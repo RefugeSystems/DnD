@@ -1,0 +1,3 @@
+{
+	"ignore": ["*.sqldb", "*.log", "tests/*", "*app_ui/*", "docs_server/*", "docs_ui/*", "deploy_cache/*", "deploy_web/*", "node_libraries/*", "node_modules/*", "Gruntfile.js", "*.md", "LICENSE", ".gitignore"]
+}

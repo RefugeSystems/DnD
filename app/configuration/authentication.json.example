@@ -1,0 +1,5 @@
+{
+	"authentication": {
+		"modules": ["local", "facebook", "google", ""]
+	}
+}

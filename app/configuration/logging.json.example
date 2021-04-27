@@ -1,0 +1,6 @@
+{
+	"logging": {
+		"directory": "./logs/",
+		"prefix": "testing"
+	}
+}
