@@ -36,6 +36,7 @@ var types = [
 		"journal",
 		"item",
 		"knowledge",
+		"quest",
 		"location"];
 
 class Universe extends EventEmitter {
