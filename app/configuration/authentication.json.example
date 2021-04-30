@@ -1,5 +1,17 @@
 {
 	"authentication": {
-		"modules": ["local", "facebook", "google", ""]
+		"modules": ["local", "facebook", "google"],
+		"local": {
+			"type": "user",
+			"name": "username",
+			"hash": "password",
+			"time": 259200000
+		},
+		"facebook": {
+			"type": "user"
+		},
+		"google": {
+			"type": "user"
+		}
 	}
 }

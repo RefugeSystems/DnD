@@ -33,7 +33,7 @@ mapping.number = {
 mapping.object = {
 	"type": "text",
 	"read": function(data) {
-		JSON.parse(data);
+		return JSON.parse(data);
 	},
 	"write": function(data) {
 		return JSON.stringify(data);
@@ -42,7 +42,7 @@ mapping.object = {
 mapping.array = {
 	"type": "text",
 	"read": function(data) {
-		JSON.parse(data);
+		return JSON.parse(data);
 	},
 	"write": function(data) {
 		return JSON.stringify(data);
@@ -102,7 +102,7 @@ mapping._toCommand = function(fields) {
 
 /**
  * Field names quoted for SQL command usage. Used for dynamic command creation.
- * 
+ *
  * Returned string starts with a leading comma for field usage. This is due to an
  * assumption that at the least ID will be specified prior to these column
  * specifications.
@@ -121,7 +121,7 @@ mapping._toColumns = function(fields) {
 };
 
 /**
- * 
+ *
  * @method mapping._toInsert
  * @private
  * @static
@@ -148,7 +148,7 @@ mapping._toInsert = function(name, fields, write) {
 /**
  * Field name identifiers for SQL command usage as "$" + field.name. Used for
  * dynamic command creation.
- * 
+ *
  * Returned string starts with a leading comma for field usage. This is due to an
  * assumption that at the least ID will be specified prior to these column
  * specifications.
@@ -175,7 +175,7 @@ mapping._toIdentifiers = function(fields) {
  * @param {Object} write The Object with the changes to write. This does NOT
  * 		have to specify every field.
  * @param {Boolean} [create] When true, the $created value is also set.
- * @return {Object} 
+ * @return {Object}
  */
 mapping._toObject = function(fields, write, create) {
 	var mapped = {},
@@ -187,7 +187,7 @@ mapping._toObject = function(fields, write, create) {
 	}
 	for(var x=0; x<fields.length; x++) {
 		field = fields[x];
-		if(mapping[field.type] && mapping[field.type].write) {
+		if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
 			mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
 		} else {
 			mapped["$" + field.id] = write[field.id];
@@ -196,45 +196,246 @@ mapping._toObject = function(fields, write, create) {
 	return mapped;
 };
 
-module.exports = function(specification, configuration) {
-	var database = this,
-		managers = {};
+var RSObject,
+	RSField;
 
-	this.connection = new sqlite3.Database(specification.file, sqlite3[specification.mode]);
+class RSDatabase extends EventEmitter {
+	constructor(specification) {
+		super();
+		/**
+		 * The configuration for this object.
+		 * @property specification
+		 * @type Object
+		 */
+		this.specification = specification;
+		
+		/**
+		 * 
+		 * @property ready
+		 * @type Boolean
+		 */
+		this.ready = false;
+		
+		/**
+		 * Maps field IDs to the RSField object.
+		 * @property field
+		 * @type Object
+		 */
+		this.field = {};
+		/**
+		 * Maps type name to the manager for that type.
+		 * @property manager
+		 * @type Object
+		 */
+		this.manager = {};
+		/**
+		 * Maps field IDs to the names of the Types using them.
+		 * @property usage
+		 * @type Object
+		 */
+		this.usage = {};
+	}
+
+	initialize(rsobject, rsfield, types) {
+		RSObject = rsobject;
+		RSField = rsfield;
+		return new Promise((done, fail) => {
+			this.connection = new sqlite3.Database(this.specification.file, sqlite3[this.specification.mode]);
+			
+			var loadFields,
+				loadTypes,
+				loading,
+				x;
+			
+			loadFields = () => {
+				this.database.connection.all("select * from rsfield;", emptyArray, (err, rows) => {
+					if(err && err.message && err.message.indexOf("no such table") !== -1) {
+						this.database.connection
+						.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description, text, inheritance text, inheritance text, type text, obscured boolean, attributes text, updated bigint, created bigint);", emptyArray, (err) => {
+							if(err) {
+								fail(err);
+							} else {
+								loadTypes([]);
+							}
+						});
+					} else {
+						for(x=0; x<rows.length; x++) {
+							rows[x] = new RSField(this, rows[x]);
+							this.field[rows[x].id] = rows[x];
+						}
+						loadTypes(rows);
+					}
+				});
+			};
+			
+			loadTypes = () => {
+				this.database.connection.all("select * from rstype;", emptyArray, (err, rows) => {
+					if(err && err.message && err.message.indexOf("no such table") !== -1) {
+						this.database.connection
+						.run("create table rstype (id text NOT NULL PRIMARY KEY, name text, description, text, fields text, attributes text, updated bigint, created bigint);", emptyArray, (err) => {
+							if(err) {
+								fail(err);
+							} else {
+								done([]);
+							}
+						});
+					} else {
+						loading = [];
+						for(x=0; x<rows.length; x++) {
+							rows[x] = new TypeManager(rows[x], this);
+							this.manager[rows[x].id] = rows[x];
+							loading.push(rows[x].initialize());
+						}
+						
+						Promise.all(loading)
+						.then(function() {
+							done(rows);
+						})
+						.catch(fail);
+					}
+				});
+			};
+			
+			this.connection.on("open", function(err) {
+				if(err) {
+					fail(err);
+				} else {
+					loadFields();
+				}
+			});
+		});
+	}
+	
+	/**
+	 *
+	 * @method getField
+	 * @param {String} name
+	 * @return {RSField}
+	 */
+	getField(name) {
+		return this.fields[name];
+	};
+	
+	/**
+	 * 
+	 * @method createField
+	 * @param {Object} specification [description]
+	 * @param {Function} callback
+	 * @return {RSField}
+	 */
+	createField(specification, callback) {
+		return new Promise((done, fail) => {
+			// TODO: Create a field
+		});
+	}
+	
+	/**
+	 * The ID can not be changed while in use (See database.usage).
+	 * @method updateField
+	 * @param {String} id
+	 * @param {Object} delta
+	 * @param {Object} [delta.id]
+	 * @param {Object} [delta.name]
+	 * @param {Object} [delta.description]
+	 * @param {Object} [delta.type]
+	 * @param {Object} [delta.obscured]
+	 * @param {Object} [delta.inheritance]
+	 * @param {Object} [delta.inheritable]
+	 * @param {Object} [delta.attribute]
+	 * @param {Function} callback
+	 * @return {RSField}
+	 */
+	updateField(id, delta, callback) {
+		return new Promise((done, fail) => {
+			var field = this.field[id];
+			if(field) {
+				if(delta.id && this.usage[id].length === 0) {
+					field.id = delta.id;
+				}
+				// TODO: Finish field data update
+			} else {
+				callback(null);
+			}
+		});
+	};
+   
+   /**
+	* 
+	* @event updated
+	* @param  {Object} updated Field data.
+	*/
 
 	/**
 	 *
-	 * @method getTableManager
-	 * @param {String} name [description]
-	 * @return {TypeManager}      [description]
+	 * @method getTypeManager
+	 * @param {String} name 
+	 * @return {TypeManager}
 	 */
-	this.getTypeManager = function(name) {
-		if(!managers[name]) {
-			managers[name] = new TypeManager(name, database);
-		}
-		return managers[name];
-	};
+	getTypeManager(name) {
+		return this.managers[name];
+	}
 	
+	
+	createTypeManager(specification) {
+		return new Promise((done, fail) => {
+			if(!this.manager[specification.name]) {
+				// TODO: Create a type manager
+			}
+		});
+	}
+	
+	
+	deleteTypeManager(name) {
+		return new Promise((done, fail) => {
+			if(this.manager[name]) {
+				// TODO: Delete Type Manager
+				 
+				// TODO: Rename table to "deleted#[TIMESTAMP]$" for preservation
+			}
+		});
+	}
+
+	/**
+	 *
+	 * @method validateFieldValue
+	 * @param {String} name 
+	 * @param {Number | String | Array | Object} value 
+	 * @return {Boolean}
+	 */
+	validateFieldValue(field, value) {
+		if(field.type) {
+			if(mapping[field.type] && mapping[field.type].typeValue) {
+				return typeof(value) === mapping[field.type].typeValue;
+			} else if(mapping[field.type] && typeof(mapping[field.type].checkType) === "function") {
+				return mapping[field.type].checkType(value);
+			} else {
+				return true;
+			}
+		} else {
+			return typeof(value) === "string";
+		}
+	}
+
 	/**
 	 * Closes all associated TypeManagers and then itself, releasing the connection
 	 * to the underlying database.
 	 * @method close
-	 * @return {Promise} 
+	 * @return {Promise}
 	 */
-	this.close = function() {
-		return new Promise(function(done, fail) {
-			var types = Object.keys(managers),
+	close() {
+		return new Promise((done, fail) => {
+			var types = Object.keys(this.managers),
 				waiting = [],
 				x;
-				
+
 			for(x=0; x<types.length; x++) {
-				waiting.push(managers[types[x]].close());
+				waiting.push(this.managers[types[x]].close());
 			}
-			
+
 			Promise.all(waiting)
-			.then(function() {
-				return new Promise(function(done, fail) {
-					database.connection.close(function(err) {
+			.then(() => {
+				return new Promise((done, fail) => {
+					this.connection.close((err) => {
 						if(err) {
 							fail(err);
 						} else {
@@ -246,19 +447,10 @@ module.exports = function(specification, configuration) {
 			.then(done)
 			.catch(fail);
 		});
-	};
+	}
+}
 
-	this.log = {};
-	this.log.info = function(message,error) {
-
-	};
-	this.log.warning = function(message,error) {
-
-	};
-	this.log.error = function(message,error) {
-
-	};
-};
+module.exports = RSDatabase;
 
 /**
  *
@@ -269,64 +461,94 @@ module.exports = function(specification, configuration) {
  * @param {Array} fields
  */
 class TypeManager extends EventEmitter {
-	constructor(name, database) {
+	constructor(specification, database) {
 		super();
+		var x;
+
+		this.id = specification.id;
 		
-		this.name = name;
+		this.name = specification.name;
 		
+		this.specification = specification;
+
 		this.database = database;
-		
+
 		/**
-		 * 
+		 *
 		 * @property statements
 		 * @type Object
 		 */
 		this.statements = {};
 		/**
-		 * 
+		 *
 		 * @property objects
 		 * @type Object
 		 */
 		this.objects = {};
 		/**
-		 * 
+		 *
 		 * @property Strings
 		 * @type Object
 		 */
 		this.strings = {};
 		/**
-		 * 
+		 *
+		 * @property defaultFieldValues
+		 * @type Object
+		 */
+		this.defaultFieldValues = {};
+		/**
+		 *
 		 * @property fields
 		 * @type Array | RSField
 		 */
-		this.fields = [];
+		this.fields = specification.fields;
+		if(this.fields) {
+			this.fields = JSON.parse(this.fields);
+		} else {
+			this.fields = [];
+		}
+ 		/**
+ 		 *
+ 		 * @property fieldCache
+ 		 * @type Object
+ 		 */
+ 		this.fieldCache = {};
+ 		/**
+ 		 * Cache mapping field IDs to their value for lookup.
+ 		 * @property fieldIDs
+ 		 * @type Array | String
+ 		 */
+		this.fieldIDs = [];
+		for(x=0; x<this.fields.length; x++) {
+			this.fieldCache[this.fields[x].id] = true; // Use Database for lookup
+			this.fieldIDs.push(this.fields[x].id);
+		}
 		/**
-		 * Cache mapping field IDs to their value for lookup.
-		 * @property _fields
-		 * @type Object | RSField
+		 *
+		 * @property attributes
+		 * @type Object
 		 */
-		this._fields = {};
+		this.attributes = specification.attributes;
+		if(this.attributes) {
+			this.attributes = JSON.parse(this.attributes);
+		} else {
+			this.attributes = {};
+		}
 	}
 
 	/**
 	 *
 	 * @method initialize
-	 * @param  {Array} fields
-	 * @param  {Array} [default_data]
 	 * @return {Promise}
 	 */
-	initialize(fields, default_data) {
-		var manager = this;
-		this.fields.splice(0);
-		this.fields.push.apply(this.fields, fields);
-		this.strings = mapping._buildStrings(this.fields, this.strings);
+	initialize() {
 		this.statements = {};
-		
 		return new Promise((done, fail) => {
 			this.database.connection.all("select * from " + this.name + ";", emptyArray, (err, rows) => {
 				if(err && err.message && err.message.indexOf("no such table") !== -1) {
 					this.database.connection
-					.run("create table " + this.name + " (id text NOT NULL PRIMARY KEY" + mapping._toCommand(fields) + ", _grid text, _x integer, _y integer, updated bigint, created bigint);", emptyArray, (err) => {
+					.run("create table " + this.name + " (id text NOT NULL PRIMARY KEY" + mapping._toCommand(this.fields) + ", _grid text, _x integer, _y integer, updated bigint, created bigint);", emptyArray, (err) => {
 						if(err) {
 							fail(err);
 						} else {
@@ -339,11 +561,90 @@ class TypeManager extends EventEmitter {
 			});
 		});
 	}
-	
+
 	/**
-	 * 
+	 *
+	 * @method isField
+	 * @param {String | RSField} field To check if present
+	 * @return {Boolean} True if the field is part of this Type.
+	 */
+	isField(field) {
+		return !!this.fieldCache[field.id || field];
+	}
+
+	/**
+	 *
+	 * @method addField
+	 * @param {String} field ID to add to this TypeManager. This field ID must
+	 * 		be defined or the operation will fail.
+	 */
+	addField(id) {
+		var field = this.database.fields[id],
+			details;
+		
+		return new Promise((done, fail) => {
+			if(!field) {
+				details = {};
+				details.database = this.database.specification.name || this.database.specification.id || this.database.specification.file || "appdb";
+				details.operation = "add";
+				details.field = id;
+				fail(new Anomaly("type:field:addemove", "Undefined field for database", 50, details, null, this));
+			} else if(this.fieldCache[field.id]) {
+				done();
+			} else {
+				var params = {};
+				params["$field"] = field.id;
+				params["$type"] = field.type;
+				this.database.connection
+				.run("alter table " + this.name + " add $field $type;", params, (err) => {
+					if(err) {
+						fail(err);
+					} else {
+						done();
+					}
+				});
+			}
+		});
+	}
+
+	/**
+	 *
+	 * @method removeField
+	 * @param {String} field ID to remove from this TypeManager. This field ID must
+	 * 		be defined or the operation will fail.
+	 */
+	removeField(id) {
+		var field = this.database.fields[id],
+			params = {},
+			details;
+		
+		return new Promise((done, fail) => {
+			if(!field) {
+				details = {};
+				details.database = this.database.specification.name || this.database.specification.id || this.database.specification.file || "appdb";
+				details.operation = "remove";
+				details.field = id;
+				fail(new Anomaly("type:field:remove", "Undefined field for database", 50, details, null, this));
+			} else if(this.fieldCache[id]) {
+				params["$field"] = field.id;
+				this.database.connection
+				.run("alter table " + this.name + " drop column $field;", params, (err) => {
+					if(err) {
+						fail(err);
+					} else {
+						done();
+					}
+				});
+			} else {
+				done();
+			}
+		});
+	}
+
+	/**
+	 *
 	 * @method close
-	 * @return {Promise} 
+	 * @return {Promise}
 	 */
 	close() {
 		return new Promise((done) => {
@@ -351,9 +652,9 @@ class TypeManager extends EventEmitter {
 			done();
 		});
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method writeObjectData
 	 * @param {Object} object Delta to write. This specifies the new field values
 	 * 		for the object that matches the incoming `object.id`. If none is defined,
@@ -365,13 +666,13 @@ class TypeManager extends EventEmitter {
 		if(!object || !object.id) {
 			throw new Error("Unable to write object with no ID: " + JSON.stringify(object));
 		}
-		
+
 		var fields = Object.keys(object),
 			sid = fields.join(),
 			statement,
 			write,
 			x;
-			
+
 		if(this.objects[object.id]) {
 			// update
 			// TODO: Verify fields are valid for this Type during write
@@ -389,18 +690,18 @@ class TypeManager extends EventEmitter {
 			// insert
 			write = mapping._toObject(this.fields, object, true);
 			this.objects[object.id] = {};
-			statement = mapping._toInsert(name, fields, object);
+			statement = mapping._toInsert(this.name, fields, object);
 		}
-		
+
 		this.database.connection.run(statement, write, callback);
 		Object.assign(this.objects[object.id], object);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method retrieveObjectData
 	 * @param {String} id
-	 * @param {Function} callback 
+	 * @param {Function} callback
 	 * @param {Boolean} force To force the Manager to pull the data from the database
 	 * 		instead of from the cached version.
 	 */
@@ -408,13 +709,15 @@ class TypeManager extends EventEmitter {
 		if(!id) {
 			throw new Error("Unable to retrieve without an object ID");
 		}
-		
+
 		if(force) {
-			this.database.connection.all("select * from " + name + " where id = $id;", {"$id":id}, (err, rows) => {
+			var params = {};
+			params["$id"] = id;
+			this.database.connection.all("select * from " + this.name + " where id = $id;", params, (err, rows) => {
 				if(err) {
 					callback(err);
 				} else if(rows && rows.length) {
-					callback(undefined, rows?this._translateObject(rows[0]):null);
+					callback(undefined, rows?this._transcribeObject(rows[0]):null);
 				} else {
 					callback(new Error("Failed to find object"));
 				}
@@ -423,19 +726,49 @@ class TypeManager extends EventEmitter {
 			callback(null, this.objects[id]);
 		}
 	}
-	
+
 	/**
 	 *
 	 * @method getObjectData
-	 * @param {String} id 
-	 * @return {Object} Raw object data for the specified ID.
+	 * @param {String} id
+	 * @param {Function} callback
+	 * @return {RSObject}
 	 */
-	getObjectData(id) {
-		return this.objects[id];
+	getObjectData(id, callback) {
+		if(this.objects[id]) {
+			callback(this.objects[id]);
+		} else {
+			
+		}
 	}
-	
+
 	/**
-	 * 
+	 *
+	 * @method setTypeDefaults
+	 * @param {Object} defaults Maps field ID to the value to use as a default. Accepts
+	 * 		fields that are not defined to this Type but objects should not set those.
+	 */
+	setTypeDefaults(defaults) {
+		this.defaultFieldValues = defaults;
+	}
+
+	/**
+	 *
+	 * @method setTypeDefault
+	 * @param {String} field
+	 * @param {Number | String | Boolean | Object | Array} value To set for the default.
+	 * 		If `null` is passed, then the mapping is deleted instead.
+	 */
+	setTypeDefault(field, value) {
+		if(value === null) {
+			delete(this.defaultFieldValues[field]);
+		} else {
+			this.defaultFieldValues[field] = value;
+		}
+	}
+
+	/**
+	 *
 	 * @method deleteObject
 	 * @param {String | Object} object The object to delete with the ID or the ID
 	 * 		of the object to delete.
@@ -446,20 +779,20 @@ class TypeManager extends EventEmitter {
 		if(!object || !(id = object.id || object)) {
 			throw new Error("Unable to delete an object with no ID: " + JSON.stringify(object));
 		}
-		
+
 		if(this.objects[id]) {
-			this.database.connection.run("delete from " + name + " where id = $id;", {"$id":id}, callback);
+			this.database.connection.run("delete from " + this.name + " where id = $id;", {"$id":id}, callback);
 			delete this.objects[id];
 		}
-		
+
 		this.emit("deleted", id);
 		callback();
 	};
-	
-	
-	
+
+
+
 	/**
-	 * 
+	 *
 	 * @method retrieveAllData
 	 * @param {String} [grid] Specifying which grid to retrieve. This is for larger
 	 * 		table filtering and initialization to retrieve large sets based on
@@ -474,16 +807,16 @@ class TypeManager extends EventEmitter {
 			callback = grid;
 			grid = null;
 		}
-		
+
 		grid = {"$grid":grid};
-		
-		this.database.connection.all("select * from " + name + " where _grid is null or _grid = $grid;", grid, (err, rows) => {
+
+		this.database.connection.all("select * from " + this.name + " where _grid is null or _grid = $grid;", grid, (err, rows) => {
 			if(err) {
 				callback(err);
 			} else if(rows && rows.length) {
 				if(rows) {
 					for(var x=0; x<rows.length; x++) {
-						rows[x] = this._translateObject(rows[x]);
+						rows[x] = this._transcribeObject(rows[x]);
 					}
 				}
 				callback(undefined, rows);
@@ -493,39 +826,52 @@ class TypeManager extends EventEmitter {
 		});
 	}
 
-	/**
-	 *
-	 * @method guarenteeData
-	 * @param {Array} data [description]
-	 * @return {Promise}
-	 */
-	guarenteeData(data) {
-		
-	};
-	
-	
-	_translateObject(object) {
-		console.log(">> Translate:" , object, this.fields);
-		var result = {},
-			field,
+
+	_transcribeObject(object) {
+		var field,
 			x;
-		
+
 		if(object) {
-			result.id = object.id;
-			result._grid = object.id;
-			result._x = object.id;
-			result._y = object.id;
-			result.updated = object.updated;
-			result.created = object.created;
-			
-			for(x=0; x<this.fields; x++) {
+			for(x=0; x<this.fields.length; x++) {
 				field = this.fields[x];
 				if(object[field.id]) {
-					result[field.id] = mapping[field.type].read?mapping[field.type].read(object[field.id]):object[field.id];
+					if(mapping[field.type] && typeof(mapping[field.type].read) === "function") {
+						object[field.id] = mapping[field.type].read(object[field.id]);
+					} else {
+						object[field.id] = object[field.id];
+					}
 				}
 			}
 		}
-		console.log(">> Result:", result);
+		
+		return object;
+	}
+
+
+	_translateObject(object) {
+		var result = {},
+			field,
+			x;
+
+		if(object) {
+			result.id = object.id;
+			result._grid = object._grid;
+			result._x = object._x;
+			result._y = object._y;
+			result.updated = object.updated;
+			result.created = object.created;
+
+			for(x=0; x<this.fields.length; x++) {
+				field = this.fields[x];
+				if(object[field.id]) {
+					if(mapping[field.type] && typeof(mapping[field.type].read) === "function") {
+						result[field.id] = mapping[field.type].read(object[field.id]);
+					} else {
+						result[field.id] = object[field.id];
+					}
+				}
+			}
+		}
 		return result;
 	}
 };

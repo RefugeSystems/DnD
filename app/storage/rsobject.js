@@ -2,31 +2,70 @@
  *
  * @class RSObject
  * @constructor
+ * @param {Object} details
  * @param {Universe} universe
  * @param {RSTypeManager} manager
- * @param {String} id
  */
 class RSObject {
 	constructor(details, universe, manager) {
 		/**
-		 * 
+		 *
 		 * @property universe
 		 * @type Universe
 		 */
 		this.universe = universe;
 		/**
-		 * 
+		 *
 		 * @property manager
 		 * @type TypeManager
 		 */
 		this.manager = manager;
-		
+		/**
+		 * 
+		 * @property type
+		 * @type String
+		 */
+		this.type = manager.id;
+		/**
+		 *
+		 * @property _data
+		 * @type {Object}
+		 */
+		this._data = details;
+
+		this.updateFields();
 	}
-	
+
 	/**
-	 * 
+	 * Pulls values from
+	 * @method updateFields
+	 * @param {Array} [delta] Optional array specifying the fields that have
+	 * 		changed to reduce the update load.
+	 */
+	updateFields(delta) {
+		var x;
+
+		if(!delta) {
+			delta = this.manager.fieldNames;
+		}
+
+		// TODO: Finish advanced calculations and defaults
+		for(x=0; x<delta.length; x++) {
+			this[delta[x]] = this._data[delta[x]];
+		}
+
+		this.universe.emit("object-update", {
+			"id": this.id,
+			"delta": delta,
+			"time": Date.now()
+		});
+	}
+
+	/**
+	 *
 	 * @method getField
-	 * @param {String} name Matching the Field ID to be used.
+	 * @param {Array | String} name Matching the Field ID to be used. If an array is
+	 * 		passed, then this is broken down automatically for precuror indexing.
 	 * @param {Array | String} [precursor] Defines the leading portion of the
 	 * 		reference. For instance to get the object's parent value where the
 	 * 		object specifies an existing value, the name would be the field
@@ -43,14 +82,23 @@ class RSObject {
 	 * 		for the referenced value.
 	 */
 	getField(name, precursor, index) {
-		
+		if(name instanceof Array) {
+			precursor = name;
+			name = precursor.pop();
+			index = 0;
+		}
+		if(precursor && index < precursor.length) {
+
+		} else {
+			return this[name];
+		}
 	}
-	
+
 	/**
 	 *
-	 * When 
 	 * @method setField
-	 * @param {String} name Matching the Field ID to be used.
+	 * @param {Array | String} name Matching the Field ID to be used. If an array is
+	 * 		passed, then this is broken down automatically for precuror indexing.
 	 * @param {String | Number | Boolean | Object} value To put into the field.
 	 * 		In the case of referential fields, this should be the String ID value
 	 * 		of the object to reference.
@@ -70,6 +118,32 @@ class RSObject {
 	 * 		for the referenced value.
 	 */
 	setField(name, value, precursor, index) {
-		
+		if(name instanceof Array) {
+			precursor = name;
+			name = precursor.pop();
+			index = 0;
+		}
+
+		if(precursor && index < precursor.length) {
+
+		} else {
+			this[name] = value;
+		}
+	}
+
+	/**
+	 *
+	 * @method checkConditional
+	 * @param {Object} condition
+	 * @param {TypeManager} [manager] For the Conditional type. If omitted, the
+	 * 		static RSField.ConditionalType constant is checked (and set if it is
+	 * 		not already) to pull the conditional type from the "conditional"
+	 * 		table.
+	 * @return {Boolean}
+	 */
+	checkConditional(manager, condition) {
+
 	}
 }
+
+module.exports = RSObject;

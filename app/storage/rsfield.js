@@ -19,7 +19,7 @@ var EventEmitter = require("events").EventEmitter,
 var index = {};
 
 class RSField extends EventEmitter {
-	constructor(specification) {
+	constructor(database, specification) {
 		super();
 		if(!specification.name) {
 			throw new Error("storage:field", this, "RSField specification requires a name", 50);
@@ -32,6 +32,13 @@ class RSField extends EventEmitter {
 		} else {
 			index[specification.name] = this;
 		}
+		
+		/**
+		 * Where this field is defined and tracked.
+		 * @property database
+		 * @type RSDatabase
+		 */
+		this.database = database;
 		
 		/**
 		 * Specifies the underlying field name used against objects.
@@ -90,6 +97,21 @@ class RSField extends EventEmitter {
 		 * @default "string"
 		 */
 		this.type = (specification.type || "string").toLowerCase();
+		/**
+		 * 
+		 * @property obscured
+		 * @type Boolean
+		 */
+		this.obscured = specification.obscured || false;
+		/**
+		 * 
+		 * @property attribute
+		 * @type Object
+		 */
+		this.attribute = specification.attributes;
+		if(typeof(this.attribute) === "string") {
+			this.attribute = JSON.parse(this.attribute);
+		}
 	}
 	
 	toString() {
@@ -98,35 +120,3 @@ class RSField extends EventEmitter {
 }
 
 module.exports = RSField;
-
-/**
- *
- * @method getField
- * @static
- * @param {String} name
- * @return {RSField}
- */
-module.exports.getField = function(name) {
-	return index[name];
-};
-
-/**
- *
- * @method removeField
- * @static
- * @param {RSField | String} name
- */
-/**
- * Emitted from the field itself to indicate that it has been removed.
- *
- * TypeManagers then use this to adjust their processing accordingly.
- * @event removed
- * @param  {Object} removed Field data.
- */
-module.exports.removeField = function(name) {
-	name = name.name || name;
-	if(index[name]) {
-		index[name].emit("removed", index[name]);
-	}
-	delete index[name];
-};
