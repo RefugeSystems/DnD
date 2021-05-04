@@ -7,38 +7,21 @@
 
 var EventEmitter = require("events").EventEmitter,
 	Anomaly = require("../management/anomaly"),
+	validTypeValue = new RegExp("^[a-z]+$"),
 	valid = new RegExp("^[a-z][a-z_]+$");
 
-/**
- * Reference to a field object by its name.
- * @property index
- * @type Object
- * @static
- * @private
- */
-var index = {};
-
 class RSField extends EventEmitter {
-	constructor(database, specification) {
+	constructor(specification) {
 		super();
+		if(!valid.test(specification.id)) {
+			throw new Error("Invalid ID for Field: " + specification.id);
+		}
+		if(specification.type && !validTypeValue.test(specification.type)) {
+			throw new Error("Invalid type value for Field: " + specification.type);
+		}
 		if(!specification.name) {
 			throw new Error("storage:field", this, "RSField specification requires a name", 50);
 		}
-
-		if(index[specification.name]) {
-			throw new Error("RSField specification requires a unique name");
-		} else if(!valid.test(specification.name)) {
-			throw new Error("RSField name is invalid; Must match " + valid.toString());
-		} else {
-			index[specification.name] = this;
-		}
-		
-		/**
-		 * Where this field is defined and tracked.
-		 * @property database
-		 * @type RSDatabase
-		 */
-		this.database = database;
 		
 		/**
 		 * Specifies the underlying field name used against objects.
@@ -54,7 +37,7 @@ class RSField extends EventEmitter {
 		this.name = specification.name;
 		/**
 		 * Why this field exists and how its used. As fields are consistent across
-		 * all types, a description of what the field is used for is key to upkeep.
+		 * all classes, a description of what the field is used for is key to upkeep.
 		 * @property description
 		 * @type String
 		 */
@@ -68,14 +51,21 @@ class RSField extends EventEmitter {
 		 * @type Object
 		 */
 		this.inheritance = specification.inheritance || {};
+		if(typeof(this.inheritance) === "string") {
+			this.inheritance = JSON.parse(this.inheritance);
+		}
 		/**
-		 * This limits the Object Types that can be referred to by this field.
+		 * This limits the Object Classes that can be referred to by this field.
 		 *
-		 * If left empty, the ID can reference any type.
+		 * If left empty, this field is treated as having no inheritance. If "*"
+		 * is specified then the ID can reference any class.
 		 * @property inheritable
 		 * @type Array | String
 		 */
 		this.inheritable = specification.inheritable || [];
+		if(typeof(this.inheritable) === "string") {
+			this.inheritable = JSON.parse(this.inheritable);
+		}
 		/**
 		 * Type determines how various operations against and displays of the field
 		 * occur. Such as a "String" value might be specified as a "Dice" type which
@@ -86,7 +76,7 @@ class RSField extends EventEmitter {
 		 * + string
 		 * + number (Allows Decimals)
 		 * + integer (Trims)
-		 * + dice
+		 * + dice | calculcated | formula (Similar with subtle differences in UI handling)
 		 * + array
 		 * + object (Stored as a String and is parsed and maintained as a single object).
 		 * 		Note that there are no atomic operations against objects as a field type,
@@ -96,7 +86,7 @@ class RSField extends EventEmitter {
 		 * @type String
 		 * @default "string"
 		 */
-		this.type = (specification.type || "string").toLowerCase();
+		this.type = (specification.type || specification.ftype || "string").toLowerCase();
 		/**
 		 * 
 		 * @property obscured
@@ -108,10 +98,22 @@ class RSField extends EventEmitter {
 		 * @property attribute
 		 * @type Object
 		 */
-		this.attribute = specification.attributes;
+		this.attribute = specification.attribute;
 		if(typeof(this.attribute) === "string") {
 			this.attribute = JSON.parse(this.attribute);
 		}
+		/**
+		 * 
+		 * @property updated
+		 * @type Integer
+		 */
+		this.updated = specification.updated;
+		/**
+		 * 
+		 * @property created
+		 * @type Integer
+		 */
+		this.created = specification.created;
 	}
 	
 	toString() {

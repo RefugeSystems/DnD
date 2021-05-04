@@ -5,27 +5,24 @@ var RSDBConnection = require("../../../app/storage/database"),
 
 describe("Core Storage", function() {
 
-	afterAll(function() {
-		// Clean Up Files
-		fs.unlinkSync(global.test_data.connection.dba.file);
-	});
-
 	describe("Type Object Data", function() {
 		var fields = [],
-			connection,
+			database,
 			testObject,
 			testModification,
 			testObjectTwo,
 			testModificationTwo,
 			writeObject,
 			writeArray,
+			universe,
 			manager,
 			load;
 
 		beforeAll(function() {
-			connection = new RSDBConnection(global.test_data.connection.dba);
 			// originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
         	// jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
+			universe = new global.mock.Universe();
 
 			testObject = {
 				"id": "lol",
@@ -68,30 +65,149 @@ describe("Core Storage", function() {
 		});
 
 		afterAll(function() {
-			var keys = Object.keys(fields);
-			for(var x=0; x<keys.length; x++) {
-				RSField.removeField(fields[x]);
-			}
+			// var keys = Object.keys(fields);
+			// for(var x=0; x<keys.length; x++) {
+			// 	RSField.removeField(fields[x]);
+			// }
 		});
 
 		it("can connect to a file", function(done) {
-			connection.initialize()
+			database = new RSDBConnection(global.test_data.connection.dba);
+			database.initialize()
+			.then(done)
 			.catch(function(err) {
 				console.log("Init Error: ", err);
 				done(err);
 			});
 		});
 		
-		it("has the field and type")
+		it("has the field and classification tables", function(done) {
+			database.connection.all("select * from rsfield", function(ferr, fields) {
+				expect(fields.length).toBe(0);
+				database.connection.all("select * from rsclass", function(cerr, classes) {
+					expect(classes.length).toBe(0);
+					done(ferr || cerr);
+				});
+			});
+		});
+		
+		it("can define a Field", function(done) {
+			database.createField(global.test_data.fields.test_a)
+			.then(function(field) {
+				expect(field).toBeDefined();
+				expect(field.id).toBe(global.test_data.fields.test_a.id);
+				expect(field.name).toBe(global.test_data.fields.test_a.name);
+				expect(field.type).toBe(global.test_data.fields.test_a.type);
+				expect(field.title).not.toBeDefined();
+				database.connection.all("select * from rsfield;", function(err, rows) {
+					if(err) {
+						done(err);
+					} else {
+						expect(rows.length).toBe(1);
+						expect(rows[0].id).toBe(global.test_data.fields.test_a.id);
+						expect(rows[0].name).toBe(global.test_data.fields.test_a.name);
+						expect(rows[0].type).toBe(global.test_data.fields.test_a.type);
+						done();
+					}
+				});
+			})
+			.catch(done);
+		});
+		
+		it("can define a Class", function(done) {
+			database.createClassManager(global.test_data.classes.testclassone)
+			.then(function(manager) {
+				done();
+			})
+			.catch(done);
+		});
+		
+		it("can add a field to a Class", function(done) {
+			var manager = database.getClassManager(global.test_data.classes.testclassone.id);
+			expect(manager).toBeDefined();
+			manager.addField(global.test_data.fields.test_a.id)
+			.then(function() {
+				done();
+			})
+			.catch(function(anomaly) {
+				console.error("Failed to add field: ", anomaly);
+				done(new Error(anomaly.msg));
+			});
+		});
+		
+		it("can create a class object", function(done) {
+			var manager = database.getClassManager(global.test_data.classes.testclassone.id);
+			expect(manager).toBeDefined();
+			manager.create(universe, global.test_data.objects.testclassone.basic, function(err, object) {
+				if(err) {
+					done(err);
+				} else {
+					// console.log("Object: ", object);
+					object.updateFieldValues();
+					expect(object).toBeDefined();
+					expect(object._data.id).toBe(global.test_data.objects.testclassone.basic.id);
+					expect(object._data.fa).toBe(global.test_data.objects.testclassone.basic.fa);
+					expect(object.id).toBe(global.test_data.objects.testclassone.basic.id);
+					expect(object.fa).toBe(global.test_data.objects.testclassone.basic.fa);
+					expect(object.created).toBeDefined();
+					expect(object.updated).toBeDefined();
+					done();
+				}
+			});
+		});
+		
+		it("can remove a field from a Class", function(done) {
+			var manager = database.getClassManager(global.test_data.classes.testclassone.id);
+			expect(manager).toBeDefined();
+			manager.removeField(global.test_data.fields.test_a.id)
+			.then(function() {
+				return new Promise(function(done, fail) {
+					manager.create(universe, global.test_data.objects.testclassone.repeating, function(err, object) {
+						if(err) {
+							fail(err);
+						} else {
+							expect(object).toBeDefined();
+							expect(object._data.id).toBe(global.test_data.objects.testclassone.repeating.id);
+							expect(object._data.fa).toBe(global.test_data.objects.testclassone.repeating.fa);
+							expect(object.id).toBe(global.test_data.objects.testclassone.repeating.id);
+							expect(object.fa).not.toBeDefined();
+							expect(object.created).toBeDefined();
+							expect(object.updated).toBeDefined();
+							done();
+						}
+					});
+				});
+			})
+			.then(function() {
+				database.connection.all("select * from testclassone;", function(err, rows) {
+					if(err) {
+						done(err);
+					} else {
+						for(var x=0; x<rows.length; x++) {
+							if(rows[x].id === global.test_data.objects.testclassone.repeating.id) {
+								expect(rows[x].fa).toBe(null); // SQLLite columns always come back with a "value", null for empty
+								done();
+								return;
+							}
+						}
+						done(new Error("Failed to find test object"));
+					}
+				});
+			})
+			.catch(function(anomaly) {
+				// console.error("Failed to remove field: ", anomaly);
+				done(new Error(anomaly.msg));
+			});
+		});
 
-		it("can write an object", function(done) {
+		xit("can write an object", function(done) {
 			manager.writeObjectData(testObject, function(err) {
 				expect(!err).toBe(true);
 				done(err);
 			});
 		});
 
-		it("can read a written object", function(done) {
+		xit("can read a written object", function(done) {
 			manager.retrieveObjectData(testObject.id, function(err, read) {
 				expect(!err).toBe(true);
 				expect(read.id).toBe(testObject.id);
@@ -100,14 +216,14 @@ describe("Core Storage", function() {
 			}, 1);
 		});
 
-		it("can modify an object", function(done) {
+		xit("can modify an object", function(done) {
 			manager.writeObjectData(testModification, function(err) {
 				expect(!err).toBe(true);
 				done(err);
 			});
 		});
 
-		it("can read the modifications of an object", function(done) {
+		xit("can read the modifications of an object", function(done) {
 			manager.retrieveObjectData(testObject.id, function(err, read) {
 				expect(!err).toBe(true);
 				expect(read.id).toBe(testObject.id);
@@ -117,7 +233,7 @@ describe("Core Storage", function() {
 			}, 1);
 		});
 
-		it("can track an object", function(done) {
+		xit("can track an object", function(done) {
 			manager.retrieveObjectData(testObject.id, function(err, read) {
 				expect(!err).toBe(true);
 				expect(read.id).toBe(testObject.id);
@@ -127,21 +243,21 @@ describe("Core Storage", function() {
 			});
 		});
 
-		it("can write an object another distinct object", function(done) {
+		xit("can write an object another distinct object", function(done) {
 			manager.writeObjectData(testObjectTwo, function(err) {
 				expect(!err).toBe(true);
 				done(err);
 			});
 		});
 
-		it("can modify that other distinct object", function(done) {
+		xit("can modify that other distinct object", function(done) {
 			manager.writeObjectData(testModificationTwo, function(err) {
 				expect(!err).toBe(true);
 				done(err);
 			});
 		});
 
-		it("can read the 2nd object", function(done) {
+		xit("can read the 2nd object", function(done) {
 			manager.retrieveObjectData(testObjectTwo.id, function(err, read) {
 				expect(!err).toBe(true);
 				expect(read).toBeDefined();
@@ -152,7 +268,7 @@ describe("Core Storage", function() {
 			}, 1);
 		});
 
-		it("can retrieve all null grid objects for a type", function(done) {
+		xit("can retrieve all null grid objects for a type", function(done) {
 			manager.retrieveAllData(function(err, read) {
 				var testing,
 					x;
@@ -170,21 +286,21 @@ describe("Core Storage", function() {
 			});
 		});
 
-		it("can delete an object", function(done) {
+		xit("can delete an object", function(done) {
 			manager.deleteObject(testObject, function(err) {
 				expect(!err).toBe(true);
 				done(err);
 			});
 		});
 
-		it("can delete an object after a single delete", function(done) {
+		xit("can delete an object after a single delete", function(done) {
 			manager.deleteObject(testObjectTwo, function(err) {
 				expect(!err).toBe(true);
 				done(err);
 			});
 		});
 
-		it("can exist as an empty set", function(done) {
+		xit("can exist as an empty set", function(done) {
 			manager.retrieveObjectData(testObject.id, function(err, read) {
 				expect(read).not.toBeDefined();
 				expect(!err).toBe(true);
@@ -196,7 +312,7 @@ describe("Core Storage", function() {
 			});
 		});
 
-		it("can write an object to a field", function(done) {
+		xit("can write an object to a field", function(done) {
 			var modification = {};
 			modification.id = testObject.id;
 			modification.fobj = writeObject;
@@ -207,7 +323,7 @@ describe("Core Storage", function() {
 			});
 		});
 
-		it("can read an object from a field", function(done) {
+		xit("can read an object from a field", function(done) {
 			manager.retrieveObjectData(testObject.id, function(err, read) {
 				expect(!err).toBe(true);
 				expect(typeof(read.fobj)).toBe("object");
@@ -217,7 +333,7 @@ describe("Core Storage", function() {
 			}, 1);
 		});
 
-		it("can write an array to a field", function(done) {
+		xit("can write an array to a field", function(done) {
 			var modification = {};
 			modification.id = testObject.id;
 			modification.farr = writeArray;
@@ -228,7 +344,7 @@ describe("Core Storage", function() {
 			});
 		});
 
-		it("can read an array from a field", function(done) {
+		xit("can read an array from a field", function(done) {
 			manager.retrieveObjectData(testObject.id, function(err, read) {
 				expect(!err).toBe(true);
 				expect(typeof(read.fobj)).toBe("object");
@@ -240,19 +356,19 @@ describe("Core Storage", function() {
 			}, 1);
 		});
 
-		xit("can add a field to a TypeManager and use it", function(done) {
+		xit("can add a field to a ClassManager and use it", function(done) {
 
 		});
 
-		xit("can add a second field to a TypeManager and use it", function(done) {
+		xit("can add a second field to a ClassManager and use it", function(done) {
 
 		});
 
-		xit("can remove a field from a TypeManager and continue to use the Type", function(done) {
+		xit("can remove a field from a ClassManager and continue to use the Type", function(done) {
 
 		});
 
-		xit("can remove a second field from a TypeManager", function(done) {
+		xit("can remove a second field from a ClassManager", function(done) {
 
 		});
 
@@ -261,12 +377,54 @@ describe("Core Storage", function() {
 		});
 
 		it("can close its connection", function(done) {
-			connection.close()
+			database.close()
 			.then(done)
 			.catch(function(err) {
 				console.log(err);
 				done(err);
 			});
+		});
+
+		it("can reconnect to that file", function(done) {
+			database = new RSDBConnection(global.test_data.connection.dba);
+			database.initialize()
+			.then(function() {
+				expect(database.manager.testclassone).toBeDefined();
+				expect(database.manager.testclassone.object).toBeDefined();
+				expect(database.manager.testclassone.object["testclassone:basic"]).toBe(false);
+				done();
+			})
+			.catch(function(err) {
+				console.log("Init Error: ", err);
+				done(err);
+			});
+		});
+		
+		it("retains the previous information", function(done) {
+			database.connection.all("select * from rsfield;", function(err, rows) {
+				if(err) {
+					done(err);
+				} else {
+					expect(rows.length).toBe(1);
+					expect(rows[0].id).toBe(global.test_data.fields.test_a.id);
+					expect(rows[0].name).toBe(global.test_data.fields.test_a.name);
+					expect(rows[0].type).toBe(global.test_data.fields.test_a.type);
+					done();
+				}
+			});
+		});
+
+		it("can close its connection again", function(done) {
+			database.close()
+			.then(done)
+			.catch(function(err) {
+				console.log(err);
+				done(err);
+			});
+		});
+		
+		it("can remove the database file after closing", function(done) {
+			fs.unlink(global.test_data.connection.dba.file, done);
 		});
 	});
 });

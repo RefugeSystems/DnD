@@ -1,7 +1,8 @@
 var LogController = require("../../../app/logging"),
-	Anomaly = require("../../../app/management/anomaly");
+	Anomaly = require("../../../app/management/anomaly"),
+	fs = require("fs");
 
-describe("Log file writing", function() {
+xdescribe("Log file writing", function() {
 	var controller;
 
 	it("can be defined", function(done) {
@@ -38,5 +39,17 @@ describe("Log file writing", function() {
 	it("can write an anomaly with detailed information", function() {
 		var anomaly = new Anomaly("tests:unit", "This is a unit test anomaly", 60, {"a": 1, "b": 2}, new Error("Severe Fault"), this);
 		controller.entry(anomaly);
+	});
+	
+	it("can be closed", function(done) {
+		setTimeout(function() {
+			controller.close()
+			.then(done)
+			.catch(done);
+		}, 4000);
+	});
+	
+	it("can be deleted after removal", function(done) {
+		fs.unlink("unittest.log", done);
 	});
 });

@@ -10,6 +10,9 @@ var EventEmitter = require("events").EventEmitter,
 	sqlite3 = require("sqlite3").verbose(),
 	emptyArray = [],
 	mapping = {};
+	
+require("../extensions/string");
+require("../extensions/array");
 
 /**
  *
@@ -196,7 +199,10 @@ mapping._toObject = function(fields, write, create) {
 	return mapped;
 };
 
-var RSObject,
+var fieldColumns = ["name", "description", "inheritance", "inheritable", "classes", "type", "obscured", "attribute"],
+	classColumns = ["name", "description", "fields", "attribute"],
+	validClassIdentifier = new RegExp("^[a-z][a-z0-9_]+$"),
+	RSObject,
 	RSField;
 
 class RSDatabase extends EventEmitter {
@@ -236,67 +242,90 @@ class RSDatabase extends EventEmitter {
 		this.usage = {};
 	}
 
-	initialize(rsobject, rsfield, types) {
-		RSObject = rsobject;
-		RSField = rsfield;
+	/**
+	 * 
+	 * @method initialize
+	 * @param  {Object} constructors Maps a class ID to a Constructor for that
+	 * 		class. Unspecified constructors default to RSObject. 
+	 * @param  {Constructor} [classes.construct] For the Constructor to use for
+	 * 		getting records back. Defaults to RSObject.
+	 * @param  {Class} [rsobject] For the RSObject constructor
+	 * @param  {Class} [rsfield] For the RSField constructor
+	 * @return {Promise} 
+	 */
+	initialize(constructors, rsobject, rsfield) {
+		RSObject = rsobject || require("./rsobject");
+		RSField = rsfield || require("./rsfield");
+		if(!constructors) {
+			constructors = {};
+		}
 		return new Promise((done, fail) => {
 			this.connection = new sqlite3.Database(this.specification.file, sqlite3[this.specification.mode]);
 			
 			var loadFields,
-				loadTypes,
+				loadClasses,
+				loadTables,
 				loading,
 				x;
 			
 			loadFields = () => {
-				this.database.connection.all("select * from rsfield;", emptyArray, (err, rows) => {
-					if(err && err.message && err.message.indexOf("no such table") !== -1) {
-						this.database.connection
-						.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description, text, inheritance text, inheritance text, type text, obscured boolean, attributes text, updated bigint, created bigint);", emptyArray, (err) => {
-							if(err) {
-								fail(err);
-							} else {
-								loadTypes([]);
-							}
-						});
+				this.connection.all("select * from rsfield;", emptyArray, (err, rows) => {
+					if(err) {
+						if(err.message && err.message.indexOf("no such table") !== -1) {
+							this.connection
+							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description text, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
+								if(err) {
+									fail(err);
+								} else {
+									loadClasses();
+								}
+							});
+						} else {
+							fail(err);
+						}
 					} else {
 						for(x=0; x<rows.length; x++) {
-							rows[x] = new RSField(this, rows[x]);
+							rows[x] = new RSField(rows[x]);
 							this.field[rows[x].id] = rows[x];
 						}
-						loadTypes(rows);
+						loadClasses();
 					}
 				});
 			};
 			
-			loadTypes = () => {
-				this.database.connection.all("select * from rstype;", emptyArray, (err, rows) => {
-					if(err && err.message && err.message.indexOf("no such table") !== -1) {
-						this.database.connection
-						.run("create table rstype (id text NOT NULL PRIMARY KEY, name text, description, text, fields text, attributes text, updated bigint, created bigint);", emptyArray, (err) => {
-							if(err) {
-								fail(err);
-							} else {
-								done([]);
-							}
-						});
+			loadClasses = () => {
+				this.connection.all("select * from rsclass;", emptyArray, (err, rows) => {
+					if(err) {
+						if(err.message && err.message.indexOf("no such table") !== -1) {
+							this.connection
+							.run("create table rsclass (id text NOT NULL PRIMARY KEY, name text, description text, fields text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
+								if(err) {
+									fail(err);
+								} else {
+									done();
+								}
+							});
+						} else {
+							fail(err);
+						}
 					} else {
 						loading = [];
 						for(x=0; x<rows.length; x++) {
-							rows[x] = new TypeManager(rows[x], this);
+							rows[x].construct = constructors[rows[x].id]; // Manager handles defaulting internally
+							rows[x] = new ClassManager(this, rows[x]);
 							this.manager[rows[x].id] = rows[x];
 							loading.push(rows[x].initialize());
 						}
-						
 						Promise.all(loading)
-						.then(function() {
-							done(rows);
+						.then(() => {
+							done();
 						})
 						.catch(fail);
 					}
 				});
 			};
 			
-			this.connection.on("open", function(err) {
+			this.connection.on("open", (err) => {
 				if(err) {
 					fail(err);
 				} else {
@@ -320,12 +349,46 @@ class RSDatabase extends EventEmitter {
 	 * 
 	 * @method createField
 	 * @param {Object} specification [description]
-	 * @param {Function} callback
-	 * @return {RSField}
+	 * @return {Promise}
 	 */
 	createField(specification, callback) {
+		if(this.field[specification.id]) {
+			return this.updateField(specification.id, specification, callback);
+		}
+		
 		return new Promise((done, fail) => {
-			// TODO: Create a field
+			var field = new RSField(specification),
+				statement = mapping._toInsert("rsfield", fieldColumns, specification),
+				write = {},
+				x;
+				
+			for(x=0; x<fieldColumns.length; x++) {
+				if(specification[fieldColumns[x]]) {
+					write["$" + fieldColumns[x]] = specification[fieldColumns[x]];
+				}
+			}
+			write.$id = specification.id;
+			if(write.$inheritable) {
+				write.$inheritable = JSON.stringify(write.$inheritable);
+			}
+			if(write.$inheritance) {
+				write.$inheritance = JSON.stringify(write.$inheritance);
+			}
+			if(write.$attribute) {
+				write.$attribute = JSON.stringify(write.$attribute);
+			}
+			write.$created = Date.now();
+			write.$updated = Date.now();
+			
+			this.connection
+			.run(statement, write, (err) => {
+				if(err) {
+					fail(err);
+				} else {
+					this.field[specification.id] = field;
+					done(field);
+				}
+			});
 		});
 	}
 	
@@ -342,20 +405,61 @@ class RSDatabase extends EventEmitter {
 	 * @param {Object} [delta.inheritance]
 	 * @param {Object} [delta.inheritable]
 	 * @param {Object} [delta.attribute]
-	 * @param {Function} callback
-	 * @return {RSField}
+	 * @return {Promise}
 	 */
 	updateField(id, delta, callback) {
+		if(!this.field[id]) {
+			delta.name = delta.name || id;
+			delta.id = id;
+			return this.updateField(delta, callback);
+		}
+		
 		return new Promise((done, fail) => {
-			var field = this.field[id];
-			if(field) {
-				if(delta.id && this.usage[id].length === 0) {
-					field.id = delta.id;
+			var field = this.field[id],
+				statement = "update rsfield set updated = $updated",
+				write = {},
+				keys,
+				x;
+				
+			for(x=0; x<fieldColumns.length; x++) {
+				if(delta[fieldColumns[x]]) {
+					statement += ", " + fieldColumns[x] + " = $" + fieldColumns[x];
+					write["$" + fieldColumns[x]] = delta[fieldColumns[x]];
 				}
-				// TODO: Finish field data update
-			} else {
-				callback(null);
 			}
+			write.$id = id;
+			if(delta.id && (!this.usage[id] || this.usage[id].length === 0)) {
+				if(this.field[delta.id]) {
+					throw new Error("Field ID " + id + " already exists");
+				}
+				statement += ", id = $_newid";
+				write.$_newid = delta.id;
+			}
+			if(write.$inheritable) {
+				write.$inheritable = JSON.stringify(write.$inheritable);
+			}
+			if(write.$inheritance) {
+				write.$inheritance = JSON.stringify(write.$inheritance);
+			}
+			if(write.$attribute) {
+				write.$attribute = JSON.stringify(write.$attribute);
+			}
+			write.$updated = Date.now();
+			
+			this.connection
+			.run(statement, write, (err) => {
+				if(err) {
+					fail(err);
+				} else {
+					for(x=0; x<fieldColumns.length; x++) {
+						if(delta[fieldColumns[x]]) {
+							field[fieldColumns[x]] = delta[fieldColumns[x]];
+						}
+					}
+					field.updated = write.$updated;
+					done(field);
+				}
+			});
 		});
 	};
    
@@ -367,28 +471,51 @@ class RSDatabase extends EventEmitter {
 
 	/**
 	 *
-	 * @method getTypeManager
+	 * @method getClassManager
 	 * @param {String} name 
-	 * @return {TypeManager}
+	 * @return {ClassManager}
 	 */
-	getTypeManager(name) {
-		return this.managers[name];
+	getClassManager(name) {
+		return this.manager[name];
 	}
 	
-	
-	createTypeManager(specification) {
+	/**
+	 *
+	 * @method createClassManager
+	 * @param {Object} specification 
+	 * @param {String} specification.id 
+	 * @param {String} specification.name 
+	 * @param {Constructor} [specification.construct] To create new objects. This
+	 * 		defaults to RSObject.
+	 * @return {Promise} 
+	 */
+	createClassManager(specification) {
 		return new Promise((done, fail) => {
-			if(!this.manager[specification.name]) {
-				// TODO: Create a type manager
+			if(!this.manager[specification.id]) {
+				// TODO: Create a Classification Manager
+				var manager = new ClassManager(this, specification);
+				manager.initialize()
+				.then(() => {
+					this.manager[specification.id] = manager;
+					done(manager);
+				})
+				.catch(fail);
+			} else {
+				done(this.manager[specification.id]);
 			}
 		});
 	}
 	
-	
-	deleteTypeManager(name) {
+	/**
+	 *
+	 * @method deleteClassManager
+	 * @param {String} id 
+	 * @return {Promise}
+	 */
+	deleteClassManager(id) {
 		return new Promise((done, fail) => {
-			if(this.manager[name]) {
-				// TODO: Delete Type Manager
+			if(this.manager[id]) {
+				// TODO: Delete Classification Manager
 				 
 				// TODO: Rename table to "deleted#[TIMESTAMP]$" for preservation
 			}
@@ -415,21 +542,34 @@ class RSDatabase extends EventEmitter {
 			return typeof(value) === "string";
 		}
 	}
+	
+	/**
+	 * Mutates the passed array into the field objects with matching IDs.
+	 * @method transcribeFields
+	 * @param {Array | String} fields [description]
+	 * @return {Array} The passed fields array after mutation.
+	 */
+	transcribeFields(fields) {
+		for(var x=0; x<fields.length; x++) {
+			fields[x] = this.field[fields[x]];
+		}
+		return fields;
+	}
 
 	/**
-	 * Closes all associated TypeManagers and then itself, releasing the connection
+	 * Closes all associated ClassManagers and then itself, releasing the connection
 	 * to the underlying database.
 	 * @method close
 	 * @return {Promise}
 	 */
 	close() {
 		return new Promise((done, fail) => {
-			var types = Object.keys(this.managers),
+			var classes = Object.keys(this.manager),
 				waiting = [],
 				x;
 
-			for(x=0; x<types.length; x++) {
-				waiting.push(this.managers[types[x]].close());
+			for(x=0; x<classes.length; x++) {
+				waiting.push(this.manager[classes[x]].close());
 			}
 
 			Promise.all(waiting)
@@ -454,25 +594,55 @@ module.exports = RSDatabase;
 
 /**
  *
- * @class TypeManager
+ * @class ClassManager
  * @constructor
- * @param {String} name Of the table to be managed.
  * @param {RSDatabase} database
- * @param {Array} fields
+ * @param {Object} specification
  */
-class TypeManager extends EventEmitter {
-	constructor(specification, database) {
+class ClassManager extends EventEmitter {
+	constructor(database, specification) {
 		super();
 		var x;
-
+		if(!validClassIdentifier.test(specification.id)) {
+			throw new Error("Invalid ID for Class");
+		}
+		
+		/**
+		 *
+		 * @property id
+		 * @type String
+		 */
 		this.id = specification.id;
-		
+		/**
+		 *
+		 * @property name
+		 * @type String
+		 */
 		this.name = specification.name;
-		
+		/**
+		 *
+		 * @property description
+		 * @type String
+		 */
+		this.description = specification.description;
+		/**
+		 *
+		 * @property specification
+		 * @type Object
+		 */
 		this.specification = specification;
-
+		/**
+		 *
+		 * @property database
+		 * @type RSDatabase
+		 */
 		this.database = database;
-
+		/**
+		 * The Constructor to use for creating objects of this class.
+		 * @property construct
+		 * @type Constructor
+		 */
+		this.construct = specification.construct || RSObject;
 		/**
 		 *
 		 * @property statements
@@ -481,10 +651,10 @@ class TypeManager extends EventEmitter {
 		this.statements = {};
 		/**
 		 *
-		 * @property objects
+		 * @property object
 		 * @type Object
 		 */
-		this.objects = {};
+		this.object = {};
 		/**
 		 *
 		 * @property Strings
@@ -493,47 +663,43 @@ class TypeManager extends EventEmitter {
 		this.strings = {};
 		/**
 		 *
-		 * @property defaultFieldValues
+		 * @property defaultFieldValue
 		 * @type Object
 		 */
-		this.defaultFieldValues = {};
+		this.defaultFieldValue = {};
 		/**
 		 *
 		 * @property fields
 		 * @type Array | RSField
 		 */
-		this.fields = specification.fields;
-		if(this.fields) {
-			this.fields = JSON.parse(this.fields);
-		} else {
-			this.fields = [];
-		}
+		this.fields = [];
  		/**
  		 *
- 		 * @property fieldCache
+ 		 * @property fieldUsed
  		 * @type Object
  		 */
- 		this.fieldCache = {};
+ 		this.fieldUsed = {};
  		/**
  		 * Cache mapping field IDs to their value for lookup.
  		 * @property fieldIDs
  		 * @type Array | String
  		 */
-		this.fieldIDs = [];
-		for(x=0; x<this.fields.length; x++) {
-			this.fieldCache[this.fields[x].id] = true; // Use Database for lookup
-			this.fieldIDs.push(this.fields[x].id);
+		this.fieldIDs = specification.fields || [];
+		if(typeof(this.fieldIDs) === "string") {
+			this.fieldIDs = JSON.parse(this.fieldIDs);
+		}
+		for(x=0; x<this.fieldIDs.length; x++) {
+			this.fields.push(this.database.field[this.fieldIDs[x]]);
+			this.fieldUsed[this.fieldIDs[x].id] = true; // Use Database for lookup
 		}
 		/**
 		 *
-		 * @property attributes
+		 * @property attribute
 		 * @type Object
 		 */
-		this.attributes = specification.attributes;
-		if(this.attributes) {
-			this.attributes = JSON.parse(this.attributes);
-		} else {
-			this.attributes = {};
+		this.attribute = specification.attribute || {};
+		if(typeof(this.attribute) === "string") {
+			this.attribute = JSON.parse(this.attribute);
 		}
 	}
 
@@ -543,20 +709,35 @@ class TypeManager extends EventEmitter {
 	 * @return {Promise}
 	 */
 	initialize() {
-		this.statements = {};
 		return new Promise((done, fail) => {
-			this.database.connection.all("select * from " + this.name + ";", emptyArray, (err, rows) => {
-				if(err && err.message && err.message.indexOf("no such table") !== -1) {
-					this.database.connection
-					.run("create table " + this.name + " (id text NOT NULL PRIMARY KEY" + mapping._toCommand(this.fields) + ", _grid text, _x integer, _y integer, updated bigint, created bigint);", emptyArray, (err) => {
-						if(err) {
-							fail(err);
-						} else {
-							done();
-						}
-					});
+			this.database.connection.all("select id from " + this.id + ";", emptyArray, (err, rows) => {
+				if(err) {
+					if(err.message && err.message.indexOf("no such table") !== -1) {
+						this.database.connection
+						.run("create table " + this.id + " (id text NOT NULL PRIMARY KEY" + mapping._toCommand(this.fields) + ", _parent text, _grid text, _x integer, _y integer, updated bigint, created bigint);", emptyArray, (err) => {
+							if(err) {
+								fail(err);
+							} else {
+								var statement = mapping._toInsert("rsclass", classColumns, this.specification),
+									write = mapping._toObject(this.specification, true);
+								write.$id = this.id;
+								this.database.connection.run(statement, write, (err) => {
+									if(err) {
+										fail(err);
+									} else {
+										done(this);
+									}
+								});
+							}
+						});
+					} else {
+						fail(err);
+					}
 				} else {
-					done();
+					for(var x=0; x<rows.length; x++) {
+						this.object[rows[x].id] = false;
+					}
+					done(this);
 				}
 			});
 		});
@@ -566,41 +747,63 @@ class TypeManager extends EventEmitter {
 	 *
 	 * @method isField
 	 * @param {String | RSField} field To check if present
-	 * @return {Boolean} True if the field is part of this Type.
+	 * @return {Boolean} True if the field is part of this Classification.
 	 */
 	isField(field) {
-		return !!this.fieldCache[field.id || field];
+		return !!this.fieldUsed[field.id || field];
 	}
 
 	/**
 	 *
 	 * @method addField
-	 * @param {String} field ID to add to this TypeManager. This field ID must
+	 * @param {String} field ID to add to this ClassManager. This field ID must
 	 * 		be defined or the operation will fail.
+	 * @return {Promise}
 	 */
 	addField(id) {
-		var field = this.database.fields[id],
-			details;
+		var field = this.database.field[id];
 		
 		return new Promise((done, fail) => {
 			if(!field) {
-				details = {};
+				var details = {};
 				details.database = this.database.specification.name || this.database.specification.id || this.database.specification.file || "appdb";
 				details.operation = "add";
 				details.field = id;
-				fail(new Anomaly("type:field:addemove", "Undefined field for database", 50, details, null, this));
-			} else if(this.fieldCache[field.id]) {
+				details.database_fields = Object.keys(this.database.field);
+				fail(new Anomaly("type:field:add", "Undefined field for database", 50, details, null, this));
+			} else if(this.fieldUsed[field.id]) {
 				done();
 			} else {
-				var params = {};
-				params["$field"] = field.id;
-				params["$type"] = field.type;
+				var params,
+					type;
+					
+				type = mapping[field.type];
+				if(type) {
+					type = type.type || field.type;
+				} else {
+					type = field.type;
+				}
+				
 				this.database.connection
-				.run("alter table " + this.name + " add $field $type;", params, (err) => {
+				.run("alter table " + this.id + " add " + field.id + " " + type + ";", emptyArray, (err) => {
 					if(err) {
 						fail(err);
 					} else {
-						done();
+						this.fieldIDs.push(field.id);
+						params = {};
+						params.$id = this.id;
+						params.$fields = JSON.stringify(this.fieldIDs);
+						this.database.connection
+						.run("update rsclass set fields = $fields where id = $id;", emptyArray, (err) => {
+							if(err) {
+								this.fieldIDs.purge(field.id);
+								fail(err);
+							} else {
+								this.fieldUsed[field.id] = true;
+								this.fields.push(field);
+								done();
+							}
+						});
 					}
 				});
 			}
@@ -610,11 +813,12 @@ class TypeManager extends EventEmitter {
 	/**
 	 *
 	 * @method removeField
-	 * @param {String} field ID to remove from this TypeManager. This field ID must
+	 * @param {String} field ID to remove from this ClassManager. This field ID must
 	 * 		be defined or the operation will fail.
+	 * @return {Promise}
 	 */
 	removeField(id) {
-		var field = this.database.fields[id],
+		var field = this.database.field[id],
 			params = {},
 			details;
 		
@@ -624,14 +828,21 @@ class TypeManager extends EventEmitter {
 				details.database = this.database.specification.name || this.database.specification.id || this.database.specification.file || "appdb";
 				details.operation = "remove";
 				details.field = id;
-				fail(new Anomaly("type:field:remove", "Undefined field for database", 50, details, null, this));
-			} else if(this.fieldCache[id]) {
-				params["$field"] = field.id;
+				fail(new Anomaly("class:field:remove", "Undefined field for database", 50, details, null, this));
+			} else if(this.fieldUsed[id]) {
+				// SQLLite Alter Table does NOT SUPPORT remove column
+				this.fieldIDs.purge(field.id);
+				params = {};
+				params.$id = this.id;
+				params.$fields = JSON.stringify(this.fieldIDs);
 				this.database.connection
-				.run("alter table " + this.name + " drop column $field;", params, (err) => {
+				.run("update rsclass set fields = $fields where id = $id;", emptyArray, (err) => {
 					if(err) {
+						this.fieldIDs.push(field.id);
 						fail(err);
 					} else {
+						delete(this.fieldUsed[field.id]);
+						this.fields.purge(field);
 						done();
 					}
 				});
@@ -652,6 +863,57 @@ class TypeManager extends EventEmitter {
 			done();
 		});
 	}
+	
+	/**
+	 * 
+	 * @method create
+	 * @param {Universe} universe
+	 * @param {Object} details
+	 * @return {Promise} 
+	 */
+	create(universe, details, callback) {
+		var object = new this.construct(universe, this, details);
+		this.writeObjectData(details, (err) => {
+			if(err) {
+				callback(err, null);
+			} else {
+				this.object[object.id] = object;
+				object.created = details.created;
+				object.updated = details.updated;
+				callback(null, object);
+			}
+		});
+	}
+	
+	request(id,callback) {
+		
+	}
+	
+	/**
+	 * Get all objects with the noted grid value.
+	 * @method loadGrid
+	 * @param  {[type]} universe [description]
+	 * @param  {[type]} grid     [description]
+	 * @return {[type]}          [description]
+	 */
+	loadGrid(universe, grid) {
+		
+	}
+	
+	
+	unloadGrid(universe, grid) {
+		
+	}
+	
+	
+	loadObject(id) {
+		
+	}
+	
+	unloadObject(id) {
+		
+	}
+	
 
 	/**
 	 *
@@ -664,37 +926,39 @@ class TypeManager extends EventEmitter {
 	 */
 	writeObjectData(object, callback) {
 		if(!object || !object.id) {
-			throw new Error("Unable to write object with no ID: " + JSON.stringify(object));
-		}
-
-		var fields = Object.keys(object),
-			sid = fields.join(),
-			statement,
-			write,
-			x;
-
-		if(this.objects[object.id]) {
-			// update
-			// TODO: Verify fields are valid for this Type during write
-			write = mapping._toObject(this.fields, object, false);
-			if(this.statements[sid]) {
-				statement = this.statements[sid];
-			} else {
-				statement = "update " + this.name + " set updated = $updated";
-				for(x=0; x<fields.length; x++) {
-					statement += ", " + fields[x] + " = $" + fields[x];
-				}
-				this.statements[sid] = statement += " where id = $id;";
-			}
+			callback(new Error("Unable to write object with no ID: " + JSON.stringify(object)));
 		} else {
-			// insert
-			write = mapping._toObject(this.fields, object, true);
-			this.objects[object.id] = {};
-			statement = mapping._toInsert(this.name, fields, object);
-		}
+			var fields = Object.keys(object),
+				sid = fields.join(),
+				statement,
+				write,
+				x;
 
-		this.database.connection.run(statement, write, callback);
-		Object.assign(this.objects[object.id], object);
+			if(this.object[object.id]) {
+				// update
+				// TODO: Verify fields are valid for this Classification during write
+				write = mapping._toObject(this.fields, object, false);
+				if(this.statements[sid]) {
+					statement = this.statements[sid];
+				} else {
+					statement = "update " + this.id + " set updated = $updated";
+					for(x=0; x<fields.length; x++) {
+						statement += ", " + fields[x] + " = $" + fields[x];
+					}
+					this.statements[sid] = statement += " where id = $id;";
+				}
+				object.updated = write.$updated;
+			} else {
+				// insert
+				write = mapping._toObject(this.fields, object, true);
+				this.object[object.id] = {};
+				statement = mapping._toInsert(this.id, fields, object);
+				object.updated = write.$updated;
+				object.created = write.$created;
+			}
+
+			this.database.connection.run(statement, write, callback);
+		}
 	}
 
 	/**
@@ -713,7 +977,7 @@ class TypeManager extends EventEmitter {
 		if(force) {
 			var params = {};
 			params["$id"] = id;
-			this.database.connection.all("select * from " + this.name + " where id = $id;", params, (err, rows) => {
+			this.database.connection.all("select * from " + this.id + " where id = $id;", params, (err, rows) => {
 				if(err) {
 					callback(err);
 				} else if(rows && rows.length) {
@@ -723,7 +987,7 @@ class TypeManager extends EventEmitter {
 				}
 			});
 		} else {
-			callback(null, this.objects[id]);
+			callback(null, this.object[id]);
 		}
 	}
 
@@ -735,8 +999,8 @@ class TypeManager extends EventEmitter {
 	 * @return {RSObject}
 	 */
 	getObjectData(id, callback) {
-		if(this.objects[id]) {
-			callback(this.objects[id]);
+		if(this.object[id]) {
+			callback(this.object[id]);
 		} else {
 			
 		}
@@ -744,22 +1008,22 @@ class TypeManager extends EventEmitter {
 
 	/**
 	 *
-	 * @method setTypeDefaults
+	 * @method setClassDefaults
 	 * @param {Object} defaults Maps field ID to the value to use as a default. Accepts
-	 * 		fields that are not defined to this Type but objects should not set those.
+	 * 		fields that are not defined to this Class but objects should not set those.
 	 */
-	setTypeDefaults(defaults) {
+	setClassDefaults(defaults) {
 		this.defaultFieldValues = defaults;
 	}
 
 	/**
 	 *
-	 * @method setTypeDefault
+	 * @method setClassDefault
 	 * @param {String} field
 	 * @param {Number | String | Boolean | Object | Array} value To set for the default.
 	 * 		If `null` is passed, then the mapping is deleted instead.
 	 */
-	setTypeDefault(field, value) {
+	setClassDefault(field, value) {
 		if(value === null) {
 			delete(this.defaultFieldValues[field]);
 		} else {
@@ -780,16 +1044,14 @@ class TypeManager extends EventEmitter {
 			throw new Error("Unable to delete an object with no ID: " + JSON.stringify(object));
 		}
 
-		if(this.objects[id]) {
-			this.database.connection.run("delete from " + this.name + " where id = $id;", {"$id":id}, callback);
-			delete this.objects[id];
+		if(this.object[id]) {
+			this.database.connection.run("delete from " + this.id + " where id = $id;", {"$id":id}, callback);
+			delete this.object[id];
 		}
 
 		this.emit("deleted", id);
 		callback();
 	};
-
-
 
 	/**
 	 *
@@ -810,7 +1072,7 @@ class TypeManager extends EventEmitter {
 
 		grid = {"$grid":grid};
 
-		this.database.connection.all("select * from " + this.name + " where _grid is null or _grid = $grid;", grid, (err, rows) => {
+		this.database.connection.all("select * from " + this.id + " where _grid is null or _grid = $grid;", grid, (err, rows) => {
 			if(err) {
 				callback(err);
 			} else if(rows && rows.length) {
@@ -826,7 +1088,12 @@ class TypeManager extends EventEmitter {
 		});
 	}
 
-
+	/**
+	 * Follows the mapping[field.type] for the mapping.[type].read function
+	 * @method _transcribeObject
+	 * @param {Object} object [description]
+	 * @return {Object}
+	 */
 	_transcribeObject(object) {
 		var field,
 			x;
@@ -847,7 +1114,12 @@ class TypeManager extends EventEmitter {
 		return object;
 	}
 
-
+	/**
+	 * Follows the mapping[field.type] for the mapping.[type].read function
+	 * @method _translateObject
+	 * @param {Object} object [description]
+	 * @return {Object}
+	 */
 	_translateObject(object) {
 		var result = {},
 			field,

@@ -84,6 +84,7 @@ module.exports = function() {
 			 * @type Bunyan
 			 * @private
 			 */
+			console.log("Make logger...");
 			output = bunyan.createLogger(this.specification);
 			
 			startup.logging = this;
@@ -106,4 +107,38 @@ module.exports = function() {
 		}
 		output.info(anomaly, anomaly.msg);
 	};
-}
+	
+	/**
+	 * 
+	 * @method close
+	 * @return {Promise}
+	 */
+	this.close = () => {
+		return new Promise((done, fail) => {
+			console.log("Streams: ", output.streams);
+			var closing = [],
+				s,
+				x;
+				
+			output.streams.forEach(function(stream) {
+				closing.push(new Promise(function(done, fail) {
+					if(stream.stream) {
+						if(stream.stream.stream) {
+							stream.stream.stream.on("close", done);
+							stream.stream.stream.end();
+						} else {
+							stream.stream.on("close", done);
+							stream.stream.end();
+						}
+					} else {
+						done();
+					}
+				}))
+			});
+			
+			Promise.all(closing)
+			.then(done)
+			.catch(fail);
+		});
+	};
+};

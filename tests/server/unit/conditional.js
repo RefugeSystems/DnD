@@ -17,7 +17,7 @@ xdescribe("RSObject conditional calculations", function() {
 
 		database = new global.mock.RSDatabase(configuration.database);
 		universe = new global.mock.Universe(configuration.universe);
-		manager = new global.mock.TypeManager("testtype", database);
+		manager = new global.mock.ClassManager("testtype", database);
 
 		details = {};
 		details.id = "testa";

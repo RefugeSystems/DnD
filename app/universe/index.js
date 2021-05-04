@@ -29,7 +29,7 @@ var types = [
 		"ability",
 		"skill",
 		"archetype",
-		"action",
+		"action", // Triggered by some game event to start user input like items that have an on long rest reset
 		"effect",
 		"race",
 		"classification",
@@ -42,6 +42,7 @@ var types = [
 class Universe extends EventEmitter {
 	constructor(configuration) {
 		super();
+		this.calculator = require("./calculator/dnd");
 		this.configuration = configuration;
 		this.managers = {};
 	}
@@ -102,8 +103,14 @@ class Universe extends EventEmitter {
 
 	}
 	
-	
-	getObject(id) {
+	/**
+	 * 
+	 * @method requestObject
+	 * @param  {[type]}   id       [description]
+	 * @param  {Function} callback [description]
+	 * @return {[type]}            [description]
+	 */
+	requestObject(id, callback) {
 		
 	}
 }

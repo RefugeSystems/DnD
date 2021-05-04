@@ -27,5 +27,26 @@ global.test_data.fields = {
 		"title": "Test Array",
 		"description": "Test field for arrays",
 		"type": "array"
+	},
+	"name": {
+		"id": "name",
+		"name": "Name",
+		"description": "Object's name",
+		"type": "string"
+	},
+	"count": {
+		"id": "count",
+		"name": "Count",
+		"type": "number"
+	},
+	"description": {
+		"id": "description",
+		"name": "Description",
+		"type": "string"
+	},
+	"slots": {
+		"id": "slots",
+		"name": "Slots",
+		"type": "array"
 	}
 };

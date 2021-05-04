@@ -1,6 +1,7 @@
 global.mock = global.mock || {};
-global.mock.TypeManager = function(name, database) {
-	var mock = jasmine.createSpyObj("TypeManager", ["initialize",
+global.mock.ClassManager = function(database, specification) {
+	
+	var mock = jasmine.createSpyObj("ClassManager", ["initialize",
 		"isField",
 		"addField",
 		"removeField",
@@ -15,7 +16,9 @@ global.mock.TypeManager = function(name, database) {
 		"deleteObjectData",
 
 		"close"]);
-	mock.name = name;
+		
+	mock.id = specification.id;
+	mock.name = specification.name;
 	mock.database = database;
 
 	mock.initialize.and.callFake(function(fields) {
