@@ -246,9 +246,7 @@ class RSDatabase extends EventEmitter {
 	 * 
 	 * @method initialize
 	 * @param  {Object} constructors Maps a class ID to a Constructor for that
-	 * 		class. Unspecified constructors default to RSObject. 
-	 * @param  {Constructor} [classes.construct] For the Constructor to use for
-	 * 		getting records back. Defaults to RSObject.
+	 * 		class. Unspecified constructors default to RSObject.
 	 * @param  {Class} [rsobject] For the RSObject constructor
 	 * @param  {Class} [rsfield] For the RSField constructor
 	 * @return {Promise} 
@@ -256,9 +254,12 @@ class RSDatabase extends EventEmitter {
 	initialize(constructors, rsobject, rsfield) {
 		RSObject = rsobject || require("./rsobject");
 		RSField = rsfield || require("./rsfield");
-		if(!constructors) {
-			constructors = {};
+		if(constructors) {
+			this.constructor = constructors;
+		} else {
+			this.constructor = {};
 		}
+		this.constructor._general = RSObject;
 		return new Promise((done, fail) => {
 			this.connection = new sqlite3.Database(this.specification.file, sqlite3[this.specification.mode]);
 			
@@ -311,7 +312,6 @@ class RSDatabase extends EventEmitter {
 					} else {
 						loading = [];
 						for(x=0; x<rows.length; x++) {
-							rows[x].construct = constructors[rows[x].id]; // Manager handles defaulting internally
 							rows[x] = new ClassManager(this, rows[x]);
 							this.manager[rows[x].id] = rows[x];
 							loading.push(rows[x].initialize());
@@ -484,9 +484,9 @@ class RSDatabase extends EventEmitter {
 	 * @method createClassManager
 	 * @param {Object} specification 
 	 * @param {String} specification.id 
-	 * @param {String} specification.name 
-	 * @param {Constructor} [specification.construct] To create new objects. This
-	 * 		defaults to RSObject.
+	 * @param {String} [specification.name] 
+	 * @param {String} [specification.description] 
+	 * @param {Array} [specification.fields] 
 	 * @return {Promise} 
 	 */
 	createClassManager(specification) {
@@ -701,6 +701,8 @@ class ClassManager extends EventEmitter {
 		if(typeof(this.attribute) === "string") {
 			this.attribute = JSON.parse(this.attribute);
 		}
+		
+		database.manager[this.id] = this;
 	}
 
 	/**
@@ -872,7 +874,8 @@ class ClassManager extends EventEmitter {
 	 * @return {Promise} 
 	 */
 	create(universe, details, callback) {
-		var object = new this.construct(universe, this, details);
+		var object = this.database.constructor[this.id] || RSObject;
+		object = new object(universe, this, details);
 		this.writeObjectData(details, (err) => {
 			if(err) {
 				callback(err, null);
@@ -885,19 +888,70 @@ class ClassManager extends EventEmitter {
 		});
 	}
 	
-	request(id,callback) {
+	/**
+	 * 
+	 * @method load
+	 * @param {Universe} universe 
+	 * @param {Object | String} details 
+	 * @return {Promise} 
+	 */
+	load(universe, details) {
+		return new Promise((done, fail) => {
+			if(typeof(details) === "string") {
+				if(this.object[details] === false) {
+					this.retrieveObjectData(details, (err, data) => {
+						if(err) {
+							fail(err);
+						} else {
+							var Construct = this.database.constructor[this.id] || RSObject;
+							this.object[details.id] = new Construct(universe, this, data);
+							done(this.object[details.id]);
+						}
+					});
+				} else if(this.object[details]) {
+					done(this.object[details]);
+				} else {
+					fail(new Error("Unknown object id (" + details + ") for this class (" + this.id + ")"));
+				}
+			} else {
+				if(this.object[details.id] === false) {
+					var Construct = this.database.constructor[this.id] || RSObject;
+					this.object[details.id] = new Construct(universe, this, details);
+					done(this.object[details.id]);
+				} else if(this.object[details.id]) {
+					done(this.object[details.id]);
+				} else {
+					fail(new Error("Unknown object id (" + details.id + ") for this class (" + this.id + ")"));
+				}
+			}
+		});
+	}
+	
+	request(id, callback) {
 		
 	}
 	
 	/**
 	 * Get all objects with the noted grid value.
 	 * @method loadGrid
-	 * @param  {[type]} universe [description]
-	 * @param  {[type]} grid     [description]
-	 * @return {[type]}          [description]
+	 * @param {Universe} universe [description]
+	 * @param {String} [grid]     [description]
+	 * @return {Promise}
 	 */
 	loadGrid(universe, grid) {
-		
+		return new Promise((done, fail) => {
+			this.retrieveAllData(grid, (err, data) => {
+				var loading = [],
+					x;
+				for(x=0; x<data.length; x++) {
+					loading.push(this.load(universe, data[x]));
+				}
+				
+				Promise.all(loading)
+				.then(done)
+				.catch(fail);
+			});
+		});
 	}
 	
 	
@@ -934,7 +988,10 @@ class ClassManager extends EventEmitter {
 				write,
 				x;
 
-			if(this.object[object.id]) {
+			if(this.object[object.id] || this.object[object.id] === false) {
+				if(this.object[object.id] === false) {
+					console.trace("hmmm");
+				}
 				// update
 				// TODO: Verify fields are valid for this Classification during write
 				write = mapping._toObject(this.fields, object, false);

@@ -4,38 +4,55 @@
  * @constructor
  */
 
-var ChangeEvent = require("./change_event");
+var RSObject = require("../../storage/rsobject"),
+	ChangeEvent = require("./change_event"),
+	DBLoader = require("./dbloader"),
+	fs = require("fs"),
+	Anomaly,
 
-module.exports = (function() {
+	classList = fs.readdirSync("./app/universe/objects/classes"),
+	constructors = {},
+	x;
+	
+constructors._general = RSObject;
+for(x=0; x<classList.length; x++) {
+	constructors[classList[x]] = require("./classes/" + classList[x]);
+}
+
+module.exports = function(universe) {
+	this.id = "universe:objects";
+	Anomaly = universe.Anomaly;
 	var database = null,
 		inheritance = {},
-		
+		manager = {};
 	
-	this.initialize = function(configuration) {
+	this.initialize = function(startup) {
 		return new Promise(function(done, fail) {
-			trace.managers = {};
 			var initializing = [],
-				manager,
+				mngr,
 				x;
-			
-			// TODO: Add logic for database type consideration?
-			database = new startup.RSDatabase(startup.configuration.database);
-			
-			// TODO: Load RSField Data
-			
-			
-			// TODO: Initialize types with field data
-			for(x=0; x<types.length; x++) {
-				manager = database.getTypeManager(types[x]);
-				initializing.push(manager.initialize());
-				trace[types[x]] = manager;
+				
+			for(x=0; x<universe.classes.length; x++) {
+				if(!constructors[universe.classes[x]]) {
+					constructors[universe.classes[x]] = RSObject;
+				}
 			}
 			
-			Promise.all(initializing)
-			.then(function() {
-				done(managers);
-			})
-			.catch(fail);
+			// TODO: Add logic for database type consideration?
+			database = new startup.RSDatabase(universe.configuration.database);
+			database.initialize(constructors)
+			.then(() => {
+				return DBLoader.initialize(universe, database);
+			}) .then(() => {
+				for(x=0; x<universe.classes.length; x++) {
+					manager[universe.classes[x]] = database.getClassManager(universe.classes[x]);
+				}
+				done(manager);
+			}).catch((err) => {
+				var anomaly = new Anomaly("fault:universe:initialization", "Failed to initialize the Universe", 60, startup, err, this);
+				universe.emit("error", anomaly);
+				fail(anomaly);
+			});
 		});
 	};
 	
@@ -47,7 +64,7 @@ module.exports = (function() {
 	 */
 	this.trackInheritance = function(source, effected) {
 		
-	}
+	};
 
 	/**
 	 * 
@@ -55,9 +72,9 @@ module.exports = (function() {
 	 * @param  {RSObject} source 
 	 * @param  {RSObject} effected 
 	 */
-	 this.untrackInheritance = function(source, effected) {
+	this.untrackInheritance = function(source, effected) {
 		
-	}
+	};
 
 	/**
 	 * 
@@ -65,9 +82,9 @@ module.exports = (function() {
 	 * @param {String} id 
 	 */
 	this.pushChanged = function(id, callback) {
-		var changing = new ChangeEvent(is, callback);
-		_trackChanging(id, changing)
-	}
+		var changing = new ChangeEvent(id, callback);
+		trackChanging(id, changing);
+	};
 	
 	/**
 	 * 
@@ -79,4 +96,6 @@ module.exports = (function() {
 	var trackChanging = function(changing) {
 		
 	};
-})();
+	
+	return this;
+};

@@ -149,6 +149,9 @@ class RSObject {
 	 * 		for the referenced value.
 	 */
 	getValue(name, index, callback) {
+		if(!callback) {
+			console.trace("GetValue: ", name, index, callback);
+		}
 		// console.log("GetValue: ", name, index, this.toJSON());
 		setTimeout(() => {
 			if(typeof(name) === "string") {
@@ -160,7 +163,7 @@ class RSObject {
 			} else if(index === undefined || index === null) {
 				index = 0;
 			}
-			console.log("Get Value[ " + this.id + " ] @" + index + " - ", name);
+			// console.log("Get Value[ " + this.id + " ] @" + index + " - ", name);
 			if(name[index] === "this") {
 				this.getValue(name, index + 1, callback);
 			} else if(index + 1 === name.length) {
@@ -168,7 +171,7 @@ class RSObject {
 			} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
 				callback(null, this[name[index]][name[index + 1]]);
 			} else if(this[name[index]]) {
-				console.log("Request More: " + name + " @" + index);
+				// console.log("Request More: " + name + " @" + index);
 				this._universe.requestObject(this[name[index]], function(err, object) {
 					if(err) {
 						callback(err, null);
@@ -182,6 +185,19 @@ class RSObject {
 				callback(new Error("Unable to follow value path @" + index + ": " + name.join()), null);
 			}
 		}, 0);
+	}
+	
+	
+	promiseValue(name) {
+		return new Promise((done, fail) => {
+			this.getValue(name, 0, function(err, value) {
+				if(err) {
+					fail(err);
+				} else {
+					done(value);
+				}
+			});
+		});
 	}
 	
 	
@@ -312,7 +328,13 @@ class RSObject {
 	}
 }
 
-
+/**
+ * 
+ * @method getClassFromID
+ * @static
+ * @param {String} id
+ * @return {String} The Class ID for the passed Object ID.
+ */
 RSObject.getClassFromID = function(id) {
 	var index = id.indexOf(":");
 	if(index === -1) {
@@ -436,10 +458,6 @@ RSObject.setObjects = function(a, b) {
 };
 
 RSObject.setValues = function(a, b, type) {
-	if(!type) {
-		type = typeof(a);
-	}
-	
 	if(typeof(a) === undefined || typeof(b) !== undefined) {
 		return b;
 	} else {

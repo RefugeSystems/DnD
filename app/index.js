@@ -1,3 +1,4 @@
+console.log(">>> Startup: " + (new Date).toString());
 
 // Add custom methods to select classes
 require("./extensions/string.js");
@@ -5,18 +6,21 @@ require("./extensions/array.js");
 
 // Get Initial Values
 var configuration = require("a-configuration"),
-	api = require("./api"),
-	authentication = require("./authentication"),
-	logging = require("./authentication"),
-
+	verify = require("./management/verify"),
+	logging = require("./logging"),
+	
 	startup = {},
+	authentication,
 	universe,
+	api,
 
 	Universe = require("./universe"),
+	Authentication = require("./authentication"),
 	Anomaly = require("./management/anomaly"),
 	RSDatabase = require("./storage/database"),
 	RSObject = require("./storage/rsobject"),
 	RSField = require("./storage/rsfield"),
+	APIController = require("./api"),
 
 	EventEmitter = require("events").EventEmitter,
 	WebSocket = require("ws"),
@@ -30,24 +34,40 @@ var configuration = require("a-configuration"),
 // Setup basic defaults
 EventEmitter.defaultMaxListeners = 50;
 
-universe = new Universe(configuration);
 startup.configuration = configuration;
 startup.RSDatabase = RSDatabase;
 startup.RSObject = RSObject;
 startup.RSField = RSField;
 startup.Anomaly = Anomaly;
 
-logging.initialize(startup)
-.then(universe.initialize)
-.then(authentication.initialize)
-.then(api.initialize)
+verify(configuration)
 .then(function() {
+	logging.initialize(startup);
+}).then(function() {
+	universe = new Universe(configuration);
+	universe.on("error", function(anomaly) {
+		logging.entry(anomaly);
+	});
+	return universe.initialize(startup);
+}).then(function() {
+	authentication = new Authentication(universe);
+	authentication.on("error", function(anomaly) {
+		logging.entry(anomaly);
+	});
+	return authentication.initialize(startup);
+}).then(function() {
+	api = new APIController(universe, authentication);
+	api.on("error", function(anomaly) {
+		logging.entry(anomaly);
+	});
+	return api.initialize(startup);
+}).then(function() {
 	console.log("System Online: " + configuration.server.port);
 	configuration.server.startup_time = Date.now() - start;
 	logging.entry(new Anomaly("app:startup:online","System Online", 30, configuration.server, null, componentID));
-})
-.catch(function(error) {
-	console.log(startup, "System Start Error: ", error);
+}).catch(function(error) {
+	// console.log(startup, "System Start Error: ", error, "\nConfiguration: ", configuration);
+	console.log("System Start Error: ", error);
 	var details = {};
 	details.startup_time = Date.now() - start;
 	details.server_configuration = configuration.server;

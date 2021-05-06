@@ -3,6 +3,7 @@
  *
  * @class LogController
  * @constructor
+ * @static
  */
 var bunyan = require("bunyan");
 
@@ -22,10 +23,10 @@ var defaults = {
 	}]
 };
 
-
-
-module.exports = function() {
+module.exports = new (function() {
 	var output = null;
+	
+	this.ready = false;
 	
 	/**
 	 *
@@ -34,13 +35,21 @@ module.exports = function() {
 	 * @return {Promise}
 	 */
 	this.initialize = (startup) => {
-		return new Promise((done, fail) => {
+		return new Promise((done) => {
 			/**
 			 *
 			 * @property specification
 			 * @type Object
 			 */
  			this.specification = Object.assign({}, defaults, startup.configuration.logging);
+			if(startup.configuration.logging.directory) {
+				this.specification.streams = [{
+					"path": startup.configuration.logging.directory + (startup.configuration.logging.prefix || startup.configuration.logging.name) + ".log",
+					"level": startup.configuration.logging.level || "debug",
+					"type": startup.configuration.logging.type || "rotating-file"
+				}];
+			}
+			console.log("Log: ", startup.configuration.logging);
 			var defaulting = Object.keys(defaults.streams[0]),
 				stream,
 			 	s,
@@ -84,10 +93,10 @@ module.exports = function() {
 			 * @type Bunyan
 			 * @private
 			 */
-			console.log("Make logger...");
 			output = bunyan.createLogger(this.specification);
 			
 			startup.logging = this;
+			this.ready = true;
 			done(startup);
 		});
 	};
@@ -98,14 +107,18 @@ module.exports = function() {
 	 * @param {String | Anomaly} anomaly
 	 */
 	this.entry = (anomaly) => {
-		if(typeof(anomaly) === "string") {
-			anomaly = {
-				"msg": anomaly
-			};
-			anomaly.date = (new Date()).toString();
-			anomaly.time = Date.now();
+		if(this.ready) {
+			if(typeof(anomaly) === "string") {
+				anomaly = {
+					"msg": anomaly
+				};
+				anomaly.date = (new Date()).toString();
+				anomaly.time = Date.now();
+			}
+			output.info(anomaly, anomaly.msg);
+		} else {
+			console.warn("Log not ready");
 		}
-		output.info(anomaly, anomaly.msg);
 	};
 	
 	/**
@@ -115,30 +128,33 @@ module.exports = function() {
 	 */
 	this.close = () => {
 		return new Promise((done, fail) => {
-			console.log("Streams: ", output.streams);
-			var closing = [],
-				s,
-				x;
-				
-			output.streams.forEach(function(stream) {
-				closing.push(new Promise(function(done, fail) {
-					if(stream.stream) {
-						if(stream.stream.stream) {
-							stream.stream.stream.on("close", done);
-							stream.stream.stream.end();
+			if(this.ready) {
+				var closing = [],
+					s,
+					x;
+					
+				output.streams.forEach(function(stream) {
+					closing.push(new Promise(function(done, fail) {
+						if(stream.stream) {
+							if(stream.stream.stream) {
+								stream.stream.stream.on("close", done);
+								stream.stream.stream.end();
+							} else {
+								stream.stream.on("close", done);
+								stream.stream.end();
+							}
 						} else {
-							stream.stream.on("close", done);
-							stream.stream.end();
+							done();
 						}
-					} else {
-						done();
-					}
-				}))
-			});
-			
-			Promise.all(closing)
-			.then(done)
-			.catch(fail);
+					}))
+				});
+				
+				Promise.all(closing)
+				.then(done)
+				.catch(fail);
+			} else {
+				done();
+			}
 		});
 	};
-};
+})();

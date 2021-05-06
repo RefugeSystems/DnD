@@ -4,14 +4,15 @@
  * @class APIController
  * @extends EventEmitter
  * @constructor
- * @type {[type]}
  */
 
 var EventEmitter = require("events").EventEmitter;
 
 class APIController extends EventEmitter {
-	constructor() {
+	constructor(universe, authentication) {
 		super();
+		this.universe = universe;
+		this.authentication = authentication;
 	}
 
 	/**
@@ -22,7 +23,7 @@ class APIController extends EventEmitter {
 	 */
 	initialize(startup) {
 		return new Promise((done, fail) => {
-
+			done();
 		});
 	}
 }

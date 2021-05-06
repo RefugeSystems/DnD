@@ -25,8 +25,12 @@ module.exports = function(universe) {
 		"cha": "charisma"
 	};
 	
-	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+)/g;
-	var calculateSecurityRegEx = /^[<>a-zA-Z0-9\(\)+-\/\*]*$/;
+	
+	var diceReductionRegEx = new RegExp("\\+?([0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\.]+)(d[0-9]+)", "g"),
+		calculateSecurityRegEx = new RegExp("^[<>a-zA-Z0-9\\(\\)+-\\/\\* ]*$"),
+		variableExpression = new RegExp("([a-z_]+)\\.?([a-z:_]+)?", "g"),
+		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
+		spaces = new RegExp(" ", "g");
 
 	var calculate = function(expression) {
 		if(expression && expression[0] === "+") { // Other operators would expressly be an issue
@@ -54,9 +58,23 @@ module.exports = function(universe) {
 		"d100"
 	];
 	
-	var variableExpression = new RegExp("([a-z_]+)\\.?([a-z:_]+)?", "g"),
-		diceExpression = new RegExp("(\([^\)]+\))?d([0-9]+)");
+	var diceValue = {
+		"d4": 4,
+		"d6": 6,
+		"d8": 8,
+		"d10": 10,
+		"d12": 12,
+		"d20": 20,
+		"d100": 100
+	};
+	
 
+	/**
+	 * 
+	 * @method diceRoll
+	 * @param {String} dice ie. d6 or d27319
+	 * @return {Integer} Value determined for the die roll.
+	 */
 	var diceRoll = function(dice) {
 		var roll = parseInt(parseInt(dice.substring(1)) * Math.random()) + 1;
 		return roll;
@@ -66,134 +84,85 @@ module.exports = function(universe) {
 	 * 
 	 * @method process
 	 * @param {String} expression
-	 * @param {RSObject} source
-	 * @param {Function} callback
+	 * @param {RSObject} [source]
+	 * @return {Promise}
 	 */
-	this.process = function(expression, source, callback) {
-		if(!source) {
-			return expression;
-		} else if(!expression || typeof(expression) === "number") {
-			return expression;
-		}
+	this.process = function(expression, source) {
+		return new Promise((done, fail) => {
+			if(!expression) {
+				done(0);
+			} else if(typeof(expression) === "number") {
+				done(expression);
+			}
 
-		var processed = expression,
-			collating = 0,
-			variables,
-			buffer,
-			error,
-			x;
-		
-		var collate = function(variables) {
-			// console.log("Collation: ", variables);
-			return function(err, value) {
-				if(err) {
-					error = err;
-					callback(err);
-				} else {
-					try {
-						// console.log("Processing: ", variables, " - ", err, value, processed);
-						processed = processed.replace(variables.matched, (value || 0));
-						// console.log("Processed: ", processed);
-						if(!error && --collating === 0) {
-							// console.log("Processed: ", processed);
-							callback(null, processed);
-						}
-					} catch(exception) {
-						error = exception;
-						callback(error);
-					}
-				}
-			};
-		};
+			var processed = expression,
+				collating = [],
+				variables,
+				collate,
+				buffer,
+				error,
+				x;
 			
-		while(variables = variableExpression.exec(expression)) {
-			// console.log("Expression: ", expression, variables);
-			collating++;
-			variables = {
-				"path": [].concat(variables),
-				"matched": variables[0],
-				"index": variables.index
+			collate = function(variables) {
+				return new Promise((done, fail) => {
+					source.promiseValue(variables.path)
+					.then((value) => {
+						processed = processed.replace(variables.matched, (value || 0));
+						done();
+					})
+					.catch(fail);
+				});
 			};
-			variables.path.shift();
-			for(x=0; x<variables.path.length; x++) {
-				if(shortHand[variables.path[x]]) {
-					variables.path[x] = shortHand[variables.path[x]];
-				} else if(!variables.path[x]) {
-					variables.path.splice(x);
+				
+			if(source) {
+				while(variables = variableExpression.exec(expression)) {
+					// console.log("Expression: ", expression, variables);
+					variables = {
+						"path": [].concat(variables),
+						"matched": variables[0],
+						"index": variables.index
+					};
+					variables.path.shift();
+					for(x=0; x<variables.path.length; x++) {
+						if(shortHand[variables.path[x]]) {
+							variables.path[x] = shortHand[variables.path[x]];
+						} else if(!variables.path[x]) {
+							variables.path.splice(x);
+						}
+					}
+					// console.log("Variables: ", variables);
+					collating.push(collate(variables));
 				}
 			}
-			// console.log("Variables: ", variables);
-			source.getValue(variables.path, collate(variables));
-		}
+			
+			Promise.all(collating)
+			.then(function() {
+				done(calculate(processed));
+			})
+			.catch(fail);
+		});
 	};
 
 	/**
 	 * Parses a string expression (e.g "con + 1d8") into an object for calculation or
 	 * display.
+	 *
+	 * Complex parenthetical expressions are NOT supported as this operation does not
+	 * perserve order and only supports single locations for dice. Thus the below is
+	 * not a valid expression for this function:
+	 * (1d6 + int)/2 + 1d6
+	 * 
 	 * @method parseDiceRoll
 	 * @param {String} expression
-	 * @param {RSObject} [source] 
+	 * @return {Object} With the dice names as keys mapping to their indicated counts.
+	 * 		The non-dice portion is returned under `remainder`.
 	 */
-	this.parseDiceRoll = function(expression, source, target) {
-		var x, sCasting, tCasting, regex, buffer = [], dice = {};
-		if(!expression) {
-			return dice;
-		} else {
-			expression = expression.toString();
-		}
-
-		if(source) {
-			sCasting = source.castWith || "int";
-			sCasting = sCasting.substring(0, 3);
-		} else {
-			sCasting = "int";
-		}
-		if(target) {
-			tCasting = target.castWith || "int";
-			tCasting = tCasting.substring(0, 3);
-		} else {
-			tCasting = "int";
-		}
-
-		if(target && target.castWith && expression.indexOf("target.cast") !== -1) {
-			regex = new RegExp("target.cast", "g");
-			expression = expression.replace(regex, tCasting);
-		}
-
-		if(source && source.castWith && expression.indexOf("cast") !== -1) {
-			regex = new RegExp("cast", "g");
-			expression = expression.replace(regex, sCasting);
-		}
-
-		if(target) {
-			for(x=0; x<rollLevelMap.length; x++) {
-				regex = new RegExp("target\\." + rollLevelMap[x][0], "g");
-				expression = expression.replace(regex, target.level[rollLevelMap[x][1]] || 0);
-			}
-			for(x=0; x<rollMap.length; x++) {
-				regex = new RegExp("target\\." + rollMap[x][0], "g");
-				expression = expression.replace(regex, parseInt(Math.floor(((target.sheet?target.sheet:target)[rollMap[x][1]] || 0)/2) - 5));
-			}
-			for(x=0; x<rollDirectMap.length; x++) {
-				regex = new RegExp("target\\." + rollDirectMap[x][0], "g");
-				expression = expression.replace(regex, parseInt( (target.sheet?target.sheet:target)[rollDirectMap[x][1]] ) );
-			}
-		}
-		if(source) {
-			for(x=0; x<rollLevelMap.length; x++) {
-				regex = new RegExp(rollLevelMap[x][0], "g");
-				expression = expression.replace(regex, source.level[rollLevelMap[x][1]] || 0);
-			}
-			for(x=0; x<rollMap.length; x++) {
-				regex = new RegExp(rollMap[x][0], "g");
-				expression = expression.replace(regex, parseInt(Math.floor(((source.sheet?source.sheet:source)[rollMap[x][1]] || 0)/2) - 5));
-			}
-			for(x=0; x<rollDirectMap.length; x++) {
-				regex = new RegExp(rollDirectMap[x][0], "g");
-				expression = expression.replace(regex, parseInt( (source.sheet?source.sheet:source)[rollDirectMap[x][1]] ) );
-			}
-		}
-		expression = expression.replace(/ /g, "");
+	this.parseDiceRoll = function(expression) {
+		var buffer = [],
+			dice = {},
+			x;
+			
+		expression = expression.replace(spaces, "");
 		x = diceReductionRegEx.exec(expression);
 		while(x !== null) {
 			buffer.push(x[0]);
@@ -203,88 +172,156 @@ module.exports = function(universe) {
 		for(x=0; x<buffer.length; x++) {
 			expression = expression.replace(buffer[x], "");
 		}
-		dice.null = expression;
+		dice.remainder = expression;
 		return dice;
 	};
-
-	var rawDiceRoll = function(expression, source, target, callback) {
-		var x, dice, add;
-		dice = parseDiceRoll(expression, source, target);
-		expression = calculate(dice.null);
-		for(x=0; x<diceOrder.length; x++) {
-			if(dice[diceOrder[x]]) {
-				add = parseInt(calculate(dice[diceOrder[x]]));
-				if(isNaN(add)) {
-					add = "(" + dice[diceOrder[x]] + ")" + diceOrder[x];
-				} else {
-					add = add + diceOrder[x];
-				}
-				if(expression) {
-					expression += " + " + add;
-				} else {
-					expression = add;
-				}
-			}
-		}
-		return expression;
-	};
-
-	var reduceDiceRoll = function(expression, source, target, callback) {
-		var x, buffer, dice;
-		dice = parseDiceRoll(expression, source, target);
-		expression = calculate(dice.null);
-		for(x=0; x<diceOrder.length; x++) {
-			if(dice[diceOrder[x]]) {
-				if(expression) {
-					expression += " + " + (isNaN(buffer = parseInt(calculate(dice[diceOrder[x]])))?dice[diceOrder[x]]:buffer) + diceOrder[x];
-				} else {
-					expression = (isNaN(buffer = parseInt(calculate(dice[diceOrder[x]])))?dice[diceOrder[x]]:buffer) + diceOrder[x];
-				}
-			}
-		}
-		return expression;
-	};
-
-	var calculateDiceRoll = function(expression, source, target, callback) {
-		var d, x, roll, dice;
-		dice = parseDiceRoll(expression, source, target);
-		roll = parseInt(calculate(dice.null)) || 0;
-		for(d=0; d<diceOrder.length; d++) {
-			dice[diceOrder[d]] = parseInt(calculate(dice[diceOrder[d]]));
-			for(x=0; x<dice[diceOrder[d]] && !isNaN(dice[diceOrder[d]]); x++) {
-				roll += diceRoll(diceOrder[d]);
-			}
-		}
-		return parseInt(roll);
-	};
-
+	
 	/**
 	 * 
 	 * @method rawDiceRoll
 	 * @param {String} expression
-	 * @param {RSObject} source
-	 * @param {RSObject} target
-	 * @param {Function} callback
+	 * @param {RSObject} [source]
+	 * @return {Promise}
 	 */
-	this.rawDiceRoll = rawDiceRoll;
-
-	/**
-	 *
-	 * @method diceRoll
-	 * @param {String} expression
-	 * @param {Character | NPC | Monster} [source] Drives raw arguments for stats such as "str" and "wis".
-	 * @param {Character | NPC | Monster} [target] Drives 'target; arguments for stats such as "target.str"
-	 * 		and "target.wis".
-	 */
-	this.diceRoll = calculateDiceRoll;
+	this.rawDiceRoll = function(expression, source) {
+		return new Promise((done, fail) => {
+			var collating = [],
+				result = {},
+				collate,
+				dice,
+				add,
+				x;
+				
+			collate = (d) => {
+				return new Promise((done, fail) => {
+					parseInt(this.process(dice[d]), source)
+					.then((add) => {
+						if(isNaN(add)) {
+							add = "(" + dice[d] + ")" + d;
+						} else {
+							add = add + d;
+						}
+						if(expression) {
+							expression += " + " + add;
+						} else {
+							expression = add;
+						}
+						done();
+					})
+					.catch(fail);
+				});
+			};
+				
+			dice = this.parseDiceRoll(expression);
+			expression = this.process(dice.remainder, source);
+			for(x=0; x<diceOrder.length; x++) {
+				if(dice[diceOrder[x]]) {
+					collating.push(collate(diceOrder[x]));
+				}
+			}
+			
+			Promise.all(collating)
+			.then(function() {
+				done(expression);
+			})
+			.catch(fail);
+		});
+	};
 
 	/**
 	 *
 	 * @method reduceDiceRoll
 	 * @param {String} expression
-	 * @param {Character | NPC | Monster} [source] Drives raw arguments for stats such as "str" and "wis".
-	 * @param {Character | NPC | Monster} [target] Drives 'target; arguments for stats such as "target.str"
-	 * 		and "target.wis".
+	 * @param {RSObject} [source] Drives raw arguments for stats such as "str" and "wis".
+	 * @return {Promise}
 	 */
-	this.reduceDiceRoll = reduceDiceRoll;
+	this.reduceDiceRoll = function(expression, source) {
+		return new Promise((done, fail) => {
+			var collating = [],
+				dice,
+				x;
+			
+			dice = this.parseDiceRoll(expression);
+			for(x=0; x<diceOrder.length; x++) {
+				if(dice[diceOrder[x]]) {
+					collating.push(this.process(dice[diceOrder[x]], source));
+				} else {
+					collating.push(null);
+				}
+			}
+			collating.push(this.process(dice.remainder, source));
+			
+			Promise.all(collating)
+			.then(function(values) {
+				var reduced = "";
+				for(x=0; x<diceOrder.length; x++) {
+					if(values[x]) {
+						if(reduced) {
+							if(typeof(values[x]) === "number") {
+								reduced += " + " + values[x] + diceOrder[x];
+							} else {
+								reduced += " + (" + values[x] + ")" + diceOrder[x];
+							}
+						} else {
+							if(typeof(values[x]) === "number") {
+								reduced = values[x] + diceOrder[x];
+							} else {
+								reduced = "(" + values[x] + ")" + diceOrder[x];
+							}
+						}
+					}
+				}
+				
+				// Pick up remainder
+				if(values[x]) {
+					if(reduced) {
+						reduced += " + " + values[x];
+					} else {
+						reduced = values[x];
+					}
+				}
+				
+				done(reduced);
+			})
+			.catch(fail);
+		});
+	};
+
+	/**
+	 *
+	 * @method rollDice
+	 * @param {String} expression
+	 * @param {RSObject} [source] Drives raw arguments for stats such as "str" and "wis".
+	 * @return {Promise}
+	 */
+	this.rollDice = function(expression, source) {
+		return new Promise((done, fail) => {
+			var roll,
+				dice,
+				d,
+				x;
+				
+			// Collate Dice Counts
+			roll = [];
+			dice = this.parseDiceRoll(expression);
+			for(d=0; d<diceOrder.length; d++) {
+				roll.push(this.process(dice[diceOrder[d]], source));
+			}
+			roll.push(this.process(dice.remainder), source);
+			
+			// Roll counts
+			Promise.all(roll)
+			.then(function(values) {
+				roll = 0;
+				for(d=0; d<diceOrder.length; d++) {
+					for(x=0; x<values[d] && !isNaN(values[d]); x++) {
+						roll += parseInt(diceValue[diceOrder[d]] * Math.random()) + 1;
+						// roll += diceRoll(diceOrder[d]);
+					}
+				}
+				done(roll);
+			})
+			.catch(fail);
+		});
+	};
 };

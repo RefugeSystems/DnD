@@ -27,7 +27,7 @@ class Anomaly {
 	constructor(code, message, level, details, cause, component) {
 		// super(message);
 		this.code = code;
-		this.origin = component?component.id || component:"unknown";
+		this.component = component?(component.id || component):"unknown";
 		this.msg = message;
 		this.level = level || (cause?40:30);
 		if(details) {

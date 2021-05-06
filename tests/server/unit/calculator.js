@@ -78,28 +78,20 @@ describe("DnD Expression Calculator", function() {
 		});
 		source.updateFieldValues();
 		// console.log("Process: ", calculator.process("1d6 + 1d6 + 1d8 + 5"));
-		calculator.process(source._data.armor, source, function(err, res) {
-			if(err) {
-				done(err);
-			} else {
-				expect(eval(res)).toBe(10);
-				calculator.process(source._data.spell_dc, source, function(err, res) {
-					if(err) {
-						done(err);
-					} else {
-						expect(eval(res)).toBe(13);
-						calculator.process("int + score", source, function(err, res) {
-							if(err) {
-								done(err);
-							} else {
-								expect(eval(res)).toBe(10);
-								done();
-							}
-						});
-					}
-				});
-			}
-		});
+		calculator.process(source._data.armor, source)
+		.then(function(res) {
+			expect(res).toBe(10);
+			return calculator.process(source._data.spell_dc, source);
+		})
+		.then(function(res) {
+			expect(res).toBe(13);
+			return calculator.process("int + score", source);
+		})
+		.then(function(res) {
+			expect(res).toBe(10);
+		})
+		.then(done)
+		.catch(done);
 	});
 	
 	it("manages to calculate across objects", function(done) {
@@ -139,20 +131,100 @@ describe("DnD Expression Calculator", function() {
 		tar.updateFieldValues();
 		
 		universe.setObjectReturn(tar);
-		calculator.process("relation.charisma", source, function(err, res) {
-			if(err) {
-				done(err);
-			} else {
-				expect(res).toBe("5");
-				done();
-			}
-		});
+		calculator.process("relation.charisma", source)
+		.then(function(res) {
+			expect(res).toBe(5);
+			done();
+		})
+		.catch(done);
 	});
 	
 	it("parses out dice references correctly", function() {
-		var result = calculator.rawDice("int + 1d6 + 9d9 + 9 - 4");
-		expect(result["remainder"]).toBe("9 - 4 + int");
-		expect(result["d6"]).toBe("1");
+		var result = calculator.parseDiceRoll("int + 1d6 + 9d9 + intd6 + ( (str + chadimire)/2 )d31 + 9 - 4");
+		expect(result["remainder"]).toBe("int+9-4");
+		expect(result["d6"]).toBe("1+int");
 		expect(result["d9"]).toBe("9");
+		expect(result["d31"]).toBe("((str+chadimire)/2)");
+	});
+	
+	it("can calculate a flat number", function(done) {
+		calculator.process("9")
+		.then(function(res) {
+			expect(res).toBe(9);
+			return calculator.process(19 + 4);
+		})
+		.then(function(res) {
+			expect(res).toBe(23);
+		})
+		.then(done)
+		.catch(done);
+	});
+	
+	it("can reduce a dice roll", function(done) {
+		var source;
+		
+		source = new RSObject(universe, manager, {
+			"id": "test:object:one",
+			"name": "Object Name",
+			"description": "Test description",
+			"strength": 10,
+			"dexterity": 10,
+			"constitution": 10,
+			"wisdom": 10,
+			"intelligence": 10,
+			"charisma": 10,
+			"relation": "test:object:target",
+			"spell_dc": "intelligence/2 + 8",
+			"armor": "10 + (this.dex/2 - 5)"
+		});
+		
+		source.updateFieldValues();
+		
+		calculator.reduceDiceRoll("int + 2d6 + 1d6 + 1d8 + 5d8")
+		.then(function(res) {
+			expect(res).toBe("3d6 + 6d8 + int");
+			return calculator.reduceDiceRoll("int + 2d6 + intd6 + dexd8 + 5d8 + 2 + ((int-5)/2)");
+		})
+		.then(function(res) {
+			expect(res).toBe("(2+int)d6 + (dex+5)d8 + int+2+((int-5)/2)");
+			return calculator.reduceDiceRoll("int + 2d6 + intd6 + dexd8 + 5d8 + 3 + ((int - 4) / 2)", source);
+		})
+		.then(function(res) {
+			expect(res).toBe("12d6 + 15d8 + 16");
+			done();
+		})
+		.catch(done);
+	});
+	
+	it("can calculate a dice roll", function(done) {
+		var source;
+		
+		source = new RSObject(universe, manager, {
+			"id": "test:object:one",
+			"name": "Object Name",
+			"description": "Test description",
+			"strength": 10,
+			"dexterity": 10,
+			"constitution": 10,
+			"wisdom": 10,
+			"intelligence": 10,
+			"charisma": 10,
+			"relation": "test:object:target",
+			"spell_dc": "intelligence/2 + 8",
+			"armor": "10 + (this.dex/2 - 5)"
+		});
+		
+		source.updateFieldValues();
+		
+		calculator.rollDice("6d6")
+		.then(function(res) {
+			expect(6 <= res && res <= 36).toBe(true);
+			return calculator.rollDice("intd6", source);
+		})
+		.then(function(res) {
+			expect(10 <= res && res <= 60).toBe(true);
+			done();
+		})
+		.catch(done);
 	});
 });

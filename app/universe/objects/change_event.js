@@ -55,12 +55,12 @@ module.exports = function(universe, id, callback) {
 	
 	this.fire = function() {
 		time = Date.now();
-		processNextObject()
+		processNextObject();
 	};
 	
 	
 	var processNextObject = function() {
-		var processing = universe.
+		// var processing = universe.
 	};
 	
 	/**

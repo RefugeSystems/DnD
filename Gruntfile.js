@@ -29,7 +29,6 @@ var config = {
 				],
 				"block-scoped-var": 2,
 				"no-undef": 2,
-				"semi": 2,
 				"max-depth": [1, {
 						"max": 10
 					}
@@ -129,7 +128,7 @@ var config = {
 			"app/core/**/*.js",
 			"app/management/**/*.js",
 			"app/storage/**/*.js",
-			"app/world/**/*.js",
+			"app/universe/**/*.js",
 			"app/*.js"
 		],
 		"ui": [
@@ -559,8 +558,8 @@ module.exports = function (grunt) {
 	});
 
 	grunt.registerTask("documentation", ["yuidoc:server", "yuidoc:ui"]);
-	grunt.registerTask("server_develop", ["eslint:server", "jasmine:server", "watch:server"]);
-	grunt.registerTask("server", ["concurrent:server"]);
+	grunt.registerTask("server_develop", ["watch:server"]);
+	grunt.registerTask("server", ["eslint:server", "jasmine:server", "concurrent:server"]);
 	grunt.registerTask("ui", ["concurrent:ui"]);
 
 	grunt.registerTask("ui_build", ["eslint", "jasmine:ui", "templify:app", "uglify:worker", "uglify:externals", "uglify:app", "concat:less", "less:app"]);

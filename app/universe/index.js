@@ -8,42 +8,50 @@
  */
 
 var EventEmitter = require("events").EventEmitter,
-	objectHandler = requrie("./objects");
+	ObjectHandler = require("./objects");
 
-var types = [
-		"session", // HTTP or WebSocket Session
-		"player",
-		
-		"setting", // Universe Settings and Values
-		"incident",
-		"meeting", // Game Session
-		
-		"dataset",
-		"image",
-		"playlist",
-		"streamurl",
-		"profile",
-		"widget",
-		
-		"entity",
-		"ability",
-		"skill",
-		"archetype",
-		"action", // Triggered by some game event to start user input like items that have an on long rest reset
-		"effect",
-		"race",
-		"classification",
-		"journal",
-		"item",
-		"knowledge",
-		"quest",
-		"location"];
+var classes = [
+	"session", // HTTP or WebSocket Session
+	"player",
+	
+	"setting", // Universe Settings and Values
+	"incident",
+	"meeting", // Game Session
+	
+	"dataset",
+	"image",
+	"playlist",
+	"streamurl",
+	"profile",
+	"widget",
+	
+	"entity",
+	"ability",
+	"skill",
+	"archetype",
+	"action", // Triggered by some game event to start user input like items that have an on long rest reset
+	"effect",
+	"race",
+	"classification",
+	"journal",
+	"item",
+	"knowledge",
+	"quest",
+	"location"];
 
 class Universe extends EventEmitter {
 	constructor(configuration) {
 		super();
+		/**
+		 * The Class Constructor for anomalies to allow using classes to construct the
+		 * object for notifications.
+		 * @property Anomaly
+		 * @type Class
+		 */
+		this.Anomaly = require("../management/anomaly");
 		this.calculator = require("./calculator/dnd");
 		this.configuration = configuration;
+		this.classes = classes;
 		this.managers = {};
 	}
 
@@ -55,8 +63,11 @@ class Universe extends EventEmitter {
 	 */
 	initialize(startup) {
 		return new Promise((done, fail) => {
+			startup.universe = this;
 			// Initialize Database
-			objectHandler.initialize(startup.configuration, types)
+			
+			this.objectHandler = new ObjectHandler(this);
+			this.objectHandler.initialize(startup)
 			// Receive the managers
 			.then((managers) => {
 				var types = Object.keys(managers),
@@ -66,9 +77,6 @@ class Universe extends EventEmitter {
 					this.managers[types[x]] = managers[types[x]];
 				}
 			})
-			// Load Grid:NULL
-			
-			// Load
 			.then(done)
 			.catch(fail);
 		});
@@ -112,6 +120,20 @@ class Universe extends EventEmitter {
 	 */
 	requestObject(id, callback) {
 		
+	}
+	
+	/**
+	 * 
+	 * @method getClassFromID
+	 * @param {String} id
+	 * @return {String} Class ID
+	 */
+	getClassFromID(id) {
+		var index = id.indexOf(":");
+		if(index === -1) {
+			return null;
+		}
+		return id.substring(0, index);
 	}
 }
 
