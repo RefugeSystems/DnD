@@ -5,7 +5,8 @@
  * @constructor
  * @static
  */
-var bunyan = require("bunyan");
+var pkg = require("../../package.json"),
+	bunyan = require("bunyan");
 
 /**
  *
@@ -14,7 +15,7 @@ var bunyan = require("bunyan");
  * @type Object
  */
 var defaults = {
-	"name": "applog",
+	"name": pkg.name || "applog",
 	"serializers": {}, // Object.assign({}, bunyan.stdSerializers),
 	"streams": [{
 		"path": "test.log",
@@ -44,12 +45,15 @@ module.exports = new (function() {
  			this.specification = Object.assign({}, defaults, startup.configuration.logging);
 			if(startup.configuration.logging.directory) {
 				this.specification.streams = [{
-					"path": startup.configuration.logging.directory + (startup.configuration.logging.prefix || startup.configuration.logging.name) + ".log",
+					"path": startup.configuration.logging.directory + (startup.configuration.logging.prefix || "") + this.specification.name + ".log",
 					"level": startup.configuration.logging.level || "debug",
 					"type": startup.configuration.logging.type || "rotating-file"
 				}];
 			}
-			console.log("Log: ", startup.configuration.logging);
+			
+			delete(this.specification.directory);
+			delete(this.specification.prefix);
+			
 			var defaulting = Object.keys(defaults.streams[0]),
 				stream,
 			 	s,

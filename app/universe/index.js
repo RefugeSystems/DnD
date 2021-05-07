@@ -48,11 +48,12 @@ class Universe extends EventEmitter {
 		 * @property Anomaly
 		 * @type Class
 		 */
+		this.id = "universe";
 		this.Anomaly = require("../management/anomaly");
 		this.calculator = require("./calculator/dnd");
 		this.configuration = configuration;
 		this.classes = classes;
-		this.managers = {};
+		this.manager = {};
 	}
 
 	/**
@@ -69,12 +70,12 @@ class Universe extends EventEmitter {
 			this.objectHandler = new ObjectHandler(this);
 			this.objectHandler.initialize(startup)
 			// Receive the managers
-			.then((managers) => {
-				var types = Object.keys(managers),
+			.then((manager) => {
+				var types = Object.keys(manager),
 					x;
 				
 				for(x=0; x<types.length; x++) {
-					this.managers[types[x]] = managers[types[x]];
+					this.manager[types[x]] = manager[types[x]];
 				}
 			})
 			.then(done)
@@ -86,10 +87,20 @@ class Universe extends EventEmitter {
 	 * 
 	 * @method getUserInformation
 	 * @param {String} id [description]
-	 * @return {RSObject}    [description]
+	 * @return {Promise | RSObject | Anomaly} Promise that on success passes the identified
+	 * 		player information or null. Fails with an Anomaly.
 	 */
 	getUserInformation(id) {
-		
+		return new Promise((done, fail) => {
+			this.manager.player.load(id)
+			.then((player) => {
+				
+			})
+			.catch((err) => {
+				
+				this.emit("error", err);
+			});
+		});
 	}
 	
 	/**

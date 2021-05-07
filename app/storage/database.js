@@ -33,6 +33,9 @@ mapping.string = {
 mapping.number = {
 	"type": "double"
 };
+mapping.file = {
+	"type": "text"
+};
 mapping.object = {
 	"type": "text",
 	"read": function(data) {
@@ -190,10 +193,12 @@ mapping._toObject = function(fields, write, create) {
 	}
 	for(var x=0; x<fields.length; x++) {
 		field = fields[x];
-		if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
-			mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
-		} else {
-			mapped["$" + field.id] = write[field.id];
+		if(field && write[field.id]) {
+			if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
+				mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
+			} else {
+				mapped["$" + field.id] = write[field.id];
+			}
 		}
 	}
 	return mapped;
@@ -312,6 +317,7 @@ class RSDatabase extends EventEmitter {
 					} else {
 						loading = [];
 						for(x=0; x<rows.length; x++) {
+							console.log("Read Class: ", rows[x]);
 							rows[x] = new ClassManager(this, rows[x]);
 							this.manager[rows[x].id] = rows[x];
 							loading.push(rows[x].initialize());
@@ -491,17 +497,38 @@ class RSDatabase extends EventEmitter {
 	 */
 	createClassManager(specification) {
 		return new Promise((done, fail) => {
-			if(!this.manager[specification.id]) {
-				// TODO: Create a Classification Manager
-				var manager = new ClassManager(this, specification);
-				manager.initialize()
-				.then(() => {
-					this.manager[specification.id] = manager;
-					done(manager);
-				})
-				.catch(fail);
-			} else {
+			if(this.manager[specification.id]) {
+				console.log("Loading Class: ", specification);
 				done(this.manager[specification.id]);
+			} else {
+				var manager = new ClassManager(this, specification),
+					statement = mapping._toInsert("rsclass", classColumns, specification),
+					write = {},
+					x;
+					
+					
+				console.log("Making Class: " + statement, specification);
+				for(x=0; x<classColumns.length; x++) {
+					if(specification[classColumns[x]]) {
+						write["$" + classColumns[x]] = specification[classColumns[x]];
+					}
+				}
+				write.$fields = JSON.stringify(specification.fields);
+				write.$id = specification.id;
+				
+				this.connection
+				.run(statement, write, (err) => {
+					if(err) {
+						fail(err);
+					} else {
+						manager.initialize()
+						.then(() => {
+							this.manager[specification.id] = manager;
+							done(manager);
+						})
+						.catch(fail);
+					}
+				});
 			}
 		});
 	}
@@ -606,7 +633,7 @@ class ClassManager extends EventEmitter {
 		if(!validClassIdentifier.test(specification.id)) {
 			throw new Error("Invalid ID for Class");
 		}
-		
+		console.log(specification);
 		/**
 		 *
 		 * @property id
@@ -689,8 +716,13 @@ class ClassManager extends EventEmitter {
 			this.fieldIDs = JSON.parse(this.fieldIDs);
 		}
 		for(x=0; x<this.fieldIDs.length; x++) {
+			if(!this.database.field[this.fieldIDs[x]]) {
+				console.log("Class Using Unknown Field: " + this.fieldIDs[x]);
+			} else {
+				console.log("Field[" + this.fieldIDs[x] + "] to Class[" + this.id + "]");
+			}
 			this.fields.push(this.database.field[this.fieldIDs[x]]);
-			this.fieldUsed[this.fieldIDs[x].id] = true; // Use Database for lookup
+			this.fieldUsed[this.fieldIDs[x]] = true; // Use Database for lookup
 		}
 		/**
 		 *
@@ -711,6 +743,7 @@ class ClassManager extends EventEmitter {
 	 * @return {Promise}
 	 */
 	initialize() {
+		console.trace("Class Initialization: " + this.id);
 		return new Promise((done, fail) => {
 			this.database.connection.all("select id from " + this.id + ";", emptyArray, (err, rows) => {
 				if(err) {
@@ -720,6 +753,8 @@ class ClassManager extends EventEmitter {
 							if(err) {
 								fail(err);
 							} else {
+								done(this);
+								/*
 								var statement = mapping._toInsert("rsclass", classColumns, this.specification),
 									write = mapping._toObject(this.specification, true);
 								write.$id = this.id;
@@ -730,6 +765,7 @@ class ClassManager extends EventEmitter {
 										done(this);
 									}
 								});
+								*/
 							}
 						});
 					} else {
@@ -896,6 +932,7 @@ class ClassManager extends EventEmitter {
 	 * @return {Promise} 
 	 */
 	load(universe, details) {
+		console.log("Load: ", details);
 		return new Promise((done, fail) => {
 			if(typeof(details) === "string") {
 				if(this.object[details] === false) {
@@ -941,15 +978,21 @@ class ClassManager extends EventEmitter {
 	loadGrid(universe, grid) {
 		return new Promise((done, fail) => {
 			this.retrieveAllData(grid, (err, data) => {
-				var loading = [],
-					x;
-				for(x=0; x<data.length; x++) {
-					loading.push(this.load(universe, data[x]));
+				if(err) {
+					fail(err);
+				} else if(!data) {
+					done();
+				} else {
+					var loading = [],
+						x;
+					for(x=0; x<data.length; x++) {
+						loading.push(this.load(universe, data[x]));
+					}
+					
+					Promise.all(loading)
+					.then(done)
+					.catch(fail);
 				}
-				
-				Promise.all(loading)
-				.then(done)
-				.catch(fail);
 			});
 		});
 	}
@@ -989,9 +1032,7 @@ class ClassManager extends EventEmitter {
 				x;
 
 			if(this.object[object.id] || this.object[object.id] === false) {
-				if(this.object[object.id] === false) {
-					console.trace("hmmm");
-				}
+				console.log("update");
 				// update
 				// TODO: Verify fields are valid for this Classification during write
 				write = mapping._toObject(this.fields, object, false);
@@ -1010,6 +1051,7 @@ class ClassManager extends EventEmitter {
 				write = mapping._toObject(this.fields, object, true);
 				this.object[object.id] = {};
 				statement = mapping._toInsert(this.id, fields, object);
+				console.log("insert: " + statement, write);
 				object.updated = write.$updated;
 				object.created = write.$created;
 			}
@@ -1040,7 +1082,7 @@ class ClassManager extends EventEmitter {
 				} else if(rows && rows.length) {
 					callback(undefined, rows?this._transcribeObject(rows[0]):null);
 				} else {
-					callback(new Error("Failed to find object"));
+					callback(null, null);
 				}
 			});
 		} else {
@@ -1140,7 +1182,7 @@ class ClassManager extends EventEmitter {
 				}
 				callback(undefined, rows);
 			} else {
-				callback(new Error("Failed to find any objects"));
+				callback(null, null);
 			}
 		});
 	}

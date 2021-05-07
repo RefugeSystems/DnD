@@ -40,34 +40,39 @@ startup.RSObject = RSObject;
 startup.RSField = RSField;
 startup.Anomaly = Anomaly;
 
+console.log("System Starting...");
 verify(configuration)
 .then(function() {
 	logging.initialize(startup);
 }).then(function() {
+	console.log("...Universe...");
 	universe = new Universe(configuration);
 	universe.on("error", function(anomaly) {
 		logging.entry(anomaly);
 	});
 	return universe.initialize(startup);
 }).then(function() {
+	console.log("...Authentication...");
 	authentication = new Authentication(universe);
 	authentication.on("error", function(anomaly) {
 		logging.entry(anomaly);
 	});
 	return authentication.initialize(startup);
 }).then(function() {
+	console.log("...API...");
 	api = new APIController(universe, authentication);
 	api.on("error", function(anomaly) {
 		logging.entry(anomaly);
 	});
 	return api.initialize(startup);
 }).then(function() {
-	console.log("System Online: " + configuration.server.port);
+	console.log("...Load Complete");
 	configuration.server.startup_time = Date.now() - start;
 	logging.entry(new Anomaly("app:startup:online","System Online", 30, configuration.server, null, componentID));
 }).catch(function(error) {
 	// console.log(startup, "System Start Error: ", error, "\nConfiguration: ", configuration);
-	console.log("System Start Error: ", error);
+	// console.log("System Start Error: ", error);
+	console.log("System Start Error: " + (error.message || error.msg), error.cause || error);
 	var details = {};
 	details.startup_time = Date.now() - start;
 	details.server_configuration = configuration.server;

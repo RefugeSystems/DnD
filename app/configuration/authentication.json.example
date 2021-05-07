@@ -1,6 +1,5 @@
 {
 	"authentication": {
-		"modules": ["local", "facebook", "google"],
 		"local": {
 			"type": "user",
 			"name": "username",
@@ -11,7 +10,12 @@
 			"type": "user"
 		},
 		"google": {
-			"type": "user"
+			"OAUTH2_CLIENT_ID": "your_client_id",
+			"OAUTH2_CLIENT_SECRET": "your_client_secret",
+			"OAUTH2_CALLBACK": "/login/link/google",
+			"name": "username",
+			"hash": "password",
+			"time": 259200000
 		}
 	}
 }

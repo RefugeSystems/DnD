@@ -47,6 +47,11 @@ module.exports = function(universe) {
 				for(x=0; x<universe.classes.length; x++) {
 					manager[universe.classes[x]] = database.getClassManager(universe.classes[x]);
 				}
+				
+				universe.on("shutdown", () => {
+					database.close();
+				});
+				
 				done(manager);
 			}).catch((err) => {
 				var anomaly = new Anomaly("fault:universe:initialization", "Failed to initialize the Universe", 60, startup, err, this);

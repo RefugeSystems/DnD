@@ -86,6 +86,17 @@ class RSObject {
 		 */
 		this._classification = manager.id;
 	}
+	
+	/**
+	 * @method linkFieldValues
+	 * @return {Promise} 
+	 */
+	linkFieldValues() {
+		console.log("Link: " + this.id);
+		return new Promise((done, fail) => {
+			done(this);
+		});
+	}
 
 	/**
 	 * Pulls values from

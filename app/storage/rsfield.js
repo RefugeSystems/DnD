@@ -17,7 +17,7 @@ class RSField extends EventEmitter {
 			throw new Error("Invalid ID for Field: " + specification.id);
 		}
 		if(specification.type && !validTypeValue.test(specification.type)) {
-			throw new Error("Invalid type value for Field: " + specification.type);
+			throw new Error("Invalid type (" + specification.type + ") value for Field (" + specification.id + ")");
 		}
 		if(!specification.name) {
 			throw new Error("storage:field", this, "RSField specification requires a name", 50);
@@ -78,6 +78,7 @@ class RSField extends EventEmitter {
 		 * + integer (Trims)
 		 * + dice | calculcated | formula (Similar with subtle differences in UI handling)
 		 * + array
+		 * + file (Base64 encoded String with the data)
 		 * + object (Stored as a String and is parsed and maintained as a single object).
 		 * 		Note that there are no atomic operations against objects as a field type,
 		 * 		they change in their entirety with any changes.

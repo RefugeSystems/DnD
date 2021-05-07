@@ -20,7 +20,9 @@ defaultPlayers.push({
 class Player extends RSObject {
 	constructor(details, universe, manager) {
 		super(details, universe, manager);
-		
-		this.guarenteeData(defaultPlayers);
+	}
+	
+	test() {
+		console.log("hi");
 	}
 }
