@@ -131,21 +131,21 @@ module.exports = function(universe) {
 		return new Promise((done, fail) => {
 			var promised = [];
 				
-			console.log("Tracking")
+			// console.log("Tracking")
 			
 			traceDependency(inheritance, consumer, source_fields, promised);
 			
-			console.log("Tracked")
+			// console.log("Tracked")
 			Promise.all(promised)
 			.then((loaded) => {
-				console.log("Tracking is Linking")
+				// console.log("Tracking is Linking")
 				for(x=0; x<loaded.length; x++) {
 					promised = [];
 					if(loaded[x]) {
 						promised.push(loaded[x].linkFieldValues());
 					}
 				}
-				console.log("Tracking Linked")
+				// console.log("Tracking Linked")
 				return Promise.all(promised);
 			})
 			.then((linked) => {
@@ -196,7 +196,7 @@ module.exports = function(universe) {
 			v,
 			x;
 			
-		console.log("Tracking")
+		// console.log("Tracking")
 		
 		inherit = function(value) {
 			classification = universe.getClassFromID(value);
@@ -293,7 +293,7 @@ module.exports = function(universe) {
 			v,
 			x;
 		
-		console.log("untracking");
+		// console.log("untracking");
 		for(x=0; x<consumed.length; x++) {
 			if(consumed[x]) {
 				if(consumed[x] instanceof Array) {
@@ -330,7 +330,7 @@ module.exports = function(universe) {
 				}
 			}
 		}
-		console.log("untracked");
+		// console.log("untracked");
 	};
 	
 	/**
