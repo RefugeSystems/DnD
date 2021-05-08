@@ -22,9 +22,7 @@
 	"license": "GNU",
 	"dependencies": {
 		"a-configuration": "^1.1.22",
-		"body-parser": "^1.19.0",
 		"bunyan": "^1.8.15",
-		"cookie-parser": "^1.4.5",
 		"cytoscape": "^3.18.2",
 		"cytoscape-cola": "^2.4.0",
 		"d3": "^6.7.0",
@@ -33,6 +31,7 @@
 		"jquery": "^3.6.0",
 		"passport": "^0.4.1",
 		"root-require": "^0.3.1",
+		"rs-random": "^1.0.41",
 		"showdown": "^1.9.1",
 		"sonos": "^1.14.1",
 		"sqlite3": "^5.0.2",

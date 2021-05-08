@@ -9,6 +9,8 @@ var WebSocket = require("ws"),
 	fs = require("fs");
 
 module.exports = new (function() {
+	this.id = "api:ws:controller";
+	
 	/**
 	 * 
 	 * @method initialize
@@ -53,6 +55,46 @@ module.exports = new (function() {
 				}
 				
 				api.universe.connectPlayer(connection);
+			});
+			
+			api.server.on("upgrade", function(request, socket, head) {
+				request.url = new URL("http://self" + request.url);
+				console.log("Upgrade URL: ", request.url);
+
+				if(request.url.pathname === "/connect") {
+					request.query = request.url.query; // This doesn't appear to be handled by WS
+					request.path = request.url.pathname;
+
+					console.log("Verifying Client: ", request.query);
+					if(api.specification.allow_anonymous) {
+						handler.handleUpgrade(request, socket, head, function(ws) {
+							handler.emit("connection", ws, request);
+						});
+					} else {
+						api.authorizeRequest(request)
+						.then(function(session) {
+							if(session) {
+								// log.info({"req": request, "session": session}, "Websocket accepted");
+								request.session = session;
+								handler.handleUpgrade(request, socket, head, function(ws) {
+									handler.emit("connection", ws, request);
+								});
+							} else {
+								api.emit("error", new api.universe.Anomaly("ws:connect:session", "No session found for connection", 40, {"request": request}, null, this));
+								// TODO: Respond nicely
+								socket.destroy();
+							}
+						}).catch(function(error) {
+							var details = {};
+							details.request = request;
+							api.emit("error", new api.universe.Anomaly("ws:connect:fault", "Failed to find session data for user while verifying websocket client", 40, details, error, this));
+							// TODO: Respond nicely
+							socket.destroy();
+						});
+					}
+				} else {
+					socket.destroy();
+				}
 			});
 			
 			done();

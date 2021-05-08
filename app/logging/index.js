@@ -25,8 +25,25 @@ var defaults = {
 };
 
 module.exports = new (function() {
-	var output = null;
-	
+	/**
+	 * 
+	 * @property output
+	 * @type Bunyan
+	 * @private
+	 */
+	var output = null,
+	/**
+	 * Queues entries to write that occur before the log is ready.
+	 * @properrty queue
+	 * @type Array
+	 * @private
+	 */
+		queue = [];
+	/**
+	 * 
+	 * @property ready
+	 * @type Boolean
+	 */
 	this.ready = false;
 	
 	/**
@@ -71,25 +88,12 @@ module.exports = new (function() {
 			this.specification.serializers.request = function(request) {
 				var serialization = {};
 				serialization.id = request.id;
+				serialization.conversation = request.conversation;
 				if(request.session) {
 					serialization.session = request.session.id;
 				}
 				return serialization;
 			};
-
-			/*
-			var errorStackRegex = new RegExp("([^\])\n\\s*", "g");
-			this.specification.serializers.cause = function(error) {
-				if(error) {
-					return {
-						"message": error.message,
-						"stack": error.stack?error.stack.replace(errorStackRegex, "$1~~").split("~~"):null
-					}
-				} else {
-					return null;
-				}
-			};
-			*/
 
 			/**
 			 *
@@ -101,6 +105,12 @@ module.exports = new (function() {
 			
 			startup.logging = this;
 			this.ready = true;
+			setTimeout(() => {
+				for(x=0; x<queue.length; x++) {
+					this.entry(queue[x]);
+				}
+				queue.splice(0);
+			}, 0);
 			done(startup);
 		});
 	};
@@ -108,20 +118,31 @@ module.exports = new (function() {
 	/**
 	 *
 	 * @method entry
-	 * @param {String | Anomaly} anomaly
+	 * @param {String | Object | Anomaly} entry
 	 */
-	this.entry = (anomaly) => {
+	this.entry = (entry) => {
+		if(typeof(entry) === "string") {
+			entry = {
+				"msg": entry,
+				"level": 30
+			};
+		}
+		if(!entry.time) {
+			entry.time = Date.now();
+		}
+		if(!entry.date) {
+			entry.date = (new Date(entry.time)).toString();
+		}
+		if(entry.message) {
+			entry.msg = entry.message;
+			delete(entry.message);
+		}
+		
 		if(this.ready) {
-			if(typeof(anomaly) === "string") {
-				anomaly = {
-					"msg": anomaly
-				};
-				anomaly.date = (new Date()).toString();
-				anomaly.time = Date.now();
-			}
-			output.info(anomaly, anomaly.msg);
+			output.info(entry, entry.msg);
 		} else {
 			console.warn("Log not ready");
+			queue.push(entry);
 		}
 	};
 	

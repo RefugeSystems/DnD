@@ -42,13 +42,13 @@ var classes = [
 class Universe extends EventEmitter {
 	constructor(configuration) {
 		super();
+		this.id = "universe";
 		/**
 		 * The Class Constructor for anomalies to allow using classes to construct the
 		 * object for notifications.
 		 * @property Anomaly
 		 * @type Class
 		 */
-		this.id = "universe";
 		this.Anomaly = require("../management/anomaly");
 		this.calculator = require("./calculator/dnd");
 		this.configuration = configuration;
@@ -69,14 +69,48 @@ class Universe extends EventEmitter {
 			
 			this.objectHandler = new ObjectHandler(this);
 			this.objectHandler.initialize(startup)
-			// Receive the managers
 			.then((manager) => {
+				// Receive the managers
 				var types = Object.keys(manager),
+					loading = [],
+					ids,
+					i,
 					x;
 				
+				// TODO: Loading Progress Bar?
+				
+				
 				for(x=0; x<types.length; x++) {
-					this.manager[types[x]] = manager[types[x]];
+					this.manager[types[x]] = manager[types[x]];	
+					if(manager[types[x]]) {
+						ids = Object.keys(manager[types[x]].object);
+						for(i=0; i<ids.length; i++) {
+							loading.push(manager[types[x]].object[ids[i]].linkFieldValues());
+						}
+					}
 				}
+				
+				return Promise.all(loading);
+			})
+			.then((loading) => {
+				// Calculate Loaded Objects
+				for(var x=0; x<loading.length; x++) {
+					if(loading[x]) {
+						loading[x].calculateFieldValues();
+					}
+				}
+				
+				return loading;
+			})
+			.then((loading) => {
+				// Update Loaded Objects
+				for(var x=0; x<loading.length; x++) {
+					if(loading[x]) {
+						loading[x].updateFieldValues();
+					}
+				}
+				
+				return loading;
 			})
 			.then(done)
 			.catch(fail);
@@ -93,24 +127,15 @@ class Universe extends EventEmitter {
 	getUserInformation(id) {
 		return new Promise((done, fail) => {
 			this.manager.player.load(id)
-			.then((player) => {
-				
-			})
+			.then(done)
 			.catch((err) => {
+				var details = {},
+					anomaly;
 				
+				anomaly = new Anomaly("user:info", "Failed to get user information", 40, details, err, this);
 				this.emit("error", err);
 			});
 		});
-	}
-	
-	/**
-	 * 
-	 * @method getSessionInformation
-	 * @param {String} id [description]
-	 * @return {RSObject}
-	 */
-	getSessionInformation(id) {
-		
 	}
 
 	/**

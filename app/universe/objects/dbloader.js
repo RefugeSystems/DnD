@@ -473,7 +473,7 @@ module.exports.initialize = function(universe, database) {
 				.then(function(objects) {
 					var x, y;
 					for(x=0; x<objects.length; x++) {
-						for(y=0; y<objects[x].length; y++) {
+						for(y=0; objects[x] && y<objects[x].length; y++) {
 							if(objects[x][y]) {
 								objects[x][y].updateFieldValues();
 							}

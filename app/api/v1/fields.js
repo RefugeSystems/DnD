@@ -3,22 +3,33 @@ var express = require("express");
 
 module.exports = new (function() {
 	this.router = express.Router();
-	this.path = "/fields";
 	
 	this.initialize = (api) => {
 		return new Promise((done) => {
+			var database = api.universe.objectHandler.getDatabase();
 			
-			this.router.get("/:classification", (req, res, next) => {
-				if(api.universe.manager[req.params.classification]) {
-					// console.log("ClassManager[" + req.params.classification + "]: ", api.universe.manager[req.params.classification]);
-					res.result = {
-						"fields": api.universe.manager[req.params.classification].fields
-					};
+			this.router.get("/", (req, res, next) => {
+				res.result = {
+					"fields": api.universe.objectHandler.listFields()
+				};
+				next();
+			});
+				
+			this.router.get("/:id", (req, res, next) => {
+				res.result = {
+					"field": database.field[req.params.id]
+				};
+				next();
+			});
+				
+			this.router.post("/", (req, res, next) => {
+				res.result = {};
+				api.universe.objectHandler.modifyField(req.body)
+				.then(function(field) {
+					res.result.field = field;
 					next();
-					
-				} else {
-					next();
-				}
+				})
+				.catch(next);
 			});
 			
 			done();

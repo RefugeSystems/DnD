@@ -81,6 +81,50 @@ module.exports = function(universe) {
 	};
 	
 	/**
+	 * Relies on Universe inheritance tracking to ensure required objects are
+	 * loaded and computes values based on their _calculated properties.
+	 * @method compute
+	 * @param {String} expression [description]
+	 * @param {RSObject} source     [description]
+	 * @param {Array} [referenced] Stores the sources for variables that were
+	 * 		calculated for update response purposes.
+	 * @return {Number}
+	 */
+	this.compute = function(expression, source, referenced) {
+		referenced = referenced || [];
+		if(!expression) {
+			return 0;
+		} else if(typeof(expression) === "number") {
+			return expression;
+		}
+
+		var processed = expression,
+			variables,
+			matched,
+			path,
+			x;
+		
+		if(source) {
+			while(variables = variableExpression.exec(expression)) {
+				// console.log("Expression: ", expression, variables);
+				path = [].concat(variables);
+				matched = path.shift();
+				for(x=0; x<path.length; x++) {
+					if(shortHand[path[x]]) {
+						path[x] = shortHand[path[x]];
+					} else if(!path[x]) {
+						path.splice(x);
+					}
+				}
+				processed.replace(matched, source.calculatedValue(path, referenced));
+			}
+		}
+		
+		return calculate(processed);
+	};
+	
+	
+	/**
 	 * 
 	 * @method process
 	 * @param {String} expression

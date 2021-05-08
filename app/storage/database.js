@@ -25,13 +25,13 @@ mapping.dice = {
 	"type": "text"
 };
 mapping.integer = {
-	// 1:1
+	"type": "integer"
 };
 mapping.string = {
 	"type": "text"
 };
 mapping.number = {
-	"type": "double"
+	"type": "real"
 };
 mapping.file = {
 	"type": "text"
@@ -357,9 +357,9 @@ class RSDatabase extends EventEmitter {
 	 * @param {Object} specification [description]
 	 * @return {Promise}
 	 */
-	createField(specification, callback) {
+	createField(specification) {
 		if(this.field[specification.id]) {
-			return this.updateField(specification.id, specification, callback);
+			return this.updateField(specification.id, specification);
 		}
 		
 		return new Promise((done, fail) => {
@@ -413,11 +413,11 @@ class RSDatabase extends EventEmitter {
 	 * @param {Object} [delta.attribute]
 	 * @return {Promise}
 	 */
-	updateField(id, delta, callback) {
+	updateField(id, delta) {
 		if(!this.field[id]) {
 			delta.name = delta.name || id;
-			delta.id = id;
-			return this.updateField(delta, callback);
+			delta.id = delta._newid || id;
+			return this.createField(delta);
 		}
 		
 		return new Promise((done, fail) => {
@@ -433,14 +433,19 @@ class RSDatabase extends EventEmitter {
 					write["$" + fieldColumns[x]] = delta[fieldColumns[x]];
 				}
 			}
+			
 			write.$id = id;
-			if(delta.id && (!this.usage[id] || this.usage[id].length === 0)) {
-				if(this.field[delta.id]) {
-					throw new Error("Field ID " + id + " already exists");
+			if(delta._newid && (!this.usage[delta._newid] || this.usage[delta._newid].length === 0)) {
+				console.log(" >> Renaming");
+				if(this.field[delta._newid]) {
+					throw new Error("Field ID " + delta._newid + " already exists");
 				}
 				statement += ", id = $_newid";
-				write.$_newid = delta.id;
+				write.$_newid = delta._newid;
 			}
+			
+			statement += " where id = $id;";
+			
 			if(write.$inheritable) {
 				write.$inheritable = JSON.stringify(write.$inheritable);
 			}
@@ -455,14 +460,18 @@ class RSDatabase extends EventEmitter {
 			this.connection
 			.run(statement, write, (err) => {
 				if(err) {
+					console.log(err);
 					fail(err);
 				} else {
+					field.updateSpecification(delta);
+					/*
 					for(x=0; x<fieldColumns.length; x++) {
 						if(delta[fieldColumns[x]]) {
 							field[fieldColumns[x]] = delta[fieldColumns[x]];
 						}
 					}
 					field.updated = write.$updated;
+					*/
 					done(field);
 				}
 			});
@@ -629,11 +638,13 @@ module.exports = RSDatabase;
 class ClassManager extends EventEmitter {
 	constructor(database, specification) {
 		super();
-		var x;
+		var loading,
+			x;
+			
 		if(!validClassIdentifier.test(specification.id)) {
 			throw new Error("Invalid ID for Class");
 		}
-		console.log(specification);
+		
 		/**
 		 *
 		 * @property id
@@ -700,8 +711,15 @@ class ClassManager extends EventEmitter {
 		 * @type Array | RSField
 		 */
 		this.fields = [];
+		/**
+		 * Stores the IDs of fields that have inheritance properties.
+		 * @property inheritableFields
+		 * @type Array
+		 */
+		this.inheritableFields = [];
  		/**
- 		 *
+ 		 * Maps a field ID to the field value from the database for
+ 		 * usaged reference against properties like type or inheritance.
  		 * @property fieldUsed
  		 * @type Object
  		 */
@@ -713,17 +731,43 @@ class ClassManager extends EventEmitter {
  		 */
 		this.fieldIDs = specification.fields || [];
 		if(typeof(this.fieldIDs) === "string") {
-			this.fieldIDs = JSON.parse(this.fieldIDs);
+			try {
+				this.fieldIDs = JSON.parse(this.fieldIDs);
+			} catch(error) {
+				console.log("whoops");
+				this.fieldIDs = this.fieldIDs.split(",");
+			}
 		}
+		
+		var reference = this;
+		this.computeFieldProperties = function() {
+			console.log("Computing fields");
+			reference.inheritableFields.splice(0);
+			var loading,
+				x;
+				
+			for(x=0; x<reference.fieldIDs.length; x++) {
+				loading = reference.database.field[reference.fieldIDs[x]];
+				if(loading.inheritable) {
+					reference.inheritableFields.push(loading.id);
+				}
+			}
+		};
+		
 		for(x=0; x<this.fieldIDs.length; x++) {
-			if(!this.database.field[this.fieldIDs[x]]) {
+			loading = this.database.field[this.fieldIDs[x]];
+			/* TODO: Remove debugging
+			if(!loading) {
 				console.log("Class Using Unknown Field: " + this.fieldIDs[x]);
 			} else {
 				console.log("Field[" + this.fieldIDs[x] + "] to Class[" + this.id + "]");
 			}
-			this.fields.push(this.database.field[this.fieldIDs[x]]);
-			this.fieldUsed[this.fieldIDs[x]] = true; // Use Database for lookup
+			*/
+			this.fields.push(loading);
+			this.fieldUsed[loading.id] = loading;
+			loading.on("changed", this.computeFieldProperties);
 		}
+		
 		/**
 		 *
 		 * @property attribute
@@ -735,6 +779,7 @@ class ClassManager extends EventEmitter {
 		}
 		
 		database.manager[this.id] = this;
+		this.computeFieldProperties();
 	}
 
 	/**
@@ -743,7 +788,7 @@ class ClassManager extends EventEmitter {
 	 * @return {Promise}
 	 */
 	initialize() {
-		console.trace("Class Initialization: " + this.id);
+		// console.trace("Class Initialization: " + this.id);
 		return new Promise((done, fail) => {
 			this.database.connection.all("select id from " + this.id + ";", emptyArray, (err, rows) => {
 				if(err) {
@@ -837,9 +882,11 @@ class ClassManager extends EventEmitter {
 								this.fieldIDs.purge(field.id);
 								fail(err);
 							} else {
-								this.fieldUsed[field.id] = true;
+								this.fieldUsed[field.id] = field;
 								this.fields.push(field);
-								done();
+								field.on("changed", this.computeFieldProperties);
+								this.computeFieldProperties();
+								done(field);
 							}
 						});
 					}
@@ -880,7 +927,9 @@ class ClassManager extends EventEmitter {
 						fail(err);
 					} else {
 						delete(this.fieldUsed[field.id]);
-						this.fields.purge(field);
+						this.fieldIDs.purge(field);
+						field.off("changed", this.computeFieldProperties);
+						this.computeFieldProperties();
 						done();
 					}
 				});
@@ -932,7 +981,7 @@ class ClassManager extends EventEmitter {
 	 * @return {Promise} 
 	 */
 	load(universe, details) {
-		console.log("Load: ", details);
+		// console.log("Load: ", details);
 		return new Promise((done, fail) => {
 			if(typeof(details) === "string") {
 				if(this.object[details] === false) {
@@ -1018,8 +1067,7 @@ class ClassManager extends EventEmitter {
 	 * @param {Object} object Delta to write. This specifies the new field values
 	 * 		for the object that matches the incoming `object.id`. If none is defined,
 	 * 		then a new object is inserted.
-	 * @param  {Function} callback [description]
-	 * @return {[type]}            [description]
+	 * @param  {Function} callback(err,data) [description]
 	 */
 	writeObjectData(object, callback) {
 		if(!object || !object.id) {

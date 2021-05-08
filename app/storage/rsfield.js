@@ -1,9 +1,15 @@
 /**
  *
+ *
+ * Note: All property values are sibject to mutation and therefore should ONLY
+ * be accessed by reference to the field object when needed.
  * @class RSField
  * @constructor
  * @param {Object} specification
  */
+
+// Could implement reflection and obscure the "set" process, however this is avoided
+// 		to maintain performance.
 
 var EventEmitter = require("events").EventEmitter,
 	Anomaly = require("../management/anomaly"),
@@ -55,14 +61,21 @@ class RSField extends EventEmitter {
 			this.inheritance = JSON.parse(this.inheritance);
 		}
 		/**
+		 * Array of the fields involved in inheritance.
+		 * @property inheritanceFields
+		 * @type String | Array
+		 */
+		this.inheritanceFields = Object.keys(this.inheritance);
+		
+		/**
 		 * This limits the Object Classes that can be referred to by this field.
 		 *
-		 * If left empty, this field is treated as having no inheritance. If "*"
-		 * is specified then the ID can reference any class.
+		 * If left empty or null, this field is treated as having no inheritance.
+		 * If it is an empty array then the ID can reference any class.
 		 * @property inheritable
 		 * @type Array | String
 		 */
-		this.inheritable = specification.inheritable || [];
+		this.inheritable = specification.inheritable;
 		if(typeof(this.inheritable) === "string") {
 			this.inheritable = JSON.parse(this.inheritable);
 		}
@@ -108,13 +121,41 @@ class RSField extends EventEmitter {
 		 * @property updated
 		 * @type Integer
 		 */
-		this.updated = specification.updated;
+		this.updated = specification.updated || Date.now();
 		/**
 		 * 
 		 * @property created
 		 * @type Integer
 		 */
-		this.created = specification.created;
+		this.created = specification.created || Date.now();
+		
+		this.updateSpecification(specification);
+	}
+	
+	updateSpecification(specification) {
+		var keys = Object.keys(specification),
+			x;
+			
+		for(x=0; x<keys.length; x++) {
+			if(keys[x][0] !== "_" && keys[x] !== "id") {
+				this[keys[x]] = specification[keys[x]];
+			}
+		}
+		
+		if(typeof(this.inheritance) === "string") {
+			this.inheritance = JSON.parse(this.inheritance);
+		}
+		this.inheritanceFields = this.inheritance?Object.keys(this.inheritance):undefined;
+		if(typeof(this.inheritable) === "string") {
+			this.inheritable = JSON.parse(this.inheritable);
+		}
+		this.type = (specification.type || specification.ftype || "string").toLowerCase();
+		if(typeof(this.attribute) === "string") {
+			this.attribute = JSON.parse(this.attribute);
+		}
+		
+		this.updated = Date.now();
+		this.emit("changed");
 	}
 	
 	toString() {

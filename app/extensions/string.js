@@ -9,8 +9,7 @@
  * @method sha256
  * @author Paul Johnston
  * @see http://pajhome.org.uk/crypt/md5/sha256.html
- * @for Hash
- * @static
+ * @for String
  */
 String.prototype.sha256 = (function() {
 	/*

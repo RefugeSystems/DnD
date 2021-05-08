@@ -17,6 +17,42 @@ module.exports = new (function() {
 				next();
 			});
 			
+			this.router.get("/inheritance", (req, res, next) => {
+				res.result = {};
+				res.result.inheritance = api.universe.objectHandler.getInheritance();
+				next();
+			});
+			
+			this.router.get("/object/:id", (req, res, next) => {
+				res.result = {};
+				res.result.inheritance = api.universe.objectHandler.retrieve(req.params.id);
+				next();
+			});
+			
+			this.router.get("/object/:id/link", (req, res, next) => {
+				res.result = {};
+				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
+				res.result.object.linkFieldValues()
+				.then(function() {
+					next();
+				})
+				.catch(next);
+			});
+			
+			this.router.get("/object/:id/calculate", (req, res, next) => {
+				res.result = {};
+				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
+				res.result.object.calculateFieldValues();
+				next();
+			});
+			
+			this.router.get("/object/:id/update", (req, res, next) => {
+				res.result = {};
+				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
+				res.result.object.updateFieldValues();
+				next();
+			});
+			
 			done();
 		});
 	};

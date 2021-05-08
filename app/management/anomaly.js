@@ -35,7 +35,7 @@ class Anomaly {
 		}
 		if(cause) {
 			this.cause = {};
-			this.cause.message = cause.message;
+			this.cause.message = cause.message || cause;
 			if(cause.stack) {
 				// "stack": cause.stack ? (typeof(cause.stack.replace) === "function" ? cause.stack : cause.stack.toString()).replace(/([^\\])\\n\s*/g, "$1~~").split("~~"):null
 				this.cause.stack = cause.stack.toString();

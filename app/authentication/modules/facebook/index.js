@@ -1,6 +1,6 @@
 /**
  * 
- * @class AuthenticationFacebook
+ * @class AuthModuleFacebook
  * @constructor
  * @static
  */

@@ -1,6 +1,6 @@
 /**
  * 
- * @class CalculatorDnD
+ * @class CalculatorDnD_callbacks
  * @extends Calculator
  * @constructor
  * @static
