@@ -3,7 +3,7 @@ var RSDBConnection = require("../../../app/storage/database"),
 	RSField = require("../../../app/storage/rsfield"),
 	fs = require("fs");
 
-describe("Core Storage", function() {
+xdescribe("Core Storage", function() {
 
 	describe("Type Object Data", function() {
 		var fields = [],

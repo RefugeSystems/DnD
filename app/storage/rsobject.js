@@ -89,12 +89,28 @@ class RSObject {
 		 */
 		this._calculated = {};
 		/**
+		 * Holds the last calculated versions of this objects attached conditionals.
+		 * These are replaced by recalculated versions during calculation and applied
+		 * to the final versions during update.
+		 * @property _conditionals
+		 * @type Array
+		 */
+		this._conditionals = [];
+		/**
 		 * Stores the original value of all straight string fields or arrays as strings
 		 * for quick change considerations against fields with any inheritance settings.
 		 * @property _linkMask
-		 * @type {Object}
+		 * @type Object
 		 */
 		this._linkMask = {};
+		/**
+		 * Stores values of references for that field from the last calculation. On
+		 * comparison change, the values are removed from dependency for the new values
+		 * to be added.
+		 * @property _calcRef
+		 * @type Object
+		 */
+		this._calcRef = {};
 		/**
 		 * 
 		 * @property _class
@@ -105,34 +121,35 @@ class RSObject {
 	
 	/**
 	 * @method linkFieldValues
+	 * @param {Boolean} [force] When true, ignores the _linkMask check. This is primarily used for universe initialization.
 	 * @return {Promise} 
 	 */
-	linkFieldValues() {
-		console.log("Link: " + this.id);
+	linkFieldValues(force) {
+		// console.log("Link: " + this.id);
 		return new Promise((done, fail) => {
 			var relink = false,
 				unlink = [],
 				x;
 				
-			console.log("relink scan");
+			// console.log("relink scan");
 			for(x=0; x<this._manager.inheritableFields.length; x++) {
-				if(this._linkMask[this._manager.inheritableFields[x]] !== this._data[this._manager.inheritableFields[x]]) {
-					if(this._linkMask[this._manager.inheritableFields[x]]) {
+				if(force || this._linkMask[this._manager.inheritableFields[x]] !== this._data[this._manager.inheritableFields[x]]) {
+					if(!force && this._linkMask[this._manager.inheritableFields[x]]) {
 						unlink.push(this._linkMask[this._manager.inheritableFields[x]]);
 					}
 					this._linkMask[this._manager.inheritableFields[x]] = this._data[this._manager.inheritableFields[x]];
 					relink = true;
 				}
 			}
-			console.log("scan fin");
+			// console.log("scan fin");
 			 
 			if(relink) {
-				console.log("relink");
+				// console.log("relink");
 				this._universe.objectHandler.trackInheritance(this, this._manager.inheritableFields)
 				.then(() => {
-					console.log("fin");
+					console.log("fin: ", unlink);
 					if(unlink.length) {
-						console.log("unlink");
+						// console.log("unlink");
 						return this._universe.objectHandler.untrackInheritance(this.id, unlink);
 					}
 				})
@@ -141,35 +158,91 @@ class RSObject {
 				})
 				.catch(fail);
 			} else {
-				console.log("no relink");
+				// console.log("no relink");
 				done(this);
 			}
 		});
 	}
 	
 	/**
+	 * Abstract method for hooks into the update process
+	 * @method preFieldCalculate
+	 */
+ 	
+ 	/**
+ 	 * Abstract method for hooks into the update process
+ 	 * @method postFieldCalculate
+ 	 */
+ 	
+ 	/**
+ 	 * Abstract method for hooks into the update process
+ 	 * @method preFieldUpdate
+ 	 */
+  	
+  	/**
+  	 * Abstract method for hooks into the update process
+  	 * @method postFieldUpdate
+  	 */
+	
+	/**
 	 * Calculate and set the `_calculated` property values for this object.
-	 * @method updateFieldValues
+	 * @method calculateFieldValues
 	 */
 	calculateFieldValues() {
+		if(typeof(this.preFieldCalculate) === "function") {
+			this.preFieldCalculate();
+		}
+		
 		var fields = this._manager.fieldIDs,
+			parent,
 			field,
 			x;
 
+		// Establish Base Values
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
-			switch(field.type) {
-				case "calculated":
-					this._calculated[fields[x]] = this.calculateField(this._data[fields[x]]);
-					break;
-				default:
-				case "formula": // formula Reduction handled in updateFieldValues
-				case "string":
-				case "number":
-				case "boolean":
-				case "object":
-					this._calculated[fields[x]] = this._data[fields[x]];
-					break;
+			if(field) {
+				switch(field.type) {
+					case "calculated":
+						this._calculated[fields[x]] = this.calculateField(fields[x], this._data[fields[x]]);
+						break;
+					default:
+					case "array":
+					case "object":
+					case "dice":
+					case "formula": // formula Reduction handled in updateFieldValues
+					case "string":
+					case "number":
+					case "boolean":
+					case "object":
+						this._calculated[fields[x]] = this._data[fields[x]];
+						break;
+				}
+			}
+		}
+		
+		// Fill in Parent Values where this is doesn't have that field filled
+		if(this._data.parent) {
+			parent = this._universe.objectHandler.retrieve(this._data.parent);
+			for(x=0; x<fields.length; x++) {
+				if(this._calculated[fields[x]] === undefined) {
+					field = this._manager.database.field[fields[x]];
+					if(field) {
+						switch(field.type) {
+							case "calculated":
+								this._calculated[fields[x]] = this.calculateField(fields[x], parent[fields[x]]);
+								break;
+							default:
+							case "formula": // formula Reduction handled in updateFieldValues
+							case "string":
+							case "number":
+							case "boolean":
+							case "object":
+								this._calculated[fields[x]] = parent[fields[x]];
+								break;
+						}
+					}
+				}
 			}
 		}
 		
@@ -179,10 +252,11 @@ class RSObject {
 			this.created = this._data.created;
 		}
 		
-		this._universe.objectHandler.pushChanged("object-update", {
-			"id": this.id,
-			"time": Date.now()
-		});
+		if(typeof(this.postFieldCalculate) === "function") {
+			this.postFieldCalculate();
+		}
+		
+		this._universe.objectHandler.pushCalculated(this.id);
 	}
 
 	/**
@@ -190,6 +264,10 @@ class RSObject {
 	 * @method updateFieldValues
 	 */
 	updateFieldValues() {
+		if(typeof(this.preFieldUpdate) === "function") {
+			this.preFieldUpdate();
+		}
+		
 		var inheriting,
 			inherit,
 			loading,
@@ -202,7 +280,7 @@ class RSObject {
 		
 		// TODO: Investigate fixing errant variable references (See: i, v, x and their uses)
 		inherit = (id) => {
-			console.log("Inherit: ", id);
+			// console.log("Inherit: ", id);
 			var source = this._universe.objectHandler.retrieve(id);
 			if(source) {
 				for(i=0; i<field.inheritanceFields.length; i++) {
@@ -237,7 +315,7 @@ class RSObject {
 		fields = this._manager.inheritableFields;
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
-			console.log("Inheriting Field: ", field);
+			// console.log("Inheriting Field: ", field);
 			if(field && this._calculated[field.id]) {
 				if(this._calculated[field.id] instanceof Array) {
 					for(v=0; v<this._calculated[field.id].length; v++) {
@@ -253,12 +331,53 @@ class RSObject {
 		fields = this._manager.fieldIDs;
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
-			switch(field.type) {
-				case "formula":
-					this[fields[x]] = this.reduceField(this._data[fields[x]]);
-					break;
+			if(field) {
+				switch(field.type) {
+					case "formula":
+						this[fields[x]] = this.reduceField(this._data[fields[x]]);
+						break;
+				}
 			}
 		}
+		
+		// Consider Conditional Values
+		if(this.conditionals) {
+			this._conditionals.splice(0);
+			for(x=0; x<this.conditionals.length; x++) {
+				loading = this._universe.objectHandler.retrieve(this.conditionals[x]);
+				if(loading) {
+					if(this.checkConditional(loading)) {
+						this._conditionals.push(this.fillConditional(loading));
+					}
+				} else {
+					loading = {};
+					loading.id = this.id;
+					loading.conditionals = this.conditionals;
+					loading.conditional = this.conditionals[x];
+					loading.index = x;
+					this._universe.emit("error", new this._universe.Anomaly("object:value:conditional", "Undefined conditional present in object", 40, loading, null, this));
+				}
+			}
+			
+			for(x=0; x<this._conditionals.length; x++) {
+				for(i=0; i<this._manager.fieldIDs.length; i++) {
+					field = this._manager.fieldIDs[x];
+					if(this._conditionals[x].add[field]) {
+						this[field] = RSObject.addValue(this[field], this._conditionals[x].add[field], field.type);
+					} else if(this._conditionals[x].sub[field]) {
+						this[field] = RSObject.subValue(this[field], this._conditionals[x].add[field], field.type);
+					} else if(this._conditionals[x].set[field]) {
+						this[field] = RSObject.setValue(this[field], this._conditionals[x].add[field], field.type);
+					}
+				}
+			}
+		}
+		
+		if(typeof(this.postFieldUpdate) === "function") {
+			this.postFieldUpdate();
+		}
+		
+		this._universe.objectHandler.pushUpdated(this.id);
 	}
 
 	/**
@@ -272,7 +391,7 @@ class RSObject {
 	 */
 	getValue(name, index, callback) {
 		if(!callback) {
-			console.trace("GetValue: ", name, index, callback);
+			// console.trace("GetValue: ", name, index, callback);
 		}
 		// console.log("GetValue: ", name, index, this.toJSON());
 		setTimeout(() => {
@@ -319,7 +438,9 @@ class RSObject {
 	 * @method calculatedValue
 	 * @param {Array | String} name Matching the Field ID to be used.
 	 * @param {Integer} [index]
-	 * @param {Array} [referenced]
+	 * @param {Array | String} [referenced] Tracks the ID of RSObjects used in
+	 * 		retrieving the described value. Only the final object should add itself.
+	 * 		Intermediate objects don't matter for this array.
 	 * @return {String | Number | Boolean | Object} Based on the RSField definition
 	 * 		for the referenced value.
 	 */
@@ -341,12 +462,12 @@ class RSObject {
 			return this.calculatedValue(name, index + 1);
 		} else if(index + 1 === name.length) {
 			if(referenced) {
-				referenced.push(this);
+				referenced.push(this.id);
 			}
 			return this._calculated[name[index]];
 		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
 			if(referenced) {
-				referenced.push(this);
+				referenced.push(this.id);
 			}
 			return this._calculated[name[index]][name[index + 1]];
 		} else if(this[name[index]]) {
@@ -372,10 +493,38 @@ class RSObject {
 	}
 	
 	/**
+	 * Calculate the value of the field based on this object's current values.
+	 *
+	 * This happens against the object's _calculated object and is the subsurface
+	 * computation for the non-inherited calculation step.
+	 *
+	 * Additionally this step handles determining the objects (aside from itself)
+	 * involved in the calculation and registering the reference dependency with
+	 * the universe.
 	 * @method calculateField
+	 * @param {String} field Name for calcRef mask reference.
+	 * @param {String | Number} value For the field to be copmuted.
 	 * @return {String | Number} 
 	 */
-	calculateField(value) {
+	calculateField(field, value) {
+		var referenced = [],
+			compare,
+			parsed,
+			value;
+		
+		if(this._data.parent) {
+			referenced.push(this._data.parent);
+		}
+		value = this._universe.calculator.compute(value, this, referenced);
+		compare = referenced.join(",");
+		if(this._calcRef[field] !== compare) {
+			if(this._calcRef[field]) {
+				this._universe.objectHandler.untrackReference(this._calcRef[field].split(","));
+			}
+			this._universe.objectHandler.trackReference(referenced);
+			this._calcRef[field] = compare;
+		}
+		
 		return value;
 	}
 	
@@ -403,48 +552,74 @@ class RSObject {
 	
 	addValues(delta, callback) {
 		var result = {},
+			details,
 			field,
 			x;
 		
 		for(x=0; x<this._manager.fieldIDs.length; x++) {
-			field = this._manager.fieldIDs[x];
-			if(delta[field.id] !== undefined) {
+			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
+			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type);
 			}
 		}
 		
 		result.id = this.id;
-		this._manager.writeData(result, (err) => {
+		this._manager.writeObjectData(result, (err) => {
 			if(err) {
-				callback(err, this);
-			} else {
-				this.updateFieldValues();
-				callback(null, this);
+				details = {};
+				details.id = this.id;
+				details.result = result;
+				details.delta = delta;
+				this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
+		});
+		
+		// Update links as needed for new Data
+		this.linkFieldValues()
+		.then(() => {
+			this.calculateFieldValues();
+			this.updateFieldValues();
+			callback(null, this);
+		})
+		.catch((err) => {
+			callback(err, this);
 		});
 	}
 	
 	
 	subValues(delta, callback) {
 		var result = {},
+			details,
 			field,
 			x;
 		
 		for(x=0; x<this._manager.fieldIDs.length; x++) {
-			field = this._manager.fieldIDs[x];
-			if(delta[field.id] !== undefined) {
+			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
+			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.subValues(this._data[field.id], delta[field.id], field.type);
 			}
 		}
 		
 		result.id = this.id;
-		this._manager.writeData(result, (err) => {
+		this._manager.writeObjectData(result, (err) => {
 			if(err) {
-				callback(err, this);
-			} else {
-				this.updateFieldValues();
-				callback(null, this);
+				details = {};
+				details.id = this.id;
+				details.result = result;
+				details.delta = delta;
+				this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
+		});
+		
+		// Update links as needed for new Data
+		this.linkFieldValues()
+		.then(() => {
+			this.calculateFieldValues();
+			this.updateFieldValues();
+			callback(null, this);
+		})
+		.catch((err) => {
+			callback(err, this);
 		});
 	}
 	
@@ -454,37 +629,44 @@ class RSObject {
 	 * by `linkFieldValues` which this calls after setting and storing the values, followed by `updateFieldValues`
 	 * to adjust for the new state.
 	 * @method setValues
-	 * @param {[type]}   delta    [description]
-	 * @param {Function} callback [description]
+	 * @param {Object} delta
+	 * @param {Function} callback
 	 */
 	setValues(delta, callback) {
 		var result = {},
+			details,
 			field,
 			x;
 		
 		for(x=0; x<this._manager.fieldIDs.length; x++) {
-			field = this._manager.fieldIDs[x];
-			if(delta[field.id] !== undefined) {
-				result[field.id] = this._data[field.id] = RSObject.setValues(this._data[field.id], delta[field.id], field.type);
+			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
+			if(field && delta[field.id] !== undefined) {
+				this._data[field.id] = result[field.id] = RSObject.setValues(this._data[field.id], delta[field.id], field.type);
 			}
 		}
 		
+		// Write Data but don't wait
 		result.id = this.id;
-		this._manager.writeData(result, (err) => {
+		this._manager.writeObjectData(result, (err) => {
 			if(err) {
-				callback(err, this);
-			} else {
-				this.linkFieldValues()
-				.then(() => {
-					this.updateFieldValues();
-					callback(null, this);
-				})
-				.catch((err) => {
-					callback(err, this);
-				});
+				details = {};
+				details.id = this.id;
+				details.result = result;
+				details.delta = delta;
+				this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
 		
+		// Update links as needed for new Data
+		this.linkFieldValues()
+		.then(() => {
+			this.calculateFieldValues();
+			this.updateFieldValues();
+			callback(null, this);
+		})
+		.catch((err) => {
+			callback(err, this);
+		});
 	}
 	
 	/**
@@ -517,7 +699,7 @@ class RSObject {
 	}
 
 	/**
-	 *
+	 * Check if the passed conditional should be applied to this object or not.
 	 * @method checkConditional
 	 * @param {Object} condition
 	 * @param {TypeManager} [manager] For the Conditional type. If omitted, the
@@ -526,8 +708,60 @@ class RSObject {
 	 * 		table.
 	 * @return {Boolean}
 	 */
-	checkConditional(manager, condition) {
-
+	checkConditional(conditional) {
+		var field,
+			x;
+		
+		for(x=0; x<conditional.fields_condition.length; x++) {
+			field = conditional.fields_condition[x];
+			if(!RSObject.checkCondition(conditional.condition[field], conditional.ifop[field], this[field])) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Calculate and store the changes to apply to this object from the passed
+	 * conditional.
+	 * 
+	 * Conditional value adjustments may depend on the current state of this object.
+	 * To control, the results are calculated for all valid conditionals and stored
+	 * to `_conditionals` to be applied after.
+	 * @method fillConditional
+	 * @return {Object} With computed values filled in for the various keys.
+	 */
+	fillConditional(conditional) {
+		var result = {},
+			field,
+			x;
+			
+		result.add = {};
+		if(conditional.add) {
+			result.add = {};
+			for(x=0; x<conditional.fields_add.length; x++) {
+				field = conditional.fields_add[x];
+				result.add[field] = this._universe.calculator.compute(conditional.add[field], this);
+			}
+		}
+		
+		result.sub = {};
+		if(conditional.sub) {
+			for(x=0; x<conditional.fields_sub.length; x++) {
+				field = conditional.fields_sub[x];
+				result.sub[field] = this._universe.calculator.compute(conditional.sub[field], this);
+			}
+		}
+		
+		result.set = {};
+		if(conditional.set) {
+			for(x=0; x<conditional.fields_set.length; x++) {
+				field = conditional.fields_set[x];
+				result.set[field] = this._universe.calculator.compute(conditional.set[field], this);
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -583,6 +817,14 @@ RSObject.getClassFromID = function(id) {
 	return id.substring(0, index);
 };
 
+/**
+ * 
+ * @method addObjects
+ * @static
+ * @param  {[type]} a [description]
+ * @param  {[type]} b [description]
+ * @return {[type]}   [description]
+ */
 RSObject.addObjects = function(a, b) {
 	var keys = Object.keys(a),
 		result = {},
@@ -596,6 +838,15 @@ RSObject.addObjects = function(a, b) {
 	return result;
 };
 
+/**
+ * 
+ * @method addValues
+ * @static
+ * @param  {[type]} a    [description]
+ * @param  {[type]} b    [description]
+ * @param  {[type]} [type] [description]
+ * @return {[type]}      [description]
+ */
 RSObject.addValues = function(a, b, type) {
 	if(!type) {
 		type = typeof(a);
@@ -626,6 +877,14 @@ RSObject.addValues = function(a, b, type) {
 	}
 };
 
+/**
+ * 
+ * @method subObjects
+ * @static
+ * @param  {[type]} a [description]
+ * @param  {[type]} b [description]
+ * @return {[type]}   [description]
+ */
 RSObject.subObjects = function(a, b) {
 	var keys = Object.keys(a),
 		result = {},
@@ -639,6 +898,15 @@ RSObject.subObjects = function(a, b) {
 	return result;
 };
 
+/**
+ * 
+ * @method subValues
+ * @static
+ * @param  {[type]} a    [description]
+ * @param  {[type]} b    [description]
+ * @param  {[type]} [type] [description]
+ * @return {[type]}      [description]
+ */
 RSObject.subValues = function(a, b, type) {
 	if(!type) {
 		type = typeof(a);
@@ -684,6 +952,14 @@ RSObject.subValues = function(a, b, type) {
 	}
 };
 
+/**
+ * 
+ * @method setObjects
+ * @static
+ * @param  {[type]} a [description]
+ * @param  {[type]} b [description]
+ * @return {[type]}   [description]
+ */
 RSObject.setObjects = function(a, b) {
 	var keys = Object.keys(a),
 		result = {},
@@ -697,6 +973,15 @@ RSObject.setObjects = function(a, b) {
 	return result;
 };
 
+/**
+ * 
+ * @method setValues
+ * @static
+ * @param a 
+ * @param b 
+ * @param {String} [type]
+ * @return The value to be set.
+ */
 RSObject.setValues = function(a, b, type) {
 	if(b === null) {
 		return undefined;
@@ -704,6 +989,106 @@ RSObject.setValues = function(a, b, type) {
 		return b;
 	} else {
 		return a;
+	}
+};
+
+/**
+ * 
+ * @method checkCondition
+ * @static
+ * @param from 
+ * @param {String} op 
+ * @param to 
+ * @return {Boolean} 
+ */
+RSObject.checkCondition = function(from, op, to) {
+	switch(op) {
+		case "hasnot":
+			if(!from) {
+				return true;
+			} else if(typeof(from) === "string" || (from instanceof Array)) {
+				return from.indexOf(to) === -1;
+			} else {
+				return true;
+			}
+			break;
+		case "has":
+			if(!from) {
+				return false;
+			} else if(typeof(from) === "string" || (from instanceof Array)) {
+				return from.indexOf(to) !== -1;
+			} else {
+				return false;
+			}
+			break;
+		case "<=":
+			if(!from && to) {
+				return true;
+			} else if(from && !to) {
+				return false;
+			} else if(!from && !to) {
+				return true;
+			} else {
+				return from <= to;
+			}
+			break;
+		case "<":
+			if(!from && to) {
+				return true;
+			} else if(from && !to) {
+				return false;
+			} else if(!from && !to) {
+				return true;
+			} else {
+				return from < to;
+			}
+			break;
+		case "!=":
+			if(!from && to) {
+				return true;
+			} else if(from && !to) {
+				return true;
+			} else if(!from && !to) {
+				return false;
+			} else {
+				return from != to;
+			}
+			break;
+		case "=":
+			if(!from && to) {
+				return false;
+			} else if(from && !to) {
+				return false;
+			} else if(!from && !to) {
+				return true;
+			} else {
+				return from == to;
+			}
+			break;
+		case ">":
+			if(!from && to) {
+				return false;
+			} else if(from && !to) {
+				return true;
+			} else if(!from && !to) {
+				return false;
+			} else {
+				return from > to;
+			}
+			break;
+		case ">=":
+			if(!from && to) {
+				return false;
+			} else if(from && !to) {
+				return true;
+			} else if(!from && !to) {
+				return true;
+			} else {
+				return from >= to;
+			}
+			break;
+		default:
+			throw new Error("Invalid conditional operation: " + op);
 	}
 };
 

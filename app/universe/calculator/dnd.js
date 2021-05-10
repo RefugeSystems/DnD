@@ -38,12 +38,16 @@ module.exports = function(universe) {
 		}
 
 		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+			console.log("Valid Expression");
 			try {
+				console.log("Maths: ", parseInt(Math.floor(eval(expression))));
 				return parseInt(Math.floor(eval(expression)));
 			} catch(ignored) {
+				console.log("Bad Expression: ", ignored);
 				return expression;
 			}
 		} else {
+			console.log("InValid Expression");
 			return expression;
 		}
 	};
@@ -101,6 +105,7 @@ module.exports = function(universe) {
 		var processed = expression,
 			variables,
 			matched,
+			value,
 			path,
 			x;
 		
@@ -116,7 +121,9 @@ module.exports = function(universe) {
 						path.splice(x);
 					}
 				}
-				processed.replace(matched, source.calculatedValue(path, referenced));
+				value = source.calculatedValue(path, referenced);
+				console.log("Computed Value[" + path.join() + "]: " + value);
+				processed = processed.replace(matched, value);
 			}
 		}
 		

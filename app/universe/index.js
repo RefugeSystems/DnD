@@ -8,6 +8,7 @@
  */
 
 var EventEmitter = require("events").EventEmitter,
+	DNDCalculator = require("./calculator/dnd"),
 	ObjectHandler = require("./objects");
 
 var classes = [
@@ -24,6 +25,7 @@ var classes = [
 	"streamurl",
 	"profile",
 	"widget",
+	"conditional",
 	
 	"entity",
 	"ability",
@@ -32,7 +34,7 @@ var classes = [
 	"action", // Triggered by some game event to start user input like items that have an on long rest reset
 	"effect",
 	"race",
-	"classification",
+	"type",
 	"journal",
 	"item",
 	"knowledge",
@@ -50,7 +52,7 @@ class Universe extends EventEmitter {
 		 * @type Class
 		 */
 		this.Anomaly = require("../management/anomaly");
-		this.calculator = require("./calculator/dnd");
+		this.calculator = new DNDCalculator(this);
 		this.configuration = configuration;
 		this.classes = classes;
 		this.manager = {};
@@ -85,7 +87,7 @@ class Universe extends EventEmitter {
 					if(manager[types[x]]) {
 						ids = Object.keys(manager[types[x]].object);
 						for(i=0; i<ids.length; i++) {
-							loading.push(manager[types[x]].object[ids[i]].linkFieldValues());
+							loading.push(manager[types[x]].object[ids[i]].linkFieldValues(true));
 						}
 					}
 				}
@@ -165,11 +167,15 @@ class Universe extends EventEmitter {
 	 * @return {String} Class ID
 	 */
 	getClassFromID(id) {
-		var index = id.indexOf(":");
-		if(index === -1) {
+		if(typeof(id) === "string") {
+			var index = id.indexOf(":");
+			if(index === -1) {
+				return null;
+			}
+			return id.substring(0, index);
+		} else {
 			return null;
 		}
-		return id.substring(0, index);
 	}
 }
 

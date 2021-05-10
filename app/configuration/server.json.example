@@ -2,7 +2,7 @@
 	"server": {
 		"port": 3000,
 		"web_root": "./ui",
-		"-redirect": "https://site.which.to/redirect/any/web/requests"
+		"-redirect": "https://site.which.to/redirect/any/web/requests",
 
 		"-certificate": "/path/to/cert",
 		"-authority": "/path/to/auth_cert",

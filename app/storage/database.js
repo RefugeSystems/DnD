@@ -317,7 +317,7 @@ class RSDatabase extends EventEmitter {
 					} else {
 						loading = [];
 						for(x=0; x<rows.length; x++) {
-							console.log("Read Class: ", rows[x]);
+							// console.log("Read Class: ", rows[x]);
 							rows[x] = new ClassManager(this, rows[x]);
 							this.manager[rows[x].id] = rows[x];
 							loading.push(rows[x].initialize());
@@ -741,31 +741,31 @@ class ClassManager extends EventEmitter {
 		
 		var reference = this;
 		this.computeFieldProperties = function() {
-			console.log("Computing fields");
 			reference.inheritableFields.splice(0);
 			var loading,
 				x;
 				
 			for(x=0; x<reference.fieldIDs.length; x++) {
 				loading = reference.database.field[reference.fieldIDs[x]];
-				if(loading.inheritable) {
-					reference.inheritableFields.push(loading.id);
+				if(loading) {
+					if(loading.inheritable) {
+						reference.inheritableFields.push(loading.id);
+					}
+				} else {
+					console.log("Unknown Field[" + this.fieldIDs[x] + "] in Class[" + this.id + "]");
 				}
 			}
 		};
 		
 		for(x=0; x<this.fieldIDs.length; x++) {
 			loading = this.database.field[this.fieldIDs[x]];
-			/* TODO: Remove debugging
-			if(!loading) {
-				console.log("Class Using Unknown Field: " + this.fieldIDs[x]);
+			if(loading) {
+				this.fields.push(loading);
+				this.fieldUsed[loading.id] = loading;
+				loading.on("changed", this.computeFieldProperties);
 			} else {
-				console.log("Field[" + this.fieldIDs[x] + "] to Class[" + this.id + "]");
+				console.log("Unknown Field[" + this.fieldIDs[x] + "] in Class[" + this.id + "]");
 			}
-			*/
-			this.fields.push(loading);
-			this.fieldUsed[loading.id] = loading;
-			loading.on("changed", this.computeFieldProperties);
 		}
 		
 		/**
@@ -877,7 +877,7 @@ class ClassManager extends EventEmitter {
 						params.$id = this.id;
 						params.$fields = JSON.stringify(this.fieldIDs);
 						this.database.connection
-						.run("update rsclass set fields = $fields where id = $id;", emptyArray, (err) => {
+						.run("update rsclass set fields = $fields where id = $id;", params, (err) => {
 							if(err) {
 								this.fieldIDs.purge(field.id);
 								fail(err);
@@ -1013,7 +1013,8 @@ class ClassManager extends EventEmitter {
 		});
 	}
 	
-	request(id, callback) {
+	
+	unload(universe, id) {
 		
 	}
 	
@@ -1048,15 +1049,6 @@ class ClassManager extends EventEmitter {
 	
 	
 	unloadGrid(universe, grid) {
-		
-	}
-	
-	
-	loadObject(id) {
-		
-	}
-	
-	unloadObject(id) {
 		
 	}
 	

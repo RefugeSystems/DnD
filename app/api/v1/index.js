@@ -40,7 +40,6 @@ module.exports = new (function() {
 					Promise.all(promised)
 					.then(() => {
 						for(x=0; x<loading.length; x++) {
-							console.log("Using: " + loading[x].path);
 							this.router.use(loading[x].path, loading[x].router);
 						}
 						

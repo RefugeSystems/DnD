@@ -1,7 +1,7 @@
 var Calculator = require("../../../app/universe/calculator/dnd"),
 	RSObject = require("../../../app/storage/rsobject");
 
-describe("DnD Expression Calculator", function() {
+xdescribe("DnD Expression Calculator", function() {
 	var calculator,
 		database,
 		universe,

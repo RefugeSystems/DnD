@@ -50,6 +50,16 @@ verify(configuration)
 	universe.on("error", function(anomaly) {
 		logging.entry(anomaly);
 	});
+	if(configuration.universe && configuration.universe.debug_cascades) {
+		universe.on("cascaded", function(cascade) {
+			logging.entry({
+				"code": "universe:object:cascade",
+				"message": "Object cascade completed",
+				"level": 20,
+				"details": cascade
+			});
+		});
+	}
 	return universe.initialize(startup);
 }).then(function() {
 	console.log("...Authentication...");

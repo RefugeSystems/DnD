@@ -23,6 +23,21 @@ module.exports = new (function() {
 				next();
 			});
 			
+			this.router.get("/reference", (req, res, next) => {
+				res.result = {};
+				res.result.reference = api.universe.objectHandler.getReference();
+				next();
+			});
+			
+			this.router.post("/calculate/:id", (req, res, next) => {
+				res.result = {};
+				res.result.referenced = [];
+				var source = api.universe.objectHandler.retrieve(req.params.id);
+				res.result.value = api.universe.calculator.compute(req.body.formula, source, res.result.referenced);
+				res.result.source = source; // Update object with source last to move this data to the bottom of the object naturally when encoded
+				next();
+			});
+			
 			this.router.get("/object/:id", (req, res, next) => {
 				res.result = {};
 				res.result.inheritance = api.universe.objectHandler.retrieve(req.params.id);
@@ -32,7 +47,7 @@ module.exports = new (function() {
 			this.router.get("/object/:id/link", (req, res, next) => {
 				res.result = {};
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
-				res.result.object.linkFieldValues()
+				res.result.object.linkFieldValues(true)
 				.then(function() {
 					next();
 				})
@@ -51,6 +66,18 @@ module.exports = new (function() {
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
 				res.result.object.updateFieldValues();
 				next();
+			});
+			
+			this.router.post("/object/:id", (req, res, next) => {
+				res.result = {};
+				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
+				res.result.object.setValues(req.body, function(err) {
+					if(err) {
+						next(err);
+					} else {
+						next();
+					}
+				});
 			});
 			
 			done();

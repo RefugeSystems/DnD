@@ -463,7 +463,7 @@ module.exports.initialize = function(universe, database) {
 					for(x=0; x<objects.length; x++) {
 						for(y=0; objects[x] && y<objects[x].length; y++) {
 							if(objects[x][y]) {
-								console.log("--Object: ", objects[x][y]);
+								// console.log("--Object: ", objects[x][y]);
 								promised.push(objects[x][y].linkFieldValues());
 							}
 						}

@@ -1,12 +1,13 @@
 /**
  *
  *
- * @class Player
+ * @class ux_class.Player
  * @extends RSObject
  * @constructor
  */
 
 var RSObject = require("../../../storage/rsobject");
+
 class Constructor extends RSObject {
 	
 	constructor(universe, manager, details) {

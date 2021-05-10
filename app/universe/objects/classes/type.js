@@ -1,7 +1,7 @@
 /**
  *
  *
- * @class ux_class.Ability
+ * @class ux_class.Type
  * @extends RSObject
  * @constructor
  */

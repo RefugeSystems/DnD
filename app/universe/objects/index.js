@@ -22,7 +22,8 @@ for(x=0; x<classList.length; x++) {
 module.exports = function(universe) {
 	this.id = "universe:objects";
 	Anomaly = universe.Anomaly;
-	var database = null,
+	var handler = this,
+		database = null,
 		inheritance = {},
 		reference = {},
 		manager = {};
@@ -102,7 +103,7 @@ module.exports = function(universe) {
 	
 	/**
 	 * 
-	 * @method getReference
+	 * @method getInheritance
 	 * @return {Object}
 	 */
 	this.getInheritance = function() {
@@ -133,35 +134,42 @@ module.exports = function(universe) {
 				
 			// console.log("Tracking")
 			
+			if(consumer.parent) {
+				source_fields.push("parent");
+			}
 			traceDependency(inheritance, consumer, source_fields, promised);
 			
 			// console.log("Tracked")
-			Promise.all(promised)
-			.then((loaded) => {
-				// console.log("Tracking is Linking")
-				for(x=0; x<loaded.length; x++) {
-					promised = [];
-					if(loaded[x]) {
-						promised.push(loaded[x].linkFieldValues());
+			if(promised.length) {
+				Promise.all(promised)
+				.then((loaded) => {
+					// console.log("Tracking is Linking: ", loaded);
+					for(x=0; x<loaded.length; x++) {
+						promised = [];
+						if(loaded[x]) {
+							promised.push(loaded[x].linkFieldValues());
+						}
 					}
-				}
-				// console.log("Tracking Linked")
-				return Promise.all(promised);
-			})
-			.then((linked) => {
-				for(x=0; x<linked.length; x++) {
-					if(linked[x]) {
-						linked[x].calculateFieldValues();
+					// console.log("Tracking Linked")
+					return Promise.all(promised);
+				})
+				.then((linked) => {
+					for(x=0; x<linked.length; x++) {
+						if(linked[x]) {
+							linked[x].calculateFieldValues();
+						}
 					}
-				}
-				for(x=0; x<linked.length; x++) {
-					if(linked[x]) {
-						linked[x].updateFieldValues();
+					for(x=0; x<linked.length; x++) {
+						if(linked[x]) {
+							linked[x].updateFieldValues();
+						}
 					}
-				}
-			})
-			.then(done)
-			.catch(fail);
+				})
+				.then(done)
+				.catch(fail);
+			} else {
+				done();
+			}
 		});
 	};
 	
@@ -169,17 +177,21 @@ module.exports = function(universe) {
 	 *
 	 * @method trackReference
 	 * @param {RSObject} consumer The object using the values.
-	 * @param {Array | String} source_fields Naming the fields on the consumer from which the
-	 * 		ID values are to be pulled.
-	 * @return {Promise}
+	 * @param {Array | String} sources IDs of the relevent sources.
+	 * @return {Array | Promise}
 	 */
-	this.trackReference = function(consumer, source_fields) {
-		return traceDependency(reference, consumer, source_fields);
+	this.trackReference = function(consumer, sources) {
+		if(consumer && sources && sources.length) {
+			return addDependencies(reference, consumer, sources);
+		} else {
+			return [];
+		}
 	};
 	
 	/**
 	 *
 	 * @method traceDependency
+	 * @private
 	 * @param {Object} trace Object that handles storing the values representing the connections
 	 * @param {RSObject} consumer The object using the values.
 	 * @param {Array | String} source_fields Naming the fields on the consumer from which the
@@ -196,45 +208,52 @@ module.exports = function(universe) {
 			v,
 			x;
 			
-		// console.log("Tracking")
-		
+		// console.log("Tracking: " + consumer.id);
 		inherit = function(value) {
 			classification = universe.getClassFromID(value);
+			// console.log(" > Inherit: ", classification);
 			if(classification && manager[classification]) {
-				loading = trace[value];
-				
-				if(!loading) {
-					loading = trace[value] = {};
-				}
-				if(loading[consumer.id]) {
-					loading[consumer.id]++;
-				} else {
-					loading[consumer.id] = 1;
-				}
-				
-				// Ensure the consumed objects are loaded
-				if(manager[classification].object[value] === false) {
-					// Exists but not loaded
-					if(loading) {
-						loading.push(manager[classification].load(universe, value));
+				// console.log(" > Inherit[Manager]");
+				if(value !== consumer.id) {
+					loading = trace[value];
+					
+					if(!loading) {
+						loading = trace[value] = {"_list":[]};
+					}
+					if(loading[consumer.id]) {
+						loading[consumer.id]++;
 					} else {
+						loading._list.push(consumer.id);
+						loading[consumer.id] = 1;
+					}
+				
+					// console.log(" > Inherit[Object]? ", value, "\n   > Loading: ", loading, "\n   > Inheritance: ", inheritance);
+					// Ensure the consumed objects are loaded
+					if(manager[classification].object[value] === false) {
+						// Exists but not loaded
+						if(loading) {
+							loading.push(manager[classification].load(universe, value));
+						} else {
+							details = {};
+							details.classification = classification;
+							details.consumer = consumer;
+							details.fields = source_fields;
+							details.id = value;
+							universe.emit("error", new universe.Anomaly("universe:trace:track", "Object not loaded", 40, details, null, this));
+						}
+					} else if(manager[classification].object[value] === undefined) {
+						// Doesn't exist
 						details = {};
 						details.classification = classification;
 						details.consumer = consumer;
-						details.fields = source_fields;
-						details.id = value;
-						universe.emit("error", new universe.Anomaly("universe:trace:track", "Object not loaded", 40, details, null, this));
+						details.field = source_fields[x];
+						details.value = value;
+						universe.emit("error", new universe.Anomaly("universe:trace:track", "No such object", 50, details, null, this));
+					}  else {
+						// Already loaded
 					}
-				} else if(manager[classification].object[value] === undefined) {
-					// Doesn't exist
-					details = {};
-					details.classification = classification;
-					details.consumer = consumer;
-					details.field = source_fields[x];
-					details.value = value;
-					universe.emit("error", new universe.Anomaly("universe:trace:track", "No such object", 50, details, null, this));
-				}  else {
-					// Already loaded
+				} else {
+					console.log("Self Trace Skipped");
 				}
 			} else {
 				details = {};
@@ -246,14 +265,93 @@ module.exports = function(universe) {
 		};
 		
 		for(x=0; x<source_fields.length; x++) {
-			if(consumer[source_fields[x]]) {
-				if(consumer[source_fields[x]] instanceof Array) {
-					for(v=0; v<consumer[source_fields[x]].length; v++) {
-						inherit(consumer[source_fields[x]][v]);
+			if(consumer._data[source_fields[x]]) {
+				if(consumer._data[source_fields[x]] instanceof Array) {
+					for(v=0; v<consumer._data[source_fields[x]].length; v++) {
+						inherit(consumer._data[source_fields[x]][v]);
 					}
 				} else {
-					inherit(consumer[source_fields[x]]);
+					// console.log(" > Inherit[Single]");
+					inherit(consumer._data[source_fields[x]]);
 				}
+			}
+		}
+		
+		return loading;
+	};
+	
+	/**
+	 *
+	 * @method addDependencies
+	 * @private
+	 * @param {Object} trace Object that handles storing the values representing the connections
+	 * @param {RSObject} consumer The object using the values.
+	 * @param {Array | String} sources IDs from which to track
+	 * @param {Array | Promise} [loading] The holds the promises of loading objects. If omitted,
+	 * 		objects that aren't already loaded instead emit a warning.
+	 * @return {Promise}
+	 */
+	var addDependencies = function(trace, consumer, sources, loading) {
+		var classification,
+			loading,
+			details,
+			inherit,
+			v,
+			x;
+			
+		// console.log("Tracking: " + consumer.id);
+		for(x=0; x<sources.length; x++) {
+			classification = universe.getClassFromID(sources[x]);
+			// console.log(" > Inherit: ", classification);
+			if(classification && manager[classification]) {
+				// console.log(" > Inherit[Manager]");
+				if(sources[x] !== consumer.id) {
+					loading = trace[sources[x]];
+					
+					if(!loading) {
+						loading = trace[sources[x]] = {"_list":[]};
+					}
+					if(loading[consumer.id]) {
+						loading[consumer.id]++;
+					} else {
+						loading._list.push(consumer.id);
+						loading[consumer.id] = 1;
+					}
+						
+					// console.log(" > Inherit[Object]? ", sources[x], "\n   > Loading: ", loading, "\n   > Inheritance: ", inheritance);
+					// Ensure the consumed objects are loaded
+					if(manager[classification].object[sources[x]] === false) {
+						// Exists but not loaded
+						if(loading) {
+							loading.push(manager[classification].load(universe, sources[x]));
+						} else {
+							details = {};
+							details.classification = classification;
+							details.consumer = consumer;
+							details.sources = sources;
+							details.id = sources[x];
+							universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 40, details, null, this));
+						}
+					} else if(manager[classification].object[sources[x]] === undefined) {
+						// Doesn't exist
+						details = {};
+						details.classification = classification;
+						details.consumer = consumer;
+						details.sources = sources;
+						details.value = sources[x];
+						universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 50, details, null, this));
+					}  else {
+						// Already loaded
+					}
+				} else {
+					console.log("Self Dependence Skipped");
+				}
+			} else {
+				details = {};
+				details.classification = classification;
+				details.consumer = consumer;
+				details.sources = sources;
+				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 50, details, null, this));
 			}
 		}
 		
@@ -287,6 +385,14 @@ module.exports = function(universe) {
 		untraceDependency(reference, consumer, consumed);
 	};
 	
+	/**
+	 * 
+	 * @method untraceDependency
+	 * @private
+	 * @param {Object} trace 
+	 * @param {RSObject} consumer 
+	 * @param {Array} consumed 
+	 */
 	var untraceDependency = function(trace, consumer, consumed) {
 		var loading,
 			details,
@@ -300,11 +406,19 @@ module.exports = function(universe) {
 					for(v=0; v<consumed[x].length; v++) {
 						loading = trace[consumed[x]];
 						if(loading) {
+							loading._list.purge(consumer);
+							delete(loading[consumer]);
+							/*
 							loading[consumer]--;
 							if(loading[consumer] < 0) {
 								console.log("Untracked below 0 Should not happen");
 								loading[consumer] = 0;
 							}
+							if(loading[consumer] === 0) {
+								loading._list.purge(consumer);
+								delete(loading[consumer]);
+							}
+							*/
 						} else {
 							details = {};
 							details.consumer = consumer;
@@ -316,11 +430,19 @@ module.exports = function(universe) {
 				} else {
 					loading = trace[consumed[x]];
 					if(loading) {
+						loading._list.purge(consumer);
+						delete(loading[consumer]);
+						/*
 						loading[consumer]--;
 						if(loading[consumer] < 0) {
 							console.log("Untracked below 0 Should not happen");
 							loading[consumer] = 0;
 						}
+						if(loading[consumer] === 0) {
+							loading._list.purge(consumer);
+							delete(loading[consumer]);
+						}
+						*/
 					} else {
 						details = {};
 						details.consumer = consumer;
@@ -331,6 +453,48 @@ module.exports = function(universe) {
 			}
 		}
 		// console.log("untracked");
+	};
+	
+	/**
+	 *
+	 * @method removeDependencies
+	 * @private
+	 * @param {Object} trace Object that handles storing the values representing the connections
+	 * @param {RSObject} consumer The object using the values.
+	 * @param {Array | String} sources IDs from which to track
+	 * @param {Array | Promise} [loading] The holds the promises of loading objects. If omitted,
+	 * 		objects that aren't already loaded instead emit a warning.
+	 * @return {Promise}
+	 */
+	var removeDependencies = function(trace, consumer, sources, loading) {
+		var classification,
+			loading,
+			details,
+			inherit,
+			v,
+			x;
+			
+		// console.log("Tracking: " + consumer.id);
+		for(x=0; x<sources.length; x++) {
+			classification = universe.getClassFromID(sources[x]);
+			// console.log(" > Inherit: ", classification);
+			if(classification && manager[classification]) {
+				// console.log(" > Inherit[Manager]");
+				loading = trace[sources[x]];
+				if(loading && loading[consumer.id]) {
+					loading._list.purge(consumer.id);
+					delete(loading[consumer.id]);
+				}
+			} else {
+				details = {};
+				details.classification = classification;
+				details.consumer = consumer;
+				details.sources = sources;
+				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 50, details, null, this));
+			}
+		}
+		
+		return loading;
 	};
 	
 	/**
@@ -346,6 +510,7 @@ module.exports = function(universe) {
 			return classManager.object[id] || null;
 		} else {
 			var details = {};
+			details.managers = Object.keys(manager);
 			details.id = id;
 			universe.emit("error", new universe.Anomaly("universe:object:retrieval", "Failed to locate manager for requested ID", 50, details, null, this));
 			return null;
@@ -353,24 +518,86 @@ module.exports = function(universe) {
 	};
 
 	/**
-	 * 
-	 * @method pushChanged
+	 * Notifies the handler to recalculate the values of dependent objects.
+	 *
+	 * This is essentially a deep update on objects as the underlying value
+	 * has changed.
+	 * @method pushCalculated
 	 * @param {String} id 
 	 */
-	this.pushChanged = function(id, callback) {
-		var changing = new ChangeEvent(id, callback);
-		trackChanging(id, changing);
+	this.pushCalculated = function(id) {
+		if(reference[id] && reference[id]._list.length) {
+			var changing = {};
+			changing.origin = id;
+			changing.queue = reference[id]._list;
+			changing.index = 0;
+			changing.start = Date.now();
+			trackCalculations(changing);
+		}
 	};
 	
 	/**
 	 * 
-	 * @method trackChanging
+	 * @method trackCalculations
+	 * @private
+	 * @param {Object} changing Used for tracking what objects have
+	 * 		been changed as a crude loop prevention
+	 */
+	var trackCalculations = function(changing) {
+		setTimeout(function() {
+			var cascade = handler.retrieve(changing.queue[changing.index++]);
+			if(cascade) {
+				cascade.calculateFieldValues();
+				cascade.updateFieldValues();
+				if(changing.index < changing.queue.length) {
+					trackCalculations(changing);
+				} else {
+					changing.duration = Date.now() - changing.start;
+					universe.emit("cascaded", changing);
+				}
+			}
+		}, 0);
+	};
+
+	/**
+	 * Notifies the handler to update the values of dependent objects.
+	 *
+	 * This is essentially a surface update as the main values haven't changed.
+	 * @method pushUpdated
+	 * @param {String} id 
+	 */
+	this.pushUpdated = function(id) {
+		console.log("Update: ", inheritance[id]);
+		if(inheritance[id] && inheritance[id]._list.length) {
+			var changing = {};
+			changing.origin = id;
+			changing.queue = inheritance[id]._list;
+			changing.index = 0;
+			changing.start = Date.now();
+			trackUpdates(changing);
+		}
+	};
+	
+	/**
+	 * 
+	 * @method trackUpdates
 	 * @private
 	 * @param {Object} changing Used for trackign what objects have
 	 * 		been changed as a crude loop prevention
 	 */
-	var trackChanging = function(changing) {
-		
+	var trackUpdates = function(changing) {
+		setTimeout(function() {
+			var cascade = handler.retrieve(changing.queue[changing.index++]);
+			if(cascade) {
+				cascade.updateFieldValues();
+				if(changing.index < changing.queue.length) {
+					trackCalculations(changing);
+				} else {
+					changing.duration = Date.now() - changing.start;
+					universe.emit("cascaded", changing);
+				}
+			}
+		}, 0);
 	};
 	
 	return this;
