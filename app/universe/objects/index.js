@@ -318,7 +318,7 @@ module.exports = function(universe) {
 						loading[consumer.id] = 1;
 					}
 						
-					// console.log(" > Inherit[Object]? ", sources[x], "\n   > Loading: ", loading, "\n   > Inheritance: ", inheritance);
+					// console.log(" > Inherit[Object]? ", sources[x], "\n   > Loading: ", loading, "\n   > Trace: ", trace);
 					// Ensure the consumed objects are loaded
 					if(manager[classification].object[sources[x]] === false) {
 						// Exists but not loaded
@@ -344,7 +344,7 @@ module.exports = function(universe) {
 						// Already loaded
 					}
 				} else {
-					console.log("Self Dependence Skipped");
+					// console.log("Self Dependence Skipped");
 				}
 			} else {
 				details = {};
@@ -567,7 +567,7 @@ module.exports = function(universe) {
 	 * @param {String} id 
 	 */
 	this.pushUpdated = function(id) {
-		console.log("Update: ", inheritance[id]);
+		// console.log("Update: ", inheritance[id]);
 		if(inheritance[id] && inheritance[id]._list.length) {
 			var changing = {};
 			changing.origin = id;

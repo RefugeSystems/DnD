@@ -147,7 +147,7 @@ class RSObject {
 				// console.log("relink");
 				this._universe.objectHandler.trackInheritance(this, this._manager.inheritableFields)
 				.then(() => {
-					console.log("fin: ", unlink);
+					// console.log("fin: ", unlink);
 					if(unlink.length) {
 						// console.log("unlink");
 						return this._universe.objectHandler.untrackInheritance(this.id, unlink);
@@ -458,22 +458,27 @@ class RSObject {
 		var details,
 			follow;
 		
+		// console.log(" [@] Compute[" + this.id + "]: ", name[index], " -> ", this[name[index]], referenced);
 		if(name[index] === "this") {
-			return this.calculatedValue(name, index + 1);
+			// console.log(" [=<] > " + this[name[index]]);
+			return this.calculatedValue(name, index + 1, referenced);
 		} else if(index + 1 === name.length) {
 			if(referenced) {
 				referenced.push(this.id);
 			}
+			// console.log(" [=T] > " + this[name[index]], referenced);
 			return this._calculated[name[index]];
 		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
+			// console.log(" [=O] > " + this[name[index]]);
 			if(referenced) {
 				referenced.push(this.id);
 			}
 			return this._calculated[name[index]][name[index + 1]];
 		} else if(this[name[index]]) {
+			// console.log(" [==] > " + this[name[index]]);
 			follow = this._universe.objectHandler.retrieve(this._calculated[name[index]]);
 			if(follow) {
-				return follow.calculatedValue(name, index + 1);
+				return follow.calculatedValue(name, index + 1, referenced);
 			} else {
 				details = {};
 				details.name = name;
@@ -483,6 +488,7 @@ class RSObject {
 				return null;
 			}
 		} else {
+			// console.log(" [=!] > " + this[name[index]]);
 			details = {};
 			details.name = name;
 			details.index = index;
@@ -506,8 +512,9 @@ class RSObject {
 	 * @param {String | Number} value For the field to be copmuted.
 	 * @return {String | Number} 
 	 */
-	calculateField(field, value) {
-		var referenced = [],
+	calculateField(field, value, tracked) {
+		// console.log("Calculate Field[" + this.id + " . " + field + "]: ", value);
+		var referenced = tracked || [],
 			compare,
 			parsed,
 			value;
@@ -516,13 +523,22 @@ class RSObject {
 			referenced.push(this._data.parent);
 		}
 		value = this._universe.calculator.compute(value, this, referenced);
+		// console.log(" [R]> ", referenced);
 		compare = referenced.join(",");
-		if(this._calcRef[field] !== compare) {
-			if(this._calcRef[field]) {
-				this._universe.objectHandler.untrackReference(this._calcRef[field].split(","));
+		// console.log(" [C:" + this.id + "]> ", tracked, referenced);
+		if(!tracked) {
+			if(this._calcRef[field] !== compare) {
+				// console.log(" [Calc:" + this.id + "]> ", tracked, referenced);
+				if(this._calcRef[field]) {
+					// console.log(" [u]> ", compare);
+					this._universe.objectHandler.untrackReference(this, this._calcRef[field].split(","));
+				}
+				// console.log(" [T]> ", referenced);
+				this._universe.objectHandler.trackReference(this, referenced);
+				this._calcRef[field] = compare;
 			}
-			this._universe.objectHandler.trackReference(referenced);
-			this._calcRef[field] = compare;
+		} else {
+			tracked.push(this.id);
 		}
 		
 		return value;
@@ -539,7 +555,7 @@ class RSObject {
 	
 	promiseValue(name) {
 		return new Promise((done, fail) => {
-			this.getValue(name, 0, function(err, value) {
+			this.getValue(name, 0, (err, value) => {
 				if(err) {
 					fail(err);
 				} else {
@@ -792,6 +808,7 @@ class RSObject {
 		json._class = this._class;
 		json._linkMask = this._linkMask;
 		json._calculated = this._calculated;
+		json._calcRef = this._calcRef;
 		json._data = this._data;
 		json.created = this.created;
 		json.updated = this.updated;

@@ -101,7 +101,7 @@ class APIController extends EventEmitter {
 				
 				
 				this.server.on("listening", () => {
-					console.log("Listening on " + this.specification.port);
+					console.log("......Listening on " + this.specification.port + "...");
 					done();
 				});
 				this.server.on("error", (err) => {

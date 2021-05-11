@@ -40,7 +40,7 @@ module.exports = new (function() {
 			
 			this.router.get("/object/:id", (req, res, next) => {
 				res.result = {};
-				res.result.inheritance = api.universe.objectHandler.retrieve(req.params.id);
+				res.result = api.universe.objectHandler.retrieve(req.params.id);
 				next();
 			});
 			

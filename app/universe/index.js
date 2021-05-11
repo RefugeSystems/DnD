@@ -111,6 +111,16 @@ class Universe extends EventEmitter {
 						loading[x].updateFieldValues();
 					}
 				}
+				for(var x=0; x<loading.length; x++) {
+					if(loading[x]) {
+						loading[x].calculateFieldValues();
+					}
+				}
+				for(var x=0; x<loading.length; x++) {
+					if(loading[x]) {
+						loading[x].updateFieldValues();
+					}
+				}
 				
 				return loading;
 			})
