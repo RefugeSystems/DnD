@@ -1,0 +1,18 @@
+<div class="system-component component-count">
+	<div class="modeling">
+		<input v-if="editable" v-model.number="shadow" />
+		<span v-if="!editable">{{value}}</span>
+	</div>
+
+	<div class="op-controls flex h centered" :class="open?'open':'closed'">
+		<button class="op-ctrl op-toggle" v-on:click="nextOp()">
+			<span :class="operations[operation].icon"></span>
+		</button>
+		<div class="op-bar flex h centered">
+			<input class="op-expression" v-model="expression" v-on:keyup.enter="complete()" v-on:keyup.esc="cancel()" />
+			<button class="op-ctrl" v-on:click="complete()">
+				<span :class="open?'fas fa-equals rs-orange':operations[initial].icon"></span>
+			</button>
+		</div>
+	</div>
+</div>

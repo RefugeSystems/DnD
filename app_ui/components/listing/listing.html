@@ -1,0 +1,19 @@
+<div class="rs-component rs-listing">
+	<div class="listing control">
+		<div class="title flex h">
+			<input class="filter" v-model="state.search" :placeholder="placeholder" />
+		</div>
+		<div class="list-data control">
+			<div class="listed" v-if="list && list.length === 0">
+				<span>{{empty || "No Entries"}}</span>
+			</div>
+			<button class="listed" v-for="entry in list" v-if="isVisible(entry)" v-on:click="openListed(entry)" :emit="emit" :class="entryStyleClass(entry)" :key="entry.id">
+				<span class="name">
+					<span class="icon" :class="entry.icon"></span>
+					<span>{{entry.name}}</span>
+				</span>
+				<span class="indicator"></span>
+			</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,79 @@
+<div class="rs-page rs-component page-account">
+	<div class="information-container">
+		<h1>Account</h1>
+		
+		<h2>Information</h2>
+		<table class="account-data">
+			<tr>
+				<td class="labels align-right">
+					<span>Username</span>
+				</td>
+				<td class="actions align-center">
+					<span class="control fas fa-user"></span>
+				</td>
+				<td>
+					<span>{{player.id}}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="labels align-right">
+					<span>Playing As</span>
+				</td>
+				<td class="actions align-center">
+					<span class="control fal fa-user-ninja"></span>
+				</td>
+				<td>
+					<span>{{modeling.entity?modeling.entity.name:"No One"}}</span>
+				</td>
+			</tr>
+			<tr v-if="player.master">
+				<td class="labels align-right">
+					<span>Game Master</span>
+				</td>
+				<td class="actions align-center">
+					<span class="control fas fa-chess-king"></span>
+				</td>
+				<td>
+					<span>{{player.master?"Yes":"No"}}</span>
+				</td>
+			</tr>
+			<tr v-for="field in fields">
+				<td class="labels align-right">
+					<span>{{labeling[field] || field.capitalize()}}</span>
+				</td>
+				<td class="actions align-center">
+					<button class="control" v-on:click="editting[field]?sendField(field):editField(field)">
+						<span :class="modeling[field] === null?'fas fa-spinner fa-pulse':(editting[field]?'far fa-check':'far fa-edit')"></span>
+					</button>
+				</td>
+				<td class="data">
+					<span v-if="!editting[field]">{{getFieldValue(field)}}</span>
+					<input v-if="editting[field]" :id="'fieldinput-' + field" :type="field==='passcode'?'password':'text'" v-model="modeling[field]" v-on:keyup.enter="sendField(field)"/>
+				</td>
+			</tr>
+			<tr v-for="field in toggles">
+				<td class="labels align-right">
+					
+				</td>
+				<td class="actions align-center">
+					<button class="control" v-on:click="toggle(field)">
+						<span :class="modeling[field] === null?'fas fa-spinner fa-pulse':(modeling[field]?'far fa-check-square':'far fa-square')"></span>
+					</button>
+				</td>
+				<td class="data">
+					<span>{{title[field]}}</span>
+				</td>
+			</tr>
+		</table>
+	
+		<h2>Description</h2>
+		<div class="description rs-white" v-if="modeling.mdDescription" v-html="modeling.mdDescription">
+		</div>
+		<div class="description rs-white" v-if="!modeling.mdDescription">
+			<p>No player description present.</p> 
+		</div>
+		
+		<h2>Stats</h2>
+		<p>Coming Soon...</p>
+	</div>
+</div>

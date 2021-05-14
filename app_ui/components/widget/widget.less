@@ -1,0 +1,77 @@
+.rs-component.widget-controls {
+	position: absolute;
+	height: 30px;
+	width: 100%;
+	right: 0px;
+	top: 0px;
+	overflow: hidden;
+	transition: width .5s;
+	z-index: 1;
+	
+	.control-bar {
+		position: relative;
+		background: @rsBlack;
+		z-index: 3;
+		
+		.widget-title {
+			white-space: nowrap;
+			padding: 2px 6px;
+			font-size: 20px;
+			flex-grow: 10;
+		}
+	}
+	
+	.control-pane {
+		position: absolute;
+		right: 0px;
+		top: 0px;
+		z-index: 5;
+	}
+	
+	.widget-ctrl {
+		color: @rsOrange;
+		display: block;
+		height: 30px;
+		width: 30px;
+		background: @rsBlack;
+		border: 1px solid @rsOrange;
+		color: @rsOrange;
+		transition: border .5s, color .5s;
+		cursor: pointer;
+		margin: 0px 0px 0px 4px;
+		
+		&:active,
+		&:hover {
+			border: 1px solid @rsWhite;
+			color: @rsWhite;
+		}
+		
+		span {
+			transition: transform .5s;
+		}
+	}
+}
+
+.configuring {
+	.widget-ctrl.config {
+		color: @rsWhite;
+	}
+}
+
+.sticky {
+	.rs-component.widget-controls {
+		width: 30px;
+	}
+	
+	&.configuring {
+		.configuration {
+			padding-top: 30px !important;
+		}
+	}
+}
+
+.collapsed {
+	.rs-component.widget-controls {
+		width: 100%;
+	}
+}

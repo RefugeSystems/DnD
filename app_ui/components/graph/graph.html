@@ -1,0 +1,9 @@
+<div class="rs-component rs-graph" v-if="isVisible()">
+	<div class="graph-search" :class="notFound?'search-error':''">
+		<input type="text" v-on:keyup.enter="centerOnSearch()" v-model="searchText" v-on:change="activity()">
+		<button class="search-center" v-on:click="centerOnSearch()">
+			<span class="fas fa-search"></span>
+		</button>
+	</div>
+	<div class="graph-container" :id="id"></div>
+</div>

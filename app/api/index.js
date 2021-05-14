@@ -13,10 +13,13 @@ var EventEmitter = require("events").EventEmitter,
 	WebSocket = require("ws"),
 	HTTPS = require("https"),
 	HTTP = require("http"),
+	Authorization = require("./authorization"),
+	APIauth = require("./authentication"),
 	APIws = require("./connection"),
 	APIv1 = require("./v1"),
 	APIui = require("./ui"),
 	express = require("express"),
+	Router = express.Router,
 	path = require("path"),
 	fs = require("fs");
 
@@ -60,6 +63,13 @@ class APIController extends EventEmitter {
 				res.status(400).json({
 					"message": "Malformed JSON"
 				});
+				// if(err) {
+				// 	res.status(400).json({
+				// 		"message": "Malformed JSON"
+				// 	});
+				// } else {
+				// 	next();
+				// }
 			});
 			this.router.use(express.urlencoded({ extended: true }));
 			this.router.use((req, res, next) => {
@@ -95,6 +105,10 @@ class APIController extends EventEmitter {
 				this.router.use("/ui", APIui.router);
 				
 				return APIws.initialize(this);
+			}).then(() => {
+				this.router.use("/login", APIauth.router);
+				
+				return APIauth.initialize(this);
 			}).then(() => {
 				// Bind WebSocket Controller
 				// TODO: bind

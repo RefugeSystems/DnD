@@ -1,0 +1,60 @@
+.rs-component.rs-widget {
+	position: relative;
+	padding: 2px;
+	margin: 0px;
+	max-width: 550px;
+	/*border: 1px solid white;*/
+	/*border-radius: 6px;*/
+	/*padding: 8px;*/
+	transition: min-height .5s;
+	min-height: 60px;
+	
+	.rs-containment {
+		overflow: hidden;
+		max-height: 2000px;
+		transition: max-height .5s;
+		position: relative;
+	}
+		
+	&.collapsed {
+		min-height: 30px;
+	
+		.rs-containment {
+			max-height: 0px;
+		}
+	}
+	
+	&.sticky {
+		position: sticky;
+		top: 0px;
+		bottom: 0px;
+		background: black;
+		z-index: 10;
+		/* padding: 10px 0px; */
+		/*padding: 0px;*/
+		
+		.rs-container {
+			padding-top: 0px !important;
+		}
+	}
+}
+
+.rs-container {
+	position: relative;
+	padding-top: 30px;
+}
+
+.collapsed {
+	.rs-component.widget-controls {
+		width: 100%;
+	}
+}
+
+.configuring {
+	.rs-component.widget-configure {
+		.configuration {
+			border-bottom: 1px solid @rsWhite;
+			max-height: 400px;
+		}
+	}
+}

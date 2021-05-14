@@ -1,0 +1,29 @@
+<div class="rs-page page-home">
+	<div class="login prompt" v-if="state === 0">
+		<div class="boxed">
+			<rs-connect v-on:connect="connect($event)" v-on:message="receiveMessage($event)" :universe="universe"></rs-connect>
+			<div class="message-content system-component" v-if="message" :class="messageClass">
+				<div class="message-heading" v-if="messageHeading">
+					<span :class="messageIcon" v-if="messageIcon"></span>
+					<span>{{messageHeading}}</span>
+				</div>
+				<div class="message-text">{{message}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="login waiting" v-if="0 < state && state < 10">
+		<div class="titling">
+			<span v-if="state === 1">Connecting</span>
+			<span v-if="state === 2">Loading</span>
+		</div>
+		<div class="status">
+			<span class="far fa-spinner fa-pulse"></span>
+		</div>
+	</div>
+	<div class="system-display active" v-if="state === 10">
+		<system-menu :universe="universe" :user="user" :player="player"></system-menu>
+		<router-view class="system-view" :universe="universe" :user="user" :player="player"></router-view>
+		<system-info :universe="universe" :user="user"></system-info>
+		<message-panel :universe="universe" :user="user"></message-panel>
+	</div>
+</div>

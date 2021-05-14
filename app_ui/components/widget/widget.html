@@ -1,0 +1,19 @@
+<div class="rs-component widget-controls">
+	<div class="flex v control-pane">
+		<button class="widget-ctrl toggle" v-on:click="toggle()">
+			<span class="far" :class="state.closed?'fa-expand-alt rot0':'fa-compress-alt rot90'"></span>
+		</button>
+	</div>
+	<div class="flex h center control-bar">
+		<span class="widget-title">
+			<span>{{contents.title || contents.declaration}}</span>
+			<span v-if="showName()">( {{shownName()}} )</span>
+		</span>
+		<button class="widget-ctrl config" v-on:click="config()" v-if="contents.configurations">
+			<span class="far fa-cogs"></span>
+		</button>
+		<button class="widget-ctrl toggle" v-on:click="toggle()">
+			<span class="far" :class="state.closed?'fa-expand-alt rot0':'fa-compress-alt rot90'"></span>
+		</button>
+	</div>
+</div>

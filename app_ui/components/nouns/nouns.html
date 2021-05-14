@@ -1,0 +1,77 @@
+<div class="rs-component component-nouns" v-save="modify" v-new="newObject">
+	<div class="selections">
+		<div class="selection">
+			<label class="">
+				<span>Noun:</span>
+				<select v-model="state.current" v-on:change="broadcastModel()">
+					<option v-for="type in nouns" :value="type">{{type}}</option>
+				</select>
+			</label>
+		</div>
+		<div class="sourcing">
+			<label class="">
+				<span>Copy:</span>
+				<select v-model="copy">
+					<option v-for="object in availableToCopy" :value="object.id">{{labelNoun(object)}}</option>
+				</select>
+			</label>
+		</div>
+	</div>
+
+	<div class="building">
+		<div class="simplified-editor" v-if="!state.advanced_editor">
+			<rs-field v-for="field in fields[state.current]" :root="state.building[state.current]" :field="field" v-on:changed="sync($event)" v-on:complete="completed(field.property)" v-on:blur="adjust(field.property)" :key="field.property">
+				<span slot="info">
+					<span v-if="field.property === 'id' && activeCopying()" class="fas fa-link rs-light-red" title="Editor is set to always copy, creating new IDs even when selections are made"></span>
+					<span v-if="field.property === 'icon'" :class="state.building[state.current].icon"></span>
+					<button class="info-link ctrl-link copy-parent fas fa-copy" v-if="displayCopyFromParent(field)" v-on:click="copyParent(field.property)" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link random-name fas fa-random" v-if="field.property === 'name' && state.current !== 'session' && hasGenerator()" v-on:click="randomizeName()" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link random-name fas fa-sync" v-if="field.property === 'name' && hasGenerator()" v-on:click="pullRandomName()" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link sync-id fas fa-id-card-alt" v-if="field.property === 'name'" v-on:click="syncID()" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link fas fa-info-circle" v-if="field.property === 'parent' && state.building[state.current].parent" v-on:click="viewParentInfo()" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link fas fa-info-circle" v-if="field.knowledge" v-on:click="openKnowledge(field.knowledge)" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link fas fa-question-circle" v-if="field.property === 'parent' && state.current === 'archetype'" v-on:click="openKnowledge('knowledge:reference:noun:archetype')" tabindex=2>
+					</button>
+					<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearField(field)" v-if="field.type !== 'label'" tabindex=2>
+					</button>
+					<button class="info-link ctrl-link random-name far fa-calendar-day" v-if="field.property === 'date' || field.property === 'created' || field.property === 'updated'" v-on:click="setDateNow(field.property)" tabindex=2>
+					</button>
+				</span>
+			</rs-field>
+		</div>
+
+		<div class="advanced-editor" v-if="state.advanced_editor">
+			<textarea v-model="rawValue" v-tab v-filedrop="fileAttach">
+			</textarea>
+			<label v-if="state.current === 'image'">
+				<span>Select Image File:</span>
+				<input type="file" id="attacher" accept="image/*" v-on:change="selectImage($event)" />
+			</label>
+		</div>
+	</div>
+
+	<div class="actions">
+		<button class="primary-action" v-on:click="newObject()">
+			<span class="action-icon fas fa-file-plus"></span>
+			<span class="action-text">New</span>
+		</button>
+		<button class="primary-action" v-on:click="modify()" :disabled="!isValid">
+			<span class="action-icon fas fa-cloud-upload"></span>
+			<span class="action-text">Save</span>
+		</button>
+		<button class="primary-action" v-on:click="dropObject()" v-if="this.state.building[state.current] && this.state.building[state.current].id">
+			<span class="action-icon fas fa-trash"></span>
+			<span class="action-text">Drop</span>
+		</button>
+		<button class="primary-action" v-on:click="toggleEditMode()">
+			<span class="action-icon far" :class="state.advanced_editor?'fa-check-square':'fa-square'"></span>
+			<span class="action-text">Advanced</span>
+		</button>
+	</div>
+</div>

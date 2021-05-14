@@ -1,0 +1,63 @@
+.rs-page.page-home {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	color: inherit;
+
+	h1 {
+		color: @rsWhite;
+	}
+
+	.login {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+	}
+
+	.waiting {
+		flex-direction: column;
+		text-align: center;
+		font-size: 30px;
+	}
+
+	.message-content {
+		margin-top: 10px;
+		max-width: 400px;
+		border: 1px solid white;
+		border-radius: 6px;
+		padding: 8px;
+		border: 1px solid @rsLightBlue;
+
+		.message-heading {
+			font-size: 18px;
+			border-bottom: 1px solid @rsWhite;
+		}
+
+		.message-text {
+			margin-top: 10px;
+		}
+	}
+
+	.system-display {
+		display: flex;
+		align-content: stretch;
+		align-items: stretch;
+		flex-direction: row;
+		height: 100%;
+		width: 100%;
+		margin: 0px !important;
+		border-width: 0px !important;
+		padding: 0px !important;
+		color: inherit;
+		overflow: hidden;
+	}
+
+	.system-view {
+		overflow: auto;
+		color: inherit;
+		width: 100%;
+		height: 100%;
+	}
+}

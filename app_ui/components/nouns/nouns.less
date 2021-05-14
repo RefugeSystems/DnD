@@ -1,0 +1,104 @@
+.rs-component.component-nouns {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.selection,
+	.sourcing {
+		margin: 4px 0px;
+
+		span {
+			display: inline-block;
+			text-align: right;
+			width: 50px;
+		}
+
+		select {
+			width: 360px;
+		}
+	}
+
+	.building {
+		border-width: 1px 0px;
+		border-style: solid;
+		border-color: @rsWhite;
+		overflow: auto;
+		flex-grow: 10;
+		/*
+		padding-top: 9px;
+		margin-top: 9px;
+		*/
+
+		.simplified-editor {
+			/*
+			max-height: ~"calc(100% - 100px)";
+			overflow: auto;
+			*/
+		}
+	}
+
+	.info-link {
+		line-height: 16px;
+		font-size: 16px;
+		padding: 0px;
+		margin: 0px;
+		border: 0px;
+	}
+
+	.simplified-editor {
+
+	}
+
+	.advanced-editor {
+		textarea {
+			min-height: 350px;
+			min-width: 100%;
+			max-width: 100%;
+			width: 100%;
+			tab-size: 4;
+
+			&.overlay {
+				color: rgba(0,0,0,.4);
+			}
+		}
+	}
+
+	.rs-field {
+
+		.multireference {
+			/*
+			max-height: 300px;
+			overflow: auto;
+			*/
+		}
+	}
+
+	.selections {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		button {
+			flex-grow: 5;
+			text-align: center;
+			padding: 10px 5px;
+		}
+	}
+
+	.output {
+
+
+		h2 {
+
+
+		 	* {
+				vertical-align: middle;
+			}
+		}
+	}
+}

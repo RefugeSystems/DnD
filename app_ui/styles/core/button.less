@@ -1,0 +1,43 @@
+
+button {
+	cursor: pointer;
+
+	&.flat {
+		padding: 0px;
+		margin: 0px;
+		border: 0px;
+		font-size: 1em;
+		background: transparent;
+	}
+
+	&.simple {
+		border: 1px solid @rsLightBlue;
+		border-radius: 5px;
+		font-size: 18px;
+		padding: 10px;
+		margin: 6px;
+		color: @rsWhite;
+		transition: border-color .5s;
+
+		&:hover {
+			border-color: @rsOrange;
+		}
+	}
+}
+
+a {
+	text-decoration: none;
+
+	&.linked-value {
+		text-decoration: underline;
+	}
+
+	&.action {
+		display: inline-block;
+		border: 1px solid @rsLightBlue;
+		color: @rsLightBlue;
+		border-radius: 4px;
+		padding: 4px;
+		margin:4px;
+	}
+}

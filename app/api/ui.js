@@ -7,11 +7,34 @@
  
 var express = require("express"),
 	path = require("path"),
-	fs = require("fs");
+	fs = require("fs"),
+	
+	divides = new RegExp("[\\/\\\\]", "g"),
+	urlStart = new RegExp("^/ui/");
 
 module.exports = new (function() {
 	this.router = express.Router();
 	this.id = "api:ui:controller";
+	var rootCompare,
+		comparison;
+	
+	rootCompare = function(to) {
+		to = to.split(divides);
+		console.log("Compare: ", comparison, to);
+		if(comparison) {
+			for(var x=0; x<comparison.length; x++) {
+				if(comparison[x] && comparison[x] !== to[x]) {
+					return false;
+				}
+			}
+			
+			return true;
+		} else {
+			return false;
+		}
+	};
+	
+	
 	
 	/**
 	 * 
@@ -25,7 +48,15 @@ module.exports = new (function() {
 			var options = {},
 				handler;
 			
-			this.router.get("/", function(req, res, next) {
+			// OS Abstraction
+			if(api.specification.web_root) {
+				comparison = api.specification.web_root.split(divides);
+			} else {
+				comparison = null;
+			}
+			
+			// This section doesn't leverage Express but path normalization to ensure requests stay in this application
+			this.router.get(/.*/i, function(req, res, next) {
 				if(api.specification.redirect) {
 					res.setHeader("Location", api.specification.redirect);
 					res.statusMessage = "See UI Site";
@@ -33,6 +64,7 @@ module.exports = new (function() {
 					res.end();
 				} else if(req.method.toLowerCase() === "get" && api.specification.web_root && req.path.indexOf("..") === -1) {
 					var pathing,
+						compare,
 						type;
 						
 					if(req.path === "/") {
@@ -40,15 +72,24 @@ module.exports = new (function() {
 					} else {
 						pathing = path.normalize(api.specification.web_root + req.path);
 					}
+					pathing = pathing.replace(urlStart, "");
 
 					// TODO: Fold into standard logging at debug level
-					// console.log("GET[" + req.url + "]: " + pathing);
-					if(pathing.startsWith(api.specification.web_root)) {
+					if(rootCompare(pathing)) {
 						fs.readFile(pathing, function(err, data) {
 							if(err) {
-								res.statusMessage = "Requested File Not Found";
-								res.statusCode = 404;
-								res.end();
+								pathing = pathing + ".html";
+								fs.readFile(pathing, function(err, data) {
+									if(err) {
+										res.statusMessage = "Requested File Not Found";
+										res.statusCode = 404;
+										res.end();
+									} else {
+										res.setHeader("Content-Type", "text/html");
+										res.statusCode = 200;
+										res.end(data);
+									}
+								});
 							} else {
 								type = path.extname(pathing);
 								if(type) {
@@ -90,6 +131,10 @@ module.exports = new (function() {
 						res.statusCode = 400;
 						res.end();
 					}
+				} else if(!api.specification.web_root) {
+					res.statusMessage = "No UI Directory";
+					res.statusCode = 404;
+					res.end();
 				} else {
 					res.statusMessage = "Invalid Request Received";
 					res.statusCode = 400;

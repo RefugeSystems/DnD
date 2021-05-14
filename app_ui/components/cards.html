@@ -1,0 +1,37 @@
+<div class="system-component component-cards">
+	<div class="card" v-for="(card, $index) in corpus" :class="cardClass($index, card)" :style="'z-index: ' + cardZIndex($index, card) + '; ' + cardOffset($index, card)" v-on:click="toCard($index)">
+	
+		<div class="information" v-swipe.left.stop="nextCard" v-swipe.right.stop="prevCard">
+			<h1>{{card.name}}</h1>
+			<rs-object-info v-on:click="processRequest($event)" :record="card" :universe="universe"></rs-object-info>
+		</div>
+		
+		<div class="footer">
+			<button v-on:click.stop="selectCard(card)" v-if="current === $index && select_label !== null" class="select">
+				<span class="fas fa-check-circle"></span>
+				<span>{{select_label}}</span>
+			</button>
+			<button class="goto">
+				<span>{{card_label}}: {{card.name}}</span>
+			</button>
+		</div>
+	</div>
+	
+	<div class="card" v-for="(card, $index) in corpus" :class="cardClass($index + corpus.length, card)" :style="'z-index: ' + cardZIndex($index + corpus.length, card) + '; ' + cardOffset($index + corpus.length, card)" v-if="$index < current" v-on:click.stop="toCard($index)">
+	
+		<div class="information" v-swipe.left.stop="nextCard" v-swipe.right.stop="prevCard">
+			<h1>{{card.name}}</h1>
+			<rs-object-info v-on:click="processRequest($event)" :record="card" :universe="universe"></rs-object-info>
+		</div>
+		
+		<div class="footer">
+			<button class="goto">
+				<span>{{card_label}}: {{card.name}}</span>
+			</button>
+		</div>
+	</div>
+	
+	<div class="back" v-if="state && state.return">
+		
+	</div>
+</div>

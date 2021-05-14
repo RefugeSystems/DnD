@@ -1,0 +1,9 @@
+{
+	"objects": [{
+		"id": "player:master",
+		"name": "Master",
+		"username": "master",
+		"description": "Default master account for building up the Universe",
+		"last": 0
+	}]
+}

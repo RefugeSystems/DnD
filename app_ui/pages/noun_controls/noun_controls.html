@@ -1,0 +1,14 @@
+<div class="rs-page page-noun_controls">
+	<div class="construction">
+		<div class="building">
+			<rs-nouns :universe="universe" :player="player" :user="user" :built="built" v-on:model="changeModel($event)" v-on:change="rerender()"></rs-nouns>
+		</div>
+		<div class="output rs-component" v-if="modeling">
+			<h2 class="nowrap">
+				<span :class="modeling.icon"></span>
+				<span>{{modeling.name}}</span>
+			</h2>
+			<rs-object-info v-on:click="processRequest($event)" :record="modeling" :universe="universe" :user="user" :player="player" :options="infoOptions"></rs-object-info>
+		</div>
+	</div>
+</div>

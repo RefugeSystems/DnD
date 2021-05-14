@@ -29,6 +29,12 @@ module.exports = new (function() {
 				next();
 			});
 			
+			this.router.get("/timemark", (req, res, next) => {
+				res.result = {};
+				res.result.timemark = api.universe.objectHandler.getTimeMark();
+				next();
+			});
+			
 			this.router.post("/calculate/:id", (req, res, next) => {
 				res.result = {};
 				res.result.referenced = [];

@@ -1,0 +1,188 @@
+<div class="rs-page rs-component page-system">
+	<div class="information-container">
+		<h1>System Information</h1>
+		<p>Overview of information regarding your system and the server to which you are connected.</p>
+
+		<button class="" v-on:click="uncachedRefresh()">
+			<span class="fas fa-eraser"></span>
+			<span>Cache Clearing Refresh</span>
+		</button>
+
+		<h2 class="flex h">
+			<span>Detected Browser Information</span>
+			<button class="make" v-on:click="makeIssue()" v-if="player.master && !knownErrors.navigator">
+				<span>Create</span>
+				<span class="fas fa-bug"></span>
+			</button>
+		</h2>
+		<table class="display browser">
+			<tr>
+				<td class="align-right">Browser:</td>
+				<td>{{navigator.name}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Version:</td>
+				<td>{{navigator.version}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Issues:</td>
+				<td v-if="!knownErrors.navigator">None Known</td>
+				<td v-if="knownErrors.navigator">
+					<button class="rs-dark-red" v-on:click="showInfo(knownErrors.navigator)">
+						<span class="fas fa-exclamation-triangle"></span>
+						<span>Known Issues</span>
+					</button>
+				</td>
+			</tr>
+		</table>
+
+		<h2>Connection Information</h2>
+		<table class="display versions">
+			<tr>
+				<td class="align-right">Connected At:</td>
+				<td>{{getDate(universe.connection.connectMark)}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Last Message:</td>
+				<td>{{getDate(universe.connection.last)}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Server Address:</td>
+				<td>{{getServerAddress()}}</td>
+			</tr>
+			<tr v-if="universe.connection.lastError">
+				<td class="align-right">Last Error At:</td>
+				<td>
+					<span class="rs-light-red fas fa-exclamation-triangle"></span>
+					<span>{{getDate(universe.connection.lastErrorAt)}}</span>
+				</td>
+			</tr>
+			<tr v-if="universe.connection.lastError">
+				<td class="align-right">Server Error:</td>
+				<td>
+					<span class="rs-light-red fas fa-exclamation-triangle"></span>
+					<span>{{universe.connection.lastError}}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-right">Server Version:</td>
+				<td>{{universe.version}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">UI Version:</td>
+				<td>{{system.version}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Latency:</td>
+				<td>{{universe.latency}}</td>
+			</tr>
+			<tr>
+				<td class="align-right">Reconnects:</td>
+				<td>{{universe.connection.reconnectAttempts}}</td>
+			</tr>
+		</table>
+
+		<h2>Connected Players</h2>
+		<table class="display players">
+			<tr v-for="player in connectedPlayers":id="player.id">
+				<td class="align-right">{{player.username}}</td>
+				<td>
+					<span v-if="player.master" class="fas fa-chess-king"></span>
+					<span v-else class="fas fa-user"></span>
+				</td>
+				<td>{{player.name}}</td>
+				<td v-if="player.entity">as <span class="rs-orange">{{universe.indexes.entity.index[player.entity]?universe.indexes.entity.index[player.entity].name:"Error[" + player.entity + "]"}}</span></td>
+			</tr>
+		</table>
+
+		<div class="data" v-if="player.master">
+			<h2>Universe Data</h2>
+			<div id="anchors"></div>
+			<table class="versions">
+				<tr>
+					<td class="align-right">Export Data</td>
+					<td>
+						<button class="flat simple" v-on:click="exportUniverse()">
+							<span class="fas fa-download"></span>
+							<span>Export Universe</span>
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-right">
+						<span v-if="!importing">Import Data</span>
+						<span v-if="importing">Importing</span>
+					</td>
+					<td>
+						<input type="file" class="flat simple" v-if="!importing" id="importFileSelection" accept="application/json" v-on:change="checkImportSelection()"/>
+						<div class="pad-aligned" v-if="importing">
+							<span class="fas fa-spinner fa-pulse"></span>
+							<span>(</span>
+							<span>{{imported}}</span>
+							<span>/</span>
+							<span>{{toImport}}</span>
+							<span v-if="failedIDs.length">
+								<span>|</span>
+								<span class="fas fa-exclamation-triangle"></span>
+								<span>{{failedIDs.length}}</span>
+							</span>
+							<span>)</span>
+						</div>
+					</td>
+				</tr>
+				<tr v-if="importMessage">
+					<td class="align-right">
+						<span>{{importMessageType}}</span>
+					</td>
+					<td>
+						<div class="pad-aligned">
+							<span :class="importIcon"></span>
+							<span>{{importMessage}}</span>
+							<span v-if="failedIDs.length" v-on:click="showFailures()">
+								<span>|</span>
+								<span class="fas fa-exclamation-triangle"></span>
+								<span>{{failedIDs.length}}</span>
+							</span>
+						</div>
+					</td>
+				</tr>
+				<tr v-if="importSelection && !importing">
+					<td>
+					</td>
+					<td>
+						<button class="flat simple" v-on:click="importUniverse()">
+							<span class="fas fa-upload"></span>
+							<span>Import Universe</span>
+						</button>
+						<button class="flat simple" v-on:click="importOverwriteToggle()">
+							<span class="far" :class="importOverwrites?'fa-check-square':'fa-square'"></span>
+							<span>Overwrite</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+			<h2>Server Control</h2>
+			<table class="versions">
+				<tr>
+					<td class="align-right">State</td>
+					<td>
+						<button class="flat simple" v-on:click="toggleLocalDebug()">
+							<span v-if="universe.debugConnection" class="far fa-check-square"></span>
+							<span v-if="!universe.debugConnection" class="far fa-square"></span>
+							<span>Debug Connection</span>
+						</button>
+					</td>
+				</tr>
+				<tr v-if="!universe.indexes.setting.index['setting:control:stop']">
+					<td class="align-right">State</td>
+					<td>
+						<button class="flat simple" v-on:click="stopUniverse()">
+							<span class="fas fa-power-off"></span>
+							<span>Stop Server</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,21 @@
+{
+	"fields": [{
+		"id": "incidents",
+		"name": "Incidents",
+		"description": "IDs of the Incidents to which this object is associated",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "entities",
+		"name": "Entities",
+		"description": "List of entities tied to this object",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "gender",
+		"name": "Gender",
+		"description": "The gender of this object",
+		"type": "string",
+		"attribute": {}
+	}]
+}

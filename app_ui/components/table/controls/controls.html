@@ -1,0 +1,22 @@
+<div class="system-component table-controls">
+	<div class="filtering">
+		<input type="text" v-model="state.filter.null" />
+		<span class="search-icon fas fa-search"></span>
+	</div>
+	<div class="controls">
+		<div class="selections" v-if="index.selection.length">
+			<div v-for="control in controls">
+				{{control}}
+			</div>
+		</div>
+		<button class="ctrl selections clear" v-if="index.selection.length" v-on:click="clearSelection()">
+			<span class="far fa-ban"></span>
+		</button>
+		<button class="ctrl selections all" v-if="index.selection.length != index.listing.length" v-on:click="allSelection()">
+			<span class="far fa-check-square"></span>
+		</button>
+		<button class="ctrl selections info" v-if="index.selection.length" v-on:click="infoSelection(index.selection[index.selection.length-1])">
+			<span class="far fa-journal-whills"></span>
+		</button>
+	</div>
+</div>

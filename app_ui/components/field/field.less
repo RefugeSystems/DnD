@@ -1,0 +1,113 @@
+
+.rs-component.rs-field {
+	color: inherit;
+	margin: 3px 0px !important;
+
+	input, button, label, table {
+		color: inherit;
+		background-color: inherit;
+	}
+
+	label {
+		display: inline-block;
+		text-align: right;
+		min-width: 100px;
+	}
+
+	&.label label span {
+		font-size: 1.5em;
+		text-decoration: underline;
+	}
+
+	select,
+	input {
+		font-size: 13px;
+		padding: 3px;
+		border-color: @rsWhite;
+		border-style: solid;
+		border-width: 0px 0px 2px 0px;
+	}
+	textarea,
+	input {
+		user-select: all;
+	}
+
+	select {
+		background: transparent;
+		color: @rsWhite;
+		max-width: 160px;
+	}
+		
+	option {
+		background: @rsBlack;
+	}
+
+	textarea {
+		width: 90%;
+		min-height: 160px;
+		max-width: 100%;
+		margin: 2px;
+	}
+
+	.checkbox-field {
+		padding: 0px;
+		margin: 0px;
+		border: 0px;
+		font-size: 1.2em;
+	}
+
+	.multireference {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 3px;
+		border: 1px solid @rsGray;
+		background: @rsWhite;
+		.referenced {
+			position: relative;
+			display: inline-flex;
+			flex-direction: row;
+			align-items: center;
+			border: 1px solid @rsGray;
+			background: @rsBlack;
+			border-radius: 5px;
+			color: @rsWhite;
+			padding: 3px;
+			margin: 3px;
+
+			.reference-display {
+				max-width: 160px;
+				padding: 0px 7px;
+				overflow: hidden;
+			}
+
+			.info {
+				color: @rsLightBlue;
+
+				line-height: 24px;
+				font-size: 24px;
+				height: 24px;
+				width: 24px;
+
+				padding: 0px;
+				padding: 0px;
+				border: 0px;
+				margin: 0px 8px 0px 0px;
+			}
+
+			.remove {
+				color: @rsWhite;
+
+				line-height: 26px;
+				font-size: 26px;
+				height: 26px;
+				width: 26px;
+
+				padding: 0px;
+				padding: 0px;
+				border: 0px;
+				margin: 0px;
+			}
+		}
+	}
+}

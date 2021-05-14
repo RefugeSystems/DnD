@@ -1,0 +1,138 @@
+{
+	"classes": [{
+		"id": "setting",
+		"name": "Setting",
+		"description": "Value for the universe",
+		"fields": ["name", "value"]
+	}, {
+		"id": "incident",
+		"name": "Incident",
+		"description": "For an event in the universe, such as a Long Rest or Battle",
+		"fields": ["name", "description", "time", "associated"]
+	}, {
+		"id": "meeting",
+		"name": "meeting",
+		"description": "xxxx",
+		"fields": ["name", "description", "time", "date", "entities"]
+	}, {
+		"id": "dataset",
+		"name": "dataset",
+		"description": "xxxx",
+		"fields": ["name", "description", "disabled", "value"]
+	}, {
+		"id": "image",
+		"name": "image",
+		"description": "xxxx",
+		"fields": ["name", "description", "disabled", "data", "url"]
+	}, {
+		"id": "playlist",
+		"name": "Playlist",
+		"description": "Collection of ",
+		"fields": ["name", "description", "disabled", "streamurls"]
+	}, {
+		"id": "audio",
+		"name": "Audio",
+		"description": "An audio clip that can be played either locally, on a client device, or streamed to a sound system. Different circumstances require different fields. Sonos streaming requires a URL. Client play requires data.",
+		"fields": ["name", "description", "disabled", "url", "data", "attribute"]
+	}, {
+		"id": "profile",
+		"name": "Profile",
+		"description": "Describes a user's set of settings",
+		"fields": ["name", "description", "user", "attribute"]
+	}, {
+		"id": "dashboard",
+		"name": "Dashboard",
+		"description": "Describes the layout of widgets on a Dashboard",
+		"fields": ["name", "description", "user", "attribute", "widgets"]
+	}, {
+		"id": "widget",
+		"name": "Widget",
+		"description": "Describes a widget available in the UI. The attributes specify available values for configuration and offer a string on field usage or an array of options.",
+		"fields": ["name", "description", "disabled", "attribute"]
+	}, {
+		"id": "slot",
+		"name": "Slot",
+		"description": "An entry where an item can be placed in association with another object.",
+		"fields": ["name", "description", "types"]
+	}, {
+		"id": "entity",
+		"name": "Entity",
+		"description": "A manipulatable entry in the Universe.",
+		"fields": ["name", "description", "slots"]
+	}, {
+		"id": "ability",
+		"name": "ability",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}, {
+		"id": "skill",
+		"name": "skill",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}, {
+		"id": "archetype",
+		"name": "archetype",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}, {
+		"id": "action",
+		"name": "action",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}, {
+		"id": "effect",
+		"name": "effect",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}, {
+		"id": "race",
+		"name": "Race",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}, {
+		"id": "conditional",
+		"name": "Conditional",
+		"description": "Specifies values to add, subtract, or set based on the described condition being met.",
+		"fields": ["name", "description", "disabled", "condition", "ifop", "add", "set", "sub"]
+	}, {
+		"id": "type",
+		"name": "Type",
+		"description": "Indicates the type of object here-in for game purposes. Such as 'weapon' or 'ranged' and are for use incombination in determing or displaying properties for the object.",
+		"fields": ["name", "description", "disabled"]
+	}, {
+		"id": "journal",
+		"name": "Journal",
+		"description": "xxxx",
+		"fields": ["name", "description", "disabled", "attribute"]
+	}, {
+		"id": "page",
+		"name": "Page",
+		"description": "A page in any set of journals. This is to allow replication of information across multiple journals and facilitate sharing with other players without duplication.",
+		"fields": ["name", "description", "disabled", "journals", "versioning", "value", "time", "date"]
+	}, {
+		"id": "item",
+		"name": "Item",
+		"description": "An item used by entities",
+		"fields": ["name", "description", "icon", "cost", "types", "needs", "damage", "dmgtype", "range", "durability", "size", "weight", "encumberance", "proiciency", "stat", "ranged", "thrown", "consume", "consume_hint", "consume_icon", "dc", "user", "attunes", "attuned", "attuned_locked", "charges", "recharges", "enchantments", "conditionals"]
+	}, {
+		"id": "knowledge",
+		"name": "Knowledge",
+		"description": "Knowledge held by an entity in the universe.",
+		"fields": ["name", "description", "icon", "category", "state", "screen", "associated", "included", "effects"]
+	}, {
+		"id": "quest",
+		"name": "Quest",
+		"description": "Specific entry for objectives.",
+		"fields": ["name", "description", "locations", "items", "conditionals", ]
+	}, {
+		"id": "minigame",
+		"name": "Minigame",
+		"description": "Describes the state of a mini-game",
+		"fields": ["name", "description", "game", "attribute", "time", "date", "last", "expiry", "conditionals"]
+	}, {
+		"id": "location",
+		"name": "Location",
+		"description": "xxxx",
+		"fields": ["name", "description"]
+	}]
+}

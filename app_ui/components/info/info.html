@@ -1,0 +1,16 @@
+<div class="system-component system-info rs-component" :class="open?'opened':'closed'">
+	<div class="main-bar">
+		<div class="titling">
+			<span v-if="viewing && viewing.icon" class="icon" :class="viewing.icon"></span>
+			<span class="text nowrap">{{viewing?viewing.name:"Information"}}</span>
+		</div>
+		<button class="control back" v-on:click="backOne()" v-if="history.length">
+			<span class="fas fa-step-backward"></span>
+		</button>
+		<button class="control close" v-on:click="closeInfo()" :tabindex="getTabIndex()">
+			<span class="fas fa-times"></span>
+		</button>
+	</div>
+	
+	<rs-object-info v-if="viewing" v-on:click="processRequest($event)" v-on:close="closeInfo()" :record="viewing" :universe="universe" :user="user" :player="player" :target="target" :base="base" :options="options"></rs-object-info>
+</div>

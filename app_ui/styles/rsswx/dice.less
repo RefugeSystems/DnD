@@ -1,0 +1,28 @@
+.rsswx-dice {
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+
+	&.force {
+		border-radius: 1em;
+		border-width: 2px;
+	}
+	
+	&.light {
+		border-color: @rsBlack;
+		background: @rsWhite;
+	}
+
+	&.dark {
+		border-color: @rsWhite;
+		background: @rsBlack;
+	}
+}
+
+.light-side {
+	--fa-secondary-color: @rsBlack;
+}
+
+.dark-side {
+	--fa-secondary-color: @rsWhite;
+}

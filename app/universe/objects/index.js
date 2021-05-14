@@ -26,7 +26,8 @@ module.exports = function(universe) {
 		database = null,
 		inheritance = {},
 		reference = {},
-		manager = {};
+		manager = {},
+		mark = {};
 	
 	this.getDatabase = function() {
 		return database;
@@ -48,7 +49,7 @@ module.exports = function(universe) {
 			database = new startup.RSDatabase(universe.configuration.database);
 			database.initialize(constructors)
 			.then(() => {
-				return DBLoader.initialize(universe, database);
+				return DBLoader.initialize(universe, database, universe.configuration);
 			}) .then(() => {
 				for(x=0; x<universe.classes.length; x++) {
 					manager[universe.classes[x]] = database.getClassManager(universe.classes[x]);
@@ -120,6 +121,15 @@ module.exports = function(universe) {
 	};
 	
 	/**
+	 * 
+	 * @method getTimeMark
+	 * @return {Object}
+	 */
+	this.getTimeMark = function() {
+		return JSON.parse(JSON.stringify(mark));
+	};
+	
+	/**
 	 * Ensures that any required object is loaded if needed. Additionally emits warnings for
 	 * missing dependencies.
 	 * @method trackInheritance
@@ -154,6 +164,7 @@ module.exports = function(universe) {
 					return Promise.all(promised);
 				})
 				.then((linked) => {
+					var now = Date.now();
 					for(x=0; x<linked.length; x++) {
 						if(linked[x]) {
 							linked[x].calculateFieldValues();
@@ -162,6 +173,7 @@ module.exports = function(universe) {
 					for(x=0; x<linked.length; x++) {
 						if(linked[x]) {
 							linked[x].updateFieldValues();
+							mark[linked[x].id] = now;
 						}
 					}
 				})
@@ -526,6 +538,7 @@ module.exports = function(universe) {
 	 * @param {String} id 
 	 */
 	this.pushCalculated = function(id) {
+		mark[id] = Date.now();
 		if(reference[id] && reference[id]._list.length) {
 			var changing = {};
 			changing.origin = id;
@@ -568,6 +581,7 @@ module.exports = function(universe) {
 	 */
 	this.pushUpdated = function(id) {
 		// console.log("Update: ", inheritance[id]);
+		mark[id] = Date.now();
 		if(inheritance[id] && inheritance[id]._list.length) {
 			var changing = {};
 			changing.origin = id;

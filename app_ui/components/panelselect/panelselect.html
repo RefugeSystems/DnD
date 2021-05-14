@@ -1,0 +1,32 @@
+<div class="rs-component rs-panel-select">
+	<div class="filter">
+		<input type="text" v-model="filter" :placeholder="placeholder"/>
+	</div>
+	<div class="selection">
+		<div class="panel-container" v-for="record in corpus" v-if="!filtertext || (record._search && record._search.indexOf(filtertext) !== -1)" :class="panelstyle(record)">
+			<div class="panel-image" v-if="!state.no_image && images[record.id]">
+				<rs-render-image :image="images[record.id]"></rs-render-image>
+			</div>
+			<div class="panel-description" :class="!state.no_image && images[record.id]?'imaged':'no-image'">
+				<div class="panel-title">
+					<span class="panel-icon" :class="record.icon"></span>
+					<span class="title-text">{{record.name}}</span>
+				</div>
+				<div class="panel-info">
+					<div class="panel-stats" v-if="fields">
+						<div class="panel-stat" v-for="stat in fields">
+							<span class="stat-label">{{getStatLabel(record, stat)}}</span>
+							<span>:</span>
+							<span class="stat-value">{{getStatValue(record, stat)}}</span>
+						</div>
+					</div>
+					<div class="panel-text" v-if="paneltext" v-html="getPanelText(record)"></div>
+					<div class="panel-text" v-if="record.description && state.panel_descriptions" v-html="rsshowdown(record.description, record)"></div>
+				</div>
+				<slot name="controls" :record="record"></slot>
+			</div>
+		</div>
+		<div class="panel-container" v-for="record in fill">
+		</div>
+	</div>
+</div>

@@ -1,0 +1,71 @@
+<div class="rs-page page-universe">
+	<div class="universe-contents">
+		<div class="title">
+			Galactic Index
+			<button class="flat simple fas fa-sync" v-on:click="resetHeaders()">Headers</button>
+			<button class="flat simple fas fa-download" v-on:click="exportUniverse()">Export Universe</button>
+		</div>
+
+		<div id="anchors">
+		</div>
+
+		<div class="rs-component flex h wrap">
+			<div class="rs-component index">
+				<div class="table-controls">
+					<rs-table-controls class="index" :universe="universe" :corpus="corpus" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state" v-on:action="processAction"></rs-table-controls>
+
+					<select v-model="target" class="table-control">
+						<option value="">No Target</option>
+						<option disabled value="div">-- Entity Divide --</option>
+						<option v-for="en in listing.entity" :value="en.id">{{en.name}}</option>
+						<option disabled value="div">--- Item Divide ---</option>
+						<option v-for="it in listing.item" :value="it.id" v-if="!it.template">{{it.name}}</option>
+						<option disabled value="div">--- Room Divide ---</option>
+						<option v-for="it in listing.room" :value="it.id" v-if="!it.template">{{it.name}}</option>
+						<option disabled value="div">-- Player Divide --</option>
+						<option v-for="pl in listing.player" :value="pl.id">{{pl.name}}</option>
+					</select>
+					<select v-model="command" v-on:change="processCommand(command)" v-if="showCommands()" class="table-control">
+						<option value="">Choose Action</option>
+						<option disabled value="div">-- Dashboards --</option>
+						<option value="dashboard-ships">Dashboard: Ships</option>
+						<option disabled value="div">-- Entities --</option>
+						<option value="spawn">Spawn Template Entities</option>
+						<option disabled value="div">-- Items --</option>
+						<option value="give" v-if="target">Give Items</option>
+						<option value="take" v-if="target">Take Items</option>
+						<option disabled value="div">-- Effects --</option>
+						<option value="effect" v-if="target">Add Effect</option>
+						<option value="uneffect" v-if="target">Remove Effect</option>
+						<option disabled value="div">-- Knowledge --</option>
+						<option value="grant-knowledge" v-if="target">Grant Knowledge</option>
+						<option value="forget-knowledge" v-if="target">Forget Knowledge</option>
+						<option disabled value="div">-- Records --</option>
+						<option value="obscure">Obscure Record</option>
+						<option value="unobscure">Unobscure Record</option>
+						<option disabled value="div">-- Maintenance --</option>
+						<option value="drop">Delete Objects</option>
+						<option value="export">Export Selection</option>
+					</select>
+
+					<select v-model="state.activeIndex" class="table-control">
+						<option value="">All</option>
+						<option v-for="index in availableIndexes" :value="index">{{index}}</option>
+					</select>
+					<select v-model.number="state.paging.per" class="table-control">
+						<option v-for="spread in getSpread()" :value="spread">{{spread}}</option>
+					</select>
+					<select v-model="state.filterTemplate" class="table-control">
+						<option value="shown">Shown</option>
+						<option value="only">Only</option>
+						<option value="out">Out</option>
+					</select>
+				</div>
+				<rs-table class="index" :universe="universe" :user="player" :corpus="corpus" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :headers="state.headers" :state="state"></rs-table>
+				<rs-table-paging class="index" :universe="universe" :user="player" :index="state.activeIndex?universe.indexes[state.activeIndex]:universe.index" :state="state"></rs-table-paging>
+			</div>
+		</div>
+	</div>
+
+	<router-view class="system-view opened" :universe="universe" :user="player" :class="$route.params.oid?'loaded':''"></router-view>
+</div>

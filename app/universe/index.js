@@ -106,17 +106,19 @@ class Universe extends EventEmitter {
 			})
 			.then((loading) => {
 				// Update Loaded Objects
-				for(var x=0; x<loading.length; x++) {
+				var x;
+				
+				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
 					}
 				}
-				for(var x=0; x<loading.length; x++) {
+				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].calculateFieldValues();
 					}
 				}
-				for(var x=0; x<loading.length; x++) {
+				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
 					}
@@ -167,6 +169,18 @@ class Universe extends EventEmitter {
 	 * @return {[type]}            [description]
 	 */
 	requestObject(id, callback) {
+		
+	}
+	
+	/**
+	 * 
+	 * @method requestState
+	 * @param {RSObject} [player] To restrict the state to.
+	 * @param {Integer} [time] The time mark from which to grab the state. This is real-time from which to grab
+	 * 		updated objects to send.
+	 * @return {Array | Object} 
+	 */
+	requestState(player, time) {
 		
 	}
 	

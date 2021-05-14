@@ -1,0 +1,111 @@
+.listing.control {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	
+	.filter {
+		flex-grow: 10;
+	}
+	
+	.list-data.control {
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		
+		&.minor {
+			max-height: 300px;
+			flex-grow: 5;
+		}
+		
+		&.normal {
+			max-height: 300px;
+			flex-grow: 10;
+		}
+		
+		&.major {
+			flex-grow: 15;
+		}
+	}
+	
+	button.listed {
+		background: transparent;
+		display: block;
+		padding: 4px 4px 6px 4px;
+		margin: 3px 3px 3px 5px;
+		text-align: left;
+		font-size: 16px;
+		cursor: pointer;
+		color: @rsWhite;
+		overflow: hidden;
+		border: 0px;
+		
+		.name {
+			display: block;
+			border-bottom: 1px solid @rsBlue;
+			transition: border-color .5s;
+			white-space: nowrap;
+			
+			* {
+				white-space: nowrap;
+				border: 0px;
+			}
+		}
+		
+		.indicator {
+			display: block;
+			height: 2px;
+			width: 0px;
+			transition: width .1s, border-color .5s;
+			background-color: @rsOrange;
+		}
+		
+		.icon {
+			transition: color .5s;
+		}
+		
+		&:hover {
+			border-color: @rsOrange;
+			
+			.indicator {
+				width: 100%;
+			}
+			
+			.name {
+				border-color: @rsOrange;
+			}
+		}
+		
+		&.active {
+			
+			.name {
+				border-color: @rsOrange;
+			}
+			
+			.icon {
+				color: @rsOrange;
+			}
+			
+			.indicator {
+				background-color: @rsOrange;
+			}
+		}
+		
+		&.disabled {
+			color: @rsGray;
+			cursor: not-allowed;
+			
+			.name {
+				border-color: @rsLightRed !important;
+			}
+			
+			.icon {
+				border-color: @rsLightRed !important;
+			}
+			
+			.indicator {
+				background-color: @rsLightRed !important;
+				width: 0px !important;
+			}
+		}
+	}
+}

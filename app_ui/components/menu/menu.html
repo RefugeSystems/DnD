@@ -1,0 +1,17 @@
+<div class="system-component system-menu rs-component" :class="getClassSettings()">
+	<div class="navigation">
+		<div class="prefixed navigation-item" v-for="navItem in navigationItems" v-if="isActive(navItem)" :class="$router.currentRoute.path.startsWith(navItem.highlight)?'current':''">
+			<router-link class="navigation-contents" :to="navItem.path" :key="navItem.path" v-if="navItem.path">
+				<span class="nav-icon" :class="navItem.icon"></span>
+				<span class="nav-label" :class="navItem.labelClass">{{navItem.label}}</span>
+			</router-link>
+		</div>
+		<div class="separator"></div>
+		<div class="prefixed navigation-item" v-for="navItem in generalItems" v-if="isActive(navItem)" :class="navItem.class">
+			<button class="prefixed navigation-contents" v-if="navItem.action" v-on:click="processNavigation(navItem)">
+				<span class="nav-icon" :class="navItem.icon"></span>
+				<span class="nav-label" :class="navItem.labelClass">{{navItem.label}}</span>
+			</button>
+		</div>
+	</div>
+</div>

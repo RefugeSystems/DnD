@@ -1,0 +1,7 @@
+<div class="rs-component widget-configure">
+	<div class="configuration">
+		<div class="field" v-for="field in contents.configurations">
+			<rs-field :root="state" :field="field" :key="field.property"></rs-field>
+		</div>
+	</div>
+</div>

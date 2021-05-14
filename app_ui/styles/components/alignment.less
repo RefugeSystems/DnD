@@ -1,0 +1,178 @@
+.rs-component {
+	.flow-h,
+	.flow.h,
+	.flex.h {
+		display: flex;
+		flex-direction: row;
+
+		&.v-center {
+			align-items: center;
+		}
+
+		&.h-center,
+		&.center {
+			justify-content: center;
+		}
+
+		&.wrap {
+			flex-wrap: wrap;
+		}
+
+		&.reversed {
+			flex-direction: row-reversed;
+		}
+
+		&.lefted {
+			justify-content: flex-start;
+		}
+
+		&.justified {
+			justify-content: space-between;
+		}
+
+		&.righted {
+			justify-content: flex-end;
+		}
+
+		&.middled {
+			justify-content: center;
+		}
+
+		&.inline {
+			display: inline-flex;
+		}
+	}
+
+	.flow-v,
+	.flow-v,
+	.flex.v {
+		display: flex;
+		flex-direction: column;
+
+		&.h-center {
+			align-items: center;
+		}
+
+		&.v-center,
+		&.center {
+			justify-content: center;
+		}
+
+		&.wrap {
+			flex-wrap: wrap;
+		}
+
+		&.reversed {
+			flex-direction: column-reversed;
+		}
+
+		&.lefted {
+			justify-content: flex-start;
+			align-items: flex-start;
+		}
+
+		&.justified {
+			justify-content: space-between;
+		}
+
+		&.righted {
+			justify-content: flex-end;
+		}
+
+		&.middled {
+			justify-content: center;
+		}
+
+		&.inline {
+			display: inline-flex;
+		}
+	}
+
+	.flex {
+		&.fill {
+			width: 100%;
+		}
+
+		&.centered {
+			justify-content: center;
+			align-items: center;
+		}
+
+		.spacer {
+			flex-grow: 10;
+		}
+
+		.start {
+			align-items: flex-start;
+		}
+
+		.end {
+			align-items: flex-end;
+		}
+	}
+
+	.grow-0 {
+		flex-grow: 0;
+	}
+
+	.grow-1 {
+		flex-grow: 1;
+	}
+
+	.grow-2 {
+		flex-grow: 2;
+	}
+
+	.grow-3 {
+		flex-grow: 3;
+	}
+
+	.grow-4 {
+		flex-grow: 4;
+	}
+
+	.grow-5 {
+		flex-grow: 5;
+	}
+
+	.grow-10 {
+		flex-grow: 10;
+	}
+
+	.shrink-0 {
+		flex-shrink: 0;
+	}
+
+	.shrink-1 {
+		flex-shrink: 1;
+	}
+
+	.shrink-2 {
+		flex-shrink: 2;
+	}
+
+	.flipped-h {
+		transform: scaleX(-1);
+	}
+
+	.flipped-v {
+		transform: scaleY(-1);
+	}
+
+	.aligned-left,
+	.align-left {
+		text-align: left;
+	}
+	.aligned-right,
+	.align-right {
+		text-align: right;
+	}
+	.aligned-center,
+	.align-center {
+		text-align: center;
+	}
+
+	.nowrap {
+		white-space: nowrap;
+	}
+}

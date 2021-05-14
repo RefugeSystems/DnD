@@ -1,0 +1,10 @@
+<div class="rs-autocomplete">
+	<div class="filter">
+		<input type="text" v-model="reference_value" v-on:keydown.enter="addReference(reference_value, activeCompletion)" v-on:keyup="deriveCompletions($event, reference_value)"/>
+	</div>
+	<div class="completions" v-if="completions.length">
+		<button class="completion" v-for="completion in completions" :class="activeCompletion === completion?'active':''" v-on:click="selectCompletion(completion)">
+			{{completion.name}}
+		</button>
+	</div>
+</div>

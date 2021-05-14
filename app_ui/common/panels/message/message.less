@@ -1,0 +1,57 @@
+.system-component.message-panel {
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	bottom: 0px;
+	right: 0px;
+	background-color: black;
+	border-left: 1px solid white;
+	border-top: 1px solid white;
+	border-top-left-radius: 10px;
+	z-index: 50;
+	
+	.message-container {
+		padding: 5px;
+		border-bottom: 1px solid white;
+		
+		p {
+			margin: 5px 0px;
+		}
+		
+		.message {
+			min-width: 200px;
+		}
+		
+		.date {
+			
+		}
+		
+		.progression {
+			position: relative;
+			overflow: hidden;
+			color: @rsWhite;
+			border: 2px solid @rsGray;
+			
+			.progression-bar {
+				position: absolute;
+				height: 50px;
+				width: 0px;
+				transition: width .5s;
+				background-color: @rsDarkGreen;
+				z-index: 1;
+			}
+			
+			.progress-readout {
+				position: relative;
+				text-align: center;
+				line-height: 26px;
+				z-index: 5;
+			}
+		}
+	}
+	
+	.spacing {
+		display: block;
+		width: 10px;
+	}
+}

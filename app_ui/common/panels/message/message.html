@@ -1,0 +1,40 @@
+<div class="system-component rs-component message-panel">
+<div class="message-container flex h center" v-for="entry in messages">
+		<!-- <div class="control visibility flex v center" v-if="!entry.id || !tracking[entry.id]"> -->
+		<div class="control visibility flex v center">
+			<button class="interactability" v-on:click="dismissMessage(entry)">
+				X
+			</button>
+		</div>
+		<div class="iconography visibility flex v center">
+			<span v-if="!entry.icon" class="fas fa-exclamation-triangle" :class="entry.error?'rs-light-red':'rs-yellow'"></span>
+			<span v-if="entry.icon" :class="entry.icon"></span>
+		</div>
+		<div class="message visibility">
+			<div class="notification-message" v-if="entry.type === 'notification'">
+				<div>{{entry.message}}</div>
+				<div class="date flow-h" v-if="entry._display_time">
+					<span>{{entry._display_time.toLocaleDateString()}}</span>
+					<span class="spacing"></span>
+					<span>{{entry._display_time.toLocaleTimeString()}}</span>
+				</div>
+			</div>
+			<div class="progress-message" v-if="entry.type === 'progress'">
+				<div>{{entry.message}}</div>
+				<div class="progression">
+					<div class="progression-bar" :style="'width: ' + (entry.processed/entry.processing*100).toFixed(3) + '%'"></div>
+					<div class="progress-readout">
+						<span>{{entry.processed}}</span>
+						<span>/</span>
+						<span>{{entry.processing}}</span>
+						<span v-if="entry.failed">
+							<span>|</span>
+							<span class="fas fa-exclamation-triangle rs-light-red"></span>
+							<span>{{entry.failed}}</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

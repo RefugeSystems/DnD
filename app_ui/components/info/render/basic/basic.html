@@ -1,0 +1,204 @@
+<div class="general-information" v-if="record && record.id">
+	<div class="base-subtitle" v-if="base">
+		<span>From</span>
+		<span class="named">{{(base).name}}</span>
+	</div>
+
+	<rs-render-image class="profile-image" modes="wide" v-if="profile" :image="profile" :linked="linkedLocation"></rs-render-image>
+
+	<div v-if="record.is_shop">
+		<span class="fas fa-warehouse"></span>
+		<span>A Shop</span>
+	</div>
+
+	<div v-if="description" v-html="description" class="record-description"></div>
+
+	<div v-if="canDashboard(record)">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="viewDashboard(false)">
+				<span class="fas fa-tablet-android-alt"></span>
+				<span>View Dashboard</span>
+			</button>
+			<button class="action direct short" v-on:click="viewDashboard(true)">
+				<span class="fas fa-external-link-alt"></span>
+			</button>
+			<button class="action direct short" v-on:click="viewDashboard(true, true)">
+				<span class="fas fa-external-link-alt rot180"></span>
+			</button>
+		</div>
+	</div>
+	<div v-if="record.is_shop">
+		<div class="control flex h">
+			<button class="action direct" v-on:click="viewShopInventory(false)">
+				<span class="far fa-boxes"></span>
+				<span>View Shop Inventory</span>
+				<span v-if="base">(As {{base.name}})</span>
+			</button>
+		</div>
+	</div>
+
+	<div v-if="relatedError" class="related-error">
+		<h3>
+			<span class="fas fa-exclamation-triangle rs-light-red"></span>
+			<span>Related Error</span>
+		</h3>
+		<div class="rs-light-red" v-html="relatedError"></div>
+	</div>
+
+	<div v-if="player.master && options.noMaster && record.restock_base">
+		<h3>Restock Distribution Preview</h3>
+		<div class="restock-graph">
+
+		</div>
+	</div>
+
+	<rs-render-image class="record-image" v-if="image" :image="image" :linked="linkedLocation"></rs-render-image>
+	<div v-if="record.data && record._class === 'image' && !record.linked" class="general-image">
+		<img :src="record.data" />
+	</div>
+	<div v-if="record.url && record._class === 'image' && record.linked" class="general-image">
+		<img :src="record.url" />
+	</div>
+
+	<div class="properties" v-if="record._class !== 'datapoint' && record._class !== 'datausage'">
+		<div class="direct-properties" v-if="showDirectProperties()">
+			<div class="property" v-for="property in keys" v-if="visible(property, record[property])" :class="toClassName(property)">
+				<div class="direct" v-if="!universe.indexes[property] && !referenceKeys[property]">
+					<span class="key" v-if="knowledgeLink[property]" :class="nameClassing(property)">
+						<a class="rendered-value" :data-id="knowledgeLink[property] || ('knowledge:reference:' + property)">{{prettifyPropertyName(property, record)}}</a>
+					</span>
+					<span class="key" v-if="!knowledgeLink[property]" :class="nameClassing(property)">{{prettifyPropertyName(property, record)}}</span>
+					<span class="divide">:</span>
+					<span v-if="!calculated[property] || !calculated[property].involved.length">
+						<span class="value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
+						<span class="raw" v-if="displayRaw[property]">{{value}}</span>
+					</span>
+					<button class="flat" v-if="calculated[property] && calculated[property].involved.length" v-on:click="toggleContributions(property)">
+						<span class="value calculated-value" v-html="prettifyPropertyValue(property, record[property], record, universe)"></span>
+						<span class="raw calculated-value" v-if="displayRaw[property]">{{value}}</span>
+						<span v-if="calculated[property].result != record[property]">
+							<span>(</span>
+							<span class="fas fa-sigma"></span>
+							<span class="calculated-value">{{calculated[property].result}}</span>
+							<span>)</span>
+						</span>
+					</button>
+				</div>
+				<div class="section contributions" :class="contributionClasses(property)" v-if="calculated[property] && calculated[property].involved">
+					<div class="subreference" v-for="involved in calculated[property].involved">
+						<a class="rendered-value" v-on:click="showInfo(involved, base)">
+							<span class="fad fa-layer-plus rs-secondary-dark-orange rs-secondary-solid"></span>
+							<span>{{involved.name}}</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="inherit-relations" v-if="showInheritRelations()">
+			<div class="section maneuver-dial" v-if="record.maneuver && record.maneuver.length">
+				<div class="reference-heading">Maneuver Dial</div>
+				<div class="subreference">
+					<rssw-ship-maneuver :universe="universe" :user="user" :entity="record" :display="true"></rssw-ship-maneuver>
+				</div>
+			</div>
+
+			<div class="property" v-for="property in keys" v-if="visible(property, record[property])">
+				<div class="reference" v-if="universe.indexes[property] || referenceKeys[property]">
+					<div class="reference-values" v-if="isArray(record[property]) && record[property].length">
+						<div class="reference-heading">{{prettifyPropertyName(property, record).pluralize(true)}}</div>
+						<div class="subreference" v-for="subrecord in record[property]" v-if="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord] && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].hidden">
+							<div class="reference-heading" v-if="!collapsed">
+								<span :class="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]?universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].icon:''"></span>
+								<span>{{universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]?universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].name:subrecord}}</span>
+							</div>
+							<rs-object-info v-if="!collapsed" :record="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]" :universe="universe"></rs-object-info>
+							<a v-if="collapsed && universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord] && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].obscured" class="rendered-value" :data-id="universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].id">{{universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord].name}}</a>
+							<a v-if="collapsed && !universe.indexes[referenceKeys[property] || property].lookup[subrecord._sourced || subrecord]" class="rendered-value unknown">{{subrecord._sourced || subrecord}}[Unknown]</a>
+						</div>
+					</div>
+					<div class="reference-values" v-if="!isArray(record[property]) && record[property] && record[property] && !record[property].hidden">
+						<div class="reference-heading">{{prettifyPropertyName(property, record).capitalize()}}</div>
+						<div class="subreference">
+							<div class="reference-heading" v-if="!collapsed">{{universe.indexes[referenceKeys[property] || property].lookup[record[property]]?universe.indexes[referenceKeys[property] || property].lookup[record[property]].name:record[property]}}</div>
+							<rs-object-info v-if="!collapsed && universe.indexes[referenceKeys[property] || property].lookup[record[property]] && !universe.indexes[referenceKeys[property] || property].lookup[record[property]].obscured" :record="universe.indexes[referenceKeys[property] || property].lookup[record[property]]" :universe="universe"></rs-object-info>
+							<a v-if="collapsed && universe.indexes[referenceKeys[property] || property].lookup[record[property]] && !universe.indexes[referenceKeys[property] || property].lookup[record[property]].obscured" class="rendered-value" :data-id="universe.indexes[referenceKeys[property] || property].lookup[record[property]].id">{{universe.indexes[referenceKeys[property] || property].lookup[record[property]].name}}</a>
+							<a v-if="collapsed && !universe.indexes[referenceKeys[property] || property].lookup[record[property]]" class="rendered-value unknown" >{{record[property]}}[Unknown]</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section" v-if="equipped.length">
+		<div class="reference-heading">Equipped Equipment</div>
+		<div class="subreference" v-for="equipped_equipment in equipped">
+			<a class="rendered-value" v-if="isOwner(equipped_equipment[1])" v-on:click="showInfo(equipped_equipment[1], record)">{{equipped_equipment[1].name}}</a>
+			<span class="rendered-value" v-else>{{equipped_equipment[1].name}}</span>
+			<span>To</span>
+			<a class="rendered-value" v-on:click="showInfo(equipped_equipment[0], record)">{{equipped_equipment[0].name}}</a>
+		</div>
+	</div>
+
+	<div class="section" v-if="base && relatedKnowledge.length">
+		<div class="reference-heading">{{base.name}}'s Related Knowledge</div>
+		<div class="subreference" v-for="knowledge in relatedKnowledge">
+			<a class="rendered-value" v-on:click="showInfo(knowledge, base)">{{knowledge.name}}</a>
+		</div>
+	</div>
+
+	<div class="section" v-if="record.related && record.related.length">
+		<div class="reference-heading">Related Data</div>
+		<div class="subreference" v-for="data in record.related" v-if="universe.index.lookup[data]">
+			<a class="rendered-value" v-if="isOwner(universe.index.lookup[data])" :data-id="data">{{universe.index.lookup[data].name}}</a>
+			<span class="rendered-value" v-else>{{universe.index.lookup[data].name}}</span>
+		</div>
+	</div>
+
+	<div class="section" v-if="relatedAbilities && relatedAbilities.length">
+		<div class="reference-heading">Related Abilities</div>
+		<div class="subreference" v-for="data in relatedAbilities">
+			<a class="rendered-value" v-if="isOwner(data)" :data-id="data.id">{{data.name}}</a>
+			<span class="rendered-value" v-else>{{data.name}}</span>
+		</div>
+	</div>
+
+	<div class="section" v-if="relatedArchetypes && relatedArchetypes.length">
+		<div class="reference-heading">Related Specializations</div>
+		<div class="subreference" v-for="data in relatedArchetypes">
+			<a class="rendered-value" v-if="isOwner(data)" :data-id="data.id">{{data.name}}</a>
+			<span class="rendered-value" v-else>{{data.name}}</span>
+		</div>
+	</div>
+
+	<div class="control reference-values" v-if="locations.length">
+		<div class="reference-heading">Locations Here</div>
+		<div class="subreference" v-for="location in shownLocations">
+			<a class="rendered-value" v-if="isOwner(location)" :data-id="location.id">{{location.name}}</a>
+			<span class="rendered-value" v-else>{{location.name}}</span>
+		</div>
+		<button class="action direct" v-if="locations.length !== shownLocations.length" v-on:click="showAllLocations()">
+			<span>Load Rest...</span>
+		</button>
+	</div>
+
+	<div class="control reference-values" v-if="entities.length">
+		<div class="reference-heading">Entities Here</div>
+		<div v-if="player && player.master">
+			<div class="subreference" v-for="entity in shownEntities">
+				<a class="rendered-value" :data-id="entity.id">{{entity.name}}</a>
+			</div>
+		</div>
+		<div v-if="!player || !player.master">
+			<div class="subreference" v-for="entity in shownEntities">
+				<a class="rendered-value" v-if="isOwner(entity)" :data-id="entity.id">{{entity.name}}</a>
+				<span class="rendered-value" v-else>{{entity.name}}</span>
+			</div>
+		</div>
+		<button class="action direct" v-if="entities.length !== shownEntities.length" v-on:click="showAllEntities()">
+			<span>Load Rest...</span>
+		</button>
+	</div>
+</div>
