@@ -8,7 +8,6 @@
  * 		received from the Universe.
  */
 
-
 /**
  * Connecting to the server
  * @event connecting
@@ -30,6 +29,10 @@ class RSUniverse extends EventEmitter {
 		super();
 		
 		this.MAX_LOG_LENGTH = 400;
+		this.KEY = {};
+		this.KEY.CLASSPREFIX = "_universe_datacache_class:";
+		this.KEY.DETAILS = "_universe_datacache_details";
+		this.KEY.METRICS = "_universe_datacache_metrics";
 		
 		try {
 			// Workers aren't fully supported yet, expecially on Mobile browsers
@@ -73,7 +76,7 @@ class RSUniverse extends EventEmitter {
 		this._noBuffer = {};
 		this._noBuffer.ping = true;
 		
-		this.indexes = {};
+		this.index = {};
 		
 		this.listing = {};
 		
@@ -86,33 +89,129 @@ class RSUniverse extends EventEmitter {
 				this.metrics.latency = latency/2;
 			}
 			this.metrics.latency = Math.floor(this.metrics.latency);
-			this.metrics.dialation = event.received - (event.sent + this.metrics.latency);
+			this.metrics.dialation = event.pong - (event.sent + this.metrics.latency);
 		};
 		this.processEvent.connected = (event) => {
 			console.warn("Connected to Server: ", event);
 			this.metrics.connected = Date.now();
 			this.metrics.connected_server = event.sent;
-			this.$emit("connected");
-			this.send("sync", {"sync": 0});
+			this.$emit("connected", this);
+			this.sync();
 		};
 		this.processEvent.close = (event) => {
 			console.warn("Server Close Received: ", event);
 			this.metrics.closed = event.sent;
 			this.$emit("closed");
 		};
+		this.processEvent.object = (event) => {
+			console.warn("Server Object Update Received: ", event);
+			this.receiveDelta(event.sent, event.data._class, event.data.id, event.data);
+		};
 		this.processEvent.sync = (event) => {
 			console.warn("Server State Received: ", event);
 			this.metrics.sync = event.sent;
-			this.$emit("loading");
+			this.$emit("loading", this);
 			setTimeout(() => {
 				// Let the display update then load the data
 				var classes = Object.keys(event.data),
-					object,
-					x;
+					objects,
+					i,
+					j;
+					
+				for(i=0; i<classes.length; i++) {
+					if(!this.index[classes[i]]) {
+						this.listing[classes[i]] = event.data[classes[i]];
+						this.index[classes[i]] = {};
+					}
+					for(j=0; j<event.data[classes[i]].length; j++) {
+						this.receiveDelta(event.sent, classes[i], event.data[classes[i]][j].id, event.data[classes[i]][j]);
+					}
+				}
+					
+				this.metrics.sync = event.sent;
+				this.players = event.players;
+				localStorage.setItem(this.KEY.DETAILS, JSON.stringify(classes));
+				localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
+				for(i=0; i<classes.length; i++) {
+					localStorage.setItem(this.KEY.CLASSPREFIX + classes[i], JSON.stringify(this.index[classes[i]]));
+				}
 				
-				this.$emit("loaded");
+				console.log("Loaded: " + JSON.stringify(this.connection.session));
+				this.$emit("loaded", this);
 			}, 0);
 		};
+		
+		// TODO: Load Previous state, possibly caching universe state data to save sync time
+		// 		Note: this.metrics is sent for the sync, so restoring its "sync" time will
+		// 		offset data from the universe.
+		try {
+			var loadDetails = localStorage.getItem(this.KEY.DETAILS),
+				loadMetrics = localStorage.getItem(this.KEY.METRICS),
+				loadClass,
+				loadObj,
+				storeIndex,
+				storeList,
+				keys,
+				i,
+				j,
+				k;
+				
+			if(loadDetails && loadMetrics) {
+				loadDetails = JSON.parse(loadDetails);
+				loadMetrics = JSON.parse(loadMetrics);
+				storeIndex = {};
+				storeList = {};
+				
+				for(i=0; i<loadDetails.length; i++) {
+					loadClass = localStorage.getItem(this.KEY.CLASSPREFIX + loadDetails[i]);
+					if(loadClass) {
+						storeIndex[loadDetails[i]] = JSON.parse(loadClass);
+						storeList[loadDetails[i]] = [];
+						keys = Object.keys(storeIndex[loadDetails[i]]);
+						for(j=0; j<keys.length; j++) {
+							storeList[loadDetails[i]].push(storeIndex[loadDetails[i]][keys[j]]);
+						}
+					}
+				}
+				
+				for(i=0; i<loadDetails.length; i++) {
+					this.listing[loadDetails[i]] = storeList[loadDetails[i]];
+					this.index[loadDetails[i]] = storeIndex[loadDetails[i]];
+				}
+				this.metrics = loadMetrics;
+			}
+		} catch(abort) {
+			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
+			this.metrics.sync = 0;
+		}
+	}
+	
+	/**
+	 * 
+	 * @method receiveDelta
+	 * @param {Integer} received 
+	 * @param {String} classification 
+	 * @param {String} id 
+	 * @param {Object} delta 
+	 */
+	receiveDelta(received, classification, id, delta) {
+		var keys = Object.keys(delta),
+			x;
+			
+		if(!this.index[classification][id]) {
+			Vue.set(this.index[classification], id, delta);
+			Vue.set(this.index[classification][id], "_sync", {});
+			for(x=0; x<keys.length; x++) {
+				Vue.set(this.index[classification][id]._sync, keys[x], received);
+			}
+		} else {
+			for(x=0; x<keys.length; x++) {
+				if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
+					Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
+					Vue.set(this.index[classification][id]._sync, keys[x], received);
+				}
+			}
+		}
 	}
 	
 	addLogEvent(event, level, details) {
@@ -323,51 +422,7 @@ class RSUniverse extends EventEmitter {
 					});
 				}
 			};
-
-			this.$on("synchronize", (event) => {
-				if(this.state.synchronizing) {
-					this.addLogEvent("Synchronizing", 20, {event});
-					console.log("Sync Event: ", event);
-					this.$emit("initialized");
-				} else {
-					this.addLogEvent("Erroneous Synchronization Event skipped", 40, {event});
-				}
-			});
-
-			this.$on("model:deleted", (event) => {
-				var record = this.nouns[event.classed][event.id];
-				if(record) {
-					if(this.debug || rsSystem.debug) {
-						console.warn("Deleting Record: " + (event.classed) + " - " + event.id + ": ", event, record);
-					}
-
-					this.index.unindexItem(record);
-					if(this.indexes[event.classed]) {
-						this.indexes[event.classed].unindexItem(record);
-						delete(this.nouns[event.classed][event.id]);
-					}
-
-					this.$emit("modified", this);
-				}
-			});
-
-			this.$on("model:modified", (event) => {
-				console.log("Event: ", event);
-				var record = this.nouns[event.classed][event.id];
-				if(record) {
-					record.receiveUpdate(event.modification);
-				} else {
-					if(!this.nouns[event.classed]) {
-						this.nouns[event.classed] = {};
-					}
-					this.nouns[event.classed][event.id] = new rsSystem.availableNouns[event.classed](event.modification, this);
-					this.indexes[event.classed].indexItem(this.nouns[event.classed][event.id]);
-					this.index.indexItem(this.nouns[event.classed][event.id]);
-					this.$emit("universe:built", this.nouns[event.classed][event.id]);
-				}
-				this.$emit("modified", this);
-			});
-
+			
 			this.connection.socket = socket;
 		});
 	}

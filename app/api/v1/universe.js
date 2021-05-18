@@ -35,6 +35,12 @@ module.exports = new (function() {
 				next();
 			});
 			
+			this.router.get("/players", (req, res, next) => {
+				res.result = {};
+				res.result.players = api.universe.getPlayerState();
+				next();
+			});
+			
 			this.router.post("/calculate/:id", (req, res, next) => {
 				res.result = {};
 				res.result.referenced = [];

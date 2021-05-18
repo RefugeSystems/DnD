@@ -30,7 +30,7 @@ class PlayerConnection extends EventEmitter {
 		this.leaves = 0;
 		
 		var receiveObject = (change) => {
-			if(change._class) {
+			if(change._class && !universe.omittedFromSync[change._class]) {
 				var manager = universe.manager[change._class],
 					send = {},
 					field,
@@ -81,7 +81,7 @@ class PlayerConnection extends EventEmitter {
 				case "ping":
 					socket.send(JSON.stringify({
 						"type": "ping",
-						"received": now,
+						"pong": now,
 						"sent": message.sent
 					}));
 					break;
@@ -90,6 +90,7 @@ class PlayerConnection extends EventEmitter {
 					message = {
 						"id": RSRandom.identifier("message", 10, 32),
 						"type": "sync",
+						"players": this.universe.getPlayerState(),
 						"data": message,
 						"sent": Date.now()
 					};
@@ -161,6 +162,7 @@ class PlayerConnection extends EventEmitter {
 		
 		this.emit("connected");
 		this.connects++;
+		this.last = Date.now();
 		console.log("Connected");
 		socket.send(JSON.stringify({
 			"type": "connected",
@@ -187,7 +189,7 @@ class PlayerConnection extends EventEmitter {
 		message = JSON.stringify(message);
 		
 		for(x=0; x<this.socketIDs.length; x++) {
-			this.connections[this.socketIDs].send(message);
+			this.connection[this.socketIDs[x]].send(message);
 		}
 	}
 }

@@ -116,6 +116,27 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
+	"id": "expires_to",
+	"name": "Expires To",
+	"description": "Indicates the new parent for this object once expired.",
+	"type": "string",
+	"attribute": {}
+});
+fields.push({
+	"id": "expires_from",
+	"name": "Expires From",
+	"description": "Indicates that object values should be pulled to this object on expiration, this value identifying the object to use. If a template is specified, values are generated and pushed into this object.",
+	"type": "string",
+	"attribute": {}
+});
+fields.push({
+	"id": "template",
+	"name": "Template",
+	"description": "When set, this object is a template and instead of defining values specifies special handling for generating an object. The value here-in designates how the generation process proceeds.",
+	"type": "string",
+	"attribute": {}
+});
+fields.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Reference to a Player object.",

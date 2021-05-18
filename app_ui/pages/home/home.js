@@ -75,8 +75,9 @@ rsSystem.component("RSHome", {
 				this.universe.$on("initializing", () => {
 					Vue.set(this, "state", 2);
 				});
-				this.universe.$on("initialized", () => {
-					Vue.set(this, "player", this.universe.indexes.player.lookup[this.user.id]);
+				this.universe.$on("loaded", () => {
+					console.log("Loaded: ", this.universe);
+					Vue.set(this, "player", this.universe.index.player[this.universe.connection.session.player]);
 					Vue.set(this, "state", 10);
 				});
 				this.universe.sync();

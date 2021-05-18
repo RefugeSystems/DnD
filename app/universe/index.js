@@ -11,7 +11,10 @@ var EventEmitter = require("events").EventEmitter,
 	Chronicle = require("../storage/chronicle"),
 	DNDCalculator = require("./calculator/dnd"),
 	PlayerConnection = require("./player"),
-	ObjectHandler = require("./objects");
+	ObjectHandler = require("./objects"),
+	omittedFromSync = {};
+
+omittedFromSync.session = true;
 
 var classes = [
 	"session", // HTTP or WebSocket Session
@@ -56,6 +59,7 @@ class Universe extends EventEmitter {
 		this.Anomaly = require("../management/anomaly");
 		this.calculator = new DNDCalculator(this);
 		this.chronicle = new Chronicle(this);
+		this.omittedFromSync = omittedFromSync;
 		this.configuration = configuration;
 		this.classes = classes;
 		this.manager = {};
@@ -201,12 +205,37 @@ class Universe extends EventEmitter {
 				this.connected.push(player.id);
 			}
 			console.log("Connect");
+			connection.on("connected", () => {
+				
+			});
+			
 			connection.connect(session, socket);
 		} else {
 			console.log("No Player");
 			socket.send({"type": "close", "code": "4", "sent": Date.now()});
 			socket.close();
 		}
+	}
+	
+	/**
+	 * 
+	 * @method getPlayerState
+	 * @return {Object}
+	 */
+	getPlayerState() {
+		var players = {},
+			x;
+		
+		for(x=0; x<this.connected.length; x++) {
+			players[this.connected[x]] = {};
+			players[this.connected[x]].username = this.connection[this.connected[x]].player.username;
+			players[this.connected[x]].connects = this.connection[this.connected[x]].connects;
+			players[this.connected[x]].leaves = this.connection[this.connected[x]].leaves;
+			players[this.connected[x]].sockets = this.connection[this.connected[x]].socketIDs.length;
+			players[this.connected[x]].last = this.connection[this.connected[x]].last;
+		}
+		
+		return players;
 	}
 	
 	/**
@@ -241,29 +270,30 @@ class Universe extends EventEmitter {
 		// TODO: Investigate time commitment here, may need broken up to prevent bad lockups
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
-			console.log("Manager: ", managers[m]);
-			state[manager.id] = [];
-			if(!player.gm) {
-				master_fields = [];
-				for(f=0; f<manager.fields.length; f++) {
-					if(manager.fields[f].attribute.master_only) {
-						master_fields.push(manager.fields[f].id);
+			if(!omittedFromSync[managers[m]]) {
+				state[manager.id] = [];
+				if(!player.gm) {
+					master_fields = [];
+					for(f=0; f<manager.fields.length; f++) {
+						if(manager.fields[f].attribute.master_only) {
+							master_fields.push(manager.fields[f].id);
+						}
 					}
 				}
-			}
-			for(x=0; x<manager.objectIDs.length; x++) {
-				sync = manager.object[manager.objectIDs[x]];
-				if(sync) { // Skip unloaded data
-					sync = sync.toJSON(); // Convert to sync format and separate object
-					if((!time || time < sync.update) && (!sync.attribute.master_only || player.gm)) {
-						if(!player.gm && master_fields.length) {
-							for(f=0; f<master_fields.length; f++) {
-								if(sync[master_fields[f]] !== undefined) {
-									delete(sync[master_fields[f]]);
+				for(x=0; x<manager.objectIDs.length; x++) {
+					sync = manager.object[manager.objectIDs[x]];
+					if(sync) { // Skip unloaded data
+						sync = sync.toJSON(); // Convert to sync format and separate object
+						if((!time || time < sync.update) && (!sync.attribute.master_only || player.gm)) {
+							if(!player.gm && master_fields.length) {
+								for(f=0; f<master_fields.length; f++) {
+									if(sync[master_fields[f]] !== undefined) {
+										delete(sync[master_fields[f]]);
+									}
 								}
 							}
+							state[manager.id].push(sync);
 						}
-						state[manager.id].push(sync);
 					}
 				}
 			}
