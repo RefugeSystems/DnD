@@ -50,7 +50,8 @@ class PlayerConnection extends EventEmitter {
 					this.emit("error", new universe.Anomaly("player:connection:object", "Failed to locate manager for object change class", 40, change, null, this));
 				}
 			} else {
-				this.send("object", change);
+				// Non-object event sending is handled by other processors
+				// this.send("object", change);
 			}
 		};
 		

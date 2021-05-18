@@ -13,7 +13,8 @@ var EventEmitter = require("events").EventEmitter,
 	validField = {},
 	validTypes = {},
 	count = 0;
-
+	
+validField.temporalness = true;
 validField.source = true;
 validField.target = true;
 validField.type = true;
@@ -54,7 +55,7 @@ class Chronicle extends EventEmitter {
 				if(err) {
 					if(err.message && err.message.indexOf("no such table") !== -1) {
 						this.database.connection
-						.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, event text, updated bigint, created bigint);", [], (err) => {
+						.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, temporalness integer, event text, updated bigint, created bigint);", [], (err) => {
 							if(err) {
 								fail(err);
 							} else {
@@ -80,7 +81,7 @@ class Chronicle extends EventEmitter {
 					fail(err);
 				} else {
 					this.database.connection
-					.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, event text, updated bigint, created bigint);", [], (err) => {
+					.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, temporalness integer, event text, updated bigint, created bigint);", [], (err) => {
 						if(err) {
 							console.log("Reinit Make Err: ", err);
 							fail(err);
@@ -107,11 +108,14 @@ class Chronicle extends EventEmitter {
 	 * 		the event. Defaults to current universe time.
 	 * @param {String} [source] Object ID
 	 * @param {String} [target] Object ID
+	 * @param {Integer} [temporalness] Which tracks the number of times the universe
+	 * 		has passed through a given time period.
 	 * @return {String} The chronicle ID for the event
 	 */
-	addEvent(type, event, time, source, target) {
+	addEvent(type, event, time, source, target, temporalness) {
 		var values = {};
 		values["$id"] = "chronicle:" + Date.now() + ":" + (count++) + ":" + (event.id || RSRandom.string(32));
+		values["$temporalness"] = temporalness || event.temporalness || this.universe.temporalness;
 		values["$time"] = time || event.time || this.universe.time;
 		values["$source"] = source || event.source;
 		values["$target"] = target || event.target;
@@ -119,7 +123,7 @@ class Chronicle extends EventEmitter {
 		values["$type"] = type;
 		values["$updated"] = Date.now();
 		values["$created"] = values["$updated"];
-		this.database.connection.run("insert into chronicle(id, type, source, target, time, event, updated, created) values($id, $type, $source, $target, $time, $event, $updated, $created);", values, (err) => {
+		this.database.connection.run("insert into chronicle(id, type, source, target, time, temporalness, event, updated, created) values($id, $type, $source, $target, $time, $temporalness, $event, $updated, $created);", values, (err) => {
 			if(err) {
 				this.emit("error", err);
 			}
@@ -154,8 +158,9 @@ class Chronicle extends EventEmitter {
 	 * @param {Integer} [time]
 	 * @param {String} [source]
 	 * @param {String} [target]
+	 * @param {Integer} [temporalness]
 	 */
-	updateEvent(id, event, type, time, source, target) {
+	updateEvent(id, event, type, time, source, target, temporalness) {
 		var statement = "update chronicle set event = $event, updated = $updated",
 			values = {};
 		values["$id"] = id;
@@ -164,6 +169,10 @@ class Chronicle extends EventEmitter {
 		if(type) {
 			statement += ", type = $type";
 			values["$type"] = type;
+		}
+		if(time || event.temporalness) {
+			statement += ", temporalness = $temporalness";
+			values["$temporalness"] = temporalness || event.temporalness;
 		}
 		if(time || event.time) {
 			statement += ", time = $time";

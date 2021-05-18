@@ -66,6 +66,8 @@ class Universe extends EventEmitter {
 		this.connection = {};
 		this.connected = [];
 		this.initialized = false;
+		this.temporalness = 0;
+		this.oldest = 0;
 		this.time = 0;
 		
 		this.on("dump-configuration", () => {
@@ -142,20 +144,69 @@ class Universe extends EventEmitter {
 				return this.chronicle.initialize(this.objectHandler);
 			})
 			.then(() => {
-				if(this.manager.setting.object["setting:time"]) {
-					this.time = parseInt(this.manager.setting.object["setting:time"].value) || 0;
-				} else {
-					this.time = 0;
-					this.manager.setting.create(this, {
-						"id": "setting:time",
-						"description": "The current time in the game",
-						"value": 0
-					}, (err, object) => {
-						if(err) {
-							this.emit("error", new Anomaly("universe:settings:time", "Failed to load game time from universe settings", 40, {}, err, this));
-						}
-					});
-				}
+				// Load Time Settings
+				var loading = [];
+				loading.push(new Promise((done, fail) => {
+					if(this.manager.setting.object["setting:time"]) {
+						this.time = parseInt(this.manager.setting.object["setting:time"].value) || 0;
+						done();
+					} else {
+						this.time = 0;
+						this.manager.setting.create(this, {
+							"id": "setting:time",
+							"description": "The current time in the game",
+							"value": 0
+						}, (err, object) => {
+							if(err) {
+								this.emit("error", new Anomaly("universe:settings:time", "Failed to load game time from universe settings", 40, {}, err, this));
+								fail(err);
+							} else {
+								done();
+							}
+						});
+					}
+				}));
+				loading.push(new Promise((done, fail) => {
+					if(this.manager.setting.object["setting:temporalness"]) {
+						this.temporalness = parseInt(this.manager.setting.object["setting:temporalness"].value) || 0;
+						done();
+					} else {
+						this.temporalness = 0;
+						this.manager.setting.create(this, {
+							"id": "setting:temporalness",
+							"description": "The number of times the universe has passed through this current time period.",
+							"value": 0
+						}, (err, object) => {
+							if(err) {
+								this.emit("error", new Anomaly("universe:settings:temporalness", "Failed to load game time from universe settings", 40, {}, err, this));
+								fail(err);
+							} else {
+								done();
+							}
+						});
+					}
+				}));
+				loading.push(new Promise((done, fail) => {
+					if(this.manager.setting.object["setting:oldest"]) {
+						this.oldest = parseInt(this.manager.setting.object["setting:oldest"].value) || 0;
+						done();
+					} else {
+						this.oldest = 0;
+						this.manager.setting.create(this, {
+							"id": "setting:oldest",
+							"description": "The oldest the universe has ever been. Used for tracking temporality.",
+							"value": 0
+						}, (err, object) => {
+							if(err) {
+								this.emit("error", new Anomaly("universe:settings:oldest", "Failed to load game time from universe settings", 40, {}, err, this));
+								fail(err);
+							} else {
+								done();
+							}
+						});
+					}
+				}));
+				return Promise.all(loading);
 			})
 			.then(() => {
 				this.initialized = true;
