@@ -86,6 +86,12 @@ module.exports = new (function() {
 				});
 			});
 			
+			this.router.post("/configuration/dump", (req, res, next) => {
+				res.result = {"emitted": Date.now()};
+				api.universe.emit("dump-configuration");
+				next();
+			});
+			
 			done();
 		});
 	};

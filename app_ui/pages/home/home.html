@@ -1,7 +1,7 @@
 <div class="rs-page page-home">
 	<div class="login prompt" v-if="state === 0">
 		<div class="boxed">
-			<rs-connect v-on:connect="connect($event)" v-on:message="receiveMessage($event)" :universe="universe"></rs-connect>
+			<rs-connect v-on:connect="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" storage-key="session"></rs-connect>
 			<div class="message-content system-component" v-if="message" :class="messageClass">
 				<div class="message-heading" v-if="messageHeading">
 					<span :class="messageIcon" v-if="messageIcon"></span>
@@ -21,9 +21,10 @@
 		</div>
 	</div>
 	<div class="system-display active" v-if="state === 10">
-		<system-menu :universe="universe" :user="user" :player="player"></system-menu>
-		<router-view class="system-view" :universe="universe" :user="user" :player="player"></router-view>
-		<system-info :universe="universe" :user="user"></system-info>
-		<message-panel :universe="universe" :user="user"></message-panel>
+		<system-menu :universe="universe" :player="player" :session="session"></system-menu>
+		<system-dialog :universe="universe" :player="player" :session="session"></system-dialog>
+		<router-view class="system-view" :universe="universe" :player="player" :session="session"></router-view>
+		<system-info :universe="universe" :player="player" :session="session"></system-info>
+		<message-panel :universe="universe" :player="player" :session="session"></message-panel>
 	</div>
 </div>

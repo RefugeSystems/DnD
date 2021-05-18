@@ -1,11 +1,18 @@
 {
 	"server": {
 		"port": 3000,
-		"web_root": "ui/",
+		"web_root": "./ui",
 		"-redirect": "https://site.which.to/redirect/any/web/requests",
 
 		"-certificate": "/path/to/cert",
 		"-authority": "/path/to/auth_cert",
-		"-key": "/path/to/key"
+		"-key": "/path/to/key",
+		
+		"origins": {
+			"https://refugesystems.net": 1747380052613,
+			"http://127.0.0.1:3082": 0,
+			"http://127.0.0.1:3000": 0,
+			"postman"
+		}
 	}
 }

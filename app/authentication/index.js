@@ -8,6 +8,7 @@
 
 var EventEmitter = require("events").EventEmitter,
 	Router = require("express").Router,
+	Random = require("rs-random"),
 	
 	defaultExpiry = 1000 * 60 * 60 * 24 *3;
 
@@ -30,14 +31,15 @@ class Authentication extends EventEmitter {
 		return new Promise((done, fail) => {
 			this.specification = startup.configuration.authentication;
 			var processes = Object.keys(this.specification),
-				initializing = [];
+				initializing = [],
+				x;
 				
 			this.router.use((req, res, next) => {
-				console.log("API: " + req.id);
+				console.log("Auth: " + req.id);
 				next();
 			});
 			
-			for(var x=0; x<processes.length; x++) {
+			for(x=0; x<processes.length; x++) {
 				if(this.specification[processes[x]]) {
 					this.processor[processes[x]] = require("./modules/" + processes[x]);
 					if(this.processor[processes[x]].initialize) {
@@ -53,6 +55,14 @@ class Authentication extends EventEmitter {
 			
 			Promise.all(initializing)
 			.then(() => {
+				for(x=0; x<processes.length; x++) {
+					if(this.processor[processes[x]].router) {
+						this.router.use("/" + processes[x], this.processor[processes[x]].router);
+						console.log(" [√] Auth Bound: " + processes[x]);
+					} else {
+						console.log(" [!] Missing Auth Router: " + processes[x]);
+					}
+				}
 				done();
 			})
 			.catch(fail);
@@ -80,8 +90,9 @@ class Authentication extends EventEmitter {
 	generateSession(player, ttl) {
 		return new Promise((done, fail) => {
 			var details = {};
-			details.id = Random.identifier("session", 20, 72);
+			details.id = Random.identifier("session", 20, 72).toLowerCase();
 			details.player = player.id;
+			details.username = player.username;
 			details.last = Date.now();
 			details.expiry = ttl || defaultExpiry;
 			this.universe.manager.session.create(this.universe, details, (err, object) => {

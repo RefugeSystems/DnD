@@ -1,0 +1,53 @@
+<div class="rs-component connect-component">
+	<div class="heading">
+		<span class="heading-icon"></span>
+	</div>
+	<div class="fields" action="javascript:void(0);">
+		<table>
+			<tr>
+				<td>
+					<label class="full align-right" for="login-username">
+						<span class="field-text">Username</span>
+					</label>
+				</td>
+				<td>
+					<input id="login-username" type="text" v-enter="connect" v-model="storage.username" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="full align-right" for="login-password">
+						<span class="field-text">Password</span>
+					</label>
+				</td>
+				<td>
+					<input id="login-password" type="password" v-enter="connect" v-model="password" v-esc="clearPassword" :placeholder="passwordPlaceholder"/>
+				</td>
+			</tr>
+			<tr v-if="external">
+				<td>
+					<label class="full align-right" for="login-address">
+						<span class="field-text">Address</span>
+					</label>
+				</td>
+				<td>
+					<input id="login-address" type="text" v-enter="connect" v-model="storage.address" />
+				</td>
+			</tr>
+		</table>
+		<div class="actions">
+			<button class="primary-action" v-on:click="connect()">
+				<span class="action-icon fas fa-sign-in"></span>
+				<span class="action-text">Connect</span>
+			</button>
+			<button class="toggle-action" v-on:click="toggleSecure()">
+				Secure?
+				<span class="far" :class="storage.secure?'fa-check-square':'fa-square'"></span>
+			</button>
+			<button class="toggle-action" v-on:click="clearSaved()" v-if="storage.password">
+				<span class="fas fa-ban"></span>
+				<span>Password</span>
+			</button>
+		</div>
+	</div>
+</div>

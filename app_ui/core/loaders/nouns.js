@@ -29,6 +29,7 @@ rsSystem.listingNouns = [];
  * @param {String} [name] The name for the noun. Defaults to the name of the constructor.
  */
 rsSystem.registerNoun = function(constructor, name) {
+	console.trace("reg");
 	name = name || constructor.name;
 	constructor.prototype._class = name;
 	constructor.prototype._type = name;

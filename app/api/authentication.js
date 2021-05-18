@@ -5,10 +5,10 @@
  * @static
  */
  
- var express = require("express"),
- 	Router = express.Router,
-    path = require("path"),
-    fs = require("fs");
+var express = require("express"),
+	Router = express.Router,
+	path = require("path"),
+	fs = require("fs");
 
 module.exports = new (function() {
 	this.id = "api:auth:controller";
@@ -23,6 +23,7 @@ module.exports = new (function() {
 	 * @return {Promise} 
 	 */
 	this.initialize = (api) => {
+		// api.authentication
 		return new Promise((done, fail) => {
 			done();
 		});

@@ -118,10 +118,6 @@ var config = {
 			]
 		},
 		"server": [
-			"tests/server/**/*.js",
-			"tests/_helpers/**/*.js",
-			"tests/_mocks/**/*.js",
-			"tests/_data/**/*.js",
 			"app/api/**/*.js",
 			"app/authentication/**/*.js",
 			"app/configuration/**/*.js",
@@ -129,14 +125,25 @@ var config = {
 			"app/management/**/*.js",
 			"app/storage/**/*.js",
 			"app/universe/**/*.js",
-			"app/*.js"
-		],
-		"ui": [
-			"tests/ui/**/*.js",
+			"app/*.js",
+		
+			"tests/server/**/*.js",
 			"tests/_helpers/**/*.js",
 			"tests/_mocks/**/*.js",
 			"tests/_data/**/*.js",
-			"app_ui/**/*.js"
+		],
+		"ui": [
+			"app_ui/common/**/*.js",
+			"app_ui/components/**/*.js",
+			"app_ui/core/**/*.js",
+			"app_ui/pages/**/*.js",
+			"app_ui/synth/**/*.js",
+			"app_ui/workers/**/*.js",
+			
+			"tests/ui/**/*.js",
+			"tests/_helpers/**/*.js",
+			"tests/_mocks/**/*.js",
+			"tests/_data/**/*.js"
 		]
 	},
 	"connect": {
@@ -209,7 +216,7 @@ var config = {
 			},
 			"files": [
 				"Gruntfile.js",
-				"app_ui/worker/**/*.js",
+				"app_ui/workers/**/*.js",
 				"app_ui/manifest.json",
 				"app_ui/**/*.less",
 				"app_ui/**/*.json",
@@ -237,18 +244,18 @@ var config = {
 				"tests/_mocks/**/*.js",
 				"tests/_data/**/*.js"
 			],
-			"tasks": ["eslint:ui", "jasmine:ui"]
+			"tasks": ["ui_develop"]
 		}
 	},
 	"exec": {
 		"server": {
 			"cmd": function() {
-				return "yuidoc -q --server 3090 ./app";
+				return "yuidoc -q --server 3090 --config ./yuidoc.app.json";
 			}
 		},
 		"ui": {
 			"cmd": function() {
-				return "yuidoc -q --server 3091 ./app_ui";
+				return "yuidoc -q --server 3091 --config ./yuidoc.ui.json";
 			}
 		}
 	},
@@ -279,7 +286,7 @@ var config = {
 				"sourceMap": false
 			},
 			"src": [
-				"app_ui/synth/index.html/index.head.html"
+				"app_ui/synth/index/index.head.html"
 			],
 			"dest": "deploy_cache/synth_index_head.html"
 		},
@@ -289,21 +296,31 @@ var config = {
 			},
 			"src": [
 				"deploy_cache/synth_index_head.html",
-				"app_ui/synth/index.html/index.transition.html",
-				"app_ui/synth/index.html/index.app.html",
-				"app_ui/synth/index.html/index.termination.html"
+				"app_ui/synth/index/index.transition.html",
+				"app_ui/synth/index/index.app.html",
+				"app_ui/synth/index/index.termination.html"
 			],
-			"dest": "deploy_web/index.html"
+			"dest": "deploy_web/index"
 		},
 		"worker": {
 			"options": {
 				"sourceMap": false
 			},
 			"src": [
-				"app_ui/worker/**/*.js",
-				"app_ui/worker/*.js"
+				"app_ui/workers/core/**/*.js",
+				"app_ui/workers/core/*.js"
 			],
 			"dest": "deploy_web/worker.js"
+		},
+		"sharedworker": {
+			"options": {
+				"sourceMap": false
+			},
+			"src": [
+				"app_ui/workers/shared/**/*.js",
+				"app_ui/workers/shared/*.js"
+			],
+			"dest": "deploy_web/shared.js"
 		},
 		"externals": {
 			"options": {
@@ -334,8 +351,11 @@ var config = {
 				"app_ui/library/*.js",
 				"app_ui/library/*/**/*.js",
 
-				"app/app_ui/*.js",
-				"app/app_ui/*/**/*.js",
+				"app_ui/core/*.js",
+				"app_ui/core/*/**/*.js",
+
+				"app_ui/common/*.js",
+				"app_ui/common/*/**/*.js",
 
 				"app_ui/components/*.js",
 				"app_ui/components/*/**/*.js",
@@ -346,7 +366,7 @@ var config = {
 				"app_ui/main/*/**/*.js",
 				"app_ui/main/*.js"
 			],
-			"dest": "deploy/main.js"
+			"dest": "deploy_web/main.js"
 		},
 		"less": {
 			"src": [
@@ -369,7 +389,7 @@ var config = {
 				"reserved": ["rsSystem"]
 			},
 			"files": {
-				"deploy/main.js": [
+				"deploy_web/main.js": [
 					"node_modules/xss/dist/xss.min.js",
 					"node_modules/hammerjs/hammer.js",
 					"node_modules/showdown/dist/showdown.min.js",
@@ -408,8 +428,16 @@ var config = {
 		"worker": {
 			"files": {
 				"deploy_web/worker.js": [
-					"app_ui/worker/**/*.js",
-					"app_ui/worker/*.js"
+					"app_ui/workers/core/**/*.js",
+					"app_ui/workers/core/*.js"
+				]
+			}
+		},
+		"sharedworker": {
+			"files": {
+				"deploy_web/shared.js": [
+					"app_ui/workers/shared/**/*.js",
+					"app_ui/workers/shared/*.js"
 				]
 			}
 		}
@@ -467,7 +495,7 @@ var config = {
 		"ui": {
 			"tasks": [
 				["open:docs_ui", "exec:ui"],
-				["ui_develop"]
+				["ui_develop", "connect:app", "open:app", "watch:app"]
 			],
 			"options": {
 				"logConcurrentOutput": true
@@ -560,9 +588,11 @@ module.exports = function (grunt) {
 	grunt.registerTask("documentation", ["yuidoc:server", "yuidoc:ui"]);
 	grunt.registerTask("server_develop", ["watch:server"]);
 	grunt.registerTask("server", ["eslint:server", "jasmine:server", "concurrent:server"]);
-	grunt.registerTask("ui", ["concurrent:ui"]);
+	grunt.registerTask("ui", ["eslint:ui", "jasmine:ui", "concurrent:ui"]);
+	
+	grunt.registerTask("ui_exp", ["ui_develop", "connect:app", "open:app", "watch:app"]);
 
-	grunt.registerTask("ui_build", ["eslint", "jasmine:ui", "templify:app", "uglify:worker", "uglify:externals", "uglify:app", "concat:less", "less:app"]);
-	grunt.registerTask("ui_develop", ["eslint", "jasmine:ui", "templify:app", "concat:worker", "concat:externals", "concat:app", "concat:less", "less:app"]);
+	grunt.registerTask("ui_build", ["eslint", "jasmine:ui", "templify:app", "uglify:worker", "uglify:sharedworker", "uglify:externals", "uglify:app", "concat:less", "less:app"]);
+	grunt.registerTask("ui_develop", ["eslint:ui", "jasmine:ui", "templify:app", "concat:worker", "concat:sharedworker", "concat:externals", "concat:app", "concat:less", "less:app"]);
 	grunt.registerTask("default", ["concurrent:development"]);
 };

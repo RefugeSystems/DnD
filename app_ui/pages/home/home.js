@@ -22,6 +22,7 @@ rsSystem.component("RSHome", {
 		data.messageClass = "";
 		data.messageIcon = "";
 		data.message = "";
+		data.session = null;
 		data.state = 0;
 
 		// Track Connection Information
@@ -36,6 +37,7 @@ rsSystem.component("RSHome", {
 	},
 	"methods": {
 		"receiveMessage": function(message) {
+			console.log("Receive Message: ", message);
 			if(message) {
 				Vue.set(this, "messageClass", message.classes || "");
 				Vue.set(this, "messageIcon", message.icon);
@@ -45,12 +47,14 @@ rsSystem.component("RSHome", {
 				Vue.set(this, "message", null);
 			}
 		},
-		"connect": function(event) {
+		"connect": function(universe) {
 			if(this.$route.hash !== "" && this.universe && this.universe.loggedOut) {
 				this.universe.loggedOut = false;
 			} else {
-				Vue.set(this, "universe", new RSUniverse({}));
-				Vue.set(this, "user", event.user);
+				console.log(" [!] Connected? ", universe);
+				Vue.set(this, "universe", universe);
+				Vue.set(this, "player", universe.connection.session);
+				Vue.set(this, "session", universe.connection.session);
 				Vue.set(this, "state", 1);
 
 				this.universe.$on("disconnected", () => {
@@ -75,7 +79,7 @@ rsSystem.component("RSHome", {
 					Vue.set(this, "player", this.universe.indexes.player.lookup[this.user.id]);
 					Vue.set(this, "state", 10);
 				});
-				this.universe.connect(event.user, event.address);
+				this.universe.sync();
 			}
 		}
 	},

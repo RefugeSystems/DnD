@@ -7,7 +7,7 @@
  * @param {Object} details
  */
 
-var valid = new RegExp("^[a-z][a-z0-9:_]+$");
+var valid = new RegExp("^[a-z][a-z0-9_]+:[a-z0-9:_]+$");
 
 require("../extensions/array");
 
@@ -218,6 +218,9 @@ class RSObject {
 						this._calculated[fields[x]] = this._data[fields[x]];
 						break;
 				}
+			}
+			if(!this._calculated[field.id] && field.attribute.default) {
+				this._calculated[field.id] = field.attribute.default;
 			}
 		}
 		
@@ -595,6 +598,7 @@ class RSObject {
 		.then(() => {
 			this.calculateFieldValues();
 			this.updateFieldValues();
+			this._universe.emit("object-updated", this.getDelta(delta));
 			callback(null, this);
 		})
 		.catch((err) => {
@@ -632,6 +636,7 @@ class RSObject {
 		.then(() => {
 			this.calculateFieldValues();
 			this.updateFieldValues();
+			this._universe.emit("object-updated", this.getDelta(delta));
 			callback(null, this);
 		})
 		.catch((err) => {
@@ -678,6 +683,7 @@ class RSObject {
 		.then(() => {
 			this.calculateFieldValues();
 			this.updateFieldValues();
+			this._universe.emit("object-updated", this.getDelta(delta));
 			callback(null, this);
 		})
 		.catch((err) => {
@@ -781,12 +787,39 @@ class RSObject {
 	}
 	
 	/**
+	 *
+	 * Currently a naive implementation, takes the set fields and adds dice and
+	 * calculcated fields for a simple set.
+	 * @method getDelta
+	 * @param {Object} op Object used in the operation to add, sub, or set.
+	 * @return {Object} With the modified properties and additional fields that
+	 * 		should be considered as part of the change. Typically computed fields.
+	 */
+	getDelta(op) {
+		var delta = {},
+			field,
+			x;
+			
+		for(x=0; x<this._manager.fields.length; x++) {
+			field = this._manager.fields[x];
+			if(!field.attribute.server_only && (op[field.id] !== undefined || field.type === "calculcated" || field.type === "dice")) {
+				delta[field.id] = this[field.id];
+			}
+		}
+		
+		delta.id = this.id;
+		delta._class = this._class;
+		return delta;
+	}
+	
+	/**
 	 * Get the raw JSON value of this object based on the current data and the
 	 * class fields.
 	 * @method toJSON
+	 * @param {Boolean} [include] Keys with a leading "_".
 	 * @return {Object} 
 	 */
-	toJSON() {
+	toJSON(include) {
 		var json = {},
 			keys,
 			x;
@@ -806,15 +839,17 @@ class RSObject {
 		
 		json.id = this.id;
 		json._class = this._class;
-		json._linkMask = this._linkMask;
-		json._calculated = this._calculated;
-		json._calcRef = this._calcRef;
-		json._data = this._data;
+		if(include) {
+			json._linkMask = this._linkMask;
+			json._calculated = this._calculated;
+			json._calcRef = this._calcRef;
+			json._data = this._data;
+			json._grid = this._grid;
+			json._x = this._x;
+			json._y = this._y;
+		}
 		json.created = this.created;
 		json.updated = this.updated;
-		json._grid = this._grid;
-		json._x = this._x;
-		json._y = this._y;
 		return json;
 	}
 }
@@ -865,23 +900,23 @@ RSObject.addObjects = function(a, b) {
  * @return {[type]}      [description]
  */
 RSObject.addValues = function(a, b, type) {
-	if(!type) {
-		type = typeof(a);
-	}
 	if(typeof(a) === undefined) {
 		return b;
 	} else if(typeof(b) === undefined) {
 		return a;
-	} else if(typeof(a) === typeof(b)) {
+	} else if(type || typeof(a) === typeof(b)) {
+		if(!type) {
+			type = typeof(a);
+		}
 		switch(type) {
 			case "string":
 				return a + " " + b;
 			case "integer":
 			case "number":
-				return a + b;
+				return (a || 0) + (b || 0);
 			case "calculated":
 			case "dice":
-				return a + " + " + b;
+				return (a || 0) + " + " + (b || 0);
 			case "array":
 				return a.concat(b);
 			case "boolean":
@@ -890,7 +925,7 @@ RSObject.addValues = function(a, b, type) {
 				return RSObject.addObjects(a, b);
 		}
 	} else {
-		throw new Error("Can not add values as types do not match");
+		throw new Error("Can not add values as types[" + type + "] do not match");
 	}
 };
 
@@ -925,9 +960,6 @@ RSObject.subObjects = function(a, b) {
  * @return {[type]}      [description]
  */
 RSObject.subValues = function(a, b, type) {
-	if(!type) {
-		type = typeof(a);
-	}
 	if(typeof(a) === undefined) {
 		switch(type) {
 			case "string":
@@ -947,7 +979,10 @@ RSObject.subValues = function(a, b, type) {
 		}
 	} else if(typeof(b) === undefined) {
 		return a;
-	} else if(typeof(a) === typeof(b)) {
+	} else if(type || typeof(a) === typeof(b)) {
+		if(!type) {
+			type = typeof(a);
+		}
 		switch(type) {
 			case "string":
 				return a.replace(b, "");
@@ -965,7 +1000,7 @@ RSObject.subValues = function(a, b, type) {
 				return RSObject.subObjects(a, b);
 		}
 	} else {
-		throw new Error("Can not add values as types do not match");
+		throw new Error("Can not sub values as types do not match");
 	}
 };
 

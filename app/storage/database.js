@@ -27,6 +27,9 @@ mapping.dice = {
 mapping.integer = {
 	"type": "integer"
 };
+mapping.calculcated = {
+	"type": "text"
+};
 mapping.string = {
 	"type": "text"
 };
@@ -142,7 +145,7 @@ mapping._toInsert = function(name, fields, write) {
 		values = "($id, $created, $updated",
 		field;
 	for(var x=0; x<fields.length; x++) {
-		if(write[fields[x]]) {
+		if(write[fields[x]] !== undefined) {
 			field = fields[x].id || fields[x];
 			columns += ", " + field;
 			values += ", $" + field;
@@ -193,7 +196,7 @@ mapping._toObject = function(fields, write, create) {
 	}
 	for(var x=0; x<fields.length; x++) {
 		field = fields[x];
-		if(field && write[field.id]) {
+		if(field && write[field.id] !== undefined) {
 			if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
 				mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
 			} else {
@@ -264,6 +267,7 @@ class RSDatabase extends EventEmitter {
 		} else {
 			this.constructor = {};
 		}
+		
 		this.constructor._general = RSObject;
 		return new Promise((done, fail) => {
 			this.connection = new sqlite3.Database(this.specification.file, sqlite3[this.specification.mode]);
@@ -688,6 +692,12 @@ class ClassManager extends EventEmitter {
 		 */
 		this.statements = {};
 		/**
+		 * 
+		 * @property objectIDs
+		 * @type Array
+		 */
+		this.objectIDs = [];
+		/**
 		 *
 		 * @property object
 		 * @type Object
@@ -819,6 +829,7 @@ class ClassManager extends EventEmitter {
 				} else {
 					for(var x=0; x<rows.length; x++) {
 						this.object[rows[x].id] = false;
+						this.objectIDs.push(rows[x].id);
 					}
 					done(this);
 				}
@@ -956,7 +967,7 @@ class ClassManager extends EventEmitter {
 	 * @method create
 	 * @param {Universe} universe
 	 * @param {Object} details
-	 * @return {Promise} 
+	 * @param {Function} callback
 	 */
 	create(universe, details, callback) {
 		var object = this.database.constructor[this.id] || RSObject;
@@ -965,9 +976,10 @@ class ClassManager extends EventEmitter {
 			if(err) {
 				callback(err, null);
 			} else {
-				this.object[object.id] = object;
 				object.created = details.created;
 				object.updated = details.updated;
+				this.object[object.id] = object;
+				this.objectIDs.push(object.id);
 				callback(null, object);
 			}
 		});

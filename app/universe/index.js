@@ -8,7 +8,9 @@
  */
 
 var EventEmitter = require("events").EventEmitter,
+	Chronicle = require("../storage/chronicle"),
 	DNDCalculator = require("./calculator/dnd"),
+	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects");
 
 var classes = [
@@ -53,9 +55,18 @@ class Universe extends EventEmitter {
 		 */
 		this.Anomaly = require("../management/anomaly");
 		this.calculator = new DNDCalculator(this);
+		this.chronicle = new Chronicle(this);
 		this.configuration = configuration;
 		this.classes = classes;
 		this.manager = {};
+		this.connection = {};
+		this.connected = [];
+		this.initialized = false;
+		this.time = 0;
+		
+		this.on("dump-configuration", () => {
+			console.log(configuration);
+		});
 	}
 
 	/**
@@ -124,9 +135,28 @@ class Universe extends EventEmitter {
 					}
 				}
 				
-				return loading;
+				return this.chronicle.initialize(this.objectHandler);
 			})
-			.then(done)
+			.then(() => {
+				if(this.manager.setting.object["setting:time"]) {
+					this.time = parseInt(this.manager.setting.object["setting:time"].value) || 0;
+				} else {
+					this.time = 0;
+					this.manager.setting.create(this, {
+						"id": "setting:time",
+						"description": "The current time in the game",
+						"value": 0
+					}, (err, object) => {
+						if(err) {
+							this.emit("error", new Anomaly("universe:settings:time", "Failed to load game time from universe settings", 40, {}, err, this));
+						}
+					});
+				}
+			})
+			.then(() => {
+				this.initialized = true;
+				done();
+			})
 			.catch(fail);
 		});
 	}
@@ -155,10 +185,28 @@ class Universe extends EventEmitter {
 	/**
 	 *
 	 * @method connectPlayer
-	 * @param {PlayerConnection} connection
+	 * @param {Session} session
+	 * @param {WebSocket} socket
 	 */
-	connectPlayer(connection) {
-
+	connectPlayer(session, socket) {
+		console.log("Connect Player: ", session.toJSON());
+		var player = this.manager.player.object[session.player],
+			connection;
+		
+		if(player) {
+			connection = this.connection[player.id];
+			if(!connection) {
+				console.log("Make Connection");
+				connection = this.connection[player.id] = new PlayerConnection(this, player);
+				this.connected.push(player.id);
+			}
+			console.log("Connect");
+			connection.connect(session, socket);
+		} else {
+			console.log("No Player");
+			socket.send({"type": "close", "code": "4", "sent": Date.now()});
+			socket.close();
+		}
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 /**
- * Handles Object cross talk and updates.
+ * Handles Object cross talk and updates for the universe to help make the processing
+ * database agnostic.
  * @class RSObjectReferrer
  * @constructor
  */
@@ -16,7 +17,7 @@ var RSObject = require("../../storage/rsobject"),
 	
 constructors._general = RSObject;
 for(x=0; x<classList.length; x++) {
-	constructors[classList[x]] = require("./classes/" + classList[x]);
+	constructors[classList[x].replace(".js", "")] = require("./classes/" + classList[x]);
 }
 
 module.exports = function(universe) {
@@ -24,11 +25,20 @@ module.exports = function(universe) {
 	Anomaly = universe.Anomaly;
 	var handler = this,
 		database = null,
+		chronicle = null,
 		inheritance = {},
 		reference = {},
 		manager = {},
 		mark = {};
 	
+	/**
+	 * 
+	 * @method getDatabase
+	 * @deprecated This exists primarily for debugging and should be avoided however
+	 * 		it currently fills a required gap between the database and the universe
+	 * 		for the Chronicle
+	 * @return {RSDatabase} [description]
+	 */
 	this.getDatabase = function() {
 		return database;
 	};

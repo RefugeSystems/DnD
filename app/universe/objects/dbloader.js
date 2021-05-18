@@ -23,9 +23,38 @@ fields.push({
 });
 fields.push({
 	"id": "disabled",
-	"name": "disabled",
+	"name": "Disabled",
 	"description": "When true, the object should be considered removed.",
 	"type": "boolean",
+	"attribute": {}
+});
+fields.push({
+	"id": "restricted",
+	"name": "Restricted",
+	"description": "When set, the object's listed properties require knowledge with the 'reveals' property and the corrsponding object as a subject.",
+	"type": "array",
+	"attribute": {}
+});
+fields.push({
+	"id": "hidden",
+	"name": "Hidden",
+	"description": "Lists properties to keep hidden.",
+	"type": "array",
+	"attribute": {}
+});
+fields.push({
+	"id": "reveals",
+	"name": "Reveals",
+	"description": "Used in combination with objects that have subjects to indicate what they reveal about those subjects.",
+	"type": "array",
+	"attribute": {}
+});
+fields.push({
+	"id": "subjects",
+	"name": "Subjects",
+	"description": "Used in combination with objects that have subjects to indicate what they reveal about those subjects.",
+	"type": "array",
+	
 	"attribute": {}
 });
 fields.push({
@@ -87,10 +116,10 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
-	"id": "expiry",
-	"name": "Expiry",
-	"description": "The duration of time for which this object is valid. Usually used in combination with `last`.",
-	"type": "integer",
+	"id": "json",
+	"name": "JSON",
+	"description": "Used for storing raw JSON data. Generally for historical use.",
+	"type": "string",
 	"attribute": {}
 });
 fields.push({
@@ -156,6 +185,115 @@ fields.push({
 	"type": "string",
 	"attribute": {}
 });
+fields.push({
+	"id": "owners",
+	"name": "Owners",
+	"description": "Lists the players that own and operate the object.",
+	"type": "array",
+	"attribute": {}
+});
+fields.push({
+	"id": "dead",
+	"name": "Dead",
+	"description": "Flags that the object is considered deceased.",
+	"type": "boolean",
+	"attribute": {}
+});
+fields.push({
+	"id": "acquired",
+	"name": "Acquired",
+	"description": "Maps an ID to the gametime at which it was acquired by the object.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
+	"id": "icon",
+	"name": "Icon",
+	"description": "CSS class to display as short hand for this object.",
+	"type": "string",
+	"attribute": {}
+});
+fields.push({
+	"id": "gm_note",
+	"name": "Game Master Note",
+	"description": "For game masters to save notes about this object and is meant to be trimmed before being sent to players.",
+	"type": "string",
+	"attribute": {
+		"master_only": true
+	}
+});
+fields.push({
+	"id": "sessions",
+	"name": "Sessions",
+	"description": "List of sessions for a player.",
+	"type": "array",
+	"attribute": {
+		"server_only": true
+	}
+});
+fields.push({
+	"id": "object",
+	"name": "Object ID",
+	"description": "Used to track that an object is directly related to another object.",
+	"type": "string",
+	"attribute": {}
+});
+fields.push({
+	"id": "data",
+	"name": "Data",
+	"description": "Used for large data storage (Such as images). Typically Base64 encoded.",
+	"type": "string",
+	"attribute": {}
+});
+fields.push({
+	"id": "connections",
+	"name": "Connections",
+	"description": "Number of active connections.",
+	"type": "integer",
+	"attribute": {
+		"default": 0
+	}
+});
+fields.push({
+	"id": "x",
+	"name": "X Position",
+	"description": "X location of the object.",
+	"type": "integer",
+	"attribute": {}
+});
+fields.push({
+	"id": "y",
+	"name": "Y Position",
+	"description": "Y location of the object.",
+	"type": "integer",
+	"attribute": {}
+});
+fields.push({
+	"id": "location",
+	"name": "Location",
+	"description": "Lists the players that own and operate the object.",
+	"type": "string",
+	"inheritance": {
+		
+	},
+	"inheritable": [
+		"location"
+	],
+	"attribute": {}
+});
+fields.push({
+	"id": "entrance",
+	"name": "Entrance",
+	"description": "Indicates the location to which this location links instead of itself. This is used for things like multiple cave entrances into one cave.",
+	"type": "string",
+	"inheritance": {
+		
+	},
+	"inheritable": [
+		"location"
+	],
+	"attribute": {}
+});
 
 /**
  * Classes to ensure exist
@@ -168,13 +306,37 @@ classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "email", "description", "auth_token", "auth_identity", "last"]
+	"fields": ["name", "disabled", "username", "password", "email", "description", "auth_token", "auth_identity", "last", "connections", "sessions"]
 });
 classes.push({
 	"id": "session",
 	"name": "Session",
 	"description": "Tracks a Player connection session",
-	"fields": ["player", "disabled", "auth_token_use", "last", "expiry"]
+	"fields": ["player", "username", "disabled", "auth_token_use", "last", "expiry"]
+});
+classes.push({
+	"id": "entity",
+	"name": "Entity",
+	"description": "Active entity in the game that takes actions",
+	"fields": ["name", "icon", "description", "disabled", "dead", "acquired", "hidden", "location", "x", "y", "gm_note"]
+});
+classes.push({
+	"id": "knowledge",
+	"name": "Knowledge",
+	"description": "Active entity in the game that takes actions",
+	"fields": ["name", "icon", "description", "subjects", "reveals", "gm_note"]
+});
+classes.push({
+	"id": "location",
+	"name": "Locations",
+	"description": "Active entity in the game that takes actions",
+	"fields": ["name", "icon", "description", "disabled", "hidden", "location", "x", "y", "entrance", "gm_note"]
+});
+classes.push({
+	"id": "setting",
+	"name": "Setting",
+	"description": "Universe values",
+	"fields": ["name", "disabled", "description", "value", "gm_note"]
 });
 
 

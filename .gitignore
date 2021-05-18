@@ -2,6 +2,7 @@ app/configuration/*.json
 docs_server/
 docs_ui/
 deploy_web/index.html
+deploy_web/shared.js
 deploy_web/worker.js
 deploy_web/main.css
 deploy_web/main.js

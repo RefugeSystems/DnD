@@ -47,9 +47,15 @@ verify(configuration)
 }).then(function() {
 	console.log("...Universe...");
 	universe = new Universe(configuration);
-	universe.on("error", function(anomaly) {
+	
+	var logData = function(anomaly) {
 		logging.entry(anomaly);
-	});
+	};
+	universe.on("error", logData);
+	universe.on("info", logData);
+	universe.on("warn", logData);
+	universe.on("log", logData);
+	
 	if(configuration.universe && configuration.universe.debug_cascades) {
 		universe.on("cascaded", function(cascade) {
 			logging.entry({
@@ -64,16 +70,23 @@ verify(configuration)
 }).then(function() {
 	console.log("...Authentication...");
 	authentication = new Authentication(universe);
+	
 	authentication.on("error", function(anomaly) {
 		logging.entry(anomaly);
 	});
+	
 	return authentication.initialize(startup);
 }).then(function() {
 	console.log("...API...");
 	api = new APIController(universe, authentication);
+	
 	api.on("error", function(anomaly) {
 		logging.entry(anomaly);
 	});
+	api.on("event", function(event) {
+		logging.entry(event);
+	});
+	
 	return api.initialize(startup);
 }).then(function() {
 	console.log("...Load Complete");

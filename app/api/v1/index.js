@@ -31,9 +31,13 @@ module.exports = new (function() {
 					for(x=0; x<paths.length; x++) {
 						if(paths[x] !== "." && paths[x] !== ".." && paths[x] !== "index.js") {
 							load = require("./" + paths[x]);
-							promised.push(load.initialize(api));
-							load.path = load.path || "/" + paths[x].replace(".js", "");
-							loading.push(load);
+							if(load.initialize) {
+								promised.push(load.initialize(api));
+								load.path = load.path || "/" + paths[x].replace(".js", "");
+								loading.push(load);
+							} else {
+								api.universe.emit("error", new api.universe.Anomaly("api:v1:load", "Failed to load an API branch: no Initialize", 40, {"branch": paths[x]}, null, this));
+							}
 						}
 					}
 
@@ -42,48 +46,6 @@ module.exports = new (function() {
 						for(x=0; x<loading.length; x++) {
 							this.router.use(loading[x].path, loading[x].router);
 						}
-						
-						this.router.options(".*", function(req, res) {
-							res.send();
-						});
-						
-						this.router.use((req, res, next) => {
-							if(res.result) {
-								res.json(res.result);
-							} else {
-								var err = new Error("Not Found");
-								err.status = 404;
-								next(err);
-							}
-						});
-						
-						this.router.use((err, req, res, next) => {
-							var details,
-								anomaly;
-								
-							if(err instanceof api.universe.Anomaly) {
-								anomaly = err;
-							} else {
-								details = {};
-								details.path = req.path;
-								details.session = req.session;
-								details.request = req.id;
-								details.size = req.body?JSON.stringify(req.body).length:0;
-								details.params = Object.assign({}, req.params);
-								details.query = Object.assign({}, req.query);
-								if(details.query.token) {
-									details.query.token = "[OBSCURED]";
-								}
-								if(details.query.password) {
-									details.query.password = "[OBSCURED]";
-								}
-								
-								anomaly = new api.universe.Anomaly("api:request:fault", err.message, 40, details, err.stack, this);
-							}
-							
-							res.status(500).json(anomaly);
-							api.emit("error", anomaly);
-						});
 						
 						done();
 					})
