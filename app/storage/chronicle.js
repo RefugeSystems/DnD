@@ -11,7 +11,8 @@ var EventEmitter = require("events").EventEmitter,
 	RSRandom = require("rs-random"),
 	emptyArray = [],
 	validField = {},
-	validTypes = {};
+	validTypes = {},
+	count = 0;
 
 validField.source = true;
 validField.target = true;
@@ -110,7 +111,7 @@ class Chronicle extends EventEmitter {
 	 */
 	addEvent(type, event, time, source, target) {
 		var values = {};
-		values["$id"] = "chronicle:" + Date.now() + ":" + (event.id || RSRandom.string(32));
+		values["$id"] = "chronicle:" + Date.now() + ":" + (count++) + ":" + (event.id || RSRandom.string(32));
 		values["$time"] = time || event.time || this.universe.time;
 		values["$source"] = source || event.source;
 		values["$target"] = target || event.target;
@@ -123,6 +124,9 @@ class Chronicle extends EventEmitter {
 				this.emit("error", err);
 			}
 		});
+		if(count > 1000) {
+			count = 0;
+		}
 		return values["$id"];
 	}
 	

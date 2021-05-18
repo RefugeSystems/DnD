@@ -50,6 +50,13 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
+	"id": "gm",
+	"name": "Game Master",
+	"description": "Flags objects as game masters. Primarily for use on Player objects.",
+	"type": "boolean",
+	"attribute": {}
+});
+fields.push({
 	"id": "subjects",
 	"name": "Subjects",
 	"description": "Used in combination with objects that have subjects to indicate what they reveal about those subjects.",
@@ -306,7 +313,7 @@ classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "email", "description", "auth_token", "auth_identity", "last", "connections", "sessions"]
+	"fields": ["name", "disabled", "username", "password", "email", "description", "gm", "auth_token", "auth_identity", "last", "connections", "sessions"]
 });
 classes.push({
 	"id": "session",

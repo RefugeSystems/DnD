@@ -1084,7 +1084,7 @@ class ClassManager extends EventEmitter {
 				x;
 
 			if(this.object[object.id] || this.object[object.id] === false) {
-				console.log("update");
+				// console.log("update");
 				// update
 				// TODO: Verify fields are valid for this Classification during write
 				write = mapping._toObject(this.fields, object, false);
@@ -1103,7 +1103,7 @@ class ClassManager extends EventEmitter {
 				write = mapping._toObject(this.fields, object, true);
 				this.object[object.id] = {};
 				statement = mapping._toInsert(this.id, fields, object);
-				console.log("insert: " + statement, write);
+				// console.log("insert: " + statement, write);
 				object.updated = write.$updated;
 				object.created = write.$created;
 			}

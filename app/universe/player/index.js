@@ -75,8 +75,9 @@ class PlayerConnection extends EventEmitter {
 		socket.onmessage = (event) => {
 			var message = JSON.parse(event.data),
 				now = Date.now();
+			console.log("Received: ", message);
 				
-			switch(message.event) {
+			switch(message.type) {
 				case "ping":
 					socket.send(JSON.stringify({
 						"type": "ping",
@@ -84,9 +85,19 @@ class PlayerConnection extends EventEmitter {
 						"sent": message.sent
 					}));
 					break;
+				case "sync":
+					message = this.universe.requestState(this.player, message.sync);
+					message = {
+						"id": RSRandom.identifier("message", 10, 32),
+						"type": "sync",
+						"data": message,
+						"sent": Date.now()
+					};
+					socket.send(JSON.stringify(message));
+					break;
 				default:
 					message = {
-						"type": "player:" + message.event,
+						"type": "player:" + message.type,
 						"received": Date.now(),
 						"player": this.player,
 						"sent": message.sent,
@@ -148,10 +159,13 @@ class PlayerConnection extends EventEmitter {
 			this.emit("error", event);
 		};
 		
-		socket.send(JSON.stringify({"type": "connected"}));
 		this.emit("connected");
 		this.connects++;
 		console.log("Connected");
+		socket.send(JSON.stringify({
+			"type": "connected",
+			"sent": Date.now()
+		}));
 	}
 	
 	/**

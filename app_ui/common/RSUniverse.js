@@ -89,7 +89,7 @@ class RSUniverse extends EventEmitter {
 			this.metrics.dialation = event.received - (event.sent + this.metrics.latency);
 		};
 		this.processEvent.connected = (event) => {
-			console.warn("Connected to Server");
+			console.warn("Connected to Server: ", event);
 			this.metrics.connected = Date.now();
 			this.metrics.connected_server = event.sent;
 			this.$emit("connected");
@@ -435,7 +435,7 @@ class RSUniverse extends EventEmitter {
 			this.state.retries = 0;
 			sending = {
 				"sent": Date.now(),
-				"event": type,
+				"type": type,
 				"data": data
 			};
 			

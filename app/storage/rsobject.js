@@ -599,10 +599,14 @@ class RSObject {
 			this.calculateFieldValues();
 			this.updateFieldValues();
 			this._universe.emit("object-updated", this.getDelta(delta));
-			callback(null, this);
+			if(typeof(callback) === "function") {
+				callback(null, this);
+			}
 		})
 		.catch((err) => {
-			callback(err, this);
+			if(typeof(callback) === "function") {
+				callback(err, this);
+			}
 		});
 	}
 	
@@ -637,10 +641,14 @@ class RSObject {
 			this.calculateFieldValues();
 			this.updateFieldValues();
 			this._universe.emit("object-updated", this.getDelta(delta));
-			callback(null, this);
+			if(typeof(callback) === "function") {
+				callback(null, this);
+			}
 		})
 		.catch((err) => {
-			callback(err, this);
+			if(typeof(callback) === "function") {
+				callback(err, this);
+			}
 		});
 	}
 	
@@ -684,10 +692,14 @@ class RSObject {
 			this.calculateFieldValues();
 			this.updateFieldValues();
 			this._universe.emit("object-updated", this.getDelta(delta));
-			callback(null, this);
+			if(typeof(callback) === "function") {
+				callback(null, this);
+			}
 		})
 		.catch((err) => {
-			callback(err, this);
+			if(typeof(callback) === "function") {
+				callback(err, this);
+			}
 		});
 	}
 	
@@ -815,6 +827,9 @@ class RSObject {
 	/**
 	 * Get the raw JSON value of this object based on the current data and the
 	 * class fields.
+	 *
+	 * The "attribute" object is guarenteed by this method, even if the class
+	 * does not explicitly feature it.
 	 * @method toJSON
 	 * @param {Boolean} [include] Keys with a leading "_".
 	 * @return {Object} 
@@ -847,6 +862,9 @@ class RSObject {
 			json._grid = this._grid;
 			json._x = this._x;
 			json._y = this._y;
+		}
+		if(!json.attribute) {
+			json.attribute = {};
 		}
 		json.created = this.created;
 		json.updated = this.updated;

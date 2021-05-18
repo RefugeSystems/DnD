@@ -94,8 +94,8 @@ class Universe extends EventEmitter {
 				
 				
 				for(x=0; x<types.length; x++) {
-					this.manager[types[x]] = manager[types[x]];	
 					if(manager[types[x]]) {
+						this.manager[types[x]] = manager[types[x]];	
 						ids = Object.keys(manager[types[x]].object);
 						for(i=0; i<ids.length; i++) {
 							loading.push(manager[types[x]].object[ids[i]].linkFieldValues(true));
@@ -226,10 +226,50 @@ class Universe extends EventEmitter {
 	 * @param {RSObject} [player] To restrict the state to.
 	 * @param {Integer} [time] The time mark from which to grab the state. This is real-time from which to grab
 	 * 		updated objects to send.
-	 * @return {Array | Object} 
+	 * @return {Object} 
 	 */
 	requestState(player, time) {
+		var managers = Object.keys(this.manager),
+			state = {},
+			master_fields,
+			manager,
+			sync,
+			f,
+			m,
+			x;
 		
+		// TODO: Investigate time commitment here, may need broken up to prevent bad lockups
+		for(m=0; m<managers.length; m++) {
+			manager = this.manager[managers[m]];
+			console.log("Manager: ", managers[m]);
+			state[manager.id] = [];
+			if(!player.gm) {
+				master_fields = [];
+				for(f=0; f<manager.fields.length; f++) {
+					if(manager.fields[f].attribute.master_only) {
+						master_fields.push(manager.fields[f].id);
+					}
+				}
+			}
+			for(x=0; x<manager.objectIDs.length; x++) {
+				sync = manager.object[manager.objectIDs[x]];
+				if(sync) { // Skip unloaded data
+					sync = sync.toJSON(); // Convert to sync format and separate object
+					if((!time || time < sync.update) && (!sync.attribute.master_only || player.gm)) {
+						if(!player.gm && master_fields.length) {
+							for(f=0; f<master_fields.length; f++) {
+								if(sync[master_fields[f]] !== undefined) {
+									delete(sync[master_fields[f]]);
+								}
+							}
+						}
+						state[manager.id].push(sync);
+					}
+				}
+			}
+		}
+		
+		return state;
 	}
 	
 	/**
