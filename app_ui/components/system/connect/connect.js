@@ -55,7 +55,12 @@
 			}
 			console.log("Connect: ", this.storage);
 			
-			fetch(location.protocol + "//" + location.host + "/address.json")
+			var path = location.pathname,
+				index = path.lastIndexOf("/");
+			if(index !== -1) {
+			    path = path.substring(0, index);
+			}
+			fetch(location.protocol + "//" + location.host + path + "/address.json")
 			.then((res) => {
 				return res.json();
 			}).then((res) => {
