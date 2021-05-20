@@ -132,8 +132,8 @@ fields.push({
 fields.push({
 	"id": "template",
 	"name": "Template",
-	"description": "When set, this object is a template and instead of defining values specifies special handling for generating an object. The value here-in designates how the generation process proceeds.",
-	"type": "string",
+	"description": "When set, this object is considered a template and can create children as described in the template object to set values of generated children.",
+	"type": "object",
 	"attribute": {}
 });
 fields.push({

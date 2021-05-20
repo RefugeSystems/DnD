@@ -158,7 +158,7 @@ class Universe extends EventEmitter {
 							"value": 0
 						}, (err, object) => {
 							if(err) {
-								this.emit("error", new Anomaly("universe:settings:time", "Failed to load game time from universe settings", 40, {}, err, this));
+								this.emit("error", new this.Anomaly("universe:settings:time", "Failed to load game time from universe settings", 40, {}, err, this));
 								fail(err);
 							} else {
 								done();
@@ -178,7 +178,7 @@ class Universe extends EventEmitter {
 							"value": 0
 						}, (err, object) => {
 							if(err) {
-								this.emit("error", new Anomaly("universe:settings:temporalness", "Failed to load game time from universe settings", 40, {}, err, this));
+								this.emit("error", new this.Anomaly("universe:settings:temporalness", "Failed to load game time from universe settings", 40, {}, err, this));
 								fail(err);
 							} else {
 								done();
