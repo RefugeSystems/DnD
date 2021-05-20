@@ -300,7 +300,7 @@ var config = {
 				"app_ui/synth/index/index.app.html",
 				"app_ui/synth/index/index.termination.html"
 			],
-			"dest": "deploy_web/index"
+			"dest": "deploy_web/index.html"
 		},
 		"worker": {
 			"options": {
