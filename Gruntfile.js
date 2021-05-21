@@ -300,7 +300,7 @@ var config = {
 				"app_ui/synth/index/index.app.html",
 				"app_ui/synth/index/index.termination.html"
 			],
-			"dest": "deploy_web/index"
+			"dest": "deploy_web/index.html"
 		},
 		"worker": {
 			"options": {
@@ -592,7 +592,7 @@ module.exports = function (grunt) {
 	
 	grunt.registerTask("ui_exp", ["ui_develop", "connect:app", "open:app", "watch:app"]);
 
-	grunt.registerTask("ui_build", ["eslint", "jasmine:ui", "templify:app", "uglify:worker", "uglify:sharedworker", "uglify:externals", "uglify:app", "concat:less", "less:app"]);
-	grunt.registerTask("ui_develop", ["eslint:ui", "jasmine:ui", "templify:app", "concat:worker", "concat:sharedworker", "concat:externals", "concat:app", "concat:less", "less:app"]);
+	grunt.registerTask("ui_build", ["eslint", "jasmine:ui", "templify:app", "concat:index_prep", "concat:index", "uglify:worker", "uglify:sharedworker", "uglify:externals", "uglify:app", "concat:less", "less:app"]);
+	grunt.registerTask("ui_develop", ["eslint:ui", "jasmine:ui", "templify:app", "concat:index_prep", "concat:index", "concat:worker", "concat:sharedworker", "concat:externals", "concat:app", "concat:less", "less:app"]);
 	grunt.registerTask("default", ["concurrent:development"]);
 };

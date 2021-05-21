@@ -1,0 +1,114 @@
+entities - Array | String - Entity
+hidden - Boolean - The object still shows but with data omitted
+hidden_name - String
+hidden_description - String
+data - File
+url
+associated - Array | String - any
+included - Array | String - any
+streamurls - Array | String - streamurl
+attribute - Object | String - non-specific
+widgets - Array | String - widget
+inventory - Array | String - item
+types - Array | String - types
+journals -
+condition - Object
+	maps a field id to a value
+ifop - Object
+	maps a field name to the operation to use for comparison
+	+ null (or undefined)
+	+ hasnot (Array does not have)
+	+ has
+	+ <=
+	+ <
+	+ =
+	+ >
+	+ >=
+	+ !=
+add - Object
+sub - Object
+set - Object
+versioning - Array - Used for complex data mergers for text editing
+position - Object - Maps a location id to a set of coordinates for where this object appears on within the location
+location - String - where this object exists
+links_to - String - location where this location links (ie. portals)
+known - Boolean - entity must have knowledge to see
+	- Overrides hidden values if set with "known" as true
+image - String - image banner picture of the object (think picture of a planet)
+view - String - image picture for the object (think map of a planet)
+background - String - image used for background as a static full screen image
+obscured - Boolean - hides object from player rendering when loaded
+x - Number
+y - Number
+attuned - String - entity
+attuned_locks - Boolean
+attunes - Boolean
+range - Object - advantage/normal/disadvantage(/?)
+ranged - Boolean
+thrown - Boolean
+damage - Object | String - dice(for base damage die)/fire/cold/etc. dice formulas
+level - Object | String - self/barbarian/bard/etc.
+charges - Integer
+recharges - Array | Object - stored(How many actions seen)/action(id on which to gain a charge)/on(number of charges which adds a charge)
+	(This is to allow multiple ways for an object to "gain" a charge")
+knowledges - Array | String - grants the following knowledge entries
+	+ Effects
+skills - 
+icon - 
+slots - Array | String - slots granted
+needs - Array | String - slots used
+durability - Integer
+size
+weight
+encumberance
+proficiency
+attribute
+dmgtype - String
+consume - Object | String - maps an Action ID to the resulting Item to become (Either directly or template to spawn)
+consume_icon - Object | String - maps an Action ID to icon to display
+consume_hint - Object | String - maps an Action ID
+transform - Object | String - maps an Action ID to the resulting Item to become (Either directly or template to spawn) and involves updates to the current ID, such as rotating equipment
+enchantments - Integer
+cost - Number
+mobility - Number
+stat - String - property considered to be primary when using an item
+dc - Object | String - skill to difficulty, ie: "perception": 15, "investigation": 10
+conditionals - Array | Object - condition
+effects - Array | String - effects that are considered to be had by this object
+strength
+dexterity
+constitution
+intelligence
+wisdom
+charisma
+user - String - entity using the object
+	> inheritable: entity
+	+ unarmed_bonus
+	+ damage_bonus
+	+ conditionals
+	+ damage
+	+ range
+equipped - Array | String - item
+	> inheritable: item
+	+ armor
+	+ [stats]
+path - Array | Array - points offset from the x,y of this object
+path_color - String
+path_opacity
+fill_color - String
+fill_opacity
+background - String - Image
+order - Number
+playlists - 
+master_note - 
+reveals - Array | String - fields revealed
+category - String
+state - 
+screen - Boolean - Flags for display on the Game Master screen
+debuff - Boolean
+dismissable - Boolean
+poitns - Integer
+accepts - Array | String - type
+rejects - Array | String - type
+game - String - ID of the mini-game to use
+quests - Array | String - quest that the entity are currently involved in
