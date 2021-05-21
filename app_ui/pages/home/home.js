@@ -49,6 +49,7 @@ rsSystem.component("RSHome", {
 			}
 		},
 		"receiveConfiguration": function(configuration) {
+			console.log("Home Configured: ", configuration);
 			Vue.set(this, "configuration", configuration);
 		},
 		"connect": function(universe) {

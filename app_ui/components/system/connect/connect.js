@@ -63,11 +63,14 @@
 			fetch(location.protocol + "//" + location.host + path + "/configuration.json")
 			.then((res) => {
 				return res.json();
-			}).then((res) => {
-				console.log(" > Address.json: ", res);
-				if(res.address && (!this.storage.address || res.force)) {
-					Vue.set(this.storage, "address", res.address);
+			}).then((configuration) => {
+				console.log(" > Address.json: ", configuration);
+				if(res.address && (!this.storage.address || configuration.force)) {
+					Vue.set(this.storage, "address", configuration.address);
 				}
+				return rsSystem.configureRouting(configuration);
+			}).then((configuration) => {
+				this.$emit("configure", configuration);
 			}).catch((err) => {
 				console.warn(err);
 			});
