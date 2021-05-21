@@ -26,6 +26,7 @@ rsSystem.component("RSHome", {
 		data.state = 0;
 
 		// Track Connection Information
+		data.configuration = null;
 		data.universe = null;
 		data.player = null;
 		data.user = null;
@@ -46,6 +47,9 @@ rsSystem.component("RSHome", {
 			} else {
 				Vue.set(this, "message", null);
 			}
+		},
+		"receiveConfiguration": function(configuration) {
+			Vue.set(this, "configuration", configuration);
 		},
 		"connect": function(universe) {
 			if(this.$route.hash !== "" && this.universe && this.universe.loggedOut) {

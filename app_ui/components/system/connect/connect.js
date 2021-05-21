@@ -60,7 +60,7 @@
 			if(index !== -1) {
 			    path = path.substring(0, index);
 			}
-			fetch(location.protocol + "//" + location.host + path + "/address.json")
+			fetch(location.protocol + "//" + location.host + path + "/configuration.json")
 			.then((res) => {
 				return res.json();
 			}).then((res) => {

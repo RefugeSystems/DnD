@@ -1,6 +1,7 @@
 app/configuration/*.json
 docs_server/
 docs_ui/
+deploy_web/configuration.json
 deploy_web/index.html
 deploy_web/shared.js
 deploy_web/worker.js
@@ -11,6 +12,10 @@ transient/*
 
 # Eclipse
 .project
+
+# Built Files
+deploy_web/*.map
+deploy_web/externals.js
 
 # Logs
 logs
