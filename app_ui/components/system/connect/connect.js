@@ -60,12 +60,13 @@
 			if(index !== -1) {
 			    path = path.substring(0, index);
 			}
+			
 			fetch(location.protocol + "//" + location.host + path + "/configuration.json")
 			.then((res) => {
 				return res.json();
 			}).then((configuration) => {
 				console.log(" > Address.json: ", configuration);
-				if(res.address && (!this.storage.address || configuration.force)) {
+				if(configuration.address && (!this.storage.address || configuration.force)) {
 					Vue.set(this.storage, "address", configuration.address);
 				}
 				return rsSystem.configureRouting(configuration);

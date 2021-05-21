@@ -28,29 +28,10 @@ rsSystem.App = new Vue({
 		};
 	},
 	"mounted": function() {
-		rsSystem.Router.addRoutes([{
+		rsSystem.Router.addRoute({
 			"path": "/",
-			"component": rsSystem.components.RSHome,
-			"children": [{
-				"path": "network/:construct?/:oid?",
-				"component": rsSystem.components.RSNetworking
-			}, {
-				"path": "nouns/:type?/:oid?",
-				"component": rsSystem.components.RSNounControls
-			}, {
-				"path": "universe",
-				"component": rsSystem.components.RSUniverse
-			}, {
-				"path": "about",
-				"component": rsSystem.components.RSAbout
-			}, {
-				"path": "account",
-				"component": rsSystem.components.RSAccount
-			}, {
-				"path": "system",
-				"component": rsSystem.components.RSSystem
-			}]
-		}]);
+			"component": rsSystem.components.RSHome
+		});
 	},
 	"router": rsSystem.Router,
 	"props": {
