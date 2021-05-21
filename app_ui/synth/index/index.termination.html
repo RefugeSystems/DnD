@@ -8,7 +8,7 @@
 		<script src="./main.js"></script>
 		<script type="text/javascript">
 			if(navigator.serviceWorker) {
-				var scope = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1?"/":"/projects/rsswx/app/";
+				var scope = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1?"/":"./";
 
 				navigator.serviceWorker.register("./worker.js", {
 					"scope": scope
