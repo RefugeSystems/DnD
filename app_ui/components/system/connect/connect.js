@@ -101,7 +101,18 @@
 					Vue.set(this, "loggingIn", true);
 					fetch(request)
 					.then((res) => {
-					    return res.json();
+						console.log("Response: ", res);
+						if(res.status === 401) {
+							throw new Error("Password Incorrect");
+						} else if(res.status === 404) {
+							throw new Error("Endpoint Not Found");
+						} else if(res.status === 500) {
+							throw new Error("Server Error");
+						} else if(res.status === 200) {
+					    	return res.json();
+						} else {
+							throw new Error("Unknown Error");
+						}
 					}).then((session) => {
 					    // Vue.set(this.storage, "session", res);
 						session.address = this.getSocketAddress();
@@ -114,8 +125,8 @@
 						this.$emit("message", {
 							"class": "rsbd-red",
 							"icon": "fas fa-exclamation-triangle rs-lightred",
-							"heading": "Failed to Connect",
-							"text": "Unable to connect to the server to login at " + request.url
+							"heading": "Login Failed",
+							"text": err.message || "Unable to connect to the server to login at " + request.url
 						});
 					});
 				}

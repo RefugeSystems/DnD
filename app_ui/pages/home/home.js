@@ -22,6 +22,7 @@ rsSystem.component("RSHome", {
 	"data": function() {
 		var data = {};
 		
+		data.messageTimestamp = "";
 		data.messageHeading = "";
 		data.messageClass = "";
 		data.messageIcon = "";
@@ -107,13 +108,18 @@ rsSystem.component("RSHome", {
 	"methods": {
 		"receiveMessage": function(message) {
 			if(message) {
+				var date = new Date();
 				Vue.set(this, "messageClass", message.classes || "");
 				Vue.set(this, "messageIcon", message.icon);
 				Vue.set(this, "messageHeading", message.heading);
+				Vue.set(this, "messageTimestamp", date.toLocaleDateString("en-us") + " " + date.toLocaleTimeString("en-us"));
 				Vue.set(this, "message", message.text || message);
 			} else {
 				Vue.set(this, "message", null);
 			}
+		},
+		"dismissMessage": function() {
+			Vue.set(this, "message", null);
 		},
 		"receiveConfiguration": function(configuration) {
 			Vue.set(this, "configuration", configuration);

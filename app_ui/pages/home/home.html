@@ -2,12 +2,13 @@
 	<div class="login prompt" v-if="state === 0 && configuration">
 		<div class="boxed">
 			<rs-connect v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" storage-key="session"></rs-connect>
-			<div class="message-content system-component" v-if="message" :class="messageClass">
+			<div class="message-content system-component" v-if="message" :class="messageClass" v-on:click="dismissMessage()">
 				<div class="message-heading" v-if="messageHeading">
 					<span :class="messageIcon" v-if="messageIcon"></span>
 					<span>{{messageHeading}}</span>
 				</div>
 				<div class="message-text">{{message}}</div>
+				<div class="message-time">{{messageTimestamp}}</div>
 			</div>
 		</div>
 	</div>
