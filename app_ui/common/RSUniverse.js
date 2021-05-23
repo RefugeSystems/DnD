@@ -223,7 +223,9 @@ class RSUniverse extends EventEmitter {
 				} else {
 					for(x=0; x<keys.length; x++) {
 						if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
-							if(delta[keys[x]] && this.index[classification][id][keys[x]] instanceof Array) {
+							if(this.index[classification][id][keys[x]] === null || delta[keys[x]] === null) {
+								Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
+							} else if(delta[keys[x]] && this.index[classification][id][keys[x]] instanceof Array) {
 								this.index[classification][id][keys[x]].splice(0);
 								this.index[classification][id][keys[x]].push.apply(this.index[classification][id][keys[x]], delta[keys[x]]);
 							} else if(delta[keys[x]] && typeof(this.index[classification][id][keys[x]]) === "object") {
