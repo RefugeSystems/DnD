@@ -22,6 +22,9 @@
 		"data": function() {
 			var data = {};
 			
+			data.alternatives = [];
+			data.modules = {};
+			
 			data.loggingIn = false;
 			data.session = {};
 			data.external = false;
@@ -69,6 +72,61 @@
 				});
 				this.$router.push("/");
 			}
+			if(this.$route.query.authfail) {
+				if(this.$route.query.authfail === "401") {
+					this.$emit("message", {
+						"class": "rsbd-orange",
+						"icon": "fas fa-exclamation-triangle rs-lightorange",
+						"heading": "Login Failed",
+						"text": "Failed to login"
+					});
+				} else if(this.$route.query.authfail === "401.1") {
+					this.$emit("message", {
+						"class": "rsbd-orange",
+						"icon": "fas fa-exclamation-triangle rs-lightorange",
+						"heading": "Unknown User",
+						"text": "SSO Login Succeeded but User Unknown"
+					});
+				}
+				this.$router.push(this.$route.path);
+			}
+			if(this.$route.query.session) {
+				var session;
+				try {
+					session = atob(this.$route.query.session);
+					this.$router.push(this.$route.path);
+					session = JSON.parse(session);
+					session.address = this.getSocketAddress();
+					console.log("Received Session: ", session);
+					this.$emit("login", session);
+				} catch(sessionBuildException) {
+					console.error("Failed to receive session: ", session);
+				}
+			}
+			
+			fetch(new Request(this.getHTTPAddress() + "/login/available"))
+			.then((res) => {
+				console.log("Auth Modules Available Retrieved");
+				if(res.status === 404) {
+					throw new Error("Endpoint Not Found");
+				} else if(res.status === 500) {
+					throw new Error("Server Error");
+				} else if(res.status === 200) {
+					return res.json();
+				} else {
+					throw new Error("Unknown Error");
+				}
+			}).then((result) => {
+				console.log("Available Modules: ", result);
+				for(var x=0; x<result.modules.length; x++) {
+					Vue.set(this.modules, result.modules[x].id, result.modules[x]);
+					if(result.modules[x].id !== "local") {
+						this.alternatives.push(result.modules[x]);
+					}
+				}
+			}).catch((error) => {
+				console.error("Error processing Available Authentication Modules: ", error);
+			});
 		},
 		"methods": {
 			"toggleSecure": function() {
@@ -89,6 +147,30 @@
 			},
 			"getSocketAddress": function() {
 				return (this.storage.secure?"wss://":"ws://") + this.storage.address;
+			},
+			"loginModule": function(module) {
+				if(!this.loggingIn) {
+					Vue.set(this, "loggingIn", true);
+					window.location.href = this.getHTTPAddress() + "/login/" + module.id + "/authenticate";
+					/*
+					var request = new Request(this.getHTTPAddress() + "/login/" + module.id + "/authenticate");
+					fetch(request)
+					.then((res) => {
+						console.log("Auth Response: ", res);
+						Vue.set(this, "loggingIn", false);
+					}).catch((err) => {
+						Vue.set(this, "loggingIn", false);
+						console.error("Failed to login: ", err);
+						this.$emit("error", err);
+						this.$emit("message", {
+							"class": "rsbd-red",
+							"icon": "fas fa-exclamation-triangle rs-lightred",
+							"heading": "Login Failed",
+							"text": err.message || "Unable to connect to the server to login at " + request.url
+						});
+					});
+					*/
+				}
 			},
 			"login": function() {
 				if(!this.loggingIn) {

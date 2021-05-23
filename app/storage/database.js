@@ -148,10 +148,13 @@ mapping._toInsert = function(name, fields, write) {
 		values = "($id, $created, $updated",
 		field;
 	for(var x=0; x<fields.length; x++) {
-		if(write[fields[x]] !== undefined) {
-			field = fields[x].id || fields[x];
+		field = fields[x].id || fields[x];
+		if(write[field] !== undefined) {
+			console.log("Adding field for insert[" + field + "]: ", write[field]);
 			columns += ", " + field;
 			values += ", $" + field;
+		} else {
+			console.log("Skipping field for insert[" + field + "]: ", write[field]);
 		}
 	}
 	return "insert into " + name + " " + columns + ") values " + values + ");";
@@ -199,12 +202,15 @@ mapping._toObject = function(fields, write, create) {
 	}
 	for(var x=0; x<fields.length; x++) {
 		field = fields[x];
-		if(field && write[field.id] !== undefined) {
+		if(field && !field.disabled && write[field.id] !== undefined) {
+			console.log("Adding field for write[" + field.id + "]: ", write[field.id]);
 			if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
 				mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
 			} else {
 				mapped["$" + field.id] = write[field.id];
 			}
+		} else {
+			console.log("Skipping field for write[" + field.id + "]: ", write[field.id]);
 		}
 	}
 	return mapped;
@@ -1122,7 +1128,7 @@ class ClassManager extends EventEmitter {
 				// insert
 				write = mapping._toObject(this.fields, object, true);
 				this.object[object.id] = {};
-				statement = mapping._toInsert(this.id, fields, object);
+				statement = mapping._toInsert(this.id, this.fields, object);
 				// console.log("insert: " + statement, write);
 				object.updated = write.$updated;
 				object.created = write.$created;

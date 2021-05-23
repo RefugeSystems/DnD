@@ -99,7 +99,7 @@ class APIController extends EventEmitter {
 					anomaly;
 					
 				console.log("Request[@" + origin + "]: ", req.path);
-				if(this.specification.origins[origin] === 0 || Date.now() < this.specification.origins[origin])  {
+				if(!origin || this.specification.origins[origin] === 0 || Date.now() < this.specification.origins[origin])  {
 					res.header("Access-Control-Allow-Origin", origin);
 					res.header("Access-Control-Allow-Headers", "*");
 					
@@ -109,7 +109,7 @@ class APIController extends EventEmitter {
 						next();
 					}
 				} else {
-					anomaly = new this.universe.Anomaly("api:request:origin", "Origin not allowed", 50, {"origin": origin}, null, this);
+					anomaly = new this.universe.Anomaly("api:request:origin", "Origin not allowed", 50, {"origin": origin?origin:"No Origin"}, null, this);
 					next(anomaly);
 				}
 			});

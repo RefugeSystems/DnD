@@ -1,64 +1,107 @@
 .rs-component.connect-component {
-	/*max-width: 400px;*/
-	border: 1px solid white;
-	border-radius: 6px;
-	padding: 8px;
 	
-	input {
-		min-width: 200px;
-		padding: 5px;
-		font-size: 17px;
-	}
-	
-	.fields {
-		display: flex;
-		flex-direction: row;
+	.connect-container {
+		/*max-width: 400px;*/
+		border: 1px solid white;
+		border-radius: 6px;
+		padding: 8px;
 		
-		table {
-			border-collapse: collapse;
+		input {
+			min-width: 200px;
+			padding: 5px;
+			font-size: 17px;
 		}
 		
-		.label {
-			padding-right: 7px;
+		.fields {
+			display: flex;
+			flex-direction: row;
+			
+			table {
+				border-collapse: collapse;
+			}
+			
+			.label {
+				padding-right: 7px;
+			}
+		}
+		
+		button {
+			padding: 3px 8px;
+			font-size: 17px;
+			border-radius: 3px;
+			background-color: white;
+			color: black;
+			border: 1px solid gray;
+			transition: background-color .5s, color .5s;
+			min-height: 34px;
+			
+			&.quick-action {
+				width: 34px;
+				height: 34px;
+				text-align: center;
+			}
+			
+			&:hover {
+				background-color: black;
+				color: white;
+			}
+			
+			&:active {
+				border-color: blue;
+			}
+			
+			span {
+				font-size: inherit;
+			}
+		}
+		
+		.actions {
+			margin: 1px;
+			
+			.primary-action {
+				width: 70px;
+				height: 70px;
+			}
 		}
 	}
 	
-	button {
-		padding: 3px 8px;
-		font-size: 17px;
-		border-radius: 3px;
-		background-color: white;
-		color: black;
-		border: 1px solid gray;
-		transition: background-color .5s, color .5s;
-		min-height: 34px;
+	.connect-alternatives {
 		
-		&.quick-action {
-			width: 34px;
-			height: 34px;
+		.divider {
+			display: block;
+			height: 3px;
+			width: 100%;
+			background-image: linear-gradient(to right, transparent, white, transparent);
+			margin: 14px 0px;
+			padding: 0px;
+		}
+		
+		.alternatives {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+		}
+		
+		.module-authentication {
+			display: block;
+			height: 48px;
+			width: 48px;
+			line-height: 48px;
 			text-align: center;
-		}
-		
-		&:hover {
-			background-color: black;
-			color: white;
-		}
-		
-		&:active {
-			border-color: blue;
-		}
-		
-		span {
-			font-size: inherit;
-		}
-	}
-	
-	.actions {
-		margin: 1px;
-		
-		.primary-action {
-			width: 70px;
-			height: 70px;
+			border: 1px solid @rsGray;
+			background-color: @rsBlack;
+			color: @rsWhite;
+			transition: background-color .5s, color .5s, border-color .5s;
+			border-radius: 5px;
+			
+			&:hover {
+				background-color: @rsWhite;
+				color: @rsBlack;
+			}
+			
+			&:active {
+				border-color: @rsBlue;
+			}
 		}
 	}
 }

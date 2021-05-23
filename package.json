@@ -23,7 +23,9 @@
 	"license": "GNU",
 	"dependencies": {
 		"a-configuration": "^1.1.22",
+		"atob": "^2.1.2",
 		"blizzard.js": "^4.1.0",
+		"btoa": "^1.2.1",
 		"bunyan": "^1.8.15",
 		"cytoscape": "^3.18.2",
 		"cytoscape-cola": "^2.4.0",
@@ -33,6 +35,7 @@
 		"hammerjs": "^2.0.8",
 		"jquery": "^3.6.0",
 		"passport": "^0.4.1",
+		"passport-google-oauth20": "^2.0.0",
 		"root-require": "^0.3.1",
 		"rs-random": "^1.0.41",
 		"showdown": "^1.9.1",

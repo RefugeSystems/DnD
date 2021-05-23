@@ -383,7 +383,7 @@ classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "email", "description", "gm", "auth_token", "auth_identity", "last", "connections", "sessions"]
+	"fields": ["name", "disabled", "username", "password", "email", "description", "gm", "auth_token", "last", "connections", "attribute"]
 });
 classes.push({
 	"id": "session",
