@@ -6,6 +6,8 @@ module.exports = function(configuration) {
 			fail(new Error("No 'server' property found within configuration: " + Object.keys(configuration)));
 		} else if(!configuration.server.port) {
 			fail(new Error("No 'server.port' property found within configuration"));
+		} else if(!configuration.server.public) {
+			fail(new Error("No 'server.public' property found within configuration"));
 		} else {
 			done();
 		}

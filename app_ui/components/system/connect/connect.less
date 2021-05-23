@@ -1,5 +1,10 @@
 .rs-component.connect-component {
 	
+	.connect-delayed {
+		font-size: 52px;
+		line-height: 52px;
+	}
+	
 	.connect-container {
 		/*max-width: 400px;*/
 		border: 1px solid white;
@@ -79,7 +84,7 @@
 		.alternatives {
 			display: flex;
 			flex-direction: row;
-			justify-content: space-around;
+			justify-content: center;
 		}
 		
 		.module-authentication {
@@ -93,6 +98,7 @@
 			color: @rsWhite;
 			transition: background-color .5s, color .5s, border-color .5s;
 			border-radius: 5px;
+			margin: 0px 10px;
 			
 			&:hover {
 				background-color: @rsWhite;
@@ -101,6 +107,11 @@
 			
 			&:active {
 				border-color: @rsBlue;
+			}
+			
+			.auth-icon {
+				line-height: 46px;
+				font-size: 28px;
 			}
 		}
 	}

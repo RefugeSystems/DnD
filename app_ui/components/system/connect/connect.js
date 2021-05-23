@@ -25,6 +25,7 @@
 			data.alternatives = [];
 			data.modules = {};
 			
+			data.loading = true;
 			data.loggingIn = false;
 			data.session = {};
 			data.external = false;
@@ -124,8 +125,16 @@
 						this.alternatives.push(result.modules[x]);
 					}
 				}
+				Vue.set(this, "loading", false);
 			}).catch((error) => {
 				console.error("Error processing Available Authentication Modules: ", error);
+				this.$emit("message", {
+					"class": "rsbd-lightred",
+					"icon": "fas fa-exclamation-triangle rs-lightorange",
+					"heading": "System Failure",
+					"text": "Failed to connect to server to check authentication options"
+				});
+				Vue.set(this, "loading", false);
 			});
 		},
 		"methods": {

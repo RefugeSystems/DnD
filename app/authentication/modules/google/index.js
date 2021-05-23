@@ -37,19 +37,19 @@ module.exports = new (function() {
 		var strategy = {
 			"clientID": specification.OAUTH2_CLIENT_ID,
 			"clientSecret": specification.OAUTH2_CLIENT_SECRET,
-			"callbackURL": specification.OAUTH2_CALLBACK,
+			"callbackURL": authentication.public + "login/google/link",
 			"accessType": "offline"
 		};
 		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
-			console.log("Received Profile...\n", req, accessToken, refreshToken, profile);
-			var user,
+			var email = profile.emails[0].value,
+				user,
 				buffer,
 				x;
 				
 			for(x=0; x<universe.manager.player.objectIDs.length; x++) {
 				buffer = universe.manager.player.object[universe.manager.player.objectIDs[x]];
-				if(buffer && buffer.attribute && buffer.attribute.google === profile.id) {
+				if(buffer && buffer.attribute && buffer.attribute.google && buffer.attribute.google.indexOf(email) !== -1) {
 					user = buffer;
 					break;
 				}
@@ -58,13 +58,13 @@ module.exports = new (function() {
 			var makePlayer = function() {
 				var details = {
 					"id": Random.identifier("player", 10, 32).toLowerCase(),
-					"username": profile.emails[0].value,
+					"username": email,
 					"name": profile.displayName,
-					"email": profile.emails[0].value,
+					"email": email,
 					"gm": false,
 					"attribute": {
 						"picture": profile.photos && profile.photos.length?profile.photos[0].value:null,
-						"google": profile.id
+						"google": email
 					}
 				};
 				universe.createObject(details, makeSession);
