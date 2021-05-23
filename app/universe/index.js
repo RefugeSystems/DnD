@@ -14,7 +14,14 @@ var EventEmitter = require("events").EventEmitter,
 	ObjectHandler = require("./objects"),
 	appPackage = require("../../package.json"),
 	fs = require("fs"),
-	omittedFromSync = {};
+	omittedFromSync = {},
+	defaultClasses = [
+		"player",
+		"session",
+		"location",
+		"setting",
+		"conditional"
+	];
 
 // Security
 omittedFromSync.session = true;
@@ -38,7 +45,7 @@ class Universe extends EventEmitter {
 		this.omittedFromSync = omittedFromSync;
 		this.configuration = configuration;
 		this.specification = configuration.universe;
-		this.classes = configuration.universe.classes;
+		this.classes = configuration.universe.classes?defaultClasses.concat(configuration.universe.classes):defaultClasses;
 		this.manager = {};
 		this.connection = {};
 		this.connected = [];
