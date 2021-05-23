@@ -1,15 +1,13 @@
-/**
+/* * <-- Remove the space between astriks for documentation purposes
  * 
- * @class ExampleEventHandler
- * @constructor
- * @abstract
- */
-
-/**
- * 
- * @method initialize
- * @param {Univers} universe
- * @return {Promise | null}
+ * @event player:example
+ * @for Universe
+ * @param {Object} event With data from the system
+ * @param {String} event.type The event name being fired, should match this event's name
+ * @param {Integer} event.received Timestamp of when the server received the event
+ * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+ * @param {RSObject} event.player That triggered the event
+ * @param {Object} event.message The payload from the UI
  */
 
 /*
@@ -21,7 +19,7 @@ module.exports.initialize = function(universe) {
 	return new Promise(function(done, fail) {
 		
 		// Note that player triggered events always start with "player:"
-		universe.on("player:[Event Name]", function(event) {
+		universe.on("player:example", function(event) {
 			// Handle the event as needed
 			console.log("Player Event: ", event);
 		});
