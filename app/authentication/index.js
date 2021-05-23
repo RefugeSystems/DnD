@@ -35,7 +35,7 @@ class Authentication extends EventEmitter {
 				x;
 				
 			this.router.use((req, res, next) => {
-				console.log("Auth: " + req.id);
+				console.log("Auth[" + req.method + "]: " + req.id + ", ", req.connection.remoteAddress, req.socket.remoteAddress, req.info?req.info.remoteAddress:req.info);
 				next();
 			});
 			

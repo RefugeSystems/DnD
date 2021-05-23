@@ -32,6 +32,7 @@ module.exports = new (function() {
 		return new Promise((done, fail) => {
 			this.router.get("/authenticate", function(req, res, next) {
 				// console.log("Local 1");
+				
 				if(req.headers["rs-username"] && req.headers["rs-password"] !== undefined) {
 					// console.log("Local 2");
 					var password = req.headers["rs-password"],
@@ -42,15 +43,15 @@ module.exports = new (function() {
 						check,
 						x;
 					
-					// console.log(" > Compare: \"" + username + "\", \"" + password + "\"");	
+					console.log("Request: \"" + username + "\", \"" + password + "\"");	
 					if(password) {
 						password = password.sha256();
 					}
-					// console.log(" > Compare: \"" + username + "\", \"" + password + "\"");
+					console.log(" > Compare: \"" + username + "\", \"" + password + "\"");
 					players = Object.keys(universe.manager.player.object);
 					for(x=0; x<players.length; x++) {
 						check = universe.manager.player.object[players[x]];
-						// console.log("Check: ", check.username, " - ", check.password);
+						console.log(" > Check: \"" + check.username + "\" - \"" + check.password + "\"");
 						if(check && check.username === username && (check.password === password || !check.password)) {
 							player = check;
 						}

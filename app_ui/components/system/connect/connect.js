@@ -59,9 +59,6 @@
 			}
 			console.log("Connect: ", this.storage);
 			
-			
-			
-			
 			if(this.$route.query.address) {
 				Vue.set(this.storage, "address", this.$route.query.address);
 				this.$emit("message", {
@@ -95,10 +92,14 @@
 			},
 			"login": function() {
 				if(!this.loggingIn) {
+					Vue.set(this, "loggingIn", true);
 					var request = new Request(this.getHTTPAddress() + "/login/local/authenticate");
 					request.headers.set("rs-username", this.storage.username);
+					if(this.password) {
+						Vue.set(this.storage, "password", this.password.sha256());
+					}
 					request.headers.set("rs-password", this.storage.password);
-					Vue.set(this, "loggingIn", true);
+					
 					fetch(request)
 					.then((res) => {
 						console.log("Response: ", res);

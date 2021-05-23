@@ -70,6 +70,7 @@ class APIController extends EventEmitter {
 				
 				if(this.specification.api.log_all_requests || (req.method === "POST" && this.specification.api.log_post_body)) {
 					var details = {};
+					details.ip = req.ip || req.connection.remoteAddress;
 					details.path = req.path;
 					details.session = req.session;
 					details.request = req.id;
@@ -96,29 +97,37 @@ class APIController extends EventEmitter {
 			this.router.use((req, res, next) => {
 				var origin = req.get("origin"),
 					anomaly;
-
+					
 				console.log("Request[@" + origin + "]: ", req.path);
-				// console.log(" > Body: ", req.body);
-				this.emit("request", req);
-				
 				if(this.specification.origins[origin] === 0 || Date.now() < this.specification.origins[origin])  {
 					res.header("Access-Control-Allow-Origin", origin);
 					res.header("Access-Control-Allow-Headers", "*");
 					
-					req.conversation = req.query.conversation;
-					if(req.query.token) {
-						// Fill with Token based Session
-						// TODO: Log if no match
-					} else if(req.query.username && req.query.password) {
-						// TODO: Fill with User based Session
-						// TODO: Log if no match
+					if(req.method === "OPTIONS") {
+						res.send();
+					} else {
+						next();
 					}
-					
-					next();
 				} else {
 					anomaly = new this.universe.Anomaly("api:request:origin", "Origin not allowed", 50, {"origin": origin}, null, this);
 					next(anomaly);
 				}
+			});
+			
+			this.router.use((req, res, next) => {
+				// console.log(" > Body: ", req.body);
+				this.emit("request", req);
+				
+				req.conversation = req.query.conversation;
+				if(req.query.token) {
+					// Fill with Token based Session
+					// TODO: Log if no match
+				} else if(req.query.username && req.query.password) {
+					// TODO: Fill with User based Session
+					// TODO: Log if no match
+				}
+				
+				next();
 			});
 			
 			this.router.options(".*", (req, res) => {
