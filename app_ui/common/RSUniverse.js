@@ -119,6 +119,7 @@ class RSUniverse extends EventEmitter {
 					i,
 					j;
 					
+				this.state.loaded = true; // Set early to not delay receiveDelta
 				for(i=0; i<classes.length; i++) {
 					if(!this.index[classes[i]]) {
 						Vue.set(this.listing, classes[i], event.data[classes[i]]);
@@ -138,13 +139,7 @@ class RSUniverse extends EventEmitter {
 				}
 				
 				Vue.set(this, "version", event.version);
-				this.state.loaded = true;
 				this.checkVersion();
-				try {
-					this.$emit("loaded", this);
-				} catch(err) {
-					console.error("wha? ", err);
-				}
 				
 				if(this.buffer_delta.length) {
 					for(i=0; i<this.buffer_delta.length; i++) {
@@ -153,6 +148,7 @@ class RSUniverse extends EventEmitter {
 				}
 				
 				this.state.synchronizing = false;
+				this.$emit("loaded", this);
 			}, 0);
 		};
 		
@@ -431,7 +427,9 @@ class RSUniverse extends EventEmitter {
 				try {
 					message = JSON.parse(event.data);
 					message.received = Date.now();
-					Vue.set(this.metrics, "sync", message.sent);
+					if(this.state.initialized) {
+						Vue.set(this.metrics, "sync", message.sent);
+					}
 					console.log("Received: ", message);
 					if(message.version && message.version !== this.version) {
 						this.version = message.version;
@@ -577,6 +575,8 @@ class RSUniverse extends EventEmitter {
 	}
 	
 	resync() {
+		localStorage.removeItem(this.KEY.DETAILS);
+		localStorage.removeItem(this.KEY.METRICS);
 		this.metrics.sync = 0;
 		this.state.loaded = false;
 		this.sync();
