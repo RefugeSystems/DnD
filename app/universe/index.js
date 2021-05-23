@@ -333,9 +333,9 @@ class Universe extends EventEmitter {
 	 * @param {Function} callback
 	 */
 	requestObject(id, callback) {
-		var classification = this.getClassFromID(details.id);
+		var classification = this.getClassFromID(id);
 		if(!this.manager[classification]) {
-			callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+			callback(new Anomaly("universe:object:request", "Unable to find object", 50, {id, classification}, null, this));
 		} else {
 			// TODO: Consider loading an object if requested while not loaded
 			callback(null, this.manager[classification].object[id]);
