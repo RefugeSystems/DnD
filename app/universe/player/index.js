@@ -192,7 +192,6 @@ class PlayerConnection extends EventEmitter {
 				send = {},
 				field,
 				x;
-			
 			if(manager) {
 				for(x=0; x<manager.fields.length; x++) {
 					field = manager.fields[x];
