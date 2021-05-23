@@ -980,19 +980,23 @@ class ClassManager extends EventEmitter {
 	 * @param {Function} callback
 	 */
 	create(universe, details, callback) {
-		var object = this.database.constructor[this.id] || RSObject;
-		object = new object(universe, this, details);
-		this.writeObjectData(details, (err) => {
-			if(err) {
-				callback(err, null);
-			} else {
-				object.created = details.created;
-				object.updated = details.updated;
-				this.object[object.id] = object;
-				this.objectIDs.push(object.id);
-				callback(null, object);
-			}
-		});
+		try {
+			var object = this.database.constructor[this.id] || RSObject;
+			object = new object(universe, this, details);
+			this.writeObjectData(details, (err) => {
+				if(err) {
+					callback(err, null);
+				} else {
+					object.created = details.created;
+					object.updated = details.updated;
+					this.object[object.id] = object;
+					this.objectIDs.push(object.id);
+					callback(null, object);
+				}
+			});
+		} catch(constructionException) {
+			callback(constructionException);
+		}
 	}
 	
 	/**
