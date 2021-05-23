@@ -29,7 +29,7 @@
 				"required": true,
 				"type": Object
 			},
-			"user": {
+			"configuration": {
 				"required": true,
 				"type": Object
 			}
@@ -218,6 +218,8 @@
 						}
 						break;
 					case "logout":
+						rsSystem.EventBus.$emit("logout");
+						/*
 						if(this.$route.path !== "/") {
 							this.$router.push("/").then(() => {
 								this.universe.logout();
@@ -225,6 +227,7 @@
 						} else {
 							this.universe.logout();
 						}
+						*/
 						break;
 					case "none":
 						break;

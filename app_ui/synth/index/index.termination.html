@@ -13,9 +13,9 @@
 				navigator.serviceWorker.register("./worker.js", {
 					"scope": scope
 				}).then(function(registration) {
-					console.log("Service Worker Registered: ", registration);
+					// console.log("Service Worker Registered: ", registration);
 				}).catch(function(error) {
-					console.error("Service Worker Registration Error: ", error);
+					// console.error("Service Worker Registration Error: ", error);
 				});
 
 				navigator.serviceWorker.ready.then(function(registration) {

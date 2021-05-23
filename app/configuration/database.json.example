@@ -1,6 +1,8 @@
 {
 	"database": {
 		"type": "sqlite",
-		"file": "./example_name.sqldb"
+		"file": "./example_name.sqldb",
+		"recovery_mode": true,
+		"locked": false
 	}
 }

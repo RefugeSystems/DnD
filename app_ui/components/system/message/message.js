@@ -2,14 +2,14 @@
 /**
  * 
  * 
- * @class messagePanel
+ * @class systemMessage
  * @constructor
  * @module common
  * @zindex 50
  */
 (function() {
 	
-	rsSystem.component("messagePanel", {
+	rsSystem.component("systemMessage", {
 		"inherit": true,
 		"mixins": [
 			
@@ -19,7 +19,11 @@
 				"required": true,
 				"type": Object
 			},
-			"user": {
+			"player": {
+				"required": true,
+				"type": Object
+			},
+			"configuration": {
 				"required": true,
 				"type": Object
 			}
@@ -35,6 +39,9 @@
 			data.messages = [];
 			
 			
+			data.identified = {};
+			
+			
 			data.tracking = {};
 			
 			return data;
@@ -43,8 +50,15 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
+			
 			this.universe.$on("track-progress", this.trackProgress);
+			this.universe.$on("notification", this.receiveMessage);
+			this.universe.$on("warning", this.receiveMessage);
 			this.universe.$on("error", this.receiveMessage);
+			
+			rsSystem.EventBus.$on("track-progress", this.trackProgress);
+			rsSystem.EventBus.$on("message", this.receiveMessage);
+			rsSystem.EventBus.$on("error", this.receiveMessage);
 		},
 		"methods": {
 			/**
@@ -80,6 +94,10 @@
 			 * @param {Object} event
 			 */
 			"receiveMessage": function(event) {
+				if(this.identified[event.id]) {
+					this.dismissMessage(this.identified[event.id]);
+				}
+				
 				event._display_time = new Date(event.time);
 				if(!event._display_time.getTime()) {
 					event._display_time = new Date();
@@ -104,9 +122,24 @@
 					}
 				}
 				
+				if(event.id) {
+					Vue.set(this.identified, event.id, event);
+				}
+				
+				if(event.timeout) {
+					event.timeout = setTimeout(() => {
+						this.dismissMessage(event);
+					}, event.timeout);
+				}
+				
 				this.messages.unshift(event);
 				if(this.messages.length > 5) {
-					this.messages.pop();
+					for(var x=this.messages.length - 1; 0<=x; x--) {
+						if(!this.messages[x].anchored) {
+							this.dismissMessage(this.messages[x]);
+							break;
+						}
+					}
 				}
 			},
 			/**
@@ -114,10 +147,27 @@
 			 * @method dismissMessage
 			 * @param {Object} event
 			 */
-			"dismissMessage": function(event) {
+			"dismissMessage": function(event, acted) {
 				var index = this.messages.indexOf(event);
+				if(event.id) {
+					Vue.delete(this.identified, event.id);
+				}
+				if(event.timeout) {
+					clearTimeout(event.timeout);
+				}
 				if(event.active) {
 					Vue.set(event, "active", false);
+				}
+				if(acted) {
+					if(event.emission) {
+						if(event.emission.type) {
+							rsSystem.EventBus.$emit(event.emission.type, event.emission);
+						} else if(typeof(event.emission === "string")) {
+							rsSystem.EventBus.$emit(event.emission);
+						} else {
+							rsSystem.log.warn("Malformed Event Emission Field", event);
+						}
+					}
 				}
 				if(index !== -1) {
 					this.messages.splice(index, 1);
@@ -127,6 +177,6 @@
 		"beforeDestroy": function() {
 			this.universe.$off("error", this.update);
 		},
-		"template": Vue.templified("common/panels/message.html")
+		"template": Vue.templified("components/system/message.html")
 	});
 })();

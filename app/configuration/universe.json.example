@@ -1,0 +1,35 @@
+{
+	"universe": {
+		"debug_cascades": true,
+		"classes": [
+			"session",
+			"player",
+			
+			"setting",
+			"incident",
+			"meeting",
+			
+			"dataset",
+			"image",
+			"playlist",
+			"streamurl",
+			"profile",
+			"widget",
+			"conditional",
+			
+			"entity",
+			"ability",
+			"skill",
+			"archetype",
+			"action",
+			"effect",
+			"race",
+			"type",
+			"journal",
+			"item",
+			"knowledge",
+			"quest",
+			"location"
+		]
+	}
+}

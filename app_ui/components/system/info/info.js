@@ -20,7 +20,7 @@
 				"required": true,
 				"type": Object
 			},
-			"user": {
+			"player": {
 				"required": true,
 				"type": Object
 			},

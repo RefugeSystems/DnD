@@ -1,5 +1,6 @@
-<div class="system-component system-dialog rs-component" :class="getClassSettings()">
-	<div class="dialog" >
-		
+<div class="system-component system-dialog rs-component" :class="classes">
+	<div class="shroud"></div>
+	<div class="dialog-container" :class="container_classes">
+		<component class="dialog-box" v-if="details" :is="renderer" :universe="universe" :player="player" :configuration="configuration" :details="details"></component>
 	</div>
 </div>

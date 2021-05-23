@@ -11,7 +11,7 @@ rsSystem.Router = new VueRouter({
 	mode: "hash"
 });
 
-rsSystem.configureRouter = function(configuration) {
+rsSystem.configureRouting = function(configuration) {
 	return new Promise(function(done, fail) {
 		
 		done(configuration);

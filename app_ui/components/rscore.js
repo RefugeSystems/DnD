@@ -18,14 +18,9 @@ rsSystem.component("RSCore", {
 			"required": true,
 			"type": Object
 		},
-		"user": {
+		"player": {
 			"required": true,
 			"type": Object
-		}
-	},
-	"computed": {
-		"player": function() {
-			return this.universe.nouns.player[this.user.id];
 		}
 	},
 	"watch": {

@@ -10,6 +10,7 @@ var EventEmitter = require("events").EventEmitter,
 	DNDCalculator = require("../calculator/dnd"),
 	ObjectHandler = require("../objects"),
 	RSRandom = require("rs-random"),
+	appPackage = require("../../../package.json"),
 	noOp = function() {};
 
 class PlayerConnection extends EventEmitter {
@@ -30,33 +31,16 @@ class PlayerConnection extends EventEmitter {
 		this.leaves = 0;
 		
 		var receiveObject = (change) => {
-			if(change._class && !universe.omittedFromSync[change._class]) {
-				var manager = universe.manager[change._class],
-					send = {},
-					field,
-					x;
-				
-				if(manager) {
-					for(x=0; x<manager.fields.length; x++) {
-						field = manager.fields[x];
-						if(change[field.id] && (!field.attrbiute || !field.attribute.master_only)) {
-							send[field.id] = change[field.id];
-						}
-					}
-					send._class = change._class;
-					send.id = change.id;
-					this.send("object", send);
-				} else {
-					this.emit("error", new universe.Anomaly("player:connection:object", "Failed to locate manager for object change class", 40, change, null, this));
-				}
-			} else {
-				// Non-object event sending is handled by other processors
-				// this.send("object", change);
-			}
+			this.receiveObject(change);
+		};
+		
+		var unloadObject = (unload) => {
+			this.unloadObject(unload);
 		};
 		
 		universe.on("object-updated", receiveObject);
 		universe.on("object-created", receiveObject);
+		universe.on("unload", unloadObject);
 	}
 	
 	connect(session, socket) {
@@ -67,7 +51,6 @@ class PlayerConnection extends EventEmitter {
 		this.session[id] = session;
 		this.socketIDs.push(id);
 		this.player.addValues({
-			"sessions": session.id,
 			"connections": 1
 		}, noOp);
 		
@@ -83,16 +66,21 @@ class PlayerConnection extends EventEmitter {
 					socket.send(JSON.stringify({
 						"type": "ping",
 						"pong": now,
+						"version": appPackage.version,
 						"sent": message.sent
 					}));
 					break;
 				case "sync":
-					message = this.universe.requestState(this.player, message.sync);
+					console.log("Received Sync: ", message);
+					var sync = message.data.sync;
+					message = this.universe.requestState(this.player, sync);
 					message = {
 						"id": RSRandom.identifier("message", 10, 32),
 						"type": "sync",
+						"sync": sync,
 						"players": this.universe.getPlayerState(),
 						"data": message,
+						"version": appPackage.version,
 						"sent": Date.now()
 					};
 					socket.send(JSON.stringify(message));
@@ -128,7 +116,6 @@ class PlayerConnection extends EventEmitter {
 			this.player.connects--;
 			this.player.leaves++;
 			this.player.subValues({
-				"sessions": session.id,
 				"connections": 1
 			});
 
@@ -192,6 +179,52 @@ class PlayerConnection extends EventEmitter {
 		for(x=0; x<this.socketIDs.length; x++) {
 			this.connection[this.socketIDs[x]].send(message);
 		}
+	}
+	
+	/**
+	 * 
+	 * @method receiveObject
+	 * @param {Object} change [description]
+	 */
+	receiveObject(change) {
+		if(change._class && !this.universe.omittedFromSync[change._class]) {
+			var manager = this.universe.manager[change._class],
+				send = {},
+				field,
+				x;
+			
+			if(manager) {
+				for(x=0; x<manager.fields.length; x++) {
+					field = manager.fields[x];
+					if(change[field.id] && !field.attribute.master_only && !field.attribute.server_only) {
+						send[field.id] = change[field.id];
+					}
+				}
+				send._class = change._class;
+				send.id = change.id;
+				this.send("object", send);
+			} else {
+				this.emit("error", new this.universe.Anomaly("player:connection:object", "Failed to locate manager for object change class", 40, change, null, this));
+			}
+		} else {
+			// Non-object event sending is handled by other processors
+			// this.send("object", change);
+		}
+	}
+	
+	/**
+	 * 
+	 * @method unloadObject
+	 * @param {String} id 
+	 */
+	unloadObject(id) {
+		var send = {},
+			field,
+			x;
+		
+		send._class = this.universe.getClassFromID(id);
+		send.id = id;
+		this.send("unload", send);
 	}
 }
 

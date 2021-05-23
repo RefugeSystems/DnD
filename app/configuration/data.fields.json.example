@@ -17,5 +17,18 @@
 		"description": "The gender of this object",
 		"type": "string",
 		"attribute": {}
+	}, {
+		"id": "url",
+		"name": "URL",
+		"description": "Indicates the web location for associated information on this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "associated",
+		"name": "Associated",
+		"description": "Other objects associated with this one",
+		"type": "array",
+		"attribute": {}
 	}]
+	
 }

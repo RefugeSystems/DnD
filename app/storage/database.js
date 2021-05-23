@@ -257,9 +257,12 @@ class RSDatabase extends EventEmitter {
 	 * 		class. Unspecified constructors default to RSObject.
 	 * @param  {Class} [rsobject] For the RSObject constructor
 	 * @param  {Class} [rsfield] For the RSField constructor
+	 * @param {Boolean} [skip_load] When true, skips loading fields and classes.
+	 * 		This is to support recovery mode where only the raw connection is
+	 * 		needed.
 	 * @return {Promise} 
 	 */
-	initialize(constructors, rsobject, rsfield) {
+	initialize(constructors, rsobject, rsfield, skip_load) {
 		RSObject = rsobject || require("./rsobject");
 		RSField = rsfield || require("./rsfield");
 		if(constructors) {
@@ -283,7 +286,7 @@ class RSDatabase extends EventEmitter {
 					if(err) {
 						if(err.message && err.message.indexOf("no such table") !== -1) {
 							this.connection
-							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description text, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
+							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description text, ordering integer, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
 								if(err) {
 									fail(err);
 								} else {
@@ -339,7 +342,11 @@ class RSDatabase extends EventEmitter {
 				if(err) {
 					fail(err);
 				} else {
-					loadFields();
+					if(skip_load) {
+						done();
+					} else {
+						loadFields();
+					}
 				}
 			});
 		});
@@ -1025,9 +1032,15 @@ class ClassManager extends EventEmitter {
 		});
 	}
 	
-	
+	/**
+	 * 
+	 * @method unload
+	 * @param {Universe} universe [description]
+	 * @param {String} id       [description]
+	 */
 	unload(universe, id) {
-		
+		this.object[id] = false;
+		universe.emit("unload", id);
 	}
 	
 	/**
@@ -1196,12 +1209,19 @@ class ClassManager extends EventEmitter {
 		}
 
 		if(this.object[id]) {
-			this.database.connection.run("delete from " + this.id + " where id = $id;", {"$id":id}, callback);
-			delete this.object[id];
+			this.unload(object._universe, id);
+			this.database.connection.run("delete from " + this.id + " where id = $id;", {"$id":id}, (err) => {
+				if(err) {
+					callback(err);
+				} else {
+					delete this.object[id];
+					this.emit("deleted", id);
+					callback();
+				}
+			});
+		} else {
+			callback();			
 		}
-
-		this.emit("deleted", id);
-		callback();
 	};
 
 	/**

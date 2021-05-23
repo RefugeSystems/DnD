@@ -1,0 +1,10 @@
+<div class="dialog-basic">
+	<h1 v-if="details.title">{{details.title}}</h1>
+	<p v-if="details.messages" v-for="p in details.messages">{{p}}</p>
+	<div class="dialog-actions">
+		<button class="basic" v-for="button in details.buttons" v-on:click="emitButton(button)">
+			<span v-if="button.classes" :class="button.classes"></span>
+			<span class="dialog-button-text">{{button.text}}</span>
+		</button>
+	</div>
+</div>

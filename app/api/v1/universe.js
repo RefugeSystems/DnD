@@ -41,6 +41,12 @@ module.exports = new (function() {
 				next();
 			});
 			
+			this.router.get("/classes", (req, res, next) => {
+				res.result = {};
+				res.result.classes = Object.keys(api.universe.manager);
+				next();
+			});
+			
 			this.router.post("/calculate/:id", (req, res, next) => {
 				res.result = {};
 				res.result.referenced = [];
@@ -87,6 +93,30 @@ module.exports = new (function() {
 					if(err) {
 						next(err);
 					} else {
+						next();
+					}
+				});
+			});
+			
+			this.router.post("/object", (req, res, next) => {
+				res.result = {};
+				api.universe.createObject(req.body, function(err, object) {
+					if(err) {
+						next(err);
+					} else {
+						res.result.object = object.toJSON();
+						next();
+					}
+				});
+			});
+			
+			this.router.delete("/object/:id", (req, res, next) => {
+				res.result = {};
+				api.universe.objectHandler.delete(req.params.id, function(err) {
+					if(err) {
+						next(err);
+					} else {
+						res.result.message = "Deleted " + req.params.id;
 						next();
 					}
 				});

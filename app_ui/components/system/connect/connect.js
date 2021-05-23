@@ -14,11 +14,15 @@
 			rsSystem.components.StorageController
 		],
 		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			}
 		},
 		"data": function() {
 			var data = {};
 			
-			data.universe = new RSUniverse();
+			data.loggingIn = false;
 			data.session = {};
 			data.external = false;
 			data.password = "";
@@ -55,26 +59,7 @@
 			}
 			console.log("Connect: ", this.storage);
 			
-			var path = location.pathname,
-				index = path.lastIndexOf("/");
-			if(index !== -1) {
-			    path = path.substring(0, index);
-			}
 			
-			fetch(location.protocol + "//" + location.host + path + "/configuration.json")
-			.then((res) => {
-				return res.json();
-			}).then((configuration) => {
-				console.log(" > Address.json: ", configuration);
-				if(configuration.address && (!this.storage.address || configuration.force)) {
-					Vue.set(this.storage, "address", configuration.address);
-				}
-				return rsSystem.configureRouting(configuration);
-			}).then((configuration) => {
-				this.$emit("configure", configuration);
-			}).catch((err) => {
-				console.warn(err);
-			});
 			
 			
 			if(this.$route.query.address) {
@@ -92,9 +77,15 @@
 			"toggleSecure": function() {
 				Vue.set(this.storage, "secure", !this.storage.secure);
 			},
+			"clearUsername": function() {
+				Vue.delete(this.storage, "username");
+			},
 			"clearPassword": function() {
 				Vue.delete(this.storage, "password");
 				Vue.set(this, "password", "");
+			},
+			"clearAddress": function() {
+				Vue.delete(this.storage, "address");
 			},
 			"getHTTPAddress": function() {
 				return (this.storage.secure?"https://":"http://") + this.storage.address;
@@ -103,48 +94,31 @@
 				return (this.storage.secure?"wss://":"ws://") + this.storage.address;
 			},
 			"login": function() {
-				return new Promise((done, fail) => {
-					if(this.storage.session) {
-						console.log(" > Have Session");
-						done(this.storage.session);
-					} else {
-						console.log(" > New Session");
-						var request = new Request(this.getHTTPAddress() + "/login/local/authenticate");
-						request.headers.set("rs-username", this.storage.username);
-						request.headers.set("rs-password", this.storage.password);
-						fetch(request)
-						.then((res) => {
-						    return res.json();
-						}).then((res) => {
-						    Vue.set(this.storage, "session", res);
-							done(this.storage.session);
-						}).catch(fail);
-					}
-				});
-			},
-			"connect": function() {
-				if(this.password) {
-					Vue.set(this.storage, "password", this.password.sha256());
-				}
-			
-				this.login()
-				.then((session) => {
-					// TODO: If Session Redirect is Present, follow - This is to enable SSOs
-					return this.universe.connect(session, this.getSocketAddress());
-				})
-				.then((universe) => {
-					console.log("Connected: ", universe);
-					this.$emit("connect", universe);
-				})
-				.catch((error) => {
-					console.log("Failed to connect: ", error);
-					this.$emit("message", {
-						"class": "rsbd-orange",
-						"icon": "fas fa-exclamation-triangle",
-						"heading": "Connection Failure",
-						"text": "Failed to connect to " + this.storage.address + "."
+				if(!this.loggingIn) {
+					var request = new Request(this.getHTTPAddress() + "/login/local/authenticate");
+					request.headers.set("rs-username", this.storage.username);
+					request.headers.set("rs-password", this.storage.password);
+					Vue.set(this, "loggingIn", true);
+					fetch(request)
+					.then((res) => {
+					    return res.json();
+					}).then((session) => {
+					    // Vue.set(this.storage, "session", res);
+						session.address = this.getSocketAddress();
+						this.$emit("login", session);
+						Vue.set(this, "loggingIn", false);
+					}).catch((err) => {
+						Vue.set(this, "loggingIn", false);
+						console.error("Failed to login: ", err);
+						this.$emit("error", err);
+						this.$emit("message", {
+							"class": "rsbd-red",
+							"icon": "fas fa-exclamation-triangle rs-lightred",
+							"heading": "Failed to Connect",
+							"text": "Unable to connect to the server to login at " + request.url
+						});
 					});
-				});
+				}
 			}
 		},
 		"template": Vue.templified("components/system/connect.html")

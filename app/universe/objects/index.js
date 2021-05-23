@@ -45,7 +45,7 @@ module.exports = function(universe) {
 	
 	this.initialize = function(startup) {
 		return new Promise(function(done, fail) {
-			var initializing = [],
+			var initializing,
 				mngr,
 				x;
 				
@@ -57,24 +57,29 @@ module.exports = function(universe) {
 			
 			// TODO: Add logic for database type consideration?
 			database = new startup.RSDatabase(universe.configuration.database);
-			database.initialize(constructors)
-			.then(() => {
-				return DBLoader.initialize(universe, database, universe.configuration);
-			}) .then(() => {
-				for(x=0; x<universe.classes.length; x++) {
-					manager[universe.classes[x]] = database.getClassManager(universe.classes[x]);
-				}
-				
-				universe.on("shutdown", () => {
-					database.close();
-				});
-				
+			console.log("Recovery Mode? " + !!universe.specification.recovery_mode);
+			initializing = database.initialize(constructors, null, null, universe.specification.recovery_mode);
+			if(universe.specification.recovery_mode) {
 				done(manager);
-			}).catch((err) => {
-				var anomaly = new Anomaly("fault:universe:initialization", "Failed to initialize the Universe", 60, startup, err, this);
-				universe.emit("error", anomaly);
-				fail(anomaly);
-			});
+			} else {
+				initializing.then(() => {
+					return DBLoader.initialize(universe, database, universe.configuration);
+				}) .then(() => {
+					for(x=0; x<universe.classes.length; x++) {
+						manager[universe.classes[x]] = database.getClassManager(universe.classes[x]);
+					}
+					
+					universe.on("shutdown", () => {
+						database.close();
+					});
+					
+					done(manager);
+				}).catch((err) => {
+					var anomaly = new Anomaly("fault:universe:initialization", "Failed to initialize the Universe", 60, startup, err, this);
+					universe.emit("error", anomaly);
+					fail(anomaly);
+				});
+			}
 		});
 	};
 	

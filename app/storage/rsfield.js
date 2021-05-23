@@ -49,6 +49,12 @@ class RSField extends EventEmitter {
 		 */
 		this.description = specification.description;
 		/**
+		 * Order in which to display this field when applicable
+		 * @property ordering
+		 * @type Integer
+		 */
+		this.ordering = specification.ordering;
+		/**
 		 * Specifies the fields of the value referenced here to pull into the values
 		 * of the object using this field. Each field ID is mapped to an operation
 		 * type (+, -, =) that specifies how the value is pulled up from the noted

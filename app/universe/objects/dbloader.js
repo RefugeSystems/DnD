@@ -36,6 +36,41 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
+	"id": "condition",
+	"name": "Condition",
+	"description": "Used by Conditional objects to determine the condition on which to apply.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
+	"id": "ifop",
+	"name": "If Operation",
+	"description": "Used by Conditional objects to determine the how to use the values of the 'condition' object for comparisons.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
+	"id": "adds",
+	"name": "Adds",
+	"description": "Used by Conditional objects to determine the values to add when aplied.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
+	"id": "subs",
+	"name": "Subs",
+	"description": "Used by Conditional objects to determine the values to sub when aplied.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
+	"id": "sets",
+	"name": "Sets",
+	"description": "Used by Conditional objects to determine the values to set when aplied.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
 	"id": "hidden",
 	"name": "Hidden",
 	"description": "Lists properties to keep hidden.",
@@ -310,6 +345,20 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
+	"id": "conditionals",
+	"name": "Conditionals",
+	"description": "Lists of conditionals that may be applied to this object.",
+	"type": "array",
+	"attribute": {}
+});
+fields.push({
+	"id": "ordering",
+	"name": "Order",
+	"description": "The order in which this field displays or computes when applicable.",
+	"type": "integer",
+	"attribute": {}
+});
+fields.push({
 	"id": "entrance",
 	"name": "Entrance",
 	"description": "Indicates the location to which this location links instead of itself. This is used for things like multiple cave entrances into one cave.",
@@ -366,6 +415,12 @@ classes.push({
 	"description": "Universe values",
 	"fields": ["name", "disabled", "description", "value", "gm_note"]
 });
+classes.push({
+	"id": "conditional",
+	"name": "Conditional",
+	"description": "Represents a conditional addition to the object's properties.",
+	"fields": ["condition", "ifop", "adds", "subs", "sets"]
+});
 
 
 /**
@@ -399,6 +454,12 @@ var objects = [];
  * @return {Promise} 
  */
 module.exports.initialize = function(universe, database, configuration) {
+	if(configuration.universe.recovery_mode) {
+		return new Promise(function(done) {
+			// Skip DB Loading
+			done();
+		});
+	}
 	return new Promise(function(done, fail) {
 		var promised,
 			build,

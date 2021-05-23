@@ -1,7 +1,7 @@
 <div class="rs-page page-home">
-	<div class="login prompt" v-if="state === 0">
+	<div class="login prompt" v-if="state === 0 && configuration">
 		<div class="boxed">
-			<rs-connect v-on:configure="receiveConfiguration($event)" v-on:connect="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" storage-key="session"></rs-connect>
+			<rs-connect v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" storage-key="session"></rs-connect>
 			<div class="message-content system-component" v-if="message" :class="messageClass">
 				<div class="message-heading" v-if="messageHeading">
 					<span :class="messageIcon" v-if="messageIcon"></span>
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="login waiting" v-if="0 < state && state < 10">
+	<div class="login waiting" v-if="(0 < state && state < 10 && storage.session) || !configuration">
 		<div class="titling">
 			<span v-if="state === 1 || state === 0">Connecting</span>
 			<span v-if="state === 2">Loading</span>
@@ -20,12 +20,12 @@
 			<span class="far fa-spinner fa-pulse"></span>
 		</div>
 	</div>
-	<div class="system-display active" v-if="state === 10">
+	<div class="system-display active" v-if="state === 10 && player && configuration">
 		<component class="system-active":is="configuration.mainpage" :universe="universe" :player="player" :configuration="configuration"></component>
 		<router-view class="system-view" :universe="universe" :player="player" :configuration="configuration"></router-view>
 		<system-menu class="system-menu" :universe="universe" :player="player" :configuration="configuration"></system-menu>
 		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration"></system-info>
 		<system-dialog class="system-dialog" :universe="universe" :player="player" :configuration="configuration"></system-dialog>
-		<message-panel class="system-message" :universe="universe" :player="player" :configuration="configuration"></message-panel>
+		<system-message class="system-message" :universe="universe" :player="player" :configuration="configuration"></system-message>
 	</div>
 </div>

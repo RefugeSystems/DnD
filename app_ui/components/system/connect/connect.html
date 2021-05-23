@@ -5,48 +5,59 @@
 	<div class="fields" action="javascript:void(0);">
 		<table>
 			<tr>
-				<td>
+				<td class="label">
 					<label class="full align-right" for="login-username">
 						<span class="field-text">Username</span>
 					</label>
 				</td>
 				<td>
-					<input id="login-username" type="text" v-enter="connect" v-model="storage.username" />
+					<input id="login-username" type="text" v-enter="login" v-model="storage.username" v-esc="clearUsername" placeholder="Enter a Username..." />
+				</td>
+				<td>
+					<button class="quick-action" v-on:click="clearUsername()">
+						<span class="fas fa-ban"></span>
+					</button>
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td class="label">
 					<label class="full align-right" for="login-password">
 						<span class="field-text">Password</span>
 					</label>
 				</td>
 				<td>
-					<input id="login-password" type="password" v-enter="connect" v-model="password" v-esc="clearPassword" :placeholder="passwordPlaceholder"/>
+					<input id="login-password" type="password" v-enter="login" v-model="password" v-esc="clearPassword" :placeholder="passwordPlaceholder"/>
+				</td>
+				<td>
+					<button class="quick-action" v-on:click="clearPassword()">
+						<span class="fas fa-ban"></span>
+					</button>
 				</td>
 			</tr>
 			<tr v-if="external">
-				<td>
+				<td class="label">
 					<label class="full align-right" for="login-address">
 						<span class="field-text">Address</span>
 					</label>
 				</td>
 				<td>
-					<input id="login-address" type="text" v-enter="connect" v-model="storage.address" />
+					<input id="login-address" type="text" v-enter="login" v-model="storage.address" v-esc="clearAddress" placeholder="Enter a Server Address..." />
+				</td>
+				<td>
+					<button class="quick-action" v-on:click="clearAddress()">
+						<span class="fas fa-ban"></span>
+					</button>
 				</td>
 			</tr>
 		</table>
 		<div class="actions">
-			<button class="primary-action" v-on:click="connect()">
-				<span class="action-icon fas fa-sign-in"></span>
-				<span class="action-text">Connect</span>
+			<button class="primary-action" v-on:click="login()">
+				<span v-if="loggingIn" class="action-icon fas fa-spinner fa-pulse"></span>
+				<span v-if="!loggingIn" class="action-icon fas fa-sign-in"></span>
 			</button>
-			<button class="toggle-action" v-on:click="toggleSecure()">
+			<button v-if="external" class="toggle-action" v-on:click="toggleSecure()">
 				Secure?
 				<span class="far" :class="storage.secure?'fa-check-square':'fa-square'"></span>
-			</button>
-			<button class="toggle-action" v-on:click="clearSaved()" v-if="storage.password">
-				<span class="fas fa-ban"></span>
-				<span>Password</span>
 			</button>
 		</div>
 	</div>

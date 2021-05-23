@@ -19,7 +19,6 @@ class Constructor extends RSObject {
 			this._data.auth_identity = {};
 		}
 		
-		this.connections = 0;
 		this.leaves = 0;
 		this.errors = 0;
 		this.sent = 0;
@@ -28,7 +27,8 @@ class Constructor extends RSObject {
 	
 	toJSON() {
 		var json = super.toJSON();
-		json.connections = this.connections;
+		json.password = null;
+		json.sessions = null;
 		json.leaves = this.leaves;
 		json.errors = this.errors;
 		json.recv = this.recv;

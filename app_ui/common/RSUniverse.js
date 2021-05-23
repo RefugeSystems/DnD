@@ -35,10 +35,10 @@ class RSUniverse extends EventEmitter {
 		this.KEY.METRICS = "_universe_datacache_metrics";
 		
 		try {
-			// Workers aren't fully supported yet, expecially on Mobile browsers
+			// Shared Workers aren't fully supported yet, especially on Mobile browsers
 			this.worker = new SharedWorker("shared.js");
 			this.worker.port.onmessage = function(event) {
-			    console.log("Sync: ", event.data);
+			    // console.log("Sync: ", event.data);
 			};
 			
 			this.worker.onerror = function(e) {
@@ -57,6 +57,7 @@ class RSUniverse extends EventEmitter {
 		this.log = [];
 		
 		this.buffer = [];
+		this.buffer_delta = [];
 		
 		this.connection = {};
 		
@@ -68,8 +69,11 @@ class RSUniverse extends EventEmitter {
 		
 		
 		this.state = {};
+		this.state.loaded = false;
 		this.state.initialized = false;
 		this.state.synchronizing = false;
+		this.state.initializing = true;
+		this.state.version_warning = false;
 		
 		this.version = "Unknown";
 		
@@ -90,26 +94,23 @@ class RSUniverse extends EventEmitter {
 			}
 			this.metrics.latency = Math.floor(this.metrics.latency);
 			this.metrics.dialation = event.pong - (event.sent + this.metrics.latency);
+			Vue.set(this, "version", event.version);
+			this.checkVersion();
 		};
 		this.processEvent.connected = (event) => {
-			console.warn("Connected to Server: ", event);
 			this.metrics.connected = Date.now();
 			this.metrics.connected_server = event.sent;
 			this.$emit("connected", this);
 			this.sync();
 		};
 		this.processEvent.close = (event) => {
-			console.warn("Server Close Received: ", event);
 			this.metrics.closed = event.sent;
 			this.$emit("closed");
 		};
 		this.processEvent.object = (event) => {
-			console.warn("Server Object Update Received: ", event);
 			this.receiveDelta(event.sent, event.data._class, event.data.id, event.data);
 		};
 		this.processEvent.sync = (event) => {
-			console.warn("Server State Received: ", event);
-			this.metrics.sync = event.sent;
 			this.$emit("loading", this);
 			setTimeout(() => {
 				// Let the display update then load the data
@@ -120,24 +121,38 @@ class RSUniverse extends EventEmitter {
 					
 				for(i=0; i<classes.length; i++) {
 					if(!this.index[classes[i]]) {
-						this.listing[classes[i]] = event.data[classes[i]];
-						this.index[classes[i]] = {};
+						Vue.set(this.listing, classes[i], event.data[classes[i]]);
+						Vue.set(this.index, classes[i], {});
 					}
 					for(j=0; j<event.data[classes[i]].length; j++) {
 						this.receiveDelta(event.sent, classes[i], event.data[classes[i]][j].id, event.data[classes[i]][j]);
 					}
 				}
-					
-				this.metrics.sync = event.sent;
-				this.players = event.players;
-				localStorage.setItem(this.KEY.DETAILS, JSON.stringify(classes));
+				
+				Vue.set(this.metrics, "sync", event.sent);
+				Vue.set(this, "players", event.players);
+				localStorage.setItem(this.KEY.DETAILS, classes.join(","));
 				localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 				for(i=0; i<classes.length; i++) {
 					localStorage.setItem(this.KEY.CLASSPREFIX + classes[i], JSON.stringify(this.index[classes[i]]));
 				}
 				
-				console.log("Loaded: " + JSON.stringify(this.connection.session));
-				this.$emit("loaded", this);
+				Vue.set(this, "version", event.version);
+				this.state.loaded = true;
+				this.checkVersion();
+				try {
+					this.$emit("loaded", this);
+				} catch(err) {
+					console.error("wha? ", err);
+				}
+				
+				if(this.buffer_delta.length) {
+					for(i=0; i<this.buffer_delta.length; i++) {
+						this.receiveDelta(this.buffer_delta[i].received, this.buffer_delta[i].classification, this.buffer_delta[i].id, this.buffer_delta[i].delta);
+					}
+				}
+				
+				this.state.synchronizing = false;
 			}, 0);
 		};
 		
@@ -157,14 +172,14 @@ class RSUniverse extends EventEmitter {
 				k;
 				
 			if(loadDetails && loadMetrics) {
-				loadDetails = JSON.parse(loadDetails);
 				loadMetrics = JSON.parse(loadMetrics);
+				loadDetails = loadDetails.split(",");
 				storeIndex = {};
 				storeList = {};
 				
 				for(i=0; i<loadDetails.length; i++) {
 					loadClass = localStorage.getItem(this.KEY.CLASSPREFIX + loadDetails[i]);
-					if(loadClass) {
+					if(loadClass && loadClass[0] !== "_") {
 						storeIndex[loadDetails[i]] = JSON.parse(loadClass);
 						storeList[loadDetails[i]] = [];
 						keys = Object.keys(storeIndex[loadDetails[i]]);
@@ -182,7 +197,7 @@ class RSUniverse extends EventEmitter {
 			}
 		} catch(abort) {
 			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
-			this.metrics.sync = 0;
+			Vue.set(this.metrics, "sync", 0);
 		}
 	}
 	
@@ -195,22 +210,35 @@ class RSUniverse extends EventEmitter {
 	 * @param {Object} delta 
 	 */
 	receiveDelta(received, classification, id, delta) {
-		var keys = Object.keys(delta),
-			x;
-			
-		if(!this.index[classification][id]) {
-			Vue.set(this.index[classification], id, delta);
-			Vue.set(this.index[classification][id], "_sync", {});
-			for(x=0; x<keys.length; x++) {
-				Vue.set(this.index[classification][id]._sync, keys[x], received);
+		if(this.state.loaded) {
+			var keys = Object.keys(delta),
+				x;
+				
+			if(this.index[classification]) {
+				if(!this.index[classification][id]) {
+					Vue.set(this.index[classification], id, delta);
+					Vue.set(this.index[classification][id], "_sync", {});
+					for(x=0; x<keys.length; x++) {
+						Vue.set(this.index[classification][id]._sync, keys[x], received);
+					}
+				} else {
+					for(x=0; x<keys.length; x++) {
+						if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
+							Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
+							Vue.set(this.index[classification][id]._sync, keys[x], received);
+						}
+					}
+				}
+			} else {
+				rsSystem.log.error("Unknown Classification[@" + id + "]: " + classification, delta);
 			}
 		} else {
-			for(x=0; x<keys.length; x++) {
-				if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
-					Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
-					Vue.set(this.index[classification][id]._sync, keys[x], received);
-				}
-			}
+			this.buffer_delta.push({
+				received,
+				classification,
+				id,
+				delta
+			});
 		}
 	}
 	
@@ -277,7 +305,6 @@ class RSUniverse extends EventEmitter {
 			throw new Error("No address specified");
 		}
 
-		var initializing = true;
 		this.version = "Unknown";
 		this.connection.session = session;
 		this.connection.address = address;
@@ -295,20 +322,28 @@ class RSUniverse extends EventEmitter {
 			socket.onopen = (event) => {
 				this.state.closing = false;
 				this.state.opened = Date.now();
+				this.state.reconnectAttempts = 0;
 				this.addLogEvent("Connection Established", 30, event);
 				if(this.state.reconnecting) {
 					this.state.reconnecting = false;
 					this.$emit("reconnected", this);
+					this.$emit("notification", {
+						"id": "universe:connection:status",
+						"message": "Reconnected",
+						"icon": "fas fa-exclamation-triangle rs-lightgreen",
+						"event": event,
+						"timeout": 10000
+					});
 				}
 				this.$emit("connecting", this);
-				if(initializing) {
-					initializing = false;
+				if(this.state.initializing) {
+					this.state.initializing = false;
 					
 					var ping = () => {
 						this.send("ping", {
 							"ping": Date.now()
 						});
-						setTimeout(ping, 60000);
+						setTimeout(ping, 360000);
 					};
 			
 					setTimeout(ping, 10000);
@@ -339,19 +374,21 @@ class RSUniverse extends EventEmitter {
 					this.state.reconnecting = true;
 					this.$emit("error", {
 						"message": "Connection Issues",
+						"anchored": true,
 						"event": event
 					});
 				}
-				if(initializing) {
-					initializing = false;
-					console.log("Connect Fault: ", event);
-					fail(this);
+				if(this.state.initializing) {
+					this.state.initializing = false;
+					console.error("Connect Fault: ", event);
+					fail(event);
 				} else {
 					this.reconnect();
 				}
 			};
 
 			socket.onclose = (event) => {
+				console.log("Close: ", event, this);
 				this.addLogEvent("Connection Closed", 40, event);
 				if(!this.state.closing) {
 					if(event.code === 4000) {
@@ -367,7 +404,10 @@ class RSUniverse extends EventEmitter {
 						this.state.lastError = "Connection Fault";
 						this.state.reconnecting = true;
 						this.$emit("error", {
-							"message": "Connection Issues",
+							"id": "universe:connection:status",
+							"message": "Reconnecting...",
+							"icon": "fas fa-exclamation-triangle rs-lightyellow",
+							"anchored": true,
 							"event": event
 						});
 						this.reconnect(event);
@@ -376,9 +416,9 @@ class RSUniverse extends EventEmitter {
 					this.$emit("disconnected", this);
 				}
 				this.connection.socket = null;
-				if(initializing) {
-					initializing = false;
-					fail(this);
+				if(this.state.initializing) {
+					this.state.initializing = false;
+					fail(event);
 				}
 			};
 
@@ -386,12 +426,12 @@ class RSUniverse extends EventEmitter {
 				var message,
 					fulfill;
 
-				this.metrics.sync = event.time;
-				this.metrics.last = Date.now();
+				Vue.set(this.metrics, "last", Date.now());
 
 				try {
 					message = JSON.parse(event.data);
 					message.received = Date.now();
+					Vue.set(this.metrics, "sync", message.sent);
 					console.log("Received: ", message);
 					if(message.version && message.version !== this.version) {
 						this.version = message.version;
@@ -436,15 +476,24 @@ class RSUniverse extends EventEmitter {
 	reconnect(event) {
 		setTimeout(() => {
 			rsSystem.log.warn("Possible Reconnect: ", event);
-			if((!event || event.code <4100) && this.connection.retries < 5) {
+			if((!event || event.code <4100) && this.state.reconnectAttempts < 5) {
 				rsSystem.log.warn("Connection Retrying...\n", this);
 				this.state.reconnectAttempts++;
-				this.state.retries++;
-				this.connect(this.connection.session, this.connection.address);
+				this.connect(this.connection.session, this.connection.address)
+				.catch((err) => {
+					console.warn("Reconnect Failed: ", err);
+				});
 			} else {
-				this.$emit("disconnected", this);
+				// this.$emit("disconnected", this);
 				rsSystem.log.error("Reconnect Giving up\n", this);
 				this.state.loggedOut = true;
+				this.$emit("error", {
+					"id": "universe:connection:status",
+					"message": "Connection Lost",
+					"icon": "fas fa-exclamation-triangle rs-lightred",
+					"anchored": true,
+					"event": event
+				});
 			}
 		}, 1000);
 	}
@@ -487,7 +536,6 @@ class RSUniverse extends EventEmitter {
 		var sending;
 
 		if(this.connection.socket) {
-			this.state.retries = 0;
 			sending = {
 				"sent": Date.now(),
 				"type": type,
@@ -514,6 +562,8 @@ class RSUniverse extends EventEmitter {
 		var details,
 			state;
 		
+		// console.warn("Synchronizing: ", this.metrics.sync);
+		
 		if(!this.state.synchronizing) {
 			this.state.synchronizing = true;
 			if(this.state.initialized) {
@@ -523,6 +573,66 @@ class RSUniverse extends EventEmitter {
 			}
 			
 			this.send("sync", this.metrics);
+		}
+	}
+	
+	resync() {
+		this.metrics.sync = 0;
+		this.state.loaded = false;
+		this.sync();
+	}
+	
+	
+	checkVersion() {
+		if(this.version != rsSystem.version) {
+			var ui = rsSystem.version.split("."),
+				app = this.version.split(".");
+			
+			if(ui[0] !== app[0]) {
+				this.$emit("error", {
+					"id": "app:update",
+					"message": "New Version Required",
+					"icon": "fas fa-exclamation-triangle rs-lightred",
+					"anchored": true,
+					"emission": {
+						"type": "dialog-open",
+						"title": "Refresh page for new version?",
+						"buttons": [{
+							"classes": "fas fa-check rs-lightgreen",
+							"text": "Yes",
+							"emission": "app-update"
+						}, {
+							"classes": "fas fa-times rs-lightred",
+							"text": "No",
+							"emission": "dialog-dismiss"
+						}]
+					}
+				});
+			} else if(ui[1] !== app[1] && !this.state.version_warning) {
+				this.state.version_warning = true;
+				this.$emit("warning", {
+					"id": "app:update",
+					"message": "New Version Available",
+					"icon": "fas fa-sync rs-lightyellow",
+					"timeout": 20000,
+					"emission": {
+						"type": "dialog-open",
+						"title": "Refresh page for new version?",
+						"buttons": [{
+							"classes": "fas fa-check rs-lightgreen",
+							"text": "Yes",
+							"emission": "app-update"
+						}, {
+							"classes": "fas fa-times rs-lightred",
+							"text": "No",
+							"emission": "dialog-dismiss"
+						}]
+					}
+				});
+			} else if(!this.state.version_warning) {
+				this.state.version_warning = true;
+				rsSystem.log.warn("New version available");
+			}
 		}
 	}
 }

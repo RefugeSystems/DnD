@@ -3,6 +3,13 @@
 		"port": 3000,
 		"web_root": "./ui",
 		"-redirect": "https://site.which.to/redirect/any/web/requests",
+		"recover_mode": false,
+		"api": {
+			"log_all_requests": true,
+			"log_post_body": false,
+			"allow_modifications": false,
+			"database_control": false
+		},
 
 		"-certificate": "/path/to/cert",
 		"-authority": "/path/to/auth_cert",

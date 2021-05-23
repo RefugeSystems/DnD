@@ -69,6 +69,9 @@ self.addEventListener("fetch", function(event) {
 		} else {
 			return fetch(event.request);
 		}
+	})
+	.catch(function(err) {
+		console.warn("Cache Match Failed: ", err);
 	});
 	event.respondWith(complete);
 	

@@ -23,12 +23,13 @@
 	}
 
 	.message-content {
-		margin-top: 10px;
 		max-width: 400px;
 		border: 1px solid white;
 		border-radius: 6px;
 		padding: 8px;
 		border: 1px solid @rsLightBlue;
+		margin: auto;
+		margin-top: 10px;
 
 		.message-heading {
 			font-size: 18px;
@@ -52,6 +53,34 @@
 		padding: 0px !important;
 		color: inherit;
 		overflow: hidden;
+		
+		.system-active {
+			z-index: 1;
+		}
+		
+		.system-view {
+			z-index: 2;
+		}
+		
+		.system-menu {
+			z-index: 10;
+		}
+		
+		.system-menu {
+			z-index: 30;
+		}
+		
+		.system-info {
+			z-index: 40;
+		}
+		
+		.system-dialog {
+			z-index: 50;
+		}
+		
+		.system-message {
+			z-index: 70;
+		}
 	}
 
 	.system-view {

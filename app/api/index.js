@@ -57,19 +57,34 @@ class APIController extends EventEmitter {
 				this.server = HTTP.createServer(options, this.router);
 			}
 			
+			
 			// Initialize Routing
 			this.router.use(express.json());
 			this.router.use((err, req, res, next) => {
 				res.status(400).json({
 					"message": "Malformed JSON"
 				});
-				// if(err) {
-				// 	res.status(400).json({
-				// 		"message": "Malformed JSON"
-				// 	});
-				// } else {
-				// 	next();
-				// }
+			});
+			this.router.use((req, res, next) => {
+				req.id = Random.identifier("request", 12, 40);
+				
+				if(this.specification.api.log_all_requests || (req.method === "POST" && this.specification.api.log_post_body)) {
+					var details = {};
+					details.path = req.path;
+					details.session = req.session;
+					details.request = req.id;
+					details.size = req.body?JSON.stringify(req.body).length:0;
+					if(req.method === "POST" && this.specification.api.log_post_body) {
+						details.body = req.body;
+					}
+					this.emit("event", new this.universe.Anomaly("api:request", "Request Received", 30, details, null, this.id));
+				}
+				
+				if((req.method !== "POST" && req.method !== "DELETE") || !this.specification.api || this.specification.api.allow_modifications == true) {
+					next();
+				} else {
+					next(new this.universe.Anomaly("api:modification:unallowed", "Modifciations Disallowed, See Configuration: server.api.allow_modifications", 40, null, null, this));
+				}
 			});
 			this.router.use(express.urlencoded({ extended: true }));
 			
@@ -90,7 +105,6 @@ class APIController extends EventEmitter {
 					res.header("Access-Control-Allow-Origin", origin);
 					res.header("Access-Control-Allow-Headers", "*");
 					
-					req.id = Random.identifier("request", 12, 40);
 					req.conversation = req.query.conversation;
 					if(req.query.token) {
 						// Fill with Token based Session

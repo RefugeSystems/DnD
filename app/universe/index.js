@@ -12,39 +12,14 @@ var EventEmitter = require("events").EventEmitter,
 	DNDCalculator = require("./calculator/dnd"),
 	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects"),
+	appPackage = require("../../package.json"),
 	omittedFromSync = {};
 
+// Security
 omittedFromSync.session = true;
-
-var classes = [
-	"session", // HTTP or WebSocket Session
-	"player",
-	
-	"setting", // Universe Settings and Values
-	"incident",
-	"meeting", // Game Session
-	
-	"dataset",
-	"image",
-	"playlist",
-	"streamurl",
-	"profile",
-	"widget",
-	"conditional",
-	
-	"entity",
-	"ability",
-	"skill",
-	"archetype",
-	"action", // Triggered by some game event to start user input like items that have an on long rest reset
-	"effect",
-	"race",
-	"type",
-	"journal",
-	"item",
-	"knowledge",
-	"quest",
-	"location"];
+// Data APIs for data separation
+omittedFromSync.image = true;
+omittedFromSync.audio = true;
 
 class Universe extends EventEmitter {
 	constructor(configuration) {
@@ -61,7 +36,8 @@ class Universe extends EventEmitter {
 		this.chronicle = new Chronicle(this);
 		this.omittedFromSync = omittedFromSync;
 		this.configuration = configuration;
-		this.classes = classes;
+		this.specification = configuration.universe;
+		this.classes = configuration.universe.classes;
 		this.manager = {};
 		this.connection = {};
 		this.connected = [];
@@ -82,11 +58,16 @@ class Universe extends EventEmitter {
 	 * @return {Promise}
 	 */
 	initialize(startup) {
+		this.objectHandler = new ObjectHandler(this);
+		
+		if(this.specification.recovery_mode) {
+			return this.objectHandler.initialize(startup);
+		}
+		
 		return new Promise((done, fail) => {
 			startup.universe = this;
 			// Initialize Database
 			
-			this.objectHandler = new ObjectHandler(this);
 			this.objectHandler.initialize(startup)
 			.then((manager) => {
 				// Receive the managers
@@ -210,6 +191,7 @@ class Universe extends EventEmitter {
 			})
 			.then(() => {
 				this.initialized = true;
+				console.log("Universe Loaded: ", Object.keys(this.manager));
 				done();
 			})
 			.catch(fail);
@@ -298,6 +280,29 @@ class Universe extends EventEmitter {
 	 */
 	requestObject(id, callback) {
 		
+	}
+	
+	
+	createObject(details, callback) {
+		var classification = this.getClassFromID(details.id);
+		if(!this.manager[classification]) {
+			callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+		} else {
+			this.manager[classification].create(this, details, (err, created) => {
+				if(err) {
+					callback(err);
+				} else {
+					created.linkFieldValues()
+					.then(() => {
+						created.calculateFieldValues();
+						created.updateFieldValues();
+						this.emit("object-created", created.toJSON());
+						callback(null, created);
+					})
+					.catch(callback);
+				}
+			});
+		}
 	}
 	
 	/**
