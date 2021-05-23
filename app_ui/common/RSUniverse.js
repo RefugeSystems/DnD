@@ -220,7 +220,17 @@ class RSUniverse extends EventEmitter {
 				} else {
 					for(x=0; x<keys.length; x++) {
 						if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
-							Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
+							if(this.index[classification][id][keys[x]] instanceof Array) {
+								this.index[classification][id][keys[x]].splice(0);
+								this.index[classification][id][keys[x]].push.apply(this.index[classification][id][keys[x]], delta[keys[x]]);
+							} else if(typeof(this.index[classification][id][keys[x]]) === "object") {
+								okeys = Object.keys(delta[keys[x]]);
+								for(k=0; k<okeys.length; k++) {
+									Vue.set(this.index[classification][id][keys[x]], okeys[k], delta[keys[x]][okeys[k]]);
+								}
+							} else {
+								Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
+							}
 							Vue.set(this.index[classification][id]._sync, keys[x], received);
 						}
 					}
