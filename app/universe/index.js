@@ -12,6 +12,7 @@ var EventEmitter = require("events").EventEmitter,
 	DNDCalculator = require("./calculator/dnd"),
 	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects"),
+	Anomaly = require("../management/anomaly"),
 	appPackage = require("../../package.json"),
 	fs = require("fs"),
 	omittedFromSync = {},
@@ -37,9 +38,9 @@ class Universe extends EventEmitter {
 		 * The Class Constructor for anomalies to allow using classes to construct the
 		 * object for notifications.
 		 * @property Anomaly
-		 * @type Class
+		 * @type Constructor
 		 */
-		this.Anomaly = require("../management/anomaly");
+		this.Anomaly = Anomaly;
 		this.calculator = new DNDCalculator(this);
 		this.chronicle = new Chronicle(this);
 		this.omittedFromSync = omittedFromSync;
