@@ -322,15 +322,26 @@ class Universe extends EventEmitter {
 	/**
 	 * 
 	 * @method requestObject
-	 * @param  {[type]}   id       [description]
+	 * @param {String} id 
+	 * @param {Function} callback
+	 */
+	requestObject(id, callback) {
+		var classification = this.getClassFromID(details.id);
+		if(!this.manager[classification]) {
+			callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+		} else {
+			// TODO: Consider loading an object if requested while not loaded
+			callback(null, this.manager[classification].object[id]);
+		}
+	}
+	
+	/**
+	 * 
+	 * @method createObject
+	 * @param  {[type]}   details  [description]
 	 * @param  {Function} callback [description]
 	 * @return {[type]}            [description]
 	 */
-	requestObject(id, callback) {
-		
-	}
-	
-	
 	createObject(details, callback) {
 		var classification = this.getClassFromID(details.id);
 		if(!this.manager[classification]) {
