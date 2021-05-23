@@ -13,6 +13,7 @@ var EventEmitter = require("events").EventEmitter,
 	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects"),
 	appPackage = require("../../package.json"),
+	fs = require("fs"),
 	omittedFromSync = {};
 
 // Security
@@ -190,6 +191,53 @@ class Universe extends EventEmitter {
 				return Promise.all(loading);
 			})
 			.then(() => {
+				return new Promise((done, fail) => {
+					var clean = new RegExp("^/?app/universe/events", "i"),
+						initializing = [],
+						errors = [],
+						queue = [],
+						loadDirectory,
+						cleaned,
+						loading,
+						x,
+						y;
+						
+					loadDirectory = (path) => {
+						fs.readdir(path, (err, paths) => {
+							for(x=0; x<paths.length; x++) {
+								cleaned = path.replace(clean, "");
+								// console.log(" > Path[" + path + " -> " + cleaned + "]: " + paths[x]);
+								if(paths[x].endsWith(".js")) {
+									loading = require("./events" + cleaned + "/" + paths[x]);
+									if(typeof(loading.initialize) === "function") {
+										loading = loading.initialize(this);
+										if(loading instanceof Promise) {
+											initializing.push(loading);
+										}
+									}
+								} else {
+									queue.push(path + "/" + paths[x]);
+								}
+							}
+							
+							if(queue.length) {
+								loadDirectory(queue.shift());
+							} else {
+								if(errors.length) {
+									console.log("Event Directory Loading Errors: ", errors);
+									fail(errors);
+								} else {
+									Promise.all(initializing)
+									.then(done)
+									.catch(fail);
+								}
+							}
+						});
+					};
+					
+					loadDirectory("app/universe/events");
+				});
+			}).then(() => {
 				this.initialized = true;
 				console.log("Universe Loaded: ", Object.keys(this.manager));
 				done();
