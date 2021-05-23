@@ -27,11 +27,14 @@ mapping.dice = {
 mapping.integer = {
 	"type": "integer"
 };
-mapping.calculcated = {
+mapping.calculcated = mapping.computed = {
 	"type": "text"
 };
-mapping.string = {
+mapping.text = mapping.string = {
 	"type": "text"
+};
+mapping.boolean = {
+	"type": "boolean"
 };
 mapping.number = {
 	"type": "real"
