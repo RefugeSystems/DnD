@@ -20,6 +20,7 @@ class Authentication extends EventEmitter {
 		this.universe = universe;
 		this.processor = {};
 		this.passport = passport;
+		this.public_web = universe.configuration.server.public_web;
 		this.public = universe.configuration.server.public;
 		
 		passport.serializeUser(function(req, user, done) {
