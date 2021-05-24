@@ -42,7 +42,7 @@ module.exports = new (function() {
 		};
 		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
-			var id = profile.id,
+			var id = profile.username,
 				user,
 				buffer,
 				x;
@@ -58,9 +58,9 @@ module.exports = new (function() {
 			var makePlayer = function() {
 				var details = {
 					"id": Random.identifier("player", 10, 32).toLowerCase(),
-					"username": id,
+					"username": profile.username,
 					"name": profile.displayName,
-					"email": id,
+					"email": profile.email,
 					"gm": false,
 					"attribute": {
 						"discord": [id]
