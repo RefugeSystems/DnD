@@ -1,6 +1,6 @@
 /**
  * 
- * @class AuthModuleGoogle
+ * @class AuthModuleFacebook
  * @extends SystemAuthModule
  * @constructor
  * @static
@@ -37,7 +37,7 @@ module.exports = new (function() {
 		var strategy = {
 			"clientID": specification.app_id,
 			"clientSecret": specification.app_secret,
-			"callbackURL": authentication.public + "login/facebook/link",
+			"callbackURL": specification.callback || authentication.public + "login/facebook/link",
 			"accessType": "offline"
 		};
 		
@@ -90,7 +90,7 @@ module.exports = new (function() {
 				console.log("Making Player");
 				makePlayer();
 			} else {
-				var error = new universe.Anomaly("authentication:google:not-found", "Authentication completed but user was not found", 40, {"request": req.id, "profile": profile});
+				var error = new universe.Anomaly("authentication:facebook:not-found", "Authentication completed but user was not found", 40, {"request": req.id, "profile": profile});
 				console.log("User Not Found: " + profile.displayName + "@" + profile.id);
 				authentication.emit("error", error);
 				done();
