@@ -6,7 +6,7 @@
  * @static
  */
 
-var Strategy = require("passport-facebook").Strategy,
+var Strategy = require("passport-bnet").Strategy,
 	Random = require("rs-random"),
 	btoa = require("btoa"),
 	express = require("express");
@@ -15,12 +15,12 @@ var Strategy = require("passport-facebook").Strategy,
 module.exports = new (function() {
 	this.router = express.Router();
 	this.description = {};
-	this.description.id = "facebook";
-	this.description.icon = "fab fa-facebook";
-	this.description.name = "Facebook";
+	this.description.id = "bnet";
+	this.description.icon = "fab fa-battle-net";
+	this.description.name = "Battle.net";
 	
 	this.router.use((req, res, next) => {
-		console.log("Facebook: " + req.id);
+		console.log("Battle.net: " + req.id);
 		next();
 	});
 	
@@ -50,7 +50,7 @@ module.exports = new (function() {
 				
 			for(x=0; x<universe.manager.player.objectIDs.length; x++) {
 				buffer = universe.manager.player.object[universe.manager.player.objectIDs[x]];
-				if(buffer && buffer.attribute && buffer.attribute.facebook && buffer.attribute.facebook.indexOf(id) !== -1) {
+				if(buffer && buffer.attribute && buffer.attribute.bnet && buffer.attribute.bnet.indexOf(id) !== -1) {
 					user = buffer;
 					break;
 				}
@@ -63,7 +63,7 @@ module.exports = new (function() {
 					"name": profile.displayName,
 					"gm": false,
 					"attribute": {
-						"facebook": [id]
+						"bnet": [id]
 					}
 				};
 				universe.createObject(details, makeSession);

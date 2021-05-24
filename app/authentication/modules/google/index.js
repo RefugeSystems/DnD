@@ -44,14 +44,14 @@ module.exports = new (function() {
 		console.log("Google Callback: " + strategy.callbackURL);
 		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
-			var email = profile.emails[0].value,
+			var id = profile.emails[0].value,
 				user,
 				buffer,
 				x;
 				
 			for(x=0; x<universe.manager.player.objectIDs.length; x++) {
 				buffer = universe.manager.player.object[universe.manager.player.objectIDs[x]];
-				if(buffer && buffer.attribute && buffer.attribute.google && buffer.attribute.google.indexOf(email) !== -1) {
+				if(buffer && buffer.attribute && buffer.attribute.google && buffer.attribute.google.indexOf(id) !== -1) {
 					user = buffer;
 					break;
 				}
@@ -60,13 +60,13 @@ module.exports = new (function() {
 			var makePlayer = function() {
 				var details = {
 					"id": Random.identifier("player", 10, 32).toLowerCase(),
-					"username": email,
+					"username": id,
 					"name": profile.displayName,
-					"email": email,
+					"email": id,
 					"gm": false,
 					"attribute": {
 						"picture": profile.photos && profile.photos.length?profile.photos[0].value:null,
-						"google": email
+						"google": [id]
 					}
 				};
 				universe.createObject(details, makeSession);
