@@ -45,7 +45,7 @@ module.exports = new (function() {
 		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
 			console.log("Received Profile...\n", req, accessToken, refreshToken, profile);
-			var email = profile.emails[0].value,
+			var email = profile.id,
 				user,
 				buffer,
 				x;
@@ -63,10 +63,8 @@ module.exports = new (function() {
 					"id": Random.identifier("player", 10, 32).toLowerCase(),
 					"username": email,
 					"name": profile.displayName,
-					"email": email,
 					"gm": false,
 					"attribute": {
-						"picture": profile.photos && profile.photos.length?profile.photos[0].value:null,
 						"google": email
 					}
 				};
