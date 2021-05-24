@@ -1,15 +1,9 @@
 {
-<<<<<<< HEAD
 	"name": "rs-dnd",
+	"title": "RSDnD",
 	"version": "0.0.1",
 	"description": "RefugeSsytems DnD Project.",
-=======
-	"name": "core",
-	"title": "RSCore",
-	"version": "0.0.0",
 	"core_version": "0.0.1",
-	"description": "RefugeSsytems Core project acts as a seed for starting new developmental work and leveraging git pulls on the core to update core fundamentals of the project allowing expansion on top of the core.",
->>>>>>> abcb1fb7e9da802feae66e431f31a2d8097f8495
 	"main": "app/index.js",
 	"keywords": [
 		"rs",
