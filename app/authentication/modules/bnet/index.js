@@ -42,7 +42,7 @@ module.exports = new (function() {
 		};
 		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
-			console.log("Received Profile...\n", req, accessToken, refreshToken, profile);
+			// console.log("Received Profile...\n", req, accessToken, refreshToken, profile);
 			var id = profile.battletag,
 				user,
 				buffer,
@@ -84,14 +84,14 @@ module.exports = new (function() {
 			};
 			
 			if(user) {
-				console.log("User Found: " + user.id);
+				// console.log("User Found: " + user.id);
 				makeSession(null, user);
 			} else if(authentication.specification.allow_creation || specification.allow_creation) {
-				console.log("Making Player");
+				// console.log("Making Player");
 				makePlayer();
 			} else {
 				var error = new universe.Anomaly("authentication:bnet:not-found", "Authentication completed but user was not found", 40, {"request": req?req.id:"unknown", "profile": profile});
-				console.log("User Not Found: " + profile.displayName + "@" + profile.id);
+				// console.log("User Not Found: " + profile.displayName + "@" + profile.id);
 				authentication.emit("error", error);
 				done();
 			}
