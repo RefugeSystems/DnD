@@ -395,7 +395,7 @@ classes.push({
 	"id": "location",
 	"name": "Locations",
 	"description": "Active entity in the game that takes actions",
-	"fields": ["name", "icon", "description", "disabled", "hidden", "location", "x", "y", "entrance", "gm_note"]
+	"fields": ["name", "icon", "description", "disabled", "hidden", "location", "x", "y", "entrance", "gm_note", "attribute"]
 });
 classes.push({
 	"id": "setting",

@@ -14,6 +14,10 @@
 			rsSystem.components.StorageController
 		],
 		"props": {
+			"configuration": {
+				"required": true,
+				"type": Object
+			},
 			"universe": {
 				"required": true,
 				"type": Object
@@ -25,6 +29,7 @@
 			data.alternatives = [];
 			data.modules = {};
 			
+			data.title = this.configuration.title || document.title || "RSApp";
 			data.loading = true;
 			data.loggingIn = false;
 			data.session = {};
@@ -61,7 +66,10 @@
 			if(!this.storage.address) {
 				Vue.set(this.storage, "address", location.host);
 			}
-			console.log("Connect: ", this.storage);
+			
+			if(this.configuration.address && (!this.storage.address || this.configuration.force)) {
+				Vue.set(this.storage, "address", this.configuration.address);
+			}
 			
 			if(this.$route.query.address) {
 				Vue.set(this.storage, "address", this.$route.query.address);
@@ -161,24 +169,6 @@
 				if(!this.loggingIn) {
 					Vue.set(this, "loggingIn", true);
 					window.location.href = this.getHTTPAddress() + "/login/" + module.id + "/authenticate";
-					/*
-					var request = new Request(this.getHTTPAddress() + "/login/" + module.id + "/authenticate");
-					fetch(request)
-					.then((res) => {
-						console.log("Auth Response: ", res);
-						Vue.set(this, "loggingIn", false);
-					}).catch((err) => {
-						Vue.set(this, "loggingIn", false);
-						console.error("Failed to login: ", err);
-						this.$emit("error", err);
-						this.$emit("message", {
-							"class": "rsbd-red",
-							"icon": "fas fa-exclamation-triangle rs-lightred",
-							"heading": "Login Failed",
-							"text": err.message || "Unable to connect to the server to login at " + request.url
-						});
-					});
-					*/
 				}
 			},
 			"login": function() {

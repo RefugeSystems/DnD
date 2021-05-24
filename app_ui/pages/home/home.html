@@ -1,7 +1,7 @@
 <div class="rs-page page-home">
 	<div class="login prompt" v-if="state === 0 && configuration">
 		<div class="boxed">
-			<rs-connect v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" storage-key="session"></rs-connect>
+			<rs-connect v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" storage-key="session"></rs-connect>
 			<div class="message-content system-component" v-if="message" :class="messageClass" v-on:click="dismissMessage()">
 				<div class="message-heading" v-if="messageHeading">
 					<span :class="messageIcon" v-if="messageIcon"></span>
@@ -28,5 +28,8 @@
 		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration"></system-info>
 		<system-dialog class="system-dialog" :universe="universe" :player="player" :configuration="configuration"></system-dialog>
 		<system-message class="system-message" :universe="universe" :player="player" :configuration="configuration"></system-message>
+	</div>
+	<div class="app-security-links">
+		<!-- TODO: Append Links and Page Generation -->
 	</div>
 </div>
