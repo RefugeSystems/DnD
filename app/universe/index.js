@@ -427,7 +427,7 @@ class Universe extends EventEmitter {
 			}
 		}
 		
-		fields = Object.keys(this.manager[managers[0]].database.field)
+		fields = Object.keys(this.manager[managers[0]].database.field);
 		for(f=0; f<fields.length; f++) {
 			state.fields.push(this.manager[managers[0]].database.field[fields[f]]);
 		}
@@ -453,5 +453,12 @@ class Universe extends EventEmitter {
 		}
 	}
 }
+
+/**
+ * 
+ * @event send
+ * @type {Object} message
+ * @type {String} message.type For client processing
+ */
 
 module.exports = Universe;

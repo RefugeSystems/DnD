@@ -38,6 +38,11 @@ class PlayerConnection extends EventEmitter {
 			this.unloadObject(unload);
 		};
 		
+		var forwardMessage = (message) => {
+			this.forwardMessage(message);
+		};
+		
+		universe.on("send", forwardMessage);
 		universe.on("object-updated", receiveObject);
 		universe.on("object-created", receiveObject);
 		universe.on("unload", unloadObject);
@@ -224,6 +229,14 @@ class PlayerConnection extends EventEmitter {
 		send._class = this.universe.getClassFromID(id);
 		send.id = id;
 		this.send("unload", send);
+	}
+	
+	forwardMessage(message) {
+		// TODO: Implement better/additional recipient restrictions
+		if((!message.recipient && !message.recipients) || (message.recipient && message.recipient === this.player.id) || (message.recipients && message.recipients.indexOf(this.player.id) !== -1)) {
+			// TODO: Implement additional general filtering
+			this.send(message);
+		}
 	}
 }
 

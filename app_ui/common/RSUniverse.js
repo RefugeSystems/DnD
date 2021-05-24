@@ -552,8 +552,9 @@ class RSUniverse extends EventEmitter {
 	 * @method send
 	 * @param {String} type
 	 * @param {Object} data
+	 * @param {String} [player] ID
 	 */
-	send(type, data) {
+	send(type, data, player) {
 		data = data || {};
 		var sending;
 
