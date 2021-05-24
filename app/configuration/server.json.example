@@ -1,5 +1,6 @@
 {
 	"server": {
+		"public": "https://[This Server's Domain Name: Include Port if Applicable]/",
 		"port": 3000,
 		"web_root": "./ui",
 		"-redirect": "https://site.which.to/redirect/any/web/requests",

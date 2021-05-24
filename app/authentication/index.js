@@ -9,7 +9,7 @@
 var EventEmitter = require("events").EventEmitter,
 	Router = require("express").Router,
 	Random = require("rs-random"),
-	
+	passport = require("passport"),
 	defaultExpiry = 1000 * 60 * 60 * 24 *3;
 
 class Authentication extends EventEmitter {
@@ -19,6 +19,19 @@ class Authentication extends EventEmitter {
 		this.router = new Router();
 		this.universe = universe;
 		this.processor = {};
+		this.passport = passport;
+		this.public = universe.configuration.server.public;
+		
+		passport.serializeUser(function(req, user, done) {
+			console.log("Serialize User: ", user);
+			req._user = user;
+			done(null, user);
+		});
+		
+		passport.deserializeUser(function(user, done) {
+			console.log("Deserialize User: ", user);
+			done(null, user);
+		});
 	}
 
 	/**
@@ -32,29 +45,43 @@ class Authentication extends EventEmitter {
 			this.specification = startup.configuration.authentication;
 			var processes = Object.keys(this.specification),
 				initializing = [],
+				available = [],
 				x;
 				
 			this.router.use((req, res, next) => {
-				console.log("Auth[" + req.method + "]: " + req.id + ", ", req.connection.remoteAddress, req.socket.remoteAddress, req.info?req.info.remoteAddress:req.info);
+				// console.log("Auth[" + req.method + "]: " + req.id + ", ", req.connection.remoteAddress);
 				next();
 			});
 			
 			for(x=0; x<processes.length; x++) {
 				if(this.specification[processes[x]]) {
 					this.processor[processes[x]] = require("./modules/" + processes[x]);
-					if(this.processor[processes[x]].initialize) {
-						initializing.push(this.processor[processes[x]].initialize(this, this.universe));
+					if(this.processor[processes[x]].initialize && this.processor[processes[x]].description && this.processor[processes[x]].router) {
+						this.processor[processes[x]].description.id = this.processor[processes[x]].id || processes[x];
+						initializing.push(this.processor[processes[x]].initialize(this, this.specification[processes[x]], this.universe));
+						available.push(this.processor[processes[x]].description);
 					} else {
 						this.emit("error", new this.universe.Anomaly("authenticator:invalid:initialization", "Configuration specifies data for an invalid authentication process", 40, {
 							"process": processes[x],
-							"specification": this.specification[processes[x]]
+							"specification": this.specification[processes[x]],
+							"hasInitialize": !!this.processor[processes[x]].initialize,
+							"hasDescription": !!this.processor[processes[x]].description,
+							"hasRouter": !!this.processor[processes[x]].router
 						}, null, this.id));
 					}
 				}
 			}
 			
+			this.router.get("/available", (req, res, next) => {
+				res.result = {};
+				res.result.modules = available;
+				next();
+			});
+			
 			Promise.all(initializing)
 			.then(() => {
+				this.router.use(passport.initialize());
+  				this.router.use(passport.session());
 				for(x=0; x<processes.length; x++) {
 					if(this.processor[processes[x]].router) {
 						this.router.use("/" + processes[x], this.processor[processes[x]].router);
@@ -67,17 +94,6 @@ class Authentication extends EventEmitter {
 			})
 			.catch(fail);
 		});
-	}
-	
-	/**
-	 * 
-	 * @method authenticate
-	 * @param {Request | Object} request
-	 * @param {String} [module]  
-	 * @return {Promise} 
-	 */
-	authenticate(request, module) {
-		
 	}
 
 	/**
@@ -103,16 +119,6 @@ class Authentication extends EventEmitter {
 				}
 			});
 		});
-	}
-	
-	/**
-	 * 
-	 * @method getSession
-	 * @param {Request} request 
-	 * @return {RSObject} For the session or null if none found.
-	 */
-	getSession(request) {
-		
 	}
 }
 

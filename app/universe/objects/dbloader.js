@@ -383,7 +383,7 @@ classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "email", "description", "gm", "auth_token", "auth_identity", "last", "connections", "sessions"]
+	"fields": ["name", "disabled", "username", "password", "email", "description", "gm", "auth_token", "last", "connections", "attribute"]
 });
 classes.push({
 	"id": "session",
@@ -392,22 +392,10 @@ classes.push({
 	"fields": ["player", "username", "disabled", "auth_token_use", "last", "expiry"]
 });
 classes.push({
-	"id": "entity",
-	"name": "Entity",
-	"description": "Active entity in the game that takes actions",
-	"fields": ["name", "icon", "description", "disabled", "dead", "acquired", "hidden", "location", "x", "y", "gm_note"]
-});
-classes.push({
-	"id": "knowledge",
-	"name": "Knowledge",
-	"description": "Active entity in the game that takes actions",
-	"fields": ["name", "icon", "description", "subjects", "reveals", "gm_note"]
-});
-classes.push({
 	"id": "location",
 	"name": "Locations",
 	"description": "Active entity in the game that takes actions",
-	"fields": ["name", "icon", "description", "disabled", "hidden", "location", "x", "y", "entrance", "gm_note"]
+	"fields": ["name", "icon", "description", "disabled", "hidden", "location", "x", "y", "entrance", "gm_note", "attribute"]
 });
 classes.push({
 	"id": "setting",

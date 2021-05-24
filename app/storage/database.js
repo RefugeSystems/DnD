@@ -27,11 +27,14 @@ mapping.dice = {
 mapping.integer = {
 	"type": "integer"
 };
-mapping.calculcated = {
+mapping.calculcated = mapping.computed = {
 	"type": "text"
 };
-mapping.string = {
+mapping.text = mapping.string = {
 	"type": "text"
+};
+mapping.boolean = {
+	"type": "boolean"
 };
 mapping.number = {
 	"type": "real"
@@ -145,8 +148,8 @@ mapping._toInsert = function(name, fields, write) {
 		values = "($id, $created, $updated",
 		field;
 	for(var x=0; x<fields.length; x++) {
-		if(write[fields[x]] !== undefined) {
-			field = fields[x].id || fields[x];
+		field = fields[x].id || fields[x];
+		if(write[field] !== undefined) {
 			columns += ", " + field;
 			values += ", $" + field;
 		}
@@ -196,7 +199,7 @@ mapping._toObject = function(fields, write, create) {
 	}
 	for(var x=0; x<fields.length; x++) {
 		field = fields[x];
-		if(field && write[field.id] !== undefined) {
+		if(field && !field.disabled && write[field.id] !== undefined) {
 			if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
 				mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
 			} else {
@@ -977,19 +980,23 @@ class ClassManager extends EventEmitter {
 	 * @param {Function} callback
 	 */
 	create(universe, details, callback) {
-		var object = this.database.constructor[this.id] || RSObject;
-		object = new object(universe, this, details);
-		this.writeObjectData(details, (err) => {
-			if(err) {
-				callback(err, null);
-			} else {
-				object.created = details.created;
-				object.updated = details.updated;
-				this.object[object.id] = object;
-				this.objectIDs.push(object.id);
-				callback(null, object);
-			}
-		});
+		try {
+			var object = this.database.constructor[this.id] || RSObject;
+			object = new object(universe, this, details);
+			this.writeObjectData(details, (err) => {
+				if(err) {
+					callback(err, null);
+				} else {
+					object.created = details.created;
+					object.updated = details.updated;
+					this.object[object.id] = object;
+					this.objectIDs.push(object.id);
+					callback(null, object);
+				}
+			});
+		} catch(constructionException) {
+			callback(constructionException);
+		}
 	}
 	
 	/**
@@ -1115,7 +1122,7 @@ class ClassManager extends EventEmitter {
 				// insert
 				write = mapping._toObject(this.fields, object, true);
 				this.object[object.id] = {};
-				statement = mapping._toInsert(this.id, fields, object);
+				statement = mapping._toInsert(this.id, this.fields, object);
 				// console.log("insert: " + statement, write);
 				object.updated = write.$updated;
 				object.created = write.$created;

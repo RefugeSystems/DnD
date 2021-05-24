@@ -12,6 +12,10 @@ var express = require("express"),
 // console.log("Local Made");
 module.exports = new (function() {
 	this.router = express.Router();
+	this.description = {};
+	this.description.id = "local";
+	this.description.icon = "ra ra-tower";
+	this.description.name = "Local";
 	
 	this.router.use((req, res, next) => {
 		// console.log("Local: " + req.id);
@@ -27,7 +31,7 @@ module.exports = new (function() {
 	 * @param {Router} authentication.router
 	 * @param {Universe} universe
 	 */
-	this.initialize = (authentication, universe) => {
+	this.initialize = (authentication, specification, universe) => {
 		// console.log("Local Init");
 		return new Promise((done, fail) => {
 			this.router.get("/authenticate", function(req, res, next) {

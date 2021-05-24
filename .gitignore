@@ -94,4 +94,5 @@ typings/
 /scrap/
 
 # Test Files
+*.sqldb-journal
 *.sqldb

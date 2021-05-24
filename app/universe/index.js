@@ -12,9 +12,17 @@ var EventEmitter = require("events").EventEmitter,
 	DNDCalculator = require("./calculator/dnd"),
 	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects"),
+	Anomaly = require("../management/anomaly"),
 	appPackage = require("../../package.json"),
 	fs = require("fs"),
-	omittedFromSync = {};
+	omittedFromSync = {},
+	defaultClasses = [
+		"player",
+		"session",
+		"location",
+		"setting",
+		"conditional"
+	];
 
 // Security
 omittedFromSync.session = true;
@@ -30,15 +38,15 @@ class Universe extends EventEmitter {
 		 * The Class Constructor for anomalies to allow using classes to construct the
 		 * object for notifications.
 		 * @property Anomaly
-		 * @type Class
+		 * @type Constructor
 		 */
-		this.Anomaly = require("../management/anomaly");
+		this.Anomaly = Anomaly;
 		this.calculator = new DNDCalculator(this);
 		this.chronicle = new Chronicle(this);
 		this.omittedFromSync = omittedFromSync;
 		this.configuration = configuration;
 		this.specification = configuration.universe;
-		this.classes = configuration.universe.classes;
+		this.classes = configuration.universe.classes?defaultClasses.concat(configuration.universe.classes):defaultClasses;
 		this.manager = {};
 		this.connection = {};
 		this.connected = [];
@@ -322,15 +330,26 @@ class Universe extends EventEmitter {
 	/**
 	 * 
 	 * @method requestObject
-	 * @param  {[type]}   id       [description]
+	 * @param {String} id 
+	 * @param {Function} callback
+	 */
+	requestObject(id, callback) {
+		var classification = this.getClassFromID(id);
+		if(!this.manager[classification]) {
+			callback(new Anomaly("universe:object:request", "Unable to find object", 50, {id, classification}, null, this));
+		} else {
+			// TODO: Consider loading an object if requested while not loaded
+			callback(null, this.manager[classification].object[id]);
+		}
+	}
+	
+	/**
+	 * 
+	 * @method createObject
+	 * @param  {[type]}   details  [description]
 	 * @param  {Function} callback [description]
 	 * @return {[type]}            [description]
 	 */
-	requestObject(id, callback) {
-		
-	}
-	
-	
 	createObject(details, callback) {
 		var classification = this.getClassFromID(details.id);
 		if(!this.manager[classification]) {

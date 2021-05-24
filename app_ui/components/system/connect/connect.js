@@ -14,6 +14,10 @@
 			rsSystem.components.StorageController
 		],
 		"props": {
+			"configuration": {
+				"required": true,
+				"type": Object
+			},
 			"universe": {
 				"required": true,
 				"type": Object
@@ -22,6 +26,11 @@
 		"data": function() {
 			var data = {};
 			
+			data.alternatives = [];
+			data.modules = {};
+			
+			data.title = this.configuration.title || document.title || "RSApp";
+			data.loading = true;
 			data.loggingIn = false;
 			data.session = {};
 			data.external = false;
@@ -57,7 +66,10 @@
 			if(!this.storage.address) {
 				Vue.set(this.storage, "address", location.host);
 			}
-			console.log("Connect: ", this.storage);
+			
+			if(this.configuration.address && (!this.storage.address || this.configuration.force)) {
+				Vue.set(this.storage, "address", this.configuration.address);
+			}
 			
 			if(this.$route.query.address) {
 				Vue.set(this.storage, "address", this.$route.query.address);
@@ -69,6 +81,69 @@
 				});
 				this.$router.push("/");
 			}
+			if(this.$route.query.authfail) {
+				if(this.$route.query.authfail === "401") {
+					this.$emit("message", {
+						"class": "rsbd-orange",
+						"icon": "fas fa-exclamation-triangle rs-lightorange",
+						"heading": "Login Failed",
+						"text": "Failed to login"
+					});
+				} else if(this.$route.query.authfail === "401.1") {
+					this.$emit("message", {
+						"class": "rsbd-orange",
+						"icon": "fas fa-exclamation-triangle rs-lightorange",
+						"heading": "Unknown User",
+						"text": "SSO Login Succeeded but User Unknown"
+					});
+				}
+				this.$router.push(this.$route.path);
+			}
+			if(this.$route.query.session) {
+				var session;
+				try {
+					session = atob(this.$route.query.session);
+					this.$router.push(this.$route.path);
+					session = JSON.parse(session);
+					session.address = this.getSocketAddress();
+					console.log("Received Session: ", session);
+					this.$emit("login", session);
+				} catch(sessionBuildException) {
+					console.error("Failed to receive session: ", session);
+				}
+			}
+			
+			fetch(new Request(this.getHTTPAddress() + "/login/available"))
+			.then((res) => {
+				console.log("Auth Modules Available Retrieved");
+				if(res.status === 404) {
+					throw new Error("Endpoint Not Found");
+				} else if(res.status === 500) {
+					throw new Error("Server Error");
+				} else if(res.status === 200) {
+					return res.json();
+				} else {
+					throw new Error("Unknown Error");
+				}
+			}).then((result) => {
+				console.log("Available Modules: ", result);
+				for(var x=0; x<result.modules.length; x++) {
+					Vue.set(this.modules, result.modules[x].id, result.modules[x]);
+					if(result.modules[x].id !== "local") {
+						this.alternatives.push(result.modules[x]);
+					}
+				}
+				Vue.set(this, "loading", false);
+			}).catch((error) => {
+				console.error("Error processing Available Authentication Modules: ", error);
+				this.$emit("message", {
+					"class": "rsbd-lightred",
+					"icon": "fas fa-exclamation-triangle rs-lightorange",
+					"heading": "System Failure",
+					"text": "Failed to connect to server to check authentication options"
+				});
+				Vue.set(this, "loading", false);
+			});
 		},
 		"methods": {
 			"toggleSecure": function() {
@@ -89,6 +164,12 @@
 			},
 			"getSocketAddress": function() {
 				return (this.storage.secure?"wss://":"ws://") + this.storage.address;
+			},
+			"loginModule": function(module) {
+				if(!this.loggingIn) {
+					Vue.set(this, "loggingIn", true);
+					window.location.href = this.getHTTPAddress() + "/login/" + module.id + "/authenticate";
+				}
 			},
 			"login": function() {
 				if(!this.loggingIn) {

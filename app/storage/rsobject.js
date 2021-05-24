@@ -1100,7 +1100,7 @@ RSObject.setObjects = function(a, b) {
  */
 RSObject.setValues = function(a, b, type) {
 	if(b === null) {
-		return undefined;
+		return null;
 	} else if(typeof(a) === undefined || typeof(b) !== undefined) {
 		return b;
 	} else {

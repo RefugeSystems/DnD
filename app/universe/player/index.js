@@ -192,11 +192,10 @@ class PlayerConnection extends EventEmitter {
 				send = {},
 				field,
 				x;
-			
 			if(manager) {
 				for(x=0; x<manager.fields.length; x++) {
 					field = manager.fields[x];
-					if(change[field.id] && !field.attribute.master_only && !field.attribute.server_only) {
+					if(change[field.id] !== undefined && !field.attribute.master_only && !field.attribute.server_only) {
 						send[field.id] = change[field.id];
 					}
 				}
