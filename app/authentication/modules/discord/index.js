@@ -1,12 +1,12 @@
 /**
  * 
- * @class AuthModuleBattleNet
+ * @class AuthModuleDiscord
  * @extends SystemAuthModule
  * @constructor
  * @static
  */
 
-var Strategy = require("passport-bnet").Strategy,
+var Strategy = require("passport-discord").Strategy,
 	Random = require("rs-random"),
 	btoa = require("btoa"),
 	express = require("express");
@@ -15,12 +15,12 @@ var Strategy = require("passport-bnet").Strategy,
 module.exports = new (function() {
 	this.router = express.Router();
 	this.description = {};
-	this.description.id = "bnet";
-	this.description.icon = "fab fa-battle-net";
-	this.description.name = "Battle.net";
+	this.description.id = "discord";
+	this.description.icon = "fab fa-discord";
+	this.description.name = "Discord";
 	
 	this.router.use((req, res, next) => {
-		console.log("Battle.net: " + req.id);
+		console.log("Discord: " + req.id);
 		next();
 	});
 	
@@ -37,20 +37,19 @@ module.exports = new (function() {
 		var strategy = {
 			"clientID": specification.app_id,
 			"clientSecret": specification.app_secret,
-			"callbackURL": specification.callback || authentication.public + "login/bnet/link",
-			"region": specification.region || "us"
+			"callbackURL": specification.callback || authentication.public + "login/discord/link",
+			"scorpe": ["identify", "email"]
 		};
 		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
-			console.log("Received Profile...\n", req, accessToken, refreshToken, profile);
-			var id = profile.battletag,
+			var id = profile.id,
 				user,
 				buffer,
 				x;
 				
 			for(x=0; x<universe.manager.player.objectIDs.length; x++) {
 				buffer = universe.manager.player.object[universe.manager.player.objectIDs[x]];
-				if(buffer && buffer.attribute && buffer.attribute.bnet && buffer.attribute.bnet.indexOf(id) !== -1) {
+				if(buffer && buffer.attribute && buffer.attribute.discord && buffer.attribute.discord.indexOf(id) !== -1) {
 					user = buffer;
 					break;
 				}
@@ -61,9 +60,10 @@ module.exports = new (function() {
 					"id": Random.identifier("player", 10, 32).toLowerCase(),
 					"username": id,
 					"name": profile.displayName,
+					"email": id,
 					"gm": false,
 					"attribute": {
-						"bnet": [id]
+						"discord": [id]
 					}
 				};
 				universe.createObject(details, makeSession);
@@ -90,7 +90,7 @@ module.exports = new (function() {
 				console.log("Making Player");
 				makePlayer();
 			} else {
-				var error = new universe.Anomaly("authentication:bnet:not-found", "Authentication completed but user was not found", 40, {"request": req?req.id:"unknown", "profile": profile});
+				var error = new universe.Anomaly("authentication:discord:not-found", "Authentication completed but user was not found", 40, {"request": req.id, "profile": profile});
 				console.log("User Not Found: " + profile.displayName + "@" + profile.id);
 				authentication.emit("error", error);
 				done();
@@ -105,9 +105,12 @@ module.exports = new (function() {
 			finish,
 			link;
 		
-		inbound = passport.authenticate("bnet");
+		inbound = passport.authenticate("discord", {
+			"scope": ["email", "profile"]
+		});
 		
-		link = passport.authenticate("bnet", {
+		link = passport.authenticate("discord", {
+			"scope": ["email", "profile"],
 			"failureRedirect": authentication.public_web + "#/?authfail=401.1"
 		});
 		
