@@ -106,11 +106,11 @@ module.exports = new (function() {
 			link;
 		
 		inbound = passport.authenticate("discord", {
-			"scope": ["email", "profile"]
+			"scope": ["identify", "email"]
 		});
 		
 		link = passport.authenticate("discord", {
-			"scope": ["email", "profile"],
+			"scope": ["identify", "email"],
 			"failureRedirect": authentication.public_web + "#/?authfail=401.1"
 		});
 		
