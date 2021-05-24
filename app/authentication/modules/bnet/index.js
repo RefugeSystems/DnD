@@ -105,9 +105,9 @@ module.exports = new (function() {
 			finish,
 			link;
 		
-		inbound = passport.authenticate("facebook");
+		inbound = passport.authenticate("bnet");
 		
-		link = passport.authenticate("facebook", {
+		link = passport.authenticate("bnet", {
 			"failureRedirect": authentication.public_web + "#/?authfail=401.1"
 		});
 		
