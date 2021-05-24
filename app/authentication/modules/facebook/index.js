@@ -41,6 +41,8 @@ module.exports = new (function() {
 			"accessType": "offline"
 		};
 		
+		console.log("Facebook Callback: " + strategy.callbackURL);
+		
 		var receiveProfile = function (req, accessToken, refreshToken, profile, done) {
 			console.log("Received Profile...\n", req, accessToken, refreshToken, profile);
 			var email = profile.emails[0].value,
@@ -110,15 +112,15 @@ module.exports = new (function() {
 		inbound = passport.authenticate("facebook");
 		
 		link = passport.authenticate("facebook", {
-			"failureRedirect": "http://127.0.0.1:3082/#/?authfail=401.1"
+			"failureRedirect": authentication.public + "#/?authfail=401.1"
 		});
 		
 		finish = function(req, res, next) {
 			console.log("Complete: ", req.session.passport.user);
 			if(req.session && req.session.passport && req.session.passport.user) {
-				res.redirect("http://127.0.0.1:3082/#/?session=" + btoa(JSON.stringify(req.session.passport.user)));
+				res.redirect(authentication.public + "#/?session=" + btoa(JSON.stringify(req.session.passport.user)));
 			} else {
-				res.redirect("http://127.0.0.1:3082/#/?authfail=401.1");
+				res.redirect(authentication.public + "#/?authfail=401.1");
 			}
 		};
 		
