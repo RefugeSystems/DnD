@@ -382,6 +382,7 @@ class Universe extends EventEmitter {
 	 */
 	requestState(player, time) {
 		var managers = Object.keys(this.manager),
+			fields = {},
 			state = {},
 			master_fields,
 			manager,
@@ -391,9 +392,13 @@ class Universe extends EventEmitter {
 			x;
 		
 		// TODO: Investigate time commitment here, may need broken up to prevent bad lockups
+		state.classes = [];
+		state.fields = [];
+		
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
 			if(!omittedFromSync[managers[m]]) {
+				state.classes.push(manager.toJSON());
 				state[manager.id] = [];
 				if(!player.gm) {
 					master_fields = [];
@@ -420,6 +425,11 @@ class Universe extends EventEmitter {
 					}
 				}
 			}
+		}
+		
+		fields = Object.keys(this.manager[managers[0]].database.field)
+		for(f=0; f<fields.length; f++) {
+			state.fields.push(this.manager[managers[0]].database.field[fields[f]]);
 		}
 		
 		return state;

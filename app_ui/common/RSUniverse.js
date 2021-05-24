@@ -122,7 +122,7 @@ class RSUniverse extends EventEmitter {
 				this.state.loaded = true; // Set early to not delay receiveDelta
 				for(i=0; i<classes.length; i++) {
 					if(!this.index[classes[i]]) {
-						Vue.set(this.listing, classes[i], event.data[classes[i]]);
+						Vue.set(this.listing, classes[i], []); // event.data[classes[i]]);
 						Vue.set(this.index, classes[i], {});
 					}
 					for(j=0; j<event.data[classes[i]].length; j++) {
@@ -190,11 +190,15 @@ class RSUniverse extends EventEmitter {
 					this.index[loadDetails[i]] = storeIndex[loadDetails[i]];
 				}
 				this.metrics = loadMetrics;
+				
+				console.log("Universe Metric Load State: ", _p(loadMetrics), _p(loadDetails));
 			}
 		} catch(abort) {
 			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
 			Vue.set(this.metrics, "sync", 0);
 		}
+		
+		console.log("Universe Initial Sync State: ", _p(this.metrics));
 	}
 	
 	/**
@@ -442,15 +446,20 @@ class RSUniverse extends EventEmitter {
 				try {
 					message = JSON.parse(event.data);
 					message.received = Date.now();
-					if(this.state.initialized) {
-						Vue.set(this.metrics, "sync", message.sent);
-					}
-					console.log("Received: ", message);
 					if(message.version && message.version !== this.version) {
 						this.version = message.version;
 					}
-					if(this.debugConnection || this.debug || rsSystem.debug) {
-						console.log("Connection - Received: ", _p(message));
+					if(this.debugConnection || this.debug) {
+						console.log("Received[" + this.state.initialized + "]: ", message, _p(message));
+					}
+					if(rsSystem.debug) {
+						if(rsSystem.debug > 10) {
+							console.log("Received: ", message, _p(message));
+						} else if(rsSystem.debug > 5) {
+							console.log("Received: ", message);
+						} else {
+							console.log("Received Message Type: " + message.type);
+						}
 					}
 					
 					this.addLogEvent(message.type + " Message received", message.type === "error"?50:30, message);
@@ -554,11 +563,18 @@ class RSUniverse extends EventEmitter {
 				"type": type,
 				"data": data
 			};
-			
-			if(this.debugConnection) {
-				console.log("Connection - Sending: ", sending);
+			if(this.debugConnection || this.debug) {
+				console.log("Sending[" + this.state.initialized + "]: ", sending);
 			}
-			
+			if(rsSystem.debug) {
+				if(rsSystem.debug > 10) {
+					console.log("Sending: ", sending, _p(sending));
+				} else if(rsSystem.debug > 5) {
+					console.log("Sending: ", sending);
+				} else {
+					console.log("Sending Message Type: " + type);
+				}
+			}
 			this.connection.socket.send(JSON.stringify(sending));
 		} else if(!this._noBuffer[type]) {
 			// TODO: Buffer for connection restored
@@ -597,6 +613,30 @@ class RSUniverse extends EventEmitter {
 		this.sync();
 	}
 	
+	
+	deleteCache() {
+		try {
+			var loadDetails = localStorage.getItem(this.KEY.DETAILS),
+				loadMetrics = localStorage.getItem(this.KEY.METRICS),
+				i;
+				
+			if(loadDetails && loadMetrics) {
+				loadMetrics = JSON.parse(loadMetrics);
+				loadDetails = loadDetails.split(",");
+				for(i=0; i<loadDetails.length; i++) {
+					localStorage.removeItem(this.KEY.CLASSPREFIX + loadDetails[i]);
+				}
+				localStorage.removeItem(this.KEY.DETAILS);
+				localStorage.removeItem(this.KEY.METRICS);
+			} else {
+				console.warn("Cache Delete Skipped for No Data");
+			}
+		} catch(abort) {
+			console.error("Delete Failed: ", abort);
+			this.addLogEvent("Failed to clear Universe Cache, aborting and allowing normal sync", 50, abort);
+			Vue.set(this.metrics, "sync", 0);
+		}
+	}
 	
 	checkVersion() {
 		if(this.version != rsSystem.version) {

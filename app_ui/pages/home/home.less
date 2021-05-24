@@ -14,6 +14,11 @@
 		display: flex;
 		justify-content: center;
 		width: 100%;
+		z-index: 5;
+	}
+	
+	.active {
+		z-index: 5;
 	}
 
 	.waiting {
@@ -92,5 +97,63 @@
 		color: inherit;
 		width: 100%;
 		height: 100%;
+	}
+	
+	.display-page {
+		position: relative;
+		height: 100%;
+		overflow: auto;
+		max-width: 500px;
+		margin: auto;
+		overflow-x: hidden;
+	}
+	
+	.app-security-links {
+		position: absolute;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		bottom: 0px;
+		left: 0px;
+		width: 100%;
+		z-index: 1;
+		height: 0px;
+		overflow: visible;
+		
+		.app-link {
+			display: block;
+			position: relative;
+			border-radius: 4px;
+			padding: 3px 6px;
+			margin: 0px 7px;
+			transition: top .5s;
+			height: 27px;
+			font-size: 14px;
+			top: 10px;
+			text-align: center;
+			/*
+			border: 1px solid @rsGray;
+			background-color: @rsBlack;
+			color: @rsWhite;
+			*/
+			
+			span {
+				display: block;
+				position: relative;
+				line-height: 20px;
+				width: 70px;
+			}
+			
+			&.active {
+				top: -40px !important;
+				color: @rsBlue;
+			}
+		}
+		
+		&.shown {
+			.app-link {
+				top: -30px;
+			}
+		}
 	}
 }

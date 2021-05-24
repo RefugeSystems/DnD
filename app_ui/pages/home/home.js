@@ -34,7 +34,11 @@ rsSystem.component("RSHome", {
 		data.universe = null;
 		data.player = null;
 		data.user = null;
-
+		
+		
+		data.pages = ["Privacy", "License", "Terms"];
+		
+		data.active = null;
 		data.configuration = null;
 		data.universe = new RSUniverse();
 		data.universe.$on("disconnected", () => {
@@ -62,6 +66,14 @@ rsSystem.component("RSHome", {
 		});
 
 		return data;
+	},
+	"watch": {
+		"$route.query": {
+			"deep": true,
+			"handler": function() {
+				this.setActive();
+			}
+		}
 	},
 	"mounted": function() {
 		rsSystem.register(this);
@@ -93,6 +105,9 @@ rsSystem.component("RSHome", {
 			if(configuration.address && (!this.storage.address || configuration.force)) {
 				Vue.set(this.storage, "address", configuration.address);
 			}
+			if(configuration.debug !== undefined) {
+				rsSystem.debug = configuration.debug;
+			}
 			Vue.set(this, "configuration", configuration);
 			return rsSystem.configureRouting(configuration);
 		}).then((configuration) => {
@@ -104,8 +119,24 @@ rsSystem.component("RSHome", {
 		if(this.storage.session) {
 			this.connect(this.storage.session);
 		}
+		
+		this.setActive();
 	},
 	"methods": {
+		"setActive": function() {
+			if(this.$route.query.p) {
+				Vue.set(this, "active", this.$route.query.p);
+			} else if(this.active) {
+				Vue.set(this, "active", null);
+			}	
+		},
+		"view": function(page) {
+			if(this.active === page) {
+				this.$router.push(this.$route.path);
+			} else {
+				this.$router.push(this.$route.path + "?p=" + page);
+			}
+		},
 		"receiveMessage": function(message) {
 			if(message) {
 				var date = new Date();
