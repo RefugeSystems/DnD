@@ -114,15 +114,15 @@ module.exports = new (function() {
 		
 		link = passport.authenticate("google", {
 			"scope": ["email", "profile"],
-			"failureRedirect": authentication.public + "#/?authfail=401.1"
+			"failureRedirect": authentication.public_web + "#/?authfail=401.1"
 		});
 		
 		finish = function(req, res, next) {
 			console.log("Complete: ", req.session.passport.user);
 			if(req.session && req.session.passport && req.session.passport.user) {
-				res.redirect(authentication.public + "#/?session=" + btoa(JSON.stringify(req.session.passport.user)));
+				res.redirect(authentication.public_web + "#/?session=" + btoa(JSON.stringify(req.session.passport.user)));
 			} else {
-				res.redirect(authentication.public + "#/?authfail=401.1");
+				res.redirect(authentication.public_web + "#/?authfail=401.1");
 			}
 		};
 		
