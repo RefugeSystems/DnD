@@ -131,7 +131,14 @@ class PlayerConnection extends EventEmitter {
 			event.player = this.player;
 			event.event = event;
 
-			this.emit("disconnected", event);
+			if(this.socketIDs.length === 0) {
+				this.emit("disconnected", event);
+				this.universe.emit("send", {
+					"type": "player-disconnected",
+					"player": this.player.id,
+					"username": this.player.username
+				});
+			}
 		};
 
 		socket.onerror = (error) => {
@@ -161,6 +168,13 @@ class PlayerConnection extends EventEmitter {
 			"type": "connected",
 			"sent": Date.now()
 		}));
+		if(this.socketIDs.length === 1) {
+			this.universe.emit("send", {
+				"type": "player-connected",
+				"player": this.player.id,
+				"username": this.player.username
+			});
+		}
 	}
 	
 	/**
@@ -198,12 +212,16 @@ class PlayerConnection extends EventEmitter {
 				field,
 				x;
 			if(manager) {
+				if(change._computed) {
+					
+				}
 				for(x=0; x<manager.fields.length; x++) {
 					field = manager.fields[x];
 					if(change[field.id] !== undefined && !field.attribute.master_only && !field.attribute.server_only) {
 						send[field.id] = change[field.id];
 					}
 				}
+				
 				send._class = change._class;
 				send.id = change.id;
 				this.send("object", send);
@@ -235,7 +253,7 @@ class PlayerConnection extends EventEmitter {
 		// TODO: Implement better/additional recipient restrictions
 		if((!message.recipient && !message.recipients) || (message.recipient && message.recipient === this.player.id) || (message.recipients && message.recipients.indexOf(this.player.id) !== -1)) {
 			// TODO: Implement additional general filtering
-			this.send(message);
+			this.send(message.type, message);
 		}
 	}
 }

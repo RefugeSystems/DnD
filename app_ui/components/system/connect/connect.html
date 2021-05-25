@@ -56,11 +56,21 @@
 						</button>
 					</td>
 				</tr>
+				<tr class="secondary-login">
+					<td></td>
+					<td>
+						<button v-on:click="login()">
+							<span>Login</span>
+							<span class="fad fa-portal-enter"></span>
+						</button>
+					</td>
+					<td></td>
+				</tr>
 			</table>
 			<div class="actions">
-				<button class="primary-action" v-on:click="login()">
+				<button class="primary-action primary-login" v-on:click="login()">
 					<span v-if="loggingIn" class="action-icon fas fa-spinner fa-pulse"></span>
-					<span v-if="!loggingIn" class="action-icon fas fa-sign-in"></span>
+					<span v-if="!loggingIn" class="action-icon fad fa-portal-enter"></span>
 				</button>
 				<button v-if="external" class="toggle-action" v-on:click="toggleSecure()">
 					Secure?

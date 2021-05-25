@@ -119,6 +119,7 @@ fields.push({
 	"description": "The resulting hash of a password for identification purposes.",
 	"type": "string",
 	"attribute": {
+		"server_only": true,
 		"encrypted": true
 	}
 });
@@ -214,25 +215,13 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
-	"id": "auth_token_use",
-	"name": "Authorization Token in Use",
-	"description": "Maps authorization tokens to expiration times. This is more to reserve the data than store.",
-	"type": "object",
-	"attribute": {}
-});
-fields.push({
 	"id": "auth_token",
 	"name": "Authorization Tokens",
 	"description": "Maps authorization tokens to expiration times. This is more to reserve the data than store.",
 	"type": "object",
-	"attribute": {}
-});
-fields.push({
-	"id": "auth_identity",
-	"name": "Authorization Identities",
-	"description": "Maps authorization Identity modules to usernames that correspond to a player. This is to allow user's to have multiple identities (ie. Multiple Google Accounts) map to the same user.",
-	"type": "object",
-	"attribute": {}
+	"attribute": {
+		"server_only": true
+	}
 });
 fields.push({
 	"id": "date",
@@ -389,7 +378,7 @@ classes.push({
 	"id": "session",
 	"name": "Session",
 	"description": "Tracks a Player connection session",
-	"fields": ["player", "username", "disabled", "auth_token_use", "last", "expiry"]
+	"fields": ["player", "username", "disabled", "last", "expiry"]
 });
 classes.push({
 	"id": "location",

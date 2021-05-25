@@ -22,7 +22,7 @@ rsSystem.component("StorageController", {
 		}
 	},
 	"data": function() {
-		console.log("Loading Controller[" + this.storageKey + "]: ", this);
+		// console.log("Loading Controller[" + this.storageKey + "]: ", this);
 		var data = {};
 		data.storage = this.loadStorage();
 		return data;
@@ -36,7 +36,7 @@ rsSystem.component("StorageController", {
 		}
 	},
 	"mounted": function() {
-		console.log("Mounted Controller[" + this.storageKey + "]: ", this.storage);
+		// console.log("Mounted Controller[" + this.storageKey + "]: ", this.storage);
 	},
 	"methods": {
 		"loadStorage": function(defaults) {

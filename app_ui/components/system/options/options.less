@@ -1,0 +1,89 @@
+.dialog.system-options {
+	
+	.options-container {
+		display: flex;
+		flex-direction: row;
+		
+		.options-navigation {
+			display: flex;
+			flex-direction: column;
+			
+			.option-page {
+				font-size: 18px;
+				text-align: left;
+				padding: 4px 7px;
+				margin: 5px;
+				
+				&.active {
+					border-color: @rsLightBlue;
+					color: @rsLightBlue;
+				}
+			}
+		}
+		
+		.options-form {
+			display: block;
+			width: 100%;
+			overflow: auto;
+		}
+		
+		.options {
+			display: flex;
+			flex-direction: column;
+			padding: 0px 7px;
+			min-width: 300px;
+			
+			.option {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				font-size: 16px;
+				
+				.option-ctrl {
+					font-size: 20px;
+					margin: 7px 0px;
+					width: 100%;
+					
+					&.toggle {
+						text-align: left;
+						border: 0px;
+					}
+					
+					&.text {
+						display: flex;
+						flex-direction: column;
+						
+						input {
+							padding: 2px 5px;
+							font-size: 16px;
+						}
+					}
+					
+					textarea {
+						display: block;
+						min-height: 60px;
+						width: -webkit-fill-available;
+					}
+				}
+				
+				button.option-ctrl {
+					width: 100%;
+				}
+				
+				.option-icon {
+					font-size: 20px;
+				}
+			}
+		}
+	}
+	
+	button {
+		border-radius: 4px;
+	}
+	
+	.malformed {
+		input {
+			background-color: @rsLightRed;
+		}
+	}
+}

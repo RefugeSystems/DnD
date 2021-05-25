@@ -21,5 +21,14 @@ module.exports.initialize = function(universe) {
 			component = event.message.data.component.id || event.message.data.component;
 		}
 		universe.chronicle.addEvent("error:player", event.message, Date.now(), component, event.player?event.player.id:null);
+		universe.emit("send", {
+			"type": "notice",
+			"mid": "report:error:received",
+			"recipient": event.player.id,
+			"message": "Error Report Received",
+			"timeout": 5000
+		});
+		
+		// TODO: Notify Game Masters of Error Report
 	});
 };

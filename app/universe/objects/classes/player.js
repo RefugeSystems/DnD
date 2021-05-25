@@ -23,6 +23,10 @@ class Constructor extends RSObject {
 		this.errors = 0;
 		this.sent = 0;
 		this.recv = 0;
+		
+		if(!this.attribute) {
+			this.attribute = {};
+		}
 	}
 	
 	toJSON() {

@@ -1,7 +1,7 @@
 <div class="rs-page page-home">
-	<div class="login prompt" v-if="state === 0 && configuration && !active">
+	<div class="login prompt" v-if="state <= 0 && configuration && !active">
 		<div class="boxed">
-			<rs-connect v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" storage-key="session"></rs-connect>
+			<rs-connect v-if="state === 0" v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" storage-key="session"></rs-connect>
 			<div class="message-content system-component" v-if="message" :class="messageClass" v-on:click="dismissMessage()">
 				<div class="message-heading" v-if="messageHeading">
 					<span :class="messageIcon" v-if="messageIcon"></span>
@@ -14,7 +14,8 @@
 	</div>
 	<div class="login waiting" v-if="((0 < state && state < 10 && storage.session) || !configuration) && !active">
 		<div class="titling">
-			<span v-if="state === 1 || state === 0">Connecting</span>
+			<span v-if="state === 0">{{title}}</span>
+			<span v-if="state === 1">Connecting</span>
 			<span v-if="state === 2">Loading</span>
 		</div>
 		<div class="status">
@@ -22,17 +23,17 @@
 		</div>
 	</div>
 	<div class="system-display active" v-if="state === 10 && player && configuration && !active">
-		<component class="system-active":is="configuration.mainpage" :universe="universe" :player="player" :configuration="configuration"></component>
-		<router-view class="system-view" :universe="universe" :player="player" :configuration="configuration"></router-view>
-		<system-menu class="system-menu" :universe="universe" :player="player" :configuration="configuration"></system-menu>
-		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration"></system-info>
-		<system-dialog class="system-dialog" :universe="universe" :player="player" :configuration="configuration"></system-dialog>
-		<system-message class="system-message" :universe="universe" :player="player" :configuration="configuration"></system-message>
+		<component class="system-active":is="configuration.mainpage" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="main_component"></component>
+		<router-view class="system-view" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile"></router-view>
+		<system-menu class="system-menu" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmenu"></system-menu>
+		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysinfo"></system-info>
+		<system-dialog class="system-dialog" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysdialog"></system-dialog>
+		<system-message class="system-message" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmsg"></system-message>
 	</div>
 	<div class="display-page" v-if="active">
 		<component :is="'page' + active"></component>
 	</div>
-	<div class="app-security-links" :class="state === 0?'shown':'hidden'">
+	<div class="app-security-links" :class="state <= 0?'shown':'hidden'">
 		<button class="app-link general" v-on:click="view(page)" :class="page === active?'active':'inactive'" v-for="page in pages">
 			<span>{{page}}</span>
 		</button>

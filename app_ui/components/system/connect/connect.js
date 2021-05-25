@@ -115,7 +115,7 @@
 			
 			fetch(new Request(this.getHTTPAddress() + "/login/available"))
 			.then((res) => {
-				console.log("Auth Modules Available Retrieved");
+				// console.log("Auth Modules Available Retrieved");
 				if(res.status === 404) {
 					throw new Error("Endpoint Not Found");
 				} else if(res.status === 500) {
@@ -126,7 +126,7 @@
 					throw new Error("Unknown Error");
 				}
 			}).then((result) => {
-				console.log("Available Modules: ", result);
+				// console.log("Available Modules: ", result);
 				for(var x=0; x<result.modules.length; x++) {
 					Vue.set(this.modules, result.modules[x].id, result.modules[x]);
 					if(result.modules[x].id !== "local") {
@@ -173,6 +173,7 @@
 			},
 			"login": function() {
 				if(!this.loggingIn) {
+					// console.warn("Logging In...");
 					Vue.set(this, "loggingIn", true);
 					var request = new Request(this.getHTTPAddress() + "/login/local/authenticate");
 					request.headers.set("rs-username", this.storage.username);
@@ -183,7 +184,7 @@
 					
 					fetch(request)
 					.then((res) => {
-						console.log("Response: ", res);
+						// console.log("Response: ", res);
 						if(res.status === 401) {
 							throw new Error("Password Incorrect");
 						} else if(res.status === 404) {

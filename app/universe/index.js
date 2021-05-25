@@ -412,7 +412,7 @@ class Universe extends EventEmitter {
 					sync = manager.object[manager.objectIDs[x]];
 					if(sync) { // Skip unloaded data
 						sync = sync.toJSON(); // Convert to sync format and separate object
-						if((!time || time < sync.update) && (!sync.attribute.master_only || player.gm)) {
+						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm)) {
 							if(!player.gm && master_fields.length) {
 								for(f=0; f<master_fields.length; f++) {
 									if(sync[master_fields[f]] !== undefined) {
