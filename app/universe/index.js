@@ -282,7 +282,7 @@ class Universe extends EventEmitter {
 	 * @param {WebSocket} socket
 	 */
 	connectPlayer(session, socket) {
-		console.log("Connect Player: ", session.toJSON());
+		// console.log("Connect Player: ", session.toJSON());
 		var player = this.manager.player.object[session.player],
 			connection;
 		

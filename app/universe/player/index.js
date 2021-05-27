@@ -51,7 +51,7 @@ class PlayerConnection extends EventEmitter {
 	connect(session, socket) {
 		var id = RSRandom.identifier("socket", 10, 64);
 		
-		console.log("Connecting " + id);
+		// console.log("Connecting " + id);
 		this.connection[id] = socket;
 		this.session[id] = session;
 		this.socketIDs.push(id);
@@ -59,12 +59,12 @@ class PlayerConnection extends EventEmitter {
 			"connections": 1
 		}, noOp);
 		
-		console.log("...continuing...");
+		// console.log("...continuing...");
 		
 		socket.onmessage = (event) => {
 			var message = JSON.parse(event.data),
 				now = Date.now();
-			console.log("Received: ", message);
+			// console.log("Received: ", message);
 				
 			switch(message.type) {
 				case "ping":
