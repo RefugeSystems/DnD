@@ -141,6 +141,11 @@ rsSystem.component("systemOptionsDialog", {
 					"action": "resync",
 					"icon": "fas fa-sync",
 					"label": "Resync"
+				}, {
+					"id": "app-cache-delete",
+					"action": "uncache",
+					"icon": "fas fa-sync",
+					"label": "Delete Cache"
 				}]
 			},
 			"report": {
@@ -266,6 +271,9 @@ rsSystem.component("systemOptionsDialog", {
 					break;
 				case "report-submit":
 					this.universe.send("error:report", this.report_mirror);
+					break;
+				case "uncache":
+					this.universe.deleteCache();
 					break;
 				case "emit":
 					rsSystem.EventBus.$emit(key);

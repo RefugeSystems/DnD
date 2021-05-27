@@ -41,6 +41,41 @@ rsSystem.component("systemMenu", {
 		data.items.controls = [];
 		data.items.options = [];
 		
+		var navigation = [],
+			routes = {},
+			item;
+			
+		if(this.configuration.mainpage) {
+			item = {
+				"path": "/home",
+				"component": rsSystem.components[this.configuration.mainpage],
+				"icon": "fas fa-globe"
+			};
+			data.items.app.push(item);
+		}
+		if(this.configuration.navigations) {
+			for(i=0; i<this.configuration.navigations.length; i++) {
+				// item = Object.assign({}, this.configuration.navigations[i]); // TODO: Nested children processing
+				item = this.configuration.navigations[i]; // TODO: Nested children processing
+				if(item.route && item.component) {
+					if(rsSystem.components[item.component]) {
+						switch(item.grouping) {
+							case "options":
+							case "controls":
+								data.items[item.grouping].push(item);
+								break;
+							default:
+								data.items.app.push(item);
+						}
+					} else {
+						// console.error("No component for navigation item: ", item); // Handled in navigation load
+					}
+				}
+			}
+		}
+		//rsSystem.Router.addRoute(routes);
+		
+		/*
 		if(this.configuration.navigations) {
 			for(i=0; i<this.configuration.navigations.length; i++) {
 				item = this.configuration.navigations[i];
@@ -64,6 +99,7 @@ rsSystem.component("systemMenu", {
 				}
 			}
 		}
+		*/
 		
 		data.optionsItem = {
 			"icon": "fas fa-cogs",
