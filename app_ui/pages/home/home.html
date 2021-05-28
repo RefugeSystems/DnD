@@ -23,8 +23,8 @@
 		</div>
 	</div>
 	<div class="system-display active" v-if="state === 10 && player && configuration && !active">
-		<component class="system-active" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
-		<router-view class="system-view" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="$route.path === '/' || $route.path === '/home'?'maincomponentskey' + mainpage:'pathcomponentKey' + $route.path"></router-view>
+		<component class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
+		<router-view class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="$route.path === '/' || $route.path === '/home'?'maincomponentskey' + mainpage:'pathcomponentKey' + $route.path"></router-view>
 		<system-menu class="system-menu" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmenu"></system-menu>
 		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysinfo"></system-info>
 		<system-dialog class="system-dialog" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysdialog"></system-dialog>

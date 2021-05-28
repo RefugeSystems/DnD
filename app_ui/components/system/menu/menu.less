@@ -9,6 +9,7 @@
 	height: 100%;
 	width: 60px;
 	background-color: transparent;
+	transition: top .5s;
 
 	.navigation {
 		display: flex;
@@ -21,68 +22,78 @@
 		color: inherit;
 		background-color: transparent;
 
-		.navigation-item {
-			display: flex;
-			position: relative;
-			left: 0px;
-			height: 46px;
-			width: 46px;
-			flex-shrink: 0;
-			flex-grow: 0;
-			align-content: flex-start;
-			align-items: center;
-			justify-content: center;
-			transition: color .5s, background-color .5s, left .5s, top .5s, font-size .5s;
-
-			margin: 6px;
-			background: @rsBlack;
-			border: 1px solid @rsGray;
-			color: @rsWhite;
-			text-align: center;
-			text-decoration: none;
-			border-radius: 5px;
-			
-			span {
-				font-size: 24px;
-				line-height: 44px;
-			}
-			
-			.nav-icon {
-				transition: transform .5s;
-			}
-
-			&.current {
-				background: @rsDarkOrange;
-				color: @rsWhite;
-				left: 6px;
-				
-				span {
-					font-size: 28px;
-				}
-			}
-			
-			&:active {
-				border-color: @rsBlue;
-			}
-			
-			&:hover {
-				background: @rsWhite;
-				color: @rsBlack;
-			}
-		}
-
 		.separator {
 			flex-grow: 100;
 		}
 	}
+
+	.navigation-item {
+		display: flex;
+		position: relative;
+		left: 0px;
+		height: 46px;
+		width: 46px;
+		flex-shrink: 0;
+		flex-grow: 0;
+		align-content: flex-start;
+		align-items: center;
+		justify-content: center;
+		transition: color .5s, background-color .5s, left .5s, top .5s, font-size .5s;
+
+		margin: 6px;
+		background: @rsBlack;
+		border: 1px solid @rsGray;
+		color: @rsWhite;
+		text-align: center;
+		text-decoration: none;
+		border-radius: 5px;
+		z-index: 1;
+		
+		span {
+			font-size: 24px;
+			line-height: 44px;
+		}
+		
+		.nav-icon {
+			transition: transform .5s;
+		}
+
+		&.current {
+			background: @rsDarkOrange;
+			color: @rsWhite;
+			
+			span {
+				font-size: 28px;
+			}
+		}
+		
+		&:active {
+			border-color: @rsBlue;
+		}
+		
+		&:hover {
+			background: @rsWhite;
+			color: @rsBlack;
+		}
+	}
 	
 	&.collapsed {
+		top: ~"calc(100% - 58px);";
+		overflow: hidden;
+		
 		.navigation-item {
-			left: -100px;
+			/*left: -100px;*/
 		}
 	}
 	
 	.collapse-item {
 		left: 0px !important;
+		
+		&.actual {
+			position: fixed;
+			bottom: 0px;
+			left: 0px;
+			z-index: 5;
+		}
 	}
 }

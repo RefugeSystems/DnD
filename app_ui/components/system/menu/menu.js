@@ -125,8 +125,8 @@ rsSystem.component("systemMenu", {
 	},
 	"methods": {
 		"updateCollapse": function() {
-			Vue.set(this.collapseItem, "icon", "fas fa-sign-out-alt " + (this.storage.collapsed?"rot0":"rot180"));
-			Vue.set(this.storage, "classing", this.storage.collapsed?"collapsed":"extended");
+			Vue.set(this.collapseItem, "icon", "fas fa-sign-out-alt " + (this.profile.navigation_collapsed?"rot270":"rot90"));
+			Vue.set(this.storage, "classing", this.profile.navigation_collapsed?"collapsed":"extended");
 		},
 		"isActive": function(item) {
 			if(item.path || item.emit) {
@@ -166,17 +166,19 @@ rsSystem.component("systemMenu", {
 		},
 		"getItemClassing": function(item) {
 			var classing = item.classes || "";
-			if(item.highlight && ( (item.highlight[0] === "/" && this.$route.path.startsWith(item.highlight)) || (item.highlight[0] === "?" && this.$route.path.indexOf(item.highlight) !== -1) )) {
-				return classing + " highlight";
+			if((item.highlight && ( (item.highlight[0] === "/" && this.$route.path.startsWith(item.highlight)) || (item.highlight[0] === "?" && this.$route.fullPath.indexOf(item.highlight) !== -1))) || (item.path === "/" && this.$route.path === "/home")) {
+				return classing + " current";
 			}
 			return classing;
 		},
 		"processNavigation": function(item) {
 			if(item === this.collapseItem) {
-				Vue.set(this.storage, "collapsed", !this.storage.collapsed);
+				Vue.set(this.profile, "navigation_collapsed", !this.profile.navigation_collapsed);
 				this.updateCollapse();
 			} else if(item.path) {
-				this.$router.push(item.path);
+				if(this.$route.path !== item.path) {
+					this.$router.push(item.path);
+				}
 			} else if(item.action) {
 				switch(item.action) {
 					case "toggle-labels":

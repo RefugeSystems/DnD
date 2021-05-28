@@ -38,6 +38,8 @@ rsSystem.component("RSHome", {
 		data.title = document.title;
 		data.pages = ["Privacy", "License", "Terms"];
 		data.screenLock = null;
+		data.mainpage = "RSDashboard";
+		data.menuSpacing = null;
 		
 		data.active = null;
 		data.configuration = null;
@@ -137,6 +139,9 @@ rsSystem.component("RSHome", {
 				rsSystem.debug = configuration.debug;
 			}
 			Vue.set(this, "configuration", configuration);
+			if(this.configuration.mainpage && rsSystem.components[this.configuration.mainpage]) {
+				Vue.set(this, "mainpage", this.configuration.mainpage);
+			}
 			return rsSystem.configureRouting(configuration);
 		}).then((configuration) => {
 			this.$emit("configure", configuration);
@@ -171,7 +176,7 @@ rsSystem.component("RSHome", {
 				Vue.set(this, "active", this.$route.query.p);
 			} else if(this.active) {
 				Vue.set(this, "active", null);
-			}	
+			}
 		},
 		"view": function(page) {
 			if(this.active === page) {

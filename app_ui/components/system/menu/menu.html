@@ -11,4 +11,7 @@
 			<span class="nav-icon" :class="collapseItem.icon"></span>
 		</button>
 	</div>
+	<button class="navigation-item collapse-item actual" :class="getItemClassing(collapseItem)" v-on:click="processNavigation(collapseItem)">
+		<span class="nav-icon" :class="collapseItem.icon"></span>
+	</button>
 </div>
