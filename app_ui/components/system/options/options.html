@@ -1,0 +1,50 @@
+<div class="dialog system-options">
+	<div class="options-container">
+		<div class="options-navigation dialog-content-bound">
+			<button class="option-page general" v-for="page in pageList" v-on:click="toPage(page)" :class="active === page?'active':'inactive'">
+				<span v-if="pages[page].icon" :class="pages[page].icon"></span>
+				<span>{{pages[page].name}}</span>
+			</button>
+		</div>
+		<div class="options-form dialog-content-bound">
+			<div class="options">
+				<div class="option" v-for="option in options">
+					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'data'">
+						<span>{{option.label}}</span>
+						<span>:</span>
+						<span>{{option.value}}</span>
+					</div>
+					<button class="option-ctrl general" :class="getOptionClass(option)" v-on:click="toggleOption(option.base, option.id)" v-if="option.type === 'toggle'" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">
+						<span class="option-icon" :class="option.base[option.id]?'far fa-check-square':'far fa-square'"></span>
+						<span>{{option.label}}</span>
+					</button>
+					<button class="option-ctrl general" :class="getOptionClass(option)" v-on:click="actionOption(option.action, option.base, option.id)" v-if="option.action">
+						<span v-if="option.icon" class="option-icon" :class="option.icon"></span>
+						<span>{{option.label}}</span>
+					</button>
+					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'select'">
+						<label :for="option.id">{{option.label}}</label>
+						<select :id="option.id" v-if="option.numeric" v-model.number="option.base[option.id]" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">
+							<option v-for="opt in option.options" :value="opt">{{opt}}</option>
+						</select>
+						<select :id="option.id" v-if="!option.numeric" v-model="option.base[option.id]" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">
+							<option v-for="opt in option.options" :value="opt">{{opt}}</option>
+						</select>
+					</div>
+					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'textarea'">
+						<label :for="option.id">{{option.label}}</label>
+						<textarea :id="option.id" v-model="option.base[option.id]"></textarea>
+					</div>
+					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'text'" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">
+						<label :for="option.id">{{option.label}}</label>
+						<input :id="option.id" type="text" v-model="option.base[option.id]" />
+					</div>
+					<div class="option-ctrl text" autocomplete="off" :class="getOptionClass(option)" v-if="option.type === 'password'">
+						<label :for="option.id">{{option.label}}</label>
+						<input :id="option.id" type="password" v-model="option.base[option.id]" :placeholder="option.placeholder" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

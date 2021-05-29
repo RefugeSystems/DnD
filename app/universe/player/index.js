@@ -38,6 +38,11 @@ class PlayerConnection extends EventEmitter {
 			this.unloadObject(unload);
 		};
 		
+		var forwardMessage = (message) => {
+			this.forwardMessage(message);
+		};
+		
+		universe.on("send", forwardMessage);
 		universe.on("object-updated", receiveObject);
 		universe.on("object-created", receiveObject);
 		universe.on("unload", unloadObject);
@@ -46,7 +51,7 @@ class PlayerConnection extends EventEmitter {
 	connect(session, socket) {
 		var id = RSRandom.identifier("socket", 10, 64);
 		
-		console.log("Connecting " + id);
+		// console.log("Connecting " + id);
 		this.connection[id] = socket;
 		this.session[id] = session;
 		this.socketIDs.push(id);
@@ -54,12 +59,12 @@ class PlayerConnection extends EventEmitter {
 			"connections": 1
 		}, noOp);
 		
-		console.log("...continuing...");
+		// console.log("...continuing...");
 		
 		socket.onmessage = (event) => {
 			var message = JSON.parse(event.data),
 				now = Date.now();
-			console.log("Received: ", message);
+			// console.log("Received: ", message);
 				
 			switch(message.type) {
 				case "ping":
@@ -126,7 +131,14 @@ class PlayerConnection extends EventEmitter {
 			event.player = this.player;
 			event.event = event;
 
-			this.emit("disconnected", event);
+			if(this.socketIDs.length === 0) {
+				this.emit("disconnected", event);
+				this.universe.emit("send", {
+					"type": "player-disconnected",
+					"player": this.player.id,
+					"username": this.player.username
+				});
+			}
 		};
 
 		socket.onerror = (error) => {
@@ -156,6 +168,13 @@ class PlayerConnection extends EventEmitter {
 			"type": "connected",
 			"sent": Date.now()
 		}));
+		if(this.socketIDs.length === 1) {
+			this.universe.emit("send", {
+				"type": "player-connected",
+				"player": this.player.id,
+				"username": this.player.username
+			});
+		}
 	}
 	
 	/**
@@ -193,12 +212,16 @@ class PlayerConnection extends EventEmitter {
 				field,
 				x;
 			if(manager) {
+				if(change._computed) {
+					
+				}
 				for(x=0; x<manager.fields.length; x++) {
 					field = manager.fields[x];
 					if(change[field.id] !== undefined && !field.attribute.master_only && !field.attribute.server_only) {
 						send[field.id] = change[field.id];
 					}
 				}
+				
 				send._class = change._class;
 				send.id = change.id;
 				this.send("object", send);
@@ -224,6 +247,14 @@ class PlayerConnection extends EventEmitter {
 		send._class = this.universe.getClassFromID(id);
 		send.id = id;
 		this.send("unload", send);
+	}
+	
+	forwardMessage(message) {
+		// TODO: Implement better/additional recipient restrictions
+		if((!message.recipient && !message.recipients) || (message.recipient && message.recipient === this.player.id) || (message.recipients && message.recipients.indexOf(this.player.id) !== -1)) {
+			// TODO: Implement additional general filtering
+			this.send(message.type, message);
+		}
 	}
 }
 

@@ -56,8 +56,23 @@
 			this.universe.$on("warning", this.receiveMessage);
 			this.universe.$on("error", this.receiveMessage);
 			
+			/**
+			 * 
+			 * @event track-progress
+			 * @for EventBus
+			 */
 			rsSystem.EventBus.$on("track-progress", this.trackProgress);
+			/**
+			 * 
+			 * @event message
+			 * @for EventBus
+			 */
 			rsSystem.EventBus.$on("message", this.receiveMessage);
+			/**
+			 * 
+			 * @event error
+			 * @for EventBus
+			 */
 			rsSystem.EventBus.$on("error", this.receiveMessage);
 		},
 		"methods": {

@@ -84,7 +84,69 @@ class RSUniverse extends EventEmitter {
 		
 		this.listing = {};
 		
+		rsSystem.EventBus.$on("universe-reconnect", () => {
+			if(!this.connection.socket) {
+				this.state.reconnectAttempts = 0;
+				rsSystem.EventBus.$emit("dialog-dismiss");
+				this.reconnect();
+			}
+		});
+		
 		this.processEvent = {};
+		
+		
+		
+		this.processEvent["notice"] = (event) => {
+			this.$emit("notification", {
+				"id": event.data.mid,
+				"message": event.data.message,
+				"icon": event.data.icon || "fas fa-exclamation-triangle rs-lightgreen",
+				"event": event,
+				"timeout": event.data.timeout,
+				"anchored": event.data.anchored
+			});
+		};
+		this.processEvent["system-warning"] = (event) => {
+			this.$emit("notification", {
+				"id": event.data.mid,
+				"message": event.data.message,
+				"icon": event.data.icon || "fas fa-exclamation-triangle rs-yellow",
+				"event": event,
+				"timeout": event.data.timeout,
+				"anchored": event.data.anchored
+			});
+		};
+		this.processEvent["system-exception"] = (event) => {
+			this.$emit("notification", {
+				"id": event.data.mid,
+				"message": event.data.message,
+				"icon": event.data.icon || "fas fa-exclamation-triangle rs-lightred",
+				"event": event,
+				"timeout": event.data.timeout,
+				"anchored": event.data.anchored
+			});
+		};
+		
+		this.processEvent["account:updated"] = (event) => {
+			this.$emit("notification", {
+				"id": "account:modification",
+				"message": "Account Updated",
+				"icon": "fas fa-exclamation-triangle rs-lightgreen",
+				"event": event,
+				"timeout": 10000
+			});
+		};
+		this.processEvent["account:update:errors"] = (event) => {
+			console.log("Failure: ", event);
+			this.$emit("notification", {
+				"id": "account:modification",
+				"message": "Account Update Failed",
+				"icon": "fas fa-exclamation-triangle rs-lightred",
+				"event": event,
+				"timeout": 10000
+			});
+		};
+		
 		this.processEvent.ping = (event) => {
 			var latency = Date.now() - event.sent;
 			if(this.metrics.latency) {
@@ -122,7 +184,7 @@ class RSUniverse extends EventEmitter {
 				this.state.loaded = true; // Set early to not delay receiveDelta
 				for(i=0; i<classes.length; i++) {
 					if(!this.index[classes[i]]) {
-						Vue.set(this.listing, classes[i], event.data[classes[i]]);
+						Vue.set(this.listing, classes[i], []); // event.data[classes[i]]);
 						Vue.set(this.index, classes[i], {});
 					}
 					for(j=0; j<event.data[classes[i]].length; j++) {
@@ -295,13 +357,13 @@ class RSUniverse extends EventEmitter {
 			this.log.pop();
 		}
 		if(event.level === 40) {
-			rsSystem.log.warn(event);
+			// rsSystem.log.warn(event);
 		}
 		if(event.level === 50) {
-			rsSystem.log.error(event);
+			// rsSystem.log.error(event);
 		}
 		if(event.level === 60) {
-			rsSystem.log.fatal(event);
+			// rsSystem.log.fatal(event);
 		}
 	}
 
@@ -442,15 +504,20 @@ class RSUniverse extends EventEmitter {
 				try {
 					message = JSON.parse(event.data);
 					message.received = Date.now();
-					if(this.state.initialized) {
-						Vue.set(this.metrics, "sync", message.sent);
-					}
-					console.log("Received: ", message);
 					if(message.version && message.version !== this.version) {
 						this.version = message.version;
 					}
-					if(this.debugConnection || this.debug || rsSystem.debug) {
-						console.log("Connection - Received: ", _p(message));
+					if(this.debugConnection || this.debug) {
+						console.log("Received[" + this.state.initialized + "]: ", message, _p(message));
+					}
+					if(rsSystem.debug) {
+						if(rsSystem.debug >= 10) {
+							console.log("Received: ", message, _p(message));
+						} else if(rsSystem.debug >= 5) {
+							console.log("Received: ", message);
+						} else {
+							console.log("Received Message Type: " + message.type);
+						}
 					}
 					
 					this.addLogEvent(message.type + " Message received", message.type === "error"?50:30, message);
@@ -466,7 +533,7 @@ class RSUniverse extends EventEmitter {
 					this.addLogEvent("Error processing message", 50, {event, exception});
 					this.$emit("warning", {
 						"message": {
-							"text": "Failed to parse AQ Connection message"
+							"text": "Failed to parse Universe Connection message"
 						},
 						"fields": {
 							"message": message,
@@ -505,7 +572,20 @@ class RSUniverse extends EventEmitter {
 					"message": "Connection Lost",
 					"icon": "fas fa-exclamation-triangle rs-lightred",
 					"anchored": true,
-					"event": event
+					"event": event,
+					"emission": {
+						"type": "dialog-open",
+						"title": "Reconnect?",
+						"buttons": [{
+							"classes": "fas fa-check rs-lightgreen",
+							"text": "Yes",
+							"emission": "universe-reconnect"
+						}, {
+							"classes": "fas fa-times rs-lightred",
+							"text": "No",
+							"emission": "dialog-dismiss"
+						}]
+					}
 				});
 			}
 		}, 1000);
@@ -543,8 +623,9 @@ class RSUniverse extends EventEmitter {
 	 * @method send
 	 * @param {String} type
 	 * @param {Object} data
+	 * @param {String} [player] ID
 	 */
-	send(type, data) {
+	send(type, data, player) {
 		data = data || {};
 		var sending;
 
@@ -554,11 +635,18 @@ class RSUniverse extends EventEmitter {
 				"type": type,
 				"data": data
 			};
-			
-			if(this.debugConnection) {
-				console.log("Connection - Sending: ", sending);
+			if(this.debugConnection || this.debug) {
+				console.log("Sending[" + this.state.initialized + "]: ", sending);
 			}
-			
+			if(rsSystem.debug) {
+				if(rsSystem.debug >= 10) {
+					console.log("Sending: ", sending, _p(sending));
+				} else if(rsSystem.debug >= 5) {
+					console.log("Sending: ", sending);
+				} else {
+					console.log("Sending Message Type: " + type);
+				}
+			}
 			this.connection.socket.send(JSON.stringify(sending));
 		} else if(!this._noBuffer[type]) {
 			// TODO: Buffer for connection restored
@@ -597,6 +685,43 @@ class RSUniverse extends EventEmitter {
 		this.sync();
 	}
 	
+	
+	deleteCache() {
+		try {
+			var loadDetails = localStorage.getItem(this.KEY.DETAILS),
+				loadMetrics = localStorage.getItem(this.KEY.METRICS),
+				i;
+				
+			if(loadDetails && loadMetrics) {
+				loadMetrics = JSON.parse(loadMetrics);
+				loadDetails = loadDetails.split(",");
+				for(i=0; i<loadDetails.length; i++) {
+					localStorage.removeItem(this.KEY.CLASSPREFIX + loadDetails[i]);
+				}
+				localStorage.removeItem(this.KEY.DETAILS);
+				localStorage.removeItem(this.KEY.METRICS);
+			} else {
+				console.warn("Cache Delete Skipped for No Data");
+			}
+		} catch(abort) {
+			console.error("Delete Failed: ", abort);
+			this.addLogEvent("Failed to clear Universe Cache, aborting and allowing normal sync", 50, abort);
+			Vue.set(this.metrics, "sync", 0);
+		}
+	}
+	
+	exportData() {
+		var appendTo = $("#anchors")[0],
+			anchor = document.createElement("a");
+
+		appendTo.appendChild(anchor);
+		anchor.href = URL.createObjectURL(new Blob([JSON.stringify(this.listing, null, "\t")]));
+		anchor.download = "universe_complete." + Date.now() + ".json";
+
+		anchor.click();
+		URL.revokeObjectURL(anchor.href);
+		appendTo.removeChild(anchor);
+	}
 	
 	checkVersion() {
 		if(this.version != rsSystem.version) {

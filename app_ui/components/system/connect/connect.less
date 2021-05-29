@@ -123,4 +123,26 @@
 			}
 		}
 	}
+	
+	.secondary-login {
+		text-align: right;
+	}
+}
+
+@media all {
+	@media (min-width: 501px) {
+		.primary-login {
+		}
+		.secondary-login {
+			display: none !important;
+		}
+	}
+	
+	@media (max-width: 500px) {
+		.primary-login {
+			display: none !important;
+		}
+		.secondary-login {
+		}
+	}
 }

@@ -1,17 +1,17 @@
-<div class="system-component system-menu rs-component" :class="getClassSettings()">
+<div class="system-component system-menu rs-component" :class="storage.classing">
 	<div class="navigation">
-		<div class="prefixed navigation-item" v-for="navItem in navigationItems" v-if="isActive(navItem)" :class="$router.currentRoute.path.startsWith(navItem.highlight)?'current':''">
-			<router-link class="navigation-contents" :to="navItem.path" :key="navItem.path" v-if="navItem.path">
-				<span class="nav-icon" :class="navItem.icon"></span>
-				<span class="nav-label" :class="navItem.labelClass">{{navItem.label}}</span>
-			</router-link>
-		</div>
+		<button class="navigation-item" v-for="item in items.app" v-if="isActive(item)" :class="getItemClassing(item)" v-on:click="processNavigation(item)" :key="item.path">
+			<span class="nav-icon" :class="item.icon"></span>
+		</button>
 		<div class="separator"></div>
-		<div class="prefixed navigation-item" v-for="navItem in generalItems" v-if="isActive(navItem)" :class="navItem.class">
-			<button class="prefixed navigation-contents" v-if="navItem.action" v-on:click="processNavigation(navItem)">
-				<span class="nav-icon" :class="navItem.icon"></span>
-				<span class="nav-label" :class="navItem.labelClass">{{navItem.label}}</span>
-			</button>
-		</div>
+		<button class="navigation-item" :class="getItemClassing(optionsItem)" v-on:click="processNavigation(optionsItem)">
+			<span class="nav-icon" :class="optionsItem.icon"></span>
+		</button>
+		<button class="navigation-item collapse-item" :class="getItemClassing(collapseItem)" v-on:click="processNavigation(collapseItem)">
+			<span class="nav-icon" :class="collapseItem.icon"></span>
+		</button>
 	</div>
+	<button class="navigation-item collapse-item actual" :class="getItemClassing(collapseItem)" v-on:click="processNavigation(collapseItem)">
+		<span class="nav-icon" :class="collapseItem.icon"></span>
+	</button>
 </div>

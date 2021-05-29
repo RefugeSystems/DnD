@@ -28,10 +28,13 @@ rsSystem.App = new Vue({
 		};
 	},
 	"mounted": function() {
+		rsSystem.EventBus.$emit("sys-ready");
+		/*
 		rsSystem.Router.addRoute({
 			"path": "/",
 			"component": rsSystem.components.RSHome
 		});
+		*/
 	},
 	"router": rsSystem.Router,
 	"props": {

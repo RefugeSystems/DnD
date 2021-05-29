@@ -20,16 +20,24 @@ rsSystem.component("RSCorePage", {
 			"required": true,
 			"type": Object
 		},
-		"user": {
+		"configuration": {
+			"required": true,
+			"type": Object
+		},
+		"profile": {
 			"required": true,
 			"type": Object
 		}
 	},
-	"computed": {
-
-	},
 	"watch": {
 	},
 	"methods": {
+		"menuSpacing": function() {
+			if(this.profile && this.profile.navigation_collapsed) {
+				return "collapsed";
+			} else {
+				return "extended";
+			}
+		}
 	}
 });

@@ -1324,4 +1324,18 @@ class ClassManager extends EventEmitter {
 		}
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @method toJSON
+	 * @return {Object}
+	 */
+	toJSON() {
+		var json = {};
+		json.id = this.id;
+		json.name = this.name;
+		json.description = this.description;
+		json.fields = this.fieldIDs;
+		return json;
+	}
 };

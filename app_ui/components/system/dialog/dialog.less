@@ -49,19 +49,45 @@
 		transition: top .5s;
 		z-index: 20;
 		
+		.dialog-close {
+			position: absolute;
+			top: -2px;
+			/*right: -59px;*/
+			border-radius: 5px;
+			border-width: 2px;
+			transition: right .5s;
+		}
+		
 		&.active {
 			top: 0px;
 		}
 	}
 	
 	.dialog-box {
-		max-width: 50%;
+		position: relative;
+		/*max-width: 50%;*/
 		min-width: 300px;
 		background-color: black;
 		border: 2px solid @rsLightBlue;
 		padding: 7px 14px;
 		border-radius: 5px;
 		z-index: 5;
+		
+		h1 {
+			font-size: 28px;
+		}
+		
+		h2 {
+			font-size: 22px;
+		}
+		
+		h3 {
+			font-size: 18px;
+		}
+		
+		h4, h5, h6 {
+			font-size: 14px;
+		}
 	}
 	
 	.dialog-actions {
@@ -89,6 +115,44 @@
 		
 		&:active {
 			border-color: @rsBlue;
+		}
+	}
+}
+
+@media all {
+	@media (min-height: 901px) {
+		.dialog-content-bound {
+			max-height: 60%;
+		}
+	}
+
+	@media (min-height: 601px) and (min-height: 900px) {
+		.dialog-content-bound {
+			max-height: 500px;
+		}
+	}
+
+	@media (max-height: 600px) {
+		.dialog-content-bound {
+			max-height: 90%;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.dialog-close {
+			right: -2px;
+		}
+		.dialog-box {
+			max-width: 90%;
+		}
+	}
+
+	@media (min-width: 801px) {
+		.dialog-close {
+			right: -59px;
+		}
+		.dialog-box {
+			max-width: 60%;
 		}
 	}
 }

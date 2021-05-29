@@ -603,6 +603,7 @@ class RSObject {
 	
 	
 	addValues(delta, callback) {
+		delta.updated = Date.now();
 		var result = {},
 			details,
 			field,
@@ -645,6 +646,7 @@ class RSObject {
 	
 	
 	subValues(delta, callback) {
+		delta.updated = Date.now();
 		var result = {},
 			details,
 			field,
@@ -695,6 +697,7 @@ class RSObject {
 	 * @param {Function} callback
 	 */
 	setValues(delta, callback) {
+		delta.updated = Date.now();
 		var result = {},
 			details,
 			field,
@@ -880,13 +883,20 @@ class RSObject {
 	 * @return {Object} 
 	 */
 	toJSON(include) {
-		var json = {},
+		var calculated = Object.assign({}, this._calculated),
+			json = {},
+			field,
 			keys,
 			x;
 		
 		if(this._manager && this._manager.fieldIDs) {
 			for(x=0; x<this._manager.fieldIDs.length; x++) {
-				json[this._manager.fieldIDs[x]] = this[this._manager.fieldIDs[x]];
+				field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
+				if(!field.attribute || !field.attribute.server_only) {
+					json[field.id] = this[field.id];
+				} else {
+					delete(calculated[field.id]);
+				}
 			}
 		} else {
 			keys = Object.keys(this);
@@ -899,7 +909,7 @@ class RSObject {
 		
 		json.id = this.id;
 		json._class = this._class;
-		json._calculated = this._calculated;
+		json._calculated = calculated;
 		json._involved = this._involved;
 		if(include) {
 			json._linkMask = this._linkMask;

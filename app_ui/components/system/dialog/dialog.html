@@ -1,6 +1,11 @@
 <div class="system-component system-dialog rs-component" :class="classes">
 	<div class="shroud"></div>
 	<div class="dialog-container" :class="container_classes">
-		<component class="dialog-box" v-if="details" :is="renderer" :universe="universe" :player="player" :configuration="configuration" :details="details"></component>
+		<div class="dialog-box" v-if="details">
+			<button class="dialog-close close pronounced action" v-on:click="closeDialog()">
+				<span class="fas fa-times"></span>
+			</button>
+			<component class="dialog-contents dialog-content-bound" v-if="details" :is="details.component" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :details="details" :storage-key="details.storageKey"></component>
+		</div>
 	</div>
 </div>

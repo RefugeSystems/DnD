@@ -17,6 +17,10 @@ transient/*
 deploy_web/*.map
 deploy_web/externals.js
 
+# Deprecated or test files
+*.old
+*.test
+
 # Logs
 logs
 *.log

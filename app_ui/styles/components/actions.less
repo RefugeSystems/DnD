@@ -11,3 +11,97 @@
 		padding: 4px;
 	}
 }
+
+.rs-page {
+	
+	button.general {
+		background-color: black;
+		color: white;
+		border: 1px solid gray;
+		transition: background-color .5s, color .5s;
+		
+		&:hover {
+			background-color: white;
+			color: black;
+		}
+		
+		&:active {
+			border-color: blue;
+		}
+	}
+		
+	button.cancel,
+	button.abort,
+	button.close {
+		background-color: @rsDarkRed;
+		color: @rsWhite;
+		border: 1px solid @rsLightRed;
+		transition: background-color .5s, color .5s;
+		
+		&:hover {
+			background-color: @rsWhite;
+			color: @rsDarkRed;
+		}
+		
+		&:active {
+			border-color: @rsWhite;
+		}
+	}
+	
+	button.action {
+		text-align: center;
+	}
+	
+	button.quick.action {
+		width: 34px;
+		height: 34px;
+		line-height: 32px;
+		border-width: 1px;
+		padding: 0px !important;
+		
+		span {
+			line-height: 42px;
+			font-size: 20px;
+		}
+	}
+	
+	button.main.action {
+		width: 48px;
+		height: 48px;
+		line-height: 48px;
+		border-width: 1px;
+		padding: 0px !important;
+		
+		span {
+			line-height: 46px;
+			font-size: 30px;
+		}
+	}
+	
+	button.pronounced.action {
+		width: 48px;
+		height: 48px;
+		line-height: 48px;
+		border-width: 2px;
+		padding: 0px !important;
+		
+		span {
+			line-height: 44px;
+			font-size: 30px;
+		}
+	}
+	
+	/* Deprecated */
+	button.quick-action {
+		width: 34px;
+		height: 34px;
+		text-align: center;
+		line-height: 32px;
+		border-width: 1px;
+		padding: 0px !important;
+		
+		span {
+			line-height: 32px;
+		}
+	}
+}

@@ -282,7 +282,7 @@ class Universe extends EventEmitter {
 	 * @param {WebSocket} socket
 	 */
 	connectPlayer(session, socket) {
-		console.log("Connect Player: ", session.toJSON());
+		// console.log("Connect Player: ", session.toJSON());
 		var player = this.manager.player.object[session.player],
 			connection;
 		
@@ -382,6 +382,7 @@ class Universe extends EventEmitter {
 	 */
 	requestState(player, time) {
 		var managers = Object.keys(this.manager),
+			fields = {},
 			state = {},
 			master_fields,
 			manager,
@@ -391,9 +392,13 @@ class Universe extends EventEmitter {
 			x;
 		
 		// TODO: Investigate time commitment here, may need broken up to prevent bad lockups
+		state.classes = [];
+		state.fields = [];
+		
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
 			if(!omittedFromSync[managers[m]]) {
+				state.classes.push(manager.toJSON());
 				state[manager.id] = [];
 				if(!player.gm) {
 					master_fields = [];
@@ -407,7 +412,7 @@ class Universe extends EventEmitter {
 					sync = manager.object[manager.objectIDs[x]];
 					if(sync) { // Skip unloaded data
 						sync = sync.toJSON(); // Convert to sync format and separate object
-						if((!time || time < sync.update) && (!sync.attribute.master_only || player.gm)) {
+						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm)) {
 							if(!player.gm && master_fields.length) {
 								for(f=0; f<master_fields.length; f++) {
 									if(sync[master_fields[f]] !== undefined) {
@@ -420,6 +425,11 @@ class Universe extends EventEmitter {
 					}
 				}
 			}
+		}
+		
+		fields = Object.keys(this.manager[managers[0]].database.field);
+		for(f=0; f<fields.length; f++) {
+			state.fields.push(this.manager[managers[0]].database.field[fields[f]]);
 		}
 		
 		return state;
@@ -443,5 +453,12 @@ class Universe extends EventEmitter {
 		}
 	}
 }
+
+/**
+ * 
+ * @event send
+ * @type {Object} message
+ * @type {String} message.type For client processing
+ */
 
 module.exports = Universe;
