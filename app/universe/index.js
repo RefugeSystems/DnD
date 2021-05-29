@@ -47,11 +47,29 @@ class Universe extends EventEmitter {
 		this.configuration = configuration;
 		this.specification = configuration.universe;
 		this.classes = configuration.universe.classes?defaultClasses.concat(configuration.universe.classes):defaultClasses;
-		this.manager = {};
+		this.initialized = false;
+		
+		/**
+		 * Maps a chronicle type to the ChronicleProcessor that handles it
+		 * @property chroniclers
+		 * @type {Object}
+		 */
+		this.chroniclers = {};
+		/**
+		 * 
+		 * @property connection
+		 * @type {Object}
+		 */
 		this.connection = {};
 		this.connected = [];
-		this.initialized = false;
-		this.temporalness = 0;
+		/**
+		 * 
+		 * @property manager
+		 * @type {Object}
+		 */
+		this.manager = {};
+		
+		this.timeline = 0;
 		this.oldest = 0;
 		this.time = 0;
 		
@@ -157,18 +175,18 @@ class Universe extends EventEmitter {
 					}
 				}));
 				loading.push(new Promise((done, fail) => {
-					if(this.manager.setting.object["setting:temporalness"]) {
-						this.temporalness = parseInt(this.manager.setting.object["setting:temporalness"].value) || 0;
+					if(this.manager.setting.object["setting:timeline"]) {
+						this.timeline = parseInt(this.manager.setting.object["setting:timeline"].value) || 0;
 						done();
 					} else {
-						this.temporalness = 0;
+						this.timeline = 0;
 						this.manager.setting.create(this, {
-							"id": "setting:temporalness",
+							"id": "setting:timeline",
 							"description": "The number of times the universe has passed through this current time period.",
 							"value": 0
 						}, (err, object) => {
 							if(err) {
-								this.emit("error", new this.Anomaly("universe:settings:temporalness", "Failed to load game time from universe settings", 40, {}, err, this));
+								this.emit("error", new this.Anomaly("universe:settings:timeline", "Failed to load game time from universe settings", 40, {}, err, this));
 								fail(err);
 							} else {
 								done();
@@ -197,8 +215,7 @@ class Universe extends EventEmitter {
 					}
 				}));
 				return Promise.all(loading);
-			})
-			.then(() => {
+			}).then(() => {
 				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/events", "i"),
 						initializing = [],
@@ -207,6 +224,7 @@ class Universe extends EventEmitter {
 						loadDirectory,
 						cleaned,
 						loading,
+						stat,
 						x,
 						y;
 						
@@ -214,8 +232,9 @@ class Universe extends EventEmitter {
 						fs.readdir(path, (err, paths) => {
 							for(x=0; x<paths.length; x++) {
 								cleaned = path.replace(clean, "");
-								// console.log(" > Path[" + path + " -> " + cleaned + "]: " + paths[x]);
-								if(paths[x].endsWith(".js")) {
+								console.log(" [Events]> Path[" + path + " -> " + cleaned + "]: " + paths[x]);
+								stat = fs.lstatSync(path + "/" + paths[x]);
+								if(paths[x][0] !== "_" && paths[x].endsWith(".js") && stat.isFile()) {
 									loading = require("./events" + cleaned + "/" + paths[x]);
 									if(typeof(loading.initialize) === "function") {
 										loading = loading.initialize(this);
@@ -223,7 +242,7 @@ class Universe extends EventEmitter {
 											initializing.push(loading);
 										}
 									}
-								} else {
+								} else if(stat.isDirectory()){
 									queue.push(path + "/" + paths[x]);
 								}
 							}
@@ -244,6 +263,56 @@ class Universe extends EventEmitter {
 					};
 					
 					loadDirectory("app/universe/events");
+				});
+			}).then(() => {
+				return new Promise((done, fail) => {
+					var clean = new RegExp("^/?app/universe/simulation", "i"),
+						initializing = [],
+						errors = [],
+						queue = [],
+						loadDirectory,
+						cleaned,
+						loading,
+						stat,
+						x,
+						y;
+						
+					loadDirectory = (path) => {
+						fs.readdir(path, (err, paths) => {
+							for(x=0; x<paths.length; x++) {
+								cleaned = path.replace(clean, "");
+								console.log(" [Sim]> Path[" + path + " -> " + cleaned + "]: " + paths[x]);
+								stat = fs.lstatSync(path + "/" + paths[x]);
+								if(paths[x][0] !== "_" && paths[x].endsWith(".js") && stat.isFile()) {
+									loading = require("./simulation" + cleaned + "/" + paths[x]);
+									if(typeof(loading.initialize) === "function" && loading.type) {
+										this.chroniclers[loading.type] = loading;
+										loading = loading.initialize(this);
+										if(loading instanceof Promise) {
+											initializing.push(loading);
+										}
+									}
+								} else if(stat.isDirectory()) {
+									queue.push(path + "/" + paths[x]);
+								}
+							}
+							
+							if(queue.length) {
+								loadDirectory(queue.shift());
+							} else {
+								if(errors.length) {
+									console.log("Event Directory Loading Errors: ", errors);
+									fail(errors);
+								} else {
+									Promise.all(initializing)
+									.then(done)
+									.catch(fail);
+								}
+							}
+						});
+					};
+					
+					loadDirectory("app/universe/simulation");
 				});
 			}).then(() => {
 				this.initialized = true;
@@ -451,6 +520,42 @@ class Universe extends EventEmitter {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * 
+	 * @method toTime
+	 * @param {Integer} end [description]
+	 */
+	timeTo(end) {
+		var reverse = end < this.time;
+		this.chronicle.getOccurrences(this.time, end, (err, occurrences) => {
+			if(err) {
+				this.emit("error", new Anomaly("universe:time:changing", "Failed to change time for universe", 50, {"time": this.time, end}, err, this));
+			} else {
+				if(occurrences && occurrences.length) {
+					var chronicler,
+						occurrence,
+						process;
+					
+					process = function() {
+						occurrence = occurrences.shift();
+						chronicler = this.chronicler[occurrence.type];
+						occurrence.reverse = reverse;
+						if(chronicler) {
+							chronicler.process(this, occurrence, process);
+						} else {
+							setTimeout(process, 0);
+						}
+						if(occurrence.emit) {
+							this.emit(occurrence.emit, occurrence);
+						}
+					};
+					
+					process();
+				}
+			}
+		});
 	}
 }
 

@@ -14,7 +14,7 @@ var EventEmitter = require("events").EventEmitter,
 	validTypes = {},
 	count = 0;
 	
-validField.temporalness = true;
+validField.timeline = true;
 validField.source = true;
 validField.target = true;
 validField.type = true;
@@ -55,7 +55,7 @@ class Chronicle extends EventEmitter {
 				if(err) {
 					if(err.message && err.message.indexOf("no such table") !== -1) {
 						this.database.connection
-						.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, temporalness integer, event text, updated bigint, created bigint);", [], (err) => {
+						.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, emit text, source text, target text, involved text, time bigint, timeline integer, event text, updated bigint, created bigint);", [], (err) => {
 							if(err) {
 								fail(err);
 							} else {
@@ -81,7 +81,7 @@ class Chronicle extends EventEmitter {
 					fail(err);
 				} else {
 					this.database.connection
-					.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, temporalness integer, event text, updated bigint, created bigint);", [], (err) => {
+					.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, source text, target text, time bigint, timeline integer, event text, updated bigint, created bigint);", [], (err) => {
 						if(err) {
 							console.log("Reinit Make Err: ", err);
 							fail(err);
@@ -96,7 +96,7 @@ class Chronicle extends EventEmitter {
 	
 	/**
 	 * 
-	 * @method addEvent
+	 * @method addOccurrence
 	 * @param {String} type
 	 * @param {Object} event
 	 * @param {String} [event.source]
@@ -108,24 +108,32 @@ class Chronicle extends EventEmitter {
 	 * 		the event. Defaults to current universe time.
 	 * @param {String} [source] Object ID
 	 * @param {String} [target] Object ID
-	 * @param {Integer} [temporalness] Which tracks the number of times the universe
+	 * @param {Integer} [timeline] Which tracks the number of times the universe
 	 * 		has passed through a given time period.
+	 * @param {String} [emit] For EventEmitter
+	 * @param {Array} [involved] Other loosely associated objects.
 	 * @return {String} The chronicle ID for the event
 	 */
-	addEvent(type, event, time, source, target, temporalness) {
+	addOccurrence(type, event, time, source, target, timeline, emit, involved) {
 		var values = {};
 		values["$id"] = "chronicle:" + Date.now() + ":" + (count++) + ":" + (event.id || RSRandom.string(32));
-		values["$temporalness"] = temporalness || event.temporalness || this.universe.temporalness;
-		values["$time"] = time || event.time || this.universe.time;
-		values["$source"] = source || event.source;
-		values["$target"] = target || event.target;
+		values["$timeline"] = timeline || event.timeline || this.universe.timeline || null;
+		values["$time"] = time || event.time || this.universe.time || null;
+		values["$source"] = source || event.source || null;
+		values["$target"] = target || event.target || null;
 		values["$event"] = JSON.stringify(event);
 		values["$type"] = type;
+		values["$emit"] = emit || null;
 		values["$updated"] = Date.now();
 		values["$created"] = values["$updated"];
-		this.database.connection.run("insert into chronicle(id, type, source, target, time, temporalness, event, updated, created) values($id, $type, $source, $target, $time, $temporalness, $event, $updated, $created);", values, (err) => {
+		this.database.connection.run("insert into chronicle(id, type, emit, source, target, time, timeline, event, updated, created) values($id, $type, $emit, $source, $target, $time, $timeline, $event, $updated, $created);", values, (err) => {
 			if(err) {
-				this.emit("error", err);
+				this.emit("error", {
+					"type": "add",
+					"occurrence": values["$id"],
+					"event": event,
+					"error": err
+				});
 			}
 		});
 		if(count > 1000) {
@@ -136,10 +144,10 @@ class Chronicle extends EventEmitter {
 	
 	/**
 	 * 
-	 * @method removeEvent
+	 * @method removeOccurrence
 	 * @param {String} id [description]
 	 */
-	removeEvent(id) {
+	removeOccurrence(id) {
 		var values = {};
 		values["$id"] = id;
 		this.database.connection.run("delete from chronicle where id = $id;", values, (err) => {
@@ -151,16 +159,18 @@ class Chronicle extends EventEmitter {
 	
 	/**
 	 * 
-	 * @method updateEvent
+	 * @method updateOccurrence
 	 * @param {String} id
 	 * @param {Object} event
 	 * @param {String} [type]
 	 * @param {Integer} [time]
 	 * @param {String} [source]
 	 * @param {String} [target]
-	 * @param {Integer} [temporalness]
+	 * @param {Integer} [timeline]
+	 * @param {String} [emit]
+	 * @param {Array | String} [involved]
 	 */
-	updateEvent(id, event, type, time, source, target, temporalness) {
+	updateOccurrence(id, event, type, time, source, target, timeline, emit, involved) {
 		var statement = "update chronicle set event = $event, updated = $updated",
 			values = {};
 		values["$id"] = id;
@@ -170,9 +180,9 @@ class Chronicle extends EventEmitter {
 			statement += ", type = $type";
 			values["$type"] = type;
 		}
-		if(time || event.temporalness) {
-			statement += ", temporalness = $temporalness";
-			values["$temporalness"] = temporalness || event.temporalness;
+		if(time || event.timeline) {
+			statement += ", timeline = $timeline";
+			values["$timeline"] = timeline || event.timeline;
 		}
 		if(time || event.time) {
 			statement += ", time = $time";
@@ -186,6 +196,15 @@ class Chronicle extends EventEmitter {
 			statement += ", target = $target";
 			values["$target"] = target || event.target;
 		}
+		if(emit || event.emit) {
+			statement += ", emit = $emit";
+			values["$emit"] = emit || event.emit;
+		}
+		if((involved || event.involved) instanceof Array) {
+			statement += ", involved = $involved";
+			values["$involved"] = involved || event.involved;
+			values["$involved"] = values["$involved"].join(",");
+		}
 		statement += " where id = $id;";
 		this.database.connection.run(statement, values, (err) => {
 			if(err) {
@@ -195,26 +214,38 @@ class Chronicle extends EventEmitter {
 	}
 	
 	/**
+	 * 
+	 * @method getOccurrence
+	 * @param {[String]} id     [description]
+	 * @param {Function} callback  [description]
+	 */
+	getOccurrence(id, callback) {
+		this.database.connection.all("select * from chronicle where id = $id;", {"$id": id}, callback);
+	}
+	
+	/**
 	 *
 	 * The end time is NOT included as it is generally treated as the "current"
 	 * time. So trailing queried for progression should always include everything
 	 * as needed.
-	 * @method getEvents
+	 * @method getOccurrences
 	 * @param {Integer} start The included time at which to start the query.
 	 * @param {Integer} end The excluded time at which to end the query.
 	 * @param {Object} [constrict] Restricts the time search for events.
 	 * @param {String} [constrict.type] Optional restriction on the type of event to get.
 	 * 		Typically this will be "verse" for events in the universe that happen
 	 * 		at that time, such as news or objects changing.
+	 * @param {Integer} [constrict.timeline]
 	 * @param {String} [constrict.target]
 	 * @param {String} [constrict.source]
-	 * @param {Function(err,chronicled)} callback Note that the chronicled values
+	 * @param {Function(err,chronicled)} callback Note that the chronicled Occurrences
 	 * 		have the "event" property as a JSON string and will need decoded.
 	 * 		This is not done here to save looping through the values twice and
 	 * 		is handled in the universe.
 	 */
-	getEvents(start, end, constrict, callback) {
+	getOccurrences(start, end, constrict, callback) {
 		var statement = "select * from chronicle where $start <= time and time < $end",
+			suffix = " order by time",
 			values = {},
 			keys,
 			x;
@@ -228,8 +259,16 @@ class Chronicle extends EventEmitter {
 			constrict = undefined;
 		}
 		
-		values["$start"] = start;
-		values["$end"] = end;
+		if(start <= end) {
+			values["$start"] = start;
+			values["$end"] = end;
+			suffix += "ASC";
+		} else {
+			values["$start"] = end;
+			values["$end"] = start;
+			suffix += "DESC";
+		}
+			
 		if(constrict) {
 			/* Desired path but cleaning to prevent injection feels expensive
 			keys = Object.keys(constrict);
@@ -246,7 +285,7 @@ class Chronicle extends EventEmitter {
 				}
 			}
 		}
-		statement += ";";
+		statement += suffix + ";";
 		
 		this.database.connection.all(statement, values, callback);
 	}
@@ -258,4 +297,95 @@ module.exports = Chronicle;
  *
  * @event error
  * @param {Error | Anomaly} error The error encountered
+ */
+
+/**
+ * Used to track events that have happened or events that will transpire.
+ *
+ * For things with multiple targets, multiple Occurrences are prefered.
+ *
+ * When triggered by a read, 
+ * @class Occurrence
+ * @constructor
+ */
+ 
+/**
+ *
+ * @property id
+ * @type String
+ */
+ 
+/**
+ * The type of Occurrence. This is used to select the simulation processor
+ * for this Occurrence.
+ * @property type
+ * @type String
+ */
+ 
+/**
+ * When set, this is emitted from the universe for event handling.
+ * @property emit
+ * @type String
+ */
+
+/**
+ * This is set by the universe for processing.
+ *
+ * When true, this event is going backwards through time and handlers should
+ * apply the inversion of their usual function.
+ * @property reverse
+ * @type Boolean
+ */
+
+/**
+ * The source of the occurrence. Generally required, though some occurrences
+ * (such as a newspaper publishing of a session recap or similar) may only populate
+ * the involved.
+ * @property source
+ * @type String
+ */
+ 
+/**
+ * The target of the occurrence. Not generally required.
+ * @property target
+ * @type String
+ */
+ 
+/**
+ * Comma separated list of other objects involved in this occurrence beyond the
+ * source and target if any are indicated. This should usually track informationally
+ * related pieces and not objects actually involved in processing the occurrence.
+ * @property involved
+ * @type String
+ */
+
+/**
+ * The in-game time for when this occurs
+ * @property time
+ * @type Integer
+ */
+ 
+/**
+ * For timetravel, tracks which "version" of the timeline is currently active,
+ * every reversal increments by one, but a timeline can in theory be "resumed"
+ * @property timeline
+ * @type String
+ */
+ 
+/**
+ *
+ * @property event
+ * @type String
+ */
+ 
+/**
+ *
+ * @property updated
+ * @type Integer
+ */
+ 
+/**
+ *
+ * @property created
+ * @type Integer
  */
