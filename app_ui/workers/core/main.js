@@ -31,6 +31,7 @@ self.addEventListener("install", function(event) {
 //				"/projects/rsswx/app/main.js"
 			"./",
 			"./index.html",
+			"./configuration.json",
 			
 			"./images/rook.blue.png",
 			"./images/rook.green.png",

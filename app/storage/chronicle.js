@@ -34,7 +34,7 @@ class Chronicle extends EventEmitter {
 		
 		var receiveObjectData = (delta) => {
 			if(universe.initialized && universe.manager[delta._class] && !universe.manager[delta._class].attribute.server_only) {
-				this.addEvent("object", delta, universe.time, null, delta.id);
+				this.adOccurrence("object", delta, universe.time, null, delta.id);
 			}
 		};
 		
