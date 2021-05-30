@@ -798,6 +798,7 @@ class ClassManager extends EventEmitter {
 			this.attribute = JSON.parse(this.attribute);
 		}
 		
+		this.fieldIDs.sort();
 		database.manager[this.id] = this;
 		this.computeFieldProperties();
 	}

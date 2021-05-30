@@ -723,6 +723,30 @@ class RSUniverse extends EventEmitter {
 		appendTo.removeChild(anchor);
 	}
 	
+	getObject(id) {
+		var c;
+		if(id && (c = this.getClassFromID(id)) && this.index[c]) {
+			return this.index[c][id];
+		}
+		return null;
+	}
+	
+	getClassFromID(id) {
+		if(typeof(id) === "string") {
+			var index = id.indexOf(":");
+			if(index === -1) {
+				return null;
+			}
+			return id.substring(0, index);
+		} else {
+			return null;
+		}
+	}
+	
+	isOwner(player, object) {
+		return !object.is_owned || object.owned[player.id || player];
+	}
+	
 	checkVersion() {
 		if(this.version != rsSystem.version) {
 			var ui = rsSystem.version.split("."),

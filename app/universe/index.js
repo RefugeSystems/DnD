@@ -23,12 +23,23 @@ var EventEmitter = require("events").EventEmitter,
 		"setting",
 		"conditional"
 	];
+	
+// 
+var sortByOrdering = function(a, b) {
+	if(a.ordering < b.ordering) {
+		return -1;
+	} else if(a.ordering > b.ordering) {
+		return 1;
+	}
+	return 0;
+};
 
 // Security
 omittedFromSync.session = true;
 // Data APIs for data separation
 omittedFromSync.image = true;
 omittedFromSync.audio = true;
+
 
 class Universe extends EventEmitter {
 	constructor(configuration) {
@@ -56,7 +67,7 @@ class Universe extends EventEmitter {
 		 */
 		this.chroniclers = {};
 		/**
-		 * 
+		 * Maps player IDs to their connection handlers
 		 * @property connection
 		 * @type {Object}
 		 */
@@ -69,12 +80,32 @@ class Universe extends EventEmitter {
 		 */
 		this.manager = {};
 		
+		this.shutting_down = false;
 		this.timeline = 0;
 		this.oldest = 0;
 		this.time = 0;
 		
 		this.on("dump-configuration", () => {
 			console.log(configuration);
+		});
+		
+		this.on("shutdown", () => {
+			this.shutting_down = true;
+			this.emit("send", {
+				"type": "notice",
+				"mid": "universe:status",
+				"message": "Universe Restarting",
+				"timeout": 30000
+			});
+			
+			setTimeout(() => {
+				var ids = Object.keys(this.connection),
+					x;
+				
+				for(x=0; x<ids.length; x++) {
+					this.connection[ids[x]].close();
+				}
+			}, 1000);
 		});
 	}
 
@@ -355,7 +386,11 @@ class Universe extends EventEmitter {
 		var player = this.manager.player.object[session.player],
 			connection;
 		
-		if(player) {
+		if(this.shutting_down) {
+			console.log("Shutting Down");
+			socket.send({"type": "close", "code": "5", "sent": Date.now()});
+			socket.close();
+		} else if(player) {
 			connection = this.connection[player.id];
 			if(!connection) {
 				console.log("Make Connection");
@@ -500,6 +535,7 @@ class Universe extends EventEmitter {
 		for(f=0; f<fields.length; f++) {
 			state.fields.push(this.manager[managers[0]].database.field[fields[f]]);
 		}
+		fields.sort(sortByOrdering);
 		
 		return state;
 	}
@@ -562,8 +598,8 @@ class Universe extends EventEmitter {
 /**
  * 
  * @event send
- * @type {Object} message
- * @type {String} message.type For client processing
+ * @param {Object} message
+ * @param {String} message.type For client processing
  */
 
 module.exports = Universe;

@@ -321,19 +321,6 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
-	"id": "location",
-	"name": "Location",
-	"description": "Lists the players that own and operate the object.",
-	"type": "string",
-	"inheritance": {
-		
-	},
-	"inheritable": [
-		"location"
-	],
-	"attribute": {}
-});
-fields.push({
 	"id": "conditionals",
 	"name": "Conditionals",
 	"description": "Lists of conditionals that may be applied to this object.",
@@ -345,19 +332,6 @@ fields.push({
 	"name": "Order",
 	"description": "The order in which this field displays or computes when applicable.",
 	"type": "integer",
-	"attribute": {}
-});
-fields.push({
-	"id": "entrance",
-	"name": "Entrance",
-	"description": "Indicates the location to which this location links instead of itself. This is used for things like multiple cave entrances into one cave.",
-	"type": "string",
-	"inheritance": {
-		
-	},
-	"inheritable": [
-		"location"
-	],
 	"attribute": {}
 });
 
@@ -379,12 +353,6 @@ classes.push({
 	"name": "Session",
 	"description": "Tracks a Player connection session",
 	"fields": ["player", "username", "disabled", "last", "expiry"]
-});
-classes.push({
-	"id": "location",
-	"name": "Locations",
-	"description": "Active entity in the game that takes actions",
-	"fields": ["name", "icon", "description", "disabled", "hidden", "location", "x", "y", "entrance", "gm_note", "attribute"]
 });
 classes.push({
 	"id": "setting",

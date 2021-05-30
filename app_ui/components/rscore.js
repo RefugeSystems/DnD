@@ -21,6 +21,14 @@ rsSystem.component("RSCore", {
 		"player": {
 			"required": true,
 			"type": Object
+		},
+		"configuration": {
+			"required": true,
+			"type": Object
+		},
+		"profile": {
+			"required": true,
+			"type": Object
 		}
 	},
 	"watch": {

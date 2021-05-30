@@ -3,7 +3,7 @@
 	"title": "RSDnD",
 	"version": "0.0.1",
 	"description": "RefugeSsytems DnD Project.",
-	"core_version": "0.0.1",
+	"core_version": "0.1.0",
 	"main": "app/index.js",
 	"keywords": [
 		"rs",
