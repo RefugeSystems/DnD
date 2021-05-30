@@ -20,7 +20,7 @@ module.exports.initialize = function(universe) {
 		if(event.message && event.message.data && event.message.data.component) {
 			component = event.message.data.component.id || event.message.data.component;
 		}
-		universe.chronicle.addEvent("error:player", event.message, Date.now(), component, event.player?event.player.id:null);
+		universe.chronicle.addOccurrence("error:player", event.message, Date.now(), component, event.player?event.player.id:null);
 		universe.emit("send", {
 			"type": "notice",
 			"mid": "report:error:received",
