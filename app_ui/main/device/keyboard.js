@@ -22,19 +22,22 @@ rsSystem.keyboard = (function() {
 		}
 		switch(e.key) {
 			case "Escape":
-				rsSystem.EventBus.$emit("close");
+				rsSystem.EventBus.$emit("key:escape");
 				break;
 		}
 	};
 	document.onkeydown = function(e) {
 		if(rsSystem.debug >= 5) {
-			console.log("Key Dn: " + e.key);
+			console.log("Key Dn[" + e.code + "]: " + e.key);
 		} else if(rsSystem.debug >= 10) {
 			console.log("Key Dn: ", e);
 		}
 		switch(e.key) {
+			case "Escape":
+				break;
 			case "F1":
 				console.log("Open Help");
+				rsSystem.EventBus.$emit("key:F1");
 				e.preventDefault();
 				if(typeof(e.stopPropogation) === "function") {
 					e.stopPropogation();
@@ -46,6 +49,9 @@ rsSystem.keyboard = (function() {
 				if(typeof(e.stopPropogation) === "function") {
 					e.stopPropogation();
 				}
+				break;
+			default:
+				rsSystem.EventBus.$emit("key:" + e.key);
 				break;
 		}
 	};

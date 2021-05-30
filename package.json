@@ -2,7 +2,7 @@
 	"name": "core",
 	"title": "RSCore",
 	"version": "0.0.0",
-	"core_version": "0.0.1",
+	"core_version": "0.1.0",
 	"description": "RefugeSsytems Core project acts as a seed for starting new developmental work and leveraging git pulls on the core to update core fundamentals of the project allowing expansion on top of the core.",
 	"main": "app/index.js",
 	"keywords": [

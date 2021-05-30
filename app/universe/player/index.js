@@ -256,6 +256,14 @@ class PlayerConnection extends EventEmitter {
 			this.send(message.type, message);
 		}
 	}
+	
+	close() {
+		for(var x=0; x<this.socketIDs.length; x++) {
+			if(this.connection[this.socketIDs[x]]) {
+				this.connection[this.socketIDs[x]].close();
+			}
+		}
+	}
 }
 
 module.exports = PlayerConnection;

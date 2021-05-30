@@ -123,39 +123,48 @@ rsSystem.component("RSHome", {
 			path = path.substring(0, index);
 		}
 		
-		fetch(location.protocol + "//" + location.host + path + "/configuration.json")
-		.then((res) => {
-			if(res.status === 404) {
-				throw new Error("Site Unavailable");
-			} else if(res.status === 500) {
-				throw new Error("Site Unavailable due to Server Error");
-			}
-			return res.json();
-		}).then((configuration) => {
-			if(configuration.address && (!this.storage.address || configuration.force)) {
-				Vue.set(this.storage, "address", configuration.address);
-			}
-			if(configuration.debug !== undefined) {
-				rsSystem.debug = configuration.debug;
-			}
-			Vue.set(this, "configuration", configuration);
+		if(rsSystem.configuration) {
+			Vue.set(this, "configuration", rsSystem.configuration);
 			if(this.configuration.mainpage && rsSystem.components[this.configuration.mainpage]) {
 				Vue.set(this, "mainpage", this.configuration.mainpage);
 			}
-			return rsSystem.configureRouting(configuration);
-		}).then((configuration) => {
-			this.$emit("configure", configuration);
-		}).catch((err) => {
-			console.warn(err);
-			Vue.set(this, "state", -1);
-			Vue.set(this, "configuration", {});
-			this.receiveMessage({
-				"class": "rsbd-red",
-				"icon": "fas fa-exclamation-triangle rs-lightred",
-				"heading": "Configuration Failed",
-				"text": err.message || "Failed to retrieve site configuration."
+			rsSystem.configureRouting(this.configuration);
+			this.$emit("configure", this.configuration);
+		} else {
+			fetch(location.protocol + "//" + location.host + path + "/configuration.json")
+			.then((res) => {
+				if(res.status === 404) {
+					throw new Error("Site Unavailable");
+				} else if(res.status === 500) {
+					throw new Error("Site Unavailable due to Server Error");
+				}
+				return res.json();
+			}).then((configuration) => {
+				if(configuration.address && (!this.storage.address || configuration.force)) {
+					Vue.set(this.storage, "address", configuration.address);
+				}
+				if(configuration.debug !== undefined) {
+					rsSystem.debug = configuration.debug;
+				}
+				Vue.set(this, "configuration", configuration);
+				if(this.configuration.mainpage && rsSystem.components[this.configuration.mainpage]) {
+					Vue.set(this, "mainpage", this.configuration.mainpage);
+				}
+				return rsSystem.configureRouting(this.configuration);
+			}).then((configuration) => {
+				this.$emit("configure", configuration);
+			}).catch((err) => {
+				console.warn(err);
+				Vue.set(this, "state", -1);
+				Vue.set(this, "configuration", {});
+				this.receiveMessage({
+					"class": "rsbd-red",
+					"icon": "fas fa-exclamation-triangle rs-lightred",
+					"heading": "Configuration Failed",
+					"text": err.message || "Failed to retrieve site configuration."
+				});
 			});
-		});
+		}
 		
 		if(this.storage.session) {
 			this.connect(this.storage.session);

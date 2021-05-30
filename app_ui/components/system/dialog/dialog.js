@@ -71,7 +71,7 @@
 			rsSystem.EventBus.$on("dialog-dismiss", (details) => {
 				this.closeDialog();
 			});
-			rsSystem.EventBus.$on("close", () => {
+			rsSystem.EventBus.$on("key:escape", () => {
 				if(this.details) {
 					this.closeDialog();
 				}
