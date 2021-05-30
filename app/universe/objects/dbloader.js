@@ -291,20 +291,6 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
-	"id": "type",
-	"name": "Type",
-	"description": "Used for tracking the game type of an object.",
-	"type": "string",
-	"attribute": {}
-});
-fields.push({
-	"id": "types",
-	"name": "Types",
-	"description": "Used for tracking the game types of an object.",
-	"type": "array",
-	"attribute": {}
-});
-fields.push({
 	"id": "data",
 	"name": "Data",
 	"description": "Used for large data storage (Such as images). Typically Base64 encoded.",
