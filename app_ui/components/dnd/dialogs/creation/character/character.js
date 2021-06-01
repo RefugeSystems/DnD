@@ -51,12 +51,14 @@ rsSystem.component("dndCreateCharacterDialog", {
 		
 		data.stage = 0;
 		data.stages = [
-			"archetype",
 			"race",
 			"variant",
+			"archetype",
 			"background",
 			"alignment",
-			"details",
+			"feats",
+			"proficiencies",
+			"details", // Name, Description
 			"review"
 		];
 		

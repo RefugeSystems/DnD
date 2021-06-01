@@ -282,7 +282,7 @@ rsSystem.component("systemOptionsDialog", {
 					this.universe.resync();
 					break;
 				case "universe-export":
-					this.universe.exportData();
+					this.universe.exportData(this.configuration.title);
 					break;
 			}
 		},

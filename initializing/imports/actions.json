@@ -1,0 +1,247 @@
+{
+    "import": [{
+			"id": "action:movement:move",
+			"name": "Move",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Move to another location by walking/running, swimming, or flying. You may have different speeds for each and the environment may restirct you options",
+			"icon": "fas fa-running",
+			"attribute": {}
+		}, {
+			"id": "action:movement:climb",
+			"name": "Climb",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Climb the side of a object or a rope. Typically this happens at half your ground movement speed but see your ${Climb Speed}$.",
+			"icon": "game-icon game-icon-mountain-climbing",
+			"attribute": {}
+		}, {
+			"id": "action:movement:swim",
+			"name": "Swim",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Swim through a liquid. Typically this happens at half your ground movement speed but see your ${Climb Speed}$.",
+			"icon": "game-icon game-icon-mountain-climbing",
+			"attribute": {}
+		}, {
+			"id": "action:movement:crawl",
+			"name": "Crawl",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Crawl on the ground at half your ${Movement Speed}$.",
+			"icon": "game-icon game-icon-half-body-crawling",
+			"attribute": {}
+		}, {
+			"id": "action:movement:jump",
+			"name": "Jump",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Jump while moving at up to your ${Movement Speed}$. A single jump can not exceed your ${Movement Speed}$ without additional factors.",
+			"icon": "game-icon game-icon-jump-across",
+			"attribute": {}
+		}, {
+			"id": "action:movement:standup",
+			"name": "Stand Up",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Stand up from a prone or crawling state. This takes half your ${Movement Speed}$.",
+			"icon": "fas fa-female",
+			"attribute": {}
+		}, {
+			"id": "action:movement:grappling",
+			"name": "Grapple Shuffle",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "If moving while you have a creature grappled, you move at half your normal speed in that situation.",
+			"icon": "game-icon game-icon-handcuffed",
+			"attribute": {}
+		}, {
+			"id": "action:movement:improvised",
+			"name": "Improvised",
+			"action_cost": {
+				"movement": 1
+			},
+			"description": "Move in some described manner at the Dungeon Master's discretion and may involve ${Skill Check}$s.",
+			"icon": "fas fa-people-carry",
+			"attribute": {}
+		}, {
+			"id": "action:main:attack",
+			"name": "Attack",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Make an ${Attack Roll}$ against a target to deal damage. In some cases you can attempt non-lethal damage or to target a specific body part, but this will make the attack much more difficult (Generally +5 to the Target's AC).",
+			"icon": "game-icon game-icon-wave-strike",
+			"attribute": {}
+		}, {
+			"id": "action:main:dash",
+			"name": "Dash",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Move up to your max movement distance for the type of movement you are want to dash as (Such as swimming, running, or flying)",
+			"icon": "fas fa-running",
+			"attribute": {}
+		}, {
+			"id": "action:main:hide",
+			"name": "Hide",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Attempt to duck away from sight so that people aren't aware of you.",
+			"icon": "fas fa-eye-slash",
+			"attribute": {}
+		}, {
+			"id": "action:main:use",
+			"name": "Use",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Operate an item, such as opening a door or desk, or flipping a switch",
+			"icon": "game-icon game-icon-button-finger",
+			"attribute": {}
+		}, {
+			"id": "action:main:help",
+			"name": "Help",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Help another creature perform a ${Skill Check}$, giving them advantage",
+			"icon": "game-icon game-icon-button-finger",
+			"attribute": {}
+		}, {
+			"id": "action:main:disengage",
+			"name": "Disengage",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Removes a creature's option of an ${Attack of Oppurtunity}$ against you when you move out of their threat radius",
+			"icon": "fas fa-arrow-alt-from-left",
+			"attribute": {}
+		}, {
+			"id": "action:main:dodge",
+			"name": "Dodge",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "You enter a defensive state giving all attacks against you ${Disadvantage}$.",
+			"icon": "fas fa-shield",
+			"attribute": {}
+		}, {
+			"id": "action:main:grapple",
+			"name": "Grapple",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "When you want to grab a creature or wrestle with it, you can replace one of your ${Attack Action}$s to grapple. Your target can be up to 1 size larger, within melee, and you mysh have at least one free hand. You perform an ${Athletics}$ check against your target's ${Athletics}$ or ${Acrobatics}$ check. Once ${Grappled}$, the target can perform either check as an ${Action}$ to attempt to break free.",
+			"icon": "game-icon game-icon-grab",
+			"attribute": {}
+		}, {
+			"id": "action:main:grapple",
+			"name": "Grapple",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "When you want to grab a creature or wrestle with it, you can replace one of your ${Attack Action}$s to grapple. Your target can be up to 1 size larger, within melee, and you mysh have at least one free hand. You perform an ${Athletics}$ check against your target's ${Athletics}$ or ${Acrobatics}$ check. Once ${Grappled}$, the target can perform either check as an ${Action}$ to attempt to break free.",
+			"icon": "game-icon game-icon-grab",
+			"attribute": {}
+		}, {
+			"id": "action:main:push",
+			"name": "Push",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "Perform an ${Atheletics}$ check to attempt to push a creature or an object. If a creature is targeted and resistant, a ${Melee Attack}$ may need rolled.",
+			"icon": "game-icon game-icon-push",
+			"attribute": {}
+		}, {
+			"id": "action:main:attack:extra",
+			"name": "Extra Attack",
+			"action_cost": {
+				"main": 1
+			},
+			"description": "If you opt to ${Attack}$ you may instead attack twice with your main weapon instead of once.",
+			"icon": "game-icon game-icon-saber-slash",
+			"attribute": {}
+		}, {
+			"id": "action:main:potion",
+			"name": "Use Potion",
+			"action_cost": {
+				"bonus": 1
+			},
+			"description": "Use a potion.",
+			"icon": "fas fa-flask-potion",
+			"attribute": {}
+		}, {
+			"id": "action:main:cast",
+			"name": "Cast a Spell",
+			"action_cost": {
+				"bonus": 1
+			},
+			"description": "Cast a spell that has a ${Casting Time}$ or takes an ${Action}$.",
+			"icon": "fas fa-hand-holding-magic",
+			"attribute": {}
+		}, {
+			"id": "action:bonus:attack:light",
+			"name": "Off-Hand Attack",
+			"action_cost": {
+				"bonus": 1
+			},
+			"description": "You may attack with your off-hand weapon.",
+			"icon": "game-icon game-icon-saber-slash",
+			"attribute": {}
+		}, {
+			"id": "action:bonus:potion",
+			"name": "Use Quick Potion",
+			"action_cost": {
+				"bonus": 1
+			},
+			"description": "Quickly use a potion.",
+			"icon": "fas fa-flask-potion",
+			"attribute": {}
+		}, {
+			"id": "action:bonus:cast:spell",
+			"name": "Cast a small Spell",
+			"action_cost": {
+				"bonus": 1
+			},
+			"description": "Cast a spell that takes a ${Bonus Action}$.",
+			"icon": "fas fa-hand-holding-magic",
+			"attribute": {}
+		}, {
+			"id": "action:bonus:cast:cantrip",
+			"name": "Cast a Cantrip",
+			"action_cost": {
+				"bonus": 1
+			},
+			"description": "In some situations you may be able to Cast a ${Cantrip}$ as ${Bonus Action}$.",
+			"icon": "fas fa-hand-holding-magic",
+			"attribute": {}
+		}, {
+			"id": "action:reaction:oppurtunity",
+			"name": "Attack of Oppurtunity",
+			"action_cost": {
+				"reaction": 1
+			},
+			"description": "If a creature you wish to strike leaves your ${Threat Radius}$ without disengaging or other special circumstances then you may use your ${Reaction}$ to perform an ${Attack}$ against that creature.",
+			"icon": "game-icon game-icon-quick-slash",
+			"attribute": {}
+		}, {
+			"id": "action:reaction:counterspell",
+			"name": "Counter a Spell",
+			"action_cost": {
+				"reaction": 1
+			},
+			"description": "Counter a spell. See ${Counterspell}$ for details.",
+			"icon": "game-icon game-icon-magic-palm",
+			"attribute": {}
+		}
+    ]
+}

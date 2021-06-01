@@ -111,20 +111,20 @@ module.exports = new (function() {
 			});
 			
 			this.router.post("/import", (req, res, next) => {
+				var importing = req.body.import || req.body.export;
 				res.result = {
 					"imported": [],
 					"errors": []
 				};
-				if(req.body.import instanceof Array) {
-					for(var x=0; x<req.body.import.length; x++) {
-						api.universe.createObject(req.body.import[x], function(err, object) {
-							console.log("Create Complete: ", !!err, !!object);
+				if(importing instanceof Array) {
+					for(var x=0; x<importing.length; x++) {
+						api.universe.createObject(importing[x], function(err, object) {
 							if(err) {
 								res.result.errors.push(err);
 							} else {
 								res.result.imported.push(object.toJSON());
 							}
-							if((res.result.errors.length + res.result.imported.length) === req.body.import.length) {
+							if((res.result.errors.length + res.result.imported.length) === importing.length) {
 								next();
 							}
 						});

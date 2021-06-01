@@ -238,6 +238,8 @@ class RSObject {
 						this._calculated[fields[x]] = this._data[fields[x]];
 						break;
 				}
+			} else {
+				console.log("Missing Field? ", fields[x]);
 			}
 			if(this._calculated[field.id] === undefined && field.attribute.default !== undefined) {
 				this._calculated[field.id] = field.attribute.default;
@@ -981,16 +983,24 @@ RSObject.getClassFromID = function(id) {
  * @return {[type]}   [description]
  */
 RSObject.addObjects = function(a, b) {
-	var keys = Object.keys(a),
-		result = {},
-		x;
-	
-	keys.uniquely.apply(keys, Object.keys(b));
-	for(x=0; x<keys.length; x++) {
-		result[keys[x]] = RSObject.addValues(a[keys[x]], b[keys[x]]);
+	if(a && !b) {
+		return b;
+	} else if(!a && b) {
+		return a;
+	} else if(a && b) {
+		var keys = Object.keys(a),
+			result = {},
+			x;
+		
+		keys.uniquely.apply(keys, Object.keys(b));
+		for(x=0; x<keys.length; x++) {
+			result[keys[x]] = RSObject.addValues(a[keys[x]], b[keys[x]]);
+		}
+		
+		return result;
+	} else {
+		return null;
 	}
-	
-	return result;
 };
 
 /**
@@ -1003,9 +1013,9 @@ RSObject.addObjects = function(a, b) {
  * @return {[type]}      [description]
  */
 RSObject.addValues = function(a, b, type) {
-	if(typeof(a) === undefined) {
+	if(typeof(a) === "undefined") {
 		return b;
-	} else if(typeof(b) === undefined) {
+	} else if(typeof(b) === "undefined") {
 		return a;
 	} else if(type || typeof(a) === typeof(b)) {
 		if(!type) {
@@ -1028,7 +1038,7 @@ RSObject.addValues = function(a, b, type) {
 				return RSObject.addObjects(a, b);
 		}
 	} else {
-		throw new Error("Can not add values as types[" + type + "] do not match");
+		throw new Error("Can not add values as types[" + type + "] do not match: " + (a?a.id:"X") + " | " + (b?b.id:"X"));
 	}
 };
 
@@ -1063,7 +1073,7 @@ RSObject.subObjects = function(a, b) {
  * @return {[type]}      [description]
  */
 RSObject.subValues = function(a, b, type) {
-	if(typeof(a) === undefined) {
+	if(typeof(a) === "undefined") {
 		switch(type) {
 			case "string":
 				return "";
@@ -1080,7 +1090,7 @@ RSObject.subValues = function(a, b, type) {
 			case "object":
 				return {};
 		}
-	} else if(typeof(b) === undefined) {
+	} else if(typeof(b) === "undefined") {
 		return a;
 	} else if(type || typeof(a) === typeof(b)) {
 		if(!type) {
@@ -1140,7 +1150,7 @@ RSObject.setObjects = function(a, b) {
 RSObject.setValues = function(a, b, type) {
 	if(b === null) {
 		return null;
-	} else if(typeof(a) === undefined || typeof(b) !== undefined) {
+	} else if(typeof(a) === "undefined" || typeof(b) !== "undefined") {
 		return b;
 	} else {
 		return a;

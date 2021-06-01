@@ -1,0 +1,124 @@
+{
+    "import": [{
+			"id": "slot:helm",
+			"name": "Helm",
+			"description": "A covering for your head",
+			"icon": "game-icon game-icon-horned-helm",
+			"ordering": 10,
+			"types_accepted": ["type:armor:helm"],
+			"attribute": {}
+		}, {
+			"id": "slot:glasses",
+			"name": "Glasses",
+			"description": "A covering for your eyes",
+			"icon": "far fa-glasses",
+			"ordering": 11,
+			"types_accepted": ["type:glasses"],
+			"attribute": {}
+		}, {
+			"id": "slot:neck",
+			"name": "Neck",
+			"description": "A place to wear a necklace",
+			"icon": "game-icon game-icon-double-necklace",
+			"ordering": 12,
+			"types_accepted": ["type:necklace"],
+			"attribute": {}
+		}, {
+			"id": "slot:cape",
+			"name": "Back",
+			"description": "A place to wear a backpack or cape",
+			"icon": "game-icon game-icon-cape",
+			"ordering": 13,
+			"types_accepted": ["type:cape", "type:backpack"],
+			"attribute": {}
+		}, {
+			"id": "slot:chest",
+			"name": "Chest Armor",
+			"description": "A place to wear armor over your torso",
+			"icon": "game-icon game-icon-muscular-torso",
+			"ordering": 14,
+			"types_accepted": ["type:armor:chest"],
+			"attribute": {}
+		}, {
+			"id": "slot:hand",
+			"name": "Hand",
+			"description": "A place to hold something",
+			"icon": "game-icon game-icon-hand",
+			"ordering": 15,
+			"types_accepted": ["type:weapon", "type:held", "type:weapon:melee", "type:weapon:ranged", "type:device", "type:armor:shield"],
+			"attribute": {}
+		}, {
+			"id": "slot:ring",
+			"name": "Ring",
+			"description": "A place to wear a ring",
+			"icon": "game-icon game-icon-ring",
+			"ordering": 16,
+			"types_accepted": ["type:ring"],
+			"attribute": {}
+		}, {
+			"id": "slot:bracers",
+			"name": "Bracers",
+			"description": "A place to wear armor over your torso",
+			"icon": "game-icon game-icon-bracers",
+			"ordering": 17,
+			"types_accepted": ["type:armor:bracers"],
+			"attribute": {}
+		}, {
+			"id": "slot:belt",
+			"name": "Belt",
+			"description": "A place to wear a belt",
+			"icon": "game-icon game-icon-belt",
+			"ordering": 18,
+			"types_accepted": ["type:belt"],
+			"attribute": {}
+		}, {
+			"id": "slot:charm",
+			"name": "Charm",
+			"description": "A place to keep a small charm",
+			"icon": "game-icon game-icon-rune-stone",
+			"ordering": 19,
+			"types_accepted": ["type:charm"],
+			"attribute": {}
+		}, {
+			"id": "slot:pouch",
+			"name": "Pouch",
+			"description": "A place to keep a small pouch on hand for use. Keeping your gold here makes it difficult to steal.",
+			"icon": "fas fa-sack",
+			"ordering": 20,
+			"types_accepted": ["type:pouch"],
+			"attribute": {}
+		}, {
+			"id": "slot:pants",
+			"name": "Bracers",
+			"description": "A place to wear armor over your torso",
+			"icon": "game-icon game-icon-armored-pants",
+			"ordering": 21,
+			"types_accepted": ["type:pants"],
+			"attribute": {}
+		}, {
+			"id": "slot:boots",
+			"name": "Boots",
+			"description": "A place to wear boots",
+			"icon": "game-icon game-icon-boots",
+			"ordering": 22,
+			"types_accepted": ["type:boots"],
+			"attribute": {}
+		}, {
+			"id": "slot:ship:cannon",
+			"name": "Cannon Emplacement",
+			"description": "A place to put a cannon",
+			"icon": "game-icon game-icon-cannon",
+			"ordering": 100,
+			"types_accepted": ["type:cannon"],
+			"attribute": {}
+		}, {
+			"id": "slot:ship:module:general",
+			"name": "Boat Module",
+			"description": "A place to put module for your boat",
+			"icon": "game-icon game-icon-abstract-005",
+			"ordering": 101,
+			"types_accepted": ["type:module:boat:general"],
+			"attribute": {}
+		}
+    ]
+}

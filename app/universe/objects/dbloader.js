@@ -29,6 +29,15 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
+	"id": "parent",
+	"name": "Parent",
+	"description": "Parental object reference for base object properties. References any object.",
+	"type": "string",
+	"inheritance": {},
+	"inheritable": [],
+	"attribute": {}
+});
+fields.push({
 	"id": "restricted",
 	"name": "Restricted",
 	"description": "When set, the object's listed properties require knowledge with the 'reveals' property and the corrsponding object as a subject.",

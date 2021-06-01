@@ -181,6 +181,7 @@ class RSUniverse extends EventEmitter {
 					i,
 					j;
 					
+				console.log("Sync: ", event);
 				this.state.loaded = true; // Set early to not delay receiveDelta
 				for(i=0; i<classes.length; i++) {
 					if(!this.index[classes[i]]) {
@@ -194,11 +195,8 @@ class RSUniverse extends EventEmitter {
 				
 				Vue.set(this.metrics, "sync", event.sent);
 				Vue.set(this, "players", event.players);
-				localStorage.setItem(this.KEY.DETAILS, classes.join(","));
 				localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
-				for(i=0; i<classes.length; i++) {
-					localStorage.setItem(this.KEY.CLASSPREFIX + classes[i], JSON.stringify(this.index[classes[i]]));
-				}
+				localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 				
 				Vue.set(this, "version", event.version);
 				this.checkVersion();
@@ -218,40 +216,31 @@ class RSUniverse extends EventEmitter {
 		// 		Note: this.metrics is sent for the sync, so restoring its "sync" time will
 		// 		offset data from the universe.
 		try {
-			var loadDetails = localStorage.getItem(this.KEY.DETAILS),
+			var loadListing = localStorage.getItem(this.KEY.CLASSPREFIX),
 				loadMetrics = localStorage.getItem(this.KEY.METRICS),
-				loadClass,
-				loadObj,
-				storeIndex,
-				storeList,
+				loadIndex = {},
 				keys,
 				i,
-				j,
-				k;
+				j;
 				
-			if(loadDetails && loadMetrics) {
-				loadMetrics = JSON.parse(loadMetrics);
-				loadDetails = loadDetails.split(",");
-				storeIndex = {};
-				storeList = {};
-				
-				for(i=0; i<loadDetails.length; i++) {
-					loadClass = localStorage.getItem(this.KEY.CLASSPREFIX + loadDetails[i]);
-					if(loadClass && loadClass[0] !== "_") {
-						storeIndex[loadDetails[i]] = JSON.parse(loadClass);
-						storeList[loadDetails[i]] = [];
-						keys = Object.keys(storeIndex[loadDetails[i]]);
-						for(j=0; j<keys.length; j++) {
-							storeList[loadDetails[i]].push(storeIndex[loadDetails[i]][keys[j]]);
+			if(loadIndex && loadMetrics) {
+				try {
+					loadListing = JSON.parse(LZString.decompressFromUTF16(loadListing));
+					keys = Object.keys(loadListing);
+					for(i=0; i<keys.length; i++) {
+						loadIndex[keys[i]] = {};
+						for(j=0; j<loadListing[keys[i]].length; j++) {
+							loadIndex[keys[i]][loadListing[keys[i]][j].id] = loadListing[keys[i]][j];
 						}
 					}
+					this.metrics = JSON.parse(loadMetrics);
+					this.listing = loadListing;
+					this.index = loadIndex;
+				} catch(exception) {
+					console.error("Clearing cache, failed to load: ", exception);
+					localStorage.removeItem(this.KEY.CLASSPREFIX);
+					localStorage.removeItem(this.KEY.METRICS);
 				}
-				
-				for(i=0; i<loadDetails.length; i++) {
-					this.listing[loadDetails[i]] = storeList[loadDetails[i]];
-					this.index[loadDetails[i]] = storeIndex[loadDetails[i]];
-				}
-				this.metrics = loadMetrics;
 			}
 		} catch(abort) {
 			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
@@ -695,21 +684,9 @@ class RSUniverse extends EventEmitter {
 	
 	deleteCache() {
 		try {
-			var loadDetails = localStorage.getItem(this.KEY.DETAILS),
-				loadMetrics = localStorage.getItem(this.KEY.METRICS),
-				i;
-				
-			if(loadDetails && loadMetrics) {
-				loadMetrics = JSON.parse(loadMetrics);
-				loadDetails = loadDetails.split(",");
-				for(i=0; i<loadDetails.length; i++) {
-					localStorage.removeItem(this.KEY.CLASSPREFIX + loadDetails[i]);
-				}
-				localStorage.removeItem(this.KEY.DETAILS);
-				localStorage.removeItem(this.KEY.METRICS);
-			} else {
-				console.warn("Cache Delete Skipped for No Data");
-			}
+			localStorage.removeItem(this.KEY.CLASSPREFIX);
+			localStorage.removeItem(this.KEY.DETAILS);
+			localStorage.removeItem(this.KEY.METRICS);
 		} catch(abort) {
 			console.error("Delete Failed: ", abort);
 			this.addLogEvent("Failed to clear Universe Cache, aborting and allowing normal sync", 50, abort);
@@ -752,6 +729,31 @@ class RSUniverse extends EventEmitter {
 	
 	isOwner(player, object) {
 		return !object.is_owned || object.owned[player.id || player];
+	}
+	
+	exportData(title) {
+		var appendTo = $(document).find("#anchors")[0],
+			anchor = document.createElement("a"),
+			keys = Object.keys(this.listing),
+			exporting = [],
+			x;
+			
+		if(!title) {
+			title = document.title || "universe";
+		}
+		title = title.replace(/ /g, "_").toLowerCase();
+
+		for(x=0; x<keys.length; x++) {
+			exporting = exporting.concat(this.listing[keys[x]]);
+		}
+
+		appendTo.appendChild(anchor);
+		anchor.href = URL.createObjectURL(new Blob([JSON.stringify({"export": exporting}, null, "\t")]));
+		anchor.download = title + ".export." + Date.now() + ".json";
+		anchor.click();
+		
+		URL.revokeObjectURL(anchor.href);
+		appendTo.removeChild(anchor);
 	}
 	
 	checkVersion() {

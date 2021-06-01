@@ -75,6 +75,7 @@ var config = {
 				"cola",
 				"atob",
 				"btoa",
+				"LZString",
 				"VueRouter",
 				"Vue",
 				"d3",

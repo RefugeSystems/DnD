@@ -1,0 +1,228 @@
+{
+    "import": [{
+            "id": "skill:strength",
+            "name": "Strength",
+            "description": "Perform a save using your muscles and force.",
+            "icon": "fas fa-fist-raised",
+            "stat": "strength",
+            "ordering": 1,
+            "section": "saves"
+        }, {
+            "id": "skill:dexterity",
+            "name": "Dexterity",
+            "description": "Perform a save using your reflexes and speed.",
+            "icon": "ra ra-player-lift",
+            "stat": "dexterity",
+            "ordering": 2,
+            "section": "saves"
+        }, {
+            "id": "skill:constitution",
+            "name": "Constitution",
+            "description": "Perform a save using the fortitude of your body.",
+            "icon": "ra ra-muscle-up",
+            "stat": "constitution",
+            "ordering": 3,
+            "section": "saves"
+        }, {
+            "id": "skill:intelligence",
+            "name": "Intelligence",
+            "description": "Perform a save using your knowledge of the world.",
+            "icon": "fas fa-brain",
+            "stat": "intelligence",
+            "ordering": 4,
+            "section": "saves"
+        }, {
+            "id": "skill:wisdom",
+            "name": "Wisdom",
+            "description": "Perform a save using your ability to understand the world.",
+            "icon": "game-icon game-icon-brainstorm",
+            "stat": "wisdom",
+            "ordering": 5,
+            "section": "saves"
+        }, {
+            "id": "skill:charisma",
+            "name": "Charisma",
+            "description": "Perform a save against the force of your personality.",
+            "icon": "fas fa-comments",
+            "stat": "charisma",
+            "ordering": 6,
+            "section": "saves"
+        }, {
+            "id": "skill:initiative",
+            "name": "Initiative",
+            "description": "Determine your combat order based on your ability to react and maintain awareness",
+            "icon": "fas fa-swords",
+            "stat": "dexterity",
+            "ordering": 10,
+            "section": "combat"
+        }, {
+            "id": "skill:concentration",
+            "name": "Concentration",
+            "description": "Attempt to maintain concentration on a spell after taking damage. The ${DC}$ is half the damage taken.",
+            "icon": "ra ra-player-shot",
+            "stat": "constitution",
+            "ordering": 11,
+            "section": "combat"
+        }, {
+            "id": "skill:mainhand",
+            "name": "Main Hand",
+            "description": "Roll an attack with the weapon in your ${Main Hand}$",
+            "icon": "game-icon game-icon-saber-slash",
+            "stat": "weapon_main",
+            "ordering": 12,
+            "section": "combat"
+        }, {
+            "id": "skill:offhand",
+            "name": "Off Hand",
+            "description": "Roll an attack with the weapon in your ${Off Hand}$",
+            "icon": "game-icon game-icon-serrated-slash",
+            "stat": "weapon_off",
+            "ordering": 13,
+            "section": "combat"
+        }, {
+            "id": "skill:acrobatics",
+            "name": "Acrobatics",
+            "description": "Attempt to move or squirm in someway relying on your ability to control your body",
+            "icon": "ra ra-falling",
+            "stat": "dexterity",
+            "ordering": 19,
+            "section": "checks"
+        }, {
+            "id": "skill:animalhandling",
+            "name": "Animal Handling",
+            "description": "Attempt to manipulate an animal of some kind. This will usually apply to creatures with an ${Intelligence}$ of 4 or lower or otherwise intelligent creatures in a crazed (or similar) state",
+            "icon": "game-icon game-icon-cow",
+            "stat": "wisdom",
+            "ordering": 20,
+            "section": "checks"
+        }, {
+            "id": "skill:arcana",
+            "name": "Arcana",
+            "description": "Attempt to understand some aspect of magic",
+            "icon": "game-icon game-icon-magic-portal",
+            "stat": "intelligence",
+            "ordering": 21,
+            "section": "checks"
+        }, {
+            "id": "skill:atheletics",
+            "name": "Atheletics",
+            "description": "Attempt to perform a feat of ${Strength}$ such as pushing or carrying an object",
+            "icon": "game-icon game-icon-push",
+            "stat": "strength",
+            "ordering": 22,
+            "section": "checks"
+        }, {
+            "id": "skill:deception",
+            "name": "Deception",
+            "description": "Attempt to convince another creature of something that you know to not be true or behave in a way that achieves a similar effect",
+            "icon": "fas fa-comment-times",
+            "stat": "charisma",
+            "ordering": 24,
+            "section": "checks"
+        }, {
+            "id": "skill:history",
+            "name": "History",
+            "description": "Attempt to understand or recall something from the past",
+            "icon": "fas fa-history",
+            "stat": "intelligence",
+            "ordering": 25,
+            "section": "checks"
+        }, {
+            "id": "skill:insight",
+            "name": "Insight",
+            "description": "Attempt to understand the intent of another creature",
+            "icon": "fas fa-book-user",
+            "stat": "wisdom",
+            "ordering": 26,
+            "section": "checks"
+        }, {
+            "id": "skill:intimidation",
+            "name": "Intimidation",
+            "description": "Attempt to scare a creature by threatening it",
+            "icon": "game-icon game-icon-xxxx",
+            "stat": "charisma",
+            "ordering": 27,
+            "section": "checks"
+        }, {
+            "id": "skill:investigation",
+            "name": "Investigation",
+            "description": "Attempt to ascertain information from an area by physically searching it",
+            "icon": "far fa-search-location",
+            "stat": "intelligence",
+            "ordering": 28,
+            "section": "checks"
+        }, {
+            "id": "skill:medicine",
+            "name": "Medicine",
+            "description": "Attempt to understand or treat an injury or illness",
+            "icon": "fas fa-heartbeat",
+            "stat": "wisdom",
+            "ordering": 29,
+            "section": "checks"
+        }, {
+            "id": "skill:nature",
+            "name": "Nature",
+            "description": "Attempt to understand some aspect of the land or a plant",
+            "icon": "fas fa-leaf-oak",
+            "stat": "intelligence",
+            "ordering": 30,
+            "section": "checks"
+        }, {
+            "id": "skill:perception",
+            "name": "Perception",
+            "description": "Attempt to look over an area and see something of interest",
+            "icon": "game-icon game-icon-look-at",
+            "stat": "wisdom",
+            "ordering": 31,
+            "section": "checks"
+        }, {
+            "id": "skill:performance",
+            "name": "Performance",
+            "description": "Attempt to manipulate your voice or move your body in a certain way",
+            "icon": "game-icon game-icon-body-balance",
+            "stat": "charisma",
+            "ordering": 32,
+            "section": "checks"
+        }, {
+            "id": "skill:persuasion",
+            "name": "Persuasion",
+            "description": "Attempt to convince another creature to do or believe something",
+            "icon": "fas fa-comments",
+            "stat": "charisma",
+            "ordering": 33,
+            "section": "checks"
+        }, {
+            "id": "skill:religion",
+            "name": "Religion",
+            "description": "Attempt to understand something from a religious perspective, possibly involving a god",
+            "icon": "fas fa-pray",
+            "stat": "intelligence",
+            "ordering": 34,
+            "section": "checks"
+        }, {
+            "id": "skill:sleightofhand",
+            "name": "Sleight Of Hand",
+            "description": "Attempt to sneakily perform an action with your hands",
+            "icon": "game-icon game-icon-robber-hand",
+            "stat": "dexterity",
+            "ordering": 35,
+            "section": "checks"
+        }, {
+            "id": "skill:stealth",
+            "name": "Stealth",
+            "description": "Attempt to slip away from the awareness of near-by creatures",
+            "icon": "fas fa-eye-slash",
+            "stat": "dexterity",
+            "ordering": 36,
+            "section": "checks"
+        }, {
+            "id": "skill:survival",
+            "name": "Survival",
+            "description": "Attempt to understand some aspect of time or your current location",
+            "icon": "fas fa-mountains",
+            "stat": "wisdom",
+            "ordering": 37,
+            "section": "checks"
+        }
+    ]
+}

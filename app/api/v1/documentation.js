@@ -84,10 +84,14 @@ module.exports = new (function() {
 					};
 					for(x=0; x<manager.fieldIDs.length; x++) {
 						field = manager.fieldUsed[manager.fieldIDs[x]];
-						load.fields[field.id] = {};
-						load.fields[field.id].name = field.name;
-						load.fields[field.id].description = field.description;
-						load.fields[field.id].type = field.type;
+						if(field) {
+							load.fields[field.id] = {};
+							load.fields[field.id].name = field.name;
+							load.fields[field.id].description = field.description;
+							load.fields[field.id].type = field.type;
+						} else {
+							console.log("Unknown Field? " + manager.fieldIDs[x]);
+						}
 					}
 					load.ids = manager.fieldIDs;
 					res.result.classes.push(load);

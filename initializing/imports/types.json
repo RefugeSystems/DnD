@@ -1,0 +1,226 @@
+{
+    "import": [{
+            "id": "type:armor:helm",
+            "name": "Armor:helm",
+            "description": "An armor covering for your head",
+            "icon": "game-icon game-icon-horned-helm"
+        }, {
+            "id": "type:glasses",
+            "name": "Glasses",
+            "description": "Glasses",
+            "icon": "far fa-glasses"
+        }, {
+            "id": "type:necklace",
+            "name": "Necklace",
+            "description": "Necklace",
+            "icon": "game-icon game-icon-necklace"
+        }, {
+            "id": "type:cape",
+            "name": "Cape",
+            "description": "Cape",
+            "icon": "game-icon game-icon-cape"
+        }, {
+            "id": "type:backpack",
+            "name": "Backpack",
+            "description": "A bag for carrying things",
+            "icon": "fas fa-backpack"
+
+        }, {
+            "id": "type:pouch",
+            "name": "Pouch",
+            "description": "A small bag",
+            "icon": "fas fa-sack"
+        }, {
+            "id": "type:charm",
+            "name": "Charm",
+            "description": "A small charm",
+            "icon": "game-icon game-icon-rune-stone"
+
+        }, {
+            "id": "type:armor:chest",
+            "name": "Chest Armor",
+            "description": "A solid piece of armor for your chest",
+            "icon": "game-icon game-icon-chest-armor"
+        }, {
+            "id": "type:weapon",
+            "name": "Weapon",
+            "description": "Item used in combat to inflict damage",
+            "icon": "fas fa-sword"
+        }, {
+            "id": "type:held",
+            "name": "Held",
+            "description": "An item that can be easily held",
+            "icon": "fas fa-person-carry"
+        }, {
+            "id": "type:weapon:melee",
+            "name": "Melee Weapon",
+            "description": "A weapon for striking creatures within reach",
+            "icon": "fas fa-sword"
+        }, {
+            "id": "type:weapon:ranged",
+            "name": "Ranged Weapon",
+            "description": "A weapon that can attack near or far",
+            "icon": "game-icon game-icon-crossbow"
+        }, {
+            "id": "type:weapon:thrown",
+            "name": "Thrown Weapon",
+            "description": "A weapon good for striking in melee or can be thrown to attack at range",
+            "icon": "fas fa-dagger"
+        }, {
+            "id": "type:device",
+            "name": "Device",
+            "description": "An interactable object with some effect",
+            "icon": "game-icon game-icon-button-finger"
+        }, {
+            "id": "type:ring",
+            "name": "Ring",
+            "description": "Ring",
+            "icon": "game-icon game-icon-ring"
+        }, {
+            "id": "type:armor:bracers",
+            "name": "Bracers",
+            "description": "Bracers",
+            "icon": "game-icon game-icon-bracers"
+        }, {
+            "id": "type:belt",
+            "name": "Belt",
+            "description": "Belt",
+            "icon": "game-icon game-icon-belt"
+        }, {
+            "id": "type:pants",
+            "name": "Pants",
+            "description": "Pants",
+            "icon": "game-icon game-icon-armored-pants"
+        }, {
+            "id": "type:boots",
+            "name": "Boots",
+            "description": "Boots",
+            "icon": "game-icon game-icon-boots"
+        }, {
+            "id": "type:cannon",
+            "name": "Cannon",
+            "description": "Cannon",
+            "icon": "game-icon game-icon-cannon"
+        }, {
+            "id": "type:module:boat:general",
+            "name": "Module:boat:general",
+            "description": "Module:boat:general",
+            "icon": "game-icon game-icon-abstract-005"
+        }, {
+            "id": "type:potion",
+            "name": "Potion",
+            "description": "Consumable Potion",
+            "icon": "fas fa-flask-potion"
+        }, {
+            "id": "type:plant",
+            "name": "Plant",
+            "description": "A plant of a piece of one",
+            "icon": "fas fa-leaf"
+        }, {
+            "id": "type:crystal",
+            "name": "Crystal",
+            "description": "A crystal",
+            "icon": "fas fa-gem"
+        }, {
+            "id": "type:ingredient",
+            "name": "Ingredient",
+            "description": "This is used in some way for recipes",
+            "icon": "fas fa-cube rot90"
+        }, {
+            "id": "type:book",
+            "name": "Book",
+            "description": "A collection of pages from some form of printing",
+            "icon": "fas fa-book"
+        }, {
+            "id": "type:journal",
+            "name": "Journal",
+            "description": "A collection of hand written pages",
+            "icon": "fas fa-book"
+        }, {
+            "id": "type:scroll:normal",
+            "name": "Scroll",
+            "description": "Long piece of paper with text upon it",
+            "icon": "fas fa-scroll"
+        }, {
+            "id": "type:scroll:magic",
+            "name": "Magical Scroll",
+            "description": "Long piece of paper inked with magical properties",
+            "icon": "fas fa-scroll-old"
+        }, {
+            "id": "type:vial",
+            "name": "Vial",
+            "description": "A small tube filled with a sample of some liquid",
+            "icon": "fas fa-vial"
+        }, {
+            "id": "type:note",
+            "name": "Note",
+            "description": "A small note",
+            "icon": "fas fa-sticky-note"
+        }, {
+            "id": "type:instrument",
+            "name": "Instrument",
+            "description": "A musical instrument",
+            "icon": "fas fa-guitar"
+        }, {
+            "id": "type:drug",
+            "name": "Drug",
+            "description": "A consumable with unusual effects",
+            "icon": "fas fa-capsules"
+        }, {
+            "id": "type:kit",
+            "name": "Kit",
+            "description": "A small bag filled with tools for a particular activity",
+            "icon": "game-icon game-icon-briefcase"
+        }, {
+            "id": "type:artifact",
+            "name": "Artifact",
+            "description": "A powerful relic from an ancient time",
+            "icon": "game-icon game-icon-abstract-041"
+        }, {
+            "id": "type:body:part",
+            "name": "Body Part",
+            "description": "Part of the body of a creature",
+            "icon": "game-icon game-icon-severed-hand"
+        }, {
+            "id": "type:armor:shield",
+            "name": "Shield",
+            "description": "A held piece of armor for deflecting attacks",
+            "icon": "fas fa-shield"
+        }, {
+            "id": "type:key",
+            "name": "Key",
+            "description": "A key for opening locks",
+            "icon": "fas fa-key-skeleton"
+        }, {
+            "id": "type:rock",
+            "name": "Rock",
+            "description": "Rock",
+            "icon": "game-icon game-icon-rock-2"
+        }, {
+            "id": "type:beverage",
+            "name": "Beverage",
+            "description": "A drinkable liquid",
+            "icon": "fas fa-beer"
+        }, {
+            "id": "type:food",
+            "name": "Food",
+            "description": "Consumable sustenience",
+            "icon": "fas fa-meat"
+        }, {
+            "id": "type:bomb",
+            "name": "Bomb",
+            "description": "An explosive",
+            "icon": "fas fa-bomb"
+        }, {
+            "id": "type:artwork",
+            "name": "Artwork",
+            "description": "Artwork",
+            "icon": "fas fa-image"
+        }, {
+            "id": "type:tool",
+            "name": "Tool",
+            "description": "Tool",
+            "icon": "fas fa-hammer"
+        }
+    ]
+}

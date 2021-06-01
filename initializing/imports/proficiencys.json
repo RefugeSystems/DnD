@@ -1,0 +1,283 @@
+{
+    "export": [{
+            "id": "proficiency:language:common",
+            "name": "Speak: Common",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "Ability to understand and speak common. Typically everyone speaks this."
+        }, {
+            "id": "proficiency:language:dwarven",
+            "name": "Speak: Dwarvian",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Ability to understand and speak dwarvish"
+        }, {
+            "id": "proficiency:language:elvan",
+            "name": "Speak: Elvish",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Ability to understand and speak elvish"
+        }, {
+            "id": "proficiency:language:gnome",
+            "name": "Speak: Gnomish",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Ability to understand and speak gnomish"
+        }, {
+            "id": "proficiency:language:goblin",
+            "name": "Speak: Goblin",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "You are able to speak the language of goblins."
+        }, {
+            "id": "proficiency:language:draconic",
+            "name": "Speak: Draconic",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Ability to understand and speak the language of dragons"
+        }, {
+            "id": "proficiency:language:undercommon",
+            "name": "Speak: Undercommon",
+            "icon": "fal fa-comment",
+            "description": "Ability to understand and speak the language common to those who dwell beneath the surface of society."
+        }, {
+            "id": "proficiency:weapon:exotic",
+            "name": "Weaponry: Exotic",
+            "icon": "fal fa-scythe",
+            "description": "Allows use of 'odd' or 'uncommon' weapons"
+        }, {
+            "id": "proficiency:weapon:heavy",
+            "name": "Weaponry: Heavy",
+            "icon": "fas fa-weight-hanging",
+            "description": "You know how to use extremely heavy weaponry."
+        }, {
+            "id": "proficiency:language:celestrial",
+            "name": "Speak: Celestial",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "Ability to understand and speak the language of gods.\n\nCan not be read through lip reading."
+        }, {
+            "id": "proficiency:language:abyssal",
+            "name": "Speak: Abyssal",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Ability to understand and speak the language of the demons.\n\nCan not be read through lip reading."
+        }, {
+            "id": "proficiency:language:animals",
+            "name": "Speak with Animals",
+            "icon": "fal fa-squirrel",
+            "description": "Ability to understand and speak with common animals like cows, horses, panthers.\n\nDoes not extend to \"monster\" creatures or other non-animal entities."
+        }, {
+            "id": "proficiency:weapon:sword",
+            "name": "Weaponry: Sword",
+            "icon": "fas fa-sword",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:dagger",
+            "name": "Weaponry: Dagger",
+            "icon": "fas fa-dagger",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:bow",
+            "name": "Weaponry: Bow",
+            "icon": "fal fa-bow-arrow",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:crossbow",
+            "name": "Weaponry: Crossbow",
+            "icon": "fas fa-bow-arrow",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:wand",
+            "name": "Weaponry: Wand",
+            "icon": "fas fa-wand",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:staff",
+            "name": "Weaponry: Staff",
+            "icon": "fas fa-staff",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:axe",
+            "name": "Weaponry: Axe",
+            "icon": "fas fa-axe-battle",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:hammer",
+            "name": "Weaponry: Hammer",
+            "icon": "fas fa-hammer-war",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:lute",
+            "name": "Play: Lute",
+            "icon": "fas fa-mandolin",
+            "description": ""
+        }, {
+            "id": "proficiency:weapon:spear",
+            "name": "Weaponry: Spear",
+            "icon": "fas fa-pen-fancy fa-rotate-180",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:robe",
+            "name": "Wear: Enchanted Robes",
+            "icon": "fal fa-tshirt",
+            "description": "While non-magical robes can be worn by anyone, magical robes have a different tone to donning them."
+        }, {
+            "id": "proficiency:armor:leather",
+            "name": "Wear Leather Armor",
+            "icon": "fal fa-tshirt",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:plate",
+            "name": "Wear: Heavy Armor",
+            "icon": "fal fa-tshirt",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:mythril",
+            "name": "Wear: Mythril Armor",
+            "icon": "fal fa-tshirt",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:chain",
+            "name": "Wear: Medium Armor",
+            "icon": "fal fa-tshirt",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:shield",
+            "name": "Use: Shield",
+            "icon": "fas fa-shield",
+            "description": ""
+        }, {
+            "id": "proficiency:instrument:drums",
+            "name": "Play: Percussion",
+            "icon": "fas fa-drum",
+            "selectable": true,
+            "description": "You are proficient with drums and percussion like instruments, being able to play them.\n\nThis merely means you can play them consistently in a pleasant way. You are still subject to your performance skill check, which this does not directly impact."
+        }, {
+            "id": "proficiency:language:aquan",
+            "name": "Speak: Aquan",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "You are able to speak the language of the merfolk."
+        }, {
+            "id": "proficiency:weapon:whip",
+            "name": "Weaponry: Whip",
+            "icon": "fal fa-signature",
+            "selectable": false,
+            "description": ""
+        }, {
+            "id": "proficiency:instrument:guitar",
+            "name": "Play: Guitar",
+            "icon": "fas fa-guitar",
+            "selectable": false,
+            "description": ""
+        }, {
+            "id": "proficiency:instrument:mandolin",
+            "name": "Play: Mandolin",
+            "icon": "fas fa-mandolin",
+            "selectable": false,
+            "description": ""
+        }, {
+            "id": "proficiency:instrument:strings",
+            "name": "Play: Strings",
+            "icon": "fas fa-mandolin",
+            "selectable": false,
+            "description": "You are proficient with string instruments, being able to play them.\n\nThis merely means you can play them consistently in a pleasant way. You are still subject to your performance skill check, which this does not directly impact."
+        }, {
+            "id": "proficiency:instrument:keys",
+            "name": "Play: Pianos",
+            "icon": "fas fa-keyboard",
+            "selectable": false,
+            "description": "You are proficient with pianos and piano like instruments, being able to play them.\n\nThis merely means you can play them consistently in a pleasant way. You are still subject to your performance skill check, which this does not directly impact."
+        }, {
+            "id": "proficiency:instrument:woodwinds",
+            "name": "Play: Woodwinds",
+            "icon": "fal fa-wind",
+            "selectable": false,
+            "description": "You are proficient with woodwind instruments, being able to play them.\n\nThis merely means you can play them consistently in a pleasant way. You are still subject to your performance skill check, which this does not directly impact."
+        }, {
+            "id": "proficiency:weapon:emplacement",
+            "name": "Use: Weapon Emplacement",
+            "icon": "fas fa-ball-pile",
+            "selectable": false,
+            "description": ""
+        }, {
+            "id": "proficiency:language:sylvan",
+            "name": "Speak: Sylvan",
+            "icon": "fal fa-comment",
+            "description": "Understand and speak an ancient elven dialect."
+        }, {
+            "id": "proficiency:language:orc",
+            "name": "Speak: Orc",
+            "selectable": true,
+            "icon": "fal fa-comment",
+            "description": "Ability to understand and speak the language of the Orcs."
+        }, {
+            "id": "proficiency:language:kintari",
+            "name": "Speak: Kintarian",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "You are able to speak the language of the Kintari."
+        }, {
+            "id": "proficiency:language:giant",
+            "name": "Speak: Giant",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "Ability to understand and speak the language of the Giants."
+        }, {
+            "id": "proficiency:language:druidic",
+            "name": "Speak: Druidic",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "A special language learned in training."
+        }, {
+            "id": "proficiency:language:merfolkian",
+            "name": "Speak: Merfolk",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "You are able to speak and understand Merfolkian, the language of the water creatures.\n\nThis allows you to speak to intelligent water creatures such as mermen and mermaids and to have some vague understanding of unintelligent water creatures to ask for things like help or directions."
+        }, {
+            "id": "proficiency:task:navigation:nautical",
+            "name": "Task: Nautical Navigation",
+            "icon": "fas fa-moon-stars",
+            "selectable": false,
+            "description": "Reading the stars is the key to navigating the open waters. A touch of the arcane and a map doesn't hurt.\n\nYou know how to combine these traits to plot a course across the open seas."
+        }, {
+            "id": "proficiency:task:captain:sailboat",
+            "name": "Task: Sailboat Captain",
+            "icon": "fas fa-ship",
+            "selectable": false,
+            "description": "You understand how a sailboat works and how to command a crew on a larger vessel.\n\nImportant for smooth operation of large sailboats.\nYou know that a different sizes of ships have different desired crews.\n\n# Small Sailing Vessels\n\nThese require very few crew to operate but only hold a small amount.\n+ Generally not recommended for sailing on the open seas\n+ 1 to 2 Crew to operate\n+ General max of 4 people actively working the rigging\n+ Up to 8 people on the ship\n\n# Medium Sailing Vessels\n\nThis is where most boats from ${\"content\":\"Draconia\",\"class\":\"rs-darkorange\"}$ fall.\n+ Minimum crew of 3 to operate\n     + Works well enough in coastal waters\n+ Optimum operation begins at 5 crew, particularly on the open seas\n+ Works best with 8 crew, and comfortably with 10\n+ Can generally carry up to 25 people on board\n\n# Large Sailing Vessels\n\nMany of this class sail under the flag of ${\"content\":\"Nautregno\", \"class\":\"rs-darkorange\"}$. And while other nations have them as well, they typically serving as flagships in those cases.\n+ Minimum crew of 15\n+ Works best with a crew of 30\n+ Can generally carry up to 80 people on board"
+        }, {
+            "id": "proficiency:language:ancient",
+            "name": "Speak: Ancient",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "Ability to understand and speak the language of the ancient civilization.\n\nA combination of Celestial, Infernal, and Deep Speech. Aquan is needed to tie together the different usages to fully grasp the language. And even then, it still must be learned.\n\nCan not be read through lip reading.\n\nCan not be gained or read through the use of Comprehend Languages."
+        }, {
+            "id": "proficiency:language:infernal",
+            "name": "Speak: Infernal",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Infernal was the language of the Baatezu, a subtype of devils, and of the Great Hell Plains.\n\nInfernal was brought to the world through contact with evil beings from other planes. It was described as harsh and alien in nature, since it developed among beings devoid of humanity.\n\nCan not be read through lip reading."
+        }, {
+            "id": "proficiency:language:primordial",
+            "name": "Speak: Primordial",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "The native language of beings like gods, and once worshiped as such, but different from those who walk the planes considered to be those of the Celestials.\n\nThese ancient beings fought as those on the Material Plane do, but also fought to conquer land in other planes with great abandon.\n\nLosing their stature and mostly resigned to their own Plane, they can occasionally be found wandering existence.\n\nCan not be read through lip reading."
+        }, {
+            "id": "proficiency:language:deepspeech",
+            "name": "Speak: Deep Speech",
+            "icon": "fal fa-comment",
+            "selectable": true,
+            "description": "Language of aberrations, an alien form of communication originating in the Far Realms. It had no native script of its own, but when written by mortals it used the Espruar script, as it was first transcribed by the Drow due to frequent contact between the two groups stemming from living in relatively close proximity within the Underdark.\n\nKnown to be commonly spoken by Cthulhian followers.\n\nCan not be read through lip reading."
+        }, {
+            "id": "proficiency:language:auran",
+            "name": "Speak: Auran",
+            "icon": "fal fa-comment",
+            "selectable": false,
+            "description": "Auran was a breathy, relaxed language that has been described as a slow exhaling of air.\n\nIt was considered a dialect of Primordial, so that creatures who spoke one of the other elemental dialects such as Aquan, Ignan or Terran could understand Auran and vice-versa.\n\nAs the language of the air, it also tends to be spoken by avian or air faring creatures in the material plane such as the <span class=\"rs-darkorange\">Kenku</span>, sometimes called the Bird People, or more intelligent <span class=\"rs-darkorange\">Air Elementals</span>."
+        }
+    ]
+}

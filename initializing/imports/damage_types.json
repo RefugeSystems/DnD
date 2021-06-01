@@ -1,0 +1,94 @@
+{
+    "import": [{
+            "id": "damage_type:bludgeoning",
+            "name": "Bludgeoning",
+            "description": "Bludgeoning",
+            "icon": "fas fa-hammer-war"
+        }, {
+            "id": "damage_type:piercing",
+            "name": "Piercing",
+            "description": "Piercing",
+            "icon": "fas fa-dagger"
+        }, {
+            "id": "damage_type:crushing",
+            "name": "Crushing",
+            "description": "Crushing",
+            "icon": "fas fa-compress-arrows-alt"
+        }, {
+            "id": "damage_type:slashing",
+            "name": "Slashing",
+            "description": "Slashing",
+            "icon": "game-icon game-icon-crossed-slashes"
+        }, {
+            "id": "damage_type:acid",
+            "name": "Acid",
+            "description": "Acid",
+            "icon": "ra ra-acid"
+        }, {
+            "id": "damage_type:cold",
+            "name": "Cold",
+            "description": "Cold",
+            "icon": "fas fa-snowflakes"
+        }, {
+            "id": "damage_type:fire",
+            "name": "Fire",
+            "description": "Fire",
+            "icon": "fas fa-fire-alt"
+        }, {
+            "id": "damage_type:force",
+            "name": "Force",
+            "description": "Force",
+            "icon": "game-icon game-icon-smash-arrows rot270"
+        }, {
+            "id": "damage_type:holy",
+            "name": "Holy",
+            "description": "Holy",
+            "icon": "fas fa-holy-water"
+        }, {
+            "id": "damage_type:lightning",
+            "name": "Lightning",
+            "description": "Lightning",
+            "icon": "fas fa-thunderstorm"
+        }, {
+            "id": "damage_type:necrotic",
+            "name": "Necrotic",
+            "description": "Necrotic",
+            "icon": "fas fa-death-juice"
+        }, {
+            "id": "damage_type:poison",
+            "name": "Poison",
+            "description": "Poison",
+            "icon": "fas fa-poison-gas"
+        }, {
+            "id": "damage_type:psychic",
+            "name": "Psychic",
+            "description": "Psychic",
+            "icon": "fas fa-psychic-waves"
+        }, {
+            "id": "damage_type:radiant",
+            "name": "Radiant",
+            "description": "Radiant",
+            "icon": "fas fa-crystal-shine"
+        }, {
+            "id": "damage_type:sonic",
+            "name": "Sonic",
+            "description": "Sonic",
+            "icon": "fas fa-sound-on"
+        }, {
+            "id": "damage_type:thunder",
+            "name": "Thunder",
+            "description": "Thunder",
+            "icon": "fas fa-wifi rot90"
+        }, {
+            "id": "damage_type:chromatic",
+            "name": "Chromatic",
+            "description": "You choose any of the following magical damage types; ${Acid}$, ${Cold}$, ${Fire}$, ${Force}$, ${Holt}$, ${Lightning}$, ${Necrotic}$, ${Poison}$, ${Radiant}$, ${Sonic}$, ${Thunder}$. There may be additional restrictions to the choosable type.",
+            "icon": "fas fa-abstract-047"
+        }, {
+            "id": "damage_type:heal",
+            "name": "Heal",
+            "description": "Heal damage to to creature",
+            "icon": "fas fa-heartbeat"
+        }
+    ]
+}
