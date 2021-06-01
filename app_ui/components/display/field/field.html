@@ -1,0 +1,26 @@
+<div class="rs-component rs-display-field" v-if="displayed">
+	<div class="flex h">
+		<div class="marking" v-if="marking">
+			<span :class="marking"/>
+		</div>
+		<div class="label">
+			<span class="text">{{fieldData.name}}</span>
+		</div>
+		<div class="seperator">
+			<span class="text">:</span>
+		</div>
+		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object'">
+			<span class="text">{{getValue()}}</span>
+		</div>
+	</div>
+	<div class="pointed">
+		<div class="value array flex v" v-if="fieldData.type === 'array'">
+			<div class="element" v-for="value in getArrayValue()">
+				<span class="text">{{getValueDisplay(fieldData, value)}}</span>
+			</div>
+		</div>
+		<div class="value object flex v" v-else-if="fieldData.type === 'object'">
+			[Object]
+		</div>
+	</div>
+</div>

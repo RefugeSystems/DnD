@@ -536,6 +536,9 @@ class RSDatabase extends EventEmitter {
 						write["$" + classColumns[x]] = specification[classColumns[x]];
 					}
 				}
+				if(specification.fields.indexOf("parent") === -1) {
+					specification.fields.push("parent");
+				}
 				write.$fields = JSON.stringify(specification.fields);
 				write.$id = specification.id;
 				
@@ -754,7 +757,6 @@ class ClassManager extends EventEmitter {
 			try {
 				this.fieldIDs = JSON.parse(this.fieldIDs);
 			} catch(error) {
-				console.log("whoops");
 				this.fieldIDs = this.fieldIDs.split(",");
 			}
 		}
@@ -798,7 +800,23 @@ class ClassManager extends EventEmitter {
 			this.attribute = JSON.parse(this.attribute);
 		}
 		
-		this.fieldIDs.sort();
+		this.fieldIDs.sort(function(a, b) {
+			if(reference.fieldUsed[a] && reference.fieldUsed[b]) {
+				if(reference.fieldUsed[a].ordering < reference.fieldUsed[b].ordering) {
+					return -1;
+				} else if(reference.fieldUsed[a].ordering > reference.fieldUsed[b].ordering) {
+					return 1;
+				}
+			}
+			
+			if(a < b) {
+				return -1;
+			} else if(a > b) {
+				return 1;
+			} else {
+				return 0;
+			}
+		});
 		database.manager[this.id] = this;
 		this.computeFieldProperties();
 	}

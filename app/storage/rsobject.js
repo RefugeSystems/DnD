@@ -212,7 +212,12 @@ class RSObject {
 			parent,
 			field,
 			x;
-
+			
+		this._search = "";
+		if(this.name) {
+			this._search += this.name.toLowerCase();
+		}
+		
 		// Establish Base Values
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
@@ -245,7 +250,7 @@ class RSObject {
 			for(x=0; x<fields.length; x++) {
 				if(this._calculated[fields[x]] === undefined) {
 					field = this._manager.database.field[fields[x]];
-					if(field) {
+					if(field && !field.attribute.no_parental) {
 						switch(field.type) {
 							case "calculated":
 								this._calculated[fields[x]] = this.calculateField(fields[x], parent[fields[x]]);
@@ -258,6 +263,9 @@ class RSObject {
 							case "object":
 								this._calculated[fields[x]] = parent[fields[x]];
 								break;
+						}
+						if(field.attribute && field.attribute.searchable && field.type === "string" && this._calculated[field.id]) {
+							this._search += ":::" + this._calculated[field.id].toLowerCase();
 						}
 					}
 				}
@@ -303,6 +311,9 @@ class RSObject {
 			if(source) {
 				for(i=0; i<field.inheritanceFields.length; i++) {
 					switch(field.inheritance[field.inheritanceFields[i]]) {
+						case "+=":
+							this[field.inheritanceFields[i]] = RSObject.addValues(this[field.inheritanceFields[i]], source[field.inheritanceFields[i]], "calculated");
+							break;
 						case "+":
 							this[field.inheritanceFields[i]] = RSObject.addValues(this[field.inheritanceFields[i]], source[field.inheritanceFields[i]]);
 							break;
@@ -394,15 +405,30 @@ class RSObject {
 			this.postFieldUpdate();
 		}
 		
+		// TODO: Implement field attribute specification for concealment, needs additional UI consideration for controlled visibility (See: Game Masters)
+		if(this.concealed) {
+			this.attribute.concealed = ["name", "description"];
+		}
+		
 		// Gaurentee Objects and Arrays where no value is set
 		fields = this._manager.fieldIDs;
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			if(field && (this[field.id] === undefined || this[field.id] === null)) {
 				if(field.type === "object") {
-					this[field.id] = {};
+					if(field.attribute.default) {
+						// Risky: This maintains deeper mutable references in complex cases
+						this[field.id] = Object.assign({}, field.attribute.default);
+					} else {
+						this[field.id] = {};
+					}
 				} else if(field.type === "array") {
-					this[field.id] = [];
+					if(field.attribute.default) {
+						// Risky: This maintains deeper mutable references in even trivial cases
+						this[field.id] = [].concat(field.attribute.default);
+					} else {
+						this[field.id] = [];
+					}
 				} else if(field.attribute.default) {
 					this[field.id] = field.attribute.default;
 				}
@@ -892,10 +918,12 @@ class RSObject {
 		if(this._manager && this._manager.fieldIDs) {
 			for(x=0; x<this._manager.fieldIDs.length; x++) {
 				field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
-				if(!field.attribute || !field.attribute.server_only) {
-					json[field.id] = this[field.id];
-				} else {
-					delete(calculated[field.id]);
+				if(field) {
+					if(!field.attribute || !field.attribute.server_only) {
+						json[field.id] = this[field.id];
+					} else {
+						delete(calculated[field.id]);
+					}
 				}
 			}
 		} else {
@@ -911,6 +939,7 @@ class RSObject {
 		json._class = this._class;
 		json._calculated = calculated;
 		json._involved = this._involved;
+		json._search = this._search;
 		if(include) {
 			json._linkMask = this._linkMask;
 			json._calcRef = this._calcRef;

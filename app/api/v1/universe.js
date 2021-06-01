@@ -43,7 +43,7 @@ module.exports = new (function() {
 			
 			this.router.get("/classes", (req, res, next) => {
 				res.result = {};
-				res.result.classes = Object.keys(api.universe.manager);
+				res.result.classes = Object.keys(api.universe.manager).sort();
 				next();
 			});
 			
@@ -108,6 +108,28 @@ module.exports = new (function() {
 						next();
 					}
 				});
+			});
+			
+			this.router.post("/import", (req, res, next) => {
+				res.result = {
+					"imported": [],
+					"errors": []
+				};
+				if(req.body.import instanceof Array) {
+					for(var x=0; x<req.body.import.length; x++) {
+						api.universe.createObject(req.body.import[x], function(err, object) {
+							console.log("Create Complete: ", !!err, !!object);
+							if(err) {
+								res.result.errors.push(err);
+							} else {
+								res.result.imported.push(object.toJSON());
+							}
+							if((res.result.errors.length + res.result.imported.length) === req.body.import.length) {
+								next();
+							}
+						});
+					}
+				}
 			});
 			
 			this.router.delete("/object/:id", (req, res, next) => {
