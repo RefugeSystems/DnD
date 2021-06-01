@@ -76,6 +76,17 @@
 					this.closeDialog();
 				}
 			});
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+					rsSystem.EventBus.$emit("display-info", {
+						"record": follow,
+						"base": this.viewing
+					});
+					event.stopPropagation();
+					event.preventDefault();
+				}
+			};
 		},
 		"methods": {
 			"closeDialog": function() {

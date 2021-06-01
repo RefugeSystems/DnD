@@ -252,13 +252,6 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
-	"id": "acquired",
-	"name": "Acquired",
-	"description": "Maps an ID to the gametime at which it was acquired by the object.",
-	"type": "object",
-	"attribute": {}
-});
-fields.push({
 	"id": "icon",
 	"name": "Icon",
 	"description": "CSS class to display as short hand for this object.",

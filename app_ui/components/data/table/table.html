@@ -1,0 +1,70 @@
+<div class="system-component table-index">
+	<div class="table-container">
+		<table class="table-element" :class="state.classes">
+			<thead>
+				<tr>
+					<th v-for="header in headers">
+						<button class="title actionable table-content" v-on:click="headerAction(header)" :class="header.thClass" v-if="!header.hideBlock">
+							<span class="sort fas" v-if="!header.nosort && state.sortKey === header.field" :class="{'fa-sort-down':state.order, 'fa-sort-up':!state.order}"></span>
+							<span class="sort fas fa-sort" v-if="!header.nosort && state.sortKey !== header.field"></span>
+							<span>{{header.title}}</span>
+						</button>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-if="corpus.length === 0 && index.listing.length">
+					<td class="notification" :colspan="headers.length">
+						<span class="fas fa-exclamation-triangle warning"></span>
+						<span>All Items Filtered Out</span>
+					</td>
+				</tr>
+				<tr v-else-if="corpus.length === 0 && index.listing.length === 0">
+					<td class="notification" :colspan="headers.length">
+						<span class="fas fa-exclamation-triangle warning"></span>
+						<span>No Items Available</span>
+					</td>
+				</tr>
+				<tr v-else-if="index.error">
+					<td class="notification" :colspan="headers.length">
+						<span class="fas fa-exclamation-triangle warning"></span>
+						<span>Data Source Error</span>
+						<p>{{index.error}}</p>
+					</td>
+				</tr>
+				<tr v-for="record in corpus" :key="record.id" :class="index.isSelected([record.id])?'record-selected':''">
+					<td v-for="(header, i) in headers" class="table-record" :class="header.field" v-on:click.stop="select(record, header)" :title="header.tag?record[header.tag]:''">
+						<div v-if="!header.noCross" class="crosshair"></div>
+						<div v-if="!header.noHighlight && index.isSelected([record.id]) && i === 0" class="highlight starting"></div>
+						<div v-if="!header.noHighlight && index.isSelected([record.id]) && i === headers.length - 1" class="highlight ending"></div>
+						<button class="table-content">
+							<slot name="table-content" :header="header" :record="record">
+								<div class="contents" :class="header.field?header.field:''" v-if="header.formatter">
+									<div v-html="header.formatter(record[header.field], record, header)"></div>
+								</div>
+								<div class="contents" :class="header.field?header.field:''" v-else-if="header.type === 'array' || isArray(record[header.field])">
+									<ul>
+										<li v-for="item in record[header.field]">{{item.name || item}}</li>
+									</ul>
+								</div>
+								<div class="contents" :class="header.field?header.field:''" v-else-if="header.type === 'object'">
+									<div v-html="formatObjectHeader(record[header.field])">
+									</div>
+								</div>
+								<div class="contents" :class="header.field?header.field:''" v-else-if="record[header.field] && typeof record[header.field] === 'object' && record[header.field] !== 'undefined'">
+									<pre>{{record[header.field] | JSON}}</pre>
+								</div>
+								<div class="contents" :class="header.field?header.field:''" v-else-if="record[header.field]">
+									{{record[header.field]}}
+								</div>
+								<div class="contents" :class="header.field?header.field:''" v-else>
+									<span> </span>
+								</div>
+							</slot>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

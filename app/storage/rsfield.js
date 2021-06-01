@@ -118,7 +118,45 @@ class RSField extends EventEmitter {
 		 * @property attribute
 		 * @type Object
 		 */
-		this.attribute = specification.attribute;
+		/**
+		 * Optional flag to block parental inheritance of the value on this field.
+		 * @property attribute.no_parental
+		 * @type Boolean
+		 */
+		/**
+		 * For Object and Array values with inheritance, this is either "key" to indicate
+		 * that the inheritance ID is within the Key or "value" to indicate that the IDs
+		 * are object IDs within the universe/
+		 * @property attribute.inherited
+		 * @type String
+		 */
+		/**
+ 		 * Used with Array types to inidcate the expected maximum size for the array.
+ 		 * @property attribute.limit
+ 		 * @type Integer
+ 		 */
+		/**
+ 		 * The value to be set for this field when the value is currently undefined.
+ 		 * @property attribute.default
+ 		 */
+		/**
+ 		 * Flag to hide the field from general system displays for the object
+ 		 * @property attribute.displayed
+ 		 * @type Boolean
+ 		 */
+		/**
+ 		 * Indicates the size above which this field should display on general system readouts.
+ 		 * These values generally range from 1 to 100 with "5" for "Small" system readouts
+ 		 * and "90" for full length readouts. Above 100 should be considered debugging territory.
+ 		 * @property attribute.display_size
+ 		 * @type Integer
+ 		 */
+		/**
+ 		 * Indicates that this field represents a primary universe value.
+ 		 * @property attribute.primary_stat
+ 		 * @type Integer
+ 		 */
+ 		this.attribute = specification.attribute;
 		if(typeof(this.attribute) === "string") {
 			try {
 				this.attribute = JSON.parse(this.attribute);

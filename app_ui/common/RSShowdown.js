@@ -44,10 +44,9 @@
 		"id": ""
 	};
 
-	var formatMarkdown = function(sourceText, universe, entity, base, targetObject) {
+	var formatMarkdown = function(sourceText, universe, entity, base, targetObject, allow_js) {
 		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
-		var player = universe.indexes.player.index[universe.user.username],
-			properties,
+		var properties,
 			tracking,
 			element,
 			target,
@@ -153,10 +152,10 @@
 			index = sourceText.indexOf(marking.start, index + 1);
 		}
 
-		if(player && !player.allow_scripting) {
-			return filterXSS(sourceText, xssOptions);
+		if(allow_js) {
+			return sourceText;
 		}
-		return sourceText;
+		return filterXSS(sourceText, xssOptions);
 	};
 
 	rsSystem.component("RSShowdown", {
@@ -168,9 +167,9 @@
 			}
 		},
 		"methods": {
-			"rsshowdown": function(sourceText, entity, base, target) {
+			"rsshowdown": function(sourceText, entity, base, target, allow_js) {
 //				console.warn("RS Showdown: ", entity, base, target);
-				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, base, target));
+				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, base, target, allow_js));
 			}
 		}
 	});

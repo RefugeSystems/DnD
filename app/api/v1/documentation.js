@@ -45,7 +45,8 @@ module.exports = new (function() {
 						"name": field.name,
 						"id": field.id,
 						"description": field.description,
-						"type": field.type
+						"type": field.type,
+						"attribute": field.attribute
 					};
 					res.result.fields.push(load);
 				};

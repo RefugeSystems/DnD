@@ -1,0 +1,27 @@
+<div class="rs-component selection-panel">
+	<div class="filter">
+		<input type="text" v-model="filter" :placeholder="placeholder"/>
+	</div>
+	<div class="selection">
+		<div class="panel-container" v-for="record in corpus" v-if="!filtertext || (record._search && record._search.indexOf(filtertext) !== -1)" v-on:click="selected(record)">
+			<div class="panel-image" v-if="image && record.profile">
+				<rs-image :image="record.profile"/>
+			</div>
+			<div class="panel-description" :class="image && record.profile?'imaged':'no-image'">
+				<div class="panel-title">
+					<span class="panel-icon" :class="record.icon"></span>
+					<span class="title-text">{{record.name}}</span>
+				</div>
+				<div class="panel-info">
+					<div class="panel-text" v-if="record.description && !descriptionless" v-html="rsshowdown(record.description, record, null, null, profile?profile.inline_javascript:false)"></div>
+					<div class="panel-stats">
+						<rs-stat-block :size="5":universe="universe" :object="record" :empties="empties" :marking="fmarking"></rs-stat-block>
+					</div>
+				</div>
+				<slot name="controls" :record="record"></slot>
+			</div>
+		</div>
+		<div class="panel-container" v-for="record in fill">
+		</div>
+	</div>
+</div>

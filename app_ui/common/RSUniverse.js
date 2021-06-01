@@ -557,6 +557,13 @@ class RSUniverse extends EventEmitter {
 		setTimeout(() => {
 			rsSystem.log.warn("Possible Reconnect: ", event);
 			if((!event || event.code <4100) && this.state.reconnectAttempts < 5) {
+				this.$emit("error", {
+					"id": "universe:connection:status",
+					"message": "Reconnecting",
+					"icon": "fas fa-sync rs-lightyellow fa-spin",
+					"timeout": 15000,
+					"event": event
+				});
 				rsSystem.log.warn("Connection Retrying...\n", this);
 				this.state.reconnectAttempts++;
 				this.connect(this.connection.session, this.connection.address)
@@ -575,15 +582,15 @@ class RSUniverse extends EventEmitter {
 					"event": event,
 					"emission": {
 						"type": "dialog-open",
-						"title": "Reconnect?",
+						"title": "Connection has been lost",
 						"buttons": [{
-							"classes": "fas fa-check rs-lightgreen",
-							"text": "Yes",
+							"classes": "fas fa-plug rs-lightgreen",
+							"text": "Reconnect",
 							"emission": "universe-reconnect"
 						}, {
-							"classes": "fas fa-times rs-lightred",
-							"text": "No",
-							"emission": "dialog-dismiss"
+							"classes": "fas fa-exclamation-triangle rs-lightyellow",
+							"text": "Refresh",
+							"emission": "app-update"
 						}]
 					}
 				});
