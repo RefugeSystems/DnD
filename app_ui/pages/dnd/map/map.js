@@ -42,5 +42,5 @@ rsSystem.component("DNDMap", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/map.html")
+	"template": Vue.templified("pages/dnd/map.html")
 });

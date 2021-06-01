@@ -30,6 +30,10 @@ var sortByOrdering = function(a, b) {
 		return -1;
 	} else if(a.ordering > b.ordering) {
 		return 1;
+	} else if(a.id < b.id) {
+		return -1;
+	} else if(a.id > b.id) {
+		return 1;
 	}
 	return 0;
 };
@@ -95,6 +99,7 @@ class Universe extends EventEmitter {
 				"type": "notice",
 				"mid": "universe:status",
 				"message": "Universe Restarting",
+				"icon": "fas fa-exclamation-triangle rs-lightyellow",
 				"timeout": 30000
 			});
 			

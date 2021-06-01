@@ -2,26 +2,14 @@
 /**
  *
  *
- * @class dndEntityOverview
+ * @class dndDisplayGeneral
  * @constructor
  * @module Components
  */
-rsSystem.component("DNDMasterMain", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.StorageController
-	],
+rsSystem.component("dndDisplayGeneral", {
 	"props": {
-		"universe": {
-			"required": true,
-			"type": Object
-		},
-		"player": {
-			"required": true,
-			"type": Object
-		},
-		"configuration": {
-			"required": true,
+		"object": {
+			"requried": true,
 			"type": Object
 		}
 	},
@@ -32,7 +20,6 @@ rsSystem.component("DNDMasterMain", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
 	},
 	"methods": {
 	},
@@ -42,5 +29,5 @@ rsSystem.component("DNDMasterMain", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("pages/dnd/master/main.html")
+	"template": Vue.templified("components/dnd/display/general.html")
 });

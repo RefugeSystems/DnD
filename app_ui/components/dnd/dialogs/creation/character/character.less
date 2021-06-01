@@ -1,0 +1,34 @@
+.dnd-component.character-creation {
+
+
+	.progress.slim.bar.container {
+		position: relative;
+		flex-grow: 100;
+		border: 1px solid @rsGray;
+		
+		.bar.indicator {
+			position: relative;
+			display: block;
+			height: 100%;
+			background-color: @rsLightGreen;
+			transition: width .5s;
+			z-index: 1;
+		}
+		
+		.bar.label {
+			position: absolute;
+			display: block;
+			font-size: 16px;
+			line-height: 20px;
+			top: 5px;
+			left: 50%;
+			text-align: center;
+			background: @rsBlack;
+			color: @rsWhite;
+			border-radius: 4px;
+			width: 40px;
+			margin: 0px 0px 0px -20px;
+			z-index: 2;
+		}
+	}
+}

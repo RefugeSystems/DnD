@@ -2,11 +2,11 @@
 /**
  *
  *
- * @class dndEntityOverview
+ * @class DNDMap
  * @constructor
  * @module Components
  */
-rsSystem.component("DNDMasterMain", {
+rsSystem.component("DNDInventory", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController
@@ -42,5 +42,5 @@ rsSystem.component("DNDMasterMain", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("pages/dnd/master/main.html")
+	"template": Vue.templified("pages/dnd/inventory.html")
 });

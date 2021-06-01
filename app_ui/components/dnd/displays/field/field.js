@@ -2,26 +2,18 @@
 /**
  *
  *
- * @class dndEntityOverview
+ * @class dndDisplayField
  * @constructor
  * @module Components
  */
-rsSystem.component("DNDMasterMain", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.StorageController
-	],
+rsSystem.component("dndDisplayField", {
 	"props": {
-		"universe": {
-			"required": true,
-			"type": Object
+		"field": {
+			"requried": true,
+			"type": String
 		},
-		"player": {
-			"required": true,
-			"type": Object
-		},
-		"configuration": {
-			"required": true,
+		"object": {
+			"requried": true,
 			"type": Object
 		}
 	},
@@ -32,7 +24,6 @@ rsSystem.component("DNDMasterMain", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
 	},
 	"methods": {
 	},
@@ -42,5 +33,5 @@ rsSystem.component("DNDMasterMain", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("pages/dnd/master/main.html")
+	"template": Vue.templified("components/dnd/display/field.html")
 });

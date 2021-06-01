@@ -25,6 +25,24 @@ rsSystem.component("DNDEntities", {
 			"type": Object
 		}
 	},
+	"computed": {
+		"entities": function() {
+			var entities = [],
+				x;
+				
+			if(this.player.playing_as && this.universe.index.entity[this.player.playing_as]) {
+				entities.push(this.universe.index.entity[this.player.playing]);
+			}
+			
+			for(x=0; x<this.universe.listing.entity.length; x++) {
+				if(this.universe.listing.entity[x].owned[this.player.id]) {
+					entities.push(this.universe.listing.entity[x]);
+				}
+			}
+			
+			return entities;
+		}
+	},
 	"data": function() {
 		var data = {};
 
@@ -35,6 +53,13 @@ rsSystem.component("DNDEntities", {
 		
 	},
 	"methods": {
+		"createPlayer": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndCreateCharacterDialog",
+				"storageKey": "createCharacterStorage",
+				"id": "dndCreateCharacterDialog"
+			});
+		}
 	},
 	"beforeDestroy": function() {
 		/*
@@ -42,5 +67,5 @@ rsSystem.component("DNDEntities", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/master/main.html")
+	"template": Vue.templified("pages/dnd/entities.html")
 });

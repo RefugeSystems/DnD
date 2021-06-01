@@ -1,0 +1,34 @@
+<div class="rs-component dnd-component character-creation">
+	<div class="selection"  v-if="stages[stage] === 'details'">
+		
+	</div>
+	
+	<panel-select v-else-if="stages[stage] === 'race'" v-on:selected="infoRecord($event)" :corpus="races" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :description="true" fmarking="fas fa-circle">
+		<div slot="controls" slot-scope="{record}">
+			<button v-on:click="chooseRace(record)">Select</button>
+		</div>
+	</panel-select>
+	
+	<panel-select v-else-if="stages[stage] === 'archetype'" v-on:select="infoRecord($event)" :corpus="classes" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :description="true" fmarking="fas fa-circle">
+		<div slot="controls" slot-scope="{record}">
+			<button v-on:click="chooseClass(record)">Select</button>
+		</div>
+	</panel-select>
+	
+	<div class="finalize" v-else>
+		
+	</div>
+	
+	<div class="progress flex h">
+		<button class="quick general action back" v-if="stage !== 0" v-on:click="backward()">
+			<span class="fas fa-arrow-from-right"/>
+		</button>
+		<div class="slim progress bar container">
+			<div class="bar indicator" :style="getProgressInidcatorStyle()"/>
+			<div class="bar label">{{stage + 1}}/{{stages.length}}</div>
+		</div>
+		<button class="quick general action forward" v-if="stage !== stages.length - 1" v-on:click="forward()">
+			<span class="fas fa-arrow-from-left"/>
+		</button>
+	</div>
+</div>
