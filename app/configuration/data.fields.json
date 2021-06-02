@@ -1,0 +1,1458 @@
+{
+	"fields": [{
+		"id": "strength",
+		"name": "Strength",
+		"description": "Strength of this object",
+		"type": "integer",
+		"ordering": 10,
+		"attribute": {
+			"primary_stat": true,
+			"display_size": 0,
+			"default": 0
+		}
+	}, {
+		"id": "dexterity",
+		"name": "Deterity",
+		"description": "Deterity of this object",
+		"type": "integer",
+		"ordering": 11,
+		"attribute": {
+			"primary_stat": true,
+			"display_size": 0,
+			"default": 0
+		}
+	}, {
+		"id": "constitution",
+		"name": "Constitution",
+		"description": "Constitution of this object",
+		"type": "integer",
+		"ordering": 12,
+		"attribute": {
+			"primary_stat": true,
+			"display_size": 0,
+			"default": 0
+		}
+	}, {
+		"id": "intelligence",
+		"name": "Intelligence",
+		"description": "Intelligence of this object",
+		"type": "integer",
+		"ordering": 13,
+		"attribute": {
+			"primary_stat": true,
+			"display_size": 0,
+			"default": 0
+		}
+	}, {
+		"id": "wisdom",
+		"name": "Wisdom",
+		"description": "Wisdom of this object",
+		"type": "integer",
+		"ordering": 14,
+		"attribute": {
+			"primary_stat": true,
+			"display_size": 0,
+			"default": 0
+		}
+	}, {
+		"id": "charisma",
+		"name": "Charisma",
+		"description": "Charisma of this object",
+		"type": "integer",
+		"ordering": 15,
+		"attribute": {
+			"primary_stat": true,
+			"display_size": 0,
+			"default": 0
+		}
+	}, {
+		"id": "playing_as",
+		"name": "Playing As",
+		"description": "Indicates the primary character for a player",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "loyal_to",
+		"name": "Loyal To",
+		"description": "Indicates who this entity is loyal to, used for summons and minions and the like",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "title",
+		"name": "Title",
+		"description": "Used for things like page and document titles. This differs from the Title class which is more for things like 'King', 'Doctor', or 'Savior of Callenth'",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "titles",
+		"name": "Titles",
+		"description": "Titles held by this object for designation purposes",
+		"type": "array",
+		"ordering": 5,
+		"attribute": {}
+	}, {
+		"id": "skill",
+		"name": "Skill",
+		"description": "The skill involved in using or operation this object, if any.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "alignment",
+		"name": "Alignment",
+		"description": "The alignment of this entity.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "skill_check",
+		"name": "Skill Checks",
+		"description": "Maps a Skill ID to this objects numerical ability to perform that skill.",
+		"type": "object",
+		"ordering": 20,
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"skill"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "incidents",
+		"name": "Incidents",
+		"description": "IDs of the Incidents to which this object is associated",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "selection",
+		"name": "Selection",
+		"description": "An array of objects that define choices for a player to make. This is largely for interpretation by the UI, should attempt to leverage/align the 'point_pool' object, and is merely maintained by the server. Usage is meant for things like choosing class specialization feats such as Rangers choosing between Archery, Dueling, etc.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "history",
+		"name": "History",
+		"description": "A quick reference array of recent actions taken. This is meant to aid players with reviewing recent activity and not meant to serve as the entirety of their history as that is handled by the universe chronicle",
+		"type": "array",
+		"attribute": {
+			"limit": 50
+		}
+	}, {
+		"id": "entities",
+		"name": "Entities",
+		"description": "List of entities tied to this object",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "contains",
+		"name": "Contains",
+		"description": "List of entities and items inside this object",
+		"type": "array",
+		"inheritance": {
+			"weight": "+"
+		},
+		"inheritable": [
+			"entity",
+			"item"
+		],
+		"attribute": {}
+	}, {
+		"id": "gender",
+		"name": "Gender",
+		"description": "The gender of this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "url",
+		"name": "URL",
+		"description": "Indicates the web location for associated information on this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "profile",
+		"name": "Profile",
+		"description": "Profile image for this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "background",
+		"name": "Background Image",
+		"description": "Background image for this object. This is for objects like locations to display as backgrounds when entities are at the location.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "main_weapon",
+		"name": "Main Weapon",
+		"description": "Indicates which of the weapons held by this creature is its primary weapon.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "rendering_path",
+		"name": "Rendering Path",
+		"description": "Point path for the polygon",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "point_pool",
+		"name": "Point Pool",
+		"description": "Various points for improving your character in various ways",
+		"type": "object",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "rendering_path_closed",
+		"name": "Rendering Closed Path",
+		"description": "When true, this path is treated as a polygon with fill",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "rendering_fill_color",
+		"name": "Rendering Fill Color",
+		"description": "Coloring. Use Hex RGBA specification; ie. #FFFFFF60",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "rendering_path_color",
+		"name": "Rendering Path Color",
+		"description": "Coloring. Use Hex RGBA specification; ie. #FFFFFF60",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "rendering_path_thickness",
+		"name": "Rendering Path Thickness",
+		"description": "Coloring",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "map",
+		"name": "Map Image",
+		"description": "Map image for this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "urls",
+		"name": "URLs",
+		"description": "Array of URLs",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "cost",
+		"name": "Cost",
+		"description": "The general cost of this object",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "versioning",
+		"name": "Versioning",
+		"description": "Background field used for large text entries to track changes",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "audios",
+		"name": "Audios",
+		"description": "List of audio IDs",
+		"type": "array",
+		"inheritance": {
+		},
+		"inheritable": [
+			"audio"
+		],
+		"attribute": {}
+	}, {
+		"id": "audio",
+		"name": "Audio",
+		"description": "Audio ID for this object",
+		"type": "string",
+		"inheritance": {
+		},
+		"inheritable": [
+			"audio"
+		],
+		"attribute": {}
+	}, {
+		"id": "durability",
+		"name": "Durability",
+		"description": "The durability of this object",
+		"type": "integer",
+		"attribute": {
+			"default": 100
+		}
+	}, {
+		"id": "journals",
+		"name": "Journals",
+		"description": "The Journal objects associated with this object, typically for use with Pages",
+		"type": "array",
+		"inheritance": {
+		},
+		"inheritable": [
+			"journal"
+		],
+		"attribute": {}
+	}, {
+		"id": "hp",
+		"name": "HP",
+		"description": "Current health points for this object",
+		"type": "integer",
+		"attribute": {
+			"default": 0
+		}
+	}, {
+		"id": "hp_temp",
+		"name": "Temp HP",
+		"description": "Current temporary health points for this object. Similar to a shield",
+		"type": "integer",
+		"attribute": {
+			"default": 0
+		}
+	}, {
+		"id": "hp_max",
+		"name": "Max HP",
+		"description": "Max health points for this object",
+		"type": "calculated",
+		"attribute": {
+			"default": 0
+		}
+	}, {
+		"id": "spell_slots",
+		"name": "Spell Slots",
+		"description": "Maps a spell level to the number of spell slots left for that object",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "spell_slot_max",
+		"name": "Max Spell Slots",
+		"description": "Maps a spell level to the maximium number of spell slots for that object",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "equip_slots",
+		"name": "Equipment Slots",
+		"description": "Maps a Slot ID to the count of slots this object has to put equipment to",
+		"type": "object",
+		"inheritance": {
+			"action_max": "+",
+			"weight": "+",
+			"score": "+",
+			"threat": "+"
+		},
+		"inheritable": [
+			"slot"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "damage_type",
+		"name": "Damage Type",
+		"description": "The damage type this object is considered to deal.",
+		"type": "string",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"damage_type"
+		],
+		"attribute": {}
+	}, {
+		"id": "use_attribute",
+		"name": "Use Atribute",
+		"description": "The attribute (typically primary stat) used when using this object.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "dice_type",
+		"name": "Dice Type",
+		"description": "The type of dice primarily associated with this object.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "hit_dice",
+		"name": "Hit Dice",
+		"description": "Hit dice present for this object, mapping the dice type (ie. d8) to the count possessed",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "hit_dice_max",
+		"name": "Hit Dice Maximum",
+		"description": "Hit dice present for this object, mapping the dice type (ie. d8) to the count offered",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "range_minimum",
+		"name": "Minimum Range",
+		"description": "This action is unable to target things this close or closer to you",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "range_normal",
+		"name": "Range",
+		"description": "The reach of this action",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "range_maximum",
+		"name": "Maximum Range",
+		"description": "Targeting objects between your range and maximum range causes you to roll with disadvantage",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "spells_maximum",
+		"name": "Maximum Spells Prepared",
+		"description": "Maximum number of spells you may have prepared",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "cantrips_maximum",
+		"name": "Maximum Cantrips Prepared",
+		"description": "Maximum number of cantrips you may have prepared",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "spell_dc",
+		"name": "Spell DC",
+		"description": "The general difficulty of avoiding the full power of you cantrips and spells",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "spell_attack",
+		"name": "Spell Attack",
+		"description": "Your ability to aim a spell when performing it as an attack",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "hp_rolled",
+		"name": "Rolled HP",
+		"description": "The total amount of HP rolled for an entity while leveling",
+		"type": "integer",
+		"attribute": {
+			"default": 0
+		}
+	}, {
+		"id": "damage",
+		"name": "Damage",
+		"description": "Maps a Damage Type ID to a formula for the amount done by this object",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"damage_type"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "debuff",
+		"name": "Debuff",
+		"description": "Indicating this is a negative effect",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "ritual",
+		"name": "Ritual",
+		"description": "Indicates this can be performed as a ritual as well as cast",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "knowledges",
+		"name": "Known Knowledge",
+		"description": "Array of knowledge known by this object",
+		"type": "array",
+		"inheritance": {
+			"actions": "+",
+			"effects": "+",
+			"spells": "+",
+			"spell_slot_max": "+",
+			"skill_check": "+=",
+			"skill_proficiency": "=",
+			"proficiencies": "+",
+			"skills": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"knowledge"
+		],
+		"attribute": {}
+	}, {
+		"id": "cast_time",
+		"name": "Casting Time",
+		"description": "Time to cast this spell in rounds",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "cast_type",
+		"name": "Casting Type",
+		"description": "Usually Spell Cast or Spell Attack",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "cast_save",
+		"name": "Save With",
+		"description": "Names the attribute with which to save against this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "cast_with",
+		"name": "Cast With",
+		"description": "Overrides the default casting attribute of the casting creature for this spell",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "cast_uses_verbal",
+		"name": "Verbal Components",
+		"description": "Spell has verbal components",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "cast_uses_somatic",
+		"name": "Gesture Components",
+		"description": "Spell has hand gestures as part of its casting",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "cast_uses_items",
+		"name": "Material Components",
+		"description": "Array of items needed to cast this spell (Use parental IDs)",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "is_owned",
+		"name": "Is Owned",
+		"description": "Quick flag to note that this object is owned by a specific player",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "duration",
+		"name": "Duration",
+		"description": "How long effects last",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "effect_shape",
+		"name": "Effect Shape",
+		"description": "The shape of the effect",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "potency",
+		"name": "Potency",
+		"description": "How strong this object is. This is for use as part of computed values",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "acquired",
+		"name": "Acquired",
+		"description": "How strong this object is. This is for use as part of computed values",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+		],
+		"attribute": {
+			"inherited": "key",
+			"displayed": false
+		}
+	}, {
+		"id": "effect_height",
+		"name": "Effect Height",
+		"description": "The height of the effect",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "effect_radius",
+		"name": "Effect Radius",
+		"description": "The radius of the effect",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "actions",
+		"name": "Performable Actions",
+		"description": "List of actions this entity can perform",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"action"
+		],
+		"attribute": {}
+	}, {
+		"id": "action_count",
+		"name": "Actions",
+		"description": "The current action count for this object by type; main, bonus, reaction",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "action_cost",
+		"name": "Action Cost",
+		"description": "Indicates the action cost of this object by mapping the action types to their numeric costs; ie. action_cost.bonus = 1. Multiple costs are addative, so bonus = 1 & main = 1 means thsi object costs a main and bonus action",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "action_max",
+		"name": "Action Max",
+		"description": "Action count max for the various types.",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "section",
+		"name": "Section",
+		"description": "A grouping value for the object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "targets",
+		"name": "Targets",
+		"description": "Types that this object can target, for instance types of objects or creatures that a spell can affect",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "resistance",
+		"name": "Resistance",
+		"description": "Maps a Damage Type ID to a formula for the amount that this object reduces that damage type by when suffered by this object",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"damage_type"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "selectable",
+		"name": "Selectable",
+		"description": "Indicates that this object is selectable for some reason, such as a Feat or Proficiency that can be selected while leveling",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "datasets",
+		"name": "Datasets",
+		"description": "Tracks dataset associated with this object",
+		"type": "array",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "playable",
+		"name": "Playable",
+		"description": "Indicates that players can select this object as part of object construction",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "content_type",
+		"name": "Content Type",
+		"description": "Used for file data to indicate the type of data it holds",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "caster",
+		"name": "Caster",
+		"description": "The entity that knows this spell. Used for spell value calculations.",
+		"type": "string",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "movement_ground",
+		"name": "Move Speed",
+		"description": "Movement speed while on the ground",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "movement_swim",
+		"name": "Swim Speed",
+		"description": "Movement speed while on the water or other liquids",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "movement_fly",
+		"name": "Fly Speed",
+		"description": "Movement speed while in the air",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "needs",
+		"name": "Needs",
+		"description": "Maps Slot IDs to the number of that slot used by this object",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"slot"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "archetypes",
+		"name": "Archetypes",
+		"description": "List of archetypes currently applied to this entity",
+		"type": "array",
+		"inheritance": {
+			"actions": "+",
+			"action_max": "+",
+			"resistance": "+=",
+			"damage": "+=",
+			"score": "+",
+			"threat": "+",
+			"spell_slot_max": "+",
+			"spells": "+",
+			"skill_check": "+=",
+			"skill_proficiency": "=",
+			"effects": "+",
+			"hit_dice_max": "+",
+			"proficiencies": "+",
+			"skills": "+",
+			"equip_slots": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"archetype"
+		],
+		"attribute": {}
+	}, {
+		"id": "race",
+		"name": "Race",
+		"description": "Race of this entity",
+		"type": "string",
+		"inheritance": {
+			"strength": "+",
+			"dexterity": "+",
+			"constitution": "+",
+			"intelligence": "+",
+			"wisdom": "+",
+			"charisma": "+",
+			"resistance": "+=",
+			"damage": "+=",
+			"actions": "+",
+			"action_max": "+",
+			"attune_max": "+",
+			"score": "+",
+			"threat": "+",
+			"spell_slot_max": "+",
+			"spells": "+",
+			"skill_check": "+=",
+			"skill_proficiency": "=",
+			"types": "+",
+			"size": "+",
+			"proficiencies": "+",
+			"effects": "+",
+			"conditionals": "+",
+			"equip_slots": "+"
+		},
+		"inheritable": [
+			"race"
+		],
+		"attribute": {}
+	}, {
+		"id": "effects",
+		"name": "Effects",
+		"description": "Effects present on this object",
+		"type": "array",
+		"inheritance": {
+			"strength": "+",
+			"dexterity": "+",
+			"constitution": "+",
+			"intelligence": "+",
+			"wisdom": "+",
+			"charisma": "+",
+			"actions": "+",
+			"spells": "+",
+			"resistance": "+=",
+			"damage": "+=",
+			
+			"spell_slot_max": "+",
+			"skill_proficiency": "=",
+			"skills": "+",
+			"threat": "+",
+			"action_max": "+",
+			"hp_max": "+",
+			
+			"equip_slots": "-",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"effect"
+		],
+		"attribute": {}
+	}, {
+		"id": "feats",
+		"name": "Feats",
+		"description": "Feats improving or diminishing this object",
+		"type": "array",
+		"inheritance": {
+			"strength": "+",
+			"dexterity": "+",
+			"constitution": "+",
+			"intelligence": "+",
+			"wisdom": "+",
+			"charisma": "+",
+			"resistance": "+=",
+			"damage": "+=",
+			"actions": "+",
+			"spells": "+",
+			"skills": "+",
+			"skill_check": "+=",
+			"effects": "+",
+			"action_max": "+",
+			"hp_max": "+",
+			"spell_slot_max": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"feat"
+		],
+		"attribute": {}
+	}, {
+		"id": "equipped",
+		"name": "Equipped",
+		"description": "List of objects currently equipped to this one.",
+		"type": "array",
+		"inheritance": {
+			"strength": "+",
+			"dexterity": "+",
+			"constitution": "+",
+			"intelligence": "+",
+			"wisdom": "+",
+			"charisma": "+",
+			"enchant_rating": "+",
+			"actions": "+",
+			"skills": "+",
+			"spells": "+",
+			"feats": "+",
+			"weight": "+",
+			"encumberance": "+",
+			"resistance": "+=",
+			"skill_check": "+=",
+			"effects": "+",
+			"proficiencies": "+",
+            "knowledge_matrix": "+",
+            "knowledges": "+",
+            "spell_slot_max": "+",
+            "threat": "+",
+            "score": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"item"
+		],
+		"attribute": {}
+	}, {
+		"id": "user",
+		"name": "User",
+		"description": "The object using this object",
+		"type": "string",
+		"inheritance": {
+			"damage": "+="
+		},
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "charges",
+		"name": "Charges",
+		"description": "Number of expendable charges available on this object.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "recharges_at",
+		"name": "Recharges At",
+		"description": "Maps an event to the number of times that event must occur for this object to gain a charge.",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "recharging",
+		"name": "Recharging Count",
+		"description": "Maps an event to the number of times that event has occurred for this object toward recharging.",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "recharges_on",
+		"name": "Recharges On",
+		"description": "Lists the events that this object uses to recharge. This is potentially different from the object's Recharges At keys for conditional flavoring.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "charges_none",
+		"name": "No Charges Transform",
+		"description": "When set, this object takes the specified object as a parent in place of its current one when it runs out of charges.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "proficiency_rating",
+		"name": "Proficiency Rating",
+		"description": "The base added skill when an object is proficient with some aspect.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "level",
+		"name": "Level",
+		"description": "The general level of this object.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "archetype_level",
+		"name": "Class Levels",
+		"description": "Maps a Class ID to this object's level in that class.",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"archetype"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "archetype_history",
+		"name": "Class Level History",
+		"description": "Stores the order in which this object leveled up classes",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "proficiency",
+		"name": "Proficiency",
+		"description": "Needed Proficiency for using this object with proficiency.",
+		"type": "string",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"proficiency"
+		],
+		"attribute": {}
+	}, {
+		"id": "skill_proficiency",
+		"name": "Skill Proficiency",
+		"description": "Maps skill IDs to a boolean to indicate proficiency in that skill.",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"skill"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "skill_advantage",
+		"name": "Advantage",
+		"description": "Counts the amount of advantage this object has towards a skill check.",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"skill"
+		],
+		"attribute": {
+			"inherited": "key",
+			"display": false
+		}
+	}, {
+		"id": "skill_disadvantage",
+		"name": "Disadvantage",
+		"description": "Counts the amount of disadvantage this object has towards a skill check.",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"skill"
+		],
+		"attribute": {
+			"inherited": "key",
+			"display": false
+		}
+	}, {
+		"id": "types_accepted",
+		"name": "Accepted Types",
+		"description": "Lists types that are accepted by this object.",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "types_rejected",
+		"name": "Rejected Types",
+		"description": "Lists types that are rejected by this object.",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "category",
+		"name": "Category",
+		"description": "Category for this object.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "state",
+		"name": "State",
+		"description": "General state indicator for the object.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "screen",
+		"name": "Master Screen",
+		"description": "When true, this object is flagged for display on a Game Master's screen.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "game",
+		"name": "Game",
+		"description": "Indicates a minigame supported by the instance to which this object refers.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "proficiencies",
+		"name": "Proficiencies",
+		"description": "Proficiencies held by this object.",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"proficiency"
+		],
+		"attribute": {}
+	}, {
+		"id": "consume",
+		"name": "Consume",
+		"description": "Can be consumed in the indicated quantity.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "consume_to",
+		"name": "Consumes To",
+		"description": "What this object becomes after consuming.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "consume_hint",
+		"name": "Consume Hint",
+		"description": "Displayed to describe the consumption.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "consume_icon",
+		"name": "Consume Icon",
+		"description": "Icon to display for consuming this object.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "dc",
+		"name": "DC",
+		"description": "The Difficulty Check associated with this object.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "spell_cast_dc",
+		"name": "Spell Cast DC",
+		"description": "The Difficulty Check associated with spell attacks cast by this object.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "spell_attack_dc",
+		"name": "Spell Attack DC",
+		"description": "The Difficulty Check associated with spells cast by this object.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "weight_locked",
+		"name": "Weight Locked",
+		"description": "When true, objects considered to be inside this object should not add weight to this object.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "attunements",
+		"name": "Attunements",
+		"description": "List of objects to whith this object is attuned.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "attunes",
+		"name": "Attunes",
+		"description": "Indicates if this object can attune to another object.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "attunement_locked",
+		"name": "Attunement Locked",
+		"description": "Indicates if this object can be unattuned voluntarily.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "attuned",
+		"name": "Attuned",
+		"description": "The object attuned to this object.",
+		"type": "string",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "unattunable",
+		"name": "Unattunable",
+		"description": "When true, this object can not be unattuned as an action.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "weight",
+		"name": "Weight",
+		"description": "The weight of this object",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "weight_max",
+		"name": "Max Weight",
+		"description": "The maximum weight of this object",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "encumberance_max",
+		"name": "Max Encumberance",
+		"description": "The maximum weight of this object",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "size",
+		"name": "Size",
+		"description": "The size of this object",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "stat",
+		"name": "Stat",
+		"description": "The main stat for this object",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "attune_max",
+		"name": "Max Attuned",
+		"description": "Maximum number of attunements",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "encumberance",
+		"name": "encumberance",
+		"description": "The encumberance of this object, representing how difficult it is to carry",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "enchant_rating",
+		"name": "Enchantment Rating",
+		"description": "The power of enchantments on this object",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "ranged",
+		"name": "Ranged Weapon",
+		"description": "Flag to indicate if this object is considered a ranged weapon",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "enchantments",
+		"name": "Enchantments",
+		"description": "Enchantments on this object",
+		"type": "array",
+		"inheritance": {
+			"enchant_rating": "+",
+			"skills": "+",
+			
+			"strength": "+",
+			"dexterity": "+",
+			"constitution": "+",
+			"intelligence": "+",
+			"wisdom": "+",
+			"charisma": "+",
+			"resistance": "+=",
+			"damage": "+=",
+			"actions": "+",
+			"action_max": "+",
+			"attune_max": "+",
+			"score": "+",
+			"spell_slot_max": "+",
+			"spells": "+",
+			"skill_check": "+=",
+			"skill_proficiency": "=",
+			"proficiencies": "+",
+			"effects": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"enchantment"
+		],
+		"attribute": {}
+	}, {
+		"id": "melee",
+		"name": "Melee Weapon",
+		"description": "Flag to indicate if this object is considered a melee weapon",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "thrown",
+		"name": "Thrown Weapon",
+		"description": "Flag to indicate if this object is considered a throwable weapon",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "type",
+		"name": "Type",
+		"description": "The primary type for this object",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "types",
+		"name": "Types",
+		"description": "The types that apply to this object",
+		"type": "array",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "location",
+		"name": "Location",
+		"description": "Where this object is currently considered to be located.",
+		"type": "array",
+		"inheritance": {
+			"conditionals": "+",
+			"actions": "+",
+			"effects": "+",
+			"skills": "+"
+		},
+		"inheritable": [
+			"location"
+		],
+		"attribute": {}
+	}, {
+		"id": "locations",
+		"name": "Locations",
+		"description": "List of locations connected to this object.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "associations",
+		"name": "Associations",
+		"description": "Objects directly connected to this one. In the case of knowledge and similar classes, this indicates the objects that the knowledge conveys knowledge of",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "knowledge_matrix",
+		"name": "Knowledge Matrix",
+		"description": "Maps object identities to arrays of properties explicitly known about that object. Forgotten objects map to null. Known with no explicit information map to empty arrays. This field is calculated during events that affect the object's knowledge.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "knowns",
+		"name": "Knowns",
+		"description": "List of properties that are known through associated knowledges.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "spells",
+		"name": "Spells",
+		"description": "Spells contained inside of or granted by this object.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "skills",
+		"name": "Skills",
+		"description": "Skills that this object can perform.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "must_know",
+		"name": "Must Know",
+		"description": "When flagged, this object is hidden unless the viewing object has knowledge for it.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "widgets",
+		"name": "Widgets",
+		"description": "List of objects describing widgets",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "pages",
+		"name": "Pages",
+		"description": "List of pages associated with this object. Primarily used for rendering journals.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "carrying",
+		"name": "Carried Weight",
+		"description": "The total weight of things being carried by this object. Computed by event handlers.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "inventory",
+		"name": "Inventory",
+		"description": "List of item IDs that this object is carrying.",
+		"type": "array",
+		"inheritance": {
+			"conditionals": "+",
+			"weight": "+"
+		},
+		"inheritable": [
+			"item"
+		],
+		"attribute": {}
+	}, {
+		"id": "price",
+		"name": "Price",
+		"description": "The base price for this object.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "score",
+		"name": "Score",
+		"description": "An abstract point value for this object, used in estimating power or worth or value for comparison.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "threat",
+		"name": "Threat",
+		"description": "A general estimate of how threatening a creature is.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "label",
+		"name": "Label",
+		"description": "Used as display text for this object in certain situations instead of the name, such as on a map.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "links_to",
+		"name": "Links To",
+		"description": "Used for locations (or similar) to note door or portal like effects for mapping purposes.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "concealed",
+		"name": "Concealed",
+		"description": "Flag to prevent display of this object ot players",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "pressence_always",
+		"name": "Always Present",
+		"description": "When set, if an object shares a location with this object, it is considered visible. This is for things like shops to be visible.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "operation_start",
+		"name": "Opening Time",
+		"description": "Day offset in seconds at which in Game time when this object opens. Essentially for shops.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "operation_time",
+		"name": "Operation Time",
+		"description": "How long this entity stays open Essentially for shops.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "items",
+		"name": "Items",
+		"description": "List of item IDs loosely associated with this object with no carrying or attachment considerations.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "owned",
+		"name": "Owned By",
+		"description": "Maps player IDs that own this object to the time at which they acquired it, 1 for general ownership, or 0 to disable ownership.",
+		"type": "object",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"player"
+		],
+		"attribute": {
+			"inherited": "key"
+		}
+	}, {
+		"id": "players",
+		"name": "Players",
+		"description": "Player IDs associated with this object. Typically for use with dashboards and other high level display objects.",
+		"type": "array",
+		"attribute": {}
+	}, {
+		"id": "attachments",
+		"name": "Attchments",
+		"description": "List of item IDs considered attached to this object.",
+		"type": "array",
+		"inheritance": {
+			"strength": "+",
+			"dexterity": "+",
+			"constitution": "+",
+			"intelligence": "+",
+			"wisdom": "+",
+			"charisma": "+",
+			"enchant_rating": "+",
+			"actions": "+",
+			"skills": "+",
+			"spells": "+",
+			"feats": "+",
+			"weight": "+",
+			"encumberance": "+",
+			"resistance": "+=",
+			"skill_check": "+=",
+			"effects": "+",
+			"proficiencies": "+",
+            "knowledge_matrix": "+",
+            "knowledges": "+",
+            "spell_slot_max": "+",
+            "threat": "+",
+            "score": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"item"
+		],
+		"attribute": {}
+	}]
+	
+}
