@@ -103,6 +103,12 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "poulation",
+		"name": "Population",
+		"description": "The theoretical number of creatures inside this object. This is NOT meant to reflect entities.length but rather total general population of something like a city where entites.length would represent the number of special creatures present and may or maynot be part of the population count.",
+		"type": "string",
+		"attribute": {}
+	}, {
 		"id": "skill_check",
 		"name": "Skill Checks",
 		"description": "Maps a Skill ID to this objects numerical ability to perform that skill.",

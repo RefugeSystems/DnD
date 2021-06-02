@@ -58,7 +58,7 @@
 		"id": "entity",
 		"name": "Entity",
 		"description": "A manipulatable entry in the Universe.",
-		"fields": ["name", "profile", "concealed", "hp_rolled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "main_weapon", "point_pool", "inventory", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "attribute"]
+		"fields": ["name", "profile", "concealed", "hp_rolled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "attribute"]
 	}, {
 		"id": "spell",
 		"name": "Spell",
@@ -148,6 +148,6 @@
 		"id": "location",
 		"name": "Location",
 		"description": "xxxx",
-		"fields": ["name", "icon", "description", "location", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "profile", "background", "map", "links_to", "attribute", "conditionals"]
+		"fields": ["name", "icon", "description", "location", "population", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "profile", "background", "map", "links_to", "attribute", "conditionals"]
 	}]
 }
