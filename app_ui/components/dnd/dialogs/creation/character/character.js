@@ -227,6 +227,10 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.proficiencies = [];
 				details.knowledges = [];
 
+				for(i=0; i<this.stats; i++) {
+					details["stat_" + this.stats[i]] = this.building[this.stats[i]];
+				}
+
 				if(this.building.variant) {
 					details.feats.push(this.building.variant.id);
 				}

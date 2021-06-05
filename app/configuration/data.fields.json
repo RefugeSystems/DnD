@@ -1,8 +1,8 @@
 {
 	"fields": [{
-		"id": "strength",
+		"id": "stat_strength",
 		"name": "Strength",
-		"description": "Strength of this object",
+		"description": "How strong you are",
 		"type": "integer",
 		"ordering": 10,
 		"attribute": {
@@ -11,9 +11,9 @@
 			"default": 0
 		}
 	}, {
-		"id": "dexterity",
+		"id": "stat_dexterity",
 		"name": "Deterity",
-		"description": "Deterity of this object",
+		"description": "Your ability to control your movements",
 		"type": "integer",
 		"ordering": 11,
 		"attribute": {
@@ -22,9 +22,9 @@
 			"default": 0
 		}
 	}, {
-		"id": "constitution",
+		"id": "stat_constitution",
 		"name": "Constitution",
-		"description": "Constitution of this object",
+		"description": "The physical condition of your body",
 		"type": "integer",
 		"ordering": 12,
 		"attribute": {
@@ -33,9 +33,9 @@
 			"default": 0
 		}
 	}, {
-		"id": "intelligence",
+		"id": "stat_intelligence",
 		"name": "Intelligence",
-		"description": "Intelligence of this object",
+		"description": "The amount of raw knowledge you can keep on hand at once",
 		"type": "integer",
 		"ordering": 13,
 		"attribute": {
@@ -44,9 +44,9 @@
 			"default": 0
 		}
 	}, {
-		"id": "wisdom",
+		"id": "stat_wisdom",
 		"name": "Wisdom",
-		"description": "Wisdom of this object",
+		"description": "Your ability to understand the workings of things",
 		"type": "integer",
 		"ordering": 14,
 		"attribute": {
@@ -55,9 +55,9 @@
 			"default": 0
 		}
 	}, {
-		"id": "charisma",
+		"id": "stat_charisma",
 		"name": "Charisma",
-		"description": "Charisma of this object",
+		"description": "The strength of your personality",
 		"type": "integer",
 		"ordering": 15,
 		"attribute": {
@@ -66,10 +66,74 @@
 			"default": 0
 		}
 	}, {
+		"id": "strength",
+		"name": "Strength Modifier",
+		"description": "Amount added to ${Strength}$ based ${Skill Checks}$",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "dexterity",
+		"name": "Deterity Modifier",
+		"description": "Amount added to ${Deterity}$ based ${Skill Checks}$",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "constitution",
+		"name": "Constitution Modifier",
+		"description": "Amount added to ${Constitution}$ based ${Skill Checks}$",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "intelligence",
+		"name": "Intelligence Modifier",
+		"description": "Amount added to ${Intelligence}$ based ${Skill Checks}$",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "wisdom",
+		"name": "Wisdom Modifier",
+		"description": "Amount added to ${Wisdom}$ based ${Skill Checks}$",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "charisma",
+		"name": "Charisma Modifier",
+		"description": "Amount added to ${Charisma}$ based ${Skill Checks}$",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
 		"id": "playing_as",
 		"name": "Playing As",
 		"description": "Indicates the primary character for a player",
 		"type": "string",
+		"inheritance": {
+		},
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "played_by",
+		"name": "Played By",
+		"description": "Indicates the primary player for an entity",
+		"type": "string",
+		"inheritance": {
+		},
+		"inheritable": [
+			"player"
+		],
 		"attribute": {}
 	}, {
 		"id": "limited",
@@ -337,6 +401,14 @@
 		"type": "calculated",
 		"attribute": {
 			"default": 0
+		}
+	}, {
+		"id": "obscured",
+		"name": "Obscured",
+		"description": "Flag to hide this from display to players",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
 		}
 	}, {
 		"id": "spell_slots",

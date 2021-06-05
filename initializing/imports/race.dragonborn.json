@@ -31,8 +31,14 @@
 				"action:rest:short",
 				"action:rest:long"
 			],
+			"hp_max": "hp_rolled + level * constitution",
+			"strength": "2 + (stat_strength - 10)/2",
+			"dexterity": "(stat_dexterity - 10)/2",
+			"constitution": "(stat_constitution - 10)/2",
+			"intelligence": "(stat_intelligence - 10)/2",
+			"wisdom": "(stat_wisdom - 10)/2",
+			"charisma": "1 + (stat_charisma - 10)/2",
             "attune_max": "pro + 1",
-            "charisma": 1,
             "datasets": [
                 "dataset:dragonborn:male",
                 "dataset:dragonborn:female"
@@ -112,7 +118,6 @@
             ],
             "spell_slot_max": {},
             "spells": {},
-            "strength": 2,
             "threat": 1,
             "types": ["type:creature", "type:humanoid"],
 			"attribute": {

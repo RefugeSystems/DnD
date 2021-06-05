@@ -27,12 +27,12 @@
  * @param {Array} event.message.data.knowledges IDs
  * @param {Array} event.message.data.archetypes IDs
  * @param {Array} event.message.data.feats IDs
- * @param {Integer} event.message.data.strength Stat score
- * @param {Integer} event.message.data.dexterity Stat score
- * @param {Integer} event.message.data.constitution Stat score
- * @param {Integer} event.message.data.intelligence Stat score
- * @param {Integer} event.message.data.wisdom Stat score
- * @param {Integer} event.message.data.charisma Stat score
+ * @param {Integer} event.message.data.stat_strength Stat score
+ * @param {Integer} event.message.data.stat_dexterity Stat score
+ * @param {Integer} event.message.data.stat_constitution Stat score
+ * @param {Integer} event.message.data.stat_intelligence Stat score
+ * @param {Integer} event.message.data.stat_wisdom Stat score
+ * @param {Integer} event.message.data.stat_charisma Stat score
  */
 
 var Random = require("rs-random");
@@ -56,12 +56,12 @@ var keys = [
 	"skill_proficiency",
 	"proficiencies",
 	"knowledges",
-	"strength",
-	"dexterity",
-	"constitution",
-	"intelligence",
-	"wisdom",
-	"charisma"
+	"stat_strength",
+	"stat_dexterity",
+	"stat_constitution",
+	"stat_intelligence",
+	"stat_wisdom",
+	"stat_charisma"
 ];
 // If changed, update docs
 
@@ -88,6 +88,7 @@ module.exports.initialize = function(universe) {
 		details.owned = {};
 		details.owned[event.player.id] = Date.now();
 		details.hp = 6;
+		details.gold = 0;
 
 		universe.createObject(details, function(err, character) {
 			if(err) {

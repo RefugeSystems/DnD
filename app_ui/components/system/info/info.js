@@ -115,7 +115,6 @@
 					Vue.set(this, "open", false);
 					Vue.set(this, "count", 0);
 				}
-				console.log("View Checked: ", this);
 			},
 			"backOne": function() {
 				this.$router.back();

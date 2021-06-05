@@ -21,7 +21,7 @@ rsSystem.EventBus.$on("sys-ready", function() {
 		item,
 		i;
 		
-	console.log("Building Routes");
+	// console.log("Building Routes");
 	
 	if(index !== -1) {
 		path = path.substring(0, index);
@@ -63,7 +63,7 @@ rsSystem.EventBus.$on("sys-ready", function() {
 				}
 			}
 		}
-		console.log("Routes: ", routes);
+		// console.log("Routes: ", routes);
 		rsSystem.Router.addRoute(routes);
 	}).catch((err) => {
 		console.warn(err);
