@@ -2,11 +2,11 @@
 /**
  *
  *
- * @class dndEntityOverview
+ * @class dndEntitySummary
  * @constructor
  * @module Components
  */
-rsSystem.component("dndEntityOverview", {
+rsSystem.component("dndEntitySummary", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
@@ -52,5 +52,5 @@ rsSystem.component("dndEntityOverview", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/entity/overview.html")
+	"template": Vue.templified("components/dnd/entity/summary.html")
 });

@@ -26,7 +26,7 @@ rsSystem.component("dndEntityOverview", {
 	},
 	"computed": {
 		"location": function() {
-			if(this.entity.locaiton && this.universe.index.location[this.entity.locaiton]) {
+			if(this.entity.location && this.universe.index.location[this.entity.locaiton]) {
 				return this.universe.index.location[this.entity.locaiton];
 			}
 			return {};

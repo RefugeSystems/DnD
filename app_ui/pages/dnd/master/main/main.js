@@ -2,7 +2,7 @@
 /**
  *
  *
- * @class dndEntityOverview
+ * @class DNDMasterMain
  * @constructor
  * @module Components
  */
