@@ -43,9 +43,34 @@
 		"icon": "",
 		"id": ""
 	};
+	
+	var naiveObjectValue = function(universe, root, path) {
+		return naiveObjectTrace(universe, root, path.split("."), 0) || path;
+	};
+	
+	var naiveObjectTrace = function(universe, base, path, index) {
+		var value = base[path[index++]],
+			load;
+		if(index >= path.length) {
+			return value;
+		} else {
+			if(typeof(value) === "object") {
+				return naiveObjectTrace(universe, value, path, index);
+			} else if(typeof(value) === "string" && (load = universe.getObject(value))) {
+				return naiveObjectTrace(universe, load, path, index);
+			} else {
+				return null;
+			}
+		}
+	};
 
-	var formatMarkdown = function(sourceText, universe, entity, base, targetObject, allow_js) {
+	var formatMarkdown = function(sourceText, universe, entity, allow_js) {
 		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
+		
+		// Deprecated and Removing
+		var targetObject = null,
+			base = null;
+			
 		var properties,
 			tracking,
 			element,
@@ -71,7 +96,7 @@
 				switch(value.length) {
 					default:
 					case 4:
-						base = universe.index.lookup[value[3]];
+						base = universe.getObject(value[3]);
 					case 3:
 						properties.classes = value[2];
 					case 2:
@@ -84,7 +109,8 @@
 			if(value) {
 				// console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 				if(value[0] === "=") {
-					value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
+					// value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
+					value = naiveObjectValue(universe, entity, value.substring(1));
 
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
 				} else if(value[0] === "~") {
@@ -108,7 +134,7 @@
 				} else if(value[0] === "?") {
 					value = value.substring(1).trim();
 					if(properties.id) {
-						buffer = universe.index.index[properties.id] || entity;
+						buffer = universe.getObject(properties.id) || entity;
 					} else {
 						buffer = entity;
 					}
@@ -119,7 +145,7 @@
 					}
 				} else if(value[0] === "#") {
 					value = value.substring(1).trim();
-					if(value && (value = universe.index.index[value])) {
+					if(value && (value = universe.getObject(value))) {
 //						value = value;
 					} else if(entity) {
 						value = entity;
@@ -133,7 +159,12 @@
 					element = $("<span class=\"\">" + value + "</span>");
 				} else {
 					// Linked
-					mark = universe.index.index[properties.id || value];
+					if(properties.id) {
+						mark = universe.getObject(properties.id);
+					} else {
+						mark = universe.getNamed(value);
+					}
+					// mark = universe.index.index[properties.id || value];
 					if(mark) {
 						element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 					} else {
@@ -167,9 +198,17 @@
 			}
 		},
 		"methods": {
-			"rsshowdown": function(sourceText, entity, base, target, allow_js) {
+			/**
+			 * 
+			 * @method rsshowdown
+			 * @param  {String} sourceText [description]
+			 * @param  {Object} record     [description]
+			 * @param  {Boolean} allow_js   [description]
+			 * @return {String} 
+			 */
+			"rsshowdown": function(sourceText, entity, allow_js) {
 //				console.warn("RS Showdown: ", entity, base, target);
-				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, base, target, allow_js));
+				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, allow_js));
 			}
 		}
 	});

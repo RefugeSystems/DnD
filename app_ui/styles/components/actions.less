@@ -29,6 +29,14 @@
 			border-color: blue;
 		}
 	}
+	
+	button.rounded {
+		border-radius: 5px;
+	}
+	
+	button.circular {
+		border-radius: 100px;
+	}
 		
 	button.cancel,
 	button.abort,
@@ -62,6 +70,11 @@
 		span {
 			line-height: 32px;
 			font-size: 20px;
+		}
+		
+		&:disabled {
+			color: transparent;
+			cursor: not-allowed;
 		}
 	}
 	

@@ -13,7 +13,7 @@
 		"id": "dataset",
 		"name": "dataset",
 		"description": "xxxx",
-		"fields": ["name", "description", "disabled", "value"]
+		"fields": ["name", "icon", "root", "spacing", "limited", "ordering", "next", "description", "disabled", "value"]
 	}, {
 		"id": "image",
 		"name": "image",
@@ -55,35 +55,40 @@
 		"description": "An entry where an item can be placed in association with another object.",
 		"fields": ["name", "icon", "description", "score", "spells", "threat", "ordering", "types", "action_max", "types_accepted", "types_rejected", "weight", "size", "attribute"]
 	}, {
+		"id": "alignment",
+		"name": "Alignment",
+		"description": "Acts as a generally summary for how this entity may act.",
+		"fields": ["name", "ordering", "playable", "icon", "description", "attribute"]
+	}, {
 		"id": "entity",
 		"name": "Entity",
 		"description": "A manipulatable entry in the Universe.",
-		"fields": ["name", "profile", "concealed", "hp_rolled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "attribute"]
+		"fields": ["name", "profile", "concealed", "hp_rolled", "gender", "gold", "race", "armor", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "notes", "slots_remaining", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "attribute"]
 	}, {
 		"id": "spell",
 		"name": "Spell",
 		"description": "Spell",
-		"fields": ["name", "icon", "description", "history", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "type", "action_cost", "targets", "cast_time", "cast_type", "cast_with", "cast_save", "duration", "archetypes", "ritual", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items"]
+		"fields": ["name", "icon", "description", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_type", "cast_with", "cast_save", "duration", "archetypes", "ritual", "user", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items"]
 	}, {
 		"id": "archetype",
 		"name": "Class",
 		"description": "A specialized class that an entity can pick up",
-		"fields": ["name", "icon", "description", "selection", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "score", "spells", "skills", "actions", "threat", "movement_ground", "movement_swim", "movement_fly", "playable", "skill_advantage", "skill_disadvantage", "action_max", "hit_dice_max", "attune_max", "spell_slot_max", "skill_check", "skill_proficiency", "proficiencies", "effects", "knowledges", "conditionals", "attribute"]
+		"fields": ["name", "icon", "description", "selection", "needs", "feats", "hp_max", "pool_gain", "spells_maximum", "root", "ordering", "next", "cantrips_maximum", "spell_dc", "spell_attack", "score", "spells", "skills", "actions", "threat", "movement_ground", "movement_swim", "movement_fly", "playable", "skill_advantage", "skill_disadvantage", "action_max", "hit_dice_max", "attune_max", "spell_slot_max", "skill_check", "skill_proficiency", "proficiencies", "effects", "knowledges", "conditionals", "attribute"]
 	}, {
 		"id": "action",
 		"name": "Action",
 		"description": "An action that can be taken by an object",
-		"fields": ["name", "icon", "description", "action_cost", "attribute"]
+		"fields": ["name", "icon", "description", "action_cost", "ordering", "attribute"]
 	}, {
 		"id": "effect",
 		"name": "Effect",
 		"description": "An effect on an object. Expiration is tracked via chronicle. These may subtract slots directly, or add through conditionals.",
-		"fields": ["name", "icon", "description", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals"]
+		"fields": ["name", "icon", "description", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals"]
 	}, {
 		"id": "race",
 		"name": "Race",
 		"description": "",
-		"fields": ["name", "icon", "description", "selection", "playable", "score", "types", "size", "skills", "movement_ground", "datasets", "movement_swim", "movement_fly", "actions", "skill_advantage", "skill_disadvantage", "skill_check", "skill_proficiency", "spells", "threat", "action_max", "equip_slots", "spell_slot_max",  "proficiencies", "attune_max", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "conditionals"]
+		"fields": ["name", "icon", "description", "armor", "selection", "variants", "pool_gain", "feats", "playable", "score", "types", "size", "skills", "movement_ground", "datasets", "movement_swim", "movement_fly", "actions", "skill_advantage", "skill_disadvantage", "skill_check", "skill_proficiency", "spells", "threat", "action_max", "equip_slots", "spell_slot_max",  "proficiencies", "attune_max", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "conditionals", "attribute"]
 	}, {
 		"id": "type",
 		"name": "Type",
@@ -100,10 +105,15 @@
 		"description": "Magical enchantment empowering an object",
 		"fields": ["name", "icon", "description", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "skills", "skill_proficiency", "movement_ground", "movement_swim", "movement_fly", "proficiencies", "skill_advantage", "skill_disadvantage", "action_max", "damage", "resistance", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spells", "score", "enchant_rating", "conditionals", "spell_slot_max", "attune_max", "effects", "attribute"]
 	}, {
+		"id": "condition",
+		"name": "Condition",
+		"description": "A basic status effect on an entity",
+		"fields": ["name", "icon", "description", "ordering", "disabled", "attribute"]
+	}, {
 		"id": "feat",
 		"name": "Feat",
 		"description": "An inherant feature of this object that improves or diminishes this object",
-		"fields": ["name", "icon", "description", "selectable", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "action_max", "hp_max", "movement_ground", "movement_swim", "movement_fly", "spells", "skills", "skill_advantage", "skill_disadvantage", "actions", "skill_proficiency", "proficiencies", "resistance", "damage", "score", "threat", "charges", "recharges_at", "recharges_on", "spell_slot_max", "attune_max", "recharging", "conditionals", "effects", "attribute"]
+		"fields": ["name", "icon", "description", "featbg", "selectable", "pool_gain", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "action_max", "hp_max", "movement_ground", "movement_swim", "movement_fly", "spells", "skills", "skill_advantage", "skill_disadvantage", "recharges_on", "actions", "skill_proficiency", "proficiencies", "resistance", "damage", "score", "threat", "charges", "recharges_at_short", "recharges_at_long", "recharges_after", "spell_slot_max", "attune_max", "recharging", "conditionals", "selection", "effects", "user", "attribute"]
 	}, {
 		"id": "skill",
 		"name": "Skill",
@@ -123,12 +133,12 @@
 		"id": "item",
 		"name": "Item",
 		"description": "An item used by entities",
-		"fields": ["name", "description", "icon", "price", "inventory", "profile", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "recharging", "recharges_at", "recharges_on", "knowledges", "knowledge_matrix", "enchantments", "skill_advantage", "skill_disadvantage", "conditionals"]
+		"fields": ["name", "description", "icon", "price", "inventory", "gold", "armor", "profile", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "skill_advantage", "skill_disadvantage", "conditionals"]
 	}, {
 		"id": "knowledge",
 		"name": "Knowledge",
 		"description": "Knowledge held by an entity in the universe.",
-		"fields": ["name", "description", "concealed", "icon", "category", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "state", "skills", "actions", "spells", "screen", "spell_slot_max", "skill_advantage", "skill_disadvantage", "associations", "skill_check", "skill_proficiency", "proficiencies", "knowns", "effects", "conditionals"]
+		"fields": ["name", "description", "concealed", "icon", "category", "spells_maximum", "feats", "cantrips_maximum", "spell_dc", "spell_attack", "state", "skills", "actions", "spells", "screen", "spell_slot_max", "skill_advantage", "skill_disadvantage", "associations", "skill_check", "skill_proficiency", "proficiencies", "knowns", "effects", "conditionals"]
 	}, {
 		"id": "quest",
 		"name": "Quest",

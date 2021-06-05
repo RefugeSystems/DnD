@@ -72,6 +72,12 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "limited",
+		"name": "Limited",
+		"description": "Limit the number of chaining branches to take",
+		"type": "integer",
+		"attribute": {}
+	}, {
 		"id": "loyal_to",
 		"name": "Loyal To",
 		"description": "Indicates who this entity is loyal to, used for summons and minions and the like",
@@ -101,11 +107,28 @@
 		"name": "Alignment",
 		"description": "The alignment of this entity.",
 		"type": "string",
+		"inheritance": {
+		},
+		"inheritable": [
+			"alignment"
+		],
 		"attribute": {}
 	}, {
-		"id": "poulation",
+		"id": "population",
 		"name": "Population",
 		"description": "The theoretical number of creatures inside this object. This is NOT meant to reflect entities.length but rather total general population of something like a city where entites.length would represent the number of special creatures present and may or maynot be part of the population count.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "pool_gain",
+		"name": "Pool Gain",
+		"description": "Adds to the character pool for selecting changes",
+		"type": "object",
+		"attribute": {}
+	}, {
+		"id": "spacing",
+		"name": "Spacing",
+		"description": "Used to indicate what kind of spacing should be used between objects, for instance in datasets, the starting dataset may specify how to separate generated names and subsequent dataset spacings are ignored",
 		"type": "string",
 		"attribute": {}
 	}, {
@@ -114,14 +137,8 @@
 		"description": "Maps a Skill ID to this objects numerical ability to perform that skill.",
 		"type": "object",
 		"ordering": 20,
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"skill"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "skill"
 		}
 	}, {
 		"id": "incidents",
@@ -134,7 +151,9 @@
 		"name": "Selection",
 		"description": "An array of objects that define choices for a player to make. This is largely for interpretation by the UI, should attempt to leverage/align the 'point_pool' object, and is merely maintained by the server. Usage is meant for things like choosing class specialization feats such as Rangers choosing between Archery, Dueling, etc.",
 		"type": "array",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "history",
 		"name": "History",
@@ -346,7 +365,7 @@
 			"slot"
 		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "slot"
 		}
 	}, {
 		"id": "damage_type",
@@ -439,14 +458,8 @@
 		"name": "Damage",
 		"description": "Maps a Damage Type ID to a formula for the amount done by this object",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"damage_type"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "damage_type"
 		}
 	}, {
 		"id": "debuff",
@@ -551,13 +564,8 @@
 		"name": "Acquired",
 		"description": "How strong this object is. This is for use as part of computed values",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-		],
 		"attribute": {
-			"inherited": "key",
+			"inherited_key": "*",
 			"displayed": false
 		}
 	}, {
@@ -625,21 +633,25 @@
 		"name": "Resistance",
 		"description": "Maps a Damage Type ID to a formula for the amount that this object reduces that damage type by when suffered by this object",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"damage_type"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "damage_type"
 		}
 	}, {
 		"id": "selectable",
 		"name": "Selectable",
 		"description": "Indicates that this object is selectable for some reason, such as a Feat or Proficiency that can be selected while leveling",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "featbg",
+		"name": "Is Background",
+		"description": "Flag for feats to be marked as potential charact backgrounds",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "datasets",
 		"name": "Datasets",
@@ -653,7 +665,9 @@
 		"name": "Playable",
 		"description": "Indicates that players can select this object as part of object construction",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "content_type",
 		"name": "Content Type",
@@ -665,15 +679,27 @@
 		"name": "Caster",
 		"description": "The entity that knows this spell. Used for spell value calculations.",
 		"type": "string",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"entity"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "entity"
 		}
+	}, {
+		"id": "armor",
+		"name": "Armor",
+		"description": "Your current Armor Class (AC)",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "gold",
+		"name": "Gold",
+		"description": "The amount of gold on or in this entity or object",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "gold_max",
+		"name": "Max Gold",
+		"description": "The maximum amount of gold this object or entity can hold",
+		"type": "integer",
+		"attribute": {}
 	}, {
 		"id": "movement_ground",
 		"name": "Move Speed",
@@ -695,17 +721,25 @@
 	}, {
 		"id": "needs",
 		"name": "Needs",
-		"description": "Maps Slot IDs to the number of that slot used by this object",
+		"description": "Maps an object ID to a needed count. For instance, Slot IDs are used to map the ID to the number of that slot used by this object. Archetypes use this to mark prior needed archetypes before this one can be choosen.",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"slot"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": ["slot", "archetype"]
 		}
+	}, {
+		"id": "slots_remaining",
+		"name": "Remaining Slots",
+		"description": "The calculated list of slots that are unused. This is used primarily for conditionals",
+		"type": "array",
+		"attribute": {
+			"inherited_key": ["slot"]
+		}
+	}, {
+		"id": "conditions",
+		"name": "Conditions",
+		"description": "Lists the condition effects active on the entity, such as ${Blinded}$ or ${Deafened}$.",
+		"type": "object",
+		"attribute": {}
 	}, {
 		"id": "archetypes",
 		"name": "Archetypes",
@@ -714,6 +748,8 @@
 		"inheritance": {
 			"actions": "+",
 			"action_max": "+",
+			"armor": "+",
+			"hp_max": "+",
 			"resistance": "+=",
 			"damage": "+=",
 			"score": "+",
@@ -746,6 +782,7 @@
 			"wisdom": "+",
 			"charisma": "+",
 			"resistance": "+=",
+			"armor": "+",
 			"damage": "+=",
 			"actions": "+",
 			"action_max": "+",
@@ -779,6 +816,7 @@
 			"intelligence": "+",
 			"wisdom": "+",
 			"charisma": "+",
+			"armor": "+",
 			"actions": "+",
 			"spells": "+",
 			"resistance": "+=",
@@ -790,12 +828,24 @@
 			"threat": "+",
 			"action_max": "+",
 			"hp_max": "+",
+			"effects": "+",
 			
 			"equip_slots": "-",
 			"conditionals": "+"
 		},
 		"inheritable": [
 			"effect"
+		],
+		"attribute": {}
+	}, {
+		"id": "variants",
+		"name": "Variants",
+		"description": "Variations of this race",
+		"type": "array",
+		"inheritance": {
+		},
+		"inheritable": [
+			"feat"
 		],
 		"attribute": {}
 	}, {
@@ -808,6 +858,7 @@
 			"dexterity": "+",
 			"constitution": "+",
 			"intelligence": "+",
+			"armor": "+",
 			"wisdom": "+",
 			"charisma": "+",
 			"resistance": "+=",
@@ -827,6 +878,12 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "notes",
+		"name": "Notes",
+		"description": "General text for notes taken by this object.",
+		"type": "string",
+		"attribute": {}
+	}, {
 		"id": "equipped",
 		"name": "Equipped",
 		"description": "List of objects currently equipped to this one.",
@@ -838,6 +895,7 @@
 			"intelligence": "+",
 			"wisdom": "+",
 			"charisma": "+",
+			"armor": "+",
 			"enchant_rating": "+",
 			"actions": "+",
 			"skills": "+",
@@ -873,6 +931,18 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "party",
+		"name": "Party",
+		"description": "The party that this object is in",
+		"type": "string",
+		"inheritance": {
+			"effects": "+"
+		},
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
 		"id": "charges",
 		"name": "Charges",
 		"description": "Number of expendable charges available on this object.",
@@ -881,8 +951,27 @@
 	}, {
 		"id": "recharges_at",
 		"name": "Recharges At",
-		"description": "Maps an event to the number of times that event must occur for this object to gain a charge.",
+		"description": "[Deprecated] Maps an event to the number of times that event must occur for this object to gain a charge.",
 		"type": "object",
+		"deprecated": true,
+		"attribute": {}
+	}, {
+		"id": "recharges_at_short",
+		"name": "Short Rests Needed",
+		"description": "Number of short rests needed to gain a charge.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "recharges_at_long",
+		"name": "Long Rests Needed",
+		"description": "Number of long rests needed to gain a charge.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "recharges_after",
+		"name": "Recharges After",
+		"description": "Amount of raw time for a charge to be gained",
+		"type": "calculated",
 		"attribute": {}
 	}, {
 		"id": "recharging",
@@ -919,14 +1008,8 @@
 		"name": "Class Levels",
 		"description": "Maps a Class ID to this object's level in that class.",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"archetype"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "archetype"
 		}
 	}, {
 		"id": "archetype_history",
@@ -951,28 +1034,16 @@
 		"name": "Skill Proficiency",
 		"description": "Maps skill IDs to a boolean to indicate proficiency in that skill.",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"skill"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "skill"
 		}
 	}, {
 		"id": "skill_advantage",
 		"name": "Advantage",
 		"description": "Counts the amount of advantage this object has towards a skill check.",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"skill"
-		],
 		"attribute": {
-			"inherited": "key",
+			"inherited_key": "skill",
 			"display": false
 		}
 	}, {
@@ -980,14 +1051,8 @@
 		"name": "Disadvantage",
 		"description": "Counts the amount of disadvantage this object has towards a skill check.",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"skill"
-		],
 		"attribute": {
-			"inherited": "key",
+			"inherited_key": "skill",
 			"display": false
 		}
 	}, {
@@ -1073,6 +1138,18 @@
 		"name": "Consume Icon",
 		"description": "Icon to display for consuming this object.",
 		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "use_from",
+		"name": "Uses From",
+		"description": "This uses charges from another property.",
+		"type": "string",
+		"inheritance": {
+			
+		},
+		"inheritable": [
+			"entity"
+		],
 		"attribute": {}
 	}, {
 		"id": "dc",
@@ -1208,6 +1285,7 @@
 			"actions": "+",
 			"action_max": "+",
 			"attune_max": "+",
+			"armor": "+",
 			"score": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
@@ -1307,6 +1385,11 @@
 		"name": "Skills",
 		"description": "Skills that this object can perform.",
 		"type": "array",
+		"inheritance": {
+		},
+		"inheritable": [
+			"skill"
+		],
 		"attribute": {}
 	}, {
 		"id": "must_know",
@@ -1356,13 +1439,17 @@
 		"name": "Score",
 		"description": "An abstract point value for this object, used in estimating power or worth or value for comparison.",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "threat",
 		"name": "Threat",
 		"description": "A general estimate of how threatening a creature is.",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "label",
 		"name": "Label",
@@ -1380,7 +1467,9 @@
 		"name": "Concealed",
 		"description": "Flag to prevent display of this object ot players",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"display": false
+		}
 	}, {
 		"id": "pressence_always",
 		"name": "Always Present",
@@ -1400,6 +1489,20 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
+		"id": "root",
+		"name": "Root",
+		"description": "Used to flag an object as a starting point for any branching considerations",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "next",
+		"name": "Next",
+		"description": "Used to flag the next objects in a chain",
+		"type": "array",
+		"attribute": {}
+	}, {
 		"id": "items",
 		"name": "Items",
 		"description": "List of item IDs loosely associated with this object with no carrying or attachment considerations.",
@@ -1410,14 +1513,8 @@
 		"name": "Owned By",
 		"description": "Maps player IDs that own this object to the time at which they acquired it, 1 for general ownership, or 0 to disable ownership.",
 		"type": "object",
-		"inheritance": {
-			
-		},
-		"inheritable": [
-			"player"
-		],
 		"attribute": {
-			"inherited": "key"
+			"inherited_key": "player"
 		}
 	}, {
 		"id": "players",
@@ -1436,6 +1533,7 @@
 			"constitution": "+",
 			"intelligence": "+",
 			"wisdom": "+",
+			"armor": "+",
 			"charisma": "+",
 			"enchant_rating": "+",
 			"actions": "+",

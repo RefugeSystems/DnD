@@ -10,17 +10,27 @@
 			<span class="text">:</span>
 		</div>
 		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object'">
-			<span class="text">{{getValue()}}</span>
+			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
+			<span v-else class="text">{{getValue()}}</span>
 		</div>
 	</div>
 	<div class="pointed">
 		<div class="value array flex v" v-if="fieldData.type === 'array'">
 			<div class="element" v-for="value in getArrayValue()">
 				<span class="text">{{getValueDisplay(fieldData, value)}}</span>
+				<button class="flat action" v-if="value.id" v-on:click="info(value)">
+					<span class="fas fa-info-circle"></span>
+				</button>
 			</div>
 		</div>
 		<div class="value object flex v" v-else-if="fieldData.type === 'object'">
-			[Object]
+			<div class="element" v-for="key in getObjectKeys()">
+				<span class="text">{{key.name}}:</span>
+				<span class="text">{{getObjectValue(key)}}</span>
+				<button class="flat action" v-if="!key.faux" v-on:click="info(key)">
+					<span class="fas fa-info-circle"></span>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

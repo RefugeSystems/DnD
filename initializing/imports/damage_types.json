@@ -43,7 +43,7 @@
             "id": "damage_type:holy",
             "name": "Holy",
             "description": "Holy",
-            "icon": "fas fa-holy-water"
+            "icon": "game-icon game-icon-holy-water"
         }, {
             "id": "damage_type:lightning",
             "name": "Lightning",
@@ -53,22 +53,22 @@
             "id": "damage_type:necrotic",
             "name": "Necrotic",
             "description": "Necrotic",
-            "icon": "fas fa-death-juice"
+            "icon": "game-icon game-icon-death-juice"
         }, {
             "id": "damage_type:poison",
             "name": "Poison",
             "description": "Poison",
-            "icon": "fas fa-poison-gas"
+            "icon": "game-icon game-icon-poison-gas"
         }, {
             "id": "damage_type:psychic",
             "name": "Psychic",
             "description": "Psychic",
-            "icon": "fas fa-psychic-waves"
+            "icon": "game-icon game-icon-psychic-waves"
         }, {
             "id": "damage_type:radiant",
             "name": "Radiant",
             "description": "Radiant",
-            "icon": "fas fa-crystal-shine"
+            "icon": "game-icon game-icon-crystal-shine"
         }, {
             "id": "damage_type:sonic",
             "name": "Sonic",

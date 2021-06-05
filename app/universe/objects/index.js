@@ -287,6 +287,7 @@ module.exports = function(universe) {
 				details.classification = classification;
 				details.consumer = consumer;
 				details.fields = source_fields;
+				details.value = value;
 				universe.emit("error", new universe.Anomaly("universe:trace:track", "No such class", 50, details, null, this));
 			}
 		};
@@ -378,6 +379,7 @@ module.exports = function(universe) {
 				details.classification = classification;
 				details.consumer = consumer;
 				details.sources = sources;
+				details.value = sources[x];
 				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 50, details, null, this));
 			}
 		}
@@ -517,6 +519,7 @@ module.exports = function(universe) {
 				details.classification = classification;
 				details.consumer = consumer;
 				details.sources = sources;
+				details.value = sources[x];
 				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 50, details, null, this));
 			}
 		}

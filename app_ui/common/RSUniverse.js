@@ -28,11 +28,11 @@ class RSUniverse extends EventEmitter {
 	constructor(details) {
 		super();
 		
-		this.MAX_LOG_LENGTH = 400;
+		this.MAX_HISTORY_LENGTH = 400;
 		this.KEY = {};
-		this.KEY.CLASSPREFIX = "_universe_datacache_class:";
-		this.KEY.DETAILS = "_universe_datacache_details";
-		this.KEY.METRICS = "_universe_datacache_metrics";
+		this.KEY.CLASSPREFIX = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:objects";
+		this.KEY.DETAILS = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:details";
+		this.KEY.METRICS = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:metrics";
 		
 		try {
 			// Shared Workers aren't fully supported yet, especially on Mobile browsers
@@ -54,7 +54,34 @@ class RSUniverse extends EventEmitter {
 			this.worker = null;
 		}
 		
-		this.log = [];
+		this.backlog = [];
+		this.log = {};
+		this.log.info = (msg, data) => {
+			reportLog(msg, 30, data);
+		};
+		this.log.warn = this.log.warning = (msg, data) => {
+			reportLog(msg, 40, data);
+		};
+		this.log.error = (msg, data) => {
+			reportLog(msg, 50, data);
+		};
+		var reportLog = (msg, level, data) => {
+			if(this.connection.socket) {
+				this.send("event:log", {
+					"message": msg,
+					"details": data,
+					"level": level
+				});
+			} else {
+				this.backlog.push({
+					"message": msg,
+					"details": data,
+					"level": level
+				});
+			}
+		};
+		
+		this.history = [];
 		
 		this.buffer = [];
 		this.buffer_delta = [];
@@ -81,6 +108,8 @@ class RSUniverse extends EventEmitter {
 		this._noBuffer.ping = true;
 		
 		this.index = {};
+		
+		this.named = {};
 		
 		this.listing = {};
 		
@@ -219,6 +248,7 @@ class RSUniverse extends EventEmitter {
 			var loadListing = localStorage.getItem(this.KEY.CLASSPREFIX),
 				loadMetrics = localStorage.getItem(this.KEY.METRICS),
 				loadIndex = {},
+				loadNamed = {},
 				keys,
 				i,
 				j;
@@ -231,11 +261,13 @@ class RSUniverse extends EventEmitter {
 						loadIndex[keys[i]] = {};
 						for(j=0; j<loadListing[keys[i]].length; j++) {
 							loadIndex[keys[i]][loadListing[keys[i]][j].id] = loadListing[keys[i]][j];
+							loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
 						}
 					}
 					this.metrics = JSON.parse(loadMetrics);
 					this.listing = loadListing;
 					this.index = loadIndex;
+					this.named = loadNamed;
 				} catch(exception) {
 					console.error("Clearing cache, failed to load: ", exception);
 					localStorage.removeItem(this.KEY.CLASSPREFIX);
@@ -268,6 +300,9 @@ class RSUniverse extends EventEmitter {
 					Vue.set(this.index[classification], id, delta);
 					Vue.set(this.index[classification][id], "_sync", {});
 					this.listing[classification].push(delta);
+					if(delta.name) {
+						Vue.set(this.named, delta.name, delta);
+					}
 					for(x=0; x<keys.length; x++) {
 						Vue.set(this.index[classification][id]._sync, keys[x], received);
 					}
@@ -341,9 +376,9 @@ class RSUniverse extends EventEmitter {
 		if(!event.time) {
 			event.time = Date.now();
 		}
-		this.log.unshift(event);
-		if(this.log.length > this.MAX_LOG_LENGTH) {
-			this.log.pop();
+		this.history.unshift(event);
+		if(this.history.length > this.MAX_HISTORY_LENGTH) {
+			this.history.pop();
 		}
 		if(event.level === 40) {
 			// rsSystem.log.warn(event);
@@ -415,13 +450,24 @@ class RSUniverse extends EventEmitter {
 				
 				if(this.buffer.length) {
 					setTimeout(() => {
-						var count = 0;
+						var count,
+						 	send;
+						
+						count = 0;
 						while(this.buffer.length && count < 50) {
-							this.send(this.buffer.shift());
+							send = this.buffer.shift();
+							this.send(send.type, send.data);
 							count++;
 						}
 						this.addLogEvent("Unbuffered waiting messages", 40, {count, "hadMore": !!this.buffer.length});
 						this.buffer.splice(0);
+						
+						count = 0;
+						while(this.backlog.length && count < 50) {
+							send = this.backlog.shift();
+							this.send("event:log", send);
+							count++;
+						}
 					}, 0);
 				}
 			};
@@ -713,6 +759,10 @@ class RSUniverse extends EventEmitter {
 			return this.index[c][id];
 		}
 		return null;
+	}
+	
+	getNamed(name) {
+		return this.named[name] || null;
 	}
 	
 	getClassFromID(id) {

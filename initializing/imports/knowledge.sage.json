@@ -1,0 +1,34 @@
+{
+    "import": [{
+            "id": "knowledge:sage:alchemy",
+			"name": "Sage: Alchemy",
+			"icon": "game-icon game-icon-apothecary",
+            "description": "You know a fair amount about ${Alchemy}$ and have dabbled in it but are not an ${Alchemist}$."
+        }, {
+            "id": "knowledge:sage:astronomy",
+			"name": "Sage: Astronomy",
+			"icon": "fas fa-planet-ringed",
+            "description": "You have studied the stars and understand a fair amount about ${Nautical Navigation}$ and how to determine your position in the world."
+        }, {
+            "id": "knowledge:sage:libraries",
+			"name": "Sage: Libraries",
+			"icon": "fas fa-books",
+            "description": "You love books and have read quite a few, making you a fairly quick reader and you have a good breath of knowledge as far as the various cultures in the world"
+        }, {
+            "id": "knowledge:sage:masonry",
+			"name": "Sage: Masonry",
+			"icon": "game-icon game-icon-stone-tower",
+            "description": "You have studied buildings and architecture at varying lengths and understand quite a bit about a building just by looking at it. ${Investigation}$ checks inside the building may reveal more about the building than usual."
+        }, {
+            "id": "knowledge:sage:sailing",
+			"name": "Sage: Sailing",
+			"icon": "game-icon game-icon-sailboat",
+            "description": "Your enjoyment of sailing has given you great understanding of how to harness wind, both on and off the water. You also intimately understand the riggings of a sailing vessel."
+        }, {
+            "id": "knowledge:sage:weather",
+			"name": "Sage: Weather",
+			"icon": "fas fa-clouds",
+            "description": "You've studied the weather and can many times tell what kind of weather is coming or how long that weather may last."
+        }
+    ]
+}

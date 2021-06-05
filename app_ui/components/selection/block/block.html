@@ -1,0 +1,18 @@
+<div class="rs-component rs-selection-block">
+	<div class="block name">
+		<span class="fas fa-exclamation-triangle rs-lightyellow" v-if="block._selected.length !== block.limit"></span>
+		<span class="fas fa-check rs-lightgreen" v-if="block._selected.length === block.limit"></span>
+		<span class="text">{{block.name}}</span>
+		<span class="readout">(</span>
+		<span class="rs-weighted" :class="block._selected.length !== block.limit?'rs-lightred':'rs-lightgreen'">{{block._selected.length}}</span>
+		<span>of {{block.limit}} )</span>
+	</div>
+	<div class="choices">
+		<div class="choice" v-for="choice in choices">
+			<button class="flat action select-choice rs-white" v-on:click="toggle(choice)">
+				<span class="far" :class="getIcon(choice)"></span>
+				<span>{{choice.name || choice.id || choice}}</span>
+			</button>
+		</div>
+	</div>
+</div>

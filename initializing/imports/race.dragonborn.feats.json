@@ -1,0 +1,254 @@
+{
+    "import": [{
+            "id": "feat:dragonborn:black",
+            "name": "Black Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:acid": "50%"
+            },
+            "icon": "fal fa-shield rot45 rs-gray",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:black"
+            ]
+        }, {
+            "id": "feat:dragonborn:blue",
+            "name": "Blue Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:lightning": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-blue",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:blue"
+            ]
+        }, {
+            "id": "feat:dragonborn:brass",
+            "name": "Brass Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:fire": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-darkyellow",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:brass"
+            ]
+        }, {
+            "id": "feat:dragonborn:bronze",
+            "name": "Bronze Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:lightning": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-darkorange",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:bronze"
+            ]
+        }, {
+            "id": "feat:dragonborn:copper",
+            "name": "Copper Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:acid": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-lightorange",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:copper"
+            ]
+        }, {
+            "id": "feat:dragonborn:gold",
+            "name": "Gold Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:fire": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-lightyellow",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:gold"
+            ]
+        }, {
+            "id": "feat:dragonborn:green",
+            "name": "Green Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:poison": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-green",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:green"
+            ]
+        }, {
+            "id": "feat:dragonborn:red",
+            "name": "Red Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:fire": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-red",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:red"
+            ]
+        }, {
+            "id": "feat:dragonborn:silver",
+            "name": "Silver Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:cold": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-gray",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:silver"
+            ]
+        }, {
+            "id": "feat:dragonborn:white",
+            "name": "White Dragonborn",
+            "description": "Your dragonborn heritage shows in your scales",
+            "actions": [
+                "action:breathweapon"
+            ],
+            "charges": 0,
+            "resistance": {
+                "damage_type:cold": "50%"
+            },
+            "icon": "far fa-shield-alt rot45 rs-white",
+            "recharges_at_short": "1",
+            "recharges_at_long": "1",
+            "recharges_on": [
+                "action:rest:short",
+                "action:rest:long"
+            ],
+            "recharging": {},
+            "score": 1,
+            "selectable": true,
+            "threat": 1,
+            "spells": [
+                "spell:dragonborn:breathweapon:white"
+            ]
+        }
+    ]
+}

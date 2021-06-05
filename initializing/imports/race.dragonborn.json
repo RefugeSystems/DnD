@@ -1,0 +1,126 @@
+{
+    "import": [{
+            "id": "race:dragonborn",
+            "action_max": {
+                "main": 1,
+                "bonus": 1,
+                "reaction": 1
+            },
+			"armor": 10,
+            "actions": [
+				"action:bonus:potion",
+				"action:main:attack",
+				"action:main:dash",
+				"action:main:disengage",
+				"action:main:dodge",
+				"action:main:grapple",
+				"action:main:help",
+				"action:main:hide",
+				"action:main:potion",
+				"action:main:push",
+				"action:main:use",
+				"action:movement:climb",
+				"action:movement:crawl",
+				"action:movement:grappling",
+				"action:movement:improvised",
+				"action:movement:jump",
+				"action:movement:move",
+				"action:movement:standup",
+				"action:movement:swim",
+				"action:reaction:oppurtunity",
+				"action:rest:short",
+				"action:rest:long"
+			],
+            "attune_max": "pro + 1",
+            "charisma": 1,
+            "datasets": [
+                "dataset:dragonborn:male",
+                "dataset:dragonborn:female"
+            ],
+            "description": "Born of dragons, as their name proclaims, the dragonborn walk proudly through a world that greets them with fearful incomprehension. Shaped by draconic gods or the dragons themselves, dragonborn originally hatched from dragon eggs as a unique race, combining the best attributes of dragons and humanoids. Some dragonborn are faithful servants to true dragons, others form the ranks of soldiers in great wars, and still others find themselves adrift, with no clear calling in life",
+            "equip_slots": {
+                "slot:helm": 1,
+                "slot:glasses": 1,
+                "slot:neck": 1,
+                "slot:chest": 1,
+                "slot:cape": 1,
+                "slot:bracers": 1,
+                "slot:gloves": 1,
+                "slot:belt": 1,
+                "slot:ring": 2,
+                "slot:hand": 2,
+                "slot:charm": 1,
+                "slot:pouch": 1,
+                "slot:pants": 1,
+                "slot:boots": 1
+            },
+            "icon": "game-icon game-icon-spiked-dragon-head",
+            "movement_ground": "24",
+            "movement_swim": "12",
+            "name": "Dragonborn",
+            "playable": true,
+            "proficiencies": [
+                "proficiency:language:common",
+                "proficiency:language:draconic"
+            ],
+            "variants": [
+                "feat:dragonborn:black",
+                "feat:dragonborn:blue",
+                "feat:dragonborn:brass",
+                "feat:dragonborn:bronze",
+                "feat:dragonborn:copper",
+                "feat:dragonborn:gold",
+                "feat:dragonborn:green",
+                "feat:dragonborn:red",
+                "feat:dragonborn:silver",
+                "feat:dragonborn:white"
+            ],
+            "size": 5,
+            "skill_advantage": {},
+            "skill_check": {},
+            "skill_disadvantage": {},
+            "skill_proficiency": {},
+            "skills": [
+                "skill:acrobatics",
+                "skill:animalhandling",
+                "skill:arcana",
+                "skill:atheletics",
+                "skill:charisma",
+                "skill:concentration",
+                "skill:constitution",
+                "skill:deception",
+                "skill:dexterity",
+                "skill:history",
+                "skill:initiative",
+                "skill:insight",
+                "skill:intelligence",
+                "skill:intimidation",
+                "skill:investigation",
+                "skill:mainhand",
+                "skill:medicine",
+                "skill:nature",
+                "skill:offhand",
+                "skill:perception",
+                "skill:performance",
+                "skill:persuasion",
+                "skill:religion",
+                "skill:sleightofhand",
+                "skill:stealth",
+                "skill:strength",
+                "skill:survival",
+                "skill:wisdom"
+            ],
+            "spell_slot_max": {},
+            "spells": {},
+            "strength": 2,
+            "threat": 1,
+            "types": ["type:creature", "type:humanoid"],
+			"attribute": {
+				"recommended": {
+					"strength": true,
+					"constitution": true
+				}
+			}
+        }
+    ]
+}

@@ -40,10 +40,10 @@
 			"types_accepted": ["type:armor:chest"],
 			"attribute": {}
 		}, {
-			"id": "slot:hand",
-			"name": "Hand",
-			"description": "A place to hold something",
-			"icon": "game-icon game-icon-hand",
+			"id": "slot:gloves",
+			"name": "Gloves",
+			"description": "Protiection for your hands",
+			"icon": "game-icon game-icon-gloves",
 			"ordering": 15,
 			"types_accepted": ["type:weapon", "type:held", "type:weapon:melee", "type:weapon:ranged", "type:device", "type:armor:shield"],
 			"attribute": {}
@@ -72,12 +72,12 @@
 			"types_accepted": ["type:belt"],
 			"attribute": {}
 		}, {
-			"id": "slot:charm",
-			"name": "Charm",
-			"description": "A place to keep a small charm",
-			"icon": "game-icon game-icon-rune-stone",
+			"id": "slot:hand",
+			"name": "Hand",
+			"description": "A place to hold something",
+			"icon": "game-icon game-icon-hand",
 			"ordering": 19,
-			"types_accepted": ["type:charm"],
+			"types_accepted": ["type:weapon", "type:held", "type:weapon:melee", "type:weapon:ranged", "type:device", "type:armor:shield"],
 			"attribute": {}
 		}, {
 			"id": "slot:pouch",
@@ -88,11 +88,19 @@
 			"types_accepted": ["type:pouch"],
 			"attribute": {}
 		}, {
+			"id": "slot:charm",
+			"name": "Charm",
+			"description": "A place to keep a small charm",
+			"icon": "game-icon game-icon-rune-stone",
+			"ordering": 21,
+			"types_accepted": ["type:charm"],
+			"attribute": {}
+		}, {
 			"id": "slot:pants",
 			"name": "Bracers",
 			"description": "A place to wear armor over your torso",
 			"icon": "game-icon game-icon-armored-pants",
-			"ordering": 21,
+			"ordering": 22,
 			"types_accepted": ["type:pants"],
 			"attribute": {}
 		}, {
@@ -100,7 +108,7 @@
 			"name": "Boots",
 			"description": "A place to wear boots",
 			"icon": "game-icon game-icon-boots",
-			"ordering": 22,
+			"ordering": 23,
 			"types_accepted": ["type:boots"],
 			"attribute": {}
 		}, {

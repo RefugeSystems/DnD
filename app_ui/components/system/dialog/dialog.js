@@ -39,6 +39,7 @@
 			data.container_classes = "inactive";
 			data.classes = "inactive";
 			data.timeout = null;
+			data.box_classes = "";
 			
 			return data;
 		},
@@ -66,6 +67,11 @@
 					Vue.set(this, "details", details);
 					Vue.set(this, "container_classes", "active");
 					Vue.set(this, "classes", "active");
+					if(details.max_size) {
+						Vue.set(this, "box_classes", "max");
+					} else {
+						Vue.set(this, "box_classes", "");
+					}
 				}
 			});
 			rsSystem.EventBus.$on("dialog-dismiss", (details) => {

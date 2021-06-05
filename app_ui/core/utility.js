@@ -86,17 +86,17 @@
 			var aName,
 				bName;
 
-			if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
-				if(a.order < b.order) {
+			if(a.ordering !== undefined && b.ordering !== undefined && a.ordering !== null && b.ordering !== null) {
+				if(a.ordering < b.ordering) {
 					return -1;
-				} else if(a.order > b.order) {
+				} else if(a.ordering > b.ordering) {
 					return 1;
 				}
 			}
-			if((a.order === undefined || a.order === null) && b.order !== undefined && b.order !== null) {
+			if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
 				return -1;
 			}
-			if((b.order === undefined || b.order === null) && a.order !== undefined && a.order !== null) {
+			if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
 				return 1;
 			}
 
@@ -110,7 +110,7 @@
 				}
 			}
 
-			if(a.date || b.date) {
+			if(a.updated || b.updated) {
 				if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
 					return -1;
 				}
@@ -118,16 +118,16 @@
 					return 1;
 				}
 
-				if((a.date === undefined || a.date === null) && b.date !== undefined && b.date !== null) {
+				if((a.updated === undefined || a.updated === null) && b.updated !== undefined && b.updated !== null) {
 					return -1;
 				}
-				if((b.date === undefined || b.date === null) && a.date !== undefined && a.date !== null) {
+				if((b.updated === undefined || b.updated === null) && a.updated !== undefined && a.updated !== null) {
 					return 1;
 				}
 
-				if(a.date < b.date) {
+				if(a.updated < b.updated) {
 					return -1;
-				} else if(a.date > b.date) {
+				} else if(a.updated > b.updated) {
 					return 1;
 				}
 			}

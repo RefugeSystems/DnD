@@ -18,6 +18,11 @@ rsSystem.component("sysInfoGeneral", {
 			"type": Object
 		}
 	},
+	"computed": {
+		"description": function() {
+			return this.rsshowdown(this.info.description, this.info, this.profile?this.profile.inline_javascript:false);
+		}
+	},
 	"data": function() {
 		var data = {};
 

@@ -1,0 +1,278 @@
+{
+    "import": [{
+            "id": "effect:condition:muted",
+			"name": "Muted",
+            "icon": "fas fa-comment-slash",
+			"description": "You are unable to speak",
+			"threat": -1
+		}, {
+            "id": "effect:condition:blind",
+			"name": "Blinded",
+            "icon": "fas fa-low-vision",
+			"description": "You are unable to see",
+			"skill_disadvantage": {
+				"skill:mainhand": true,
+				"skill:offhand": true
+			},
+			"threat": -3
+		}, {
+            "id": "effect:condition:deafened",
+			"name": "Deafened",
+            "icon": "fas fa-deaf",
+			"description": "You are unable to hear",
+			"threat": -1
+		}, {
+            "id": "effect:condition:charmed",
+			"name": "Charmed",
+            "icon": "game-icon game-icon-nested-hearts",
+			"description": "You are charmed",
+			"threat": -1
+		}, {
+            "id": "effect:condition:frozen",
+			"name": "Frozen",
+            "icon": "game-icon game-icon-nested-ice-cube",
+			"description": "You are frozen and unable to move",
+			"movement_speed": "-1 * user.movement_speed",
+			"movement_swim": "-1 * user.movement_swim",
+			"movement_fly": "-1 * user.movement_fly",
+			"threat": -1
+		}, {
+            "id": "effect:condition:frightened",
+			"name": "Frightened",
+            "icon": "game-icon game-icon-terror",
+			"description": "You are frightened of a creature and roll any ability checks at ${Disadvantage}$ if you can see the creature of which you are afraid. Additionally, you can not move closer to that creature's perceived location.",
+			"threat": -1
+		}, {
+            "id": "effect:condition:exhausted:1",
+			"name": "Exhausted (1)",
+            "icon": "game-icon game-icon-tired-eye",
+			"description": "You are exhausted from lack of sleep",
+			"skill_disadvantage": {
+				"skill:acrobatics": true,
+				"skill:animalhandling": true,
+				"skill:arcana": true,
+				"skill:atheletics": true,
+				"skill:concentration": true,
+				"skill:deception": true,
+				"skill:history": true,
+				"skill:initiative": true,
+				"skill:insight": true,
+				"skill:intimidation": true,
+				"skill:investigation": true,
+				"skill:mainhand": true,
+				"skill:medicine": true,
+				"skill:nature": true,
+				"skill:offhand": true,
+				"skill:perception": true,
+				"skill:performance": true,
+				"skill:persuasion": true,
+				"skill:religion": true,
+				"skill:sleightofhand": true,
+				"skill:stealth": true,
+				"skill:survival": true
+			},
+			"threat": -5
+		}, {
+            "id": "effect:condition:exhausted:2",
+			"name": "Exhausted (2)",
+            "icon": "game-icon game-icon-tired-eye",
+			"description": "You are exhausted from lack of sleep and move more slowly. You are also unable to ${Swim}$ or ${Fly}$.",
+			"movement_speed": "-.5 * user.movement_speed",
+			"movement_swim": "-1 * user.movement_swim",
+			"movement_fly": "-1 * user.movement_fly",
+			"threat": -10
+		}, {
+            "id": "effect:condition:exhausted:3",
+			"name": "Exhausted (3)",
+            "icon": "game-icon game-icon-tired-eye",
+			"description": "You are exhausted from lack of sleep and even the adreniline of combat is having trouble sustaining you",
+			"skill_disadvantage": {
+				"skill:strength": true,
+				"skill:dexterity": true,
+				"skill:constitution": true,
+				"skill:intelligence": true,
+				"skill:wisdom": true,
+				"skill:charisma": true,
+				"skill:initiative": true,
+				"skill:concentration": true,
+				"skill:mainhand": true,
+				"skill:offhand": true
+			},
+			"threat": -20
+		}, {
+            "id": "effect:condition:exhausted:4",
+			"name": "Exhausted (4)",
+            "icon": "game-icon game-icon-tired-eye",
+			"description": "You are exhausted from lack of sleep and your body is beginning to fail you",
+			"max_hp": "-.5 * user.max_hp",
+			"threat": -30
+		}, {
+            "id": "effect:condition:exhausted:5",
+			"name": "Exhausted (5)",
+            "icon": "game-icon game-icon-tired-eye",
+			"description": "You are exhausted from lack of sleep and are no longer able to move. You must rest soon or die.",
+			"movement_speed": "-.5 * user.movement_speed",
+			"movement_swim": "-1 * user.movement_swim",
+			"movement_fly": "-1 * user.movement_fly",
+			"threat": -50
+		}, {
+            "id": "effect:condition:grappled",
+			"name": "Grappled",
+            "icon": "game-icon game-icon-handcuffed",
+			"description": "You are currently being grappled and are unable to traverse. You may make an ${Athletics}$ or ${Acrobatics}$ check against the grapplers ${Athletics}$ check to break free.",
+			"actions": ["action:breakfree:grapple"],
+			"movement_speed": "-1 * user.movement_speed",
+			"movement_swim": "-1 * user.movement_swim",
+			"movement_fly": "-1 * user.movement_fly",
+			"threat": -10
+		}, {
+            "id": "effect:condition:poisoned",
+			"name": "Poisoned",
+            "icon": "game-icon game-icon-tired-eye",
+			"description": "You are exhausted from lack of sleep and even the adreniline of combat is having trouble sustaining you",
+			"potency": 0,
+			"skill_disadvantage": {
+				"skill:acrobatics": true,
+				"skill:animalhandling": true,
+				"skill:arcana": true,
+				"skill:atheletics": true,
+				"skill:concentration": true,
+				"skill:deception": true,
+				"skill:history": true,
+				"skill:initiative": true,
+				"skill:insight": true,
+				"skill:intimidation": true,
+				"skill:investigation": true,
+				"skill:mainhand": true,
+				"skill:medicine": true,
+				"skill:nature": true,
+				"skill:offhand": true,
+				"skill:perception": true,
+				"skill:performance": true,
+				"skill:persuasion": true,
+				"skill:religion": true,
+				"skill:sleightofhand": true,
+				"skill:stealth": true,
+				"skill:survival": true,
+				"skill:mainhand": true,
+				"skill:offhand": true
+			},
+			"threat": -2
+		}, {
+            "id": "effect:condition:unconscious",
+			"name": "Unconscious",
+            "icon": "fas fa-male rot270",
+			"description": "You are unconscious and unaware of your surroundings. Any attack against you from within 4 studs that hits is a ${Critical Strike}$ and attacks against you have ${Advantage}$. You automatically fail any ${Strength Save}$ or ${Dexterity Save}$ and have involuntarily dropped any items you were holding.",
+			"effects": ["effect:condition:incapacitated"],
+			"threat": -30
+		}, {
+            "id": "effect:condition:stunned",
+			"name": "Stunned",
+            "icon": "fal fa-dizzy",
+			"description": "You are stunned and struggling to stay aware of your surroundings. Any attack against you has ${Advantage}$. Additionally, you automatically fail any ${Strength Save}$ or ${Dexterity Save}$.",
+			"effects": ["effect:condition:incapacitated"],
+			"threat": -10
+		}, {
+            "id": "effect:condition:paralyzed",
+			"name": "Paralyzed",
+            "icon": "fal fa-dizzy",
+			"description": "You are paralyzed and unable move. Any attack against you has ${Advantage}$ and if it is within 4 studs and hits, it is a ${Critical Strike}$. Additionally, you automatically fail any ${Strength Save}$ or ${Dexterity Save}$.",
+			"effects": ["effect:condition:incapacitated"],
+			"threat": -15
+		}, {
+            "id": "effect:condition:incapacitated",
+			"name": "Incapacitated",
+            "icon": "fal fa-dizzy",
+			"description": "You are unable to take any actions",
+			"action_max": {
+				"main": -10,
+				"bonus": -10,
+				"reaction": -10
+			},
+			"threat": -30
+		}, {
+            "id": "effect:condition:prone",
+			"name": "Prone",
+            "icon": "game-icon game-icon-falling rot180",
+			"description": "You are laying on the ground and moving at half speed. Additionally attacks against you from within 4 studs have ${Advantage}$.",
+			"movement_speed": "-.5 * user.movement_speed",
+			"skill_disadvantage": {
+				"skill:mainhand": true,
+				"skill:offhand": true
+			},
+			"threat": 0
+		}, {
+            "id": "effect:condition:restrained",
+			"name": "Restrained",
+            "icon": "game-icon game-icon-handcuffed",
+			"description": "You are currently being restrained.",
+			"movement_speed": "-1 * user.movement_speed",
+			"skill_disadvantage": {
+				"skill:dexterity": true,
+				"skill:mainhand": true,
+				"skill:offhand": true
+			},
+			"threat": -1
+		}, {
+            "id": "effect:immunity:poison",
+			"name": "Immunity: Poison",
+			"icon": "fal fa-virus-slash",
+			"description": "You are immune to any new ${Poison}$ effects"
+		}, {
+            "id": "effect:immunity:disease",
+			"name": "Immunity: Disease",
+			"icon": "fas fa-virus-slash",
+			"description": "You are immune to any new ${Disease}$ effects"
+		}, {
+            "id": "effect:immunity:deafened",
+			"name": "Immunity: Deafened",
+			"icon": "fas fa-virus-slash",
+			"description": "You are immune to any new ${Deafening}$ effects"
+		}, {
+            "id": "effect:invisibile",
+			"name": "Invisible",
+			"icon": "game-icon game-icon-invisible",
+			"description": "You are not visible to the naked eye but can still be detected from tracks and noises and magic may reveal your position. Any ${Attack}$ you make is generally done with ${Advantage}$ save special circumstances where magic or other aids have negated this effect for your target."
+		}, {
+            "id": "effect:invisibile:power",
+			"name": "Invisibility",
+			"icon": "game-icon game-icon-invisible",
+			"description": "You are not visible to the naked eye and leave no tracks nor make any noises. ${Detect Magic}$ will not see you however ${Divination}$ magic may still locate or track you. Any ${Attack}$ you make is generally done with ${Advantage}$ save special circumstances where magic or other aids have negated this effect for your target. Taking any ${Action}$ will end this effect"
+		}, {
+            "id": "effect:invisibile:greater",
+			"name": "Greater Invisibility",
+			"icon": "game-icon game-icon-invisible",
+			"description": "You are not visible to the naked eye and leave no tracks nor make any noises. ${Detect Magic}$ will not see you however ${Divination}$ magic may still locate or track you. Any ${Attack}$ you make is generally done with ${Advantage}$ save special circumstances where magic or other aids have negated this effect for your target. Taking an ${Action}$ will not end this effect."
+		}, {
+            "id": "effect:condition:petrified",
+			"name": "Petrified",
+            "icon": "game-icon game-icon-rock-2",
+			"description": "You are petrified and you automatically fail any ${Strength Save}$ or ${Dexterity Save}$.",
+			"effects": ["effect:condition:incapacitated", "effect:immunity:poison", "effect:immunity:disease"],
+			"movement_speed": "-1 * user.movement_speed",
+			"skill_disadvantage": {
+				"skill:dexterity": true,
+				"skill:mainhand": true,
+				"skill:offhand": true
+			},
+			"resistances": {
+				"damage_type:bludgeoning": "50%",
+				"damage_type:slashing": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:crushing": "50%",
+				"damage_type:acid": "50%",
+				"damage_type:cold": "50%",
+				"damage_type:fire": "50%",
+				"damage_type:force": "50%",
+				"damage_type:holy": "50%",
+				"damage_type:lightning": "50%",
+				"damage_type:necrotic": "50%",
+				"damage_type:poison": "50%",
+				"damage_type:sonic": "50%",
+				"damage_type:thunder": "50%",
+				"damage_type:radiant": "50%"
+			},
+			"threat": -20
+        }
+    ]
+}

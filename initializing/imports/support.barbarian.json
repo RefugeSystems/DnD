@@ -1,0 +1,57 @@
+{
+    "import": [{
+            "id": "feat:rage",
+            "icon": "game-icon game-icon-enrage",
+            "name": "Rage",
+            "description": "Allows you to enter a **Rage** up to ${=charges}$ times per day where you gain the ${Raging}$ effect.",
+			"actions": ["action:feat:rage"],
+            "charges": "1.3 + Math.pow(user.level.barbarian, .555)",
+            "recharges_at_long": "1",
+            "recharges_at_short": "1",
+            "recharging": {},
+            "score": 1,
+            "selectable": false,
+            "threat": 1
+		}, {
+            "id": "feat:unarmoreddefense",
+            "icon": "game-icon game-icon-muscular-torso",
+            "name": "Unarmored Defense",
+            "description": "As long as you have no chest armor equipped, you gain bonus armor.",
+            "conditionals": [{
+				"condition": {
+					"slots_remaining": "slot:armor:chest"
+				},
+				"ifop": {
+					"slots_remaining": "isin"
+				},
+				"add": {
+					"armor": "con"
+				}
+			}],
+            "score": 1,
+            "selectable": false,
+            "threat": 1
+		}, {
+            "id": "effect:rage",
+            "icon": "game-icon game-icon-enrage",
+            "name": "Raging",
+            "description": "You are RAGING! You deal more damage and are more resistant to physical damage.",
+			"damage": {
+				"damage_type:bludgeoning": "user.level.barbarian/8 + 2"
+			},
+			"resistances": {
+				"damage_type:bludgeoning": "50%",
+				"damage_type:slashing": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:crushing": "50%"
+			},
+            "skill_advantage": {
+				"skill:strength": true
+			},
+			"effects": ["effect:condition:muted"],
+            "score": 0,
+            "selectable": false,
+            "threat": 1
+        }
+    ]
+}

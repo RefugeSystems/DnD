@@ -73,10 +73,10 @@
 
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
-				if(follow && (follow = this.universe.getObject(follow))) {
+				if(follow && (follow = this.universe.getObject(follow.value))) {
 					rsSystem.EventBus.$emit("display-info", {
-						"info": follow,
-						"base": this.viewing
+						"info": follow.id,
+						"view": this.view
 					});
 					event.stopPropagation();
 					event.preventDefault();
@@ -92,10 +92,17 @@
 				return this.open?5:-1;
 			},
 			"displayRecord": function(event) {
-				rsSystem.manipulateQuery({
-					"view": event.view || null,
-					"info": event.info
-				});
+				if(this.$route.query.info !== event.info) {
+					rsSystem.manipulateQuery({
+						"view": event.view || null,
+						"info": event.info
+					});
+				} else {
+					rsSystem.manipulateQuery({
+						"view": null,
+						"info": null
+					});
+				}
 			},
 			"checkView": function() {
 				var object;

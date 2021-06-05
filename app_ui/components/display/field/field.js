@@ -41,7 +41,7 @@ rsSystem.component("rsDisplayField", {
 			return this.universe.index.fields[this.field];
 		},
 		"displayed": function() {
-			return this.empties || this.fieldData.type === "boolean" || this.object[this.field];
+			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
 		}
 	},
 	"data": function() {
@@ -53,6 +53,17 @@ rsSystem.component("rsDisplayField", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"info": function(record) {
+			if(this.$route.query.info !== record.id) {
+				rsSystem.manipulateQuery({
+					"info": record.id
+				});
+			} else {
+				rsSystem.manipulateQuery({
+					"info": null
+				});
+			}
+		},
 		"getValueDisplay": function(field, value) {
 			if(field.attribute.obscures) {
 				for(var x=0; x<field.attribute.obscures.length; x++) {
@@ -77,6 +88,9 @@ rsSystem.component("rsDisplayField", {
 				return value;
 			}
 		},
+		"getValueClass": function() {
+			return !!this.object[this.field]?"fas fa-check":"fas fa-times";
+		},
 		"getArrayValue": function() {
 			if(this.object[this.field]) {
 				if(this.fieldData.inheritable) {
@@ -99,6 +113,52 @@ rsSystem.component("rsDisplayField", {
 				}
 			} else {
 				return "";
+			}
+		},
+		"getObjectKeys": function() {
+			var oKeys = [],
+				keys,
+				load,
+				x;
+			
+			if(this.object[this.field]) {
+				keys = Object.keys(this.object[this.field]);
+				if(this.fieldData.attribute.inherited_key && this.fieldData.attribute.displayed !== false) {
+					for(x=0; x<keys.length; x++) {
+						if(load = this.universe.getObject(keys[x])) {
+							oKeys.push(load);
+						}
+					}
+				} else {
+					for(x=0; x<keys.length; x++) {
+						oKeys.push({
+							"name": keys[x],
+							"id": keys[x],
+							"faux": true
+						});
+					}
+				}
+			}
+			
+			return oKeys;
+		},
+		"getObjectValue": function(key) {
+			var value = this.object[this.field][key.id],
+				load,
+				x;
+			
+			if(this.fieldData.attribute.inherited_value) {
+				if(load = this.universe.getObject(value)) {
+					return load.name;
+				} else {
+					return value;
+				}
+			} else if(typeof(value) === "number") {
+				return value > 0?"+" + value:value;
+			// } else if(typeof(value) === "string") {
+			// 	return value;
+			} else {
+				return value;
 			}
 		},
 		"getValue": function() {

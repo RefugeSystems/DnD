@@ -72,6 +72,7 @@
 		padding: 7px 14px;
 		border-radius: 5px;
 		z-index: 5;
+		transition: max-width .5s, width .5s, max-height .5s, height .5s;
 		
 		h1 {
 			font-size: 28px;
@@ -122,24 +123,46 @@
 		display: flex;
 		flex-direction: column;
 	}
+	
+	.dialog-content-max-bound {
+		width: 100%;
+	}
 }
 
 @media all {
 	@media (min-height: 901px) {
+		.dialog-box {
+			max-height: 65%;
+		}
 		.dialog-content-bound {
-			max-height: 60%;
+			max-height: 100%;
+		}
+		.dialog-box.max .dialog-content-bound {
+			height: 100%;
 		}
 	}
 
-	@media (min-height: 601px) and (min-height: 900px) {
+	@media (min-height: 601px) and (max-height: 900px) {
+		.dialog-box {
+			max-height: 550px;
+		}
 		.dialog-content-bound {
 			max-height: 500px;
+		}
+		.dialog-box.max .dialog-content-bound {
+			height: 500px;
 		}
 	}
 
 	@media (max-height: 600px) {
+		.dialog-box {
+			height: 100%;
+		}
 		.dialog-content-bound {
-			max-height: 90%;
+			max-height: 100%;
+		}
+		.dialog-box.max .dialog-content-bound {
+			height: 100%;
 		}
 	}
 
@@ -150,14 +173,17 @@
 		.dialog-box {
 			max-width: 90%;
 		}
+		.dialog-box.max {
+			width: 90%;
+		}
 	}
 
 	@media (min-width: 801px) {
 		.dialog-close {
 			right: -59px;
 		}
-		.dialog-box {
-			max-width: 60%;
+		.dialog-box.max {
+			width: 60%;
 		}
 	}
 }

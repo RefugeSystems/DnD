@@ -27,11 +27,17 @@ mapping.dice = {
 mapping.integer = {
 	"type": "integer"
 };
-mapping.calculcated = mapping.computed = {
+mapping.calculated = mapping.computed = {
 	"type": "text"
 };
 mapping.text = mapping.string = {
 	"type": "text"
+};
+mapping.date = mapping.time = {
+	"type": "integer"
+};
+mapping.gametime = {
+	"type": "integer"
 };
 mapping.boolean = {
 	"type": "boolean"
@@ -1001,18 +1007,24 @@ class ClassManager extends EventEmitter {
 	create(universe, details, callback) {
 		try {
 			var object = this.database.constructor[this.id] || RSObject;
-			object = new object(universe, this, details);
-			this.writeObjectData(details, (err) => {
-				if(err) {
-					callback(err, null);
-				} else {
-					object.created = details.created;
-					object.updated = details.updated;
-					this.object[object.id] = object;
-					this.objectIDs.push(object.id);
-					callback(null, object);
-				}
-			});
+			if(object) {
+				this.writeObjectData(details, (err) => {
+					if(err) {
+						console.log("Data Write Failed[" + this.id + "]: " + details.id);
+						callback(err, null);
+					} else {
+						console.log("Data Written[" + this.id + "]: " + details.id);
+						object = new object(universe, this, details);
+						object.created = details.created;
+						object.updated = details.updated;
+						this.object[object.id] = object;
+						this.objectIDs.push(object.id);
+						callback(null, object);
+					}
+				});
+			} else {
+				callback(new Error("Failed to locate constructor for Class " + this.id));
+			}
 		} catch(constructionException) {
 			callback(constructionException);
 		}

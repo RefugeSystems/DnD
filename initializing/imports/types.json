@@ -24,7 +24,6 @@
             "name": "Backpack",
             "description": "A bag for carrying things",
             "icon": "fas fa-backpack"
-
         }, {
             "id": "type:pouch",
             "name": "Pouch",
@@ -221,6 +220,101 @@
             "name": "Tool",
             "description": "Tool",
             "icon": "fas fa-hammer"
+		}, {
+            "id": "type:magic:abjuration",
+            "name": "Magic: Abjuration",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-abstract-111"
+        }, {
+            "id": "type:magic:conjuration",
+            "name": "Magic: Conjuration",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-xxxx"
+        }, {
+            "id": "type:magic:necromancy",
+            "name": "Magic: Necromancy",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-half-dead"
+        }, {
+            "id": "type:magic:evocation",
+            "name": "Magic: Evocation",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-beam-wake"
+        }, {
+            "id": "type:magic:divination",
+            "name": "Magic: Divination",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-water-diviner-stick"
+        }, {
+            "id": "type:magic:enchantment",
+            "name": "Magic: Enchantment",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-psychic-waves"
+        }, {
+            "id": "type:magic:illusion",
+            "name": "Magic: Illusion",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-eyelashes"
+        }, {
+            "id": "type:magic:transmutation",
+            "name": "Magic: Transmutation",
+            "description": "The school of magic associated with this object",
+            "icon": "game-icon game-icon-transform"
+		}, {
+            "id": "type:any",
+            "name": "Any",
+            "description": "Anything in the universe",
+            "icon": "fad fa-galaxy"
+        }, {
+            "id": "type:creature",
+            "name": "Creature",
+            "description": "Any living organism capable of self induced motion",
+            "icon": "game-icon game-icon-seahorse"
+        }, {
+            "id": "type:dead",
+            "name": "Dead",
+            "description": "A dead creature",
+            "icon": "fas fa-dizzy"
+        }, {
+            "id": "type:living",
+            "name": "Living",
+            "description": "A living creature",
+            "icon": "far fa-heartbeat"
+        }, {
+            "id": "type:ground",
+            "name": "Ground",
+            "description": "Any surface on which people stand due to gravity. Absence of or changes to gravity may change this.",
+            "icon": "game-icon game-icon-falling-rocks"
+        }, {
+            "id": "type:humanoid",
+            "name": "Humanoid",
+            "description": "A two legged creature, typically of moderate (4+) ${Intelligence}$",
+            "icon": "fas fa-user-alt"
+        }, {
+            "id": "type:magic",
+            "name": "Magic",
+            "description": "General a spell or an effect of one",
+            "icon": "game-icon game-icon-magic-palm"
+        }, {
+            "id": "type:item",
+            "name": "Item",
+            "description": "An item",
+            "icon": "game-icon game-icon-companion-cube"
+        }, {
+            "id": "type:friendly",
+            "name": "Friendly",
+            "description": "A creature that considers you friendly",
+            "icon": "fas fa-thumbs-up"
+        }, {
+            "id": "type:hostile",
+            "name": "Hostile",
+            "description": "A creature readily attempting to harm you",
+            "icon": "fas fa-thumbs-down"
+        }, {
+            "id": "type:neutral",
+            "name": "Neutral",
+            "description": "A creature neither trusting you nor trying to harm you. With some grey area.",
+            "icon": "fas fa-peace"
         }
     ]
 }

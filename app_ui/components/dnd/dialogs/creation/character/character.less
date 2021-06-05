@@ -1,5 +1,40 @@
 .dnd-component.character-creation {
 
+	.selection.finalize,
+	.selection.choices,
+	.selection.details {
+		font-size: 16px;
+		
+		.name {
+			font-size: 20px;
+		}
+		
+		input {
+			min-width: 200px;
+		}
+		
+		textarea {
+			min-width: 200px;
+			min-height: 100px;
+		}
+		
+		@media (min-width: 500px) {
+			padding-left: 30px;
+		}
+	}
+
+	.panels.alignment {
+		.panel-container {
+			min-width: 300px;
+			width: 32%;
+		}
+	}
+	
+	.block {
+		p, ul {
+			margin: 0px;
+		}
+	}
 
 	.progress.slim.bar.container {
 		position: relative;
@@ -29,6 +64,62 @@
 			width: 40px;
 			margin: 0px 0px 0px -20px;
 			z-index: 2;
+		}
+
+		&.has-errors {
+			.bar.indicator {
+				background-color: @rsLightRed;
+			}
+		}
+	}
+
+	.stat.container {
+
+		.stat.label {
+			font-size: 20px;
+		}
+
+		.stat.input {
+
+			input {
+				width: 60px;
+				font-size: 18px;
+			}
+		}
+	}
+
+	.error.column {
+		width: 30px;
+		text-align: center;
+		vertical-align: top;
+	}
+
+	.error.readout {
+		position: absolute;
+		bottom: 0px;
+		left: 25%;
+		width: 50%;
+		z-index: 5;
+		overflow: hidden;
+		max-height: 0px;
+		transition: max-height .5s, border-width .5s;
+		background-color: @rsBlack;
+		text-align: center;
+		height: 20px;
+		color: @rsWhite;
+		border: 0px;
+		padding: 0px;
+		border-color: @rsDarkRed;
+		border-style: solid;
+
+		.message {
+			padding: 2px;
+			font-size: 14px;
+		}
+
+		&.displayed {
+			max-height: 50px;
+			border-width: 1px;
 		}
 	}
 }

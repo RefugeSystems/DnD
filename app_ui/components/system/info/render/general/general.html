@@ -1,3 +1,4 @@
-<div class="rs-component info-general">
-	<h1>{{info.name || info.id}}</h1>
+<div class="info-general rs-black">
+	<div class="description" v-html="description"/>
+	<rs-stat-block :universe="universe" :object="info" :size="100" :empties="false" marking="fad fa-dot-circle rs-secondary-transparent"/>
 </div>

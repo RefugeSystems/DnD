@@ -1,0 +1,27 @@
+{
+    "import": [{
+            "id": "dataset:dragonborn:male",
+            "name": "Male Dragonborn Names",
+            "icon": "fas fa-mars",
+			"ordering": 5,
+			"root": true,
+			"next": ["dataset:dragonborn:last"],
+            "value": "Arjhan Balasar Bharash Donaar Ghesh Heskan Kriv Medrash Mehen Nadarr Pandjed Patrin Rhogar Shamash Shedinn Tarhun Torinn"
+        }, {
+            "id": "dataset:dragonborn:female",
+            "name": "Female Dragonborn Names",
+            "icon": "fas fa-venus",
+			"ordering": 6,
+			"root": true,
+			"next": ["dataset:dragonborn:last"],
+            "value": "Akra Biri Daar Farideh Harann Havilar Jheri Kava Korinn Mishann Nala Perra Raiann Sora Surina Thava Uadjit"
+        }, {
+            "id": "dataset:dragonborn:last",
+            "name": "Dragonborn Surnames",
+            "icon": "game-icon game-icon-spiked-dragon-head",
+			"ordering": 10,
+			"root": false,
+            "value": "Clethtinthiallor Daardendrian Delmirev Drachedandion Fenkenkabradon Kepeshkmolik Kerrhylon Kimbatuul Linxakasendalor Myastan Nemmonis Norixius Ophinshtalajiir Prexijandilin Shestendeliath Turnuroth Verthisathurgiesh Yarjerit"
+        }
+    ]
+}

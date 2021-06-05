@@ -1,0 +1,76 @@
+{
+    "import": [
+        {
+            "id": "alignment:lawful:good",
+			"icon": "fas fa-shield-cross",
+            "name": "Lawful Good",
+            "description": "You have a set of rules you follow and you tend to be more selflessness than the average creature, commonly going out of your way to help those in need. The laws you follow tend towards this aspect as well but you may break laws that oppress other creatures.",
+            "ordering": 11,
+			"playable": true
+        },
+        {
+            "id": "alignment:lawful:neutral",
+			"icon": "fas fa-scroll",
+            "name": "Lawful Neutral",
+            "description": "You follow a set of rules but they are more abstract than applying to creatures or other people. The plight of another is more detached from you and the rules you live by reflect this.",
+			"ordering": 12,
+			"playable": true
+        },
+        {
+            "id": "alignment:lawful:evil",
+			"icon": "fas fa-coins",
+            "name": "Lawful Evil",
+            "description": "You follow a set of rules that seek to maximize what you have, possibly financially, possibly spiritually. You see creatures as a means to an end and the laws you live by order the ways in which you use or bend them to your whim.",
+			"ordering": 13,
+			"playable": true
+        },
+        {
+            "id": "alignment:neutral:good",
+			"icon": "fas fa-heart",
+            "name": "Neutral Good",
+            "description": "You don't have a particular way of living, all rules are made to be broken but likely exist for a reason. You are governed more by your selflessness and are driven to help other creatures, often ignoring laws or your own wellbeing",
+			"ordering": 21,
+			"playable": true
+        },
+        {
+            "id": "alignment:neutral:neutral",
+			"icon": "fas fa-peace",
+            "name": "Neutral Neutral",
+            "description": "Existance is pain and pleasure. You continue to exist to enjoy the pleasantries but have some joy from those around you, within the extend that it doesn't impede upon your own.",
+			"ordering": 22,
+			"playable": true
+        },
+        {
+            "id": "alignment:neutral:evil",
+			"icon": "fas fa-comments-alt-dollar",
+            "name": "Neutral Evil",
+            "description": "While fairly consistent in your decisions, you have no set of rules, merely exploiting the opportunities that come your way for your own gain. Helping other creatures is only something you do when it pleases you.",
+			"ordering": 23,
+			"playable": true
+        },
+        {
+            "id": "alignment:chaotic:good",
+			"icon": "fas fa-angel",
+            "name": "Chaotic Good",
+            "description": "You will do anything to help a creature you see as in pain, rules be damned.",
+			"ordering": 31,
+			"playable": true
+        },
+        {
+            "id": "alignment:chaotic:neutral",
+			"icon": "fas fa-monkey",
+            "name": "Chaotic Neutral",
+            "description": "Whatever flights of fancy come to mind are what you generally tend to do.",
+			"ordering": 32,
+			"playable": true
+        },
+        {
+            "id": "alignment:chaotic:evil",
+			"icon": "fas fa-omega",
+            "name": "Chaotic Evil",
+            "description": "You tend to simply take what you want, skirting or defying any rules, the world exists to serve you and the things inside it are yours.",
+			"ordering": 33,
+			"playable": true
+        }
+    ]
+}

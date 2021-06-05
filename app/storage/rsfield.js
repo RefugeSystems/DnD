@@ -150,10 +150,18 @@ class RSField extends EventEmitter {
  		 * and "90" for full length readouts. Above 100 should be considered debugging territory.
  		 * @property attribute.display_size
  		 * @type Integer
+ 		 * @default 100
  		 */
 		/**
  		 * Indicates that this field represents a primary universe value.
  		 * @property attribute.primary_stat
+ 		 * @type Integer
+ 		 */
+		/**
+ 		 * Indicate to include the value of this field in the generated search string for the object.
+ 		 *
+ 		 * Only works for string typed fields.
+ 		 * @property attribute.searchable
  		 * @type Integer
  		 */
  		this.attribute = specification.attribute;
@@ -166,6 +174,9 @@ class RSField extends EventEmitter {
 		}
 		if(!this.attribute) {
 			this.attribute = {};
+		}
+		if(!this.attribute.display_size) {
+			this.attribute.display_size = 100;
 		}
 		/**
 		 * 

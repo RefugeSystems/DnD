@@ -104,8 +104,8 @@
             "ordering": 21,
             "section": "checks"
         }, {
-            "id": "skill:atheletics",
-            "name": "Atheletics",
+            "id": "skill:athletics",
+            "name": "Athletics",
             "description": "Attempt to perform a feat of ${Strength}$ such as pushing or carrying an object",
             "icon": "game-icon game-icon-push",
             "stat": "strength",
@@ -222,6 +222,62 @@
             "icon": "fas fa-mountains",
             "stat": "wisdom",
             "ordering": 37,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:disguise",
+            "name": "Disguise Kit",
+            "description": "Attempt to mask your appear using a kit",
+            "icon": "fas fa-mask",
+            "stat": "dexterity",
+            "ordering": 100,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:forgery",
+            "name": "Forgery Kit",
+            "description": "Attempt to create fake documents",
+            "icon": "fas fa-money-check-edit",
+            "stat": "intelligence",
+            "ordering": 100,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:thieves",
+            "name": "Forgery Kit",
+            "description": "Attempt to pick a lock",
+            "icon": "game-icon game-icon-lockpicks",
+            "stat": "dexterity",
+            "ordering": 100,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:healers",
+            "name": "Forgery Kit",
+            "description": "Attempt to stabilize an unconscious creature at 0HP",
+            "icon": "fas fa-medkit",
+            "stat": "wisdom",
+            "ordering": 100,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:artisans",
+            "name": "Artisanal Kit",
+            "description": "Attempt to create an item",
+            "icon": "game-icon game-icon-crafting",
+            "stat": "wisdom",
+            "ordering": 100,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:alchemists",
+            "name": "Alchemy Kit",
+            "description": "Attempt to brew something",
+            "icon": "game-icon game-icon-apothecary",
+            "stat": "intelligence",
+            "ordering": 100,
+            "section": "checks"
+        }, {
+            "id": "skill:kit:cartographers",
+            "name": "Alchemy Kit",
+            "description": "Attempt to create or update a map",
+            "icon": "game-icon game-icon-treasure-map",
+            "stat": "intelligence",
+            "ordering": 100,
             "section": "checks"
         }
     ]

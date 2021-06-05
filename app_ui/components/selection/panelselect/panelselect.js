@@ -31,12 +31,6 @@
 					return [];
 				}
 			},
-			"fill": {
-				"type": Array,
-				"default": function() {
-					return [];
-				}
-			},
 			"placeholder": {
 				"type": String,
 				"default": "Filter Items..."
@@ -50,6 +44,9 @@
 			"profile": {
 				"type": Object
 			},
+			"limit": {
+				"type": Number
+			},
 			"fmarking": {
 				"type": String
 			},
@@ -59,8 +56,26 @@
 			"descriptionless": {
 				"type": Boolean
 			},
+			"flush": {
+				"type": Number
+			},
 			"image": {
 				"type": Boolean
+			},
+			"current": {
+			}
+		},
+		"computed": {
+			"fill": function() {
+				var fill = [],
+					x;
+					
+				if(this.flush) {
+					for(x=0; x<this.flush; x++) {
+						fill.push({});
+					}
+				}
+				return fill;
 			}
 		},
 		"data": function() {
@@ -69,6 +84,7 @@
 			data.filtertext = "";
 			data.filter = "";
 			data.images = {};
+			
 
 			return data;
 		},
@@ -85,6 +101,33 @@
 			
 		},
 		"methods": {
+			"panelClass": function(record) {
+				if(this.isCurrent(record)) {
+					return "panel-current";
+				}
+				return "";
+			},
+			"isCurrent": function(record) {
+				if(!this.current) {
+					return false;
+				}
+				
+				if(this.current instanceof Array) {
+					return this.current.indexOf(record) !== -1 || this.current.indexOf(record.id) !== -1;
+				}
+				
+				return this.current == record || this.current.id == record.id || this.current == record.id;
+			},
+			"isDisplayed": function(record) {
+				if(this.isCurrent(record) && (this.filtertext === "current".substring(0,this.filtertext.length) ||
+						this.filtertext === "selected".substring(0,this.filtertext.length) ||
+						this.filtertext === "mine".substring(0,this.filtertext.length) ||
+						this.filtertext === "my".substring(0,this.filtertext.length) ||
+						this.filtertext === "active".substring(0,this.filtertext.length))) {
+					return true;
+				}
+				return !this.filtertext || (record._search && record._search.indexOf(this.filtertext) !== -1);
+			},
 			"selected": function(record) {
 				this.$emit("selected", record);
 			}

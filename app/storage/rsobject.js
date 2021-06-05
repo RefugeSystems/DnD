@@ -327,13 +327,20 @@ class RSObject {
 							break;
 						default:
 							loading = {};
-							loading.id = this._calculated[field.id];
-							this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to load object to pull inherited fields.", 50, loading, null, this));
+							loading.id = this.id;
+							loading.value = this._calculated[field.id];
+							loading.field = field;
+							loading.source = source.id || source;
+							loading.full_source = !!source.id;
+							this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
 					}
 				}
 			} else {
 				loading = {};
-				loading.id = this._calculated[field.id];
+				loading.id = this.id;
+				loading.value = this._calculated[field.id];
+				loading.field = field;
+				loading.source_id = id;
 				this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to load object to pull inherited fields.", 50, loading, null, this));
 			}
 		};
@@ -1013,13 +1020,17 @@ RSObject.addObjects = function(a, b) {
  * @return {[type]}      [description]
  */
 RSObject.addValues = function(a, b, type) {
-	if(typeof(a) === "undefined") {
+	if(typeof(a) === "undefined" || a === null) {
 		return b;
-	} else if(typeof(b) === "undefined") {
+	} else if(typeof(b) === "undefined" || b === null) {
 		return a;
 	} else if(type || typeof(a) === typeof(b)) {
 		if(!type) {
-			type = typeof(a);
+			if(a instanceof Array) {
+				type = "array";
+			} else {
+				type = typeof(a);
+			}
 		}
 		switch(type) {
 			case "string":
@@ -1038,7 +1049,7 @@ RSObject.addValues = function(a, b, type) {
 				return RSObject.addObjects(a, b);
 		}
 	} else {
-		throw new Error("Can not add values as types[" + type + "] do not match: " + (a?a.id:"X") + " | " + (b?b.id:"X"));
+		throw new Error("Can not add values as types[" + type + "] do not match: " + (a?a.id:a) + " | " + (b?b.id:b));
 	}
 };
 
@@ -1094,7 +1105,11 @@ RSObject.subValues = function(a, b, type) {
 		return a;
 	} else if(type || typeof(a) === typeof(b)) {
 		if(!type) {
-			type = typeof(a);
+			if(a instanceof Array) {
+				type = "array";
+			} else {
+				type = typeof(a);
+			}
 		}
 		switch(type) {
 			case "string":
@@ -1168,6 +1183,15 @@ RSObject.setValues = function(a, b, type) {
  */
 RSObject.checkCondition = function(from, op, to) {
 	switch(op) {
+		case "has":
+			if(!from) {
+				return false;
+			} else if(typeof(from) === "string" || (from instanceof Array)) {
+				return from.indexOf(to) !== -1;
+			} else {
+				return false;
+			}
+			break;
 		case "hasnot":
 			if(!from) {
 				return true;
@@ -1177,13 +1201,22 @@ RSObject.checkCondition = function(from, op, to) {
 				return true;
 			}
 			break;
-		case "has":
-			if(!from) {
+		case "isin":
+			if(!to) {
 				return false;
-			} else if(typeof(from) === "string" || (from instanceof Array)) {
-				return from.indexOf(to) !== -1;
+			} else if(typeof(to) === "string" || (to instanceof Array)) {
+				return to.indexOf(from) !== -1;
 			} else {
 				return false;
+			}
+			break;
+		case "isnotin":
+			if(!to) {
+				return true;
+			} else if(typeof(to) === "string" || (to instanceof Array)) {
+				return to.indexOf(from) === -1;
+			} else {
+				return true;
 			}
 			break;
 		case "<=":

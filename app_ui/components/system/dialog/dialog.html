@@ -1,7 +1,7 @@
 <div class="system-component system-dialog rs-component" :class="classes">
 	<div class="shroud"></div>
 	<div class="dialog-container" :class="container_classes">
-		<div class="dialog-box" v-if="details">
+		<div class="dialog-box" v-if="details" :class="box_classes">
 			<button class="dialog-close close pronounced action" v-on:click="closeDialog()">
 				<span class="fas fa-times"></span>
 			</button>

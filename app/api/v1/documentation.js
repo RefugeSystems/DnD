@@ -46,6 +46,8 @@ module.exports = new (function() {
 						"id": field.id,
 						"description": field.description,
 						"type": field.type,
+						"inheritance": field.inheritance,
+						"inheritable": field.inheritable,
 						"attribute": field.attribute
 					};
 					res.result.fields.push(load);

@@ -24,6 +24,14 @@ rsSystem.component("dndEntityOverview", {
 			}
 		}
 	},
+	"computed": {
+		"location": function() {
+			if(this.entity.locaiton && this.universe.index.location[this.entity.locaiton]) {
+				return this.universe.index.location[this.entity.locaiton];
+			}
+			return {};
+		}
+	},
 	"data": function() {
 		var data = {};
 
@@ -45,6 +53,12 @@ rsSystem.component("dndEntityOverview", {
 		};
 	},
 	"methods": {
+		"getImageURL": function() {
+			if(this.location) {
+				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id;
+			}
+			return null;
+		}
 	},
 	"beforeDestroy": function() {
 		/*

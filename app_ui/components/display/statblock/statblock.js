@@ -40,7 +40,7 @@ rsSystem.component("rsStatBlock", {
 			if(this.object._class) {
 				for(x=0; x<this.universe.index.classes[this.object._class].fields.length; x++) {
 					field = this.universe.index.fields[this.universe.index.classes[this.object._class].fields[x]];
-					if(field && field.attribute.display_size !== undefined && field.attribute.display_size < this.size) {
+					if(field && ((this.size >= 100 && field.attribute.displayed !== false) || (field.attribute.display_size !== undefined && field.attribute.display_size < this.size))) {
 						fields.push(field.id);
 						// fields.push(field);
 					}

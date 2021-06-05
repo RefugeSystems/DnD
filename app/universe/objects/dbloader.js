@@ -18,7 +18,9 @@ fields.push({
 	"description": "The display name for the object.",
 	"type": "string",
 	"attribute": {
-		"obscures": ["name_hidden", "name_generic"]
+		"obscures": ["name_hidden", "name_generic"],
+		"display_size": 110,
+		"displayed": false
 	}
 });
 fields.push({
@@ -26,7 +28,9 @@ fields.push({
 	"name": "Disabled",
 	"description": "When true, the object should be considered removed.",
 	"type": "boolean",
-	"attribute": {}
+	"attribute": {
+		"display_size": 95
+	}
 });
 fields.push({
 	"id": "parent",
@@ -35,7 +39,10 @@ fields.push({
 	"type": "string",
 	"inheritance": {},
 	"inheritable": [],
-	"attribute": {}
+	"attribute": {
+		"displayed": false,
+		"display_size": 110
+	}
 });
 fields.push({
 	"id": "restricted",
@@ -137,7 +144,10 @@ fields.push({
 	"name": "Description",
 	"description": "The description of the object.",
 	"type": "string",
-	"attribute": {}
+	"attribute": {
+		"display_size": 110,
+		"displayed": false
+	}
 });
 fields.push({
 	"id": "email",
@@ -206,7 +216,7 @@ fields.push({
 	"id": "time",
 	"name": "time",
 	"description": "Tracks game time offset.",
-	"type": "integer",
+	"type": "gametime",
 	"attribute": {}
 });
 fields.push({
@@ -236,7 +246,7 @@ fields.push({
 	"id": "date",
 	"name": "date",
 	"description": "Tracks the real time offset.",
-	"type": "integer",
+	"type": "date",
 	"attribute": {}
 });
 fields.push({
@@ -265,7 +275,10 @@ fields.push({
 	"name": "Icon",
 	"description": "CSS class to display as short hand for this object.",
 	"type": "string",
-	"attribute": {}
+	"attribute": {
+		"display_size": 110,
+		"displayed": false
+	}
 });
 fields.push({
 	"id": "gm_note",
@@ -327,7 +340,9 @@ fields.push({
 	"name": "Conditionals",
 	"description": "Lists of conditionals that may be applied to this object.",
 	"type": "array",
-	"attribute": {}
+	"attribute": {
+		"displayed": false
+	}
 });
 fields.push({
 	"id": "ordering",

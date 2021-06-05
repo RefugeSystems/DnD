@@ -30,13 +30,13 @@ rsSystem.component("DNDEntities", {
 			var entities = [],
 				x;
 				
-			if(this.player.playing_as && this.universe.index.entity[this.player.playing_as]) {
-				entities.push(this.universe.index.entity[this.player.playing]);
+			if(this.player.attribute.playing_as && this.universe.index.entity[this.player.attribute.playing_as]) {
+				entities.uniquely(this.universe.index.entity[this.player.attribute.playing_as]);
 			}
 			
 			for(x=0; x<this.universe.listing.entity.length; x++) {
 				if(this.universe.listing.entity[x].owned[this.player.id]) {
-					entities.push(this.universe.listing.entity[x]);
+					entities.uniquely(this.universe.listing.entity[x]);
 				}
 			}
 			
@@ -57,7 +57,8 @@ rsSystem.component("DNDEntities", {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndCreateCharacterDialog",
 				"storageKey": "createCharacterStorage",
-				"id": "dndCreateCharacterDialog"
+				"id": "dndCreateCharacterDialog",
+				"max_size": true
 			});
 		}
 	},

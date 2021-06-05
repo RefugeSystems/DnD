@@ -466,6 +466,7 @@ class Universe extends EventEmitter {
 		} else {
 			this.manager[classification].create(this, details, (err, created) => {
 				if(err) {
+					console.log("Error: ", err);
 					callback(err);
 				} else {
 					created.linkFieldValues()
