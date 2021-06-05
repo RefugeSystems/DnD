@@ -1,0 +1,46 @@
+{
+	"universe": {
+		"debug_cascades": true,
+		"classes": [
+			"session",
+			"player",
+			
+			"setting",
+			"meeting",
+			"event",
+			
+			"dataset",
+			"image",
+			"playlist",
+			"audio",
+			"profile",
+			"widget",
+			"conditional",
+			"dashboard",
+			
+			"party",
+			"entity",
+			"ability",
+			"skill",
+			"slot",
+			"proficiency",
+			"spell",
+			"enchantment",
+			"alignment",
+			"feat",
+			"page",
+			"damage_type",
+			"minigame",
+			"archetype",
+			"action",
+			"effect",
+			"race",
+			"type",
+			"journal",
+			"item",
+			"knowledge",
+			"quest",
+			"location"
+		]
+	}
+}
