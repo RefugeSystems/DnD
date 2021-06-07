@@ -1,7 +1,7 @@
 
-<div class="rs-component rs-field" :class="field.type + ' property-' + field.property" v-if="isVisible()">
+<div class="rs-component rs-field" :class="field.type + ' property-' + field.id" v-if="isVisible()">
 	<label :for="fid">
-		<span>{{field.label}}</span>
+		<span>{{field.name}}</span>
 	</label>
 	<span v-if="field.error">
 		<h3>
@@ -17,13 +17,16 @@
 		<!-- Do Nothing Here -->
 	</span>
 
-	<select :id="fid" v-if="field.type === 'select' && field.options && field.options.length" v-model="root[field.property]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
-		<option v-if="root[field.property] === 'undefined' && !field.persistUnset" :value="root[field.property]">{{field.unset}}</option>
+	<select :id="fid" v-if="(field.type === 'select' && field.options && field.options.length) || (field.attribute.input === 'selection')" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
+		<option v-if="root[field.id] === 'undefined' && !field.persistUnset" :value="root[field.id]">{{field.unset}}</option>
 		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
 
+		<option v-for="option in availableReferences" :value="option.id">{{option.name}}</option>
+		<!--
 		<option v-if="field.raw" v-for="option in field.options" :value="option">{{option}}</option>
 		<option v-if="!field.raw && !field.optionValue && !field.optionLabel" v-for="option in field.options" :value="option.value" :title="option[field.optionDescription] || option.description || ''">{{option.label}}</option>
 		<option v-if="!field.raw && field.optionValue && field.optionLabel" v-for="option in field.options" :value="option[field.optionValue]" :title="option[field.optionDescription] || option.description || ''">{{option[field.optionLabel]}}</option>
+		-->
 	</select>
 
 	<span v-if="field.type === 'select' && (!field.options || !field.options.length)">
@@ -31,31 +34,37 @@
 		<span>Loading...</span>
 	</span>
 
-	<button :id="fid" v-if="field.type === 'checkbox'" :disabled="field.disable?field.disable():false" v-on:click="set(!root[field.property])" class="flat">
-		<span class="far" :class="root[field.property]?'fa-check-square':'fa-square'"></span>
+	<button :id="fid" v-if="field.type === 'boolean'" v-on:click="set(!root[field.id])" class="flat">
+		<span class="far" :class="root[field.id]?'fa-check-square':'fa-square'"></span>
 	</button>
 
-	<input :id="fid" :type="field.type" v-if="field.type === 'number'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.property]" :min="field.min" :max="field.max" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" :type="field.type" v-if="field.type === 'number' || field.type === 'integer'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 
-	<input :id="fid" type="password" v-if="field.type === 'password'" v-model="buffer" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" type="text" v-if="field.type === 'text'" v-model="buffer" :placeholder="field.placeholder" :disabled="field.disable?field.disable():false" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="password" v-if="field.type === 'password' || field.attribute.encrypted || field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="!field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 
-	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" :disabled="field.disable?field.disable():false" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<span class="indicator" v-if="field.type === 'file'">
-		<span class="rs-light-blue">[</span>
-		<span class="" v-if="root[field.property]">Present</span>
-		<span class="" v-if="!root[field.property]">Empty</span>
-		<span class="rs-light-blue">]</span>
+	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<span class="indicator" v-if="field.type === 'file' || field.attribute.file_data">
+		<span class="" v-if="root[field.id]">
+			<span class="rs-light-green">[</span>
+			<span>Present</span>
+			<span class="rs-light-green">]</span>
+		</span>
+		<span class="" v-if="!root[field.id]">
+			<span class="rs-light-red">[</span>
+			<span>Empty</span>
+			<span class="rs-light-red">]</span>
+		</span>
 	</span>
 
 	<span v-if="field.suffix" class="suffix">{{field.suffix}}</span>
 
 	<span v-if="field.computed" class="computed" :class="field.computed.class?field.computed.class():{}">{{field.computed.method()}}</span>
 	<span v-if="field.computed && field.computed.suffix" class="computed-suffix">{{field.computed.suffix}}</span>
-	<button v-if="field.info" class="info fas fa-info-circle" v-on:click.stop="field.info(root[field.property])"></button>
-	<button v-if="field.validation" class="validation fas" :class="{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}" v-on:click.stop="field.validation.feedback(field, root[field.property], checkField())"></button>
+	<button v-if="field.info" class="info fas fa-info-circle" v-on:click.stop="field.info(root[field.id])"></button>
+	<button v-if="field.validation" class="validation fas" :class="{'fa-check good': checkField(), 'fa-exclamation-triangle violation': !checkField()}" v-on:click.stop="field.validation.feedback(field, root[field.id], checkField())"></button>
 
 	<slot name="info">
 	</slot>
@@ -77,25 +86,25 @@
 		</tr>
 	</table>
 
-	<div v-if="field.type === 'file'" class="file-select">
-		<input :id="fid" type="file" :accept="field.accept || '*'" v-on:change="selectFile($event)" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<div v-if="field.type === 'file' || field.attribute.file_data" class="file-select">
+		<input :id="fid + ':file'" type="file" :accept="field.accept || '*'" v-on:change="selectFile($event)" v-on:focus="focusing()" v-on:blur="blurring()" />
 	</div>
 
-	<div v-if="field.type === 'textarea'" class="textarea">
-		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.placeholder" v-on:input="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()">
+	<div v-if="field.attribute.long_text" class="textarea">
+		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.attribute.placeholder" v-on:input="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()">
 		</textarea>
 	</div>
 
-	<div v-if="field.type === 'multireference' && !field.raw && field.source_index" class="multireference">
-		<div class="referenced" v-for="(reference, $index) in root[field.property]">
+	<div v-if="field.type === 'array' && !field.raw && field.source_index" class="multireference">
+		<div class="referenced" v-for="(reference, $index) in root[field.id]">
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
-			<span class="reference-display">{{field.source_index.index[reference]?field.source_index.index[reference].name || field.source_index.index[reference].id:"Missing:" + reference}}</span>
+			<span class="reference-display">{{getReferenceName(reference)}}</span>
 			<button class="info fas fa-info-circle" v-if="!field.noinfo" v-on:click="openReference(reference)"></button>
 		</div>
 		<div class="referenced" v-if="field.source_index">
 			<select v-model="reference_value" v-if="!field.autocomplete" v-on:change="addReference(reference_value)">
 				<option value="">Select To Add</option>
-				<option v-for="option in field.source_index.listing" v-if="optionAvailable(option)" :id="option[field.optionValue]" :value="option[field.optionValue]" :title="option[field.optionValue]">{{option.template?'(T) ' + option[field.optionLabel]:option[field.optionLabel]}}</option>
+				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
 			</select>
 			<div class="rs-autocomplete" v-if="field.autocomplete">
 				<div class="filter">
@@ -110,7 +119,7 @@
 		</div>
 	</div>
 	<div v-if="field.type === 'multireference' && field.raw" class="multireference">
-		<div class="referenced" v-for="(reference, $index) in root[field.property]">
+		<div class="referenced" v-for="(reference, $index) in root[field.id]">
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 			<span class="reference-display">{{reference}}</span>
 			<button class="info fas fa-edit" v-on:click="editReference($index, reference)"></button>

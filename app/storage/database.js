@@ -113,6 +113,7 @@ mapping._toCommand = function(fields) {
 			command += ", " + fields[x].id + " " + mapping[fields[x].type].type;
 		} else {
 			// TODO: Warning or thrown?
+			throw new Error("Unknown Field Type: " + (fields[x].id || fields[x]));
 		}
 	}
 	return command;
@@ -216,7 +217,7 @@ mapping._toObject = function(fields, write, create) {
 	return mapped;
 };
 
-var fieldColumns = ["name", "description", "inheritance", "inheritable", "classes", "type", "obscured", "attribute"],
+var fieldColumns = ["name", "description", "ordering", "inheritance", "inheritable", "classes", "type", "obscured", "attribute"],
 	classColumns = ["name", "description", "fields", "attribute"],
 	validClassIdentifier = new RegExp("^[a-z][a-z0-9_]+$"),
 	RSObject,
@@ -406,6 +407,7 @@ class RSDatabase extends EventEmitter {
 			write.$created = Date.now();
 			write.$updated = Date.now();
 			
+			console.log("Create Field statement: " + statement, write);
 			this.connection
 			.run(statement, write, (err) => {
 				if(err) {
@@ -477,6 +479,7 @@ class RSDatabase extends EventEmitter {
 			}
 			write.$updated = Date.now();
 			
+			console.log("Update Field statement: " + statement, write);
 			this.connection
 			.run(statement, write, (err) => {
 				if(err) {
@@ -776,7 +779,7 @@ class ClassManager extends EventEmitter {
 			for(x=0; x<reference.fieldIDs.length; x++) {
 				loading = reference.database.field[reference.fieldIDs[x]];
 				if(loading) {
-					if(loading.inheritable) {
+					if(loading.inheritance) {
 						reference.inheritableFields.push(loading.id);
 					}
 				} else {
@@ -808,7 +811,11 @@ class ClassManager extends EventEmitter {
 		
 		this.fieldIDs.sort(function(a, b) {
 			if(reference.fieldUsed[a] && reference.fieldUsed[b]) {
-				if(reference.fieldUsed[a].ordering < reference.fieldUsed[b].ordering) {
+				if(!reference.fieldUsed[a].ordering && reference.fieldUsed[b].ordering) {
+					return 1;
+				} else if(reference.fieldUsed[a].ordering && !reference.fieldUsed[b].ordering) {
+					return -1;
+				} else if(reference.fieldUsed[a].ordering < reference.fieldUsed[b].ordering) {
 					return -1;
 				} else if(reference.fieldUsed[a].ordering > reference.fieldUsed[b].ordering) {
 					return 1;
@@ -1029,6 +1036,34 @@ class ClassManager extends EventEmitter {
 			callback(constructionException);
 		}
 	}
+
+	/**
+	 * 
+	 * @param {RSObject} object 
+	 * @param {Function} callback 
+	 */
+	delete(object, callback) {
+		if(!object || !object.id) {
+			throw new Error("Unable to delete an object with no ID: " + JSON.stringify(object));
+		}
+
+		if(this.object[object.id]) {
+			if(object._universe) {
+				this.unload(object._universe, object.id);
+			}
+			this.database.connection.run("delete from " + this.id + " where id = $id;", {"$id":object.id}, (err) => {
+				if(err) {
+					callback(err);
+				} else {
+					delete this.object[object.id];
+					this.emit("deleted", object.id);
+					callback();
+				}
+			});
+		} else {
+			callback();			
+		}
+	}
 	
 	/**
 	 * 
@@ -1078,7 +1113,11 @@ class ClassManager extends EventEmitter {
 	 */
 	unload(universe, id) {
 		this.object[id] = false;
-		universe.emit("unload", id);
+		universe.emit("send", {
+			"type": "unload",
+			"classification": this.id,
+			"id": id
+		});
 	}
 	
 	/**
@@ -1236,6 +1275,7 @@ class ClassManager extends EventEmitter {
 	/**
 	 *
 	 * @method deleteObject
+	 * @deprecated See `delete`
 	 * @param {String | Object} object The object to delete with the ID or the ID
 	 * 		of the object to delete.
 	 * @param {Function} callback

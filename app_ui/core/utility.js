@@ -86,18 +86,17 @@
 			var aName,
 				bName;
 
+			if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
+				return 1;
+			} else if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
+				return -1;
+			}
 			if(a.ordering !== undefined && b.ordering !== undefined && a.ordering !== null && b.ordering !== null) {
 				if(a.ordering < b.ordering) {
 					return -1;
 				} else if(a.ordering > b.ordering) {
 					return 1;
 				}
-			}
-			if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
-				return -1;
-			}
-			if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
-				return 1;
 			}
 
 			if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {

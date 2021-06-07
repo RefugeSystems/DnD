@@ -1,0 +1,73 @@
+{
+	"import": [{
+		"id": "feat:dwarf:hill",
+		"name": "Hill",
+		"icon": "game-icon game-icon-hills",
+		"description": ".",
+		"stat_wisdom": 1,
+		"hp_max": "level",
+		"selectable": false
+	}, {
+		"id": "feat:dwarf:mountain",
+		"name": "Mountain",
+		"icon": "game-icon game-icon-mountain-cave",
+		"description": ".",
+		"stat_strength": 2,
+		"proficiencies": [
+			"proficiency:armor:light",
+			"proficiency:armor:medium"
+		],
+		"selectable": false
+	}, {
+		"id": "feat:darkvision",
+		"name": "Darkvision",
+		"description": "You are still able to see in pitch black conditions, however only in ${Grayscale}$, out to 48 studs.",
+		"icon": "fab fa-free-code-camp",
+		"score": 1,
+		"selectable": false,
+		"threat": 1
+	}, {
+		"id": "feat:stonecunning",
+		"name": "Stone Cunning",
+		"description": "Whenever you make an ${History}$ check related to the origin of stonework, you are considered proficient in the ${History}$ skill and add double your ${Proficiency Bonus}$ to the check, instead of your normal bonus.",
+		"icon": "game-icon game-icon-stone-block",
+		"score": 1,
+		"selectable": false,
+		"threat": 0
+	}, {
+		"id": "feat:proficiency:artisantools:smith",
+		"name": "Artisan Tool Proficiency: Smith's Tools",
+		"description": "You are proficient with some artisian tools in this class.",
+		"icon": "game-icon game-anvil",
+		"score": 1,
+		"selectable": false,
+		"threat": 0
+	}, {
+		"id": "feat:proficiency:artisantools:brewer",
+		"name": "Artisan Tool Proficiency: Brewer's Supplies",
+		"description": "You are proficient with some artisian tools in this class.",
+		"icon": "game-icon game-beer-horn",
+		"score": 1,
+		"selectable": false,
+		"threat": 0
+	}, {
+		"id": "feat:proficiency:artisantools:mason",
+		"name": "Artisan Tool Proficiency: Masons's Tools",
+		"description": "You are proficient with some artisian tools in this class.",
+		"icon": "game-icon game-stone-wall",
+		"score": 1,
+		"selectable": false,
+		"threat": 0
+	}, {
+		"id": "feat:dwarf:resilience",
+		"name": "Dwarven Resilience",
+		"description": "You have ${Advantage}$ on saving throws against ${Poison}$, and you have resistance against ${Poison Damage}$.",
+		"icon": "game-icon game-icon-poison-gas",
+		"score": 1,
+		"selectable": false,
+		"resistance": {
+			"damage_type:poison": "50%"
+		},
+		"threat": 1
+	}]
+}

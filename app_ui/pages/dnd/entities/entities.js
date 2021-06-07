@@ -35,7 +35,7 @@ rsSystem.component("DNDEntities", {
 			}
 			
 			for(x=0; x<this.universe.listing.entity.length; x++) {
-				if(this.universe.listing.entity[x].owned[this.player.id]) {
+				if(this.universe.listing.entity[x].played_by === this.player.id && !this.universe.listing.entity[x].disabled && this.universe.listing.entity[x].state !== "deceased") {
 					entities.uniquely(this.universe.listing.entity[x]);
 				}
 			}

@@ -2,11 +2,11 @@
 /**
  *
  *
- * @class DNDMasterMain
+ * @class DNDMasterScreen
  * @constructor
  * @module Components
  */
-rsSystem.component("DNDMasterMain", {
+rsSystem.component("DNDMasterScreen", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController
@@ -42,5 +42,5 @@ rsSystem.component("DNDMasterMain", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("pages/dnd/master/main.html")
+	"template": Vue.templified("pages/dnd/master/screen.html")
 });

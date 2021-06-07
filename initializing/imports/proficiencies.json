@@ -148,6 +148,21 @@
             "icon": "fas fa-shield",
             "description": ""
         }, {
+            "id": "proficiency:armor:light",
+            "name": "Wear: Light Armor",
+            "icon": "gaem-icon game-icon-shoulder-armor",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:medium",
+            "name": "Wear: Medium Armor",
+            "icon": "gaem-icon game-icon-chest-armor",
+            "description": ""
+        }, {
+            "id": "proficiency:armor:heavy",
+            "name": "Wear: Heavy Armor",
+            "icon": "gaem-icon game-icon-abdominal-armor",
+            "description": ""
+        }, {
             "id": "proficiency:instrument:drums",
             "name": "Play: Percussion",
             "icon": "fas fa-drum",

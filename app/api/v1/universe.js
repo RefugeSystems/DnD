@@ -62,6 +62,12 @@ module.exports = new (function() {
 				next();
 			});
 			
+			this.router.get("/object/:id/full", (req, res, next) => {
+				res.result = {};
+				res.result = api.universe.objectHandler.retrieve(req.params.id).toJSON(true);
+				next();
+			});
+			
 			this.router.get("/object/:id/link", (req, res, next) => {
 				res.result = {};
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
@@ -75,7 +81,7 @@ module.exports = new (function() {
 			this.router.get("/object/:id/calculate", (req, res, next) => {
 				res.result = {};
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
-				res.result.object.calculateFieldValues();
+				res.result.object.recalculateFieldValues();
 				next();
 			});
 			
@@ -117,10 +123,15 @@ module.exports = new (function() {
 					"errors": []
 				};
 				if(importing instanceof Array) {
-					for(var x=0; x<importing.length; x++) {
-						api.universe.createObject(importing[x], function(err, object) {
+					importing.forEach(function(details) {
+						api.universe.createObject(details, function(err, object) {
 							if(err) {
-								res.result.errors.push(err);
+								console.log("Error[" + details.id + "]: ", err);
+								res.result.errors.push({
+									"source": details.id,
+									"message": err.message,
+									"error": err
+								});
 							} else {
 								res.result.imported.push(object.toJSON());
 							}
@@ -128,7 +139,7 @@ module.exports = new (function() {
 								next();
 							}
 						});
-					}
+					});
 				}
 			});
 			

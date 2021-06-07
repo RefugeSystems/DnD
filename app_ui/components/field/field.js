@@ -7,11 +7,9 @@
  * @module Components
  */
 (function() {
-	var storageKey = "_rs_fieldComponentKey";
-
-	var offset = (new Date()).getTimezoneOffset() * 60 * 1000;
-
-	var autocompleteLength = 5;
+	var offset = (new Date()).getTimezoneOffset() * 60 * 1000,
+		autocompleteLength = 5,
+		bufferDelay = 250;
 
 	var dateToString = function(time) {
 		if(!time) {
@@ -49,6 +47,10 @@
 		"mixins": [
 		],
 		"props": {
+			"universe": {
+				"required": true,
+				"type": Object
+			},
 			"root": {
 				"required": true,
 				"type": Object
@@ -56,6 +58,18 @@
 			"field": {
 				"required": true,
 				"type": Object
+			}
+		},
+		"computed": {
+			"availableReferences": function() {
+				var available = [],
+					x;
+				if(this.field && this.field.inheritable) {
+					for(x=0; x<this.field.inheritable.length; x++) {
+						available = available.concat(this.universe.listing[this.field.inheritable[x]]);
+					}
+				}
+				return available;
 			}
 		},
 		"data": function() {
@@ -77,14 +91,14 @@
 			data.bufferMark = null;
 			switch(this.field.type) {
 				case "date":
-					if(this.root[this.field.property]) {
-						data.buffer = dateToString(this.root[this.field.property]);
+					if(this.root[this.field.id]) {
+						data.buffer = dateToString(this.root[this.field.id]);
 					} else {
 						data.buffer = "";
 					}
 					break;
 				default:
-					data.buffer = this.root[this.field.property];
+					data.buffer = this.root[this.field.id];
 			}
 //			if(this.field.type === "textarea") {
 //			} else {
@@ -97,21 +111,20 @@
 
 			return data;
 		},
-		"watch": {
-
-		},
 		"mounted": function() {
 			rsSystem.register(this);
 			if(this.field.source_index && this.field.source_index.listing) {
 				this.field.source_index.listing.sort(this.sortData);
 			}
-			this.$watch("root." + this.field.property, function(newValue, oldValue) {
-				switch(this.field.type) {
-					case "date":
-						Vue.set(this, "buffer", dateToString(newValue));
-						break;
-					default:
-						Vue.set(this, "buffer", newValue);
+			this.$watch("root." + this.field.id, function(newValue, oldValue) {
+				if(newValue != this.buffer) {
+					switch(this.field.type) {
+						case "date":
+							Vue.set(this, "buffer", dateToString(newValue));
+							break;
+						default:
+							Vue.set(this, "buffer", newValue);
+					}
 				}
 			});
 		},
@@ -211,31 +224,38 @@
 
 				return true;
 			},
+			"getReferenceName": function(reference) {
+				var object = this.universe.getObject(reference);
+				if(object) {
+					return object.name;
+				}
+				return "[ Unknown ]";
+			},
 			"addReference": function(reference) {
-				if(!this.root[this.field.property]) {
-					Vue.set(this.root, this.field.property, []);
+				if(!this.root[this.field.id]) {
+					Vue.set(this.root, this.field.id, []);
 				}
 				if(this.field.autocomplete) {
 					if(this.completions[this.activeCompletion]) {
-						this.root[this.field.property].push(this.completions[this.activeCompletion][this.field.optionValue]);
+						this.root[this.field.id].push(this.completions[this.activeCompletion][this.field.optionValue]);
 						Vue.set(this, "reference_value", "");
 						this.completions.splice(0);
 						this.emitChanged();
 					}
 				} else if(reference) {
-					if(!(this.root[this.field.property] instanceof Array)) {
-						Vue.set(this.root, this.field.property, []);
+					if(!(this.root[this.field.id] instanceof Array)) {
+						Vue.set(this.root, this.field.id, []);
 					}
-					this.root[this.field.property].push(reference);
+					this.root[this.field.id].push(reference);
 					Vue.set(this, "reference_value", "");
 					this.emitChanged();
 				}
 			},
 			"selectCompletion": function(completion) {
-				if(!this.root[this.field.property]) {
-					Vue.set(this.root, this.field.property, []);
+				if(!this.root[this.field.id]) {
+					Vue.set(this.root, this.field.id, []);
 				}
-				this.root[this.field.property].push(completion[this.field.optionValue]);
+				this.root[this.field.id].push(completion[this.field.optionValue]);
 				Vue.set(this, "reference_value", "");
 				this.completions.splice(0);
 			},
@@ -246,7 +266,7 @@
 				$(this.$el).find("#editreference").focus();
 			},
 			"dismissReference": function(index) {
-				this.root[this.field.property].splice(index, 1);
+				this.root[this.field.id].splice(index, 1);
 				this.emitChanged();
 			},
 			"openReference": function(reference) {
@@ -281,7 +301,7 @@
 				return true;
 			},
 			"validSelectionOption": function(value) {
-				return !this.field.uniqueness || !this.root[this.field.property] || this.root[this.field.property].indexOf(value) === -1;
+				return !this.field.uniqueness || !this.root[this.field.id] || this.root[this.field.id].indexOf(value) === -1;
 			},
 			"deriveCompletions": function(reference, event) {
 				if(!event || this.adjustCompletions(event)) {
@@ -318,26 +338,26 @@
 				Vue.set(this, "focused", true);
 			},
 			"checkField": function() {
-				if(!this.root[this.field.property]) {
+				if(!this.root[this.field.id]) {
 					return false;
-				} else if(this.field.min && (this.root[this.field.property] < this.field.min || this.root[this.field.property].length <this.field.min)) {
+				} else if(this.field.min && (this.root[this.field.id] < this.field.min || this.root[this.field.id].length <this.field.min)) {
 					return false;
-				} else if(this.field.max && (this.root[this.field.property] >this.field.max || this.root[this.field.property].length >this.field.max)) {
+				} else if(this.field.max && (this.root[this.field.id] >this.field.max || this.root[this.field.id].length >this.field.max)) {
 					return false;
-				} else if(this.field.validation.pattern && !this.field.validation.pattern.test(this.root[this.field.property])) {
+				} else if(this.field.validation.pattern && !this.field.validation.pattern.test(this.root[this.field.id])) {
 					return false;
-				} else if(this.field.validation.method && !this.field.validation.method(this.root[this.field.property])) {
+				} else if(this.field.validation.method && !this.field.validation.method(this.root[this.field.id])) {
 					return false;
 				} else {
 					return true;
 				}
 			},
 			"processDate": function() {
-				Vue.set(this.root, this.field.property, new Date(this.buffer).getTime() + offset);
+				Vue.set(this.root, this.field.id, new Date(this.buffer).getTime() + offset);
 			},
 			"bufferChangeProcess": function() {
 				if(this.bufferMark < Date.now()) {
-					Vue.set(this.root, this.field.property, this.buffer);
+					Vue.set(this.root, this.field.id, this.buffer);
 					Vue.set(this, "bufferLoading", false);
 					this.emitChanged();
 				} else {
@@ -347,26 +367,26 @@
 					}
 					setTimeout(() => {
 						this.bufferChangeProcess();
-					}, 500);
+					}, bufferDelay);
 				}
 			},
 			"bufferChanged": function() {
-				Vue.set(this, "bufferMark", Date.now() + 500);
+				Vue.set(this, "bufferMark", Date.now() + bufferDelay);
 				Vue.set(this, "bufferLoading", true);
 				setTimeout(() => {
 					this.bufferChangeProcess();
-				}, 500);
+				}, bufferDelay);
 
 			},
 			"emitChanged": function() {
 				this.$emit("changed", {
-					"value": this.root[this.field.property],
-					"property": this.field.property,
+					"value": this.root[this.field.id],
+					"property": this.field.id,
 					"time": Date.now()
 				});
 
 				if(this.field.onchange) {
-					this.field.onchange(this.root[this.field.property]);
+					this.field.onchange(this.root[this.field.id]);
 				}
 
 				if(!this.focused) {
@@ -376,23 +396,28 @@
 				Vue.set(this, "bufferChanging", false);
 			},
 			"selectFile": function(event) {
-				var input = $(this.$el).find("[id='" + this.fid + "']"),
+				var input = $(this.$el).find("[id='" + this.fid + ":file']"),
 					value,
-					keys,
-					x;
+					start,
+					type,
+					end;
 
-				console.warn("File Search: ", event);
+				console.warn("File Search: ", input, event);
 				if(input && input.length && input[0].files.length) {
 					console.warn("Set Data");
 					DataUtility.encodeFile(input[0].files[0])
 					.then((result) => {
 						value = result.data;
-						Vue.set(this.root, this.field.property, value);
+						start = value.indexOf(":");
+						end = value.indexOf(";");
+						type = value.substring(start + 1, end);
+						Vue.set(this.root, "content_type", type);
+						Vue.set(this.root, this.field.id, value);
 					});
 				}
 			},
 			"set": function(value) {
-				Vue.set(this.root, this.field.property, value);
+				Vue.set(this.root, this.field.id, value);
 				this.emitChanged();
 			},
 			"compose": function(row, col) {
@@ -418,17 +443,17 @@
 				var aName,
 					bName;
 
-				if(a.order !== undefined && b.order !== undefined && a.order !== null && b.order !== null) {
-					if(a.order < b.order) {
+				if(a.ordering !== undefined && b.ordering !== undefined && a.ordering !== null && b.ordering !== null) {
+					if(a.ordering < b.ordering) {
 						return -1;
-					} else if(a.order > b.order) {
+					} else if(a.ordering > b.ordering) {
 						return 1;
 					}
 				}
-				if((a.order === undefined || a.order === null) && b.order !== undefined && b.order !== null) {
+				if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
 					return -1;
 				}
-				if((b.order === undefined || b.order === null) && a.order !== undefined && a.order !== null) {
+				if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
 					return 1;
 				}
 

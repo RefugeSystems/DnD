@@ -223,6 +223,12 @@ class PlayerConnection extends EventEmitter {
 				}
 				
 				send._class = change._class;
+				if(change._search) {
+					send._search = change._search;
+				}
+				if(change._data) {
+					send._data = change._data;
+				}
 				send.id = change.id;
 				this.send("object", send);
 			} else {

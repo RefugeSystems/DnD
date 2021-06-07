@@ -87,8 +87,11 @@ module.exports.initialize = function(universe) {
 		details.id = Random.identifier("entity", 10, 32).toLowerCase();
 		details.owned = {};
 		details.owned[event.player.id] = Date.now();
-		details.hp = 6;
+		details.played_by = event.player.id;
 		details.gold = 0;
+		details.level = 1;
+		console.log("Received: " + JSON.stringify(event.message.data, null, 4));
+		console.log("Details: " + JSON.stringify(details, null, 4));
 
 		universe.createObject(details, function(err, character) {
 			if(err) {
@@ -104,11 +107,11 @@ module.exports.initialize = function(universe) {
 			} else {
 				character.setValues({"hp": character.hp_max}, function(err) {
 					universe.chronicle.addOccurrence("character:created", event.message.data, Date.now(), null, event.player?event.player.id:null);
-					var attribute = Object.assign({}, event.player.attribute);
-					attribute.playing_as = character.id;
-					event.player.setValues({
-						"attribute": attribute
-					});
+					// var attribute = Object.assign({}, event.player.attribute);
+					// attribute.playing_as = character.id;
+					// event.player.setValues({
+					// 	"attribute": attribute
+					// });
 					universe.emit("send", {
 						"type": "notice",
 						"mid": "create:character",

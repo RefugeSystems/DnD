@@ -4,6 +4,10 @@
  * @class dndCreateCharacterDialog
  * @constructor
  * @module Components
+ * @param {Object} universe
+ * @param {Object} player
+ * @param {Object} entity
+ * @param {UIProfile} profile
  */
 rsSystem.component("dndCreateCharacterDialog", {
 	"inherit": true,
@@ -53,12 +57,12 @@ rsSystem.component("dndCreateCharacterDialog", {
 					}
 				}
 				if (!selectable.length) {
-					selectable.push({
-						"id": null,
-						"name": "No Variants",
-						"description": this.building.race.name + " has no racial variants",
-						"_search": "none"
-					});
+					// selectable.push({
+					// 	"id": null,
+					// 	"name": "Normal",
+					// 	"description": this.building.race.name + " has no racial variants",
+					// 	"_search": "none"
+					// });
 				}
 			}
 			selectable.sort(rsSystem.utility.sortData);
@@ -137,7 +141,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 				record,
 				x;
 
-			if (this.building.race) {
+			if (this.building.race && this.building.race.datasets) {
 				for (x = 0; x < this.building.race.datasets.length; x++) {
 					record = this.universe.getObject(this.building.race.datasets[x]);
 					if (record) {
@@ -202,11 +206,18 @@ rsSystem.component("dndCreateCharacterDialog", {
 		data.selections = {};
 		data.errors = {};
 		data.errorCount = 0;
+		data.muted = false;
 
 		return data;
 	},
 	"mounted": function () {
 		rsSystem.register(this);
+		if(this.profile.auto_roll) {
+			Vue.set(this, "muted", true);
+			for(var i=0; i<this.stats.length; i++) {
+				this.rollStat(this.stats[i]);
+			}
+		}
 	},
 	"methods": {
 		"create": function () {
@@ -227,7 +238,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.proficiencies = [];
 				details.knowledges = [];
 
-				for(i=0; i<this.stats; i++) {
+				for(i=0; i<this.stats.length; i++) {
 					details["stat_" + this.stats[i]] = this.building[this.stats[i]];
 				}
 
@@ -423,11 +434,13 @@ rsSystem.component("dndCreateCharacterDialog", {
 			Vue.set(this.building, stat, roll[0] + roll[1] + roll[2]);
 			dropped = roll.pop();
 
-			this.universe.$emit("notification", {
-				"message": "Rolled " + stat + ": " + roll.join(", ") + " (" + dropped + ")",
-				"icon": "fas fa-dice fa-pulse",
-				"timeout": 6000
-			});
+			if(!this.muted) {
+				this.universe.$emit("notification", {
+					"message": "Rolled " + stat + ": " + roll.join(", ") + " (" + dropped + ")",
+					"icon": "fas fa-dice fa-pulse",
+					"timeout": 6000
+				});
+			}
 		},
 		"statRecommended": function(base, stat) {
 			return base && base.attribute && base.attribute.recommended && base.attribute.recommended[stat];

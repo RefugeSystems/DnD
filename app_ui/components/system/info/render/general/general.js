@@ -16,11 +16,15 @@ rsSystem.component("sysInfoGeneral", {
 		"info": {
 			"requried": true,
 			"type": Object
+		},
+		"size": {
+			"type": Number,
+			"default": 90
 		}
 	},
 	"computed": {
 		"description": function() {
-			return this.rsshowdown(this.info.description, this.info, this.profile?this.profile.inline_javascript:false);
+			return this.rsshowdown(this.info.description || "", this.info, this.profile?this.profile.inline_javascript:false);
 		}
 	},
 	"data": function() {

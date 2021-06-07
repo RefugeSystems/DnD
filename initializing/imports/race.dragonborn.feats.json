@@ -1,7 +1,7 @@
 {
     "import": [{
             "id": "feat:dragonborn:black",
-            "name": "Black Dragonborn",
+            "name": "Black",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -26,7 +26,7 @@
             ]
         }, {
             "id": "feat:dragonborn:blue",
-            "name": "Blue Dragonborn",
+            "name": "Blue",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -51,7 +51,7 @@
             ]
         }, {
             "id": "feat:dragonborn:brass",
-            "name": "Brass Dragonborn",
+            "name": "Brass",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -76,7 +76,7 @@
             ]
         }, {
             "id": "feat:dragonborn:bronze",
-            "name": "Bronze Dragonborn",
+            "name": "Bronze",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -101,7 +101,7 @@
             ]
         }, {
             "id": "feat:dragonborn:copper",
-            "name": "Copper Dragonborn",
+            "name": "Copper",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -126,7 +126,7 @@
             ]
         }, {
             "id": "feat:dragonborn:gold",
-            "name": "Gold Dragonborn",
+            "name": "Gold",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -151,7 +151,7 @@
             ]
         }, {
             "id": "feat:dragonborn:green",
-            "name": "Green Dragonborn",
+            "name": "Green",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -176,7 +176,7 @@
             ]
         }, {
             "id": "feat:dragonborn:red",
-            "name": "Red Dragonborn",
+            "name": "Red",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -201,7 +201,7 @@
             ]
         }, {
             "id": "feat:dragonborn:silver",
-            "name": "Silver Dragonborn",
+            "name": "Silver",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"
@@ -226,7 +226,7 @@
             ]
         }, {
             "id": "feat:dragonborn:white",
-            "name": "White Dragonborn",
+            "name": "White",
             "description": "Your dragonborn heritage shows in your scales",
             "actions": [
                 "action:breathweapon"

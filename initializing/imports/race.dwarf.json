@@ -1,0 +1,48 @@
+{
+    "import": [{
+        "id": "race:dwarf",
+        "parent": "race:root:character",
+        "name": "Dwarf",
+        "datasets": [
+            "dataset:dragonborn:male",
+            "dataset:dragonborn:female"
+        ],
+        "description": "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 4 studs tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller. Their courage and endurance are also easily a match for any of the larger folk.\n\nDwarven skin ranges from deep brown to a paler hue tinged with red, but the most common shades are light brown or deep tan, like certain tones of earth. Their hair, worn long but in simple styles, is usually black, gray, or brown, though paler dwarves often have red hair. Male dwarves value their beards highly and groom them carefully.",
+        "icon": "game-icon game-icon-dwarf-face",
+        "movement_ground": "20",
+        "movement_swim": "10",
+        "size": 5,
+        "playable": true,
+        "proficiencies": [
+            "proficiency:language:common",
+            "proficiency:language:dwarven",
+            "proficiency:weapon:hammer",
+            "proficiency:weapon:axe"
+        ],
+        "variants": [
+            "feat:dwarf:hill",
+            "feat:dwarf:mountain"
+        ],
+        "feats": [
+            "feat:darkvision",
+            "feat:dwarf:resilience"
+        ],
+        "stat_constitution": 2,
+        "selection": [{
+            "name": "Tool Proficiency",
+            "field": "feats",
+            "limit": 1,
+            "choices": [
+                "feat:proficiency:artisantools:smith",
+                "feat:proficiency:artisantools:brewer",
+                "feat:proficiency:artisantools:mason"
+            ]
+        }],
+		"attribute": {
+			"recommended": {
+				"strength": true,
+				"constitution": true
+			}
+		}
+    }]
+}

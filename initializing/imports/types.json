@@ -34,7 +34,6 @@
             "name": "Charm",
             "description": "A small charm",
             "icon": "game-icon game-icon-rune-stone"
-
         }, {
             "id": "type:armor:chest",
             "name": "Chest Armor",

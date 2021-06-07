@@ -55,7 +55,7 @@ module.exports = new (function() {
 					
 				fields = Object.keys(database.field);
 				for(i=0; i<fields.length; i++) {
-					if(fields[i].indexOf(req.params.name) !== -1) {
+					if(req.params.name === "*" || fields[i].indexOf(req.params.name) !== -1) {
 						loadField(database.field[fields[i]]);
 					}
 				}

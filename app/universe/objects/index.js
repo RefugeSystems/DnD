@@ -1,7 +1,7 @@
 /**
  * Handles Object cross talk and updates for the universe to help make the processing
  * database agnostic.
- * @class RSObjectReferrer
+ * @class ObjectReferrer
  * @constructor
  */
 
@@ -44,6 +44,7 @@ module.exports = function(universe) {
 	};
 	
 	this.initialize = function(startup) {
+		console.log("Referer Initializing");
 		return new Promise(function(done, fail) {
 			var initializing,
 				mngr,
@@ -266,7 +267,7 @@ module.exports = function(universe) {
 							details.consumer = consumer;
 							details.fields = source_fields;
 							details.id = value;
-							universe.emit("error", new universe.Anomaly("universe:trace:track", "Object not loaded", 40, details, null, this));
+							universe.emit("error", new universe.Anomaly("universe:trace:track", "Object not loaded", 40, details, null, "universe:objects"));
 						}
 					} else if(manager[classification].object[value] === undefined) {
 						// Doesn't exist
@@ -275,7 +276,7 @@ module.exports = function(universe) {
 						details.consumer = consumer;
 						details.field = source_fields[x];
 						details.value = value;
-						universe.emit("error", new universe.Anomaly("universe:trace:track", "No such object", 50, details, null, this));
+						universe.emit("error", new universe.Anomaly("universe:trace:track", "No such object", 50, details, null, "universe:objects"));
 					}  else {
 						// Already loaded
 					}
@@ -287,8 +288,11 @@ module.exports = function(universe) {
 				details.classification = classification;
 				details.consumer = consumer;
 				details.fields = source_fields;
+				details.available = Object.keys(manager);
 				details.value = value;
-				universe.emit("error", new universe.Anomaly("universe:trace:track", "No such class", 50, details, null, this));
+				universe.emit("error", new universe.Anomaly("universe:trace:track", "No such class", 50, details, null, "universe:objects"));
+
+				// console.trace("what1?");
 			}
 		};
 		
@@ -358,7 +362,7 @@ module.exports = function(universe) {
 							details.consumer = consumer;
 							details.sources = sources;
 							details.id = sources[x];
-							universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 40, details, null, this));
+							universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 40, details, null, "universe:objects"));
 						}
 					} else if(manager[classification].object[sources[x]] === undefined) {
 						// Doesn't exist
@@ -367,7 +371,7 @@ module.exports = function(universe) {
 						details.consumer = consumer;
 						details.sources = sources;
 						details.value = sources[x];
-						universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 50, details, null, this));
+						universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 50, details, null, "universe:objects"));
 					}  else {
 						// Already loaded
 					}
@@ -380,7 +384,8 @@ module.exports = function(universe) {
 				details.consumer = consumer;
 				details.sources = sources;
 				details.value = sources[x];
-				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 50, details, null, this));
+				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 50, details, null, "universe:objects"));
+				// console.trace("what2?");
 			}
 		}
 		
@@ -453,7 +458,7 @@ module.exports = function(universe) {
 							details.consumer = consumer;
 							details.consumed = consumed[x];
 							details.index = v;
-							universe.emit("error", new universe.Anomaly("universe:trace:untrack", "No such consumed object being tracked", 40, details, null, this));
+							// universe.emit("error", new universe.Anomaly("universe:trace:untrack", "No such consumed object being tracked", 40, details, null, "universe:objects"));
 						}
 					}
 				} else {
@@ -476,7 +481,7 @@ module.exports = function(universe) {
 						details = {};
 						details.consumer = consumer;
 						details.consumed = consumed;
-						universe.emit("error", new universe.Anomaly("universe:trace:untrack", "No such consumed object being tracked", 40, details, null, this));
+						// universe.emit("error", new universe.Anomaly("universe:trace:untrack", "No such consumed object being tracked", 40, details, null, "universe:objects"));
 					}
 				}
 			}
@@ -520,7 +525,7 @@ module.exports = function(universe) {
 				details.consumer = consumer;
 				details.sources = sources;
 				details.value = sources[x];
-				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 50, details, null, this));
+				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 50, details, null, "universe:objects"));
 			}
 		}
 		
@@ -542,7 +547,7 @@ module.exports = function(universe) {
 			var details = {};
 			details.managers = Object.keys(manager);
 			details.id = id;
-			universe.emit("error", new universe.Anomaly("universe:object:retrieval", "Failed to locate manager for requested ID", 50, details, null, this));
+			universe.emit("error", new universe.Anomaly("universe:object:retrieval", "Failed to locate manager for requested ID", 50, details, null, "universe:objects"));
 			return null;
 		}
 	};
@@ -550,7 +555,8 @@ module.exports = function(universe) {
 	/**
 	 * Notifies the handler to recalculate the values of dependent objects.
 	 *
-	 * This is essentially a deep update on objects as the underlying value
+	 * This is essentially a deep update on objects as the underlying value and uses references
+	 * to determine what objects need to _calculate_.
 	 * has changed.
 	 * @method pushCalculated
 	 * @param {String} id 
@@ -562,8 +568,11 @@ module.exports = function(universe) {
 			changing.origin = id;
 			changing.queue = reference[id]._list;
 			changing.index = 0;
+			changing.type = "calculated";
 			changing.start = Date.now();
 			trackCalculations(changing);
+		} else {
+			// console.log(" !! No Calc: " + id);
 		}
 	};
 	
@@ -593,7 +602,8 @@ module.exports = function(universe) {
 	/**
 	 * Notifies the handler to update the values of dependent objects.
 	 *
-	 * This is essentially a surface update as the main values haven't changed.
+	 * This is essentially a surface update as the main values haven't changed and uses inheritance
+	 * to determine what objects need to _update_.
 	 * @method pushUpdated
 	 * @param {String} id 
 	 */
@@ -605,6 +615,7 @@ module.exports = function(universe) {
 			changing.origin = id;
 			changing.queue = inheritance[id]._list;
 			changing.index = 0;
+			changing.type = "updated";
 			changing.start = Date.now();
 			trackUpdates(changing);
 		}
@@ -621,6 +632,9 @@ module.exports = function(universe) {
 		setTimeout(function() {
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
 			if(cascade) {
+				// cascade.updateFieldValues();
+				// cascade.recalculateFieldValues();
+				cascade.calculateFieldValues();
 				cascade.updateFieldValues();
 				if(changing.index < changing.queue.length) {
 					trackCalculations(changing);

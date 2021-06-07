@@ -1,0 +1,15 @@
+{
+    "import": [{
+        "id": "feat:patron:fiend",
+        "name": "Fiend",
+        "spells": ["spell:burninghands", "spell:command"]
+    }, {
+        "id": "feat:patron:archfey",
+        "name": "Archfey",
+        "spells": ["spell:faeriefire", "spell:sleep"]
+    }, {
+        "id": "feat:patron:greatoldone",
+        "name": "Great Old One",
+        "spells": ["spell:dissonantwhispers", "spell:tashashideouslaughter"]
+    }]
+}

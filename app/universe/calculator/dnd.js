@@ -6,6 +6,8 @@
  * @static
  */
 module.exports = function(universe) {
+	
+	var debug = false;
 
 	var rollMap = [
 		["str", "strength"],
@@ -22,33 +24,46 @@ module.exports = function(universe) {
 		"con": "constitution",
 		"int": "intelligence",
 		"wis": "wisdom",
-		"cha": "charisma"
+		"cha": "charisma",
+		"pro": "proficiency_rating"
 	};
 	
 	
 	var diceReductionRegEx = new RegExp("\\+?([0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\.]+)(d[0-9]+)", "g"),
 		calculateSecurityRegEx = new RegExp("^([<>a-zA-Z0-9\\(\\)+-\\/\\* ]+|Math\\.[a-zA-Z]+)$"),
-		variableExpression = new RegExp("([a-z_]+)\\.?([a-z:_]+)?", "g"),
+		variableExpression = new RegExp("([a-z_]+)(\\.?[a-z:_]+)*", "gi"),
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
-		spaces = new RegExp(" ", "g");
+		spaces = new RegExp(" ", "g"),
+		zeros = new RegExp("(null|undefined)", "g"),
+		maths = new RegExp("([^a-zA-Z_.])(min|max)\\(", "g");
 
-	var calculate = function(expression) {
-		if(expression && expression[0] === "+") { // Other operators would expressly be an issue
-			expression = expression.substring(1);
+	var calculate = function(original) {
+		if(original && original[0] === "+") { // Other operators would expressly be an issue
+			original = original.substring(1);
+		}
+
+		if(debug) {
+			console.log(" > Seen: " + original);
+		}
+		var expression = original.replace(maths, "$1Math.$2(").replace(zeros, "0");
+		if(debug) {
+			console.log(" > Expanded: " + expression);
 		}
 
 		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
 			// console.log("Valid Expression");
 			try {
-				// console.log("Maths: ", parseInt(Math.floor(eval(expression))));
+				if(debug) {
+					console.log(" > Result: ", parseInt(Math.floor(eval(expression))));
+				}
 				return parseInt(Math.floor(eval(expression)));
 			} catch(ignored) {
 				// console.log("Bad Expression: ", ignored);
-				return expression;
+				return original;
 			}
 		} else {
 			// console.log("Invalid Expression");
-			return expression;
+			return original;
 		}
 	};
 
@@ -109,9 +124,14 @@ module.exports = function(universe) {
 			path,
 			x;
 		
+		if(debug) {
+			console.log("Compute: ", expression);
+		}
 		if(source) {
 			while(variables = variableExpression.exec(expression)) {
-				// console.log("Expression: ", expression, variables);
+				if(debug) {
+					console.log(" > Expression: ", expression, variables);
+				}
 				path = [].concat(variables);
 				matched = path.shift();
 				for(x=0; x<path.length; x++) {
@@ -122,12 +142,19 @@ module.exports = function(universe) {
 					}
 				}
 				value = source.calculatedValue(path, referenced);
-				// console.log("Computed Value[" + path.join() + "]: " + value);
-				processed = processed.replace(matched, value);
+				if(value !== undefined && value !== null) {
+					// console.log(" > Computed Value[" + path.join() + "]: " + value);
+					processed = processed.replace(matched, value);
+				}
 			}
 		}
-		
-		return calculate(processed);
+
+		if(processed !== expression) {
+			// Rerun until we "stabilize" to detect arbitrary depth in referencing
+			return this.compute(processed, source, referenced);
+		} else {
+			return calculate(processed);
+		}
 	};
 	
 	

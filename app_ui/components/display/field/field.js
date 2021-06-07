@@ -154,7 +154,8 @@ rsSystem.component("rsDisplayField", {
 					return value;
 				}
 			} else if(typeof(value) === "number") {
-				return value > 0?"+" + value:value;
+				// return value > 0?value:value;
+				return value;
 			// } else if(typeof(value) === "string") {
 			// 	return value;
 			} else {

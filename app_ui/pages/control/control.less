@@ -1,0 +1,53 @@
+.rs-page.page-control {
+	display: block;
+
+	.construction {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		height: 100%;
+		overflow: hidden;
+
+		& > * {
+			max-height: 100%;
+			overflow: auto;
+		}
+
+		.building {
+			padding: 0px 5px;
+			max-width: 500px;
+		}
+
+		.output {
+			background-color: @rsWhite;
+			min-width: 400px;
+			max-width: 400px;
+			width: 400px;
+			padding: 5px;
+
+			h1, h2, h3, h4 {
+				color: @rsBlack;
+			}
+		}
+
+		.description {
+			color: @rsBlack;
+		}
+
+		.primary-action {
+			background: transparent;
+			transition: color .5s, border .5s;
+			border: 1px solid @rsOrange;
+			color: @rsOrange;
+			cursor: pointer;
+			margin: 0px 5px 0px 0px;
+			padding: 5px;
+
+			&:active,
+			&:hover {
+				border-color: @rsWhite;
+				color: @rsWhite;
+			}
+		}
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"import": [{
+		"id": "feat:hellishresistance",
+		"name": "Hellish Resistance",
+		"description": "Your infernal trait give you resistance to ${Fire Damage}$.",
+		"resistance": {
+			"damage_type:fire": "50%"
+		},
+		"icon": "game-icon game-icon-fire-shield",
+		"score": 1,
+		"selectable": false,
+		"threat": 1
+	}, {
+		"id": "feat:darkvision",
+		"name": "Darkvision",
+		"description": "You are still able to see in pitch black conditions, however only in ${Grayscale}$, out to 48 studs.",
+		"icon": "fab fa-free-code-camp",
+		"score": 1,
+		"selectable": false,
+		"threat": 1
+	}, {
+		"id": "feat:infernallegacy",
+		"name": "Infernal Legacy",
+		"description": "You are still able to see in pitch black conditions, however only in ${Grayscale}$, out to 48 studs.",
+		"icon": "game-icon game-icon-fire-shrine",
+		"score": 1,
+		"selectable": false,
+		"threat": 1,
+        "spells": ["spell:cantrip:thaumaturgy"],
+        "conditionals": []
+	}]
+}

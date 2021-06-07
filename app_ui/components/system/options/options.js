@@ -1,4 +1,8 @@
-
+/**
+ * Component for controlling device options.
+ * @class systemOptionsDialog
+ * @constructor
+ */
 rsSystem.component("systemOptionsDialog", {
 	"inherit": true,
 	"mixins": [
@@ -44,9 +48,19 @@ rsSystem.component("systemOptionsDialog", {
 		data.active = null;
 
 		data.pages = {
+			/**
+			 * 
+			 * @property profile
+			 * @type UIProfile
+			 */
 			"profile": {
 				"name": "Profile",
 				"options": [{
+					"id": "auto_roll",
+					"label": "Automatically Roll Dice",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "screen_wake",
 					"label": "Lock Screen Awake",
 					"base": this.profile,
@@ -323,3 +337,42 @@ rsSystem.component("systemOptionsDialog", {
 	},
 	"template": Vue.templified("components/system/options.html")
 });
+
+
+/**
+ * Tracked as a normal object, this represents and stores general preferences
+ * for the device. Later to be updated to follow the user.
+ * @class UIProfile
+ * @constructor
+ */
+/**
+ * 
+ * @property auto_roll
+ * @type Boolean
+ */
+/**
+ * 
+ * @property screen_wake
+ * @type Boolean
+ */
+/**
+ * 
+ * @property inline_javascript
+ * @type Boolean
+ */
+/**
+ * 
+ * @property disable_sounds
+ * @type Boolean
+ */
+/**
+ * 
+ * @property no_master
+ * @type Boolean
+ */
+/**
+ * 
+ * @property silence_messaging
+ * @type Boolean
+ */
+

@@ -1,0 +1,69 @@
+{
+	"import": [{
+			"id": "archetype:warlock:1",
+			"name": "Warlock",
+			"icon": "game-icon game-icon-magic-shield",
+			"description": "A warlock is defined by a pact with an otherworldly being. Sometimes the relationship between warlock and patron is like that of a cleric and a deity, though the beings that serve as patrons for warlocks are not gods. A warlock might lead a cult dedicated to a demon prince, an archdevil, or an utterly alien entity—beings not typically served by clerics. More often, though, the arrangement is similar to that between a master and an apprentice. The warlock learns and grows in power, at the cost of occasional services performed on the patron’s behalf.\n\nThe magic bestowed on a warlock ranges from minor but lasting alterations to the warlock’s being (such as the ability to see in darkness or to read any language) to access to powerful spells. Unlike bookish wizards, warlocks supplement their magic with some facility at hand-to-hand combat. They are comfortable in light armor and know how to use simple weapons.",
+			"hp_max": "8",
+			"spell_attack": "proficiency + charisma",
+			"spell_dc": "8 + proficiency + charisma",
+			"hit_dice_max": {
+				"d8": 1
+			},
+			"feats": [
+				"feat:otherworldlypatron",
+				"feat:pactmagic"
+			],
+			"cantrips_maximum": "2",
+			"spells_maximum": "2",
+			"spell_slot_max": {
+				"1": 1
+			},
+			"playable": true,
+			"proficiencies": [
+				"proficiency:weapon:sword",
+				"proficiency:weapon:bow",
+				"proficiency:weapon:dagger",
+				"proficiency:weapon:staff",
+				"proficiency:armor:leather",
+				"proficiency:language:common"
+			],
+			"root": true,
+			"score": 1,
+			"selection": [{
+				"name": "Warlock Proficiencies",
+				"field": "skill_proficiency",
+				"limit": 2,
+				"choices": [
+					"skill:arcana",
+					"skill:deception",
+					"skill:history",
+					"skill:intimidation",
+					"skill:investigation",
+					"skill:religion",
+					"skill:nature"
+				]
+			}, {
+				"name": "Warlock Patron",
+				"field": "feats",
+				"limit": 1,
+				"choices": [
+					"feat:patron:fiend",
+					"feat:patron:archfey",
+					"feat:patron:greatoldone"
+				]
+			}],
+			"skill_proficiency": {
+				"skill:wisdom": 1,
+				"skill:charisma": 1
+			},
+			"threat": 1,
+			"attribute": {
+				"recommended": {
+					"wisdom": true,
+					"charisma": true
+				}
+			}
+		}
+	]
+}

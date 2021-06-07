@@ -146,7 +146,8 @@ fields.push({
 	"type": "string",
 	"attribute": {
 		"display_size": 110,
-		"displayed": false
+		"displayed": false,
+		"long_text": true
 	}
 });
 fields.push({
@@ -310,7 +311,11 @@ fields.push({
 	"name": "Data",
 	"description": "Used for large data storage (Such as images). Typically Base64 encoded.",
 	"type": "string",
-	"attribute": {}
+	"ordering": 100,
+	"attribute": {
+		"display_size": 110,
+		"file_data": true
+	}
 });
 fields.push({
 	"id": "connections",
@@ -522,6 +527,18 @@ module.exports.initialize = function(universe, database, configuration) {
 				promised.push(build(objects[x]));
 			}
 			
+			
+			if(promised.length) {
+				Promise.all(promised)
+				.then(() => {
+					done();
+				})
+				.catch(fail);
+			} else {
+				done();
+			}
+
+			/*
 			if(promised.length) {
 				Promise.all(promised)
 				.then(function(objects) {
@@ -552,6 +569,7 @@ module.exports.initialize = function(universe, database, configuration) {
 			} else {
 				done();
 			}
+			*/
 		})
 		.catch(fail);
 	});

@@ -26,7 +26,11 @@ var EventEmitter = require("events").EventEmitter,
 	
 // 
 var sortByOrdering = function(a, b) {
-	if(a.ordering < b.ordering) {
+	if(!a.ordering && b.ordering) {
+		return 1;
+	} else if(a.ordering && !b.ordering) {
+		return -1;
+	} else if(a.ordering < b.ordering) {
 		return -1;
 	} else if(a.ordering > b.ordering) {
 		return 1;
@@ -41,7 +45,7 @@ var sortByOrdering = function(a, b) {
 // Security
 omittedFromSync.session = true;
 // Data APIs for data separation
-omittedFromSync.image = true;
+// omittedFromSync.image = true;
 omittedFromSync.audio = true;
 
 
@@ -127,6 +131,7 @@ class Universe extends EventEmitter {
 			return this.objectHandler.initialize(startup);
 		}
 		
+		console.log("Starting Load");
 		return new Promise((done, fail) => {
 			startup.universe = this;
 			// Initialize Database
@@ -139,10 +144,8 @@ class Universe extends EventEmitter {
 					ids,
 					i,
 					x;
-				
-				// TODO: Loading Progress Bar?
-				
-				
+
+				console.log("Loading Managers");
 				for(x=0; x<types.length; x++) {
 					if(manager[types[x]]) {
 						this.manager[types[x]] = manager[types[x]];	
@@ -156,6 +159,9 @@ class Universe extends EventEmitter {
 				return Promise.all(loading);
 			})
 			.then((loading) => {
+				console.log("Managers Loaded");
+				var anomaly = new Anomaly("universe:initialization", "Managers Loaded", 30, Object.keys(this.manager), null, this);
+				this.emit("error", anomaly);
 				// Calculate Loaded Objects
 				for(var x=0; x<loading.length; x++) {
 					if(loading[x]) {
@@ -169,6 +175,7 @@ class Universe extends EventEmitter {
 				// Update Loaded Objects
 				var x;
 				
+				console.log("Linking Objects");
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
@@ -375,7 +382,7 @@ class Universe extends EventEmitter {
 					anomaly;
 				
 				anomaly = new Anomaly("user:info", "Failed to get user information", 40, details, err, this);
-				this.emit("error", err);
+				this.emit("error", anomaly);
 			});
 		});
 	}
@@ -438,6 +445,22 @@ class Universe extends EventEmitter {
 	
 	/**
 	 * 
+	 * @method getObject
+	 * @param {String} id 
+	 * @param {Function} callback
+	 */
+	getObject(id, callback) {
+		var classification = this.getClassFromID(id);
+		if(!this.manager[classification]) {
+			callback(new Anomaly("universe:object:request", "Unable to find object", 50, {id, classification}, null, this));
+		} else {
+			// TODO: Consider loading an object if requested while not loaded
+			callback(null, this.manager[classification].object[id]);
+		}
+	}
+	
+	/**
+	 * 
 	 * @method requestObject
 	 * @param {String} id 
 	 * @param {Function} callback
@@ -477,6 +500,27 @@ class Universe extends EventEmitter {
 						callback(null, created);
 					})
 					.catch(callback);
+				}
+			});
+		}
+	}
+
+	/**
+	 * 
+	 * @method deleteObject
+	 * @param {String} id 
+	 * @param {Function} callback 
+	 */
+	deleteObject(object, callback) {
+		if(!object) {
+			callback(new Anomaly("universe:object:delete", "Unable to identify classification for new object", 50, {"id": object.id, "classification": object._class}, null, this));
+		} else {
+			this.manager[object._class].delete(object, (err) => {
+				if(err) {
+					console.log("Error: ", err);
+					callback(err);
+				} else {
+					callback();
 				}
 			});
 		}
@@ -534,6 +578,8 @@ class Universe extends EventEmitter {
 						}
 					}
 				}
+			} else {
+				state.classes.push(manager.toJSON());
 			}
 		}
 		

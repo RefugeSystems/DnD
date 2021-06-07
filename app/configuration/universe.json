@@ -1,6 +1,6 @@
 {
 	"universe": {
-		"debug_cascades": true,
+		"debug_cascades": false,
 		"classes": [
 			"session",
 			"player",

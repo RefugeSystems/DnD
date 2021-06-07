@@ -14,7 +14,12 @@ class Constructor extends RSObject {
 		super(universe, manager, details);
 	}
 	
-	
+	toJSON() {
+		var data = super.toJSON();
+		delete(data._data);
+		delete(data.data);
+		return data;
+	}
 }
 
 module.exports = Constructor;

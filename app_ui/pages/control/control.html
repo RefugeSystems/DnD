@@ -1,0 +1,14 @@
+<div class="rs-page page-control">
+	<div class="construction">
+		<div class="building">
+			<rs-nouns :universe="universe" :player="player" :configuration="configuration" :profile="profile" v-on:classification="reclass($event)" storage-key="control:noun:editing"></rs-nouns>
+		</div>
+		<div class="output rs-component">
+			<h2 class="nowrap">
+				<span :class="tracked?tracked.icon:''"></span>
+				<span>{{tracked?tracked.name:'No Tracked'}}</span>
+			</h2>
+			<sys-info-general v-if="tracked" v-on:click="processRequest($event)" :info="tracked" :size="110" :profile="profile" :universe="universe" :configuration="configuration" :player="player"></sys-info-general>
+		</div>
+	</div>
+</div>

@@ -34,7 +34,7 @@
 				"limit": 2,
 				"choices": [
 					"skill:animalhandling",
-					"skill:atheletics",
+					"skill:athletics",
 					"skill:intimidation",
 					"skill:nature",
 					"skill:perception",

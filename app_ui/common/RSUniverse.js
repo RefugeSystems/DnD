@@ -125,6 +125,22 @@ class RSUniverse extends EventEmitter {
 		
 		
 		
+		this.processEvent["unload"] = (event) => {
+			console.warn("Unload Data: ", event);
+			var classification = event.data.classification,
+				id = event.data.id,
+				i;
+
+			if(this.index[classification] && this.index[classification][id]) {
+				delete(this.index[classification][id]);
+				for(i=0; i<this.listing[classification].length; i++) {
+					if(this.listing[classification][i].id === id) {
+						this.listing[classification].splice(i, 1);
+						return null;
+					}
+				}
+			}
+		};
 		this.processEvent["notice"] = (event) => {
 			this.$emit("notification", {
 				"id": event.data.mid,
@@ -756,7 +772,14 @@ class RSUniverse extends EventEmitter {
 	getObject(id) {
 		var c;
 		if(id && (c = this.getClassFromID(id)) && this.index[c]) {
-			return this.index[c][id];
+			switch(c) {
+				case "classes":
+				case "fields":
+					return this.index[c][id.substring(id.indexOf(":") + 1)];
+					break;
+				default:
+					return this.index[c][id];
+			}
 		}
 		return null;
 	}

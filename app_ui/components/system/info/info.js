@@ -27,6 +27,12 @@
 				"required": true,
 				"type": Object
 			},
+			"profile": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			},
 			"options": {
 				"type": Object,
 				"default": function() {
@@ -57,6 +63,8 @@
 			data.info = null;
 			
 			data.count = 0;
+
+			data.size = 90;
 
 			return data;
 		},
@@ -92,6 +100,9 @@
 				return this.open?5:-1;
 			},
 			"displayRecord": function(event) {
+				if(typeof(event) === "string") {
+					event = {"info":event};
+				}
 				if(this.$route.query.info !== event.info) {
 					rsSystem.manipulateQuery({
 						"view": event.view || null,

@@ -1,0 +1,27 @@
+{
+    "import": [{
+            "id": "dataset:tiefling:male",
+            "name": "Male Tiefling Names",
+            "icon": "fas fa-mars",
+			"ordering": 5,
+			"root": true,
+			"next": ["dataset:tiefling:last"],
+            "value": "Akmenos Amnon Barakas Damakos Ekemon Iados Kairon Leucis Melech Mordai Morthos Pelaios Skamos Therai"
+        }, {
+            "id": "dataset:tiefling:female",
+            "name": "Female Tiefling Names",
+            "icon": "fas fa-venus",
+			"ordering": 6,
+			"root": true,
+			"next": ["dataset:tiefling:last"],
+            "value": "Akta Anakis Bryseis Criella Damaia Ea Kallista Lerissa Makaria Nemeia Orianna Phelaia Rieta"
+        }, {
+            "id": "dataset:tiefling:last",
+            "name": "Tiefling Surnames",
+            "icon": "game-icon game-icon-spiked-dragon-head",
+			"ordering": 10,
+			"root": false,
+            "value": "Sagesun Earthcloud Sternblower Lonebend Skullspell Strongrun Mildshield Bearsnout Burningblaze Glorystar Regalshade Goldscar Sternfeather Hardoak Distantdream Dawnspell Humblemark Gloomvigor Starsnow Battlereaper"
+        }
+    ]
+}

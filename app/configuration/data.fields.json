@@ -12,7 +12,7 @@
 		}
 	}, {
 		"id": "stat_dexterity",
-		"name": "Deterity",
+		"name": "Dexterity",
 		"description": "Your ability to control your movements",
 		"type": "integer",
 		"ordering": 11,
@@ -69,15 +69,17 @@
 		"id": "strength",
 		"name": "Strength Modifier",
 		"description": "Amount added to ${Strength}$ based ${Skill Checks}$",
-		"type": "integer",
+		"type": "calculated",
+		"ordering": 20,
 		"attribute": {
 			"display_size": 90
 		}
 	}, {
 		"id": "dexterity",
-		"name": "Deterity Modifier",
-		"description": "Amount added to ${Deterity}$ based ${Skill Checks}$",
-		"type": "integer",
+		"name": "Dexterity Modifier",
+		"description": "Amount added to ${Dexterity}$ based ${Skill Checks}$",
+		"type": "calculated",
+		"ordering": 21,
 		"attribute": {
 			"display_size": 90
 		}
@@ -85,7 +87,8 @@
 		"id": "constitution",
 		"name": "Constitution Modifier",
 		"description": "Amount added to ${Constitution}$ based ${Skill Checks}$",
-		"type": "integer",
+		"type": "calculated",
+		"ordering": 22,
 		"attribute": {
 			"display_size": 90
 		}
@@ -93,7 +96,8 @@
 		"id": "intelligence",
 		"name": "Intelligence Modifier",
 		"description": "Amount added to ${Intelligence}$ based ${Skill Checks}$",
-		"type": "integer",
+		"type": "calculated",
+		"ordering": 23,
 		"attribute": {
 			"display_size": 90
 		}
@@ -101,7 +105,8 @@
 		"id": "wisdom",
 		"name": "Wisdom Modifier",
 		"description": "Amount added to ${Wisdom}$ based ${Skill Checks}$",
-		"type": "integer",
+		"type": "calculated",
+		"ordering": 24,
 		"attribute": {
 			"display_size": 90
 		}
@@ -109,9 +114,19 @@
 		"id": "charisma",
 		"name": "Charisma Modifier",
 		"description": "Amount added to ${Charisma}$ based ${Skill Checks}$",
-		"type": "integer",
+		"type": "calculated",
+		"ordering": 25,
 		"attribute": {
 			"display_size": 90
+		}
+	}, {
+		"id": "mobility",
+		"name": "Mobility",
+		"description": "How mobile you are, usually restricted by armor. This determines the max contribution of dexterity to your armor",
+		"type": "integer",
+		"attribute": {
+			"display_size": 90,
+			"default": 10
 		}
 	}, {
 		"id": "playing_as",
@@ -200,7 +215,7 @@
 		"name": "Skill Checks",
 		"description": "Maps a Skill ID to this objects numerical ability to perform that skill.",
 		"type": "object",
-		"ordering": 20,
+		"ordering": 30,
 		"attribute": {
 			"inherited_key": "skill"
 		}
@@ -427,12 +442,6 @@
 		"name": "Equipment Slots",
 		"description": "Maps a Slot ID to the count of slots this object has to put equipment to",
 		"type": "object",
-		"inheritance": {
-			"action_max": "+",
-			"weight": "+",
-			"score": "+",
-			"threat": "+"
-		},
 		"inheritable": [
 			"slot"
 		],
@@ -824,6 +833,7 @@
 			"hp_max": "+",
 			"resistance": "+=",
 			"damage": "+=",
+			"feats": "+",
 			"score": "+",
 			"threat": "+",
 			"spell_slot_max": "+",
@@ -853,9 +863,16 @@
 			"intelligence": "+",
 			"wisdom": "+",
 			"charisma": "+",
+			"stat_strength": "+",
+			"stat_dexterity": "+",
+			"stat_constitution": "+",
+			"stat_intelligence": "+",
+			"stat_wisdom": "+",
+			"stat_charisma": "+",
 			"resistance": "+=",
 			"armor": "+",
 			"damage": "+=",
+			"feats": "+",
 			"actions": "+",
 			"action_max": "+",
 			"attune_max": "+",
@@ -888,6 +905,12 @@
 			"intelligence": "+",
 			"wisdom": "+",
 			"charisma": "+",
+			"stat_strength": "+",
+			"stat_dexterity": "+",
+			"stat_constitution": "+",
+			"stat_intelligence": "+",
+			"stat_wisdom": "+",
+			"stat_charisma": "+",
 			"armor": "+",
 			"actions": "+",
 			"spells": "+",
@@ -930,6 +953,12 @@
 			"dexterity": "+",
 			"constitution": "+",
 			"intelligence": "+",
+			"stat_strength": "+",
+			"stat_dexterity": "+",
+			"stat_constitution": "+",
+			"stat_intelligence": "+",
+			"stat_wisdom": "+",
+			"stat_charisma": "+",
 			"armor": "+",
 			"wisdom": "+",
 			"charisma": "+",
@@ -965,6 +994,12 @@
 			"dexterity": "+",
 			"constitution": "+",
 			"intelligence": "+",
+			"stat_strength": "+",
+			"stat_dexterity": "+",
+			"stat_constitution": "+",
+			"stat_intelligence": "+",
+			"stat_wisdom": "+",
+			"stat_charisma": "+",
 			"wisdom": "+",
 			"charisma": "+",
 			"armor": "+",
@@ -1352,6 +1387,12 @@
 			"intelligence": "+",
 			"wisdom": "+",
 			"charisma": "+",
+			"stat_strength": "+",
+			"stat_dexterity": "+",
+			"stat_constitution": "+",
+			"stat_intelligence": "+",
+			"stat_wisdom": "+",
+			"stat_charisma": "+",
 			"resistance": "+=",
 			"damage": "+=",
 			"actions": "+",
@@ -1607,6 +1648,12 @@
 			"wisdom": "+",
 			"armor": "+",
 			"charisma": "+",
+			"stat_strength": "+",
+			"stat_dexterity": "+",
+			"stat_constitution": "+",
+			"stat_intelligence": "+",
+			"stat_wisdom": "+",
+			"stat_charisma": "+",
 			"enchant_rating": "+",
 			"actions": "+",
 			"skills": "+",
