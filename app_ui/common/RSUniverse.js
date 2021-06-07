@@ -808,16 +808,26 @@ class RSUniverse extends EventEmitter {
 		var appendTo = $(document).find("#anchors")[0],
 			anchor = document.createElement("a"),
 			keys = Object.keys(this.listing),
-			exporting = [],
-			x;
+			exporting = {},
+			i,
+			j;
 			
+		exporting.classes = [];
+		exporting.fields = [];
+		exporting.export = [];
 		if(!title) {
 			title = document.title || "universe";
 		}
 		title = title.replace(/ /g, "_").toLowerCase();
 
-		for(x=0; x<keys.length; x++) {
-			exporting = exporting.concat(this.listing[keys[x]]);
+		for(i=0; i<keys.length; i++) {
+			for(j=0; j<this.listing[keys[i]].length; j++) {
+				if(keys[i] === "classes" || keys[i] === "fields") {
+					exporting[keys[i]].push(this.listing[keys[i]][j]);
+				} else {
+					exporting.export.push(this.listing[keys[i]][j]._data);
+				}
+			}
 		}
 
 		appendTo.appendChild(anchor);
