@@ -140,12 +140,14 @@
 								Vue.set(this.details, this.fields[x].id, source._data[this.fields[x].id]);
 							}
 						}
+						this.previewObject();
 					}
 					Vue.set(this, "copy", null);
 				}
 			},
 			"reclassing": function() {
 				this.$emit("classification", this.storage.classification);
+				this.previewObject();
 			},
 			"selectImage": function(event) {
 				var input = $(this.$el).find("#attacher"),
@@ -173,15 +175,64 @@
 			"completed": function(event) {
 				console.log("Complete: ", event);
 			},
+			"toObject": function() {
+				var object = {},
+					i;
+
+				// Clean eroneous fields
+				object.id = this.details.id;
+				for(i=0; i<this.fields.length; i++) {
+					if(this.details[this.fields[i].id] !== undefined) {
+						object[this.fields[i].id] = this.details[this.fields[i].id];
+					} else {
+						object[this.fields[i].id] = null;
+					}
+				}
+
+				return object;
+			},
+			"previewObject": function() {
+				var previewing = {},
+					i;
+
+				// Clean eroneous fields
+				previewing.id = this.details.id;
+				for(i=0; i<this.fields.length; i++) {
+					if(this.details[this.fields[i].id] !== undefined) {
+						if(this.fields[i].type === "array" && this.details[this.fields[i].id].length === 0) {
+							previewing[this.fields[i].id] = null;
+						} else if(this.fields[i].type === "object") {
+							// Reform object
+						} else {
+							previewing[this.fields[i].id] = this.details[this.fields[i].id];
+						}
+					} else {
+						previewing[this.fields[i].id] = null;
+					}
+				}
+				this.universe.send("preview:object", {
+					"classification": this.storage.classification,
+					"details": previewing
+				});
+			},
 			"sync": function(event) {
-				console.log("Sync: ", event);
+				this.previewObject();
 			},
 			"adjust": function(event) {
 				console.log("Blured: ", event);
 			},
-			
 			"clearField": function(field) {
-				Vue.delete(this.details, field);
+				switch(field.type) {
+					case "array":
+						Vue.set(this.details, field, []);
+						break;
+					case "object":
+						Vue.set(this.details, field, {});
+						break;
+					default:
+						Vue.delete(this.details, field);
+						break;
+				}
 			},
 			"displayCopyFromParent": function(field) {
 				// TODO
@@ -229,6 +280,8 @@
 				for(i=0; i<keys.length; i++) {
 					Vue.delete(this.details, keys[i]);
 				}
+
+				this.previewObject();
 			},
 			/**
 			 * Save the current specifications to an object (either making new or updating based

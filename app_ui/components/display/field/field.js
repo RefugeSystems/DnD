@@ -53,6 +53,11 @@ rsSystem.component("rsDisplayField", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"fieldInfo": function() {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": "fields:" + this.field
+			});
+		},
 		"info": function(record) {
 			if(this.$route.query.info !== record.id) {
 				rsSystem.manipulateQuery({
@@ -167,6 +172,8 @@ rsSystem.component("rsDisplayField", {
 				var value = this.universe.getObject(this.object[this.field]);
 				if(value) {
 					return value.name || value.id;
+				} else {
+					return this.object[this.field];
 				}
 			} else {
 				return this.object[this.field];

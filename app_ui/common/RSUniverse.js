@@ -136,6 +136,7 @@ class RSUniverse extends EventEmitter {
 				for(i=0; i<this.listing[classification].length; i++) {
 					if(this.listing[classification][i].id === id) {
 						this.listing[classification].splice(i, 1);
+						this.cacheData();
 						return null;
 					}
 				}
@@ -226,7 +227,7 @@ class RSUniverse extends EventEmitter {
 					i,
 					j;
 					
-				console.log("Sync: ", event);
+				// console.log("Sync: ", event);
 				this.state.loaded = true; // Set early to not delay receiveDelta
 				for(i=0; i<classes.length; i++) {
 					if(!this.index[classes[i]]) {
@@ -240,8 +241,9 @@ class RSUniverse extends EventEmitter {
 				
 				Vue.set(this.metrics, "sync", event.sent);
 				Vue.set(this, "players", event.players);
-				localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
-				localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
+				this.cacheData();
+				// localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
+				// localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 				
 				Vue.set(this, "version", event.version);
 				this.checkVersion();
@@ -294,6 +296,15 @@ class RSUniverse extends EventEmitter {
 			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
 			Vue.set(this.metrics, "sync", 0);
 		}
+	}
+
+	/**
+	 * 
+	 * @method cacheData
+	 */
+	cacheData() {
+		localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
+		localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 	}
 	
 	/**

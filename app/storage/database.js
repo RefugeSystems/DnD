@@ -1182,8 +1182,10 @@ class ClassManager extends EventEmitter {
 					statement = this.statements[sid];
 				} else {
 					statement = "update " + this.id + " set updated = $updated";
-					for(x=0; x<fields.length; x++) {
-						statement += ", " + fields[x] + " = $" + fields[x];
+					for(x=0; x<this.fieldIDs.length; x++) {
+						if(object[this.fieldIDs[x]] !== undefined) {
+							statement += ", " + this.fieldIDs[x] + " = $" + this.fieldIDs[x];
+						}
 					}
 					this.statements[sid] = statement += " where id = $id;";
 				}

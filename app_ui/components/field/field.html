@@ -1,6 +1,6 @@
 
 <div class="rs-component rs-field" :class="field.type + ' property-' + field.id" v-if="isVisible()">
-	<label :for="fid">
+	<label :for="fid" v-on:click.right.stop.prevent="fieldInfo(field.id)">
 		<span>{{field.name}}</span>
 	</label>
 	<span v-if="field.error">
@@ -95,18 +95,21 @@
 		</textarea>
 	</div>
 
-	<div v-if="field.type === 'array' && !field.raw && field.source_index" class="multireference">
+	<div v-if="field.type === 'array'" class="multireference">
 		<div class="referenced" v-for="(reference, $index) in root[field.id]">
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 			<span class="reference-display">{{getReferenceName(reference)}}</span>
-			<button class="info fas fa-info-circle" v-if="!field.noinfo" v-on:click="openReference(reference)"></button>
+			<button class="info fas fa-info-circle" v-if="reference.id && !field.noinfo" v-on:click="openReference(reference)"></button>
 		</div>
-		<div class="referenced" v-if="field.source_index">
-			<select v-model="reference_value" v-if="!field.autocomplete" v-on:change="addReference(reference_value)">
+		<div class="referenced">
+			<select v-model="reference_value" v-if="availableReferences.length" v-on:change="addReference(reference_value)">
 				<option value="">Select To Add</option>
 				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
 			</select>
-			<div class="rs-autocomplete" v-if="field.autocomplete">
+			<div v-if="!availableReferences.length">
+				<input v-model="reference_value" v-on:keydown.enter="addReference(reference_value)" />
+			</div>
+			<!--div class="rs-autocomplete" v-if="field.attribute.autocomplete">
 				<div class="filter">
 					<input type="text" v-model="reference_value" v-on:keydown.enter="addReference(reference_value, activeCompletion)" v-on:keyup="deriveCompletions(reference_value, $event)"/>
 				</div>
@@ -115,10 +118,36 @@
 						{{completion[field.optionLabel]}}
 					</button>
 				</div>
-			</div>
+			</div-->
 		</div>
 	</div>
-	<div v-if="field.type === 'multireference' && field.raw" class="multireference">
+
+	<div v-if="field.type === 'object'" class="multireference">
+		<div class="referenced" v-for="(reference, $index) in root[field.id]">
+			<button class="remove fas fa-times-square" v-on:click="dismissObjectMap($index)"></button>
+			<span class="reference-display">{{getObjectKey($index)}}</span>
+			<span class="reference-display">{{getObjectValue(reference)}}</span>
+		</div>
+		<div class="referenced">
+			<select v-model="reference_key" v-if="availableReferences.length && keyside" v-on:change="addObjectReference(reference_key, reference_value)">
+				<option value="">Select To Add</option>
+				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
+			</select>
+			<div v-if="!availableReferences.length && !keyside">
+				<input v-model="reference_key" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" />
+			</div>
+			<span>:</span>
+			<div v-if="!availableReferences.length && !valueside">
+				<input v-model="reference_value" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" />
+			</div>
+			<select v-model="reference_value" v-if="availableReferences.length && valueside" v-on:change="addObjectReference(reference_key, reference_value)">
+				<option value="">Select To Add</option>
+				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
+			</select>
+		</div>
+	</div>
+
+	<!--div v-if="field.type === 'multireference' && field.raw" class="multireference">
 		<div class="referenced" v-for="(reference, $index) in root[field.id]">
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 			<span class="reference-display">{{reference}}</span>
@@ -132,7 +161,7 @@
 	<div v-if="field.type === 'multireference' && !field.raw && !field.source_index">
 		<span class="fas fa-exclamation-triangle"></span>
 		<span>No Source Index</span>
-	</div>
+	</div-->
 
 	<div class="error" v-if="field.error">
 		<span>Error:</span>

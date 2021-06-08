@@ -20,8 +20,9 @@ module.exports.initialize = function(universe) {
 
 		details.id = classification + ":preview:" + event.player.id;
 		details.obscured = true;
+		console.log("Previewing: ", details);
 
-		universe.createObject(details, function(err, object) {
+		var object = universe.getObject(details.id, function(err, object) {
 			if(err) {
 				universe.emit("send", {
 					"type": "notice",
@@ -32,8 +33,38 @@ module.exports.initialize = function(universe) {
 					"error": err,
 					"anchored": true
 				});
+			} else if(object) {
+				console.log("Updating");
+				object.setValues(details, function(err) {
+					if(err) {
+						universe.emit("send", {
+							"type": "notice",
+							"mid": "create:object",
+							"recipient": event.player.id,
+							"message": "Failed to generate object preview: " + err.message,
+							"icon": "fas fa-exclamation-triangle rs-lightred",
+							"error": err,
+							"anchored": true
+						});
+					}
+				});
 			} else {
-				console.log("Preview Generated: ", object.toJSON());
+				console.log("Creating");
+				universe.createObject(details, function(err, object) {
+					if(err) {
+						universe.emit("send", {
+							"type": "notice",
+							"mid": "create:object",
+							"recipient": event.player.id,
+							"message": "Failed to generate object preview: " + err.message,
+							"icon": "fas fa-exclamation-triangle rs-lightred",
+							"error": err,
+							"anchored": true
+						});
+					} else {
+						// console.log("Preview Generated: ", object.toJSON());
+					}
+				});
 			}
 		});
 	});

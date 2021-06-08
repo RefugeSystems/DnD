@@ -135,7 +135,7 @@
 			 * @method closeInfo
 			 */
 			"closeInfo": function() {
-				this.$router.push(rsSystem.manipulateQuery(closeInfo));
+				rsSystem.manipulateQuery(closeInfo);
 			}
 		},
 		"beforeDestroy": function() {

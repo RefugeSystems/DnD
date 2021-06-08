@@ -477,6 +477,36 @@ class Universe extends EventEmitter {
 	
 	/**
 	 * 
+	 * @method modifyObject
+	 * @param  {[type]}   details  [description]
+	 * @param  {Function} callback [description]
+	 * @return {[type]}            [description]
+	 */
+	modifyObject(details, callback) {
+		var classification = this.getClassFromID(details.id);
+		if(!this.manager[classification]) {
+			callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+		} else {
+			this.manager[classification].create(this, details, (err, created) => {
+				if(err) {
+					console.log("Error: ", err);
+					callback(err);
+				} else {
+					created.linkFieldValues()
+					.then(() => {
+						created.calculateFieldValues();
+						created.updateFieldValues();
+						this.emit("object-created", created.toJSON());
+						callback(null, created);
+					})
+					.catch(callback);
+				}
+			});
+		}
+	}
+	
+	/**
+	 * 
 	 * @method createObject
 	 * @param  {[type]}   details  [description]
 	 * @param  {Function} callback [description]

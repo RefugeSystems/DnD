@@ -443,7 +443,9 @@ rsSystem.component("dndCreateCharacterDialog", {
 			}
 		},
 		"statRecommended": function(base, stat) {
-			return base && base.attribute && base.attribute.recommended && base.attribute.recommended[stat];
+			if(base && base.attribute) {
+				return (base.attribute.recommended && base.attribute.recommended[stat]) || base.attribute.recommended.indexOf(stat) !== -1;
+			}
 		},
 		"statUp": function(stat) {
 			var index = this.stats.indexOf(stat),

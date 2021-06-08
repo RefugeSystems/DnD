@@ -3,7 +3,7 @@
 		<div class="marking" v-if="marking">
 			<span :class="marking"/>
 		</div>
-		<div class="label">
+		<div class="label" v-on:click.right.stop.prevent="fieldInfo()">
 			<span class="text">{{fieldData.name}}</span>
 		</div>
 		<div class="seperator">

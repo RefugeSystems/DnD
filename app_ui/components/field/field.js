@@ -1,4 +1,3 @@
-
 /**
  *
  *
@@ -73,17 +72,22 @@
 			}
 		},
 		"data": function() {
-			var x, y, data = {};
+			var data = {},
+				load,
+				i;
 			Vue.set(this.field, "type", (this.field.type || "text").toLowerCase());
 			if(this.field.unset === undefined) {
 				this.field.unset = "Select...";
 			}
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
+			data.reference_key = "";
 			data.focused = false;
 
 			data.activeCompletion = null;
 			data.completions = [];
+			data.valueside = false;
+			data.keyside = false;
 
 			data.bufferChanging = false;
 			data.bufferLoading = false;
@@ -96,6 +100,9 @@
 					} else {
 						data.buffer = "";
 					}
+					break;
+				case "object":
+					data.buffer = [];
 					break;
 				default:
 					data.buffer = this.root[this.field.id];
@@ -127,8 +134,17 @@
 					}
 				}
 			});
+			if(this.field.type === "object") {
+				// this.resyncFromObject();
+			}
 		},
 		"methods": {
+			"fieldInfo": function(field) {
+				console.log("Field Info: ", field);
+				rsSystem.EventBus.$emit("display-info", {
+					"info": "fields:" + field
+				});
+			},
 			"isVisible": function() {
 				if(!this.field.condition) {
 					return true;
@@ -224,12 +240,64 @@
 
 				return true;
 			},
-			"getReferenceName": function(reference) {
-				var object = this.universe.getObject(reference);
+			"resyncToObject": function() {
+				var keys,
+					i;
+
+				if(this.root[this.field.id]) {
+					keys = Object.keys(this.root[this.field.id]);
+					for(i=0; i<keys.length; i++) {
+						Vue.delete(this.root[this.field.id], keys[i]);
+					}
+				} else {
+					Vue.set(this.root, this.field.id, {});
+				}
+
+				for(i=0; i<this.buffer.length; i++) {
+					Vue.set(this.root[this.field.id], this.buffer[i].key, this.buffer[i].value);
+				}
+			},
+			"resyncFromObject": function() {
+				var keys,
+					i;
+
+				if(this.root[this.field.id]) {
+					Vue.set(this.root, this.field.id, {});
+				}
+
+				keys = Object.keys(this.root[this.field.id]);
+				this.buffer.splice(0);
+				for(i=0; i<keys.length; i++) {
+					this.buffer.push({
+						"value": this.root[this.field.id][keys[i]],
+						"key": keys[i]
+					});
+				}
+			},
+			"getObjectKey": function(name) {
+				var object = this.universe.getObject(name);
 				if(object) {
 					return object.name;
 				}
-				return "[ Unknown ]";
+				return name;
+			},
+			"getObjectValue": function(name) {
+				var object = this.universe.getObject(name);
+				if(object) {
+					return object.name;
+				}
+				return name;
+			},
+			"getReferenceName": function(reference) {
+				if(reference) {
+					var object = this.universe.getObject(reference.id || reference);
+					if(object) {
+						return object.name;
+					}
+					return reference;
+				} else {
+					return "NULL";
+				}
 			},
 			"addReference": function(reference) {
 				if(!this.root[this.field.id]) {
@@ -251,14 +319,6 @@
 					this.emitChanged();
 				}
 			},
-			"selectCompletion": function(completion) {
-				if(!this.root[this.field.id]) {
-					Vue.set(this.root, this.field.id, []);
-				}
-				this.root[this.field.id].push(completion[this.field.optionValue]);
-				Vue.set(this, "reference_value", "");
-				this.completions.splice(0);
-			},
 			"editReference": function(index, reference) {
 				Vue.set(this, "reference_value", reference);
 				this.dismissReference(index);
@@ -268,6 +328,24 @@
 			"dismissReference": function(index) {
 				this.root[this.field.id].splice(index, 1);
 				this.emitChanged();
+			},
+			"addObjectReference": function(key, value) {
+				console.log("Add Object Key: ", key, value);
+				Vue.set(this.root[this.field.id], key, value);
+			},
+			"dismissObjectMap": function(index) {
+				console.log("Dismiss Object Key: ", index);
+				Vue.delete(this.root[this.field.id], index);
+				// this.buffer.splice(index, 1);
+				// this.resyncToObject();
+			},
+			"selectCompletion": function(completion) {
+				if(!this.root[this.field.id]) {
+					Vue.set(this.root, this.field.id, []);
+				}
+				this.root[this.field.id].push(completion[this.field.optionValue]);
+				Vue.set(this, "reference_value", "");
+				this.completions.splice(0);
 			},
 			"openReference": function(reference) {
 				if(reference) {
@@ -354,10 +432,16 @@
 			},
 			"processDate": function() {
 				Vue.set(this.root, this.field.id, new Date(this.buffer).getTime() + offset);
+				this.emitChanged();
 			},
 			"bufferChangeProcess": function() {
 				if(this.bufferMark < Date.now()) {
-					Vue.set(this.root, this.field.id, this.buffer);
+					if(this.field.type === "object") {
+
+					} else {
+						Vue.set(this.root, this.field.id, this.buffer);
+					}
+
 					Vue.set(this, "bufferLoading", false);
 					this.emitChanged();
 				} else {

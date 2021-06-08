@@ -714,6 +714,9 @@
 		"name": "Resistance",
 		"description": "Maps a Damage Type ID to a formula for the amount that this object reduces that damage type by when suffered by this object",
 		"type": "object",
+		"inheritable": [
+			"damage_type"
+		],
 		"attribute": {
 			"inherited_key": "damage_type"
 		}
@@ -1428,7 +1431,7 @@
 		"id": "type",
 		"name": "Type",
 		"description": "The primary type for this object",
-		"type": "array",
+		"type": "string",
 		"inheritance": {
 			
 		},
@@ -1634,6 +1637,9 @@
 		"name": "Players",
 		"description": "Player IDs associated with this object. Typically for use with dashboards and other high level display objects.",
 		"type": "array",
+		"inheritable": [
+			"player"
+		],
 		"attribute": {}
 	}, {
 		"id": "attachments",

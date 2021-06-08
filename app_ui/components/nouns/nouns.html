@@ -31,7 +31,7 @@
 					<span v-if="field.id === 'icon'" :class="details.icon"></span>
 					<button class="info-link ctrl-link copy-parent fas fa-copy" v-if="displayCopyFromParent(field.id)" v-on:click="copyParent(field.id)" tabindex=2>
 					</button>
-					<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearField(field.id)" tabindex=2>
+					<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearField(field)" tabindex=2>
 					</button>
 				</span>
 			</rs-field>
