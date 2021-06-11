@@ -7,8 +7,8 @@
 		<div class="label" v-on:click.right.stop.prevent="fieldInfo()">
 			<span class="text">{{fieldData.name}}</span>
 		</div>
-		<div class="seperator">
-			<span class="text">:</span>
+		<div>
+			<span class="seperator">:</span>
 		</div>
 		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object'">
 			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
@@ -23,7 +23,7 @@
 				<div class="flex h involved entry">
 					<span class="marking fad fa-layer-minus rs-transparent rs-secondary-solid rs-secondary-purple"></span>
 					<span class="text">{{value.name}}</span>
-					<span>:</span>
+					<span class="seperator">:</span>
 					<span class="text" v-if="!involvesComplex(value.id)">{{object._involved[field][value.id]}}</span>
 					<button class="flat action fas fa-info-circle display-info rs-purple" v-if="value.id" v-on:click="info(value)">
 						<!--span class="fas fa-info-circle display-info rs-purple"></span-->

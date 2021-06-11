@@ -2,14 +2,23 @@
 	background-color: transparent;
 	z-index: 2;
 
+	.property-container {
+	}
+
 	.property {
-		display: flex;
+		display: inline-flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
-		padding: 6px 3px;
+		padding: 4px 6px;
 		border-radius: 4px;
 		background-color: @rsBlack;
-		margin: 5px;
+		margin: 7px 5px;
+		font-size: 16px;
+	}
+
+	button.property {
+		border: 0px;
+		color: @rsWhite;
 	}
 
 	.seperator {
@@ -17,7 +26,14 @@
 	}
 
 	.icon {
-		margin: 3px;
+		display: inline-block;
+		margin: 0px 5px 0px 0px;
+		width: 20px;
+		text-align: center;
+	}
+
+	.action {
+		margin: 0px 0px 0px 5px;
 	}
 
 	&.cell4 {
@@ -46,12 +62,26 @@
 	}
 
 	&.left {
-		justify-content: flex-start;
+		align-items: flex-start;
 	}
 	&.centered {
-		justify-content: center;
+		align-items: center;
 	}
 	&.right {
-		justify-content: flex-end;
+		align-items: flex-end;
+
+		.property {
+			flex-direction: row-reverse;
+		}
+
+		.icon {
+			display: inline-block;
+			margin: 0px 0px 0px 5px;
+			// text-align: left;
+		}
+	
+		.action {
+			margin: 0px 5px 0px 0px;
+		}
 	}
 }

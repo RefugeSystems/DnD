@@ -9,6 +9,7 @@
 	</div>
 	<div class="player-entity column" v-for="entity in entities">
 		<div class="column-content">
+			<!-- TODO: Convert to use a Dashboard or Profile that can layout Columns with any number of entities and widgets where dnd-entity-overview is merely a widget -->
 			<dnd-entity-overview :entity="entity" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'_dndeoc:' + entity.id" :key="entity.id" />
 		</div>
 	</div>

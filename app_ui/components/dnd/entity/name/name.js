@@ -32,6 +32,14 @@ rsSystem.component("dndEntityName", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"info": function() {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": this.entity.id
+			});
+		},
+		"levelUp": function() {
+			// TODO
+		}
 	},
 	"beforeDestroy": function() {
 		/*

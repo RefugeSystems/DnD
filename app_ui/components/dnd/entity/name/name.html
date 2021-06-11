@@ -1,10 +1,14 @@
 <div class="rs-component dnd-component entity-name">
 	<div class="justified flex h bar">
-		<div class="name property">
-			{{entity.name}}
+		<div class="name property-container">
+			<button class="property" v-on:click="info()">
+				<span>{{entity.name}}</span>
+			</button>
 		</div>
-		<div class="level property">
-			Level: {{entity.level}}
+		<div class="level property-container" v-on:click="levelUp()">
+			<button class="property">
+				Level: {{entity.level}}
+			</button>
 		</div>
 	</div>
 </div>

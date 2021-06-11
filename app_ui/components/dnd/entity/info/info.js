@@ -60,6 +60,9 @@ rsSystem.component("dndEntityInfo", {
 		};
 	},
 	"methods": {
+		"giveGold": function() {
+			// TODO
+		}
 	},
 	"beforeDestroy": function() {
 		/*

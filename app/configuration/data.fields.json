@@ -1179,7 +1179,7 @@
 		"attribute": {}
 	}, {
 		"id": "proficiency_rating",
-		"name": "Proficiency Rating",
+		"name": "Proficiency",
 		"description": "The base added skill when an object is proficient with some aspect.",
 		"type": "calculated",
 		"attribute": {}
