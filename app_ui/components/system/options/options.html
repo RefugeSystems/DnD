@@ -23,13 +23,13 @@
 						<span>{{option.label}}</span>
 					</button>
 					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'select'">
-						<label :for="option.id">{{option.label}}</label>
 						<select :id="option.id" v-if="option.numeric" v-model.number="option.base[option.id]" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">
-							<option v-for="opt in option.options" :value="opt">{{opt}}</option>
+							<option v-for="opt in option.options" :value="opt.id || opt">{{opt.name || opt}}</option>
 						</select>
 						<select :id="option.id" v-if="!option.numeric" v-model="option.base[option.id]" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">
-							<option v-for="opt in option.options" :value="opt">{{opt}}</option>
+							<option v-for="opt in option.options" :value="opt.id || opt">{{opt.name || opt}}</option>
 						</select>
+						<label :for="option.id">{{option.label}}</label>
 					</div>
 					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'textarea'">
 						<label :for="option.id">{{option.label}}</label>

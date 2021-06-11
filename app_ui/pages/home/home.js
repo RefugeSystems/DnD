@@ -69,7 +69,7 @@ rsSystem.component("RSHome", {
 			}
 		});
 		data.universe.$on("loaded", () => {
-			console.log("Loaded: ", this.universe);
+			// console.log("Loaded: ", this.universe);
 			Vue.set(this, "player", this.universe.index.player[this.universe.connection.session.player]);
 			if(this.state >= 0) {
 				Vue.set(this, "state", 10);

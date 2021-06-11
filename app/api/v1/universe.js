@@ -118,28 +118,60 @@ module.exports = new (function() {
 			
 			this.router.post("/import", (req, res, next) => {
 				var importing = req.body.import || req.body.export;
+				// console.log("Body: ", req.body);
 				res.result = {
 					"imported": [],
 					"errors": []
 				};
-				if(importing instanceof Array) {
+
+				if(importing instanceof Array && importing.length) {
+					api.universe.emit("send", {
+						"type": "notice",
+						"mid": "import:objects",
+						"recipients": api.universe.getMasters(),
+						"message": "Importing data: 0/" + importing.length,
+						"icon": "fas fa-sync fa-spin",
+						"timeout": 10000
+					});
+
 					importing.forEach(function(details) {
 						api.universe.createObject(details, function(err, object) {
 							if(err) {
-								console.log("Error[" + details.id + "]: ", err);
+								console.log("Error[" + (details?details.id:details) + "]: ", err);
 								res.result.errors.push({
-									"source": details.id,
+									"source": details?details.id:details,
 									"message": err.message,
 									"error": err
 								});
 							} else {
 								res.result.imported.push(object.toJSON());
 							}
+							api.universe.emit("send", {
+								"type": "notice",
+								"mid": "import:objects",
+								"recipients": api.universe.getMasters(),
+								"message": "Importing data: " + res.result.imported.length + "/" + importing.length + ":" + res.result.errors.length,
+								"icon": "fas fa-sync fa-spin",
+								"timeout": 10000
+							});
 							if((res.result.errors.length + res.result.imported.length) === importing.length) {
+								api.universe.emit("send", {
+									"type": "notice",
+									"mid": "import:objects",
+									"recipients": api.universe.getMasters(),
+									"message": "Import Complete: " + res.result.imported.length + "/" + importing.length + ":" + res.result.errors.length,
+									"icon": "fas " + (res.result.errors.length?"fa-exclamation-triangle rs-lightred":"fa-check rs-lightgreen"),
+									"timeout": 10000
+								});
 								next();
 							}
 						});
 					});
+				} else {
+					res.result = {
+						"message": "No import information found"
+					};
+					next();
 				}
 			});
 			

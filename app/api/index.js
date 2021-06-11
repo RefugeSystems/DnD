@@ -19,7 +19,12 @@ var EventEmitter = require("events").EventEmitter,
 	express = require("express"),
 	Router = express.Router,
 	path = require("path"),
-	fs = require("fs");
+	fs = require("fs"),
+	options = {};
+
+options.expressJSON = {
+	"limit": "50mb"
+};
 
 class APIController extends EventEmitter {
 	constructor(universe, authentication) {
@@ -59,10 +64,12 @@ class APIController extends EventEmitter {
 			
 			
 			// Initialize Routing
-			this.router.use(express.json());
+			this.router.use(express.json({"limit":"50mb"}));
 			this.router.use((err, req, res, next) => {
+				console.log("JSON Body Error: ", err);
 				res.status(400).json({
-					"message": "Malformed JSON"
+					"message": "Malformed JSON",
+					"error": err
 				});
 			});
 			this.router.use((req, res, next) => {

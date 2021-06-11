@@ -52,7 +52,7 @@
 			/**
 			 *
 			 * @property view
-			 * @type RSObject
+			 * @type Object
 			 */
 			data.view = null;
 			/**
@@ -64,9 +64,12 @@
 			
 			data.count = 0;
 
-			data.size = 90;
-
 			return data;
+		},
+		"computed": {
+			"size": function() {
+				return this.profile.info_size || 90;
+			}
 		},
 		"watch": {
 			"$route.query.info": function(nV, oV) {

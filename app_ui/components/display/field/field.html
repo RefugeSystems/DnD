@@ -1,7 +1,8 @@
 <div class="rs-component rs-display-field" v-if="displayed">
-	<div class="flex h">
+	<rs-image v-if="image" :image="image" />
+	<div class="flex h" v-if="!image">
 		<div class="marking" v-if="marking">
-			<span :class="marking"/>
+			<span :class="marking"></span>
 		</div>
 		<div class="label" v-on:click.right.stop.prevent="fieldInfo()">
 			<span class="text">{{fieldData.name}}</span>
@@ -13,23 +14,54 @@
 			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
 			<span v-else class="text">{{getValue()}}</span>
 		</div>
+		<button class="flat action fas rs-chevron-circle-down" :class="valuesContainerClass()" v-if="canToggleField" v-on:click="toggleField()"></button>
+		<button class="flat action fad rs-purple" :class="viewInvolved?'fa-layer-minus':'fa-layer-plus'" v-if="hasInvolved()" v-on:click="toggleInvolved()"></button>
 	</div>
-	<div class="pointed">
-		<div class="value array flex v" v-if="fieldData.type === 'array'">
-			<div class="element" v-for="value in getArrayValue()">
-				<span class="text">{{getValueDisplay(fieldData, value)}}</span>
-				<button class="flat action" v-if="value.id" v-on:click="info(value)">
-					<span class="fas fa-info-circle"></span>
-				</button>
+	<div class="pointed" v-if="!image">
+		<div class="value array flex v" v-if="viewInvolved">
+			<div class="involved" v-for="value in involved">
+				<div class="flex h involved entry">
+					<span class="marking fad fa-layer-minus rs-transparent rs-secondary-solid rs-secondary-purple"></span>
+					<span class="text">{{value.name}}</span>
+					<span>:</span>
+					<span class="text" v-if="!involvesComplex(value.id)">{{object._involved[field][value.id]}}</span>
+					<button class="flat action fas fa-info-circle display-info rs-purple" v-if="value.id" v-on:click="info(value)">
+						<!--span class="fas fa-info-circle display-info rs-purple"></span-->
+					</button>
+					<button class="flat action fas rs-blue" :class="detailInvolved[value.id]?'fa-minus-circle':'fa-plus-circle'" v-if="involvesComplex(value.id)" v-on:click="toggleInvolvedDetail(value.id)">
+						<!--span class="fas fa-info-circle display-info rs-purple"></span-->
+					</button>
+				</div>
+				<div class="involved value" v-if="detailInvolved[value.id]">
+					<div class="involved element" v-if="isString(object._involved[field][value.id])">
+						{{object._involved[field][value.id]}}
+					</div>
+					<div class="involved element" v-if="!isString(object._involved[field][value.id])" v-for="(ivalue,key) in object._involved[field][value.id]">
+						<span class="fas fa-plus-circle"></span>
+						<span>{{key}}</span>
+						<span class="seperator">:</span>
+						<span>{{ivalue}}</span>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="value object flex v" v-else-if="fieldData.type === 'object'">
-			<div class="element" v-for="key in getObjectKeys()">
-				<span class="text">{{key.name}}:</span>
-				<span class="text">{{getObjectValue(key)}}</span>
-				<button class="flat action" v-if="!key.faux" v-on:click="info(key)">
-					<span class="fas fa-info-circle"></span>
-				</button>
+		<div class="values" :class="valuesContainerClass()">
+			<div class="value array flex v" v-if="fieldData.type === 'array'">
+				<div class="element" v-for="value in getArrayValue()">
+					<span class="text">{{getValueDisplay(fieldData, value)}}</span>
+					<button class="flat action" v-if="value.id" v-on:click="info(value)">
+						<span class="fas fa-info-circle"></span>
+					</button>
+				</div>
+			</div>
+			<div class="value object flex v" v-else-if="fieldData.type === 'object'">
+				<div class="element" v-for="key in getObjectKeys()">
+					<span class="text">{{key.name}}:</span>
+					<span class="text">{{getObjectValue(key)}}</span>
+					<button class="flat action" v-if="!key.faux" v-on:click="info(key)">
+						<span class="fas fa-info-circle display-info"></span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>

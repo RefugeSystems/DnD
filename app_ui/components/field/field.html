@@ -1,5 +1,5 @@
 
-<div class="rs-component rs-field" :class="field.type + ' property-' + field.id" v-if="isVisible()">
+<div class="rs-component rs-field" :class="field.type + ' property-' + field.id" v-if="isVisible()" v-filedrop="useFileData">
 	<label :for="fid" v-on:click.right.stop.prevent="fieldInfo(field.id)">
 		<span>{{field.name}}</span>
 	</label>
@@ -17,11 +17,11 @@
 		<!-- Do Nothing Here -->
 	</span>
 
-	<select :id="fid" v-if="(field.type === 'select' && field.options && field.options.length) || (field.attribute.input === 'selection')" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
+	<select :id="fid" v-if="availableReferences.length && field.type === 'string'" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
 		<option v-if="root[field.id] === 'undefined' && !field.persistUnset" :value="root[field.id]">{{field.unset}}</option>
 		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
 
-		<option v-for="option in availableReferences" :value="option.id">{{option.name}}</option>
+		<option v-for="option in availableReferences" :value="option.id" :title="option.id">{{option.name}}</option>
 		<!--
 		<option v-if="field.raw" v-for="option in field.options" :value="option">{{option}}</option>
 		<option v-if="!field.raw && !field.optionValue && !field.optionLabel" v-for="option in field.options" :value="option.value" :title="option[field.optionDescription] || option.description || ''">{{option.label}}</option>
@@ -43,7 +43,7 @@
 	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 
 	<input :id="fid" type="password" v-if="field.type === 'password' || field.attribute.encrypted || field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" type="text" v-if="!field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="text" v-if="availableReferences.length === 0 && !field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 
 	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" />
 	<span class="indicator" v-if="field.type === 'file' || field.attribute.file_data">
@@ -126,6 +126,7 @@
 		<div class="referenced" v-for="(reference, $index) in root[field.id]">
 			<button class="remove fas fa-times-square" v-on:click="dismissObjectMap($index)"></button>
 			<span class="reference-display">{{getObjectKey($index)}}</span>
+			<span>:</span>
 			<span class="reference-display">{{getObjectValue(reference)}}</span>
 		</div>
 		<div class="referenced">

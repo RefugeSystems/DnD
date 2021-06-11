@@ -225,6 +225,7 @@ fields.push({
 	"name": "Attributes",
 	"description": "Dynamic attributes for the object.",
 	"type": "object",
+	"ordering": -900,
 	"attribute": {}
 });
 fields.push({
@@ -313,8 +314,19 @@ fields.push({
 	"type": "string",
 	"ordering": 100,
 	"attribute": {
+		"server_only": true,
 		"display_size": 110,
 		"file_data": true
+	}
+});
+fields.push({
+	"id": "displayed_as",
+	"name": "Displayed As",
+	"description": "Maps expected values of this field to strings to display for that value. This serves to prettify values without the need for an entirely different class.",
+	"type": "object",
+	"ordering": 500,
+	"attribute": {
+		"display_size": 110
 	}
 });
 fields.push({
@@ -323,6 +335,7 @@ fields.push({
 	"description": "Number of active connections.",
 	"type": "integer",
 	"attribute": {
+		"display_size": 110,
 		"default": 0
 	}
 });
@@ -436,6 +449,9 @@ module.exports.initialize = function(universe, database, configuration) {
 			classes = classes.concat(configuration.classes);
 		}
 		if(configuration.fields) {
+			// TODO: Merge keeping field IDs from configuration to allow override
+			//		of defaults to modify attributes, ordering, description, or
+			//		display_as (Preserving default name and type)
 			fields = fields.concat(configuration.fields);
 		}
 		if(configuration.objects) {

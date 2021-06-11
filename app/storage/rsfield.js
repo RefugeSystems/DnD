@@ -179,6 +179,23 @@ class RSField extends EventEmitter {
 			this.attribute.display_size = 100;
 		}
 		/**
+ 		 * Used to map values to a display string in the case of simple values, such
+		 * as mapping a "scale" integer to a label for the size.
+ 		 * @property displayed_as
+ 		 * @type Object
+ 		 */
+ 		this.displayed_as = specification.displayed_as;
+		if(typeof(this.displayed_as) === "string") {
+			try {
+				this.displayed_as = JSON.parse(this.displayed_as);
+			} catch(parseException) {
+				
+			}
+		}
+		if(!this.displayed_as) {
+			this.displayed_as = {};
+		}
+		/**
 		 * 
 		 * @property updated
 		 * @type Integer
@@ -214,6 +231,9 @@ class RSField extends EventEmitter {
 		this.type = (specification.type || specification.ftype || "string").toLowerCase();
 		if(typeof(this.attribute) === "string") {
 			this.attribute = JSON.parse(this.attribute);
+		}
+		if(typeof(this.displayed_as) === "string") {
+			this.displayed_as = JSON.parse(this.displayed_as);
 		}
 		
 		this.updated = Date.now();

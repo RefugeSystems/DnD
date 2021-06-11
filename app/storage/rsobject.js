@@ -232,6 +232,7 @@ class RSObject {
 			this.preFieldCalculate();
 		}
 		
+		this._involved = {};
 		var inheriting = [],
 			inherit,
 			loading,
@@ -293,10 +294,29 @@ class RSObject {
 								loading.full_source = !!source.id;
 								this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
 						}
+						if(!this._involved[field.inheritanceFields[i]]) {
+							this._involved[field.inheritanceFields[i]] = {};
+						}
+						// console.log(this.id + "[" + field.inheritanceFields[i] + "] -> " + source.id);
+						if(source._combined[field.inheritanceFields[i]]) { // Intentionally ignoring 0, false, and other falsey values as they essentially aren't contributing
+							switch(ifield.type) {
+								case "object":
+									if(Object.keys(source._combined[field.inheritanceFields[i]]).length) {
+										this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+									}
+									break;
+								case "array":
+									if(source._combined[field.inheritanceFields[i]].length) {
+										this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+									}
+									break;
+								default:
+									this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+							}
+						}
 						// console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
 					} catch (e) {
 						console.log("Ref Fail: " + field.id);
-						throw e;
 					}
 				}
 			} else {
@@ -402,7 +422,7 @@ class RSObject {
 			this.preFieldUpdate();
 		}
 		
-		this._involved = {};
+		// this._involved = {};
 		var fields = this._manager.fieldIDs,
 			inherit,
 			loading,
@@ -412,7 +432,7 @@ class RSObject {
 			field,
 			i,
 			x;
-			
+
 		this._search = "";
 		if(this.name) {
 			this._search += this.name.toLowerCase();
@@ -729,7 +749,9 @@ class RSObject {
 		// console.log("Calculate Field[" + this.id + " . " + field + "]: ", value);
 		var referenced = tracked || [],
 			compare,
-			parsed;
+			parsed,
+			keys,
+			i;
 		
 		if(value === null || value === undefined) {
 			return null;
@@ -754,7 +776,10 @@ class RSObject {
 				if(!this._involved[field]) {
 					this._involved[field] = [];
 				}
-				this._involved[field] = this._involved[field].concat(referenced);
+				// this._involved[field] = this._involved[field].concat(referenced);
+				for(i=0; i<referenced.length; i++) {
+					this._involved[field][referenced[i]] = true;
+				}
 				this._universe.objectHandler.trackReference(this, referenced);
 				// this._universe.objectHandler.trackInheritance(this, referenced);
 				this._calcRef[field] = compare;

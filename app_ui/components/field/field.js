@@ -311,6 +311,15 @@
 						this.emitChanged();
 					}
 				} else if(reference) {
+					if(reference.startsWith("json::")) {
+						try {
+							reference = JSON.parse(reference.substring(6));
+						} catch(exception) {
+							this.universe.generalMessage("Failed to parse new value", "fas fa-exclamation-triangle rs-lightred");
+							return null;
+						}
+					}
+
 					if(!(this.root[this.field.id] instanceof Array)) {
 						Vue.set(this.root, this.field.id, []);
 					}
@@ -331,6 +340,17 @@
 			},
 			"addObjectReference": function(key, value) {
 				console.log("Add Object Key: ", key, value);
+				if(value.startsWith("json::")) {
+					try {
+						value = JSON.parse(value.substring(6));
+					} catch(exception) {
+						this.universe.generalMessage("Failed to parse new value", "fas fa-exclamation-triangle rs-lightred");
+						return null;
+					}
+				}
+				if(!this.root[this.field.id]) {
+					Vue.set(this.root, this.field.id, {});
+				}
 				Vue.set(this.root[this.field.id], key, value);
 			},
 			"dismissObjectMap": function(index) {
@@ -479,6 +499,10 @@
 
 				Vue.set(this, "bufferChanging", false);
 			},
+			"useFileData": function(event) {
+				console.log("Se;ect Drop: ", event.files[0]);
+				this.readFile(event.files[0]);
+			},
 			"selectFile": function(event) {
 				var input = $(this.$el).find("[id='" + this.fid + ":file']"),
 					value,
@@ -486,9 +510,10 @@
 					type,
 					end;
 
-				console.warn("File Search: ", input, event);
+				// console.warn("File Search: ", input, event);
 				if(input && input.length && input[0].files.length) {
-					console.warn("Set Data");
+					this.readFile(input[0].files[0]);
+					/*
 					DataUtility.encodeFile(input[0].files[0])
 					.then((result) => {
 						value = result.data;
@@ -497,6 +522,27 @@
 						type = value.substring(start + 1, end);
 						Vue.set(this.root, "content_type", type);
 						Vue.set(this.root, this.field.id, value);
+						this.emitChanged();
+					});
+					*/
+				}
+			},
+			"readFile": function(file) {
+				if(file) {
+					var value,
+						start,
+						type,
+						end;
+
+					DataUtility.encodeFile(file)
+					.then((result) => {
+						value = result.data;
+						start = value.indexOf(":");
+						end = value.indexOf(";");
+						type = value.substring(start + 1, end);
+						Vue.set(this.root, "content_type", type);
+						Vue.set(this.root, this.field.id, value);
+						this.emitChanged();
 					});
 				}
 			},

@@ -49,6 +49,8 @@ rsSystem.component("RSControl", {
 		data.built = {};
 
 		data.classification = this.universe.listing.classes[0].id;
+		
+		data.suffix = Date.now();
 
 		return data;
 	},
@@ -68,6 +70,9 @@ rsSystem.component("RSControl", {
 		};
 	},
 	"methods": {
+		"sync": function() {
+			Vue.set(this, "suffix", Date.now());
+		},
 		"reclass": function(classification) {
 			Vue.set(this, "classification", classification);
 		}

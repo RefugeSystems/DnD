@@ -37,7 +37,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.race.length; x++) {
-				if (this.universe.listing.race[x].playable) {
+				if (this.universe.listing.race[x].playable && !this.universe.listing.race[x].attribute.no_show) {
 					selectable.push(this.universe.listing.race[x]);
 				}
 			}
@@ -48,10 +48,8 @@ rsSystem.component("dndCreateCharacterDialog", {
 			if (this.building.race) {
 				for (x = 0; x < this.building.race.variants.length; x++) {
 					feat = this.universe.getObject(this.building.race.variants[x]);
-					if (feat) {
-						if (!feat.inactive) {
-							selectable.push(feat);
-						}
+					if (feat && !feat.inactive && !feat.attribute.no_show) {
+						selectable.push(feat);
 					} else {
 						this.universe.log.error("Unknown racial variant: " + this.building.race.variants[x]);
 					}
@@ -70,7 +68,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.archetype.length; x++) {
-				if (this.universe.listing.archetype[x].playable) {
+				if (this.universe.listing.archetype[x].playable && !this.universe.listing.archetype[x].attribute.no_show) {
 					selectable.push(this.universe.listing.archetype[x]);
 				}
 			}
@@ -79,7 +77,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.feat.length; x++) {
-				if (this.universe.listing.feat[x].featbg) {
+				if (this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show) {
 					selectable.push(this.universe.listing.feat[x]);
 				}
 			}
@@ -88,7 +86,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.alignment.length; x++) {
-				if (this.universe.listing.alignment[x].playable) {
+				if (this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show) {
 					selectable.push(this.universe.listing.alignment[x]);
 				}
 			}
@@ -444,7 +442,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 		},
 		"statRecommended": function(base, stat) {
 			if(base && base.attribute) {
-				return (base.attribute.recommended && base.attribute.recommended[stat]) || base.attribute.recommended.indexOf(stat) !== -1;
+				return (base.attribute.recommended && base.attribute.recommended[stat]) || (typeof(base.attribute.recommended) === "string" && base.attribute.recommended.indexOf(stat) !== -1);
 			}
 		},
 		"statUp": function(stat) {

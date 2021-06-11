@@ -29,7 +29,13 @@ rsSystem.component("rsDisplayField", {
 			"required": true,
 			"type": Object
 		},
+		"profile": {
+			"type": Object
+		},
 		"empties": {
+			"type": Boolean
+		},
+		"hideInvolved": {
 			"type": Boolean
 		},
 		"marking": {
@@ -42,17 +48,63 @@ rsSystem.component("rsDisplayField", {
 		},
 		"displayed": function() {
 			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
+		},
+		"image": function() {
+			return this.universe.index.image[this.object[this.field]];
+		},
+		"involved": function() {
+			if(this.object._involved && this.object._involved[this.field] && this.object._involved[this.field]) {
+				var keys = Object.keys(this.object._involved[this.field]),
+					involved = [],
+					buffer,
+					i;
+				for(i=0; i<keys.length; i++) {
+					buffer = this.universe.getObject(keys[i]);
+					if(buffer) {
+						involved.push(buffer);
+					} else {
+						// TODO: Warning
+					}
+				}
+				if(involved.length) {
+					return involved;
+				}
+			}
+			return null;
 		}
 	},
 	"data": function() {
 		var data = {};
 		
+		data.canToggleField = !!this.profile;
+		data.viewInvolved = false;
+		data.detailInvolved = {};
+
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"toggleField": function() {
+			if(this.profile) {
+				if(!this.profile.field_hide) {
+					Vue.set(this.profile, "field_hide", {});
+				}
+				Vue.set(this.profile.field_hide, this.field, !this.profile.field_hide[this.field]);
+			}
+		},
+		"valuesContainerClass": function() {
+			if(this.profile) {
+				if(!this.profile.field_hide) {
+					Vue.set(this.profile, "field_hide", {});
+				}
+				if(this.profile.field_hide && this.profile.field_hide[this.field]) {
+					return "hide";
+				}
+			}
+			return "show";
+		},
 		"fieldInfo": function() {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": "fields:" + this.field
@@ -69,6 +121,31 @@ rsSystem.component("rsDisplayField", {
 				});
 			}
 		},
+		"hasInvolved": function() {
+			if(this.hideInvolved || !this.involved) {
+				return false;
+			}
+
+			return true;
+		},
+		"isString": function(value) {
+			return typeof(value) === "string";
+		},
+		"involvesComplex": function(key) {
+			if(this.object._involved && this.object._involved[this.field]) {
+				if(parseInt(this.object._involved[this.field][key]) == this.object._involved[this.field][key]) {
+					return false;
+				}
+				return true;
+			}
+			return false;
+		},
+		"toggleInvolved": function() {
+			Vue.set(this, "viewInvolved", !this.viewInvolved);
+		},
+		"toggleInvolvedDetail": function(key) {
+			Vue.set(this.detailInvolved, key, !this.detailInvolved[key]);
+		},
 		"getValueDisplay": function(field, value) {
 			if(field.attribute.obscures) {
 				for(var x=0; x<field.attribute.obscures.length; x++) {
@@ -83,7 +160,9 @@ rsSystem.component("rsDisplayField", {
 				}
 			}
 			
-			if(typeof(value) === "object") {
+			if(field.displayed_as && field.displayed_as[value] !== undefined) {
+				return field.displayed_as[value];
+			} else if(typeof(value) === "object") {
 				if(field.attribute.display_key) {
 					return value[field.attribute.display_key];
 				} else {
@@ -107,8 +186,10 @@ rsSystem.component("rsDisplayField", {
 						lookup = this.universe.getObject(this.object[this.field][x]);
 						if(lookup) {
 							value.push(lookup);
-						} else {
-							rsSystem.log.warn("Unknown Value? " + this.object[this.field][x]);
+						} else if(this.fieldData.displayed_as[this.object[this.field][x]]) {
+							value.push(this.fieldData.displayed_as[this.object[this.field][x]]);
+						} else if(this.object[this.field][x] !== undefined && this.object[this.field][x] !== null) {
+							value.push(this.object[this.field][x]);
 						}
 					}
 					
@@ -137,7 +218,7 @@ rsSystem.component("rsDisplayField", {
 				} else {
 					for(x=0; x<keys.length; x++) {
 						oKeys.push({
-							"name": keys[x],
+							"name": this.fieldData.displayed_as?this.fieldData.displayed_as[keys[x]] || keys[x]:keys[x],
 							"id": keys[x],
 							"faux": true
 						});
@@ -158,6 +239,8 @@ rsSystem.component("rsDisplayField", {
 				} else {
 					return value;
 				}
+			} else if(this.fieldData.displayed_as && this.fieldData.displayed_as[value]) {
+				return this.fieldData.displayed_as[value];
 			} else if(typeof(value) === "number") {
 				// return value > 0?value:value;
 				return value;
@@ -168,15 +251,18 @@ rsSystem.component("rsDisplayField", {
 			}
 		},
 		"getValue": function() {
-			if(this.fieldData.inheritable) {
-				var value = this.universe.getObject(this.object[this.field]);
+			var value = this.object[this.field];
+			if(this.fieldData.displayed_as && this.fieldData.displayed_as[value]) {
+				return this.fieldData.displayed_as[value];
+			} else if(this.fieldData.inheritable) {
+				value = this.universe.getObject(value);
 				if(value) {
 					return value.name || value.id;
 				} else {
 					return this.object[this.field];
 				}
 			} else {
-				return this.object[this.field];
+				return value;
 			}
 		}
 	},

@@ -5,6 +5,8 @@
  * @class dndEntityOverview
  * @constructor
  * @module Components
+ * @param {Object} entity
+ * @param {Object} profile
  */
 rsSystem.component("dndEntityOverview", {
 	"inherit": true,
@@ -20,16 +22,64 @@ rsSystem.component("dndEntityOverview", {
 		"profile": {
 			"type": Object,
 			"default": function() {
-				return {};
+				return this.universe.index.profile[this.entity.profile] || {};
 			}
 		}
 	},
 	"computed": {
+		/**
+		 * 
+		 * @property location
+		 * @type Object
+		 */
 		"location": function() {
 			if(this.entity.location && this.universe.index.location[this.entity.locaiton]) {
 				return this.universe.index.location[this.entity.locaiton];
 			}
 			return {};
+		},
+		/**
+		 * 
+		 * @property image
+		 * @type Object
+		 */
+		"image": function() {
+			if(this.location && this.location.portrait) {
+				return this.universe.index.image[this.location.portrait];
+			} else if(this.entity.picture) {
+				return this.universe.index.image[this.entity.picture];
+			}
+		},
+
+		"widgets": function() {
+			var widgets = [],
+				dashboard,
+				widget,
+				i;
+
+			if(this.entity.dashboard && (dashboard = this.universe.index.dashboard[this.entity.dashboard])) {
+				
+			} else if(this.profile.default_dashboard && (dashboard = this.universe.index.dashboard[this.profile.default_dashboard])) {
+
+			} else {
+				for(i=0; i<this.universe.listing.dashboard.length; i++) {
+					if(this.universe.listing.dashboard[i].default_value && !this.universe.listing.dashboard[i].is_preview && !this.universe.listing.dashboard[i].disabled) {
+						dashboard = this.universe.listing.dashboard[i];
+						break;
+					}
+				}
+			}
+
+			if(dashboard) {
+				for(i=0; i<dashboard.widgets.length; i++) {
+					widget = this.universe.index.widget[dashboard.widgets[i]];
+					if(widget && !widget.disabled) {
+						widgets.push(widget);
+					}
+				}
+			}
+
+			return widgets;
 		}
 	},
 	"data": function() {

@@ -46,6 +46,7 @@ module.exports = new (function() {
 						"id": field.id,
 						"description": field.description,
 						"type": field.type,
+						"ordering": field.ordering,
 						"inheritance": field.inheritance,
 						"inheritable": field.inheritable,
 						"attribute": field.attribute

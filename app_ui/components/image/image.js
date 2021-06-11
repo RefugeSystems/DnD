@@ -23,8 +23,24 @@
 				"default": "general",
 				"type": String
 			},
+			"cacheSuffix": {
+				default: ""
+			},
 			"linked": {
 				"type": Object
+			}
+		},
+		"computed": {
+			/**
+			 * 
+			 * @property location
+			 * @type Object
+			 */
+			"url": function() {
+				if(this.cacheSuffix) {
+					return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id + "?ctrl=" + this.cacheSuffix;
+				}
+				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id;
 			}
 		},
 		"data": function() {
@@ -35,41 +51,12 @@
 			
 			return data;
 		},
-		"watch": {
-			"image": {
-				"deep": true,
-				"handler": function() {
-//					console.warn("Re-Render Image: ", this.image);
-					this.update();
-				}
-			},
-			"linked": function() {
-//				console.warn("Re-Link Image: ", this.linked);
-				this.update();
-			}
-		},
 		"mounted": function() {
 			rsSystem.register(this);
-			if(this.image.delayed_data) {
-				this.image.retrieve();
-			} else {
-				this.update();
-			}
 		},
 		"methods": {
-			"update": function() {
-				if(this.image.linked) {
-					Vue.set(this, "uri", this.image.url);
-				} else {
-					Vue.set(this, "uri", this.image.data);
-				}
-				if(this.linked) {
-					this.link = "/" + this.linked.linked + "/" + this.linked.id;
-				} else {
-					this.link = false;
-				}
-				
-				this.$forceUpdate();
+			"follow": function() {
+
 			},
 			"classes": function() {
 				var classes;

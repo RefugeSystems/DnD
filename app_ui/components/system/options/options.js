@@ -32,8 +32,11 @@ rsSystem.component("systemOptionsDialog", {
 	},
 	"data": function() {
 		var data = {},
+			dashboards = [],
+			default_dash,
 			option,
 			keys,
+			i,
 			x;
 			
 		data.options = [];
@@ -46,6 +49,18 @@ rsSystem.component("systemOptionsDialog", {
 		data.version_ui = rsSystem.version;
 		data.navigator = rsSystem.getBrowserName();
 		data.active = null;
+
+		for(i=0; i<this.universe.listing.dashboard.length; i++) {
+			if(!this.universe.listing.dashboard[i].is_preview && !this.universe.listing.dashboard[i].disabled) {
+				if(this.universe.listing.dashboard[i].default_value) {
+					default_dash = this.universe.listing.dashboard[i];
+				}
+				dashboards.push(this.universe.listing.dashboard[i]);
+			}
+		}
+		if(!this.profile.default_dashboard && default_dash) {
+			Vue.set(this.profile, "default_dashboard", default_dash.id);
+		}
 
 		data.pages = {
 			/**
@@ -85,6 +100,39 @@ rsSystem.component("systemOptionsDialog", {
 					"label": "No Message Alerts",
 					"base": this.profile,
 					"type": "toggle"
+				}, {
+					"id": "info_size",
+					"label": "Information Detail Amount in Flyout",
+					"base": this.profile,
+					"type": "select",
+					"options": [{
+						"name": "Minimum",
+						"id": 5
+					}, {
+						"name": "Small",
+						"id": 30
+					}, {
+						"name": "Medium",
+						"id": 50
+					}, {
+						"name": "Large",
+						"id": 70
+					}, {
+						"name": "Full",
+						"id": 90
+					}, {
+						"name": "Complete",
+						"id": 100
+					}, {
+						"name": "Debug",
+						"id": 200
+					}]
+				}, {
+					"id": "default_dashboard",
+					"label": "Default Character Dashboard",
+					"base": this.profile,
+					"type": "select",
+					"options": dashboards
 				}]
 			},
 			"account": {
@@ -374,5 +422,20 @@ rsSystem.component("systemOptionsDialog", {
  * 
  * @property silence_messaging
  * @type Boolean
+ */
+/**
+ * 
+ * @property full_info
+ * @type Boolean
+ */
+/**
+ * 
+ * @property info_size
+ * @type Integer
+ */
+/**
+ * 
+ * @property default_dashboard
+ * @type String
  */
 

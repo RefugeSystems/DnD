@@ -2,58 +2,78 @@
 /**
  * 
  * 
- * @class rsImage
+ * @class rsRenderImage
  * @constructor
  * @module Components
  */
-rsSystem.component("rsImage", {
-	"inherit": true,
-	"mixins": [
-		
-	],
-	"props": {
-		/**
-		 * ID of the image
-		 * @property image
-		 * @type String
-		 */
-		"image": {
-			"required": true,
-			"type": String
-		},
-		"modes": {
-			"default": "general",
-			"type": String
-		},
-		"universe": {
-			"required": true,
-			"type": Object
-		}
-	},
-	"data": function() {
-		var data = {};
-		data.uri = this.universe.connection.address.replace("ws://", "http://").replace("wss://", "https://") + "/api/v1/image/" + this.image;
-		return data;
-	},
-	"mounted": function() {
-		rsSystem.register(this);
-	},
-	"methods": {
-		"classes": function() {
-			var classes;
+(function() {
+	
+	
+	rsSystem.component("rsImage", {
+		"inherit": true,
+		"mixins": [
 			
-			if(this.modes) {
-				classes = this.modes;
-			} else {
-				classes = "general";
+		],
+		"props": {
+			"image": {
+				"required": true,
+				"type": Object
+			},
+			"modes": {
+				"default": "general",
+				"type": String
+			},
+			"cacheSuffix": {
+				default: ""
+			},
+			"linked": {
+				"type": Object
 			}
-			
-			if(this.linked) {
-				classes += " linked";
+		},
+		"computed": {
+			/**
+			 * 
+			 * @property location
+			 * @type Object
+			 */
+			"url": function() {
+				if(this.cacheSuffix) {
+					return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.image.id + "?ctrl=" + this.cacheSuffix;
+				}
+				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.image.id;
 			}
+		},
+		"data": function() {
+			var data = {};
 			
-			return classes;
-		}
-	},
-	"template": Vue.templified("components/display/image.html")
-});
+			data.link = null;
+			data.uri = null;
+			
+			return data;
+		},
+		"mounted": function() {
+			rsSystem.register(this);
+		},
+		"methods": {
+			"follow": function() {
+
+			},
+			"classes": function() {
+				var classes;
+				
+				if(this.modes) {
+					classes = this.modes;
+				} else {
+					classes = "general";
+				}
+				
+				if(this.linked) {
+					classes += " linked";
+				}
+				
+				return classes;
+			}
+		},
+		"template": Vue.templified("components/display/image.html")
+	});
+})();

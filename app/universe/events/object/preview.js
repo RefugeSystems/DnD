@@ -19,10 +19,17 @@ module.exports.initialize = function(universe) {
 			details = event.message.data.details;
 
 		details.id = classification + ":preview:" + event.player.id;
-		details.obscured = true;
-		console.log("Previewing: ", details);
+		details.is_preview = true;
+		if(details.name) {
+			details.name += " (Preview)";
+		}
+		if(!details.attribute) {
+			details.attribute = {};
+		}
+		details.attribute.no_show = true;
 
-		var object = universe.getObject(details.id, function(err, object) {
+		console.log("Preview: ", details);
+		universe.getObject(details.id, function(err, object) {
 			if(err) {
 				universe.emit("send", {
 					"type": "notice",
@@ -33,23 +40,34 @@ module.exports.initialize = function(universe) {
 					"error": err,
 					"anchored": true
 				});
-			} else if(object) {
-				console.log("Updating");
-				object.setValues(details, function(err) {
-					if(err) {
-						universe.emit("send", {
-							"type": "notice",
-							"mid": "create:object",
-							"recipient": event.player.id,
-							"message": "Failed to generate object preview: " + err.message,
-							"icon": "fas fa-exclamation-triangle rs-lightred",
-							"error": err,
-							"anchored": true
-						});
-					}
-				});
+			} else if(object && typeof(object.setValue) === "function") {
+				if(typeof(object.setValue) === "function") {
+					object.setValues(details, function(err) {
+						if(err) {
+							universe.emit("send", {
+								"type": "notice",
+								"mid": "create:object",
+								"recipient": event.player.id,
+								"message": "Failed to generate object preview: " + err.message,
+								"icon": "fas fa-exclamation-triangle rs-lightred",
+								"error": err,
+								"anchored": true
+							});
+						}
+					});
+				} else {
+					console.log("Failed to get RSObject instantiation? ", object);
+					universe.emit("send", {
+						"type": "notice",
+						"mid": "create:object",
+						"recipient": event.player.id,
+						"message": "Failed to find appropriate asset: Contact GM",
+						"icon": "fas fa-exclamation-triangle rs-lightred",
+						"anchored": true
+					});
+				}
 			} else {
-				console.log("Creating");
+				// console.log("Creating");
 				universe.createObject(details, function(err, object) {
 					if(err) {
 						universe.emit("send", {

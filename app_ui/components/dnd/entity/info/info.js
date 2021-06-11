@@ -2,15 +2,14 @@
 /**
  *
  *
- * @class dndEntityKnowledge
+ * @class dndEntityInfo
  * @constructor
  * @module Components
  */
-rsSystem.component("dndEntityKnowledge", {
+rsSystem.component("dndEntityInfo", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController,
-		rsSystem.components.DNDCore
+		rsSystem.components.DNDWidgetCore
 	],
 	"props": {
 		"entity": {
@@ -22,6 +21,22 @@ rsSystem.component("dndEntityKnowledge", {
 			"default": function() {
 				return {};
 			}
+		}
+	},
+	"computed": {
+		"totalHitDice": function() {
+			var total = 0,
+				keys,
+				i;
+			
+			if(this.entity.hit_dice) {
+				keys = Object.keys(this.entity.hit_dice);
+				for(i=0; i<keys.length; i++) {
+					total += (this.entity.hit_dice[keys[i]] || 0);
+				}
+			}
+
+			return total;
 		}
 	},
 	"data": function() {
@@ -52,5 +67,5 @@ rsSystem.component("dndEntityKnowledge", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/entity/knowledge.html")
+	"template": Vue.templified("components/dnd/entity/info.html")
 });

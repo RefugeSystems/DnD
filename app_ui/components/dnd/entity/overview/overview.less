@@ -1,5 +1,22 @@
 .dnd-component.character-overview {
+	position: relative;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
 
+	.widgets.container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		z-index: 2;
 
-	
+		.widget {
+			width: 100%;
+		}
+	}
+
+	.imagery {
+		position: absolute;
+		z-index: 1;
+	}
 }

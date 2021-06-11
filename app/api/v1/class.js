@@ -33,6 +33,16 @@ module.exports = new (function() {
 				}
 			});
 			
+			this.router.post("/:classification/attribute", (req, res, next) => {
+				if(api.universe.manager[req.params.classification]) {
+					res.result = {};
+					res.result.attributes = api.universe.setClassAttribute(req.params.classification, req.body);
+					next();
+				} else {
+					next();
+				}
+			});
+			
 			
 			this.router.post("/:classification/fields", (req, res, next) => {
 				if(req.body.fields && req.body.fields.length && api.universe.manager[req.params.classification]) {

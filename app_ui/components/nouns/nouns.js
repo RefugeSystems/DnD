@@ -120,6 +120,9 @@
 					Vue.delete(this.storage, "detail_data");
 				}
 			}
+			if(!this.storage.classification_ids) {
+				this.storage.classification_ids = {};
+			}
 			if(this.$route.params.classification) {
 				Vue.set(this.storage, "classification", this.$route.params.classification);
 			} else if(!this.storage.classification) {
@@ -128,16 +131,33 @@
 			this.reclassing();
 		},
 		"methods": {
+			"usableSource": function(source) {
+				return source.id.indexOf(":preview:") === -1;
+			},
 			"copySource": function(source) {
+				var x;
+				console.log("Copy: ", source);
 				if(source) {
+					console.log(" > Source: ", source);
 					source = this.universe.index[this.storage.classification][source];
-					if(source && source._data) {
-						Vue.set(this.details, "id", source._data.id);
-						for(var x=0; x<this.fields.length; x++) {
-							if(source._data[this.fields[x].id] === null || source._data[this.fields[x].id] === undefined) {
-								Vue.delete(this.details, this.fields[x].id);
-							} else {
-								Vue.set(this.details, this.fields[x].id, source._data[this.fields[x].id]);
+					if(source) {
+						if(source._data) {
+							Vue.set(this.details, "id", source._data.id);
+							for(x=0; x<this.fields.length; x++) {
+								if(source._data[this.fields[x].id] === null || source._data[this.fields[x].id] === undefined) {
+									Vue.delete(this.details, this.fields[x].id);
+								} else {
+									Vue.set(this.details, this.fields[x].id, source._data[this.fields[x].id]);
+								}
+							}
+						} else {
+							Vue.set(this.details, "id", source.id);
+							for(x=0; x<this.fields.length; x++) {
+								if(source[this.fields[x].id] === null || source[this.fields[x].id] === undefined) {
+									Vue.delete(this.details, this.fields[x].id);
+								} else {
+									Vue.set(this.details, this.fields[x].id, source[this.fields[x].id]);
+								}
 							}
 						}
 						this.previewObject();
@@ -146,6 +166,7 @@
 				}
 			},
 			"reclassing": function() {
+				Vue.set(this.details, "id", this.storage.classification_ids[this.storage.classification] || "");
 				this.$emit("classification", this.storage.classification);
 				this.previewObject();
 			},
@@ -173,7 +194,7 @@
 				console.log("Drop: ", event);
 			},
 			"completed": function(event) {
-				console.log("Complete: ", event);
+				// console.log("Complete: ", event);
 			},
 			"toObject": function() {
 				var object = {},
@@ -198,7 +219,7 @@
 				// Clean eroneous fields
 				previewing.id = this.details.id;
 				for(i=0; i<this.fields.length; i++) {
-					if(this.details[this.fields[i].id] !== undefined) {
+					if(this.details[this.fields[i].id] !== undefined && this.details[this.fields[i].id] !== null) {
 						if(this.fields[i].type === "array" && this.details[this.fields[i].id].length === 0) {
 							previewing[this.fields[i].id] = null;
 						} else if(this.fields[i].type === "object") {
@@ -216,21 +237,26 @@
 				});
 			},
 			"sync": function(event) {
+				Vue.set(this.storage.classification_ids, this.storage.classification, this.details.id);
 				this.previewObject();
+				this.$emit("sync", event);
 			},
 			"adjust": function(event) {
-				console.log("Blured: ", event);
+				// console.log("Blured: ", event);
+			},
+			"noData": function(field) {
+				Vue.set(this.details, field.id, null);
 			},
 			"clearField": function(field) {
 				switch(field.type) {
 					case "array":
-						Vue.set(this.details, field, []);
+						Vue.set(this.details, field.id, []);
 						break;
 					case "object":
-						Vue.set(this.details, field, {});
+						Vue.set(this.details, field.id, {});
 						break;
 					default:
-						Vue.delete(this.details, field);
+						Vue.delete(this.details, field.id);
 						break;
 				}
 			},
@@ -278,10 +304,14 @@
 					i;
 
 				for(i=0; i<keys.length; i++) {
-					Vue.delete(this.details, keys[i]);
+					Vue.set(this.details, keys[i], null);
 				}
 
 				this.previewObject();
+
+				for(i=0; i<keys.length; i++) {
+					Vue.delete(this.details, keys[i]);
+				}
 			},
 			/**
 			 * Save the current specifications to an object (either making new or updating based

@@ -1,10 +1,44 @@
 .rs-component.rs-display-field {
 	
+
+	img {
+		max-width: 100%;
+	}
+	
 	.object,
 	.array {	
 		.element {
 			text-align: left;
 		}
+	}
+
+	.involved {
+		.display-info {
+
+		}
+
+		.entry {
+
+			.action {
+				
+			}
+		}
+	}
+
+	.action {
+		transition: transform .5s;
+	}
+
+	.action.hide {
+		transform: rotate(180deg);
+	}
+
+	.seperator {
+		margin: 0px 5px 0px 2px;
+	}
+
+	.action {
+		margin-left: 5px;
 	}
 	
 	.marking {

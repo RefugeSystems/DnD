@@ -133,8 +133,7 @@
 		"name": "Playing As",
 		"description": "Indicates the primary character for a player",
 		"type": "string",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"entity"
 		],
@@ -144,8 +143,7 @@
 		"name": "Played By",
 		"description": "Indicates the primary player for an entity",
 		"type": "string",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"player"
 		],
@@ -186,8 +184,7 @@
 		"name": "Alignment",
 		"description": "The alignment of this entity.",
 		"type": "string",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"alignment"
 		],
@@ -275,9 +272,35 @@
 	}, {
 		"id": "profile",
 		"name": "Profile",
-		"description": "Profile image for this object",
+		"description": "Profile data to use for this object",
 		"type": "string",
+		"inheritable": [
+			"profile"
+		],
 		"attribute": {}
+	}, {
+		"id": "portrait",
+		"name": "Portrait",
+		"description": "Portrait (Short Hand or Bust) image for this object",
+		"type": "string",
+		"inheritable": [
+			"image"
+		],
+		"attribute": {
+			"display_size": 110
+		}
+	}, {
+		"id": "picture",
+		"name": "Picture",
+		"description": "Picutre (Full Length or Encompassing) image for this object",
+		"type": "string",
+		"ordering": 1,
+		"inheritable": [
+			"image"
+		],
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "background",
 		"name": "Background Image",
@@ -357,8 +380,7 @@
 		"name": "Audios",
 		"description": "List of audio IDs",
 		"type": "array",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"audio"
 		],
@@ -368,8 +390,7 @@
 		"name": "Audio",
 		"description": "Audio ID for this object",
 		"type": "string",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"audio"
 		],
@@ -387,8 +408,7 @@
 		"name": "Journals",
 		"description": "The Journal objects associated with this object, typically for use with Pages",
 		"type": "array",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"journal"
 		],
@@ -426,6 +446,14 @@
 			"displayed": false
 		}
 	}, {
+		"id": "is_preview",
+		"name": "Is Preview",
+		"description": "Flag to mark this object as a preview of something and not an actual object",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "spell_slots",
 		"name": "Spell Slots",
 		"description": "Maps a spell level to the number of spell slots left for that object",
@@ -454,7 +482,7 @@
 		"description": "The damage type this object is considered to deal.",
 		"type": "string",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"damage_type"
@@ -667,7 +695,7 @@
 		"description": "List of actions this entity can perform",
 		"type": "array",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"action"
@@ -690,6 +718,12 @@
 		"name": "Action Max",
 		"description": "Action count max for the various types.",
 		"type": "object",
+		"displayed_as": {
+			"main": "Main",
+			"bonus": "Bonus",
+			"movement": "Movement",
+			"reaction": "Reaction"
+		},
 		"attribute": {}
 	}, {
 		"id": "section",
@@ -703,7 +737,7 @@
 		"description": "Types that this object can target, for instance types of objects or creatures that a spell can affect",
 		"type": "array",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"type"
@@ -721,9 +755,44 @@
 			"inherited_key": "damage_type"
 		}
 	}, {
+		"id": "dashboard",
+		"name": "Dashboard",
+		"description": "The dashboard used by this object that indicates the widget layout to use",
+		"type": "string",
+		"inheritable": [
+			"dashboard"
+		],
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "component",
+		"name": "Component",
+		"description": "Names the component to use for rendering",
+		"type": "string",
+		"attribute": {
+			"display_size": 110
+		}
+	}, {
+		"id": "default_value",
+		"name": "Default",
+		"description": "Indicates that htis is the default object to use in certain cases such as dashboards",
+		"type": "boolean",
+		"attribute": {
+			"display_size": 100
+		}
+	}, {
 		"id": "selectable",
 		"name": "Selectable",
 		"description": "Indicates that this object is selectable for some reason, such as a Feat or Proficiency that can be selected while leveling",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "auto_refresh",
+		"name": "Refresh",
+		"description": "When true, the system will automatically refresh this object",
 		"type": "boolean",
 		"attribute": {
 			"displayed": false
@@ -919,7 +988,7 @@
 			"spells": "+",
 			"resistance": "+=",
 			"damage": "+=",
-			
+
 			"spell_slot_max": "+",
 			"skill_proficiency": "=",
 			"skills": "+",
@@ -927,7 +996,7 @@
 			"action_max": "+",
 			"hp_max": "+",
 			"effects": "+",
-			
+
 			"equip_slots": "-",
 			"conditionals": "+"
 		},
@@ -940,8 +1009,7 @@
 		"name": "Variants",
 		"description": "Variations of this race",
 		"type": "array",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"feat"
 		],
@@ -1017,11 +1085,11 @@
 			"skill_check": "+=",
 			"effects": "+",
 			"proficiencies": "+",
-            "knowledge_matrix": "+",
-            "knowledges": "+",
-            "spell_slot_max": "+",
-            "threat": "+",
-            "score": "+",
+			"knowledge_matrix": "+",
+			"knowledges": "+",
+			"spell_slot_max": "+",
+			"threat": "+",
+			"score": "+",
 			"conditionals": "+"
 		},
 		"inheritable": [
@@ -1058,6 +1126,14 @@
 		"description": "Number of expendable charges available on this object.",
 		"type": "integer",
 		"attribute": {}
+	}, {
+		"id": "cell_width",
+		"name": "Cell Width",
+		"description": "Number of cells (out of 4) that the widget should occupy in width",
+		"type": "integer",
+		"attribute": {
+			"options": [1, 2, 3, 4]
+		}
 	}, {
 		"id": "recharges_at",
 		"name": "Recharges At",
@@ -1133,7 +1209,7 @@
 		"description": "Needed Proficiency for using this object with proficiency.",
 		"type": "string",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"proficiency"
@@ -1171,7 +1247,7 @@
 		"description": "Lists types that are accepted by this object.",
 		"type": "array",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"type"
@@ -1183,7 +1259,7 @@
 		"description": "Lists types that are rejected by this object.",
 		"type": "array",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"type"
@@ -1219,7 +1295,7 @@
 		"description": "Proficiencies held by this object.",
 		"type": "array",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"proficiency"
@@ -1255,7 +1331,7 @@
 		"description": "This uses charges from another property.",
 		"type": "string",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"entity"
@@ -1309,7 +1385,7 @@
 		"description": "The object attuned to this object.",
 		"type": "string",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"entity"
@@ -1344,6 +1420,19 @@
 		"name": "Size",
 		"description": "The size of this object",
 		"type": "integer",
+		"displayed_as": {
+			"0": "Particle",
+			"1": "Atomic",
+			"2": "Itsy",
+			"3": "Tiny",
+			"4": "Small",
+			"5": "Medium",
+			"6": "Large",
+			"7": "Huge",
+			"8": "Gargantuan",
+			"9": "Enormous",
+			"10": "Colossal"
+		},
 		"attribute": {}
 	}, {
 		"id": "stat",
@@ -1383,7 +1472,7 @@
 		"inheritance": {
 			"enchant_rating": "+",
 			"skills": "+",
-			
+
 			"strength": "+",
 			"dexterity": "+",
 			"constitution": "+",
@@ -1441,7 +1530,7 @@
 		"description": "The primary type for this object",
 		"type": "string",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"type"
@@ -1453,7 +1542,7 @@
 		"description": "The types that apply to this object",
 		"type": "array",
 		"inheritance": {
-			
+
 		},
 		"inheritable": [
 			"type"
@@ -1509,8 +1598,7 @@
 		"name": "Skills",
 		"description": "Skills that this object can perform.",
 		"type": "array",
-		"inheritance": {
-		},
+		"inheritance": {},
 		"inheritable": [
 			"skill"
 		],
@@ -1526,7 +1614,12 @@
 		"name": "Widgets",
 		"description": "List of objects describing widgets",
 		"type": "array",
-		"attribute": {}
+		"inheritable": [
+			"widget"
+		],
+		"attribute": {
+			"display_size": 10
+		}
 	}, {
 		"id": "pages",
 		"name": "Pages",
@@ -1650,6 +1743,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "absent",
+		"name": "Absent",
+		"description": "Players who were absent for this.",
+		"type": "array",
+		"inheritable": [
+			"player"
+		],
+		"attribute": {}
+	}, {
 		"id": "attachments",
 		"name": "Attchments",
 		"description": "List of item IDs considered attached to this object.",
@@ -1679,11 +1781,11 @@
 			"skill_check": "+=",
 			"effects": "+",
 			"proficiencies": "+",
-            "knowledge_matrix": "+",
-            "knowledges": "+",
-            "spell_slot_max": "+",
-            "threat": "+",
-            "score": "+",
+			"knowledge_matrix": "+",
+			"knowledges": "+",
+			"spell_slot_max": "+",
+			"threat": "+",
+			"score": "+",
 			"conditionals": "+"
 		},
 		"inheritable": [
@@ -1691,5 +1793,5 @@
 		],
 		"attribute": {}
 	}]
-	
+
 }

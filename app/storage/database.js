@@ -217,7 +217,7 @@ mapping._toObject = function(fields, write, create) {
 	return mapped;
 };
 
-var fieldColumns = ["name", "description", "ordering", "inheritance", "inheritable", "classes", "type", "obscured", "attribute"],
+var fieldColumns = ["name", "description", "ordering", "inheritance", "inheritable", "classes", "type", "obscured", "displayed_as", "attribute"],
 	classColumns = ["name", "description", "fields", "attribute"],
 	validClassIdentifier = new RegExp("^[a-z][a-z0-9_]+$"),
 	RSObject,
@@ -296,7 +296,7 @@ class RSDatabase extends EventEmitter {
 					if(err) {
 						if(err.message && err.message.indexOf("no such table") !== -1) {
 							this.connection
-							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description text, ordering integer, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
+							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description text, ordering integer, displayed_as text, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
 								if(err) {
 									fail(err);
 								} else {
@@ -476,6 +476,9 @@ class RSDatabase extends EventEmitter {
 			}
 			if(write.$attribute) {
 				write.$attribute = JSON.stringify(write.$attribute);
+			}
+			if(write.$displayed_as) {
+				write.$displayed_as = JSON.stringify(write.$displayed_as);
 			}
 			write.$updated = Date.now();
 			
@@ -877,6 +880,28 @@ class ClassManager extends EventEmitter {
 				}
 			});
 		});
+	}
+
+	/**
+	 * 
+	 * @method setAttributes
+	 * @param {Object} attributes Mapping keys to new attribute values.
+	 * 		Null values are kept as null after the update. Undefined is
+	 * 		not updated.
+	 * @param {Function} callback(err)
+	 * @return {Object} Class attributes
+	 */
+	setAttributes(attributes, callback) {
+		var values = {};
+		Object.assign(this.attribute, attributes);
+		values.$attribute = JSON.stringify(this.attribute);
+		values.$id = this.id;
+
+		this.database.connection.run("update rsclass set attribute = $attribute where id = $id;", values, (err, rows) => {
+			callback(err);
+		});
+
+		return this.attribute;
 	}
 
 	/**
@@ -1409,6 +1434,7 @@ class ClassManager extends EventEmitter {
 		json.name = this.name;
 		json.description = this.description;
 		json.fields = this.fieldIDs;
+		json.attribute = this.attribute;
 		return json;
 	}
 };

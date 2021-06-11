@@ -26,11 +26,13 @@ var EventEmitter = require("events").EventEmitter,
 	
 // 
 var sortByOrdering = function(a, b) {
-	if(!a.ordering && b.ordering) {
-		return 1;
-	} else if(a.ordering && !b.ordering) {
-		return -1;
-	} else if(a.ordering < b.ordering) {
+	if(a.ordering === null || a.ordering === undefined) {
+		a.ordering = 0;
+	}
+	if(b.ordering === null || b.ordering === undefined) {
+		b.ordering = 0;
+	}
+	if(a.ordering < b.ordering) {
 		return -1;
 	} else if(a.ordering > b.ordering) {
 		return 1;
@@ -365,6 +367,49 @@ class Universe extends EventEmitter {
 			.catch(fail);
 		});
 	}
+
+	/**
+	 * 
+	 * @param {Object} attributes 
+	 * @return {Object} 
+	 * @throws universe:class:missing
+	 */
+	setClassAttribute(classification, attributes) {
+		if(this.manager[classification]) {
+			this.manager[classification].setAttributes(attributes, (error) => {
+				if(error) {
+					this.generalError("Failed to update " + classification + " class attributes: " + error.message, error);
+				} else {
+					this.emit("send", {
+						"type": "class",
+						"id": classification,
+						"update": {
+							"attribute": this.manager[classification].attribute
+						}
+					});
+				}
+			});
+		} else {
+			throw new Error("No such class: " + classification);
+		}
+	}
+
+	/**
+	 * 
+	 * @method generalError
+	 * @param {String} message 
+	 * @param {Error} error 
+	 */
+	generalError(message, error) {
+		this.emit("send", {
+			"type": "notice",
+			"mid": "universe:error:general",
+			"message": message,
+			"icon": "fas fa-exclamation-triangle rs-lightred",
+			"error": error,
+			"anchored": true
+		});
+	}
 	
 	/**
 	 * 
@@ -513,25 +558,29 @@ class Universe extends EventEmitter {
 	 * @return {[type]}            [description]
 	 */
 	createObject(details, callback) {
-		var classification = this.getClassFromID(details.id);
-		if(!this.manager[classification]) {
-			callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+		if(details) {
+			var classification = this.getClassFromID(details.id);
+			if(!this.manager[classification]) {
+				callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+			} else {
+				this.manager[classification].create(this, details, (err, created) => {
+					if(err) {
+						console.log("Error: ", err);
+						callback(err);
+					} else {
+						created.linkFieldValues()
+						.then(() => {
+							created.calculateFieldValues();
+							created.updateFieldValues();
+							this.emit("object-created", created.toJSON());
+							callback(null, created);
+						})
+						.catch(callback);
+					}
+				});
+			}
 		} else {
-			this.manager[classification].create(this, details, (err, created) => {
-				if(err) {
-					console.log("Error: ", err);
-					callback(err);
-				} else {
-					created.linkFieldValues()
-					.then(() => {
-						created.calculateFieldValues();
-						created.updateFieldValues();
-						this.emit("object-created", created.toJSON());
-						callback(null, created);
-					})
-					.catch(callback);
-				}
-			});
+			callback(new Error("Attempted to create null object?"));
 		}
 	}
 
@@ -596,7 +645,7 @@ class Universe extends EventEmitter {
 					sync = manager.object[manager.objectIDs[x]];
 					if(sync) { // Skip unloaded data
 						sync = sync.toJSON(); // Convert to sync format and separate object
-						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm)) {
+						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm) && !sync.attribute.no_sync) {
 							if(!player.gm && master_fields.length) {
 								for(f=0; f<master_fields.length; f++) {
 									if(sync[master_fields[f]] !== undefined) {
@@ -620,6 +669,29 @@ class Universe extends EventEmitter {
 		fields.sort(sortByOrdering);
 		
 		return state;
+	}
+
+	/**
+	 * 
+	 * @method getMasters
+	 * @return {Object} Mapping player IDs to true/false. Typically where
+	 * 		the only IDs are game masters mapped to true, but caching
+	 * 		may cause this to later map to the player's master state
+	 * 		that after an update maybe false and still appear here.
+	 */
+	getMasters() {
+		var masters = {},
+			player,
+			i;
+
+		for(i=0; i<this.manager.player.objectIDs.length; i++) {
+			player = this.manager.player.object[this.manager.player.objectIDs[i]];
+			if(player.gm || player.master || player.game_master) {
+				masters[player.id] = true;
+			}
+		}
+
+		return masters;
 	}
 	
 	/**

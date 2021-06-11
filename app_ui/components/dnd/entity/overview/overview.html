@@ -1,20 +1,6 @@
 <div class="rs-component dnd-component character-overview">
-	<img class="background" v-if="location && location.background" :src="getImageURL(location.background)" />
-	<div class="naming">
-		<span>{{entity.name}}</span>
-	</div>
-	<div class="health">
-		<span class="fas fa-heartbeat"></span>
-		<span class="hp">{{entity.hp}}</span>
-		<span>/</span>
-		<span class="hp">{{entity.hp_max}}</span>
-	</div>
-	<div class="armor">
-		<span class="fas fa-shield"></span>
-		<span class="ac">{{entity.armor}}</span>
-	</div>
-	<div class="gold">
-		<span class="fas fa-coins"></span>
-		<span class="ac">{{entity.gold}}</span>
+	<rs-image class="imagery" v-if="image" :image="image" />
+	<div class="widgets container flex v">
+		<component v-for="(widget, $index) in widgets" :key="$index" v-if="widget && !widget.disabled" :is="widget.component" :universe="universe" :entity="entity" :profile="profile" :player="player" :widget="widget" :storage-key="entity.id + widget.id"/>
 	</div>
 </div>

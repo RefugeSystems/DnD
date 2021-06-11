@@ -20,11 +20,18 @@ rsSystem.component("sysInfoGeneral", {
 		"size": {
 			"type": Number,
 			"default": 90
+		},
+		"cacheSuffix": {
 		}
 	},
 	"computed": {
 		"description": function() {
 			return this.rsshowdown(this.info.description || "", this.info, this.profile?this.profile.inline_javascript:false);
+		},
+		"image": function() {
+			if(this.info.portrait && this.universe.index.image[this.info.portrait]) {
+				return this.universe.index.image[this.info.portrait];
+			}
 		}
 	},
 	"data": function() {
@@ -34,13 +41,17 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-
-		this.$el.onclick = (event) => {
-			console.log("General Info Click: ", event);
-		};
 	},
 	"methods": {
-		
+		"getImageURL": function(record) {
+			if(record.data) {
+				return record.data;
+			} else if(this.cacheSuffix) {
+				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + record.id + "?ctrl=" + this.cacheSuffix;
+			} else {
+				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + record.id + "?ctrl=" + Date.now();
+			}
+		}
 	},
 	"beforeDestroy": function() {
 		/*

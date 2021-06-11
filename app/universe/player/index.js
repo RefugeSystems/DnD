@@ -1,4 +1,3 @@
-
 /**
  * 
  *
@@ -76,7 +75,7 @@ class PlayerConnection extends EventEmitter {
 					}));
 					break;
 				case "sync":
-					console.log("Received Sync: ", message);
+					// console.log("Received Sync: ", message);
 					var sync = message.data.sync;
 					message = this.universe.requestState(this.player, sync);
 					message = {
@@ -215,12 +214,6 @@ class PlayerConnection extends EventEmitter {
 				if(change._computed) {
 					
 				}
-				for(x=0; x<manager.fields.length; x++) {
-					field = manager.fields[x];
-					if(change[field.id] !== undefined && !field.attribute.master_only && !field.attribute.server_only) {
-						send[field.id] = change[field.id];
-					}
-				}
 				
 				send._class = change._class;
 				if(change._search) {
@@ -229,6 +222,21 @@ class PlayerConnection extends EventEmitter {
 				if(change._data) {
 					send._data = change._data;
 				}
+
+				for(x=0; x<manager.fields.length; x++) {
+					field = manager.fields[x];
+					if(change[field.id] !== undefined && !field.attribute.master_only && !field.attribute.server_only) {
+						send[field.id] = change[field.id];
+					} else {
+						if(send._calculated) {
+							delete(send._calculated[field.id]);
+						}
+						if(send._data) {
+							delete(send._data[field.id]);
+						}
+					}
+				}
+
 				send.id = change.id;
 				this.send("object", send);
 			} else {
@@ -257,7 +265,7 @@ class PlayerConnection extends EventEmitter {
 	
 	forwardMessage(message) {
 		// TODO: Implement better/additional recipient restrictions
-		if((!message.recipient && !message.recipients) || (message.recipient && message.recipient === this.player.id) || (message.recipients && message.recipients.indexOf(this.player.id) !== -1)) {
+		if((!message.recipient && !message.recipients) || (message.recipient && message.recipient === this.player.id) || (message.recipients && message.recipients[this.player.id])) {
 			// TODO: Implement additional general filtering
 			this.send(message.type, message);
 		}

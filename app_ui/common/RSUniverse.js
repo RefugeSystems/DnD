@@ -172,7 +172,6 @@ class RSUniverse extends EventEmitter {
 				"anchored": event.data.anchored
 			});
 		};
-		
 		this.processEvent["account:updated"] = (event) => {
 			this.$emit("notification", {
 				"id": "account:modification",
@@ -193,6 +192,15 @@ class RSUniverse extends EventEmitter {
 			});
 		};
 		
+		this.processEvent["class"] = (event) => {
+			if(event.data.update.attribute) {
+				if(!this.index.classes[event.data.id].attribute) {
+					this.index.classes[event.data.id].attribute = event.data.update.attribute;
+				} else {
+					Object.assign(this.index.classes[event.data.id].attribute, event.data.update.attribute);
+				}
+			}
+		};
 		this.processEvent.ping = (event) => {
 			var latency = Date.now() - event.sent;
 			if(this.metrics.latency) {
@@ -282,6 +290,8 @@ class RSUniverse extends EventEmitter {
 							loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
 						}
 					}
+					// console.log("Cached Action Max: ", _p(loadIndex.fields.action_max));
+					// console.log("Cached Size: ", _p(loadIndex.fields.size));
 					this.metrics = JSON.parse(loadMetrics);
 					this.listing = loadListing;
 					this.index = loadIndex;
@@ -306,6 +316,21 @@ class RSUniverse extends EventEmitter {
 		localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 		localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 	}
+
+
+	generalMessage(message, icon, display) {
+		var notice = {
+			"id": "account:modification",
+			"message": message,
+			"icon": icon || "fas fa-exclamation-triangle rs-lightyellow"
+		};
+		if(display === true) {
+			notice.anchored = true;
+		} else if(typeof(display) === "number") {
+			notice.timeout = display;
+		}
+		this.$emit("notification", notice);
+	}
 	
 	/**
 	 * 
@@ -323,6 +348,9 @@ class RSUniverse extends EventEmitter {
 				x;
 				
 			if(this.index[classification]) {
+				// if(classification === "fields" && id === "action_max") {
+				// 	console.log("Field Sync: " + id, _p(this.index[classification][id]), _p(delta));
+				// }
 				if(!this.index[classification][id]) {
 					Vue.set(this.index[classification], id, delta);
 					Vue.set(this.index[classification][id], "_sync", {});
@@ -338,10 +366,10 @@ class RSUniverse extends EventEmitter {
 						if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
 							if(this.index[classification][id][keys[x]] === null || delta[keys[x]] === null) {
 								Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
-							} else if(delta[keys[x]] && this.index[classification][id][keys[x]] instanceof Array) {
+							} else if(delta[keys[x]] && (this.index[classification][id][keys[x]] instanceof Array)) {
 								this.index[classification][id][keys[x]].splice(0);
 								this.index[classification][id][keys[x]].push.apply(this.index[classification][id][keys[x]], delta[keys[x]]);
-							} else if(delta[keys[x]] && typeof(this.index[classification][id][keys[x]]) === "object") {
+							} else if(delta[keys[x]] && (typeof(this.index[classification][id][keys[x]]) === "object")) {
 								okeys = Object.keys(delta[keys[x]]);
 								for(k=0; k<okeys.length; k++) {
 									Vue.set(this.index[classification][id][keys[x]], okeys[k], delta[keys[x]][okeys[k]]);
@@ -364,6 +392,9 @@ class RSUniverse extends EventEmitter {
 				delta
 			});
 		}
+		// if(classification === "fields" && id === "action_max") {
+		// 	console.log("Field Sync Finish: " + id, _p(this.index[classification][id]), _p(delta));
+		// }
 	}
 	
 	addLogEvent(event, level, details) {

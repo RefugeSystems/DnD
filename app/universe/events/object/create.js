@@ -45,7 +45,7 @@ module.exports.initialize = function(universe) {
 							"type": "notice",
 							"mid": "create:object",
 							"recipient": event.player.id,
-							"message": "Complete: " + details.name,
+							"message": "Complete: " + (object.name || object.id),
 							"icon": "fas fa-check rs-lightgreen",
 							"timeout": 2000
 						});
