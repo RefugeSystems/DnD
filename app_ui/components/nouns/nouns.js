@@ -136,11 +136,11 @@
 			},
 			"copySource": function(source) {
 				var x;
-				console.log("Copy: ", source);
+
 				if(source) {
-					console.log(" > Source: ", source);
 					source = this.universe.index[this.storage.classification][source];
 					if(source) {
+						source = JSON.parse(JSON.stringify(source));
 						if(source._data) {
 							Vue.set(this.details, "id", source._data.id);
 							for(x=0; x<this.fields.length; x++) {

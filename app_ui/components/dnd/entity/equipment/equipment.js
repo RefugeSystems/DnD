@@ -9,8 +9,7 @@
 rsSystem.component("dndEntityEquipment", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController,
-		rsSystem.components.DNDCore
+		rsSystem.components.DNDWidgetCore
 	],
 	"props": {
 		"entity": {
@@ -24,6 +23,31 @@ rsSystem.component("dndEntityEquipment", {
 			}
 		}
 	},
+	"computed": {
+		"equipment": function() {
+			if(this.entity.equipped && this.entity.equipped.length) {
+				var equipment = [],
+					weapons = [],
+					item,
+					i;
+				
+				for(i=0; i<this.entity.equipped.length; i++) {
+					item = this.universe.index.item[this.entity.equipped[i]];
+					if(item) {
+						if(item.melee || item.ranged || item.thrown) {
+							weapons.push(item);
+						} else {
+							equipment.push(item);
+						}
+					}
+				}
+
+				return weapons.concat(equipment);
+			} else {
+				return [];
+			}
+		}
+	},
 	"data": function() {
 		var data = {};
 
@@ -31,20 +55,11 @@ rsSystem.component("dndEntityEquipment", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-
-		this.$el.onclick = (event) => {
-			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
-				rsSystem.EventBus.$emit("display-info", {
-					"record": follow,
-					"base": this.viewing
-				});
-				event.stopPropagation();
-				event.preventDefault();
-			}
-		};
 	},
 	"methods": {
+		"use": function(item) {
+			console.log("Use: ", item);
+		}
 	},
 	"beforeDestroy": function() {
 		/*

@@ -47,6 +47,9 @@ rsSystem.component("rsDisplayField", {
 			return this.universe.index.fields[this.field];
 		},
 		"displayed": function() {
+			if(this.object.picture === this.object.portrait && (this.field === "picture" || this.field === "portrait")) {
+				return false;
+			}
 			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
 		},
 		"image": function() {

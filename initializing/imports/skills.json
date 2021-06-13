@@ -53,7 +53,7 @@
             "description": "Determine your combat order based on your ability to react and maintain awareness",
             "icon": "fas fa-swords",
             "stat": "dexterity",
-            "ordering": 10,
+            "ordering": 12,
             "section": "Combat Skills"
         }, {
             "id": "skill:concentration",
@@ -61,23 +61,21 @@
             "description": "Attempt to maintain concentration on a spell after taking damage. The ${DC}$ is half the damage taken.",
             "icon": "ra ra-player-shot",
             "stat": "constitution",
-            "ordering": 11,
+            "ordering": 13,
             "section": "Combat Skills"
         }, {
             "id": "skill:mainhand",
             "name": "Main Hand",
             "description": "Roll an attack with the weapon in your ${Main Hand}$",
             "icon": "game-icon game-icon-saber-slash",
-            "stat": "weapon_main",
-            "ordering": 12,
+            "ordering": 10,
             "section": "Combat Skills"
         }, {
             "id": "skill:offhand",
             "name": "Off Hand",
             "description": "Roll an attack with the weapon in your ${Off Hand}$",
             "icon": "game-icon game-icon-serrated-slash",
-            "stat": "weapon_off",
-            "ordering": 13,
+            "ordering": 11,
             "section": "Combat Skills"
         }, {
             "id": "skill:acrobatics",
@@ -139,7 +137,7 @@
             "id": "skill:intimidation",
             "name": "Intimidation",
             "description": "Attempt to scare a creature by threatening it",
-            "icon": "game-icon game-icon-xxxx",
+            "icon": "game-icon game-icon-swords-power",
             "stat": "charisma",
             "ordering": 27,
             "section": "Skill Checks"

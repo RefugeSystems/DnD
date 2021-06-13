@@ -35,6 +35,37 @@ rsSystem.component("dndEntityStats", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"getMainHand": function() {
+			var attack = this.entity.skill_check["skill:mainhand"] || 0;
+			if(attack < 0) {
+				return attack;
+			}
+			return "+" + attack;
+		},
+		"getOffHand": function() {
+			var attack = this.entity.skill_check["skill:offhand"] || 0;
+			if(attack < 0) {
+				return attack;
+			}
+			return "+" + attack;
+		},
+		"getSpellAttack": function() {
+			var attack = this.entity.spell_attack || 0;
+			if(attack < 0) {
+				return attack;
+			}
+			return "+" + attack;
+		},
+		"getSpellDC": function() {
+			return this.entity.spell_dc || 0;
+		},
+		"openDiceBin": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id
+			});
+		}
 	},
 	"beforeDestroy": function() {
 		/*

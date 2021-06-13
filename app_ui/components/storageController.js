@@ -49,7 +49,7 @@ rsSystem.component("StorageController", {
 			}
 		},
 		"saveStorage": function() {
-			if(this.storageKey) {
+			if(this && this.storageKey) {
 				localStorage.setItem(this.storageKey, JSON.stringify(this.storage));
 			}
 		}

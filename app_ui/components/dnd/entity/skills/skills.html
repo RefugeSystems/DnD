@@ -2,7 +2,7 @@
 	<div class="section" v-for="section in sections">
 		<div class="section-name flex h">
 			<button class="property" v-on:click="toggleSection(section.id)">
-				<span class="fal" :class="storage[section.id]?'fa-minus':'fa-plus'"/>
+				<span class="fal" :class="storage[section.id]?'fa-plus':'fa-minus'"/>
 			</button>
 			<div class="property rsbg-lightBlue">
 				<span>{{section.name}}</span>

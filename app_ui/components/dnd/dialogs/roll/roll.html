@@ -1,0 +1,19 @@
+<div class="rs-component dnd-component dialog-dicebin">
+	<h1>{{entity.name}}</h1>
+	<div class="input flex h">
+		<input type="text" v-model="storage.formula" v-on:keydown.enter="roll(storage.formula)" v-on:keydown.esc.prevent.stop="clear()" />
+		<button class="rounded general action dice" v-on:click="roll(storage.formula)">
+			<span class="fas fa-dice"></span>
+		</button>
+		<button class="rounded general quick action dice" v-for="dice in die" v-on:click="rollDice(dice)">
+			<span :class="dice.icon"></span>
+		</button>
+	</div>
+	<div class="output flex h wrap">
+		<div class="roll inline flex v" v-for="(roll, $index) in storage.rolls" v-on:click="dismiss($index)">
+			<button class="result flat action rs-white rsbg-black">{{roll.computed}}</button>
+			<div class="formula">{{roll.formula}}</div>
+			<div class="delay">{{roll.delay}}ms</div>
+		</div>
+	</div>
+</div>

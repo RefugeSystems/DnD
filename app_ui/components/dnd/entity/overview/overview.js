@@ -33,8 +33,8 @@ rsSystem.component("dndEntityOverview", {
 		 * @type Object
 		 */
 		"location": function() {
-			if(this.entity.location && this.universe.index.location[this.entity.locaiton]) {
-				return this.universe.index.location[this.entity.locaiton];
+			if(this.entity.location && this.universe.index.location[this.entity.location]) {
+				return this.universe.index.location[this.entity.location];
 			}
 			return {};
 		},
@@ -44,8 +44,8 @@ rsSystem.component("dndEntityOverview", {
 		 * @type Object
 		 */
 		"image": function() {
-			if(this.location && this.location.portrait) {
-				return this.universe.index.image[this.location.portrait];
+			if(this.location && this.location.background) {
+				return this.universe.index.image[this.location.background];
 			} else if(this.entity.picture) {
 				return this.universe.index.image[this.entity.picture];
 			}

@@ -78,6 +78,7 @@ rsSystem.component("DNDWidgetCore", {
 				"info": record.id || record
 			});
 		},
+		
 		"sortData": rsSystem.utility.sortData
 	},
 	"beforeDestroy": function() {

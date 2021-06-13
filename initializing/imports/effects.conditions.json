@@ -4,6 +4,7 @@
 			"name": "Muted",
             "icon": "fas fa-comment-slash",
 			"description": "You are unable to speak",
+			"debuff": true,
 			"threat": -1
 		}, {
             "id": "effect:condition:blind",
@@ -14,18 +15,21 @@
 				"skill:mainhand": true,
 				"skill:offhand": true
 			},
+			"debuff": true,
 			"threat": -3
 		}, {
             "id": "effect:condition:deafened",
 			"name": "Deafened",
             "icon": "fas fa-deaf",
 			"description": "You are unable to hear",
+			"debuff": true,
 			"threat": -1
 		}, {
             "id": "effect:condition:charmed",
 			"name": "Charmed",
             "icon": "game-icon game-icon-nested-hearts",
 			"description": "You are charmed",
+			"debuff": true,
 			"threat": -1
 		}, {
             "id": "effect:condition:frozen",
@@ -35,12 +39,14 @@
 			"movement_speed": "-1 * user.movement_speed",
 			"movement_swim": "-1 * user.movement_swim",
 			"movement_fly": "-1 * user.movement_fly",
+			"debuff": true,
 			"threat": -1
 		}, {
             "id": "effect:condition:frightened",
 			"name": "Frightened",
             "icon": "game-icon game-icon-terror",
 			"description": "You are frightened of a creature and roll any ability checks at ${Disadvantage}$ if you can see the creature of which you are afraid. Additionally, you can not move closer to that creature's perceived location.",
+			"debuff": true,
 			"threat": -1
 		}, {
             "id": "effect:condition:exhausted:1",
@@ -71,6 +77,7 @@
 				"skill:stealth": true,
 				"skill:survival": true
 			},
+			"debuff": true,
 			"threat": -5
 		}, {
             "id": "effect:condition:exhausted:2",
@@ -80,6 +87,7 @@
 			"movement_speed": "-.5 * user.movement_speed",
 			"movement_swim": "-1 * user.movement_swim",
 			"movement_fly": "-1 * user.movement_fly",
+			"debuff": true,
 			"threat": -10
 		}, {
             "id": "effect:condition:exhausted:3",
@@ -98,6 +106,7 @@
 				"skill:mainhand": true,
 				"skill:offhand": true
 			},
+			"debuff": true,
 			"threat": -20
 		}, {
             "id": "effect:condition:exhausted:4",
@@ -105,6 +114,7 @@
             "icon": "game-icon game-icon-tired-eye",
 			"description": "You are exhausted from lack of sleep and your body is beginning to fail you",
 			"max_hp": "-.5 * user.max_hp",
+			"debuff": true,
 			"threat": -30
 		}, {
             "id": "effect:condition:exhausted:5",
@@ -114,6 +124,7 @@
 			"movement_speed": "-.5 * user.movement_speed",
 			"movement_swim": "-1 * user.movement_swim",
 			"movement_fly": "-1 * user.movement_fly",
+			"debuff": true,
 			"threat": -50
 		}, {
             "id": "effect:condition:grappled",
@@ -124,6 +135,7 @@
 			"movement_speed": "-1 * user.movement_speed",
 			"movement_swim": "-1 * user.movement_swim",
 			"movement_fly": "-1 * user.movement_fly",
+			"debuff": true,
 			"threat": -10
 		}, {
             "id": "effect:condition:poisoned",
@@ -155,6 +167,7 @@
 				"skill:mainhand": true,
 				"skill:offhand": true
 			},
+			"debuff": true,
 			"threat": -2
 		}, {
             "id": "effect:condition:unconscious",
@@ -162,6 +175,7 @@
             "icon": "fas fa-male rot270",
 			"description": "You are unconscious and unaware of your surroundings. Any attack against you from within 4 studs that hits is a ${Critical Strike}$ and attacks against you have ${Advantage}$. You automatically fail any ${Strength Save}$ or ${Dexterity Save}$ and have involuntarily dropped any items you were holding.",
 			"effects": ["effect:condition:incapacitated"],
+			"debuff": true,
 			"threat": -30
 		}, {
             "id": "effect:condition:stunned",
@@ -169,6 +183,7 @@
             "icon": "fal fa-dizzy",
 			"description": "You are stunned and struggling to stay aware of your surroundings. Any attack against you has ${Advantage}$. Additionally, you automatically fail any ${Strength Save}$ or ${Dexterity Save}$.",
 			"effects": ["effect:condition:incapacitated"],
+			"debuff": true,
 			"threat": -10
 		}, {
             "id": "effect:condition:paralyzed",
@@ -176,6 +191,7 @@
             "icon": "fal fa-dizzy",
 			"description": "You are paralyzed and unable move. Any attack against you has ${Advantage}$ and if it is within 4 studs and hits, it is a ${Critical Strike}$. Additionally, you automatically fail any ${Strength Save}$ or ${Dexterity Save}$.",
 			"effects": ["effect:condition:incapacitated"],
+			"debuff": true,
 			"threat": -15
 		}, {
             "id": "effect:condition:incapacitated",
@@ -187,6 +203,7 @@
 				"bonus": -10,
 				"reaction": -10
 			},
+			"debuff": true,
 			"threat": -30
 		}, {
             "id": "effect:condition:prone",
@@ -210,6 +227,7 @@
 				"skill:mainhand": true,
 				"skill:offhand": true
 			},
+			"debuff": true,
 			"threat": -1
 		}, {
             "id": "effect:immunity:poison",
@@ -270,6 +288,7 @@
 				"damage_type:thunder": "50%",
 				"damage_type:radiant": "50%"
 			},
+			"debuff": true,
 			"threat": -20
         }
     ]

@@ -69,6 +69,40 @@
 					}
 				}
 				return available;
+			},
+			"keyside": function() {
+				if(this.field.attribute && this.field.attribute.inherited_key) {
+					if(typeof(this.field.attribute.inherited_key) === "boolean") {
+						var available = [],
+							x;
+						if(this.field && this.field.inheritable) {
+							for(x=0; x<this.field.inheritable.length; x++) {
+								available = available.concat(this.universe.listing[this.field.inheritable[x]]);
+							}
+						}
+						return available;
+					} else {
+						return this.universe.listing[this.field.attribute.inherited_key];
+					}
+				}
+				return null;
+			},
+			"valueside": function() {
+				if(this.field.attribute && this.field.attribute.inherited_value) {
+					if(typeof(this.field.attribute.inherited_value) === "boolean") {
+						var available = [],
+							x;
+						if(this.field && this.field.inheritable) {
+							for(x=0; x<this.field.inheritable.length; x++) {
+								available = available.concat(this.universe.listing[this.field.inheritable[x]]);
+							}
+						}
+						return available;
+					} else {
+						return this.universe.listing[this.field.attribute.inherited_value];
+					}
+				}
+				return null;
 			}
 		},
 		"data": function() {
@@ -86,8 +120,6 @@
 
 			data.activeCompletion = null;
 			data.completions = [];
-			data.valueside = false;
-			data.keyside = false;
 
 			data.bufferChanging = false;
 			data.bufferLoading = false;
@@ -340,18 +372,20 @@
 			},
 			"addObjectReference": function(key, value) {
 				console.log("Add Object Key: ", key, value);
-				if(value.startsWith("json::")) {
-					try {
-						value = JSON.parse(value.substring(6));
-					} catch(exception) {
-						this.universe.generalMessage("Failed to parse new value", "fas fa-exclamation-triangle rs-lightred");
-						return null;
+				if((key || key === 0) && (value || value === 0)) {
+					if(value.startsWith("json::")) {
+						try {
+							value = JSON.parse(value.substring(6));
+						} catch(exception) {
+							this.universe.generalMessage("Failed to parse new value", "fas fa-exclamation-triangle rs-lightred");
+							return null;
+						}
 					}
+					if(!this.root[this.field.id]) {
+						Vue.set(this.root, this.field.id, {});
+					}
+					Vue.set(this.root[this.field.id], key, value);
 				}
-				if(!this.root[this.field.id]) {
-					Vue.set(this.root, this.field.id, {});
-				}
-				Vue.set(this.root[this.field.id], key, value);
 			},
 			"dismissObjectMap": function(index) {
 				console.log("Dismiss Object Key: ", index);

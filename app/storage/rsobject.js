@@ -428,8 +428,8 @@ class RSObject {
 			loading,
 			source,
 			parent,
-			fields,
 			field,
+			keys,
 			i,
 			x;
 
@@ -590,6 +590,21 @@ class RSObject {
 				}
 			}
 		}
+
+		// Dice Reduce Dice Fields
+		for(x=0; x<fields.length; x++) {
+			field = this._manager.database.field[fields[x]];
+			if(field && this[field.id] && (field.type === "dice" || field.type === "object:dice")) {
+				if(typeof(this[field.id]) === "object") {
+					keys = Object.keys(this[field.id]);
+					for(i=0; i<keys.length; i++) {
+						this[field.id][keys[i]] = this._universe.calculator.reduceDiceRoll(this[field.id][keys[i]], this);
+					}
+				} else {
+					this[field.id] = this._universe.calculator.reduceDiceRoll(this[field.id], this);
+				}
+			}
+		}
 		
 		// TODO: Implement field attribute specification for concealment, needs additional UI consideration for controlled visibility (See: Game Masters)
 		if(this.concealed) {
@@ -700,23 +715,27 @@ class RSObject {
 				referenced.push(this.id);
 			}
 			// console.log(" [=T] > " + this[name[index]], referenced);
-			return this._calculated[name[index]];
+			// return this._calculated[name[index]];
+			return this[name[index]];
 		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
 			// console.log(" [=O] > " + this[name[index]]);
 			if(referenced) {
 				referenced.push(this.id);
 			}
-			return this._calculated[name[index]][name[index + 1]];
+			// return this._calculated[name[index]][name[index + 1]];
+			return this[name[index]][name[index + 1]];
 		} else if(this[name[index]]) {
 			// console.log(" [==] > " + this[name[index]]);
-			follow = this._universe.objectHandler.retrieve(this._calculated[name[index]]);
+			// follow = this._universe.objectHandler.retrieve(this._calculated[name[index]]);
+			follow = this._universe.objectHandler.retrieve(this[name[index]]);
 			if(follow) {
 				return follow.calculatedValue(name, index + 1, referenced);
 			} else {
 				details = {};
 				details.name = name;
 				details.index = index;
-				details.value = this._calculated[name[index]];
+				// details.value = this._calculated[name[index]];
+				details.value = this[name[index]];
 				this._universe.emit("error", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 40, details, null, this));
 				return null;
 			}
@@ -725,7 +744,8 @@ class RSObject {
 			details = {};
 			details.name = name;
 			details.index = index;
-			details.value = this._calculated[name[index]];
+			// details.value = this._calculated[name[index]];
+			details.value = this[name[index]];
 			this._universe.emit("error", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 40, details, null, this));
 			return null;
 		}
@@ -1105,7 +1125,7 @@ class RSObject {
 				field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 				if(field) {
 					if(!field.attribute || !field.attribute.server_only) {
-						json[field.id] = this[field.id];
+						json[field.id] = this[field.id] || null;
 					} else {
 						delete(calculated[field.id]);
 					}

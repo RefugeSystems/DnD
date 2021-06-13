@@ -309,7 +309,12 @@
 		"name": "Background Image",
 		"description": "Background image for this object. This is for objects like locations to display as backgrounds when entities are at the location.",
 		"type": "string",
-		"attribute": {}
+		"inheritable": [
+			"image"
+		],
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "main_weapon",
 		"name": "Main Weapon",
@@ -570,6 +575,9 @@
 		"name": "Damage",
 		"description": "Maps a Damage Type ID to a formula for the amount done by this object",
 		"type": "object",
+		"inheritable": [
+			"damage_type"
+		],
 		"attribute": {
 			"inherited_key": "damage_type"
 		}
@@ -898,8 +906,8 @@
 		"attribute": {}
 	}, {
 		"id": "archetypes",
-		"name": "Archetypes",
-		"description": "List of archetypes currently applied to this entity",
+		"name": "Classes",
+		"description": "List of classes currently applied to this entity",
 		"type": "array",
 		"inheritance": {
 			"actions": "+",
@@ -918,6 +926,8 @@
 			"spells": "+",
 			"skill_check": "+=",
 			"skill_proficiency": "=",
+			"spell_attack": "+",
+			"spell_dc": "+",
 			"effects": "+",
 			"hit_dice_max": "+",
 			"proficiencies": "+",
@@ -967,6 +977,7 @@
 			"types": "+",
 			"size": "+",
 			"proficiencies": "+",
+			"proficiency_rating": "+",
 			"effects": "+",
 			"conditionals": "+",
 			"equip_slots": "+"
@@ -1024,6 +1035,24 @@
 			"feat"
 		],
 		"attribute": {}
+	}, {
+		"id": "death_save",
+		"name": "Death Saves",
+		"description": "Numer of successful death saves",
+		"type": "number",
+		"attribute": {
+			"displayed": false,
+			"default": 0
+		}
+	}, {
+		"id": "death_fail",
+		"name": "Death Fails",
+		"description": "Numer of failed death saves",
+		"type": "number",
+		"attribute": {
+			"displayed": false,
+			"default": 0
+		}
 	}, {
 		"id": "feats",
 		"name": "Feats",
@@ -1571,7 +1600,7 @@
 		"id": "location",
 		"name": "Location",
 		"description": "Where this object is currently considered to be located.",
-		"type": "array",
+		"type": "string",
 		"inheritance": {
 			"conditionals": "+",
 			"actions": "+",

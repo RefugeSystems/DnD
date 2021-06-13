@@ -57,6 +57,24 @@ mapping.object = {
 		return JSON.stringify(data);
 	}
 };
+mapping["object:calculated"] = {
+	"type": "text",
+	"read": function(data) {
+		return JSON.parse(data);
+	},
+	"write": function(data) {
+		return JSON.stringify(data);
+	}
+};
+mapping["object:dice"] = {
+	"type": "text",
+	"read": function(data) {
+		return JSON.parse(data);
+	},
+	"write": function(data) {
+		return JSON.stringify(data);
+	}
+};
 mapping.array = {
 	"type": "text",
 	"read": function(data) {

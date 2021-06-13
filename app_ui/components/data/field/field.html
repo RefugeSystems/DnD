@@ -130,20 +130,20 @@
 			<span class="reference-display">{{getObjectValue(reference)}}</span>
 		</div>
 		<div class="referenced">
-			<select v-model="reference_key" v-if="availableReferences.length && keyside" v-on:change="addObjectReference(reference_key, reference_value)">
+			<select v-model="reference_key" v-if="keyside" v-on:change="addObjectReference(reference_key, reference_value)">
 				<option value="">Select To Add</option>
-				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
+				<option v-for="option in keyside" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
 			</select>
-			<div v-if="!availableReferences.length && !keyside">
+			<div v-if="!keyside">
 				<input v-model="reference_key" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" />
 			</div>
 			<span>:</span>
-			<div v-if="!availableReferences.length && !valueside">
+			<div v-if="!valueside">
 				<input v-model="reference_value" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" />
 			</div>
-			<select v-model="reference_value" v-if="availableReferences.length && valueside" v-on:change="addObjectReference(reference_key, reference_value)">
+			<select v-model="reference_value" v-if="valueside" v-on:change="addObjectReference(reference_key, reference_value)">
 				<option value="">Select To Add</option>
-				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
+				<option v-for="option in valueside" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
 			</select>
 		</div>
 	</div>

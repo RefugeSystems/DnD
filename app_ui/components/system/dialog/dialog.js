@@ -64,6 +64,9 @@
 					if(!details.component) {
 						details.component = "system-dialog-basic";
 					}
+					if(!details.storageKey) {
+						details.storageKey = "general-dialog";
+					}
 					Vue.set(this, "details", details);
 					Vue.set(this, "container_classes", "active");
 					Vue.set(this, "classes", "active");
