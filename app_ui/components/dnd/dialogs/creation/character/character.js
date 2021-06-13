@@ -189,6 +189,20 @@ rsSystem.component("dndCreateCharacterDialog", {
 			"Non-Binary",
 			"Agender"
 		];
+		data.fieldPortrait = {
+			"id": "portrait",
+			"name": "Portrait",
+			"type": "file",
+			"condition": {},
+			"attribute": {}
+		};
+		data.fieldPicture = {
+			"id": "picture",
+			"name": "Picture",
+			"type": "file",
+			"condition": {},
+			"attribute": {}
+		};
 
 		data.building = {};
 		data.building.details = {};
@@ -235,6 +249,8 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.skill_proficiency = {};
 				details.proficiencies = [];
 				details.knowledges = [];
+				details.portrait = this.building.portrait;
+				details.picture = this.building.picture;
 
 				for(i=0; i<this.stats.length; i++) {
 					details["stat_" + this.stats[i]] = this.building[this.stats[i]];
@@ -509,6 +525,9 @@ rsSystem.component("dndCreateCharacterDialog", {
 				return (record.name || record) + " ";
 			}
 			return record.name || record;
+		},
+		"syncPortrait": function() {
+
 		},
 		"info": function (record) {
 			rsSystem.EventBus.$emit("display-info", {

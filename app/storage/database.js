@@ -404,6 +404,9 @@ class RSDatabase extends EventEmitter {
 			if(write.$attribute) {
 				write.$attribute = JSON.stringify(write.$attribute);
 			}
+			if(write.$displayed_as) {
+				write.$displayed_as = JSON.stringify(write.$displayed_as);
+			}
 			write.$created = Date.now();
 			write.$updated = Date.now();
 			

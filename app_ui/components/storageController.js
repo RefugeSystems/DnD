@@ -11,7 +11,6 @@ rsSystem.component("StorageController", {
 	],
 	"props": {
 		"storageKey": {
-			"required": true,
 			"type": String
 		},
 		"defaultStorage": {
@@ -40,18 +39,19 @@ rsSystem.component("StorageController", {
 	},
 	"methods": {
 		"loadStorage": function(defaults) {
-			var data = localStorage.getItem(this.storageKey);
-			if(data) {
-//				console.log("Load[" + key + "]: ", data);
-				return JSON.parse(data);
-			} else {
-//				console.log("Load[" + key + "]: Defaulted");
-				return defaults || this.defaultStorage;
+			if(this.storageKey) {
+				var data = localStorage.getItem(this.storageKey);
+				if(data) {
+					return JSON.parse(data);
+				} else {
+					return defaults || this.defaultStorage;
+				}
 			}
 		},
 		"saveStorage": function() {
-//			console.log("Save[" + key + "]: ", this.storage);
-			localStorage.setItem(this.storageKey, JSON.stringify(this.storage));
+			if(this.storageKey) {
+				localStorage.setItem(this.storageKey, JSON.stringify(this.storage));
+			}
 		}
 	}
 });

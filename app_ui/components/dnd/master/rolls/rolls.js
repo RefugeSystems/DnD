@@ -2,25 +2,15 @@
 /**
  *
  *
- * @class dndEntityName
+ * @class dndMasterRolls
  * @constructor
  * @module Components
  */
-rsSystem.component("dndEntityName", {
-	"inherit": true,
-	"mixins": [
-		rsSystem.components.DNDWidgetCore
-	],
+rsSystem.component("dndMasterRolls", {
 	"props": {
-		"entity": {
+		"object": {
 			"requried": true,
 			"type": Object
-		},
-		"profile": {
-			"type": Object,
-			"default": function() {
-				return {};
-			}
 		}
 	},
 	"data": function() {
@@ -32,9 +22,6 @@ rsSystem.component("dndEntityName", {
 		rsSystem.register(this);
 	},
 	"methods": {
-		"levelUp": function() {
-
-		}
 	},
 	"beforeDestroy": function() {
 		/*
@@ -42,5 +29,5 @@ rsSystem.component("dndEntityName", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/entity/name.html")
+	"template": Vue.templified("components/dnd/master/players.html")
 });

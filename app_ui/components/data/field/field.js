@@ -612,6 +612,6 @@
 				return 0;
 			}
 		},
-		"template": Vue.templified("components/field.html")
+		"template": Vue.templified("components/data/field.html")
 	});
 })();

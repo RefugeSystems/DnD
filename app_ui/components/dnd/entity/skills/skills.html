@@ -1,3 +1,26 @@
-<div class="rs-component dnd-component entity-skills">
-	
+<div class="rs-component dnd-component entity-skills flex v">
+	<div class="section" v-for="section in sections">
+		<div class="section-name flex h">
+			<button class="property" v-on:click="toggleSection(section.id)">
+				<span class="fal" :class="storage[section.id]?'fa-minus':'fa-plus'"/>
+			</button>
+			<div class="property rsbg-lightBlue">
+				<span>{{section.name}}</span>
+			</div>
+		</div>
+		<div class="divider"></div>
+		<div class="skills flex h justified" v-if="!storage[section.id]">
+			<div class="skills flex v" v-for="(column, $index) in section.skills" :class="$index?'col_right':'col_left'">
+				<div class="property-container skill flex h" v-for="(skill, $index) in column">
+					<button class="property" v-on:click="rollSkill(skill)">
+						<span>{{getValue(skill)}}</span>
+						<span class="seperator" :class="skill.icon"></span>
+						<span>{{skill.name}}</span>
+						<span class="fas fa-dice seperator" v-if="rolled[skill.id] !== undefined"></span>
+						<span v-if="rolled[skill.id] !== undefined">{{rolled[skill.id]}}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

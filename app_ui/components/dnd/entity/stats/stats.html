@@ -1,3 +1,32 @@
-<div class="rs-component dnd-component entity-knowledge">
-	
+<div class="rs-component dnd-component entity-stats">
+	<div class="property-container health">
+		<button class="property" v-on:click="takeDamage()">
+			<span class="icon fas fa-running"></span>
+			<span>{{entity.movement_ground}}</span>
+		</button>
+	</div>
+	<div class="property-container armor">
+		<div class="property">
+			<span class="icon fas fa-shield"></span>
+			<span>{{entity.armor}}</span>
+		</div>
+	</div>
+	<div class="property-container gold">
+		<button class="property" v-on:click="transferGold()">
+			<span class="icon fas fa-coins"></span>
+			<span>
+				<span>{{entity.gold}}</span>
+				<span v-if="entity.gold_max">
+					<span class="seperator">/</span>
+					<span>{{entity.gold_max}}</span>
+				</span>
+			</span>
+		</button>
+	</div>
+	<div class="property-container hitdice">
+		<button class="property" v-on:click="useHitDice()">
+			<span class="icon fas fa-dice"></span>
+			<span>{{totalHitDice}}</span>
+		</button>
+	</div>
 </div>

@@ -1,10 +1,20 @@
 <div class="rs-page dnd-page dnd-entities">
-	<div v-if="!player.attribute.playing_as" class="column">
-		<div class="column-content">
+	<div class="column">
+		<div class="column-content" v-if="!main || main.state === 'deceased'">
 			<button v-on:click="createPlayer()" class="general create">
 				<span class="icon fas fa-user-plus"></span>
 				<span class="text">Create Character</span>
 			</button>
+		</div>
+		<div class="player-entity column" v-if="main && main.state !== 'deceased'">
+			<div class="column-content">
+				<dnd-entity-overview :entity="main" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'_dndeoc:' + main.id" />
+			</div>
+		</div>
+	</div>
+	<div class="player-entity column">
+		<div class="column-content">
+			<dnd-entity-summary v-for="entity in minions" :entity="entity" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'_dndeoc:' + entity.id" :key="entity.id" />
 		</div>
 	</div>
 	<div class="player-entity column" v-for="entity in entities">

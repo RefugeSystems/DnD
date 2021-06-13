@@ -9,8 +9,7 @@
 rsSystem.component("dndEntitySummary", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController,
-		rsSystem.components.DNDCore
+		rsSystem.components.DNDWidgetCore
 	],
 	"props": {
 		"entity": {
@@ -24,6 +23,22 @@ rsSystem.component("dndEntitySummary", {
 			}
 		}
 	},
+	"computed": {
+		/**
+		 * 
+		 * @property image
+		 * @type Object
+		 */
+		"image": function() {
+			if(this.entity.picture) {
+				return this.universe.index.image[this.entity.picture];
+			}
+			return null;
+		},
+		"damage": {
+
+		}
+	},
 	"data": function() {
 		var data = {};
 
@@ -31,18 +46,6 @@ rsSystem.component("dndEntitySummary", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-
-		this.$el.onclick = (event) => {
-			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
-				rsSystem.EventBus.$emit("display-info", {
-					"record": follow,
-					"base": this.viewing
-				});
-				event.stopPropagation();
-				event.preventDefault();
-			}
-		};
 	},
 	"methods": {
 	},

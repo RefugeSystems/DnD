@@ -6,7 +6,7 @@
  * @constructor
  * @module Components
  */
-rsSystem.component("dndEntityName", {
+rsSystem.component("dndEntityImagery", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.DNDWidgetCore
@@ -32,9 +32,6 @@ rsSystem.component("dndEntityName", {
 		rsSystem.register(this);
 	},
 	"methods": {
-		"levelUp": function() {
-
-		}
 	},
 	"beforeDestroy": function() {
 		/*

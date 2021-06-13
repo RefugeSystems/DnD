@@ -1,7 +1,6 @@
 
-var express = require("express"),
-	parseDataUrl  = require("parse-data-url"),
-	atob = require("atob");
+var parseDataUrl = require("parse-data-url"),
+	express = require("express");
 
 module.exports = new (function() {
 	this.router = express.Router();

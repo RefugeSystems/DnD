@@ -1,5 +1,7 @@
 <div class="rs-component dnd-component character-overview">
-	<rs-image class="imagery" v-if="image" :image="image" />
+	<div class="imagery-container">
+		<rs-image class="imagery" v-if="image" :image="image" />
+	</div>
 	<div class="widgets container flex v">
 		<component v-for="(widget, $index) in widgets" :key="$index" v-if="widget && !widget.disabled" :is="widget.component" :universe="universe" :entity="entity" :profile="profile" :player="player" :widget="widget" :storage-key="entity.id + widget.id"/>
 	</div>

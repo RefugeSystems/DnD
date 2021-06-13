@@ -381,25 +381,25 @@ classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "email", "description", "gm", "auth_token", "last", "connections", "attribute"]
+	"fields": ["name", "disabled", "username", "password", "parent", "email", "description", "gm", "auth_token", "last", "connections", "attribute"]
 });
 classes.push({
 	"id": "session",
 	"name": "Session",
 	"description": "Tracks a Player connection session",
-	"fields": ["player", "username", "disabled", "last", "expiry"]
+	"fields": ["player", "username", "disabled", "parent", "last", "expiry"]
 });
 classes.push({
 	"id": "setting",
 	"name": "Setting",
 	"description": "Universe values",
-	"fields": ["name", "disabled", "description", "value", "gm_note"]
+	"fields": ["name", "disabled", "description", "value", "parent", "gm_note"]
 });
 classes.push({
 	"id": "conditional",
 	"name": "Conditional",
 	"description": "Represents a conditional addition to the object's properties.",
-	"fields": ["condition", "ifop", "adds", "subs", "sets"]
+	"fields": ["condition", "parent", "ifop", "adds", "subs", "sets"]
 });
 
 

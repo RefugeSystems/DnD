@@ -9,8 +9,7 @@
 rsSystem.component("dndEntityStats", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController,
-		rsSystem.components.DNDCore
+		rsSystem.components.DNDWidgetCore
 	],
 	"props": {
 		"entity": {
@@ -24,6 +23,9 @@ rsSystem.component("dndEntityStats", {
 			}
 		}
 	},
+	"computed": {
+
+	},
 	"data": function() {
 		var data = {};
 
@@ -31,18 +33,6 @@ rsSystem.component("dndEntityStats", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-
-		this.$el.onclick = (event) => {
-			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
-				rsSystem.EventBus.$emit("display-info", {
-					"record": follow,
-					"base": this.viewing
-				});
-				event.stopPropagation();
-				event.preventDefault();
-			}
-		};
 	},
 	"methods": {
 	},

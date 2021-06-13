@@ -26,17 +26,36 @@ rsSystem.component("DNDEntities", {
 		}
 	},
 	"computed": {
+		"main": function() {
+			if(this.player.attribute.playing_as && this.universe.index.entity[this.player.attribute.playing_as]) {
+				return this.universe.index.entity[this.player.attribute.playing_as];
+			}
+			return null;
+		},
 		"entities": function() {
 			var entities = [],
+				entity,
 				x;
 				
-			if(this.player.attribute.playing_as && this.universe.index.entity[this.player.attribute.playing_as]) {
-				entities.uniquely(this.universe.index.entity[this.player.attribute.playing_as]);
-			}
 			
 			for(x=0; x<this.universe.listing.entity.length; x++) {
-				if(this.universe.listing.entity[x].played_by === this.player.id && !this.universe.listing.entity[x].disabled && this.universe.listing.entity[x].state !== "deceased" && !this.universe.listing.entity[x].obscured) {
-					entities.uniquely(this.universe.listing.entity[x]);
+				entity = this.universe.listing.entity[x];
+				if(entity.played_by === this.player.id && !entity.disabled && entity.state !== "deceased" && !entity.is_preview && !entity.obscured && !entity.is_minion && entity.id !== this.player.attribute.playing_as) {
+					entities.uniquely(entity);
+				}
+			}
+			
+			return entities;
+		},
+		"minions": function() {
+			var entities = [],
+				entity,	
+				x;
+			
+			for(x=0; x<this.universe.listing.entity.length; x++) {
+				entity = this.universe.listing.entity[x];
+				if((entity.played_by === this.player.id || (this.main && entity.loyal_to.indexOf(this.main.id) !== -1)) && !entity.is_preview && !entity.disabled && entity.state !== "deceased" && !entity.obscured && entity.is_minion) {
+					entities.uniquely(entity);
 				}
 			}
 			

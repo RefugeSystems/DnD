@@ -262,6 +262,9 @@
 		"name": "Gender",
 		"description": "The gender of this object",
 		"type": "string",
+		"inheritable": [
+			"gender"
+		],
 		"attribute": {}
 	}, {
 		"id": "url",
@@ -908,6 +911,9 @@
 			"feats": "+",
 			"score": "+",
 			"threat": "+",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
 			"skill_check": "+=",
@@ -942,6 +948,9 @@
 			"stat_wisdom": "+",
 			"stat_charisma": "+",
 			"resistance": "+=",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"armor": "+",
 			"damage": "+=",
 			"feats": "+",
@@ -952,6 +961,7 @@
 			"threat": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
+			"skills": "+",
 			"skill_check": "+=",
 			"skill_proficiency": "=",
 			"types": "+",
@@ -1039,6 +1049,9 @@
 			"spells": "+",
 			"skills": "+",
 			"skill_check": "+=",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"effects": "+",
 			"action_max": "+",
 			"hp_max": "+",
@@ -1462,6 +1475,12 @@
 		"id": "ranged",
 		"name": "Ranged Weapon",
 		"description": "Flag to indicate if this object is considered a ranged weapon",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "is_minion",
+		"name": "Is Minion",
+		"description": "When true the entity is a minion",
 		"type": "boolean",
 		"attribute": {}
 	}, {

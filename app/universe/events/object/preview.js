@@ -28,7 +28,7 @@ module.exports.initialize = function(universe) {
 		}
 		details.attribute.no_show = true;
 
-		console.log("Preview: ", details);
+		// console.log("Preview: ", details);
 		universe.getObject(details.id, function(err, object) {
 			if(err) {
 				universe.emit("send", {

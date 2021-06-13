@@ -49,6 +49,6 @@
 				this.$emit("input", this.modeling);
 			}
 		},
-		"template": Vue.templified("components/field/autocomplete.html")
+		"template": Vue.templified("components/data/field/autocomplete.html")
 	});
 })();
