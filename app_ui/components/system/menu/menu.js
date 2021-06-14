@@ -143,7 +143,6 @@ rsSystem.component("systemMenu", {
 			return false;
 		},
 		"evaluateConditional": function(condition) {
-			console.warn("Condition: ", condition);
 			var keys = Object.keys(condition),
 				x;
 

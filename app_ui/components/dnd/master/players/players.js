@@ -7,9 +7,17 @@
  * @module Components
  */
 rsSystem.component("dndMasterPlayers", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.DNDWidgetCore
+	],
 	"props": {
 		"object": {
 			"requried": true,
+			"type": Object
+		},
+		"tracking": {
+			"required": true,
 			"type": Object
 		}
 	},
@@ -22,6 +30,12 @@ rsSystem.component("dndMasterPlayers", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"displayed": function(player) {
+			if(player.id.indexOf(":preview:") === -1) {
+				return true;
+			}
+			return false;
+		}
 	},
 	"beforeDestroy": function() {
 		/*

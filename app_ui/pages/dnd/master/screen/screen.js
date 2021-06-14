@@ -20,21 +20,41 @@ rsSystem.component("DNDMasterScreen", {
 			"required": true,
 			"type": Object
 		},
+		"profile": {
+			"required": true,
+			"type": Object
+		},
 		"configuration": {
 			"required": true,
 			"type": Object
 		}
 	},
 	"data": function() {
-		var data = {};
+		var data = {},
+			buffer,
+			i;
+
+		data.tracking = {};
+		data.tracking.player = {};
+		for(i=0; i<this.universe.listing.player.length; i++) {
+			data.tracking.player[this.universe.listing.player[i].id] = this.universe.listing.player[i].connections || 0;
+		}
 
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 		
+		this.universe.$on("player-disconnected", this.playerDisconnected);
+		this.universe.$on("player-connected", this.playerConnected);
 	},
 	"methods": {
+		"playerDisconnected": function(event) {
+			console.log("Disconnect: ", event);
+		},
+		"playerConnected": function(event) {
+			console.log("Connect: ", event);
+		}
 	},
 	"beforeDestroy": function() {
 		/*
