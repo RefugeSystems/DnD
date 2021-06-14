@@ -28,6 +28,7 @@ class Anomaly {
 		// super(message);
 		this.code = code;
 		this.component = component?(component.id || component):"unknown";
+		this.message = message;
 		this.msg = message;
 		this.level = level || (cause?40:30);
 		if(details) {

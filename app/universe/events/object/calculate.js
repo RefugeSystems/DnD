@@ -56,7 +56,8 @@ module.exports.initialize = function(universe) {
 	universe.on("player:roll:object", function(event) {
 		var formula = event.message.data.formula,
 			cbid = event.message.data.cbid,
-			referenced = [];
+			referenced = [],
+			rolled;
 
 		universe.getObject(event.message.data.id, function(err, object) {
 			if(err) {
@@ -70,28 +71,15 @@ module.exports.initialize = function(universe) {
 					"anchored": true
 				});
 			} else if(object && (event.player.gm || object.owned[event.player.id])) {
-				universe.calculator.rollDice(formula, object)
-				.then(function(result) {
-					console.log("Roll[" + formula + "]: ", result);
-					universe.emit("send", {
-						"type": "roll",
-						"recipient": event.player.id,
-						"computed": result,
-						"formula": formula,
-						"referenced": referenced,
-						"callback_id": cbid
-					});
-				})
-				.catch(function(err) {
-					universe.emit("send", {
-						"type": "notice",
-						"mid": "roll:object",
-						"recipient": event.player.id,
-						"message": "Error calculating roll: " + err.message,
-						"icon": "fas fa-exclamation-triangle rs-lightred",
-						"error": err,
-						"anchored": true
-					});
+				rolled = universe.calculator.computedDiceRoll(formula, object, referenced);
+				// console.log("Roll[" + formula + "]: ", rolled);
+				universe.emit("send", {
+					"type": "roll",
+					"recipient": event.player.id,
+					"computed": rolled,
+					"formula": formula,
+					"referenced": referenced,
+					"callback_id": cbid
 				});
 			} else {
 				universe.emit("send", {

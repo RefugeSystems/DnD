@@ -13,8 +13,8 @@
 
 var EventEmitter = require("events").EventEmitter,
 	Anomaly = require("../management/anomaly"),
-	validTypeValue = new RegExp("^[a-z]+$"),
-	valid = new RegExp("^[a-z][a-z_]*$");
+	validTypeValue = new RegExp("^[a-z:]+$"),
+	valid = new RegExp("^[a-z][a-z:_]*$");
 
 class RSField extends EventEmitter {
 	constructor(specification) {

@@ -59,6 +59,10 @@ rsSystem.component("dndEntityEquipment", {
 	"methods": {
 		"use": function(item) {
 			console.log("Use: ", item);
+			this.startRoll({
+				"specs": item.damage,
+				"record": item
+			}, true);
 		}
 	},
 	"beforeDestroy": function() {

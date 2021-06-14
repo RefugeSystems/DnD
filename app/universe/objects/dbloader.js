@@ -358,6 +358,9 @@ fields.push({
 	"name": "Conditionals",
 	"description": "Lists of conditionals that may be applied to this object.",
 	"type": "array",
+	"inheritable": [
+		"conditional"
+	],
 	"attribute": {
 		"displayed": false
 	}
@@ -399,7 +402,7 @@ classes.push({
 	"id": "conditional",
 	"name": "Conditional",
 	"description": "Represents a conditional addition to the object's properties.",
-	"fields": ["condition", "parent", "ifop", "adds", "subs", "sets"]
+	"fields": ["name", "description", "condition", "parent", "ifop", "adds", "subs", "sets"]
 });
 
 

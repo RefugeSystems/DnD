@@ -122,7 +122,7 @@
 		</div>
 	</div>
 
-	<div v-if="field.type === 'object'" class="multireference">
+	<div v-if="field.type === 'object' || field.type === 'object:dice'" class="multireference">
 		<div class="referenced" v-for="(reference, $index) in root[field.id]">
 			<button class="remove fas fa-times-square" v-on:click="dismissObjectMap($index)"></button>
 			<span class="reference-display">{{getObjectKey($index)}}</span>

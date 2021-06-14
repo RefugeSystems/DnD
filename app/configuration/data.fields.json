@@ -758,7 +758,7 @@
 		"id": "resistance",
 		"name": "Resistance",
 		"description": "Maps a Damage Type ID to a formula for the amount that this object reduces that damage type by when suffered by this object",
-		"type": "object",
+		"type": "object:dice",
 		"inheritable": [
 			"damage_type"
 		],
@@ -869,19 +869,28 @@
 		"name": "Move Speed",
 		"description": "Movement speed while on the ground",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "movement_swim",
 		"name": "Swim Speed",
 		"description": "Movement speed while on the water or other liquids",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "movement_fly",
 		"name": "Fly Speed",
 		"description": "Movement speed while in the air",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "needs",
 		"name": "Needs",
@@ -937,6 +946,15 @@
 		},
 		"inheritable": [
 			"archetype"
+		],
+		"attribute": {}
+	}, {
+		"id": "populace",
+		"name": "Populace",
+		"description": "List of entities that are considered active at the location",
+		"type": "array",
+		"inheritable": [
+			"entity"
 		],
 		"attribute": {}
 	}, {
@@ -1017,6 +1035,10 @@
 			"action_max": "+",
 			"hp_max": "+",
 			"effects": "+",
+
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 
 			"equip_slots": "-",
 			"conditionals": "+"

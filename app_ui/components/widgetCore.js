@@ -73,12 +73,15 @@ rsSystem.component("DNDWidgetCore", {
 		}
 	},
 	"methods": {
-		"info": function(record) {
-			rsSystem.EventBus.$emit("display-info", {
-				"info": record.id || record
+		"startRoll": function(rolling, targeted) {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"targeted": targeted,
+				"rolling": rolling
 			});
 		},
-		
 		"sortData": rsSystem.utility.sortData
 	},
 	"beforeDestroy": function() {

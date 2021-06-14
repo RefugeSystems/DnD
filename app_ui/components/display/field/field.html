@@ -10,7 +10,7 @@
 		<div class="seperator">
 			<span class="text">:</span>
 		</div>
-		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object'">
+		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object' && fieldData.type !== 'object:dice'">
 			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
 			<span v-else class="text">{{getValue()}}</span>
 		</div>
@@ -54,7 +54,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="value object flex v" v-else-if="fieldData.type === 'object'">
+			<div class="value object flex v" v-else-if="fieldData.type === 'object' || fieldData.type === 'object:dice'">
 				<div class="element" v-for="key in getObjectKeys()">
 					<span class="text">{{key.name}}:</span>
 					<span class="text">{{getObjectValue(key)}}</span>

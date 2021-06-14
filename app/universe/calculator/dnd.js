@@ -29,7 +29,7 @@ module.exports = function(universe) {
 	};
 	
 	
-	var diceReductionRegEx = new RegExp("\\+?([0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\. ]+?\\))(d[0-9]+)", "g"),
+	var diceReductionRegEx = new RegExp("\\+?(-?[0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\. ]+?\\))(d[0-9]+|%)", "g"),
 		calculateSecurityRegEx = new RegExp("^([<>a-zA-Z0-9\\(\\)+-\\/\\* ]+|Math\\.[a-zA-Z]+)$"),
 		variableExpression = new RegExp("([a-z_]+)(\\.?[a-z:_]+)*", "gi"),
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
@@ -66,6 +66,8 @@ module.exports = function(universe) {
 			return original;
 		}
 	};
+
+	var maxDepth = 6;
 
 	var diceOrder = [
 		"d4",
@@ -109,8 +111,12 @@ module.exports = function(universe) {
 	 * 		calculated for update response purposes.
 	 * @return {Number}
 	 */
-	this.compute = function(expression, source, referenced) {
+	this.compute = function(expression, source, referenced, depth = 0) {
 		referenced = referenced || [];
+		if(depth > 2) {
+			console.log("Found Depth: " + depth);
+		}
+		
 		if(!expression) {
 			return 0;
 		} else if(typeof(expression) === "number") {
@@ -128,7 +134,7 @@ module.exports = function(universe) {
 			console.log("Compute: ", expression);
 		}
 		if(source) {
-			while(variables = variableExpression.exec(expression)) {
+			while((variables = variableExpression.exec(expression))) {
 				if(debug) {
 					console.log(" > Expression: ", expression, variables);
 				}
@@ -149,10 +155,18 @@ module.exports = function(universe) {
 			}
 		}
 
-		if(processed !== expression) {
+		// return calculate(processed);
+		if(source && processed !== expression && depth < maxDepth) {
 			// Rerun until we "stabilize" to detect arbitrary depth in referencing
-			return this.compute(processed, source, referenced);
+			// console.trace("Depth: " + depth);
+			if(depth > 2) {
+				console.log(" [" + source.id + "]: " + processed + " <--> " + expression);
+			}
+			return this.compute(processed, source, referenced, depth + 1);
 		} else {
+			if(depth > 2) {
+				console.log("Good");
+			}
 			return calculate(processed);
 		}
 	};
@@ -376,6 +390,103 @@ module.exports = function(universe) {
 			})
 			.catch(fail);
 		});
+	};
+
+	/**
+	 *
+	 * @method reduceDiceRoll
+	 * @param {String} expression
+	 * @param {RSObject} [source] Drives raw arguments for stats such as "str" and "wis".
+	 * @return {String}
+	 */
+	this.reducedDiceRoll = function(expression, source) {
+		var reduced = "",
+			value,
+			dice,
+			x;
+
+		dice = this.parseDiceRoll(expression);
+		for(x=0; x<diceOrder.length; x++) {
+			value = this.compute(dice[diceOrder[x]], source);
+			if(value) {
+				if(reduced) {
+					if(typeof(value) === "number") {
+						reduced += " + " + value + diceOrder[x];
+					} else {
+						reduced += " + (" + value + ")" + diceOrder[x];
+					}
+				} else {
+					if(typeof(value) === "number") {
+						reduced = value + diceOrder[x];
+					} else {
+						reduced = "(" + value + ")" + diceOrder[x];
+					}
+				}
+			}
+		}
+		value = this.compute(dice.remainder, source);
+		if(value) {
+			if(reduced) {
+				reduced += " + " + value;
+			} else {
+				reduced = value;
+			}
+		}
+		value = this.compute(dice["%"], source);
+		if(value) {
+			if(reduced) {
+				reduced += " + " + value;
+			} else {
+				reduced = value;
+			}
+		}
+
+
+		return reduced;
+	};
+
+	/**
+	 * 
+	 * @param {String} expression 
+	 * @param {*} source 
+	 * @param {Number} [incoming] Optional value that when specified is used against the
+	 * 		computed percentage value. When omitted, percentages are applied to the computed
+	 * 		value outside the percentage.
+	 */
+	this.computedDiceRoll = function(expression, source, referenced, incoming) {
+		var values = {},
+			roll = 0,
+			value,
+			dice,
+			d,
+			x;
+
+		dice = this.parseDiceRoll(expression);
+		for(x=0; x<diceOrder.length; x++) {
+			values[x] = this.compute(dice[diceOrder[x]], source, referenced);
+		}
+		for(d=0; d<diceOrder.length; d++) {
+			for(x=0; x<values[d] && !isNaN(values[d]); x++) {
+				roll += parseInt(diceValue[diceOrder[d]] * Math.random()) + 1;
+			}
+		}
+
+		value = this.compute(dice.remainder, source, referenced);
+		if(value) {
+			roll += value;
+		}
+		value = this.compute(dice["%"], source, referenced);
+		if(value) {
+			if(incoming) {
+				roll += Math.floor(value/100*incoming);
+				// console.log("Incoming[" + value + "]: " + roll);
+			} else {
+				roll += Math.floor(roll * value/100);
+				// console.log("Percentile[" + value + "]: " + roll);
+			}
+		}
+
+		return roll;
 	};
 
 	this.debug = function(state) {

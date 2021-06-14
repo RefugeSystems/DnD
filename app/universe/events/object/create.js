@@ -31,6 +31,7 @@ module.exports.initialize = function(universe) {
 
 				universe.createObject(details, function(err, object) {
 					if(err) {
+						console.log("Err: ", err);
 						universe.emit("send", {
 							"type": "notice",
 							"mid": "create:object",

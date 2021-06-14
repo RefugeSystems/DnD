@@ -26,11 +26,11 @@ module.exports.initialize = function(universe) {
 		if(!details.attribute) {
 			details.attribute = {};
 		}
-		details.attribute.no_show = true;
 
-		// console.log("Preview: ", details);
+		console.log("Preview: ", details.name, " - ", details.damage, " - ", details.movement_fly);
 		universe.getObject(details.id, function(err, object) {
 			if(err) {
+				console.log(err);
 				universe.emit("send", {
 					"type": "notice",
 					"mid": "create:object",

@@ -52,6 +52,11 @@ rsSystem.component("StorageController", {
 			if(this && this.storageKey) {
 				localStorage.setItem(this.storageKey, JSON.stringify(this.storage));
 			}
+		},
+		"info": function(record) {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": record.id || record
+			});
 		}
 	}
 });
