@@ -1,52 +1,54 @@
 <div class="rs-component dnd-component character-creation">
     <div class="flex v fill">
         <div class="grow-10 over-auto">
-            <div class="selection details" v-if="stages[stage] === 'details'">
-                <table>
-                    <tr>
-                        <td class="align-right align-top">Name:</td>
-                        <td><input type="text" v-model="building.name" /></td>
-                        <td>
-                            <button class="general quick action" v-for="dataset in nameGenerators" v-on:click="randomName(dataset)">
-                                <span :class="dataset.icon" />
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-right align-top">Gender:</td>
-                        <td>
-                            <select type="text" v-model="building.gender">
-                                <option :value="gender" v-for="gender in genders">{{gender}}</option>
-                            </select>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-right align-top">Description:</td>
-                        <td>
-                            <textarea v-model="building.description"></textarea>
-                        </td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td class="align-right align-top">Notes:</td>
-                        <td>
-                            <textarea v-model="building.notes"></textarea>
-                        </td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <button class="rounded basic general action" v-on:click="forward()">
-                                <span>Next</span>
-                                <span class="fas fa-user-edit"></span>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <div class="selection details flex h" v-if="stages[stage] === 'details'">
+				<div class="selection input">
+					<table>
+						<tr>
+							<td class="align-right align-top">Name:</td>
+							<td><input type="text" v-model="building.name" /></td>
+							<td>
+								<button class="general quick action" v-for="dataset in nameGenerators" v-on:click="randomName(dataset)">
+									<span :class="dataset.icon"></span>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="align-right align-top">Gender:</td>
+							<td>
+								<select type="text" v-model="building.gender">
+									<option :value="gender" v-for="gender in genders">{{gender}}</option>
+								</select>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<td class="align-right align-top">Description:</td>
+							<td>
+								<textarea v-model="building.description"></textarea>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="align-right align-top">Notes:</td>
+							<td>
+								<textarea v-model="building.notes"></textarea>
+							</td>
+							<td></td>
+						</tr>
+					</table>
+					<rs-field :root="building" :field="fieldPortrait" :universe="universe" v-on:changed="syncPortrait()" v-on:complete="syncPortrait()" />
+					<rs-field :root="building" :field="fieldPicture" :universe="universe" v-on:changed="syncPortrait()" v-on:complete="syncPortrait()" />
+					<button class="rounded basic general action" v-on:click="forward()">
+						<span>Next</span>
+						<span class="fas fa-user-edit"></span>
+					</button>
+				</div>
+				<div class="selection display">
+					<img v-if="building.picture" :src="building.picture" />
+				</div>
+			</div>
 
             <panel-select v-else-if="corpus[stages[stage]] && corpus[stages[stage]].length" class="selection panels" :class="stages[stage]" v-on:selected="infoRecord($event)" :flush="6" :corpus="corpus[stages[stage]]" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :descriptionless="true" :current="building[stages[stage]]" fmarking="fad fa-dot-circle rs-secondary-transparent">
                 <div slot="controls" slot-scope="{record}" class="align-right">
@@ -123,152 +125,157 @@
 			</div>
 
             <div class="finalize selection" v-else>
-                <table>
-                    <tr>
-                        <td class="label align-right align-top">Name:</td>
-                        <td class="" v-if="errorCount">
-							<button class="flat action" v-if="errors[6]" v-on:click="goToError()">
-								<span class="fas fa-exclamation-triangle rs-lightred"></span>
-							</button>
-						</td>
-                        <td class="value">{{building.name}}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Gender:</td>
-						<td v-if="errorCount"></td>
-                        <td class="value">{{building.gender}}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Race:</td>
-                        <td class="" v-if="errorCount">
-							<button class="flat action" v-if="errors[1]" v-on:click="goToError()">
-								<span class="fas fa-exclamation-triangle rs-lightred"></span>
-							</button>
-						</td>
-                        <td class="value">{{getName(building.variant, true)}}{{getName(building.race)}}</td>
-                        <td>
-                            <button class="flat action rs-blue" v-on:click="info(building.race)">
-                                <span class="fas fa-info-circle"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Alignment:</td>
-                        <td class="" v-if="errorCount">
-							<button class="flat action" v-if="errors[4]" v-on:click="goToError()">
-								<span class="fas fa-exclamation-triangle rs-lightred"></span>
-							</button>
-						</td>
-                        <td class="value">{{getName(building.alignment)}}</td>
-                        <td>
-                            <button class="flat action rs-blue" v-on:click="info(building.alignment)">
-                                <span class="fas fa-info-circle"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Class:</td>
-                        <td class="" v-if="errorCount">
-							<button class="flat action" v-if="errors[2]" v-on:click="goToError()">
-								<span class="fas fa-exclamation-triangle rs-lightred"></span>
-							</button>
-						</td>
-                        <td class="value">{{getName(building.archetype)}}</td>
-                        <td>
-                            <button class="flat action rs-blue" v-on:click="info(building.archetype)">
-                                <span class="fas fa-info-circle"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Background:</td>
-                        <td class="" v-if="errorCount">
-							<button class="flat action" v-if="errors[3]" v-on:click="goToError()">
-								<span class="fas fa-exclamation-triangle rs-lightred"></span>
-							</button>
-						</td>
-                        <td class="value">{{getName(building.background)}}</td>
-                        <td>
-                            <button class="flat action rs-blue" v-on:click="info(building.background)">
-                                <span class="fas fa-info-circle"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Description:</td>
-						<td v-if="errorCount"></td>
-                        <td class="value">
-                            <rs-text-block :universe="universe" :text="building.description" />
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="label align-right align-top">Notes:</td>
-						<td v-if="errorCount"></td>
-                        <td class="value">
-                            <rs-text-block :universe="universe" :text="building.notes" />
-                        </td>
-                        <td></td>
-                    </tr>
-                    <!-- tr>
-						<td class="label align-right align-top">Feats:</td>
-						<td class="value">
-							<ul v-if="building.feats.length">
-								<li v-for="feat in building.feats">
-									<span>{{feat.name}}</span>
-									<button class="flat action rs-blue" v-on:click="info(feat)">
-										<span class="fas fa-info-circle"></span>
-									</button>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td class="label align-right align-top">Proficiencies:</td>
-						<td>
-							<ul v-if="building.proficiencies.length">
-								<li v-for="proficiency in building.proficiencies">
-									<span>{{proficiency.name}}</span>
-									<button class="flat action rs-blue" v-on:click="info(proficiency)">
-										<span class="fas fa-info-circle"></span>
-									</button>
-								</li>
-							</ul>
-						</td>
-					</tr -->
-                    <tr>
-                        <td class="label align-right align-top">Choices:</td>
-                        <td class="" v-if="errorCount">
-							<button class="flat action" v-if="errors[5]" v-on:click="goToError()">
-								<span class="fas fa-exclamation-triangle rs-lightred"></span>
-							</button>
-						</td>
-                        <td>
-                            <div class="block" v-for="block in choiceBlocks">
-                                <span>{{block.name}}</span>
-                                <ul>
-                                    <li v-for="choice in block._selected">
-                                        <span>{{getName(choice)}}</span>
-                                        <button class="flat action rs-blue" v-on:click="info(choice)">
-                                            <span class="fas fa-info-circle"></span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <button class="rounded basic general action" v-if="!errorCount" v-on:click="create()">
-                                <span>Create</span>
-                                <span class="fas fa-user-plus"></span>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+				<div class="flex h">
+					<table>
+						<tr>
+							<td class="label align-right align-top">Name:</td>
+							<td class="" v-if="errorCount">
+								<button class="flat action" v-if="errors[6]" v-on:click="goToError()">
+									<span class="fas fa-exclamation-triangle rs-lightred"></span>
+								</button>
+							</td>
+							<td class="value">{{building.name}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Gender:</td>
+							<td v-if="errorCount"></td>
+							<td class="value">{{building.gender.name || building.gender}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Race:</td>
+							<td class="" v-if="errorCount">
+								<button class="flat action" v-if="errors[1]" v-on:click="goToError()">
+									<span class="fas fa-exclamation-triangle rs-lightred"></span>
+								</button>
+							</td>
+							<td class="value">{{getName(building.variant, true)}}{{getName(building.race)}}</td>
+							<td>
+								<button class="flat action rs-blue" v-on:click="info(building.race)">
+									<span class="fas fa-info-circle"></span>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Alignment:</td>
+							<td class="" v-if="errorCount">
+								<button class="flat action" v-if="errors[4]" v-on:click="goToError()">
+									<span class="fas fa-exclamation-triangle rs-lightred"></span>
+								</button>
+							</td>
+							<td class="value">{{getName(building.alignment)}}</td>
+							<td>
+								<button class="flat action rs-blue" v-on:click="info(building.alignment)">
+									<span class="fas fa-info-circle"></span>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Class:</td>
+							<td class="" v-if="errorCount">
+								<button class="flat action" v-if="errors[2]" v-on:click="goToError()">
+									<span class="fas fa-exclamation-triangle rs-lightred"></span>
+								</button>
+							</td>
+							<td class="value">{{getName(building.archetype)}}</td>
+							<td>
+								<button class="flat action rs-blue" v-on:click="info(building.archetype)">
+									<span class="fas fa-info-circle"></span>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Background:</td>
+							<td class="" v-if="errorCount">
+								<button class="flat action" v-if="errors[3]" v-on:click="goToError()">
+									<span class="fas fa-exclamation-triangle rs-lightred"></span>
+								</button>
+							</td>
+							<td class="value">{{getName(building.background)}}</td>
+							<td>
+								<button class="flat action rs-blue" v-on:click="info(building.background)">
+									<span class="fas fa-info-circle"></span>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Description:</td>
+							<td v-if="errorCount"></td>
+							<td class="value">
+								<rs-text-block :universe="universe" :text="building.description" />
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Notes:</td>
+							<td v-if="errorCount"></td>
+							<td class="value">
+								<rs-text-block :universe="universe" :text="building.notes" />
+							</td>
+							<td></td>
+						</tr>
+						<!-- tr>
+							<td class="label align-right align-top">Feats:</td>
+							<td class="value">
+								<ul v-if="building.feats.length">
+									<li v-for="feat in building.feats">
+										<span>{{feat.name}}</span>
+										<button class="flat action rs-blue" v-on:click="info(feat)">
+											<span class="fas fa-info-circle"></span>
+										</button>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td class="label align-right align-top">Proficiencies:</td>
+							<td>
+								<ul v-if="building.proficiencies.length">
+									<li v-for="proficiency in building.proficiencies">
+										<span>{{proficiency.name}}</span>
+										<button class="flat action rs-blue" v-on:click="info(proficiency)">
+											<span class="fas fa-info-circle"></span>
+										</button>
+									</li>
+								</ul>
+							</td>
+						</tr -->
+						<tr>
+							<td class="label align-right align-top">Choices:</td>
+							<td class="" v-if="errorCount">
+								<button class="flat action" v-if="errors[5]" v-on:click="goToError()">
+									<span class="fas fa-exclamation-triangle rs-lightred"></span>
+								</button>
+							</td>
+							<td>
+								<div class="block" v-for="block in choiceBlocks">
+									<span>{{block.name}}</span>
+									<ul>
+										<li v-for="choice in block._selected">
+											<span>{{getName(choice)}}</span>
+											<button class="flat action rs-blue" v-on:click="info(choice)">
+												<span class="fas fa-info-circle"></span>
+											</button>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<button class="rounded basic general action" v-if="!errorCount" v-on:click="create()">
+									<span>Create</span>
+									<span class="fas fa-user-plus"></span>
+								</button>
+							</td>
+						</tr>
+					</table>
+					<div class="selection display">
+						<img v-if="building.picture" :src="building.picture" />
+					</div>
+				</div>
             </div>
         </div>
         <div class="progress flex h">

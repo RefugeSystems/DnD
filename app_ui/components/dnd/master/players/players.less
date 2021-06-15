@@ -1,0 +1,32 @@
+.dnd-component.master-players {
+	line-height: 30px;
+	height: 30px;
+
+
+
+	.player-info {
+		margin: 10px;
+		color: @rsWhite;
+
+		& > * {
+			line-height: inherit;
+			height: inherit;
+		}
+	}
+
+	.player-connections {
+		display: inline-block;
+		background-color: @rsDarkRed;
+		border-radius: 20px;
+		width: 30px;
+		margin-right: 5px;
+		box-shadow: 0px 0px 5px @rsRed;
+		text-align: center;
+
+		&.connected {
+			box-shadow: 0px 0px 5px @rsGreen;
+			background-color: @rsDarkGreen;
+		}
+	}
+	
+}

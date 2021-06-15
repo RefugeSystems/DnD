@@ -1,3 +1,8 @@
 <div class="rs-component dnd-component entity-effects">
-	
+	<div class="divider"></div>
+	<div class="effects flex h wrap">
+		<button class="effect rounded general quick action" v-for="effect in effects" v-on:click="info(effect)" v-on:click.right.prevent.stop="info(effect)">
+			<span :class="effectClasses(effect)"></span>
+		</button>
+	</div>
 </div>

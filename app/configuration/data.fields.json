@@ -262,6 +262,9 @@
 		"name": "Gender",
 		"description": "The gender of this object",
 		"type": "string",
+		"inheritable": [
+			"gender"
+		],
 		"attribute": {}
 	}, {
 		"id": "url",
@@ -306,7 +309,12 @@
 		"name": "Background Image",
 		"description": "Background image for this object. This is for objects like locations to display as backgrounds when entities are at the location.",
 		"type": "string",
-		"attribute": {}
+		"inheritable": [
+			"image"
+		],
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "main_weapon",
 		"name": "Main Weapon",
@@ -567,6 +575,9 @@
 		"name": "Damage",
 		"description": "Maps a Damage Type ID to a formula for the amount done by this object",
 		"type": "object",
+		"inheritable": [
+			"damage_type"
+		],
 		"attribute": {
 			"inherited_key": "damage_type"
 		}
@@ -747,7 +758,7 @@
 		"id": "resistance",
 		"name": "Resistance",
 		"description": "Maps a Damage Type ID to a formula for the amount that this object reduces that damage type by when suffered by this object",
-		"type": "object",
+		"type": "object:dice",
 		"inheritable": [
 			"damage_type"
 		],
@@ -858,19 +869,28 @@
 		"name": "Move Speed",
 		"description": "Movement speed while on the ground",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "movement_swim",
 		"name": "Swim Speed",
 		"description": "Movement speed while on the water or other liquids",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "movement_fly",
 		"name": "Fly Speed",
 		"description": "Movement speed while in the air",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "needs",
 		"name": "Needs",
@@ -895,8 +915,8 @@
 		"attribute": {}
 	}, {
 		"id": "archetypes",
-		"name": "Archetypes",
-		"description": "List of archetypes currently applied to this entity",
+		"name": "Classes",
+		"description": "List of classes currently applied to this entity",
 		"type": "array",
 		"inheritance": {
 			"actions": "+",
@@ -908,10 +928,15 @@
 			"feats": "+",
 			"score": "+",
 			"threat": "+",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
 			"skill_check": "+=",
 			"skill_proficiency": "=",
+			"spell_attack": "+",
+			"spell_dc": "+",
 			"effects": "+",
 			"hit_dice_max": "+",
 			"proficiencies": "+",
@@ -921,6 +946,15 @@
 		},
 		"inheritable": [
 			"archetype"
+		],
+		"attribute": {}
+	}, {
+		"id": "populace",
+		"name": "Populace",
+		"description": "List of entities that are considered active at the location",
+		"type": "array",
+		"inheritable": [
+			"entity"
 		],
 		"attribute": {}
 	}, {
@@ -942,6 +976,9 @@
 			"stat_wisdom": "+",
 			"stat_charisma": "+",
 			"resistance": "+=",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"armor": "+",
 			"damage": "+=",
 			"feats": "+",
@@ -952,11 +989,13 @@
 			"threat": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
+			"skills": "+",
 			"skill_check": "+=",
 			"skill_proficiency": "=",
 			"types": "+",
 			"size": "+",
 			"proficiencies": "+",
+			"proficiency_rating": "+",
 			"effects": "+",
 			"conditionals": "+",
 			"equip_slots": "+"
@@ -997,6 +1036,10 @@
 			"hp_max": "+",
 			"effects": "+",
 
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
+
 			"equip_slots": "-",
 			"conditionals": "+"
 		},
@@ -1014,6 +1057,24 @@
 			"feat"
 		],
 		"attribute": {}
+	}, {
+		"id": "death_save",
+		"name": "Death Saves",
+		"description": "Numer of successful death saves",
+		"type": "number",
+		"attribute": {
+			"displayed": false,
+			"default": 0
+		}
+	}, {
+		"id": "death_fail",
+		"name": "Death Fails",
+		"description": "Numer of failed death saves",
+		"type": "number",
+		"attribute": {
+			"displayed": false,
+			"default": 0
+		}
 	}, {
 		"id": "feats",
 		"name": "Feats",
@@ -1039,6 +1100,9 @@
 			"spells": "+",
 			"skills": "+",
 			"skill_check": "+=",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"effects": "+",
 			"action_max": "+",
 			"hp_max": "+",
@@ -1465,6 +1529,12 @@
 		"type": "boolean",
 		"attribute": {}
 	}, {
+		"id": "is_minion",
+		"name": "Is Minion",
+		"description": "When true the entity is a minion",
+		"type": "boolean",
+		"attribute": {}
+	}, {
 		"id": "enchantments",
 		"name": "Enchantments",
 		"description": "Enchantments on this object",
@@ -1552,7 +1622,7 @@
 		"id": "location",
 		"name": "Location",
 		"description": "Where this object is currently considered to be located.",
-		"type": "array",
+		"type": "string",
 		"inheritance": {
 			"conditionals": "+",
 			"actions": "+",

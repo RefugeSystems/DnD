@@ -29,7 +29,9 @@ module.exports = function(universe) {
 		inheritance = {},
 		reference = {},
 		manager = {},
-		mark = {};
+		mark = {},
+		
+		emptyArray = [];
 	
 	/**
 	 * 
@@ -607,14 +609,20 @@ module.exports = function(universe) {
 	 * @method pushUpdated
 	 * @param {String} id 
 	 */
-	this.pushUpdated = function(id) {
+	this.pushUpdated = function(id, origins) {
 		// console.log("Update: ", inheritance[id]);
 		mark[id] = Date.now();
+		if(origins) {
+			origins.uniquely(id);
+		} else {
+			origins = [id];
+		}
 		if(inheritance[id] && inheritance[id]._list.length) {
 			var changing = {};
 			changing.origin = id;
 			changing.queue = inheritance[id]._list;
 			changing.index = 0;
+			changing.origins = origins;
 			changing.type = "updated";
 			changing.start = Date.now();
 			trackUpdates(changing);
@@ -631,13 +639,13 @@ module.exports = function(universe) {
 	var trackUpdates = function(changing) {
 		setTimeout(function() {
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
-			if(cascade) {
+			if(cascade && changing.origins.indexOf(cascade.id) === -1) {
 				// cascade.updateFieldValues();
 				// cascade.recalculateFieldValues();
-				cascade.calculateFieldValues();
-				cascade.updateFieldValues();
+				cascade.calculateFieldValues(changing.origins);
+				cascade.updateFieldValues(changing.origins);
 				if(changing.index < changing.queue.length) {
-					trackCalculations(changing);
+					trackUpdates(changing);
 				} else {
 					changing.duration = Date.now() - changing.start;
 					universe.emit("cascaded", changing);

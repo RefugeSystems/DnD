@@ -347,6 +347,9 @@ class RSUniverse extends EventEmitter {
 				k,
 				x;
 				
+			if(this.debug) {
+				console.log("Delta: ", _p(delta));
+			}
 			if(this.index[classification]) {
 				// if(classification === "fields" && id === "action_max") {
 				// 	console.log("Field Sync: " + id, _p(this.index[classification][id]), _p(delta));
@@ -368,8 +371,16 @@ class RSUniverse extends EventEmitter {
 								Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
 							} else if(delta[keys[x]] && (this.index[classification][id][keys[x]] instanceof Array)) {
 								this.index[classification][id][keys[x]].splice(0);
-								this.index[classification][id][keys[x]].push.apply(this.index[classification][id][keys[x]], delta[keys[x]]);
+								try {
+									this.index[classification][id][keys[x]].push.apply(this.index[classification][id][keys[x]], delta[keys[x]]);
+								} catch(e) {
+									console.error("Delta Failed: ", e);
+								}
 							} else if(delta[keys[x]] && (typeof(this.index[classification][id][keys[x]]) === "object")) {
+								okeys = Object.keys(this.index[classification][id][keys[x]]);
+								for(k=0; k<okeys.length; k++) {
+									Vue.delete(this.index[classification][id][keys[x]], okeys[k]);
+								}
 								okeys = Object.keys(delta[keys[x]]);
 								for(k=0; k<okeys.length; k++) {
 									Vue.set(this.index[classification][id][keys[x]], okeys[k], delta[keys[x]][okeys[k]]);
@@ -614,7 +625,7 @@ class RSUniverse extends EventEmitter {
 					}
 					
 					this.addLogEvent(message.type + " Message received", message.type === "error"?50:30, message);
-					this.$emit(message.type, message.event);
+					this.$emit(message.type, message.event || message.data);
 					
 					if(this.processEvent[message.type]) {
 						this.processEvent[message.type](message);

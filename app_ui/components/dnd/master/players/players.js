@@ -2,25 +2,21 @@
 /**
  *
  *
- * @class DNDMasterScreen
+ * @class dndMasterPlayerList
  * @constructor
  * @module Components
  */
-rsSystem.component("DNDMasterScreen", {
+rsSystem.component("dndMasterPlayers", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController
+		rsSystem.components.DNDWidgetCore
 	],
 	"props": {
-		"universe": {
-			"required": true,
+		"object": {
+			"requried": true,
 			"type": Object
 		},
-		"player": {
-			"required": true,
-			"type": Object
-		},
-		"configuration": {
+		"tracking": {
 			"required": true,
 			"type": Object
 		}
@@ -32,9 +28,14 @@ rsSystem.component("DNDMasterScreen", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
 	},
 	"methods": {
+		"displayed": function(player) {
+			if(player.id.indexOf(":preview:") === -1) {
+				return true;
+			}
+			return false;
+		}
 	},
 	"beforeDestroy": function() {
 		/*
@@ -42,5 +43,5 @@ rsSystem.component("DNDMasterScreen", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("pages/dnd/master/screen.html")
+	"template": Vue.templified("components/dnd/master/players.html")
 });

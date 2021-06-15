@@ -13,8 +13,8 @@
 
 var EventEmitter = require("events").EventEmitter,
 	Anomaly = require("../management/anomaly"),
-	validTypeValue = new RegExp("^[a-z]+$"),
-	valid = new RegExp("^[a-z][a-z_]*$");
+	validTypeValue = new RegExp("^[a-z:]+$"),
+	valid = new RegExp("^[a-z][a-z:_]*$");
 
 class RSField extends EventEmitter {
 	constructor(specification) {
@@ -189,7 +189,7 @@ class RSField extends EventEmitter {
 			try {
 				this.displayed_as = JSON.parse(this.displayed_as);
 			} catch(parseException) {
-				
+				this.displayed_as = {};
 			}
 		}
 		if(!this.displayed_as) {
@@ -233,7 +233,12 @@ class RSField extends EventEmitter {
 			this.attribute = JSON.parse(this.attribute);
 		}
 		if(typeof(this.displayed_as) === "string") {
-			this.displayed_as = JSON.parse(this.displayed_as);
+			try {
+				this.displayed_as = JSON.parse(this.displayed_as);
+			} catch(wtf) {
+				console.trace("Filed Update Error?: " + this.displayed_as, this.displayed_as);
+				this.displayed_as = {};
+			}
 		}
 		
 		this.updated = Date.now();

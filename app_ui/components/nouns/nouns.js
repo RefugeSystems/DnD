@@ -136,11 +136,11 @@
 			},
 			"copySource": function(source) {
 				var x;
-				console.log("Copy: ", source);
+
 				if(source) {
-					console.log(" > Source: ", source);
 					source = this.universe.index[this.storage.classification][source];
 					if(source) {
+						source = JSON.parse(JSON.stringify(source));
 						if(source._data) {
 							Vue.set(this.details, "id", source._data.id);
 							for(x=0; x<this.fields.length; x++) {
@@ -223,7 +223,7 @@
 						if(this.fields[i].type === "array" && this.details[this.fields[i].id].length === 0) {
 							previewing[this.fields[i].id] = null;
 						} else if(this.fields[i].type === "object") {
-							// Reform object
+							previewing[this.fields[i].id] = Object.assign({}, this.details[this.fields[i].id]);
 						} else {
 							previewing[this.fields[i].id] = this.details[this.fields[i].id];
 						}
@@ -325,9 +325,16 @@
 				// Clean eroneous fields
 				saving.id = this.details.id;
 				for(i=0; i<this.fields.length; i++) {
-					saving[this.fields[i].id] = this.details[this.fields[i].id];
+					switch(typeof(this.details[this.fields[i].id])) {
+						case "object":
+							saving[this.fields[i].id] = JSON.parse(JSON.stringify(this.details[this.fields[i].id]));
+							break;
+						default:
+							saving[this.fields[i].id] = this.details[this.fields[i].id];
+					}
 				}
 
+				console.log("Saving: ", saving);
 				this.universe.send("create:object", {
 					"classification": this.storage.classification,
 					"details": saving

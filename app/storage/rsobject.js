@@ -226,7 +226,7 @@ class RSObject {
 	 * Calculate and set the `_calculated` property values for this object.
 	 * @method calculateFieldValues
 	 */
-	calculateFieldValues() {
+	calculateFieldValues(origins) {
 		// console.trace(" > Calculate: " + this._data.id);
 		if(typeof(this.preFieldCalculate) === "function") {
 			this.preFieldCalculate();
@@ -274,7 +274,7 @@ class RSObject {
 						// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
 						switch(field.inheritance[field.inheritanceFields[i]]) {
 							case "+=":
-								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type); //, "calculated");
+								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 								break;
 							case "+":
 								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type);
@@ -316,7 +316,7 @@ class RSObject {
 						}
 						// console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
 					} catch (e) {
-						console.log("Ref Fail: " + field.id);
+						console.log("Ref Fail: " + field.id, e);
 					}
 				}
 			} else {
@@ -409,14 +409,14 @@ class RSObject {
 		
 		// console.log("Calculated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushCalculated(this.id);
-		this._universe.objectHandler.pushUpdated(this.id);
+		this._universe.objectHandler.pushUpdated(this.id, origins);
 	}
 
 	/**
 	 * Calculate and set the `_calculated` property values for this object.
 	 * @method updateFieldValues
 	 */
-	updateFieldValues() {
+	updateFieldValues(origins) {
 		// console.trace(" > Update: " + this._data.id);
 		if(typeof(this.preFieldUpdate) === "function") {
 			this.preFieldUpdate();
@@ -428,8 +428,8 @@ class RSObject {
 			loading,
 			source,
 			parent,
-			fields,
 			field,
+			keys,
 			i,
 			x;
 
@@ -580,17 +580,45 @@ class RSObject {
 			for(x=0; x<this._conditionals.length; x++) {
 				for(i=0; i<this._manager.fieldIDs.length; i++) {
 					field = this._manager.fieldIDs[x];
-					if(this._conditionals[x].adds[field]) {
+					if(this._conditionals[x].adds && this._conditionals[x].adds[field]) {
 						this[field] = RSObject.addValue(this[field], this._conditionals[x].adds[field], field.type);
-					} else if(this._conditionals[x].subs[field]) {
+					} else if(this._conditionals[x].subs && this._conditionals[x].subs[field]) {
 						this[field] = RSObject.subValue(this[field], this._conditionals[x].subs[field], field.type);
-					} else if(this._conditionals[x].sets[field]) {
+					} else if(this._conditionals[x].sets && this._conditionals[x].sets[field]) {
 						this[field] = RSObject.setValue(this[field], this._conditionals[x].sets[field], field.type);
 					}
 				}
 			}
 		}
-		
+
+		// Final Field Checks
+		for(x=0; x<fields.length; x++) {
+			field = this._manager.database.field[fields[x]];
+			if(field) {
+				// Reduce Dice Fields
+				if(this[field.id] && (field.type === "dice" || field.type === "object:dice")) {
+					if(typeof(this[field.id]) === "object") {
+						keys = Object.keys(this[field.id]);
+						for(i=0; i<keys.length; i++) {
+							if(typeof(this[field.id][keys[i]]) === "string") {
+								this[field.id][keys[i]] = this._universe.calculator.reducedDiceRoll(this[field.id][keys[i]], this);
+							}
+						}
+					} else {
+						this[field.id] = this._universe.calculator.reducedDiceRoll(this[field.id], this);
+					}
+				}
+				// Defaults (For null computations) & Bounds
+				if(field.attribute.default && this[field.id] === null) {
+					this[field.id] = field.attribute.default;
+				} else if(typeof(field.attribute.min) === "number" && this[field.id] < field.attribute.min) {
+					this[field.id] = field.attribute.min;
+				} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
+					this[field.id] = field.attribute.max;
+				}
+			}
+		}
+
 		// TODO: Implement field attribute specification for concealment, needs additional UI consideration for controlled visibility (See: Game Masters)
 		if(this.concealed) {
 			if(!this.attribute) {
@@ -611,6 +639,8 @@ class RSObject {
 
 		// console.log("Updated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushUpdated(this.id);
+
+		this._universe.emit("object-updated", this.toJSON());
 	}
 
 	/**
@@ -700,23 +730,27 @@ class RSObject {
 				referenced.push(this.id);
 			}
 			// console.log(" [=T] > " + this[name[index]], referenced);
-			return this._calculated[name[index]];
+			// return this._calculated[name[index]];
+			return this[name[index]];
 		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
 			// console.log(" [=O] > " + this[name[index]]);
 			if(referenced) {
 				referenced.push(this.id);
 			}
-			return this._calculated[name[index]][name[index + 1]];
+			// return this._calculated[name[index]][name[index + 1]];
+			return this[name[index]][name[index + 1]];
 		} else if(this[name[index]]) {
 			// console.log(" [==] > " + this[name[index]]);
-			follow = this._universe.objectHandler.retrieve(this._calculated[name[index]]);
+			// follow = this._universe.objectHandler.retrieve(this._calculated[name[index]]);
+			follow = this._universe.objectHandler.retrieve(this[name[index]]);
 			if(follow) {
 				return follow.calculatedValue(name, index + 1, referenced);
 			} else {
 				details = {};
 				details.name = name;
 				details.index = index;
-				details.value = this._calculated[name[index]];
+				// details.value = this._calculated[name[index]];
+				details.value = this[name[index]];
 				this._universe.emit("error", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 40, details, null, this));
 				return null;
 			}
@@ -725,7 +759,8 @@ class RSObject {
 			details = {};
 			details.name = name;
 			details.index = index;
-			details.value = this._calculated[name[index]];
+			// details.value = this._calculated[name[index]];
+			details.value = this[name[index]];
 			this._universe.emit("error", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 40, details, null, this));
 			return null;
 		}
@@ -760,7 +795,7 @@ class RSObject {
 		if(this._data.parent) {
 			referenced.push(this._data.parent);
 		}
-		value = this._universe.calculator.compute(value, this, referenced);
+		value = this._universe.calculator.computedDiceRoll(value, this, referenced);
 		// console.log(" [R]> ", referenced);
 		compare = referenced.join(",");
 		// console.log(" [C:" + this.id + "]> ", tracked, referenced);
@@ -1105,7 +1140,11 @@ class RSObject {
 				field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 				if(field) {
 					if(!field.attribute || !field.attribute.server_only) {
-						json[field.id] = this[field.id];
+						if(this[field.id] !== null && this[field.id] !== undefined) {
+							json[field.id] = this[field.id];
+						} else {
+							json[field.id] = null;
+						}
 					} else {
 						delete(calculated[field.id]);
 					}
@@ -1166,7 +1205,7 @@ RSObject.getClassFromID = function(id) {
  * @param  {[type]} b [description]
  * @return {[type]}   [description]
  */
-RSObject.addObjects = function(a, b) {
+RSObject.addObjects = function(a, b, type) {
 	if(a && !b) {
 		return b;
 	} else if(!a && b) {
@@ -1178,7 +1217,7 @@ RSObject.addObjects = function(a, b) {
 		
 		keys.uniquely.apply(keys, Object.keys(b));
 		for(x=0; x<keys.length; x++) {
-			result[keys[x]] = RSObject.addValues(a[keys[x]], b[keys[x]]);
+			result[keys[x]] = RSObject.addValues(a[keys[x]], b[keys[x]], type);
 		}
 		
 		return result;
@@ -1194,9 +1233,10 @@ RSObject.addObjects = function(a, b) {
  * @param  {[type]} a    [description]
  * @param  {[type]} b    [description]
  * @param  {[type]} [type] [description]
+ * @param  {[type]} [op] [description]
  * @return {[type]}      [description]
  */
-RSObject.addValues = function(a, b, type) {
+RSObject.addValues = function(a, b, type, op) {
 	if(typeof(a) == "undefined" || a === null) {
 		return b;
 	} else if(typeof(b) == "undefined" || b === null) {
@@ -1215,10 +1255,11 @@ RSObject.addValues = function(a, b, type) {
 			case "integer":
 			case "number":
 				return (a || 0) + (b || 0);
+			case "object:dice":
 			case "calculated":
 			case "dice":
 				if(typeof(a || b) === "object") {
-					return RSObject.addObjects(a, b);
+					return RSObject.addObjects(a, b, "calculated");
 				} else {
 					return (a || 0) + " + " + (b || 0);
 				}
@@ -1226,13 +1267,17 @@ RSObject.addValues = function(a, b, type) {
 				try {
 					return a.concat(b);
 				} catch(e) {
-					console.log("A: ", a, "B: ", b, e);
+					// console.log("A: ", a, "B: ", b, e);
 					throw e;
 					// return null;
 				}
 			case "boolean":
 				return a && b;
 			case "object":
+				if(op === "+=") {
+					// console.log("Op Add: ", a, b);
+					return RSObject.addObjects(a, b, "calculated");
+				}
 				return RSObject.addObjects(a, b);
 		}
 	} else {
@@ -1253,6 +1298,13 @@ RSObject.addValues = function(a, b, type) {
  * @return {[type]}   [description]
  */
 RSObject.subObjects = function(a, b) {
+	if(!a) {
+		a = {};
+	}
+	if(!b) {
+		b = {};
+	}
+
 	var keys = Object.keys(a),
 		result = {},
 		x;

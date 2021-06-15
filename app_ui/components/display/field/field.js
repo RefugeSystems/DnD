@@ -47,6 +47,9 @@ rsSystem.component("rsDisplayField", {
 			return this.universe.index.fields[this.field];
 		},
 		"displayed": function() {
+			if(this.object.picture === this.object.portrait && (this.field === "picture" || this.field === "portrait")) {
+				return false;
+			}
 			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
 		},
 		"image": function() {
@@ -186,7 +189,7 @@ rsSystem.component("rsDisplayField", {
 						lookup = this.universe.getObject(this.object[this.field][x]);
 						if(lookup) {
 							value.push(lookup);
-						} else if(this.fieldData.displayed_as[this.object[this.field][x]]) {
+						} else if(this.fieldData.displayed_as && this.fieldData.displayed_as[this.object[this.field][x]]) {
 							value.push(this.fieldData.displayed_as[this.object[this.field][x]]);
 						} else if(this.object[this.field][x] !== undefined && this.object[this.field][x] !== null) {
 							value.push(this.object[this.field][x]);

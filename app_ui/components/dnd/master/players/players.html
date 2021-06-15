@@ -1,0 +1,12 @@
+<div class="dnd-component master-players">
+	<div class="titling">
+
+	</div>
+	<div class="count flex h wrap">
+		<div class="player-info inline flex h" v-for="play in universe.listing.player" v-if="displayed(play)" :title="play.id">
+			<span class="player-connections" :class="play.connections?'connected':''">{{play.connections || 0}}</span>
+			<span class="player-name">{{play.name}}</span>
+		</div>
+	</div>
+</div>
+

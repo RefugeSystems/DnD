@@ -35,7 +35,8 @@
  * @param {Integer} event.message.data.stat_charisma Stat score
  */
 
-var Random = require("rs-random");
+var parseDataUrl = require("parse-data-url"),
+	Random = require("rs-random");
 /**
  * Used to determine the keys to copy from the source data to restrict this character creation from being abused.
  * @property keys
@@ -65,6 +66,15 @@ var keys = [
 ];
 // If changed, update docs
 
+var typeShort = {};
+typeShort["jpeg"] = "image/jpeg";
+typeShort["jpg"] = "image/jpeg";
+typeShort["jfif"] = "image/jpeg";
+typeShort["pjpeg"] = "image/jpeg";
+typeShort["pjp"] = "image/jpeg";
+typeShort["png"] = "image/png";
+typeShort["svg"] = "image/svg";
+
 module.exports.initialize = function(universe) {
 	universe.on("player:create:character", function(event) {
 		universe.emit("info", new universe.Anomaly("player:create:character", "Player character creation requested", 30, event.message, null, "event:" + event.type));
@@ -79,6 +89,7 @@ module.exports.initialize = function(universe) {
 
 		var source = event.message.data,
 			details = {},
+			pictures,
 			x;
 
 		for(x = 0; x < keys.length; x++) {
@@ -90,39 +101,135 @@ module.exports.initialize = function(universe) {
 		details.played_by = event.player.id;
 		details.gold = 0;
 		details.level = 1;
-		console.log("Received: " + JSON.stringify(event.message.data, null, 4));
-		console.log("Details: " + JSON.stringify(details, null, 4));
 
-		universe.createObject(details, function(err, character) {
+		makeCharacter(universe, event, source, details)
+		.then(addPicture)
+		.then(addPortrait)
+		.then(finish)
+		.catch(errored(universe, event));
+	});
+};
+
+
+var makeCharacter = function(universe, event, source, details) {
+	return new Promise(function(done, fail) {
+		var data = {};
+		data.universe = universe;
+		data.details = details;
+		data.source = source;
+		data.event = event;
+		data.sets = {};
+
+		data.universe.createObject(details, function(err, character) {
 			if(err) {
-				universe.emit("send", {
-					"type": "notice",
-					"mid": "create:character",
-					"recipient": event.player.id,
-					"message": "Character Creation Failed: " + err.message,
-					"icon": "fas fa-exclamation-triangle rs-lightred",
-					"error": err,
-					"anchored": true
-				});
+				fail(err);
 			} else {
-				character.setValues({"hp": character.hp_max}, function(err) {
-					universe.chronicle.addOccurrence("character:created", event.message.data, Date.now(), null, event.player?event.player.id:null);
-					// var attribute = Object.assign({}, event.player.attribute);
-					// attribute.playing_as = character.id;
-					// event.player.setValues({
-					// 	"attribute": attribute
-					// });
-					universe.emit("send", {
-						"type": "notice",
-						"mid": "create:character",
-						"recipient": event.player.id,
-						"message": "Character Created",
-						"icon": err?"fas fa-check rs-lightyellow":"fas fa-check rs-lightgreen",
-						"errors": err,
-						"timeout": 10000
-					});
-				});
+				data.character = character;
+				done(data);
 			}
 		});
 	});
+};
+
+var addPicture = function(data) {
+	return new Promise(function(done, fail) {
+		if(data.source.picture) {
+			var parsed = parseDataUrl(data.source.picture),
+				details = {};
+			details.id = Random.identifier("image", 10, 32).toLowerCase() + ":" + details.id;
+			details.content_type = typeShort[parsed.content_type] || parsed.content_type || "image/jpeg";
+			details.data = data.source.picture;
+			details.name = (data.details.name || data.details.id || "Anonymous") + " (Picture)";
+			details.description = "Uploaded picture for " + data.details.name + " ( " + data.details.id + " )";
+			data.universe.createObject(details, function(err, image) {
+				if(err) {
+					fail(err);
+				} else {
+					data.sets.picture = image.id;
+					data.picture = image;
+					done(data);
+				}
+			});
+		} else {
+			done(data);
+		}
+	});
+};
+
+var addPortrait = function(data) {
+	return new Promise(function(done, fail) {
+		if(data.source.portrait) {
+			var parsed = parseDataUrl(data.source.portrait),
+				details = {};
+			details.id = Random.identifier("image", 10, 32).toLowerCase() + ":" + details.id;
+			details.content_type = typeShort[parsed.content_type] || parsed.content_type || "image/jpeg";
+			details.data = data.source.portrait;
+			details.name = (data.details.name || data.details.id || "Anonymous") + " (Picture)";
+			details.description = "Uploaded portrait for " + data.details.name + " ( " + data.details.id + " )";
+			data.universe.createObject(details, function(err, image) {
+				if(err) {
+					fail(err);
+				} else {
+					data.sets.portrait = image.id;
+					data.portrait = image;
+					done(data);
+				}
+			});
+		} else {
+			done(data);
+		}
+	});
+};
+
+var finish = function(data) {
+	return new Promise(function(done, fail) {
+		var attributes = Object.assign({}, data.event.player.attribute);
+		attributes.playing_as = data.character.id;
+		attributes = {
+			"attribute": attributes
+		};
+		data.event.player.setValues(attributes, function(p_err) {
+			data.sets.hp = data.character.hp_max;
+			data.character.setValues(data.sets, function(err) {
+				data.universe.chronicle.addOccurrence("character:created", data.event.message.data, Date.now(), null, data.event.player?data.event.player.id:null);
+				data.player.setValues(data.sets, function(err) {
+					if(err || p_err) {
+						data.universe.emit("send", {
+							"type": "notice",
+							"mid": "create:character",
+							"recipient": data.event.player.id,
+							"message": "Character Created (With Issues)",
+							"icon": "fas fa-check rs-lightyellow",
+							"errors": [err, p_err],
+							"timeout": 10000
+						});
+					} else {
+						data.universe.emit("send", {
+							"type": "notice",
+							"mid": "create:character",
+							"recipient": data.event.player.id,
+							"message": "Character Created",
+							"icon": "fas fa-check rs-lightgreen",
+							"timeout": 10000
+						});
+					}
+					done(data);
+				});
+			});
+		});
+	});
+};
+
+var errored = function(universe, event) {
+	return function(error) {
+		universe.emit("send", {
+			"type": "notice",
+			"mid": "create:character",
+			"recipient": event.player.id,
+			"message": "Character Creation Failed: " + error.message,
+			"icon": "fas fa-exclamation-triangle rs-lightred",
+			"error": error,
+			"anchored": true
+		});
+	};
 };

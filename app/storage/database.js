@@ -57,6 +57,24 @@ mapping.object = {
 		return JSON.stringify(data);
 	}
 };
+mapping["object:calculated"] = {
+	"type": "text",
+	"read": function(data) {
+		return JSON.parse(data);
+	},
+	"write": function(data) {
+		return JSON.stringify(data);
+	}
+};
+mapping["object:dice"] = {
+	"type": "text",
+	"read": function(data) {
+		return JSON.parse(data);
+	},
+	"write": function(data) {
+		return JSON.stringify(data);
+	}
+};
 mapping.array = {
 	"type": "text",
 	"read": function(data) {
@@ -403,6 +421,9 @@ class RSDatabase extends EventEmitter {
 			}
 			if(write.$attribute) {
 				write.$attribute = JSON.stringify(write.$attribute);
+			}
+			if(write.$displayed_as) {
+				write.$displayed_as = JSON.stringify(write.$displayed_as);
 			}
 			write.$created = Date.now();
 			write.$updated = Date.now();

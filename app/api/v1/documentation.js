@@ -19,7 +19,7 @@ module.exports = new (function() {
 			
 			this.router.get("/class", (req, res, next) => {
 				res.result = {
-					"classes": Object.keys(api.universe.manager)
+					"classes": Object.keys(api.universe.manager).sort()
 				};
 				next();
 			});

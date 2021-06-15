@@ -1,24 +1,24 @@
 <div class="rs-component dnd-component entity-info flex v">
-	<div class="property-container">
-		<div class="property health">
+	<div class="property-container health">
+		<button class="property" v-on:click="takeDamage()">
 			<span class="icon fas fa-heartbeat"></span>
-			<span class="nowrap">
+			<span>
 				<span>{{entity.hp}}</span>
 				<span class="seperator">/</span>
 				<span>{{entity.hp_max}}</span>
 			</span>
-		</div>
+		</button>
 	</div>
-	<div class="property-container">
-		<div class="property armor">
+	<div class="property-container armor">
+		<div class="property">
 			<span class="icon fas fa-shield"></span>
 			<span>{{entity.armor}}</span>
 		</div>
 	</div>
-	<div class="property-container">
-		<button class="property gold" v-on:click="giveGold()">
+	<div class="property-container gold">
+		<button class="property" v-on:click="transferGold()">
 			<span class="icon fas fa-coins"></span>
-			<span class="nowrap">
+			<span>
 				<span>{{entity.gold}}</span>
 				<span v-if="entity.gold_max">
 					<span class="seperator">/</span>
@@ -27,10 +27,10 @@
 			</span>
 		</button>
 	</div>
-	<div class="property-container">
-		<div class="property hitdice">
+	<div class="property-container hitdice">
+		<button class="property" v-on:click="useHitDice()">
 			<span class="icon fas fa-dice"></span>
 			<span>{{totalHitDice}}</span>
-		</div>
+		</button>
 	</div>
 </div>

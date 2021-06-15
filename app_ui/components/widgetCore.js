@@ -20,7 +20,6 @@ rsSystem.component("DNDWidgetCore", {
 			"type": Object
 		},
 		"widget": {
-			"requried": true,
 			"type": Object
 		}
 	},
@@ -51,28 +50,39 @@ rsSystem.component("DNDWidgetCore", {
 		this.$el.classList.remove("widget_left");
 		this.$el.classList.remove("widget_center");
 		this.$el.classList.remove("widget_right");
-		if(this.widget.cell_width) {
-			this.$el.classList.add("cell" + this.widget.cell_width);
-		}
+		if(this.widget) {
+			if(this.widget.cell_width) {
+				this.$el.classList.add("cell" + this.widget.cell_width);
+			}
 
-		if(this.widget.attribute) {
-			if(this.widget.attribute.height) {
+			if(this.widget.attribute) {
+				if(this.widget.attribute.height) {
+					$(this.$el).css({"height": this.widget.attribute.height});
+				}
+				if(this.widget.attribute.left) {
+					this.$el.classList.add("widget_left");
+				} else if(this.widget.attribute.center) {
+					this.$el.classList.add("widget_center");
+				} else if(this.widget.attribute.right) {
+					this.$el.classList.add("widget_right");
+				}
+			}
+			if(this.widget.attribute && this.widget.attribute.height) {
 				$(this.$el).css({"height": this.widget.attribute.height});
 			}
-			if(this.widget.attribute.left) {
-				this.$el.classList.add("widget_left");
-			} else if(this.widget.attribute.center) {
-				this.$el.classList.add("widget_center");
-			} else if(this.widget.attribute.right) {
-				this.$el.classList.add("widget_right");
-			}
-		}
-		if(this.widget.attribute && this.widget.attribute.height) {
-			$(this.$el).css({"height": this.widget.attribute.height});
 		}
 	},
 	"methods": {
-
+		"startRoll": function(rolling, targeted) {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"targeted": targeted,
+				"rolling": rolling
+			});
+		},
+		"sortData": rsSystem.utility.sortData
 	},
 	"beforeDestroy": function() {
 		/*

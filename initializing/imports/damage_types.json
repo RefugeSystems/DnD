@@ -83,7 +83,7 @@
             "id": "damage_type:chromatic",
             "name": "Chromatic",
             "description": "You choose any of the following magical damage types; ${Acid}$, ${Cold}$, ${Fire}$, ${Force}$, ${Holt}$, ${Lightning}$, ${Necrotic}$, ${Poison}$, ${Radiant}$, ${Sonic}$, ${Thunder}$. There may be additional restrictions to the choosable type.",
-            "icon": "fas fa-abstract-047"
+            "icon": "game-icon game-icon-abstract-047"
         }, {
             "id": "damage_type:heal",
             "name": "Heal",

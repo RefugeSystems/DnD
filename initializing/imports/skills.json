@@ -6,7 +6,7 @@
             "icon": "fas fa-fist-raised",
             "stat": "strength",
             "ordering": 1,
-            "section": "saves"
+            "section": "Saves"
         }, {
             "id": "skill:dexterity",
             "name": "Dexterity",
@@ -14,7 +14,7 @@
             "icon": "ra ra-player-lift",
             "stat": "dexterity",
             "ordering": 2,
-            "section": "saves"
+            "section": "Saves"
         }, {
             "id": "skill:constitution",
             "name": "Constitution",
@@ -22,7 +22,7 @@
             "icon": "ra ra-muscle-up",
             "stat": "constitution",
             "ordering": 3,
-            "section": "saves"
+            "section": "Saves"
         }, {
             "id": "skill:intelligence",
             "name": "Intelligence",
@@ -30,7 +30,7 @@
             "icon": "fas fa-brain",
             "stat": "intelligence",
             "ordering": 4,
-            "section": "saves"
+            "section": "Saves"
         }, {
             "id": "skill:wisdom",
             "name": "Wisdom",
@@ -38,7 +38,7 @@
             "icon": "game-icon game-icon-brainstorm",
             "stat": "wisdom",
             "ordering": 5,
-            "section": "saves"
+            "section": "Saves"
         }, {
             "id": "skill:charisma",
             "name": "Charisma",
@@ -46,39 +46,37 @@
             "icon": "fas fa-comments",
             "stat": "charisma",
             "ordering": 6,
-            "section": "saves"
+            "section": "Saves"
         }, {
             "id": "skill:initiative",
             "name": "Initiative",
             "description": "Determine your combat order based on your ability to react and maintain awareness",
             "icon": "fas fa-swords",
             "stat": "dexterity",
-            "ordering": 10,
-            "section": "combat"
+            "ordering": 12,
+            "section": "Combat Skills"
         }, {
             "id": "skill:concentration",
             "name": "Concentration",
             "description": "Attempt to maintain concentration on a spell after taking damage. The ${DC}$ is half the damage taken.",
             "icon": "ra ra-player-shot",
             "stat": "constitution",
-            "ordering": 11,
-            "section": "combat"
+            "ordering": 13,
+            "section": "Combat Skills"
         }, {
             "id": "skill:mainhand",
             "name": "Main Hand",
             "description": "Roll an attack with the weapon in your ${Main Hand}$",
             "icon": "game-icon game-icon-saber-slash",
-            "stat": "weapon_main",
-            "ordering": 12,
-            "section": "combat"
+            "ordering": 10,
+            "section": "Combat Skills"
         }, {
             "id": "skill:offhand",
             "name": "Off Hand",
             "description": "Roll an attack with the weapon in your ${Off Hand}$",
             "icon": "game-icon game-icon-serrated-slash",
-            "stat": "weapon_off",
-            "ordering": 13,
-            "section": "combat"
+            "ordering": 11,
+            "section": "Combat Skills"
         }, {
             "id": "skill:acrobatics",
             "name": "Acrobatics",
@@ -86,7 +84,7 @@
             "icon": "ra ra-falling",
             "stat": "dexterity",
             "ordering": 19,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:animalhandling",
             "name": "Animal Handling",
@@ -94,7 +92,7 @@
             "icon": "game-icon game-icon-cow",
             "stat": "wisdom",
             "ordering": 20,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:arcana",
             "name": "Arcana",
@@ -102,7 +100,7 @@
             "icon": "game-icon game-icon-magic-portal",
             "stat": "intelligence",
             "ordering": 21,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:athletics",
             "name": "Athletics",
@@ -110,7 +108,7 @@
             "icon": "game-icon game-icon-push",
             "stat": "strength",
             "ordering": 22,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:deception",
             "name": "Deception",
@@ -118,7 +116,7 @@
             "icon": "fas fa-comment-times",
             "stat": "charisma",
             "ordering": 24,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:history",
             "name": "History",
@@ -126,7 +124,7 @@
             "icon": "fas fa-history",
             "stat": "intelligence",
             "ordering": 25,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:insight",
             "name": "Insight",
@@ -134,15 +132,15 @@
             "icon": "fas fa-book-user",
             "stat": "wisdom",
             "ordering": 26,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:intimidation",
             "name": "Intimidation",
             "description": "Attempt to scare a creature by threatening it",
-            "icon": "game-icon game-icon-xxxx",
+            "icon": "game-icon game-icon-swords-power",
             "stat": "charisma",
             "ordering": 27,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:investigation",
             "name": "Investigation",
@@ -150,7 +148,7 @@
             "icon": "far fa-search-location",
             "stat": "intelligence",
             "ordering": 28,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:medicine",
             "name": "Medicine",
@@ -158,7 +156,7 @@
             "icon": "fas fa-heartbeat",
             "stat": "wisdom",
             "ordering": 29,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:nature",
             "name": "Nature",
@@ -166,7 +164,7 @@
             "icon": "fas fa-leaf-oak",
             "stat": "intelligence",
             "ordering": 30,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:perception",
             "name": "Perception",
@@ -174,7 +172,7 @@
             "icon": "game-icon game-icon-look-at",
             "stat": "wisdom",
             "ordering": 31,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:performance",
             "name": "Performance",
@@ -182,7 +180,7 @@
             "icon": "game-icon game-icon-body-balance",
             "stat": "charisma",
             "ordering": 32,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:persuasion",
             "name": "Persuasion",
@@ -190,7 +188,7 @@
             "icon": "fas fa-comments",
             "stat": "charisma",
             "ordering": 33,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:religion",
             "name": "Religion",
@@ -198,7 +196,7 @@
             "icon": "fas fa-pray",
             "stat": "intelligence",
             "ordering": 34,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:sleightofhand",
             "name": "Sleight Of Hand",
@@ -206,7 +204,7 @@
             "icon": "game-icon game-icon-robber-hand",
             "stat": "dexterity",
             "ordering": 35,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:stealth",
             "name": "Stealth",
@@ -214,7 +212,7 @@
             "icon": "fas fa-eye-slash",
             "stat": "dexterity",
             "ordering": 36,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:survival",
             "name": "Survival",
@@ -222,7 +220,7 @@
             "icon": "fas fa-mountains",
             "stat": "wisdom",
             "ordering": 37,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:disguise",
             "name": "Disguise Kit",
@@ -230,7 +228,7 @@
             "icon": "fas fa-mask",
             "stat": "dexterity",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:forgery",
             "name": "Forgery Kit",
@@ -238,7 +236,7 @@
             "icon": "fas fa-money-check-edit",
             "stat": "intelligence",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:thieves",
             "name": "Forgery Kit",
@@ -246,7 +244,7 @@
             "icon": "game-icon game-icon-lockpicks",
             "stat": "dexterity",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:healers",
             "name": "Forgery Kit",
@@ -254,7 +252,7 @@
             "icon": "fas fa-medkit",
             "stat": "wisdom",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:artisans",
             "name": "Artisanal Kit",
@@ -262,7 +260,7 @@
             "icon": "game-icon game-icon-crafting",
             "stat": "wisdom",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:alchemists",
             "name": "Alchemy Kit",
@@ -270,7 +268,7 @@
             "icon": "game-icon game-icon-apothecary",
             "stat": "intelligence",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }, {
             "id": "skill:kit:cartographers",
             "name": "Alchemy Kit",
@@ -278,7 +276,7 @@
             "icon": "game-icon game-icon-treasure-map",
             "stat": "intelligence",
             "ordering": 100,
-            "section": "checks"
+            "section": "Skill Checks"
         }
     ]
 }
