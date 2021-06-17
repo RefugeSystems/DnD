@@ -211,7 +211,7 @@
 		"id": "skill_check",
 		"name": "Skill Checks",
 		"description": "Maps a Skill ID to this objects numerical ability to perform that skill.",
-		"type": "object",
+		"type": "object:dice",
 		"ordering": 30,
 		"attribute": {
 			"inherited_key": "skill"
@@ -243,6 +243,9 @@
 		"name": "Entities",
 		"description": "List of entities tied to this object",
 		"type": "array",
+		"inheritable": [
+			"entity"
+		],
 		"attribute": {}
 	}, {
 		"id": "contains",
@@ -272,6 +275,14 @@
 		"description": "Indicates the web location for associated information on this object",
 		"type": "string",
 		"attribute": {}
+	}, {
+		"id": "is_npc",
+		"name": "Is NPC",
+		"description": "Flag to indicate an entity is an NPC",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "profile",
 		"name": "Profile",
@@ -821,6 +832,9 @@
 		"name": "Datasets",
 		"description": "Tracks dataset associated with this object",
 		"type": "array",
+		"inheritable": [
+			"dataset"
+		],
 		"attribute": {
 			"displayed": false
 		}
@@ -897,7 +911,7 @@
 		"description": "Maps an object ID to a needed count. For instance, Slot IDs are used to map the ID to the number of that slot used by this object. Archetypes use this to mark prior needed archetypes before this one can be choosen.",
 		"type": "object",
 		"attribute": {
-			"inherited_key": ["slot", "archetype"]
+			"inherited_key": ["slot", "archetype", "feat"]
 		}
 	}, {
 		"id": "slots_remaining",
@@ -938,6 +952,8 @@
 			"spell_attack": "+",
 			"spell_dc": "+",
 			"effects": "+",
+			"encumberance_max": "+",
+			"weight_max": "+",
 			"hit_dice_max": "+",
 			"proficiencies": "+",
 			"skills": "+",
@@ -976,6 +992,8 @@
 			"stat_wisdom": "+",
 			"stat_charisma": "+",
 			"resistance": "+=",
+			"encumberance_max": "+",
+			"weight_max": "+",
 			"movement_ground": "+",
 			"movement_swim": "+",
 			"movement_fly": "+",
@@ -1027,10 +1045,13 @@
 			"spells": "+",
 			"resistance": "+=",
 			"damage": "+=",
+			"encumberance_max": "+",
+			"weight_max": "+",
 
 			"spell_slot_max": "+",
 			"skill_proficiency": "=",
 			"skills": "+",
+			"skill_check": "+=",
 			"threat": "+",
 			"action_max": "+",
 			"hp_max": "+",
@@ -1091,6 +1112,8 @@
 			"stat_intelligence": "+",
 			"stat_wisdom": "+",
 			"stat_charisma": "+",
+			"encumberance_max": "+",
+			"weight_max": "+",
 			"armor": "+",
 			"wisdom": "+",
 			"charisma": "+",
@@ -1144,6 +1167,8 @@
 			"spells": "+",
 			"feats": "+",
 			"weight": "+",
+			"encumberance_max": "+",
+			"weight_max": "+",
 			"encumberance": "+",
 			"resistance": "+=",
 			"skill_check": "+=",
@@ -1466,19 +1491,28 @@
 		"name": "Weight",
 		"description": "The weight of this object",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "weight_max",
 		"name": "Max Weight",
 		"description": "The maximum weight of this object",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "encumberance_max",
 		"name": "Max Encumberance",
 		"description": "The maximum weight of this object",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "size",
 		"name": "Size",
@@ -1503,7 +1537,9 @@
 		"name": "Stat",
 		"description": "The main stat for this object",
 		"type": "string",
-		"attribute": {}
+		"attribute": {
+			"searchable": true
+		}
 	}, {
 		"id": "attune_max",
 		"name": "Max Attuned",
@@ -1515,7 +1551,10 @@
 		"name": "encumberance",
 		"description": "The encumberance of this object, representing how difficult it is to carry",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "enchant_rating",
 		"name": "Enchantment Rating",
@@ -1562,6 +1601,10 @@
 			"attune_max": "+",
 			"armor": "+",
 			"score": "+",
+			"encumberance_max": "+",
+			"encumberance": "+",
+			"weight_max": "+",
+			"weight": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
 			"skill_check": "+=",
@@ -1624,6 +1667,9 @@
 		"description": "Where this object is currently considered to be located.",
 		"type": "string",
 		"inheritance": {
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
 			"conditionals": "+",
 			"actions": "+",
 			"effects": "+",
@@ -1758,6 +1804,22 @@
 			"display": false
 		}
 	}, {
+		"id": "tracked_timing",
+		"name": "Time Tracked",
+		"description": "Used on party object to track their game date/time and restore it when loaded. Two parties with this flagged can NOT be active at the same time and membership is checked when loading party. This is specifically to handle having multiple parties in the same world with differing in-game times but can also serve to keep party entities from being active together.",
+		"type": "boolean",
+		"attribute": {
+			"display": false
+		}
+	}, {
+		"id": "tracked_time",
+		"name": "Party's Time",
+		"description": "Tracks the time for the party. This time is set in the Universe when this party is loaded. Attempting to load a party member when the universe is not at this time should fail.",
+		"type": "integer",
+		"attribute": {
+			"display": false
+		}
+	}, {
 		"id": "pressence_always",
 		"name": "Always Present",
 		"description": "When set, if an object shares a location with this object, it is considered visible. This is for things like shops to be visible.",
@@ -1845,8 +1907,10 @@
 			"skills": "+",
 			"spells": "+",
 			"feats": "+",
-			"weight": "+",
+			"encumberance_max": "+",
 			"encumberance": "+",
+			"weight_max": "+",
+			"weight": "+",
 			"resistance": "+=",
 			"skill_check": "+=",
 			"effects": "+",

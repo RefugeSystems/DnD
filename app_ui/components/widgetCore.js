@@ -73,6 +73,35 @@ rsSystem.component("DNDWidgetCore", {
 		}
 	},
 	"methods": {
+		"performSkillCheck": function(skill) {
+			var action = this.universe.index.action[action];
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"skill": skill,
+				"action": action,
+				"closeAfterCheck": true
+			});
+		},
+		"takeAction": function(action, using, rolls, targeted) {
+			rolls.unshift({});
+			var rolling = Object.assign.apply(Object.assign, rolls);
+			if(typeof(action) === "string") {
+				action = this.universe.index.action[action];
+			}
+
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"targeted": using.targets || action.targets || targeted,
+				"rolling": rolling,
+				"action": action,
+				"using": using,
+				"closeAfterAction": true
+			});
+		},
 		"startRoll": function(rolling, targeted) {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",

@@ -48,7 +48,7 @@
 		"id": "party",
 		"name": "Party",
 		"description": "Group of entities.",
-		"fields": ["parent", "name", "description", "disabled", "entities", "is_preview", "attribute"]
+		"fields": ["parent", "name", "description", "tracked_timing", "tracked_time", "disabled", "entities", "is_preview", "attribute"]
 	}, {
 		"id": "slot",
 		"name": "Slot",
@@ -67,8 +67,8 @@
 	}, {
 		"id": "entity",
 		"name": "Entity",
-		"description": "A manipulatable entry in the Universe.",
-		"fields": ["parent", "name", "profile", "portrait", "picture", "damage", "dashboard", "concealed", "death_save", "death_fail", "ordering", "obscured", "mobility", "proficiency_rating", "feats", "hp_rolled", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "played_by", "gender", "gold", "race", "armor", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "notes", "slots_remaining", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "is_minion", "is_preview", "attribute"]
+		"description": "Generally a kind of living or interactable object within the Universe.",
+		"fields": ["parent", "name", "profile", "portrait", "picture", "is_npc", "damage", "tracked_timing", "tracked_time", "dashboard", "concealed", "death_save", "death_fail", "ordering", "obscured", "mobility", "proficiency_rating", "feats", "hp_rolled", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "played_by", "gender", "gold", "race", "armor", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "notes", "slots_remaining", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "is_minion", "is_preview", "attribute"]
 	}, {
 		"id": "spell",
 		"name": "Spell",
@@ -83,17 +83,17 @@
 		"id": "action",
 		"name": "Action",
 		"description": "An action that can be taken by an object",
-		"fields": ["parent", "name", "icon", "description", "action_cost", "ordering", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "skills", "description", "targets", "action_cost", "ordering", "is_preview", "attribute"]
 	}, {
 		"id": "effect",
 		"name": "Effect",
 		"description": "An effect on an object. Expiration is tracked via chronicle. These may subtract slots directly, or add through conditionals.",
-		"fields": ["parent", "name", "icon", "description", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "debuff", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "description", "obscured", "skill_check", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "debuff", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "race",
 		"name": "Race",
 		"description": "",
-		"fields": ["parent", "name", "icon", "description", "armor", "mobility", "proficiency_rating", "selection", "variants", "stat_strength", "stat_dexterity", "hp_max", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "pool_gain", "feats", "playable", "score", "types", "size", "skills", "movement_ground", "datasets", "movement_swim", "movement_fly", "actions", "skill_advantage", "skill_disadvantage", "skill_check", "skill_proficiency", "spells", "threat", "action_max", "equip_slots", "spell_slot_max",  "proficiencies", "attune_max", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "description", "armor", "mobility", "encumberance_max", "weight_max", "proficiency_rating", "selection", "variants", "stat_strength", "stat_dexterity", "hp_max", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "pool_gain", "feats", "playable", "score", "types", "size", "skills", "movement_ground", "datasets", "movement_swim", "movement_fly", "actions", "skill_advantage", "skill_disadvantage", "skill_check", "skill_proficiency", "spells", "threat", "action_max", "equip_slots", "spell_slot_max",  "proficiencies", "attune_max", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "type",
 		"name": "Type",

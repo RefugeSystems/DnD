@@ -43,4 +43,49 @@ describe("RSObject", function() {
 		expect(res.bool).toBe(a.bool && b.bool);
 		expect(res.num).toBe(a.num + b.num);
 	});
+	
+	it("can set Object values", function() {
+		var a = {},
+			b = {},
+			res;
+			
+		a.dice = "2d4";
+		b.dice = "4d8";
+		
+		a.num = 4;
+		b.num = 0;
+		
+		a.bool = true;
+		b.bool = false;
+
+		res = RSObject.setObjects(a, b);
+		expect(res.num).toBe(0);
+		expect(res.dice).toBe("4d8");
+		expect(res.bool).toBe(false);
+	});
+	
+	it("can add Object values", function() {
+		var a = {},
+			b = {},
+			res;
+			
+		a.dice = "2d4";
+		b.dice = "4d8";
+		
+		a.num = 4;
+		b.num = 0;
+
+		a.old_data = 3;
+		b.new_data = 9;
+		
+		a.bool = true;
+		b.bool = false;
+
+		res = RSObject.addObjects(a, b);
+		expect(res.num).toBe(4);
+		expect(res.dice).toBe("2d4 4d8");
+		expect(res.bool).toBe(false);
+		expect(res.old_data).toBe(3);
+		expect(res.new_data).toBe(9);
+	});
 });

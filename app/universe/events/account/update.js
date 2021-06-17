@@ -15,7 +15,7 @@
 
 module.exports.initialize = function(universe) {
 	universe.on("player:account:update", function(event) {
-		console.log("Player Event: ", event);
+		// console.log("Player Event: ", event);
 		
 		var auth_sources = ["discord", "bnet", "google", "facebook"],
 			errors = [],
@@ -37,6 +37,9 @@ module.exports.initialize = function(universe) {
 			}
 		}
 		
+		if(event.message.data.name && event.message.data.name !== event.player.name) {
+			values.name = event.message.data.name;
+		}
 		if(event.message.data.password) {
 			values.password = event.message.data.password.sha256();
 		}

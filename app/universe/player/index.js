@@ -28,6 +28,11 @@ class PlayerConnection extends EventEmitter {
 		this.connects = 0;
 		
 		this.leaves = 0;
+
+		// Fresh instantiation, initialize connection count
+		player.setValues({
+			"connections": 0
+		});
 		
 		var receiveObject = (change) => {
 			this.receiveObject(change);
@@ -41,10 +46,19 @@ class PlayerConnection extends EventEmitter {
 			this.forwardMessage(message);
 		};
 		
+		var masterLogEvent = (message) => {
+			if(this.player.gm) {
+				message = Object.assign({}, message);
+				message.type = "log";
+				this.forwardMessage(message);
+			}
+		};
+		
 		universe.on("send", forwardMessage);
 		universe.on("object-updated", receiveObject);
 		universe.on("object-created", receiveObject);
 		universe.on("unload", unloadObject);
+		universe.on("error", masterLogEvent);
 	}
 	
 	connect(session, socket) {

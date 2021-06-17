@@ -1,39 +1,127 @@
 <div class="rs-component dnd-component dialog-dicebin">
-	<h1>{{entity.name}}</h1>
-	<div class="rolling" v-if="details.rolling && (details.targeted && !target)">
-		<div class="roll-label" v-if="!details.rolling.record">
-			Target for {{details.rolling.name || "Stat Roll"}}
+	<h1>
+		<span>{{entity.name}}</span>
+		<span v-if="details.action">: {{details.action.name}}</span>
+	</h1>
+	<div class="rolling spell-level" v-if="details.spell && spellLevel">
+		<!-- Show Spell Level
+		<div class="roll-label flex h">
+			<button class="roll-key general rounded quick action" v-on:click="info(target)">
+				<span :class="target.icon || 'fas fa-cube'"></span>
+			</button>
+			<div class="target flex v center grow1">
+				<span>Target: {{target.name}}</span>
+				<dnd-health-bar :entity="target"></dnd-health-bar>
+			</div>
 		</div>
-		<div class="roll-label flex h" v-if="details.rolling.record">
-			<button class="roll-key general rounded quick action" v-on:click="info(details.rolling.record)">
-				<span :class="details.rolling.record.icon || 'fas fa-cube'"></span>
+		-->
+	</div>
+	<div class="rolling spell-level" v-if="details.spell && !spellLevel">
+		<!-- TODO: Select Spell Level for cast send -->
+	</div>
+	<div class="rolling target" v-if="details.rolling && details.targeted && target">
+		<div class="roll-label flex h">
+			<button class="roll-key general rounded quick action" v-on:click="info(target)">
+				<span :class="target.icon || 'fas fa-cube'"></span>
+			</button>
+			<div class="target flex v center grow1">
+				<span>Target: {{target.name}}</span>
+				<dnd-health-bar :entity="target"></dnd-health-bar>
+			</div>
+			<button class="roll-key general rounded quick action" v-on:click="clearTarget()">
+				<span class="fas fa-ban"></span>
+			</button>
+		</div>
+	</div>
+	<div class="rolling target" v-if="details.rolling && details.targeted && !target">
+		<div class="roll-label" v-if="!details.using">
+			Target for {{getRollName()}}
+		</div>
+		<div class="roll-label flex h" v-if="details.using">
+			<button class="roll-key general rounded quick action" v-on:click="info(details.using)">
+				<span :class="details.using.icon || 'fas fa-cube'"></span>
 			</button>
 			<div class="flex v center grow1">
-				<span>Target for {{details.rolling.record.name}}</span>
+				<span>Target for {{details.using.name}}</span>
 			</div>
 		</div>
 		<div class="to-roll flex h" v-for="targetable in targets">
 			<button class="roll-key general rounded quick action" v-on:click="info(targetable)">
 				<span :class="targetable.icon"></span>
 			</button>
-			<button class="roll-result flex v center general rounded" v-on:click="selectTarget(targetable)">
+			<button class="roll-result target flex v center general rounded" v-on:click="selectTarget(targetable)">
 				<span>{{targetable.name}}</span>
+				<dnd-health-bar :entity="targetable"></dnd-health-bar>
 			</button>
 		</div>
 	</div>
-	<div class="rolling" v-if="details.rolling && (!details.targeted || target)">
-		<div class="roll-label" v-if="!details.rolling.record">
+	<div class="rolling target" v-if="check">
+		<div class="roll-label flex h">
+			<button class="roll-key general rounded quick action" v-on:click="info(check.skill)">
+				<span :class="check.skill.icon || 'fas fa-cube'"></span>
+			</button>
+			<div class="target flex v center grow1">
+				<span>
+					<span class="fas fa-dice"></span>
+					<span>{{check.computed}}</span>
+				</span>
+			</div>
+			<button class="roll-key general rounded quick action" v-on:click="clearSkill()">
+				<span class="fas fa-ban"></span>
+			</button>
+		</div>
+	</div>
+	<div class="rolling skill-roll" v-if="skills.length && !check && (!details.targeted || target)">
+		<div class="roll-label" v-if="!details.using">
+			Roll a Skill:
+		</div>
+		<div class="to-roll flex h" v-for="check in skills">
+			<button class="roll-key general rounded quick action" v-on:click="info(check.skill)">
+				<span :class="check.skill.icon"></span>
+			</button>
+			<div class="roll-result flex v center" :class="check == tracking?'tracking':''">
+				<input type="text" v-model="check.computed" v-on:focus="setTracking(check)" :placeholder="check.formula" />
+			</div>
+			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check)">
+				<span class="fas fa-dice"></span>
+			</button>
+			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check, 1)">
+				<span class="fas fa-chevron-double-up"></span>
+			</button>
+			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check, -1)">
+				<span class="fas fa-chevron-double-down"></span>
+			</button>
+			<div class="rolled flex h" v-if="check.dice_rolls">
+				<div class="results flex h" v-for="(results, die) in check.dice_rolls" v-if="die !== 'vantage'">
+					<button class="result rounded general action" v-for="(result, $index) in results" v-on:click="reroll(check, die, $index)" v-on:click.right.stop.prevent="removeRoll(check, die, $index)">
+						<span class="fas" :class="'fa-dice-' + die"></span>
+						<span class="die-roll">{{result}}</span>
+					</button>
+				</div>
+			</div>
+			<button class="rounded general roll result quick action" v-if="check.computed || check.computed === 0" v-on:click="clearSkill(check)">
+				<span class="fas fa-ban"></span>
+			</button>
+			<button class="rounded general roll result quick action" v-if="check.computed || check.computed === 0" v-on:click="sendSkill(check)">
+				<span class="fas fa-share-square"></span>
+			</button>
+		</div>
+	</div>
+	<div class="response dnd-widget align-center" v-if="statusResponse">
+		<div class="divider"></div>
+		<div>{{statusResponse}}</div>
+		<div class="divider"></div>
+	</div>
+	<div class="rolling" v-if="details.rolling">
+		<div class="roll-label" v-if="!details.using">
 			Rolling {{details.rolling.name || "Stat Roll"}}:
 		</div>
-		<div class="roll-label flex h" v-if="details.rolling.record">
-			<button class="roll-key general rounded quick action" v-on:click="info(details.rolling.record)">
-				<span :class="details.rolling.record.icon || 'fas fa-cube'"></span>
+		<div class="roll-label flex h" v-if="details.using">
+			<button class="roll-key general rounded quick action" v-on:click="info(details.using)">
+				<span :class="details.using.icon || 'fas fa-cube'"></span>
 			</button>
 			<div class="flex v center grow1">
-				<span>Rolling {{details.rolling.record.name}}</span>
-			</div>
-			<div class="flex v center grow1 target" v-if="target">
-				<span>Targeting {{target.name}}</span>
+				<span>Rolling {{details.using.name}}</span>
 			</div>
 		</div>
 		<div class="to-roll flex h" v-for="roll in rolling">
@@ -44,13 +132,21 @@
 				<span>{{roll.key}}</span>
 			</div>
 			<div class="roll-result flex v center" :class="roll == tracking?'tracking':''">
-				<input type="text" v-model="roll.result" v-on:focus="setTracking(roll)" :placeholder="roll.formula" />
+				<input type="text" v-model="roll.computed" v-on:focus="setTracking(roll)" :placeholder="roll.formula" />
+			</div>
+			<div class="rolled flex h" v-if="roll.dice_rolls">
+				<div class="results flex h" v-for="(results, die) in roll.dice_rolls">
+					<button class="result rounded general action" v-for="(result, $index) in results" v-on:click="reroll(roll, die, $index)" v-on:click.right.stop.prevent="removeRoll(roll, die, $index)">
+						<span class="fas" :class="'fa-dice-' + die"></span>
+						<span class="die-roll">{{result}}</span>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="roll-complete flex h">
-			<button class="general rounded action roll-action" v-on:click="submitRoll()">
-				<span class="fas fa-dice"></span>
-				<span>Roll</span>
+			<button class="general rounded action roll-action" v-if="getResultState() >= 0" v-on:click="sendResults(rolling)">
+				<span :class="getSendResultIcon()"></span>
+				<span>{{getFinishName()}}</span>
 			</button>
 			<button class="general rounded action roll-action" v-on:click="autoRoll()">
 				<span class="game-icon game-icon-rolling-dice-cup"></span>
@@ -63,19 +159,23 @@
 		</div>
 	</div>
 	<div class="input flex h">
-		<input type="text" v-model="storage.formula" v-on:keydown.enter="roll(storage.formula)" v-on:keydown.esc.prevent.stop="clear()" v-on:focus="setTracking(null)" />
+		<input type="text" v-model="storage.formula" v-on:keydown.enter="roll(storage.formula)" v-on:keydown.esc.prevent.stop="clearHistory()" v-on:keyup.esc.prevent.stop="" v-on:keypress.esc.prevent.stop="" v-on:focus="setTracking(null)" />
 		<button class="rounded general action dice" v-on:click="roll(storage.formula)">
 			<span class="fas fa-dice"></span>
+		</button>
+		<button class="rounded general action dice" v-on:click="clearHistory()">
+			<span class="fas fa-ban"></span>
 		</button>
 		<button class="rounded general quick action dice" v-for="dice in die" v-on:click="rollDice(dice)">
 			<span :class="dice.icon"></span>
 		</button>
 	</div>
 	<div class="output flex h wrap">
-		<div class="roll inline flex v" v-for="(roll, $index) in storage.rolls" v-on:click="dismiss($index)" :class="roll == active?'active':''">
+		<div class="roll inline flex v" v-for="(roll, $index) in storage.rolls" v-on:click="dismiss($index)" :class="roll == active?'active':''" :title="roll.title || JSON(roll)">
 			<button class="result flat action rs-white rsbg-black">{{roll.computed}}</button>
-			<div class="formula">{{roll.formula}}</div>
-			<div class="delay">{{roll.delay}}ms</div>
+			<div class="formula">{{roll.name || roll.formula}}</div>
+			<!-- div class="delay" v-if="roll.delay">{{roll.delay}}ms</div -->
+			<div class="footnote" v-if="roll.footnote">{{roll.footnote}}</div>
 		</div>
 	</div>
 </div>

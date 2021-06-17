@@ -35,7 +35,7 @@ module.exports = function(universe) {
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
 		spaces = new RegExp(" ", "g"),
 		zeros = new RegExp("(null|undefined)", "g"),
-		maths = new RegExp("([^a-zA-Z_.])(min|max)\\(", "g");
+		maths = new RegExp("([^a-zA-Z_.])(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g");
 
 	var calculate = function(original) {
 		if(original && original[0] === "+") { // Other operators would expressly be an issue
@@ -267,17 +267,20 @@ module.exports = function(universe) {
 			dice = {},
 			x;
 			
-		expression = expression.replace(spaces, "");
-		x = diceReductionRegEx.exec(expression);
-		while(x !== null) {
-			buffer.push(x[0]);
-			dice[x[2]] = dice[x[2]]?dice[x[2]] + "+" + x[1]:x[1];
+		if(expression) {
+			expression = expression.replace(spaces, "");
 			x = diceReductionRegEx.exec(expression);
+			while(x !== null) {
+				buffer.push(x[0]);
+				dice[x[2]] = dice[x[2]]?dice[x[2]] + "+" + x[1]:x[1];
+				x = diceReductionRegEx.exec(expression);
+			}
+			for(x=0; x<buffer.length; x++) {
+				expression = expression.replace(buffer[x], "");
+			}
+			dice.remainder = expression;
 		}
-		for(x=0; x<buffer.length; x++) {
-			expression = expression.replace(buffer[x], "");
-		}
-		dice.remainder = expression;
+
 		return dice;
 	};
 	
@@ -406,9 +409,15 @@ module.exports = function(universe) {
 			x;
 
 		dice = this.parseDiceRoll(expression);
+		if(debug) {
+			console.log("Computing: ", dice);
+		}
 		for(x=0; x<diceOrder.length; x++) {
 			value = this.compute(dice[diceOrder[x]], source);
 			if(value) {
+				if(debug) {
+					console.log(" > Dice[" + diceOrder[x] + "]: ", value);
+				}
 				if(reduced) {
 					if(typeof(value) === "number") {
 						reduced += " + " + value + diceOrder[x];
@@ -425,6 +434,9 @@ module.exports = function(universe) {
 			}
 		}
 		value = this.compute(dice.remainder, source);
+		if(debug) {
+			console.log(" > Dice[remainder]: " + reduced, value);
+		}
 		if(value) {
 			if(reduced) {
 				reduced += " + " + value;
@@ -433,12 +445,18 @@ module.exports = function(universe) {
 			}
 		}
 		value = this.compute(dice["%"], source);
+		if(debug) {
+			console.log(" > Dice[percent]: " + reduced, value);
+		}
 		if(value) {
 			if(reduced) {
 				reduced += " + " + value;
 			} else {
 				reduced = value;
 			}
+		}
+		if(debug) {
+			console.log(" = Final: " + reduced);
 		}
 
 
@@ -452,8 +470,11 @@ module.exports = function(universe) {
 	 * @param {Number} [incoming] Optional value that when specified is used against the
 	 * 		computed percentage value. When omitted, percentages are applied to the computed
 	 * 		value outside the percentage.
+	 * @param {Object} [rolls] When specified, the dice can be tracked for the number
+	 * 		of each dice rolled.
 	 */
-	this.computedDiceRoll = function(expression, source, referenced, incoming) {
+	this.computedDiceRoll = function(expression, source, referenced, incoming, rolls, advantage) {
+		rolls = rolls || {};
 		var values = {},
 			roll = 0,
 			value,
@@ -462,20 +483,61 @@ module.exports = function(universe) {
 			x;
 
 		dice = this.parseDiceRoll(expression);
+		if(debug) {
+			console.log("Computing: ", dice);
+		}
 		for(x=0; x<diceOrder.length; x++) {
 			values[x] = this.compute(dice[diceOrder[x]], source, referenced);
 		}
 		for(d=0; d<diceOrder.length; d++) {
+			if(debug) {
+				console.log(" > Dice[" + diceOrder[d] + "]: ", values[x]);
+			}
 			for(x=0; x<values[d] && !isNaN(values[d]); x++) {
-				roll += parseInt(diceValue[diceOrder[d]] * Math.random()) + 1;
+				value = Math.floor(diceValue[diceOrder[d]] * Math.random()) + 1;
+				roll += value;
+				if(!rolls[diceOrder[d]]) {
+					rolls[diceOrder[d]] = [];
+				}
+				rolls[diceOrder[d]].push(value);
+			}
+		}
+
+		if(advantage && rolls.d20) {
+			if(advantage < 0) {
+				// Disadvantage
+				value = Math.floor(20 * Math.random()) + 1;
+				if(value < rolls.d20[0]) {
+					rolls.vantage = [value, rolls.d20[0]];
+					roll = roll - rolls.d20[0] + value;
+					rolls.d20[0] = value;
+				} else {
+					rolls.vantage = [rolls.d20[0], value];
+				}
+			} else {
+				// Advantage
+				value = Math.floor(20 * Math.random()) + 1;
+				if(value > rolls.d20[0]) {
+					rolls.vantage = [value, rolls.d20[0]];
+					roll = roll - rolls.d20[0] + value;
+					rolls.d20[0] = value;
+				} else {
+					rolls.vantage = [rolls.d20[0], value];
+				}
 			}
 		}
 
 		value = this.compute(dice.remainder, source, referenced);
+		if(debug) {
+			console.log(" > Dice[remainder]: " + roll, value);
+		}
 		if(value) {
 			roll += value;
 		}
 		value = this.compute(dice["%"], source, referenced);
+		if(debug) {
+			console.log(" > Dice[percent]: " + roll, value);
+		}
 		if(value) {
 			if(incoming) {
 				roll += Math.floor(value/100*incoming);
@@ -485,7 +547,13 @@ module.exports = function(universe) {
 				// console.log("Percentile[" + value + "]: " + roll);
 			}
 		}
+		if(debug) {
+			console.log(" = Final: " + roll);
+		}
 
+		if(isNaN(roll)) {
+			return expression;
+		}
 		return roll;
 	};
 

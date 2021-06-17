@@ -27,12 +27,17 @@ rsSystem.component("dndEntitySkills", {
 		"sections": function() {
 			var sections = [],
 				store = {},
+				filter,
 				section,
 				skills,
 				skill,
 				name,
 				i;
 			
+			if(this.storage.filter) {
+				filter = this.storage.filter.toLowerCase();
+			}
+
 			for(i=0; i<this.entity.skills.length; i++) {
 				skill = this.universe.index.skill[this.entity.skills[i]];
 				if(!skill.disabled) {
@@ -48,7 +53,9 @@ rsSystem.component("dndEntitySkills", {
 						};
 						sections.push(section);
 					}
-					section.skills.push(skill);
+					if(!filter || skill._search.indexOf(filter) !== -1) {
+						section.skills.push(skill);
+					}
 					if(skill.ordering > section.ordering) {
 						section.ordering = skill.ordering;
 					}
@@ -75,25 +82,36 @@ rsSystem.component("dndEntitySkills", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		if(!this.storage.rolled) {
+			Vue.set(this.storage, "rolled", {});
+		}
 
 		this.universe.$on("entity:roll", this.processRoll);
 	},
 	"methods": {
 		"processRoll": function(event) {
+			console.log("Process Roll: ", event);
+			if(event.entity === this.entity.id) {
+				Vue.set(this.storage.rolled, event.skill, event.result);
+			}
 		},
 		"toggleSection": function(section) {
 			Vue.set(this.storage, section, !this.storage[section]);
 		},
 		"getValue": function(skill) {
-			var value = (this.entity[skill.stat] || 0) + (this.entity.skill_check[skill.id] || 0);
+			var value = this.entity.skill_check[skill.id] || 0;
 			if(value < 0) {
 				return value;
 			} else {
 				return "+" + value;
 			}
 		},
+		"dismissRoll": function(skill) {
+			Vue.set(this.storage.rolled, skill.id, null);
+		},
 		"rollSkill": function(skill) {
-
+			Vue.set(this.storage.rolled, skill.id, null);
+			this.performSkillCheck(skill);
 		}
 	},
 	"beforeDestroy": function() {

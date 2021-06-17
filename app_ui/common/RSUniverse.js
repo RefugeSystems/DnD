@@ -152,6 +152,16 @@ class RSUniverse extends EventEmitter {
 				"anchored": event.data.anchored
 			});
 		};
+		this.processEvent["log"] = (event) => {
+			this.$emit("notification", {
+				"id": "universe:log",
+				"message": event.data.message || event.data.msg,
+				"icon": event.data.level >= 50?"fas fa-exclamation-triangle rs-lightred":(event.data.level >= 40?"fas fa-exclamation-triangle rs-lightyellow":"fas fa-exclamation-triangle rs-lightgreen"),
+				"event": event,
+				"timeout": event.data.level < 40?10000:null,
+				"anchored": event.data.level >= 40
+			});
+		};
 		this.processEvent["system-warning"] = (event) => {
 			this.$emit("notification", {
 				"id": event.data.mid,
@@ -316,7 +326,6 @@ class RSUniverse extends EventEmitter {
 		localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 		localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 	}
-
 
 	generalMessage(message, icon, display) {
 		var notice = {
@@ -661,6 +670,7 @@ class RSUniverse extends EventEmitter {
 		setTimeout(() => {
 			rsSystem.log.warn("Possible Reconnect: ", event);
 			if((!event || event.code <4100) && this.state.reconnectAttempts < 5) {
+				this.$emit("error:reconnecting");
 				this.$emit("error", {
 					"id": "universe:connection:status",
 					"message": "Reconnecting",
@@ -678,6 +688,7 @@ class RSUniverse extends EventEmitter {
 				// this.$emit("disconnected", this);
 				rsSystem.log.error("Reconnect Giving up\n", this);
 				this.state.loggedOut = true;
+				this.$emit("error:disconnected");
 				this.$emit("error", {
 					"id": "universe:connection:status",
 					"message": "Connection Lost",

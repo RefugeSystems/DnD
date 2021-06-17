@@ -122,6 +122,16 @@ rsSystem.component("systemMenu", {
 	"mounted": function() {
 		rsSystem.register(this);
 		this.updateCollapse();
+
+		this.universe.$on("connected", () => {
+			Vue.set(this.optionsItem, "icon", "fas fa-cogs");
+		});
+		this.universe.$on("error:reconnecting", () => {
+			Vue.set(this.optionsItem, "icon", "fas fa-exclamation-triangle rs-lightyellow");
+		});
+		this.universe.$on("error:disconnected", () => {
+			Vue.set(this.optionsItem, "icon", "fas fa-exclamation-triangle rs-lightred");
+		});
 	},
 	"methods": {
 		"updateCollapse": function() {

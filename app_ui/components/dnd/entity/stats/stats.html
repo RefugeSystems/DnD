@@ -15,16 +15,22 @@
 			<span>{{getSpellAttack()}}</span>
 		</div>
 	</div>
-	<div class="property-container health">
-		<button class="property" v-on:click="takeDamage()">
+	<div class="property-container weight">
+		<button class="property" v-on:click="checkWeight()">
+			<span class="icon fas" :class="getWeightScales()"></span>
+			<span>{{entity.weight}}</span>
+		</button>
+	</div>
+	<div class="property-container speed">
+		<button class="property" v-on:click="move()">
 			<span class="icon fas fa-running"></span>
 			<span>{{entity.movement_ground}}</span>
 		</button>
 	</div>
-	<div class="property-container dicebin">
+	<!--div class="property-container dicebin">
 		<button class="property" v-on:click="openDiceBin()">
 			<span class="game-icon game-icon-rolling-dice-cup"></span>
 			<span></span>
 		</button>
-	</div>
+	</div-->
 </div>

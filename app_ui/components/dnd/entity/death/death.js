@@ -42,20 +42,23 @@ rsSystem.component("dndEntityDeath", {
 	"data": function() {
 		var data = {};
 
+		data.send = {};
+		data.send.entity = this.entity.id;
+
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 	},
 	"methods": {
-		"takeDamage": function() {
-
+		"isVisible": function() {
+			return this.entity.effects.indexOf("effect:condition:stabilized") === -1 && this.entity.hp === 0;
 		},
-		"transferGold": function() {
-
+		"passSave": function() {
+			this.universe.send("death:save", this.send);
 		},
-		"useHitDice": function() {
-
+		"failSave": function() {
+			this.universe.send("death:fail", this.send);
 		}
 	},
 	"beforeDestroy": function() {

@@ -25,6 +25,13 @@
 			"debuff": true,
 			"threat": -1
 		}, {
+            "id": "effect:condition:stabilized",
+			"name": "Stabilized",
+            "icon": "fas fa-heart-rate",
+			"description": "You have been knocked unconscious but are no longer dying. Taking any damage however will resume your death save count.",
+			"debuff": false,
+			"threat": -5
+		}, {
             "id": "effect:condition:charmed",
 			"name": "Charmed",
             "icon": "game-icon game-icon-nested-hearts",
@@ -36,9 +43,9 @@
 			"name": "Frozen",
             "icon": "game-icon game-icon-nested-ice-cube",
 			"description": "You are frozen and unable to move",
-			"movement_speed": "-1 * user.movement_speed",
-			"movement_swim": "-1 * user.movement_swim",
-			"movement_fly": "-1 * user.movement_fly",
+			"movement_speed": "-100%",
+			"movement_swim": "-100%",
+			"movement_fly": "-100%",
 			"debuff": true,
 			"threat": -1
 		}, {
@@ -84,9 +91,9 @@
 			"name": "Exhausted (2)",
             "icon": "game-icon game-icon-tired-eye",
 			"description": "You are exhausted from lack of sleep and move more slowly. You are also unable to ${Swim}$ or ${Fly}$.",
-			"movement_speed": "-.5 * user.movement_speed",
-			"movement_swim": "-1 * user.movement_swim",
-			"movement_fly": "-1 * user.movement_fly",
+			"movement_speed": "-50%",
+			"movement_swim": "-100%",
+			"movement_fly": "-100%",
 			"debuff": true,
 			"threat": -10
 		}, {
@@ -121,9 +128,9 @@
 			"name": "Exhausted (5)",
             "icon": "game-icon game-icon-tired-eye",
 			"description": "You are exhausted from lack of sleep and are no longer able to move. You must rest soon or die.",
-			"movement_speed": "-.5 * user.movement_speed",
-			"movement_swim": "-1 * user.movement_swim",
-			"movement_fly": "-1 * user.movement_fly",
+			"movement_speed": "-50%",
+			"movement_swim": "-100%",
+			"movement_fly": "-100%",
 			"debuff": true,
 			"threat": -50
 		}, {
@@ -133,8 +140,8 @@
 			"description": "You are currently being grappled and are unable to traverse. You may make an ${Athletics}$ or ${Acrobatics}$ check against the grapplers ${Athletics}$ check to break free.",
 			"actions": ["action:breakfree:grapple"],
 			"movement_speed": "-1 * user.movement_speed",
-			"movement_swim": "-1 * user.movement_swim",
-			"movement_fly": "-1 * user.movement_fly",
+			"movement_swim": "-100%",
+			"movement_fly": "-100%",
 			"debuff": true,
 			"threat": -10
 		}, {
@@ -210,7 +217,7 @@
 			"name": "Prone",
             "icon": "game-icon game-icon-falling rot180",
 			"description": "You are laying on the ground and moving at half speed. Additionally attacks against you from within 4 studs have ${Advantage}$.",
-			"movement_speed": "-.5 * user.movement_speed",
+			"movement_speed": "-50%",
 			"skill_disadvantage": {
 				"skill:mainhand": true,
 				"skill:offhand": true

@@ -14,7 +14,9 @@ class Constructor extends RSObject {
 		super(universe, manager, details);
 	}
 	
-	
+	postFieldUpdate() {
+		
+	}
 }
 
 module.exports = Constructor;

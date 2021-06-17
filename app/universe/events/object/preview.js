@@ -40,8 +40,8 @@ module.exports.initialize = function(universe) {
 					"error": err,
 					"anchored": true
 				});
-			} else if(object && typeof(object.setValue) === "function") {
-				if(typeof(object.setValue) === "function") {
+			} else if(object && typeof(object.setValues) === "function") {
+				if(typeof(object.setValues) === "function") {
 					object.setValues(details, function(err) {
 						if(err) {
 							universe.emit("send", {

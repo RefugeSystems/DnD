@@ -451,14 +451,18 @@ class RSObject {
 							this._search += ":::" + this._calculated[field.id].toLowerCase();
 						}
 					default:
-					case "array":
-					case "object":
 					case "dice":
 					case "formula": // formula Reduction handled in updateFieldValues
 					case "number":
 					case "boolean":
-					case "object":
 						this[fields[x]] = this._calculated[fields[x]];
+						break;
+					case "object:dice":
+					case "object":
+						this[fields[x]] = Object.assign({}, this._calculated[fields[x]]);
+						break;
+					case "array":
+						this[fields[x]] = [].concat(this._calculated[fields[x]]);
 						break;
 				}
 			}
@@ -1211,13 +1215,20 @@ RSObject.addObjects = function(a, b, type) {
 	} else if(!a && b) {
 		return a;
 	} else if(a && b) {
-		var keys = Object.keys(a),
+		var akeys = Object.keys(a),
+			bkeys = Object.keys(b),
+			checked = {},
 			result = {},
 			x;
 		
-		keys.uniquely.apply(keys, Object.keys(b));
-		for(x=0; x<keys.length; x++) {
-			result[keys[x]] = RSObject.addValues(a[keys[x]], b[keys[x]], type);
+		for(x=0; x<akeys.length; x++) {
+			result[akeys[x]] = RSObject.addValues(a[akeys[x]], b[akeys[x]], type);
+			checked[akeys[x]] = true;
+		}
+		for(x=0; x<bkeys.length; x++) {
+			if(!checked[bkeys[x]]) {
+				result[bkeys[x]] = RSObject.addValues(a[bkeys[x]], b[bkeys[x]], type);
+			}
 		}
 		
 		return result;
@@ -1416,10 +1427,10 @@ RSObject.setObjects = function(a, b) {
 RSObject.setValues = function(a, b, type) {
 	if(b === null) {
 		return null;
-	} else if(typeof(a) === "undefined" || typeof(b) !== "undefined") {
-		return b;
-	} else {
+	} else if(typeof(b) === "undefined") {
 		return a;
+	} else {
+		return b;
 	}
 };
 

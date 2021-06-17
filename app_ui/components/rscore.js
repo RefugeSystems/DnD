@@ -44,6 +44,9 @@ rsSystem.component("RSCore", {
 		};
 	},
 	"methods": {
+		"closeDialog": function() {
+			rsSystem.EventBus.$emit("dialog-dismiss");
+		},
 		"getPlayer": function() {
 			return this.universe.nouns.player[this.user.id];
 		}

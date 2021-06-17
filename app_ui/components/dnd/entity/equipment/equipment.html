@@ -1,5 +1,5 @@
-<div class="rs-component dnd-component entity-knowledge">
-	<div class="divider"></div>
+<div class="rs-component dnd-component entity-equipment">
+	<div class="divider" v-if="equipment.length"></div>
 	<div class="items flex h wrap">
 		<button class="item rounded general quick action" v-for="item in equipment" v-on:click.left="use(item)" v-on:click.right.stop.prevent="info(item)">
 			<span :class="item.icon || 'fas fa-cube'"></span>

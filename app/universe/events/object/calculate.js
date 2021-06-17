@@ -57,6 +57,7 @@ module.exports.initialize = function(universe) {
 		var formula = event.message.data.formula,
 			cbid = event.message.data.cbid,
 			referenced = [],
+			dice = {},
 			rolled;
 
 		universe.getObject(event.message.data.id, function(err, object) {
@@ -71,7 +72,9 @@ module.exports.initialize = function(universe) {
 					"anchored": true
 				});
 			} else if(object && (event.player.gm || object.owned[event.player.id])) {
-				rolled = universe.calculator.computedDiceRoll(formula, object, referenced);
+				universe.calculator.debug(true);
+				rolled = universe.calculator.computedDiceRoll(formula, object, referenced, undefined, dice, event.message.data.advantage);
+				universe.calculator.debug(false);
 				// console.log("Roll[" + formula + "]: ", rolled);
 				universe.emit("send", {
 					"type": "roll",
@@ -79,6 +82,7 @@ module.exports.initialize = function(universe) {
 					"computed": rolled,
 					"formula": formula,
 					"referenced": referenced,
+					"dice_rolls": dice,
 					"callback_id": cbid
 				});
 			} else {

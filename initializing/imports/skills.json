@@ -177,7 +177,7 @@
             "id": "skill:performance",
             "name": "Performance",
             "description": "Attempt to manipulate your voice or move your body in a certain way",
-            "icon": "game-icon game-icon-body-balance",
+            "icon": "fas fa-theater-masks",
             "stat": "charisma",
             "ordering": 32,
             "section": "Skill Checks"

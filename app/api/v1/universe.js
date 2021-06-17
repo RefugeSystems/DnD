@@ -192,6 +192,12 @@ module.exports = new (function() {
 				api.universe.emit("dump-configuration");
 				next();
 			});
+
+			this.router.get("/test/error", (req, res, next) => {
+				res.result = {};
+				api.universe.emit("error", new api.universe.Anomaly("test", "Test Error", 30));
+				next();
+			});
 			
 			done();
 		});

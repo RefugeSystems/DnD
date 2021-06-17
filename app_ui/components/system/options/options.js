@@ -144,6 +144,12 @@ rsSystem.component("systemOptionsDialog", {
 					"base": data.account_mirror,
 					"type": "text"
 				}, {
+					"id": "name",
+					"label": "Name",
+					"submit": "account-submit",
+					"base": data.account_mirror,
+					"type": "text"
+				}, {
 					"id": "description",
 					"label": "Description",
 					"submit": "account-submit",
@@ -326,8 +332,8 @@ rsSystem.component("systemOptionsDialog", {
 						rsSystem.EventBus.$emit("message", {
 							"id": "account:updated",
 							"message": "Account Update: Passwords do not match",
-							"icon": "fas fa-exclamation-triangle rs-lightred",
-							"event": event
+							"icon": "fas fa-exclamation-triangle rs-lightred"
+							// "event": event
 						});
 					}
 					break;
@@ -336,6 +342,7 @@ rsSystem.component("systemOptionsDialog", {
 					break;
 				case "uncache":
 					this.universe.deleteCache();
+					location.reload(true);
 					break;
 				case "emit":
 					rsSystem.EventBus.$emit(key);

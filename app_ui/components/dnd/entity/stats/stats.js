@@ -59,6 +59,24 @@ rsSystem.component("dndEntityStats", {
 		"getSpellDC": function() {
 			return this.entity.spell_dc || 0;
 		},
+		"getWeightScales": function() {
+			if(this.entity.encumberance < this.entity.encumberance_max * .8) {
+				return "fa-balance-scale-right";
+			} else if(this.entity.encumberance <= this.entity.encumberance_max) {
+				return "fa-balance-scale-right rs-lightyellow";
+			// } else if(this.entity.encumberance > this.entity.encumberance_max) {
+			// 	return "fa-balance-scale-right rs-lightred";
+			} else {
+				return "fa-balance-scale-left rs-lightred";
+				// return "fa-balance-scale rs-lightyellow";
+			}
+		},
+		"checkWeight": function() {
+			
+		},
+		"move": function() {
+
+		},
 		"openDiceBin": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
