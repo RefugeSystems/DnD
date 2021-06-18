@@ -28,6 +28,10 @@ rsSystem.component("systemMenu", {
 		"profile": {
 			"required": true,
 			"type": Object
+		},
+		"chatCore": {
+			"required": true,
+			"type": RSChatCore
 		}
 	},
 	"data": function() {
@@ -106,6 +110,11 @@ rsSystem.component("systemMenu", {
 			"emit": rsSystem.object_reference.events.options
 		};
 		
+		data.chatItem = {
+			"icon": "fas fa-comment",
+			"emit": rsSystem.object_reference.events.chat
+		};
+		
 		data.classing = "";
 		data.collapseItem = {};
 		
@@ -132,8 +141,25 @@ rsSystem.component("systemMenu", {
 		this.universe.$on("error:disconnected", () => {
 			Vue.set(this.optionsItem, "icon", "fas fa-exclamation-triangle rs-lightred");
 		});
+
+		this.chatCore.$on("received", this.checkViewed);
+		this.chatCore.$on("viewed", this.checkViewed);
+		this.checkViewed();
 	},
 	"methods": {
+		"checkViewed": function() {
+			var groups = Object.keys(this.chatCore.chat._recent),
+				i;
+
+			for(i=0; i<groups.length; i++) {
+				if((!this.chatCore.chat._last[groups[i]] && this.chatCore.chat._recent[groups[i]]) || this.chatCore.chat._last[groups[i]] < this.chatCore.chat._recent[groups[i]]) {
+					Vue.set(this.chatItem, "icon", "fas fa-comment-exclamation");
+					return true;
+				}
+			}
+			Vue.set(this.chatItem, "icon", "fas fa-comment");
+			return false;
+		},
 		"updateCollapse": function() {
 			Vue.set(this.collapseItem, "icon", "fas fa-sign-out-alt " + (this.profile.navigation_collapsed?"rot270":"rot90"));
 			Vue.set(this.storage, "classing", this.profile.navigation_collapsed?"collapsed":"extended");

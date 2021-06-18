@@ -29,6 +29,10 @@
 			"profile": {
 				"required": true,
 				"type": Object
+			},
+			"chatCore": {
+				"requried": true,
+				"type": RSChatCore
 			}
 		},
 		"data": function() {
@@ -90,11 +94,8 @@
 			});
 			this.$el.onclick = (event) => {
 				var follow = event.srcElement.attributes.getNamedItem("data-id");
-				if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
-					rsSystem.EventBus.$emit("display-info", {
-						"record": follow,
-						"base": this.viewing
-					});
+				if(follow && (follow = this.universe.getObject(follow.value))) {
+					rsSystem.EventBus.$emit("display-info", follow.id);
 					event.stopPropagation();
 					event.preventDefault();
 				}

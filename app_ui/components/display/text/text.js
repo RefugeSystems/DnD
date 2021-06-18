@@ -6,6 +6,8 @@
  * @constructor
  * @module Components
  * @params {Universe} universe
+ * @params {RSObject} [record]
+ * @params {Object} [profile]
  * @params {String} text
  */
 rsSystem.component("rsTextBlock", {

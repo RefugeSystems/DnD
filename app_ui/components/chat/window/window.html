@@ -1,0 +1,23 @@
+<div class="rs-component chat-window">
+	<div class="flex h container">
+		<div class="flex v groups">
+			<button class="rounded general action group" v-for="group in groups" v-on:click="selectGroup(group)" :class="group === storage.active?'active':''">
+				<span class="fas fa-comment-exclamation" v-if="(!chatCore.chat._last[group] && chatCore.chat._recent[group]) || chatCore.chat._last[group] < chatCore.chat._recent[group]"></span>
+				<span>{{getGroupName(group)}}</span>
+			</button>
+		</div>
+		<div class="flex v stream grow-1">
+			<div class="messages">
+				<chat-stream :universe="universe" :player="player" :profile="profile" :stream="stream"></chat-stream>
+			</div>
+			<div class="send flex h centered">
+				<div class="message text flex v grow-5">
+					<textarea v-model="storage.message" v-on:keypress.enter.stop.prevent="send($event)"></textarea>
+				</div>
+				<button class="rounded general quick action send" v-on:click="send()">
+					<span class="fas fa-comment-lines"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

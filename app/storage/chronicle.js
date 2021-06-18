@@ -2,8 +2,9 @@
  * 
  *
  * @class Chronicle
+ * @constructor
  * @extends EventEmitter
- * @param {RSDatabase} database
+ * @param {Universe} universe
  */
  
 var EventEmitter = require("events").EventEmitter,

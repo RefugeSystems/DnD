@@ -7,6 +7,8 @@
  * @type {[type]}
  */
 
+const RSObject = require("../storage/rsobject");
+
 var EventEmitter = require("events").EventEmitter,
 	Chronicle = require("../storage/chronicle"),
 	DNDCalculator = require("./calculator/dnd"),
@@ -91,8 +93,24 @@ class Universe extends EventEmitter {
 		this.manager = {};
 		
 		this.shutting_down = false;
+		/**
+		 * Used to essentially track the number of times the universe has rewound.
+		 * @property timeline
+		 * @type Integer
+		 */
 		this.timeline = 0;
+		/**
+		 * The oldest the universe has ever been. Used to track multiple timelines.
+		 * @property oldest
+		 * @type Integer
+		 */
 		this.oldest = 0;
+		/**
+		 * The current "time" of the universe which is treated as an offset from
+		 * the start of the game.
+		 * @property time
+		 * @type Integer
+		 */
 		this.time = 0;
 		
 		this.on("dump-configuration", () => {
@@ -486,6 +504,39 @@ class Universe extends EventEmitter {
 		}
 		
 		return players;
+	}
+
+	/**
+	 * A non-callback object retrieval by ID.
+	 * @method get
+	 * @param {String} id 
+	 * @param {String} [classification] Optional class name to save processing if known,
+	 * 		otherwise it is pulled from the ID.
+	 * @returns {RSObject}
+	 */
+	get(id, classification) {
+		if(!classification) {
+			classification = this.getClassFromID(id);
+		}
+		if(this.manager[classification]) {
+			return this.manager[classification].object[id];
+		}
+		this.emit("error", new Anomaly("universe:object:request", "Unable to find object", 50, {id, classification}, null, this));
+		return null;
+	}
+
+	/**
+	 * 
+	 * @method list
+	 * @param {String} classificaiton Name
+	 * @returns {Array} of Object IDs for that class
+	 */
+	list(classification) {
+		if(this.manager[classification]) {
+			return this.manager[classification].objectIDs;
+		}
+		this.emit("error", new Anomaly("universe:object:request", "Unable to find class", 50, {classification}, null, this));
+		return null;
 	}
 	
 	/**

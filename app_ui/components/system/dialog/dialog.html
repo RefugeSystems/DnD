@@ -5,7 +5,7 @@
 			<button class="dialog-close close pronounced action" v-on:click="closeDialog()">
 				<span class="fas fa-times"></span>
 			</button>
-			<component class="dialog-contents dialog-content-bound" v-if="details" :is="details.component" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :details="details" :storage-key="details.storageKey"></component>
+			<component class="dialog-contents dialog-content-bound" v-if="details" :is="details.component" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="profile" :details="details" :storage-key="details.storageKey"></component>
 		</div>
 	</div>
 </div>

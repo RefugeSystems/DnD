@@ -16,6 +16,7 @@
  * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
  * @param {Object} event.message.data Typical location of data from the UI
  * @param {String} event.message.data.name Simple name
+ * @param {String} event.message.data.nickname
  * @param {String} event.message.data.notes In markdown text
  * @param {String} event.message.data.description In markdown text
  * @param {String} event.message.data.icon CSS Classing, not typically specified here, possibly slated for inheritance from race
@@ -51,6 +52,7 @@ var keys = [
 	"icon",
 	"gender",
 	"race",
+	"nickname",
 	"alignment",
 	"archetypes",
 	"feats",
@@ -192,7 +194,7 @@ var finish = function(data) {
 			data.sets.hp = data.character.hp_max;
 			data.character.setValues(data.sets, function(err) {
 				data.universe.chronicle.addOccurrence("character:created", data.event.message.data, Date.now(), null, data.event.player?data.event.player.id:null);
-				data.player.setValues(data.sets, function(err) {
+				data.event.player.setValues(data.sets, function(err) {
 					if(err || p_err) {
 						data.universe.emit("send", {
 							"type": "notice",

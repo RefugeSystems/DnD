@@ -2,7 +2,7 @@
 	<div class="main-bar">
 		<div class="titling">
 			<span v-if="info && info.icon" class="icon" :class="info.icon"></span>
-			<span class="text nowrap">{{info?info.name:"Information"}}</span>
+			<span class="text nowrap">{{info?info.nickname || info.name:"Information"}}</span>
 		</div>
 		<button class="control back" v-on:click="backOne()" v-if="count > 1">
 			<span class="fas fa-step-backward"></span>

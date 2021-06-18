@@ -138,6 +138,12 @@
 							<td></td>
 						</tr>
 						<tr>
+							<td class="label align-right align-top">Nickname:</td>
+							<td class="" v-if="errorCount"></td>
+							<td class="value">{{building.nickname}}</td>
+							<td></td>
+						</tr>
+						<tr>
 							<td class="label align-right align-top">Gender:</td>
 							<td v-if="errorCount"></td>
 							<td class="value">{{building.gender.name || building.gender}}</td>

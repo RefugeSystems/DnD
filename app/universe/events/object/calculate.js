@@ -72,9 +72,9 @@ module.exports.initialize = function(universe) {
 					"anchored": true
 				});
 			} else if(object && (event.player.gm || object.owned[event.player.id])) {
-				universe.calculator.debug(true);
+				// universe.calculator.debug(true);
 				rolled = universe.calculator.computedDiceRoll(formula, object, referenced, undefined, dice, event.message.data.advantage);
-				universe.calculator.debug(false);
+				// universe.calculator.debug(false);
 				// console.log("Roll[" + formula + "]: ", rolled);
 				universe.emit("send", {
 					"type": "roll",
@@ -117,7 +117,7 @@ module.exports.initialize = function(universe) {
 			} else if(object && (event.player.gm || object.owned[event.player.id])) {
 				universe.calculator.reduceDiceRoll(formula, object)
 				.then(function(result) {
-					console.log("reduce[" + formula + "]: ", result);
+					// console.log("reduce[" + formula + "]: ", result);
 					universe.emit("send", {
 						"type": "reduce",
 						"recipient": event.player.id,

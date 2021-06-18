@@ -853,6 +853,12 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "nickname",
+		"name": "Nickname",
+		"description": "Short name for this",
+		"type": "string",
+		"attribute": {}
+	}, {
 		"id": "caster",
 		"name": "Caster",
 		"description": "The entity that knows this spell. Used for spell value calculations.",

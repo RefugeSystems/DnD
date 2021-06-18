@@ -1,0 +1,50 @@
+.rs-component.chat-stream {
+	position: relative;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	.container {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+
+		.message {
+			display: inline-flex;
+			flex-direction: column;
+			border-radius: 5px;
+			padding: 4px 7px;
+			text-align: left;
+			margin: 5px;
+			min-width: 30%;
+			max-width: 70%;
+			white-space: break-spaces;
+			word-break: break-all;
+
+			.sender {
+				margin: 0px 7px 0px 0px;
+				font-weight: 600;
+			}
+
+			p {
+				margin: 0px;
+			}
+	
+			.time {
+				width: 100%;
+				margin-top: 4px;
+				text-align: left;
+			}
+		}
+
+		&.me {
+			justify-content: flex-end;
+
+			.message,
+			.time {
+				text-align: right;
+			}
+		}
+	}
+
+}

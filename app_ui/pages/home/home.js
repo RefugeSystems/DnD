@@ -31,7 +31,6 @@ rsSystem.component("RSHome", {
 
 		// Track Connection Information
 		data.configuration = null;
-		data.universe = null;
 		data.player = null;
 		data.user = null;
 		
@@ -44,6 +43,7 @@ rsSystem.component("RSHome", {
 		data.active = null;
 		data.configuration = null;
 		data.universe = new RSUniverse();
+		data.chatCore = new RSChatCore(data.universe);
 		data.universe.$on("disconnected", () => {
 			Vue.set(this, "messageClass", "");
 			Vue.set(this, "messageIcon", "fas fa-info-circle rs-light-blue");
@@ -71,6 +71,7 @@ rsSystem.component("RSHome", {
 		data.universe.$on("loaded", () => {
 			// console.log("Loaded: ", this.universe);
 			Vue.set(this, "player", this.universe.index.player[this.universe.connection.session.player]);
+			this.chatCore.setPlayer(this.player);
 			if(this.state >= 0) {
 				Vue.set(this, "state", 10);
 			}

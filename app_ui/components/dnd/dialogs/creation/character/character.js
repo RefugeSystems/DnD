@@ -37,7 +37,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.race.length; x++) {
-				if (this.universe.listing.race[x].playable && !this.universe.listing.race[x].attribute.no_show) {
+				if (this.universe.listing.race[x].playable && !this.universe.listing.race[x].attribute.no_show && !this.universe.listing.race[x].is_preview) {
 					selectable.push(this.universe.listing.race[x]);
 				}
 			}
@@ -48,7 +48,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 			if (this.building.race) {
 				for (x = 0; x < this.building.race.variants.length; x++) {
 					feat = this.universe.getObject(this.building.race.variants[x]);
-					if (feat && !feat.inactive && !feat.attribute.no_show) {
+					if (feat && !feat.inactive && !feat.attribute.no_show && !feat.is_preview) {
 						selectable.push(feat);
 					} else {
 						this.universe.log.error("Unknown racial variant: " + this.building.race.variants[x]);
@@ -68,7 +68,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.archetype.length; x++) {
-				if (this.universe.listing.archetype[x].playable && !this.universe.listing.archetype[x].attribute.no_show) {
+				if (this.universe.listing.archetype[x].playable && !this.universe.listing.archetype[x].attribute.no_show && !this.universe.listing.archetype[x].is_preview) {
 					selectable.push(this.universe.listing.archetype[x]);
 				}
 			}
@@ -77,7 +77,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.feat.length; x++) {
-				if (this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show) {
+				if (this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show && !this.universe.listing.feat[x].is_preview) {
 					selectable.push(this.universe.listing.feat[x]);
 				}
 			}
@@ -86,7 +86,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for (x = 0; x < this.universe.listing.alignment.length; x++) {
-				if (this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show) {
+				if (this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show && !this.universe.listing.alignment[x].is_preview) {
 					selectable.push(this.universe.listing.alignment[x]);
 				}
 			}
@@ -240,6 +240,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 					j;
 
 				details.name = this.building.name;
+				details.nickname = this.building.nickname;
 				details.description = this.building.description;
 				details.gender = this.building.gender;
 				details.race = this.building.race.id;

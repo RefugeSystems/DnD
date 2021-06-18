@@ -2,7 +2,7 @@
 	<div class="justified flex h bar">
 		<div class="property-container name flex h centered">
 			<button class="property" v-on:click="info(entity)">
-				{{entity.name}}
+				{{entity.nickname || entity.name}}
 			</button>
 			<button class="rounded general quick action" v-on:click="startRoll()">
 				<span class="game-icon game-icon-rolling-dice-cup"></span>

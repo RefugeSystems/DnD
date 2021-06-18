@@ -4,6 +4,9 @@
 			<span class="nav-icon" :class="item.icon"></span>
 		</button>
 		<div class="separator"></div>
+		<button class="navigation-item" :class="getItemClassing(chatItem)" v-on:click="processNavigation(chatItem)">
+			<span class="nav-icon" :class="chatItem.icon"></span>
+		</button>
 		<button class="navigation-item" :class="getItemClassing(optionsItem)" v-on:click="processNavigation(optionsItem)">
 			<span class="nav-icon" :class="optionsItem.icon"></span>
 		</button>
