@@ -329,6 +329,7 @@ rsSystem.component("dndDialogRoll", {
 		"rollSkill": function(check, advantage) {
 			if(!check.computed) {
 				var cb = Random.identifier("roll", 10, 32);
+				this.setTracking(check);
 				Vue.set(this.waiting, cb, check);
 				this.universe.send("roll:object", {
 					"id": this.entity.id,
