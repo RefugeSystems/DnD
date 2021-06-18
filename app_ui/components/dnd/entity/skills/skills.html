@@ -3,23 +3,23 @@
 		<div class="section-name flex h justified">
 			<div class="name flex h">
 				<button class="property" v-on:click="toggleSection(section.id)">
-					<span class="fal" :class="storage[section.id]?'fa-plus':'fa-minus'"/>
+					<span class="fal" :class="storage && storage[section.id]?'fa-plus':'fa-minus'"/>
 				</button>
 				<div class="property rsbg-lightBlue">
 					<span>{{section.name}}</span>
 				</div>
 			</div>
 			<div class="filter flex v">
-				<input v-if="$index === 0" class="grow-1" type="text" placeholder="Filter Skills..." v-model="storage.filter" />
+				<input v-if="storage && $index === 0" class="grow-1" type="text" placeholder="Filter Skills..." v-model="storage.filter" />
 			</div>
 		</div>
 		<div class="divider"></div>
-		<div class="skills flex h justified" v-if="!storage[section.id]">
+		<div class="skills flex h justified" v-if="storage && !storage[section.id]">
 			<div class="skills flex v" v-for="(column, $index) in section.skills" :class="$index?'col_right':'col_left'">
 				<div class="property-container skill flex h" v-for="(skill, $index) in column">
-					<button class="property nowrap" v-on:click="rollSkill(skill)" v-on:click.right.stop.prevent="dismissRoll(skill)">
+					<button class="property nowrap" v-on:click="rollSkill(skill)" v-on:click.right.stop.prevent="dismissRoll(skill)" :class="storage && (storage.rolled[skill.id] || storage.rolled[skill.id] === 0)?'marked':''">
 						<span>{{getValue(skill)}}</span>
-						<span class="seperator" :class="skill.icon"></span>
+						<span class="seperator skill-icon" :class="skill.icon"></span>
 						<span class="skill-name">{{skill.name}}</span>
 						<span v-if="storage && (storage.rolled[skill.id] || storage.rolled[skill.id] === 0)"class="fas fa-dice seperator"></span>
 						<span v-if="storage && (storage.rolled[skill.id] || storage.rolled[skill.id] === 0)">{{storage.rolled[skill.id]}}</span>

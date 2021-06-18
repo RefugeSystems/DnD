@@ -9,14 +9,18 @@
 
 const RSObject = require("../storage/rsobject");
 
-var EventEmitter = require("events").EventEmitter,
+var appPackage = require("../../package.json"),
+	EventEmitter = require("events").EventEmitter,
+	Random = require("rs-random"),
+	fs = require("fs"),
+
 	Chronicle = require("../storage/chronicle"),
+	Anomaly = require("../management/anomaly"),
+	
 	DNDCalculator = require("./calculator/dnd"),
 	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects"),
-	Anomaly = require("../management/anomaly"),
-	appPackage = require("../../package.json"),
-	fs = require("fs"),
+	
 	omittedFromSync = {},
 	defaultClasses = [
 		"player",
@@ -537,6 +541,26 @@ class Universe extends EventEmitter {
 		}
 		this.emit("error", new Anomaly("universe:object:request", "Unable to find class", 50, {classification}, null, this));
 		return null;
+	}
+
+	/**
+	 * 
+	 * @param {String} id 
+	 * @param {Function} callback 
+	 */
+	copy(id, mask, callback) {
+		var source = this.get(id),
+			details = {};
+
+		// TODO: Handle Templates
+		if(source) {
+			details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+			details.parent = id;
+			Object.assign(details, mask);
+			this.createObject(details, callback);
+		} else {
+			callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
+		}
 	}
 	
 	/**

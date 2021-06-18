@@ -90,7 +90,7 @@ rsSystem.component("dndEntitySkills", {
 	},
 	"methods": {
 		"processRoll": function(event) {
-			console.log("Process Roll: ", event);
+			// console.log("Process Roll: ", event);
 			if(event.entity === this.entity.id) {
 				Vue.set(this.storage.rolled, event.skill, event.result);
 			}

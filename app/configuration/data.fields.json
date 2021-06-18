@@ -691,13 +691,22 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
+		"id": "importance",
+		"name": "Importance",
+		"description": "How important is this?",
+		"type": "string",
+		"ordering": 105,
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
 		"id": "acquired",
 		"name": "Acquired",
-		"description": "How strong this object is. This is for use as part of computed values",
-		"type": "object",
+		"description": "When you acquired this",
+		"type": "integer",
+		"ordering": 100,
 		"attribute": {
-			"inherited_key": "*",
-			"displayed": false
+			"display_size": 90
 		}
 	}, {
 		"id": "effect_height",

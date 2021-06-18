@@ -73,7 +73,7 @@
 		"id": "spell",
 		"name": "Spell",
 		"description": "Spell",
-		"fields": ["parent", "name", "icon", "description", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_type", "cast_with", "cast_save", "duration", "archetypes", "ritual", "user", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "acquired", "description", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_type", "cast_with", "cast_save", "duration", "archetypes", "ritual", "user", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items", "is_preview", "attribute"]
 	}, {
 		"id": "archetype",
 		"name": "Class",
@@ -88,7 +88,7 @@
 		"id": "effect",
 		"name": "Effect",
 		"description": "An effect on an object. Expiration is tracked via chronicle. These may subtract slots directly, or add through conditionals.",
-		"fields": ["parent", "name", "icon", "description", "obscured", "skill_check", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "debuff", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "acquired", "description", "obscured", "skill_check", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "debuff", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "race",
 		"name": "Race",
@@ -118,7 +118,7 @@
 		"id": "feat",
 		"name": "Feat",
 		"description": "An inherant feature of this object that improves or diminishes this object",
-		"fields": ["parent", "name", "icon", "description", "obscured", "mobility", "featbg", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "selectable", "pool_gain", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "action_max", "hp_max", "movement_ground", "movement_swim", "movement_fly", "spells", "skills", "skill_advantage", "skill_disadvantage", "recharges_on", "actions", "skill_proficiency", "proficiencies", "resistance", "damage", "score", "threat", "charges", "recharges_at_short", "recharges_at_long", "recharges_after", "spell_slot_max", "attune_max", "recharging", "conditionals", "selection", "effects", "user", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "acquired", "description", "obscured", "mobility", "featbg", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "selectable", "pool_gain", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "action_max", "hp_max", "movement_ground", "movement_swim", "movement_fly", "spells", "skills", "skill_advantage", "skill_disadvantage", "recharges_on", "actions", "skill_proficiency", "proficiencies", "resistance", "damage", "score", "threat", "charges", "recharges_at_short", "recharges_at_long", "recharges_after", "spell_slot_max", "attune_max", "recharging", "conditionals", "selection", "effects", "user", "is_preview", "attribute"]
 	}, {
 		"id": "skill",
 		"name": "Skill",
@@ -138,17 +138,17 @@
 		"id": "item",
 		"name": "Item",
 		"description": "An item used by entities",
-		"fields": ["parent", "name", "description", "icon", "price", "mobility", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "inventory", "gold", "armor", "profile", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "skill_advantage", "skill_disadvantage", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "description", "acquired", "icon", "price", "mobility", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "inventory", "gold", "armor", "profile", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "skill_advantage", "skill_disadvantage", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "knowledge",
 		"name": "Knowledge",
 		"description": "Knowledge held by an entity in the universe.",
-		"fields": ["parent", "name", "description", "concealed", "icon", "category", "spells_maximum", "feats", "cantrips_maximum", "spell_dc", "spell_attack", "state", "skills", "actions", "spells", "screen", "spell_slot_max", "skill_advantage", "skill_disadvantage", "associations", "skill_check", "skill_proficiency", "proficiencies", "knowns", "effects", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "description", "acquired", "concealed", "icon", "category", "spells_maximum", "feats", "cantrips_maximum", "spell_dc", "spell_attack", "state", "skills", "actions", "spells", "screen", "spell_slot_max", "skill_advantage", "skill_disadvantage", "associations", "skill_check", "skill_proficiency", "proficiencies", "knowns", "effects", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "quest",
 		"name": "Quest",
 		"description": "Specific entry for objectives.",
-		"fields": ["parent", "name", "description", "concealed", "locations", "items", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "description", "acquired", "importance", "concealed", "locations", "items", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "proficiency",
 		"name": "Proficiency",

@@ -104,7 +104,8 @@ module.exports.initialize = function(universe) {
 		details.gold = 0;
 		details.level = 1;
 
-		makeCharacter(universe, event, source, details)
+		copyFeats(universe, event, source, details)
+		.then(makeCharacter)
 		.then(addPicture)
 		.then(addPortrait)
 		.then(finish)
@@ -112,17 +113,56 @@ module.exports.initialize = function(universe) {
 	});
 };
 
-
-var makeCharacter = function(universe, event, source, details) {
+var copyFeats = function(universe, event, source, details) {
 	return new Promise(function(done, fail) {
-		var data = {};
+		var errors = [],
+			data = {},
+			mask = {},
+			count = 0,
+			collect,
+			i;
+
+		mask.acquired = universe.time;
+
 		data.universe = universe;
 		data.details = details;
 		data.source = source;
 		data.event = event;
 		data.sets = {};
 
-		data.universe.createObject(details, function(err, character) {
+		collect = function(err, feat) {
+			if(err) {
+				// TODO: Handle
+				console.error("Feat Copy Error: ", err);
+				errors.push(err);
+			} else {
+				var index = data.details.feats.indexOf(feat.parent);
+				if(index === -1) {
+					// TODO: Error - But should be impossible
+					console.error(" [!] No Index for copied Feat?");
+				} else {
+					data.details.feats[index] = feat.id;
+				}
+			}
+			count++;
+			if(count === data.details.feats.length) {
+				done(data);
+			}
+		};
+
+		if(data.details.feats.length) {
+			for(i=0; i<data.details.feats.length; i++) {
+				universe.copy(data.details.feats[i], mask, collect);
+			}
+		} else {
+			done(data);
+		}
+	});
+};
+
+var makeCharacter = function(data) {
+	return new Promise(function(done, fail) {
+		data.universe.createObject(data.details, function(err, character) {
 			if(err) {
 				fail(err);
 			} else {
@@ -224,6 +264,7 @@ var finish = function(data) {
 
 var errored = function(universe, event) {
 	return function(error) {
+		console.log("Creation Error: ", error);
 		universe.emit("send", {
 			"type": "notice",
 			"mid": "create:character",
