@@ -613,8 +613,14 @@ class RSObject {
 					}
 				}
 				// Defaults (For null computations) & Bounds
-				if(field.attribute.default && this[field.id] === null) {
-					this[field.id] = field.attribute.default;
+				if(this[field.id] === null || this[field.id] === undefined) {
+					if(field.attribute.default) {
+						this[field.id] = field.attribute.default;
+					} else if(field.type === "object" || field.type === "object:dice") {
+						this[field.id] = {};
+					} else if(field.type === "array") {
+						this[field.id] = [];
+					}
 				} else if(typeof(field.attribute.min) === "number" && this[field.id] < field.attribute.min) {
 					this[field.id] = field.attribute.min;
 				} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
@@ -628,7 +634,24 @@ class RSObject {
 			if(!this.attribute) {
 				this.attribute = {};
 			}
-			this.attribute.concealed = ["name", "description"];
+			if(typeof(this.attribute.concealed) === "object") {
+				keys = Object.keys(this.attribute.concealed);
+				for(i=0; i<keys.length; i++) {
+					if(keys[i][0] !== "_" && keys[i] !== "id") {
+						this[keys[i]] = this.attribute.concealed[keys[i]];
+					}
+				}
+			} if(this.attribute.concealed instanceof Array) {
+				for(i=0; i<this.attribute.concealed.length; i++) {
+					if(this.attribute.concealed[i][0] !== "_" && this.attribute.concealed[i] !== "id") {
+						this[this.attribute.concealedeys[i]] = "Unknown";
+					}
+				}
+			} else {
+				this.name = "Unknown";
+				this.nickname = null;
+				this.description = "Unknown";
+			}
 		}
 		
 		// Maintain updated/created
@@ -639,6 +662,10 @@ class RSObject {
 		
 		if(typeof(this.postFieldUpdate) === "function") {
 			this.postFieldUpdate();
+		}
+
+		if(this.is_preview) {
+			this.name += " (Preview)";
 		}
 
 		// console.log("Updated Self[" + this._data.id + "]");
@@ -1134,6 +1161,7 @@ class RSObject {
 	 */
 	toJSON(include) {
 		var calculated = Object.assign({}, this._calculated),
+			data = Object.assign({}, this._data),
 			json = {},
 			field,
 			keys,
@@ -1151,6 +1179,7 @@ class RSObject {
 						}
 					} else {
 						delete(calculated[field.id]);
+						delete(data[field.id]);
 					}
 				}
 			}
@@ -1165,13 +1194,13 @@ class RSObject {
 		
 		json.id = this.id;
 		json._class = this._class;
-		json._calculated = calculated;
 		json._involved = this._involved;
 		json._search = this._search;
-		json._data = this._data;
+		json._data = data;
 		if(include) {
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
+			json._calculated = calculated;
 			json._calcRef = this._calcRef;
 			json._grid = this._grid;
 			json._x = this._x;

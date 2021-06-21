@@ -1,0 +1,12 @@
+<div class="dnd-component entity-damage">
+	<div class="flex v">
+		<div class="flex h" v-for="source in sources">
+			<button class="damage-source" v-on:click="attackWith(source)">
+				<span :class="source.icon || 'fas fa-swords'"></span>
+			</button>
+			<div class="damage-types">
+				
+			</div>
+		</div>
+	</div>
+</div>

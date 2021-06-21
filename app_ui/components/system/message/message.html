@@ -1,13 +1,5 @@
 <div class="system-component rs-component message-panel">
-	<div class="message-container flex h left" v-for="entry in messages" v-on:click="dismissMessage(entry, true)">
-		<!-- <div class="control visibility flex v center" v-if="!entry.id || !tracking[entry.id]"> -->
-		<!--
-		<div class="control visibility flex v center">
-			<button class="interactability" v-on:click="dismissMessage(entry)">
-				X
-			</button>
-		</div>
-		-->
+	<div class="message-container flex h left" v-for="entry in messages" v-on:click="dismissMessage(entry, true)" v-on:click.right.stop.prevent="printMessage(entry)">
 		<div class="iconography visibility flex v center">
 			<span v-if="!entry.icon" class="fas fa-exclamation-triangle" :class="entry.error?'rs-light-red':'rs-yellow'"></span>
 			<span v-if="entry.icon" :class="entry.icon"></span>

@@ -88,4 +88,52 @@ describe("RSObject", function() {
 		expect(res.old_data).toBe(3);
 		expect(res.new_data).toBe(9);
 	});
+	
+	it("can add deeply nested Object Array values", function() {
+		var a = {},
+			b = {},
+			res;
+			
+		a.on = {};
+		b.on = {};
+
+		a.on.attack = [{
+			"id": 0,
+			"a": 1
+		}];
+		a.on.long_rest = [{
+			"id": 10,
+			"a": 12
+		}];
+		b.on.attack = [{
+			"id": 1,
+			"b": 1
+		}];
+		b.on.short_rest = [{
+			"id": 20,
+			"b": 11
+		}];
+		
+		a.new_obj = {
+			"j": 4
+		};
+		b.old_obj = {
+			"k": 9
+		};
+
+		res = RSObject.addObjects(a, b);
+		expect(res.on.attack).toBeDefined();
+		expect(res.on.long_rest).toBeDefined();
+		expect(res.on.short_rest).toBeDefined();
+		expect(res.new_obj.j).toBe(4);
+		expect(res.old_obj.k).toBe(9);
+		expect(res.on.long_rest[0]).toBeDefined();
+		expect(res.on.long_rest[0].id).toBe(10);
+		expect(res.on.long_rest[0].a).toBe(12);
+		expect(res.on.long_rest[0].b).not.toBeDefined();
+		expect(res.on.short_rest[0].id).toBe(20);
+		expect(res.on.short_rest[0].a).not.toBeDefined();
+		expect(res.on.short_rest[0].b).toBe(11);
+		expect(res.on.attack.length).toBe(2);
+	});
 });

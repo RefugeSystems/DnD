@@ -78,10 +78,10 @@ class Universe extends EventEmitter {
 		
 		/**
 		 * Maps a chronicle type to the ChronicleProcessor that handles it
-		 * @property chroniclers
+		 * @property chronicler
 		 * @type {Object}
 		 */
-		this.chroniclers = {};
+		this.chronicler = {};
 		/**
 		 * Maps player IDs to their connection handlers
 		 * @property connection
@@ -103,6 +103,13 @@ class Universe extends EventEmitter {
 		 * @type Integer
 		 */
 		this.timeline = 0;
+		/**
+		 * When true, time is going backwards. This is used to reduce the timeline
+		 * increments to only increment on the initial reverse
+		 * @property reversing
+		 * @type Boolean
+		 */
+		this.reversing = false;
 		/**
 		 * The oldest the universe has ever been. Used to track multiple timelines.
 		 * @property oldest
@@ -466,24 +473,24 @@ class Universe extends EventEmitter {
 			connection;
 		
 		if(this.shutting_down) {
-			console.log("Shutting Down");
+			// console.log("Shutting Down");
 			socket.send({"type": "close", "code": "5", "sent": Date.now()});
 			socket.close();
 		} else if(player) {
 			connection = this.connection[player.id];
 			if(!connection) {
-				console.log("Make Connection");
+				// console.log("Make Connection");
 				connection = this.connection[player.id] = new PlayerConnection(this, player);
 				this.connected.push(player.id);
 			}
-			console.log("Connect");
+			// console.log("Connect");
 			connection.on("connected", () => {
 				
 			});
 			
 			connection.connect(session, socket);
 		} else {
-			console.log("No Player");
+			// console.log("No Player");
 			socket.send({"type": "close", "code": "4", "sent": Date.now()});
 			socket.close();
 		}
@@ -702,6 +709,8 @@ class Universe extends EventEmitter {
 		// TODO: Investigate time commitment here, may need broken up to prevent bad lockups
 		state.classes = [];
 		state.fields = [];
+		state._timeline = this.timeline;
+		state._time = this.time;
 		
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
@@ -722,6 +731,7 @@ class Universe extends EventEmitter {
 						sync = sync.toJSON(); // Convert to sync format and separate object
 						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm) && !sync.attribute.no_sync) {
 							if(!player.gm && master_fields.length) {
+								delete(sync._data);
 								for(f=0; f<master_fields.length; f++) {
 									if(sync[master_fields[f]] !== undefined) {
 										delete(sync[master_fields[f]]);
@@ -786,41 +796,122 @@ class Universe extends EventEmitter {
 			return null;
 		}
 	}
+
+	/**
+	 * 
+	 * @method forwardTime
+	 * @param {Integer} increment [description]
+	 */
+	forwardTime(increment) {
+		this.toTime((this.time || 0) + increment);
+	}
 	
 	/**
 	 * 
 	 * @method toTime
 	 * @param {Integer} end [description]
 	 */
-	timeTo(end) {
-		var reverse = end < this.time;
-		this.chronicle.getOccurrences(this.time, end, (err, occurrences) => {
+	 toTime(end) {
+		var reverse = end < this.time,
+			start = this.time;
+		this.chronicle.getOccurrences(this.time, end, null, (err, occurrences) => {
 			if(err) {
-				this.emit("error", new Anomaly("universe:time:changing", "Failed to change time for universe", 50, {"time": this.time, end}, err, this));
+				this.emit("error", new Anomaly("universe:time:changing", "Failed to retrieve occurances within time period for universe", 50, {"start": this.time, "end": end}, err, this));
 			} else {
 				if(occurrences && occurrences.length) {
-					var chronicler,
+					var processing = occurrences.length,
+						chronicler,
 						occurrence,
 						process;
 					
-					process = function() {
+					process = () => {
 						occurrence = occurrences.shift();
-						chronicler = this.chronicler[occurrence.type];
-						occurrence.reverse = reverse;
-						if(chronicler) {
-							chronicler.process(this, occurrence, process);
-						} else {
-							setTimeout(process, 0);
+						if(occurrence) {
+							chronicler = this.chronicler[occurrence.type];
+							occurrence.reverse = reverse;
+							if(chronicler) {
+								chronicler.process(this, occurrence, process);
+							} else if(occurrence.emit) {
+								this.emit(occurrence.emit, occurrence);
+							}
 						}
-						if(occurrence.emit) {
-							this.emit(occurrence.emit, occurrence);
+						if(occurrences.length) {
+							setTimeout(process, 0);
+						} else {
+							// console.log("Time[" + start + " -> " + end + " @ " + processing + "]: ", {
+							// 	"timeline": this.timeline,
+							// 	"time": this.time
+							// });
+							this.emit("time:changed", {
+								"timeline": this.timeline,
+								"time": this.time
+							});
 						}
 					};
 					
 					process();
+				} else {
+					// console.log("Time[" + start + " -> " + end + "]: ", {
+					// 	"timeline": this.timeline,
+					// 	"time": this.time
+					// });
+					this.emit("time:changed", {
+						"timeline": this.timeline,
+						"time": this.time
+					});
 				}
 			}
 		});
+		this.time = end;
+		this.manager.setting.object["setting:time"].setValues({
+			"value": this.time
+		});
+		if(reverse && !this.reversing) {
+			this.reversing = true;
+			this.timeline++;
+			this.manager.setting.object["setting:timeline"].setValues({
+				"value": this.timeline
+			});
+		} else if(!reverse && this.reversing) {
+			this.reversing = false;
+		}
+	}
+
+	/**
+	 * Emitted after a `toTime` invocation has finished procsessing all occurrences that
+	 * should have been processed in the time transition.
+	 * @event time:change
+	 * @param {Integer} time 
+	 */
+
+	/**
+	 * A temporary handler to let functionality be built with decent error reporting. Reporting
+	 * using this function should later be revised and if this method is deemed appropriate, the
+	 * `handleError` method should be used instead as this method is meant to double as a `TODO`
+	 * flag for the code block.
+	 * @method generalError
+	 * @param {String} code 
+	 * @param {Error} error 
+	 * @param {String} [message] 
+	 * @param {Object} [details] 
+	 */
+	generalError(code, error, message, details) {
+		console.trace(" [!] Universe General Error Handling: " + error.message);
+		var anomaly = new Anomaly(code, message, 50, details, error);
+		this.emit("error", anomaly);
+	}
+
+	/**
+	 * 
+	 * @method handleError
+	 * @param {String} code 
+	 * @param {Error} error 
+	 * @param {String} [message]
+	 * @param {Object} [details]
+	 */
+	handleError(code, error, message, details) {
+		var anomaly = new Anomaly(code, message, 50, details, error);
+		this.emit("error", anomaly);
 	}
 }
 

@@ -28,13 +28,28 @@ rsSystem.component("dndDialogRoll", {
 		}
 	},
 	"computed": {
+		"damageTypes": function() {
+			var types = [],
+				type,
+				i;
+
+			for(i=0; i<this.universe.listing.damage_type.length; i++) {
+				type = this.universe.listing.damage_type[i];
+				if(type && !type.disabled && !type.is_preview) {
+					types.push(type);
+				}
+			}
+
+			types.sort(rsSystem.utility.sortData);
+			return types;
+		},
 		"rolling": function() {
 			var rolling = [],
 				roll,
 				keys,
 				i;
 
-			if(this.details.rolling && this.details.rolling) {
+			if(this.details.rolling) {
 				keys = Object.keys(this.details.rolling);
 				for(i=0; i<keys.length; i++) {
 					roll = this.universe.getObject(keys[i]);
@@ -44,13 +59,67 @@ rsSystem.component("dndDialogRoll", {
 					rolling.push({
 						"key": roll,
 						"formula": this.details.rolling[keys[i]],
+						"ordering": roll.ordering,
 						"computed": ""
 					});
 				}
 			}
 
+			rolling.sort(rsSystem.utility.sortData);
 			return rolling;
 		},
+		/*
+		"damages": function() {
+			var rolling = [],
+				roll,
+				keys,
+				i;
+
+			if(this.details.damage) {
+				keys = Object.keys(this.details.damage);
+				for(i=0; i<keys.length; i++) {
+					roll = this.universe.getObject(keys[i]);
+					if(!roll) {
+						roll = keys[i];
+					}
+					rolling.push({
+						"key": roll,
+						"formula": this.details.damage[keys[i]],
+						"ordering": roll.ordering,
+						"computed": ""
+					});
+				}
+			}
+
+			rolling.sort(rsSystem.utility.sortData);
+			return rolling;
+		},
+		"resists": function() {
+			var rolling = [],
+				roll,
+				keys,
+				i;
+
+			if(this.details.resist) {
+				keys = Object.keys(this.details.resist);
+				for(i=0; i<keys.length; i++) {
+					roll = this.universe.getObject(keys[i]);
+					if(!roll) {
+						roll = keys[i];
+					}
+					rolling.push({
+						"key": roll,
+						"formula": this.details.resist[keys[i]],
+						"ordering": roll.ordering,
+						"computed": ""
+					});
+				}
+			}
+
+			rolling.sort(rsSystem.utility.sortData);
+			return rolling;
+		},
+		*/
 		/**
 		 * 
 		 * Event of "dialog-open" with "dndDialogRoll" passed as the component.
@@ -98,6 +167,7 @@ rsSystem.component("dndDialogRoll", {
 			dice = [],
 			skill,
 			roll,
+			keys,
 			i;
 		
 		dice = ["d4", "d6", "d8", "d10", "d12", "d20", "d100"];
@@ -124,6 +194,7 @@ rsSystem.component("dndDialogRoll", {
 		data.die[6].icon = "fad fa-dice-d10";
 		data.statusResponse = null;
 		data.spellLevel = null;
+		data.negative = false;
 		data.tracking = null;
 		data.active = null;
 		data.target = null;
@@ -140,6 +211,55 @@ rsSystem.component("dndDialogRoll", {
 		} else {
 			data.entity = null;
 		}
+
+		if(typeof(this.details.action) === "string") {
+			Vue.set(this.details, "action", this.universe.getObject(this.details.action));
+		}
+
+		data.damages = [];
+		data.resists = [];
+		data.damageActive = {};
+		if(this.details.damage) {
+			keys = Object.keys(this.details.damage);
+			for(i=0; i<keys.length; i++) {
+				roll = this.universe.getObject(keys[i]);
+				if(!roll) {
+					roll = keys[i];
+				}
+				data.damageActive[roll.id] = true;
+				if(this.details.action && this.details.action.id === "action:damage:complete") {
+					data.damages.push({
+						"key": roll,
+						"formula": this.details.damage[keys[i]],
+						"ordering": roll.ordering,
+						"computed": this.details.damage[keys[i]]
+					});
+				} else {
+					data.damages.push({
+						"key": roll,
+						"formula": this.details.damage[keys[i]],
+						"ordering": roll.ordering,
+						"computed": ""
+					});
+				}
+				if(this.details.resist && this.details.resist[keys[i]]) {
+					data.resists.push({
+						"key": roll,
+						"formula": this.details.resist[keys[i]],
+						"ordering": roll.ordering,
+						"computed": ""
+					});
+				} else if(data.entity && data.entity.resistance && data.entity.resistance[keys[i]]) {
+					data.resists.push({
+						"key": roll,
+						"formula": data.entity.resistance[keys[i]],
+						"ordering": roll.ordering,
+						"computed": ""
+					});
+				}
+			}
+		}
+		data.damages.sort(rsSystem.utility.sortData);
 
 		data.skills = [];
 		if(this.details.skill) {
@@ -175,6 +295,10 @@ rsSystem.component("dndDialogRoll", {
 			}
 		}
 
+		if(data.skills.length === 1) {
+			data.tracking = data.skills[0];
+		}
+
 		return data;
 	},
 	"mounted": function() {
@@ -189,6 +313,38 @@ rsSystem.component("dndDialogRoll", {
 		}
 	},
 	"methods": {
+		"addDamageType": function(type) {
+			var roll;
+			this.damageActive[type.id] = true;
+			this.damages.push({
+				"key": type,
+				"formula": "",
+				"ordering": type.ordering,
+				"computed": ""
+			});
+			if(this.details.resist && this.details.resist[type.id]) {
+				roll = {
+					"key": type,
+					"formula": this.details.resist[type.id],
+					"ordering": type.ordering,
+					"computed": ""
+				};
+			} else if(this.entity.resistance && this.entity.resistance[type.id]) {
+				roll = {
+					"key": type,
+					"formula": this.entity.resistance[type.id],
+					"ordering": type.ordering,
+					"computed": ""
+				};
+			}
+			console.log("Add Damage: ", type, this.entity);
+			if(roll) {
+				this.resists.push(roll);
+				if(this.profile.auto_roll) {
+					this.rollSkill(roll);
+				}
+			}
+		},
 		"getCheckName": function() {
 			if(this.details.rolling && this.details.check_name) {
 				return this.details.check_name;
@@ -201,8 +357,8 @@ rsSystem.component("dndDialogRoll", {
 		"getFinishName": function() {
 			if(this.details.rolling && this.details.finish_name) {
 				return this.details.finish_name;
-			} else if(this.details.action) {
-				return "Perform " + this.details.action.name;
+			} else if(this.details.action && this.details.action.name) {
+				return this.details.action.name;
 			} else {
 				return "Perform Action";
 			}
@@ -270,8 +426,19 @@ rsSystem.component("dndDialogRoll", {
 		"clearTarget": function(){
 			Vue.set(this, "target", null);
 		},
-		"setTracking": function(roll) {
+		"setTracking": function(roll, negative) {
+			Vue.set(this, "negative", !!negative);
 			Vue.set(this, "tracking", roll);
+		},
+		"getTrackedClass": function(roll) {
+			var classes = "";
+			if(this.tracking === roll) {
+				classes += "tracking ";
+			}
+			if(this.negative) {
+				classes += "negative ";
+			}
+			return classes;
 		},
 		"roll": function(input) {
 			var cb = Random.identifier("cb", 10, 32);
@@ -284,11 +451,11 @@ rsSystem.component("dndDialogRoll", {
 			});
 		},
 		"autoRoll": function() {
-			if(this.rolling.length) {
-				var roll,
-					cb,
-					i;
+			var roll,
+				cb,
+				i;
 
+			if(this.rolling.length) {
 				for(i=0; i<this.rolling.length; i++) {
 					roll = this.rolling[i];
 					if(!roll.computed) {
@@ -302,6 +469,37 @@ rsSystem.component("dndDialogRoll", {
 					}
 				}
 			}
+
+			if(this.damages.length) {
+				for(i=0; i<this.damages.length; i++) {
+					roll = this.damages[i];
+					if(!roll.computed) {
+						cb = Random.identifier("roll", 10, 32);
+						Vue.set(this.waiting, cb, roll);
+						this.universe.send("roll:object", {
+							"id": this.entity.id,
+							"formula": roll.formula,
+							"cbid": cb
+						});
+					}
+				}
+			}
+
+			if(this.resists.length) {
+				for(i=0; i<this.resists.length; i++) {
+					roll = this.resists[i];
+					if(!roll.computed) {
+						cb = Random.identifier("roll", 10, 32);
+						Vue.set(this.waiting, cb, roll);
+						this.universe.send("roll:object", {
+							"id": this.entity.id,
+							"formula": roll.formula,
+							"cbid": cb
+						});
+					}
+				}
+			}
+
 			if(this.skills.length === 1) {
 				this.rollSkill(this.skills[0]);
 			}
@@ -337,21 +535,6 @@ rsSystem.component("dndDialogRoll", {
 					"advantage": advantage,
 					"cbid": cb
 				});
-				/*
-				var roll = Random.integer(20,1);
-				this.clearSkillRolls(check);
-				Vue.set(check, "computed", roll + (this.entity.skill_check[check.skill.id] || 0));
-				if(!check.dice_rolls) {
-					Vue.set(check, "dice_rolls", {});
-				}
-				if(!check.dice_rolls.d20) {
-					Vue.set(check.dice_rolls, "d20", []);
-				} else {
-					check.dice_rolls.d20.splice(0);
-				}
-				check.dice_rolls.d20.push(roll);
-				this.$forceUpdate();
-				*/
 			}
 		},
 		"sendSkill": function(check) {
@@ -396,6 +579,7 @@ rsSystem.component("dndDialogRoll", {
 					Vue.set(this.rolling[i], "computed", "");
 					Vue.set(this.rolling[i], "dice_rolls", {});
 				}
+				Vue.set(this, "active", null);
 				this.$forceUpdate();
 			}
 		},
@@ -437,9 +621,17 @@ rsSystem.component("dndDialogRoll", {
 				save;
 
 			save = roll.dice_rolls[die][index];
-			store = roll.computed - save;
+			if(this.negative) {
+				store = roll.computed + save;
+			} else {
+				store = roll.computed - save;
+			}
 			Vue.set(roll.dice_rolls[die], index, rolled);
-			Vue.set(roll, "computed", store + rolled);
+			if(this.negative) {
+				Vue.set(roll, "computed", store - rolled);
+			} else {
+				Vue.set(roll, "computed", store + rolled);
+			}
 
 			store = {
 				"computed": rolled,
@@ -478,7 +670,11 @@ rsSystem.component("dndDialogRoll", {
 				Vue.set(this, "active", store);
 				this.storage.rolls.unshift(store);
 			}
-			Vue.set(store, "computed", (store.computed || 0) + rolled);
+			if(this.negative) {
+				Vue.set(store, "computed", (store.computed || 0) - rolled);
+			} else {
+				Vue.set(store, "computed", (store.computed || 0) + rolled);
+			}
 			if(!store.dice_rolls[die.label]) {
 				Vue.set(store.dice_rolls, die.label, []);
 			}
@@ -492,18 +688,43 @@ rsSystem.component("dndDialogRoll", {
 					return -1;
 				}
 			}
+			for(i=0; i<this.damages.length; i++) {
+				if(!this.damages[i].computed && this.damages[i].computed !== 0) {
+					return -1;
+				}
+			}
+			for(i=0; i<this.resists.length; i++) {
+				if(!this.resists[i].computed && this.resists[i].computed !== 0) {
+					return -1;
+				}
+			}
 
-			if((this.skills && this.check === null && this.warn === 0) || (this.targets && this.target === null && this.warn <= 1)) {
+			if(this.details.action && this.details.action.id === "action:free:damage") {
+				return 0;
+			} else if((this.skills && this.skills.length && this.check === null && this.warn === 0) || (this.targets && this.targets.length && this.target === null && this.warn <= 1 && (!this.details.action || (this.details.action && this.details.action.targets && this.details.action.targets.length)))) {
 				return 2;
 			} else {
 				return 0;
 			}
 		},
 		"getSendResultIcon": function() {
+			switch(this.getResultState()) {
+				case -1:
+					return "fas fa-exclamation-triangle rs-lightred";
+				case 0:
+					if(this.details.action) {
+						return this.details.action.icon || "fas fa-dice";
+					} else {
+						return this.details.finish_icon || "fas fa-dice";
+					}
+				default:
+					return "fas fa-exclamation-triangle rs-lightyellow";	
+			}
+			/*
 			var i;
 			for(i=0; i<this.rolling.length; i++) {
 				if(!this.rolling[i].computed && this.rolling[i].computed !== 0) {
-					return "fas fa-exclamation-triangle rs-lightred";
+					
 				}
 			}
 
@@ -512,10 +733,11 @@ rsSystem.component("dndDialogRoll", {
 			} else if(this.targets && this.target === null && this.warn <= 1) {
 				return "fas fa-exclamation-triangle rs-lightyellow";
 			} else if(this.action) {
-				return this.action.icon || "fas fa-dice";
+				
 			} else {
 				return "fas fa-dice";
 			}
+			*/
 		},
 		"sendResults": function() {
 			var state = this.getResultState(),
@@ -525,12 +747,15 @@ rsSystem.component("dndDialogRoll", {
 			if(state > 0 && this.warn < state) {
 				Vue.set(this, "warn", this.warn + 1);
 			} else if(state < 0) {
-				console.error("Missing result data: ", _p(this.rolling));
+				console.error("Missing result data: ", _p(this.rolling), _p(this.damages), _p(this.resists));
 			} else {
 				perform = {};
 				if(this.details.action) {
 					perform.action = this.details.action.id;
 					perform.name = this.details.action.name;
+				}
+				if(this.details.activity) {
+					perform.activity = this.details.activity;
 				}
 				if(this.details.using) {
 					perform.using = this.details.using.id;
@@ -539,15 +764,35 @@ rsSystem.component("dndDialogRoll", {
 					perform.target = this.target.id;
 				}
 				if(this.check) {
-					perform.check = this.check;
+					perform.check = Object.assign({}, this.check);
+					if(perform.check.skill) {
+						perform.check.skill = perform.check.skill.id;
+					}
+					delete(perform.check.key);
 				}
 				if(this.statusResponse) {
 					perform.status = this.statusResponse;
 				}
-				perform.result = {};
-				for(i=0; i<this.rolling.length; i++) {
-					perform.result[this.rolling[i].key.id || this.rolling[i].key] = this.rolling[i].computed;
+				perform.entity = this.entity.id;
+				if(this.rolling.length) {
+					perform.result = {};
+					for(i=0; i<this.rolling.length; i++) {
+						perform.result[this.rolling[i].key.id || this.rolling[i].key] = this.rolling[i].computed;
+					}
 				}
+				if(this.damages.length) {
+					perform.damage = {};
+					for(i=0; i<this.damages.length; i++) {
+						perform.damage[this.damages[i].key.id || this.damages[i].key] = this.damages[i].computed;
+					}
+				}
+				if(this.resists.length) {
+					perform.resist = {};
+					for(i=0; i<this.resists.length; i++) {
+						perform.resist[this.resists[i].key.id || this.resists[i].key] = this.resists[i].computed;
+					}
+				}
+
 				this.universe.send("action:perform", perform);
 				if(this.details.closeAfterAction) {
 					this.closeDialog();

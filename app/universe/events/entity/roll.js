@@ -67,20 +67,52 @@ module.exports.initialize = function(universe) {
 	});
 
 	universe.on("player:action:perform", function(event) {
-		var roll = {
+		console.log("Incoming: ", event.message.data);
+
+		var perform = {
 			"type": "entity:action",
-			"outcome": event.message.data.result,
+			"activity": event.message.data.activity,
+			"result": event.message.data.result,
+			"damage": event.message.data.damage,
+			"resist": event.message.data.resist,
 			"entity": event.message.data.entity,
+			"action": event.message.data.action,
 			"target": event.message.data.target,
 			"skill": event.message.data.skill,
 			"check": event.message.data.check,
 			"item": event.message.data.using,
 			"name": event.message.data.name,
-			"recipients": universe.getMasters()
+			"player": event.player.id
 		};
 
-		universe.chronicle.addOccurrence("character:action", roll, Date.now(), null, event.player.id);
-		universe.emit("send", roll);
+		universe.emit(perform.action, perform);
+		/*
+		if(actions[perform.action]) {
+			universe.chronicle.addOccurrence("character:action", perform, Date.now(), null, event.player.id);
+			actions[perform.action](event, perform, function(err, result) {
+				if(err) {
+					universe.emit("error", new universe.Anomaly("action:perform:fault", "Error performing action for player", perform, 50, err, "roll.js"));
+				} else {
+					if(result.send) {
+						universe.emit("send", result.send);
+					}
+				}
+			});
+		}
+		*/
 	});
 
+
+	var actions = {};
+	/**
+	 * 
+	 * @event action:free:damage
+	 * @for Universe
+	 * @param {Object} event 
+	 * @param {Object} perform 
+	 * @param {Function} callback 
+	 */
+	actions["action:free:damage"] = function(event, perform, callback) {
+		
+	};
 };

@@ -5,6 +5,7 @@
 	/**
 	 *
 	 * @class Utility
+	 * @namespace rsSystem
 	 * @constructor
 	 * @static
 	 */
@@ -74,6 +75,99 @@
 					"base": base
 				});
 			}
+		},
+		/**
+		 *
+		 * @method sortData
+		 * @param a
+		 * @param b
+		 * @return {Number}
+		 */
+		"sortByID": function(a, b) {
+			if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
+				return 1;
+			} else if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
+				return -1;
+			}
+			if(a.ordering !== undefined && b.ordering !== undefined && a.ordering !== null && b.ordering !== null) {
+				if(a.ordering < b.ordering) {
+					return -1;
+				} else if(a.ordering > b.ordering) {
+					return 1;
+				}
+			}
+
+			if(a.id < b.id) {
+				return -1;
+			} else if(a.id > b.id) {
+				return 1;
+			}
+			console.error("Matching IDs Found? ", a, b);
+			return 0;
+		},
+		/**
+		 *
+		 * @method sortData
+		 * @param a
+		 * @param b
+		 * @return {Number}
+		 */
+		"sortTrueData": function(a, b) {
+			var aName,
+				bName;
+
+			if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
+				return 1;
+			} else if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
+				return -1;
+			}
+			if(a.ordering !== undefined && b.ordering !== undefined && a.ordering !== null && b.ordering !== null) {
+				if(a.ordering < b.ordering) {
+					return -1;
+				} else if(a.ordering > b.ordering) {
+					return 1;
+				}
+			}
+
+			if(a._data.name !== undefined && b._data.name !== undefined && a._data.name !== null && b._data.name !== null) {
+				aName = a._data.name.toLowerCase();
+				bName = b._data.name.toLowerCase();
+				if(aName < bName) {
+					return -1;
+				} else if(aName > bName) {
+					return 1;
+				}
+			}
+
+			if(a.updated || b.updated) {
+				if((a._data.name === undefined || a._data.name === null) && b._data.name !== undefined && b._data.name !== null) {
+					return -1;
+				}
+				if((b._data.name === undefined || b._data.name === null) && a._data.name !== undefined && a._data.name !== null) {
+					return 1;
+				}
+
+				if((a.updated === undefined || a.updated === null) && b.updated !== undefined && b.updated !== null) {
+					return -1;
+				}
+				if((b.updated === undefined || b.updated === null) && a.updated !== undefined && a.updated !== null) {
+					return 1;
+				}
+
+				if(a.updated < b.updated) {
+					return -1;
+				} else if(a.updated > b.updated) {
+					return 1;
+				}
+			}
+
+			if(a.id < b.id) {
+				return -1;
+			} else if(a.id > b.id) {
+				return 1;
+			}
+
+			return 0;
 		},
 		/**
 		 *

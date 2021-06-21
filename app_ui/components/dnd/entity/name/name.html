@@ -10,7 +10,8 @@
 		</div>
 		<div class="property-container level">
 			<button class="property" v-on:click="levelUp()">
-				Level: {{entity.level}} (+{{entity.proficiency_rating}})
+				<span v-if="!entity.is_minion">Level: {{entity.level}}</span>
+				<span>(+{{entity.proficiency_rating}})</span>
 			</button>
 		</div>
 	</div>

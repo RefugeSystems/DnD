@@ -34,7 +34,7 @@ module.exports = new (function() {
 			// Create WebSocket handler for server
 			handler = new WebSocket.Server(options);
 			handler.on("connection", function(connection, request) {
-				console.log( " [!] Websocket Server Connection");
+				// console.log( " [!] Websocket Server Connection");
 
 				if(request.session) {
 					connection.username = request.session.username;

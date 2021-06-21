@@ -1,5 +1,5 @@
 <div class="rs-component dnd-component entity-info flex v">
-	<div class="property-container health">
+	<div class="property-container health" v-if="!widget.attribute.hide_health">
 		<button class="property" v-on:click="takeDamage()">
 			<span class="icon fas fa-heartbeat"></span>
 			<span>
@@ -9,13 +9,13 @@
 			</span>
 		</button>
 	</div>
-	<div class="property-container armor">
+	<div class="property-container armor" v-if="!widget.attribute.hide_armor">
 		<div class="property">
 			<span class="icon fas fa-shield"></span>
 			<span>{{entity.armor}}</span>
 		</div>
 	</div>
-	<div class="property-container gold">
+	<div class="property-container gold" v-if="!widget.attribute.hide_gold">
 		<button class="property" v-on:click="transferGold()">
 			<span class="icon fas fa-coins"></span>
 			<span>
@@ -27,7 +27,7 @@
 			</span>
 		</button>
 	</div>
-	<div class="property-container hitdice">
+	<div class="property-container hitdice" v-if="!widget.attribute.hide_hit_dice">
 		<button class="property" v-on:click="useHitDice()">
 			<span class="icon fas fa-dice"></span>
 			<span>{{totalHitDice}}</span>

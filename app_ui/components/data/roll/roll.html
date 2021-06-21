@@ -1,0 +1,8 @@
+<div class="rs-component rs-roll">
+	<input v-model="result" />
+	<div class="actions flex h nowrap">
+
+		<slot name="actions" :roll="roll">
+		</slot>
+	</div>
+</div>

@@ -66,6 +66,12 @@ rsSystem.component("DNDWidgetCore", {
 				} else if(this.widget.attribute.right) {
 					this.$el.classList.add("widget_right");
 				}
+				if(this.widget.attribute.min_height) {
+					$(this.$el).css({"min-height": this.widget.attribute.min_height});
+				}
+				if(this.widget.attribute.classing) {
+					this.$el.classList.add(this.widget.attribute.classing);
+				}
 			}
 			if(this.widget.attribute && this.widget.attribute.height) {
 				$(this.$el).css({"height": this.widget.attribute.height});
@@ -111,7 +117,8 @@ rsSystem.component("DNDWidgetCore", {
 				"rolling": rolling
 			});
 		},
-		"sortData": rsSystem.utility.sortData
+		"sortData": rsSystem.utility.sortData,
+		"noOp": function() {}
 	},
 	"beforeDestroy": function() {
 		/*

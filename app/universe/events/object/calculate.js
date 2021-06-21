@@ -71,27 +71,38 @@ module.exports.initialize = function(universe) {
 					"error": err,
 					"anchored": true
 				});
-			} else if(object && (event.player.gm || object.owned[event.player.id])) {
-				// universe.calculator.debug(true);
-				rolled = universe.calculator.computedDiceRoll(formula, object, referenced, undefined, dice, event.message.data.advantage);
-				// universe.calculator.debug(false);
-				// console.log("Roll[" + formula + "]: ", rolled);
-				universe.emit("send", {
-					"type": "roll",
-					"recipient": event.player.id,
-					"computed": rolled,
-					"formula": formula,
-					"referenced": referenced,
-					"dice_rolls": dice,
-					"callback_id": cbid
-				});
+			} else if(object) {
+				if(event.player.gm || object.owned[event.player.id]) {
+					// universe.calculator.debug(true);
+					rolled = universe.calculator.computedDiceRoll(formula, object, referenced, undefined, dice, event.message.data.advantage);
+					// universe.calculator.debug(false);
+					// console.log("Roll[" + formula + "]: ", rolled);
+					universe.emit("send", {
+						"type": "roll",
+						"recipient": event.player.id,
+						"computed": rolled,
+						"formula": formula,
+						"referenced": referenced,
+						"dice_rolls": dice,
+						"callback_id": cbid
+					});
+				} else {
+					universe.emit("send", {
+						"type": "notice",
+						"mid": "access:alert",
+						"recipients": universe.getMasters(),
+						"message": event.player.name + "(" + event.player.id + ") attempted roll against " + event.message.data.id,
+						"icon": "fas fa-exclamation-triangle rs-lightyellow",
+						"anchored": true
+					});
+				}
 			} else {
 				universe.emit("send", {
 					"type": "notice",
 					"mid": "access:alert",
 					"recipients": universe.getMasters(),
-					"message": event.player.name + "(" + event.player.id + ") attempted roll against " + event.message.data.id,
-					"icon": "fas fa-sync fa-spin",
+					"message": "Object not found " + event.message.data.id,
+					"icon": "fas fa-exclamation-triangle rs-lightyellow",
 					"anchored": true
 				});
 			}

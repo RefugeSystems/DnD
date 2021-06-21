@@ -49,7 +49,33 @@ rsSystem.component("dndEntityInfo", {
 	},
 	"methods": {
 		"takeDamage": function() {
+			var rolling = {},
+				action = this.universe.index.action["action:free:damage"],
+				resist = Object.assign({}, this.entity.resistance),
+				damage,
+				i;
 
+			/*
+			for(i=0; i<this.universe.listing.damage_type.length; i++) {
+				damage = this.universe.listing.damage_type[i];
+				if(damage && !damage.disabled && !damage.is_preview) {
+					rolling[damage.id] = "";
+				}
+				if(this.entity.resistance && this.entity.resistance[damage.id]) {
+					resist[damage.id] = this.entity.resistance[damage.id];
+				}
+			}
+			*/
+
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"damage": rolling,
+				"resist": resist,
+				"action": action,
+				"closeAfterAction": true
+			});
 		},
 		"transferGold": function() {
 

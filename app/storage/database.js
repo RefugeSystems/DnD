@@ -235,8 +235,8 @@ mapping._toObject = function(fields, write, create) {
 	return mapped;
 };
 
-var fieldColumns = ["name", "description", "ordering", "inheritance", "inheritable", "classes", "type", "obscured", "displayed_as", "attribute"],
-	classColumns = ["name", "description", "fields", "attribute"],
+var fieldColumns = ["name", "icon", "description", "ordering", "inheritance", "inheritable", "classes", "type", "obscured", "displayed_as", "attribute"],
+	classColumns = ["name", "icon", "description", "fields", "attribute"],
 	validClassIdentifier = new RegExp("^[a-z][a-z0-9_]+$"),
 	RSObject,
 	RSField;
@@ -314,7 +314,7 @@ class RSDatabase extends EventEmitter {
 					if(err) {
 						if(err.message && err.message.indexOf("no such table") !== -1) {
 							this.connection
-							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, description text, ordering integer, displayed_as text, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
+							.run("create table rsfield (id text NOT NULL PRIMARY KEY, name text, icon text, description text, ordering integer, displayed_as text, inheritance text, inheritable text, classes text, obscured boolean, type text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
 								if(err) {
 									fail(err);
 								} else {
@@ -339,7 +339,7 @@ class RSDatabase extends EventEmitter {
 					if(err) {
 						if(err.message && err.message.indexOf("no such table") !== -1) {
 							this.connection
-							.run("create table rsclass (id text NOT NULL PRIMARY KEY, name text, description text, fields text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
+							.run("create table rsclass (id text NOT NULL PRIMARY KEY, name text, icon text, description text, fields text, attribute text, updated bigint, created bigint);", emptyArray, (err) => {
 								if(err) {
 									fail(err);
 								} else {
@@ -709,6 +709,12 @@ class ClassManager extends EventEmitter {
 		this.name = specification.name;
 		/**
 		 *
+		 * @property icon
+		 * @type String
+		 */
+		this.icon = specification.icon;
+		/**
+		 *
 		 * @property description
 		 * @type String
 		 */
@@ -795,7 +801,7 @@ class ClassManager extends EventEmitter {
 		}
 		
 		var reference = this;
-		this.computeFieldProperties = function() {
+		this.computeFieldProperties = () => {
 			reference.inheritableFields.splice(0);
 			var loading,
 				x;

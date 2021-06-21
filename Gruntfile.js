@@ -106,6 +106,7 @@ var config = {
 				"_p",
 
 				"RSCalculator",
+				"RSCalendar",
 				"RSChatCore",
 				"RSUniverse",
 				"RSObject",

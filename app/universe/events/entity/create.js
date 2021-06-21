@@ -21,6 +21,8 @@
  * @param {String} event.message.data.description In markdown text
  * @param {String} event.message.data.icon CSS Classing, not typically specified here, possibly slated for inheritance from race
  * @param {String} event.message.data.gender Simply naming the gender; "Male", "Female", "Non-Binary", "Agender"
+ * @param {Number} event.message.data.height 
+ * @param {Number} event.message.data.weight 
  * @param {String} event.message.data.race ID
  * @param {String} event.message.data.alignment ID
  * @param {Object} event.message.data.skill_proficiency Mapping IDs to 0 or 1
@@ -52,6 +54,8 @@ var keys = [
 	"icon",
 	"gender",
 	"race",
+	"height",
+	"weight",
 	"nickname",
 	"alignment",
 	"archetypes",
@@ -104,8 +108,8 @@ module.exports.initialize = function(universe) {
 		details.gold = 0;
 		details.level = 1;
 
-		copyFeats(universe, event, source, details)
-		.then(makeCharacter)
+		makeCharacter(universe, event, source, details)
+		.then(copyFeats)
 		.then(addPicture)
 		.then(addPortrait)
 		.then(finish)
@@ -113,54 +117,19 @@ module.exports.initialize = function(universe) {
 	});
 };
 
-var copyFeats = function(universe, event, source, details) {
-	return new Promise(function(done, fail) {
-		var errors = [],
-			data = {},
-			mask = {},
-			count = 0,
-			collect,
-			i;
+var makeCharacter = function(universe, event, source, details) {
+	var data = {};
+	data.universe = universe;
+	data.details = details;
+	data.source = source;
+	data.event = event;
+	data.sets = {};
+	
+	// Setup Archetype Level Tracking
+	data.archetype = universe.get(details.archetypes[0]);
+	details.level_archetype = {};
+	details.level_archetype[data.archetype] = 1;
 
-		mask.acquired = universe.time;
-
-		data.universe = universe;
-		data.details = details;
-		data.source = source;
-		data.event = event;
-		data.sets = {};
-
-		collect = function(err, feat) {
-			if(err) {
-				// TODO: Handle
-				console.error("Feat Copy Error: ", err);
-				errors.push(err);
-			} else {
-				var index = data.details.feats.indexOf(feat.parent);
-				if(index === -1) {
-					// TODO: Error - But should be impossible
-					console.error(" [!] No Index for copied Feat?");
-				} else {
-					data.details.feats[index] = feat.id;
-				}
-			}
-			count++;
-			if(count === data.details.feats.length) {
-				done(data);
-			}
-		};
-
-		if(data.details.feats.length) {
-			for(i=0; i<data.details.feats.length; i++) {
-				universe.copy(data.details.feats[i], mask, collect);
-			}
-		} else {
-			done(data);
-		}
-	});
-};
-
-var makeCharacter = function(data) {
 	return new Promise(function(done, fail) {
 		data.universe.createObject(data.details, function(err, character) {
 			if(err) {
@@ -170,6 +139,53 @@ var makeCharacter = function(data) {
 				done(data);
 			}
 		});
+	});
+};
+
+var copyFeats = function(data) {
+	return new Promise(function(done, fail) {
+		var errors = [],
+			mask = {},
+			count = 0,
+			collect,
+			i;
+
+		if(data.details.feats) {
+			mask.acquired = data.universe.time;
+			mask.user = data.character.id;
+			data.set.feats = [];
+
+			collect = function(err, feat) {
+				if(err) {
+					// TODO: Improve Handling
+					console.error("Feat Copy Error: ", err);
+					data.universe.generalError("universe:character:create", err, "While copying Feats");
+					errors.push(err);
+				} else {
+					var index = data.details.feats.indexOf(feat.parent);
+					if(index === -1) {
+						console.error(" [!] No Index for copied Feat?");
+						data.universe.handleError("universe:character:create", null, "Copied an feat not in array", {"source": data.details.feats, "copy": feat.id, "parent": feat.parent, "entity": data.character.id});
+					} else {
+						data.set.feats.push(feat.id);
+					}
+				}
+				count++;
+				if(count === data.details.feats.length) {
+					done(data);
+				}
+			};
+
+			if(data.details.feats.length) {
+				for(i=0; i<data.details.feats.length; i++) {
+					data.universe.copy(data.details.feats[i], mask, collect);
+				}
+			} else {
+				done(data);
+			}
+		} else {
+			done();
+		}
 	});
 };
 
@@ -206,7 +222,7 @@ var addPortrait = function(data) {
 			details.id = Random.identifier("image", 10, 32).toLowerCase() + ":" + details.id;
 			details.content_type = typeShort[parsed.content_type] || parsed.content_type || "image/jpeg";
 			details.data = data.source.portrait;
-			details.name = (data.details.name || data.details.id || "Anonymous") + " (Picture)";
+			details.name = (data.details.name || data.details.id || "Anonymous") + " (Portrait)";
 			details.description = "Uploaded portrait for " + data.details.name + " ( " + data.details.id + " )";
 			data.universe.createObject(details, function(err, image) {
 				if(err) {

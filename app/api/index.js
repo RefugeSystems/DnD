@@ -260,15 +260,15 @@ class APIController extends EventEmitter {
 		return new Promise((done, fail) => {
 			var session = this.universe.manager.session.object[id],
 				now = Date.now();
-			console.log("Get Session: " + id);
+			// console.log("Get Session: " + id);
 			if(session) {
 				if(now < session.last + session.expiry) {
-					console.log(" > Session Valid: " + id);
+					// console.log(" > Session Valid: " + id);
 					now = {
 						"last": now
 					};
 					session.setValues(now, (err) => {
-						console.log(" > Session Updated: ", err);
+						// console.log(" > Session Updated: ", err);
 						if(err) {
 							fail(err);
 						} else {
@@ -276,11 +276,11 @@ class APIController extends EventEmitter {
 						}
 					});
 				} else {
-					console.log(" > Session Expired: " + id);
+					// console.log(" > Session Expired: " + id);
 					fail(new Error("Expired Session"));
 				}
 			} else {
-				console.log(" > Session Not Found: " + id);
+				// console.log(" > Session Not Found: " + id);
 				fail(new Error("No Session"));
 			}
 		});

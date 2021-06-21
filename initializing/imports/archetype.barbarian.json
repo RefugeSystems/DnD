@@ -9,8 +9,7 @@
 				"d12": 1
 			},
 			"feats": [
-				"feat:unarmoreddefense",
-				"feat:rage"
+				"feat:unarmoreddefense"
 			],
 			"playable": true,
 			"proficiencies": [
@@ -39,6 +38,13 @@
 					"skill:nature",
 					"skill:perception",
 					"skill:survival"
+				]
+			}, {
+				"name": "Barbarian Rage",
+				"field": "feats",
+				"limit": 1,
+				"choices": [
+					"feat:rage"
 				]
 			}],
 			"skill_proficiency": {

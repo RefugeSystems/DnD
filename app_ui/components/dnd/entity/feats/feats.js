@@ -9,8 +9,7 @@
 rsSystem.component("dndEntityFeats", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController,
-		rsSystem.components.DNDCore
+		rsSystem.components.DNDWidgetCore
 	],
 	"props": {
 		"entity": {
@@ -24,6 +23,29 @@ rsSystem.component("dndEntityFeats", {
 			}
 		}
 	},
+	"computed": {
+		"feats": function() {
+			var feats = {},
+				feat,
+				i;
+
+			feats.hidden = [];
+			feats.shown = [];
+
+			for(i=0; i<this.entity.feats.length; i++) {
+				feat = this.universe.index.feat[this.entity.feats[i]];
+				if(feat) {
+					if(this.storage && this.storage.hide && this.storage.hide[feat.id]) {
+						feats.hidden.push(feat);
+					} else if(!feat.concealed) {
+						feats.shown.push(feat);
+					}
+				}
+			}
+
+			return feats;
+		}
+	},
 	"data": function() {
 		var data = {};
 
@@ -31,20 +53,17 @@ rsSystem.component("dndEntityFeats", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-
-		this.$el.onclick = (event) => {
-			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
-				rsSystem.EventBus.$emit("display-info", {
-					"record": follow,
-					"base": this.viewing
-				});
-				event.stopPropagation();
-				event.preventDefault();
-			}
-		};
+		if(!this.storage.hide) {
+			Vue.set(this.storage, "hide", {});
+		}
 	},
 	"methods": {
+		"toggleHide": function(feat) {
+			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);
+		},
+		"toggleHidden": function() {
+			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
+		}
 	},
 	"beforeDestroy": function() {
 		/*

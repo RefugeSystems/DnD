@@ -94,7 +94,6 @@ class RSUniverse extends EventEmitter {
 		this.metrics.sync = 0;
 		this.metrics.last = 0;
 		
-		
 		this.state = {};
 		this.state.loaded = false;
 		this.state.initialized = false;
@@ -107,11 +106,35 @@ class RSUniverse extends EventEmitter {
 		this._noBuffer = {};
 		this._noBuffer.ping = true;
 		
+		this.calendar = new rsSystem.Calendar(this);
+		// TODO: Abstract calendar
+		this.calendar.nameMonths([
+			"Alucevum",
+			"Vaknaevum",
+			"Borgevum",
+			"Skaparvum",
+			"Umqavum",
+			"Comiaevum",
+			"Unkulevum",
+			"Dormevum"
+		]);
+		this.calendar.nameDays([
+			"Horallum",
+			"Horaneskja",
+			"Horantono",
+			"Horavis",
+			"Horanquil",
+			"Horakkir"
+		]);
+		this.calendar.setDays([25]);
+
 		this.index = {};
 		
 		this.named = {};
 		
 		this.listing = {};
+
+		this.profile = {};
 		
 		rsSystem.EventBus.$on("universe-reconnect", () => {
 			if(!this.connection.socket) {
@@ -123,8 +146,10 @@ class RSUniverse extends EventEmitter {
 		
 		this.processEvent = {};
 		
-		
-		
+		this.processEvent["time:changed"] = (event) => {
+			Vue.set(this, "time", event.data.time);
+			this.$emit("time:changed", event.data.time);
+		};
 		this.processEvent["unload"] = (event) => {
 			console.warn("Unload Data: ", event);
 			var classification = event.data.classification,
@@ -149,18 +174,30 @@ class RSUniverse extends EventEmitter {
 				"icon": event.data.icon || "fas fa-exclamation-triangle rs-lightgreen",
 				"event": event,
 				"timeout": event.data.timeout,
-				"anchored": event.data.anchored
+				"anchored": event.data.anchored,
+				"emission": event.data.emission
+			});
+		};
+		this.processEvent["dismiss-message"] = (event) => {
+			console.log("Dismiss: ", event.data);
+			this.$emit("dismiss-message", {
+				"id": event.data.mid
 			});
 		};
 		this.processEvent["log"] = (event) => {
-			this.$emit("notification", {
-				"id": "universe:log",
+			var notice = {
 				"message": event.data.message || event.data.msg,
 				"icon": event.data.level >= 50?"fas fa-exclamation-triangle rs-lightred":(event.data.level >= 40?"fas fa-exclamation-triangle rs-lightyellow":"fas fa-exclamation-triangle rs-lightgreen"),
 				"event": event,
 				"timeout": event.data.level < 40?10000:null,
 				"anchored": event.data.level >= 40
-			});
+			};
+
+			if(this.profile && this.profile.collapse_system_alerts) {
+				notice.id = "universe:log";
+			}
+
+			this.$emit("notification", notice);
 		};
 		this.processEvent["system-warning"] = (event) => {
 			this.$emit("notification", {
@@ -169,7 +206,8 @@ class RSUniverse extends EventEmitter {
 				"icon": event.data.icon || "fas fa-exclamation-triangle rs-yellow",
 				"event": event,
 				"timeout": event.data.timeout,
-				"anchored": event.data.anchored
+				"anchored": event.data.anchored,
+				"emission": event.data.emission
 			});
 		};
 		this.processEvent["system-exception"] = (event) => {
@@ -179,7 +217,8 @@ class RSUniverse extends EventEmitter {
 				"icon": event.data.icon || "fas fa-exclamation-triangle rs-lightred",
 				"event": event,
 				"timeout": event.data.timeout,
-				"anchored": event.data.anchored
+				"anchored": event.data.anchored,
+				"emission": event.data.emission
 			});
 		};
 		this.processEvent["account:updated"] = (event) => {
@@ -188,7 +227,8 @@ class RSUniverse extends EventEmitter {
 				"message": "Account Updated",
 				"icon": "fas fa-exclamation-triangle rs-lightgreen",
 				"event": event,
-				"timeout": 10000
+				"timeout": 10000,
+				"emission": event.data.emission
 			});
 		};
 		this.processEvent["account:update:errors"] = (event) => {
@@ -198,7 +238,8 @@ class RSUniverse extends EventEmitter {
 				"message": "Account Update Failed",
 				"icon": "fas fa-exclamation-triangle rs-lightred",
 				"event": event,
-				"timeout": 10000
+				"timeout": 10000,
+				"emission": event.data.emission
 			});
 		};
 		
@@ -248,17 +289,25 @@ class RSUniverse extends EventEmitter {
 				// console.log("Sync: ", event);
 				this.state.loaded = true; // Set early to not delay receiveDelta
 				for(i=0; i<classes.length; i++) {
-					if(!this.index[classes[i]]) {
-						Vue.set(this.listing, classes[i], []); // event.data[classes[i]]);
-						Vue.set(this.index, classes[i], {});
-					}
-					for(j=0; j<event.data[classes[i]].length; j++) {
-						this.receiveDelta(event.sent, classes[i], event.data[classes[i]][j].id, event.data[classes[i]][j]);
+					if(classes[i][0] !== "_") {
+						if(!this.index[classes[i]]) {
+							Vue.set(this.listing, classes[i], []); // event.data[classes[i]]);
+							Vue.set(this.index, classes[i], {});
+						}
+						for(j=0; j<event.data[classes[i]].length; j++) {
+							this.receiveDelta(event.sent, classes[i], event.data[classes[i]][j].id, event.data[classes[i]][j]);
+						}
 					}
 				}
 				
 				Vue.set(this.metrics, "sync", event.sent);
+				Vue.set(this, "timeline", event.data._timeline);
+				Vue.set(this, "time", event.data._time);
 				Vue.set(this, "players", event.players);
+				this.$emit("time:changed", {
+					"timeline": event.data._timeline,
+					"time": event.data._time
+				});
 				this.cacheData();
 				// localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 				// localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
@@ -315,6 +364,12 @@ class RSUniverse extends EventEmitter {
 		} catch(abort) {
 			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
 			Vue.set(this.metrics, "sync", 0);
+		}
+	}
+
+	setProfile(profile) {
+		if(profile) {
+			this.profile = profile;
 		}
 	}
 
@@ -639,7 +694,7 @@ class RSUniverse extends EventEmitter {
 					if(this.processEvent[message.type]) {
 						this.processEvent[message.type](message);
 					} else {
-						this.$emit(message.type + ":complete", message.event);
+						this.$emit(message.type, message.event);
 					}
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);

@@ -14,7 +14,7 @@
 	</div>
 	<div class="player-entity column">
 		<div class="column-content">
-			<dnd-entity-summary v-for="entity in minions" :entity="entity" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'_dndeoc:' + entity.id" :key="entity.id" />
+			<dnd-entity-overview v-for="entity in minions" :entity="entity" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'_dndeoc:' + entity.id" :key="entity.id" />
 		</div>
 	</div>
 	<div class="player-entity column" v-for="entity in entities">

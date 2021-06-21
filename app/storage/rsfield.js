@@ -42,6 +42,12 @@ class RSField extends EventEmitter {
 		 */
 		this.name = specification.name;
 		/**
+		 * CSS Classing for the icon associated with this field.
+		 * @property icon
+		 * @type String
+		 */
+		this.icon = specification.icon;
+		/**
 		 * Why this field exists and how its used. As fields are consistent across
 		 * all classes, a description of what the field is used for is key to upkeep.
 		 * @property description

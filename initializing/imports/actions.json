@@ -1,5 +1,11 @@
 {
     "import": [{
+			"id": "action:free:damage",
+			"name": "Take Damage",
+			"description": "Take damage",
+			"icon": "fas fa-heartbeat",
+			"attribute": {}
+		}, {
 			"id": "action:movement:move",
 			"name": "Move",
 			"action_cost": {
@@ -63,6 +69,13 @@
 			"icon": "game-icon game-icon-handcuffed",
 			"attribute": {}
 		}, {
+			"id": "action:damage:complete",
+			"name": "Take Damage",
+			"action_cost": {},
+			"description": "You are taking damage.",
+			"icon": "game-icon game-icon-bleeding-wound",
+			"attribute": {}
+		}, {
 			"id": "action:movement:improvised",
 			"name": "Improvised",
 			"action_cost": {
@@ -77,7 +90,7 @@
 			"action_cost": {
 				"main": -1
 			},
-			"skils": ["skill:mainhand"],
+			"skills": ["skill:mainhand"],
 			"description": "Make an ${Attack Roll}$ against a target to deal damage. In some cases you can attempt non-lethal damage or to target a specific body part, but this will make the attack much more difficult (Generally +5 to the Target's AC).",
 			"icon": "game-icon game-icon-wave-strike",
 			"attribute": {}
@@ -96,7 +109,7 @@
 			"action_cost": {
 				"main": -1
 			},
-			"skils": ["skill:stealth"],
+			"skills": ["skill:stealth"],
 			"description": "Attempt to duck away from sight so that people aren't aware of you.",
 			"icon": "fas fa-eye-slash",
 			"attribute": {}
@@ -142,7 +155,7 @@
 			"action_cost": {
 				"main": -1
 			},
-			"skils": ["skill:athletics"],
+			"skills": ["skill:athletics"],
 			"description": "When you want to grab a creature or wrestle with it, you can replace one of your ${Attack Action}$s to grapple. Your target can be up to 1 size larger, within melee, and you mysh have at least one free hand. You perform an ${Athletics}$ check against your target's ${Athletics}$ or ${Acrobatics}$ check. Once ${Grappled}$, the target can perform either check as an ${Action}$ to attempt to break free.",
 			"icon": "game-icon game-icon-grab",
 			"attribute": {}
@@ -152,7 +165,7 @@
 			"action_cost": {
 				"main": -1
 			},
-			"skils": ["skill:athletics"],
+			"skills": ["skill:athletics"],
 			"description": "Perform an ${Atheletics}$ check to attempt to push a creature or an object. If a creature is targeted and resistant, a ${Melee Attack}$ may need rolled.",
 			"icon": "game-icon game-icon-push",
 			"attribute": {}
@@ -162,7 +175,7 @@
 			"action_cost": {
 				"main": -1
 			},
-			"skils": ["skill:mainhand"],
+			"skills": ["skill:mainhand"],
 			"description": "If you opt to ${Attack}$ you may instead attack twice with your main weapon instead of once.",
 			"icon": "game-icon game-icon-saber-slash",
 			"attribute": {}
@@ -199,7 +212,7 @@
 			"action_cost": {
 				"bonus": -1
 			},
-			"skils": ["skill:offhand"],
+			"skills": ["skill:offhand"],
 			"description": "You may attack with your off-hand weapon.",
 			"icon": "game-icon game-icon-saber-slash",
 			"attribute": {}
@@ -236,7 +249,7 @@
 			"action_cost": {
 				"reaction": -1
 			},
-			"skils": ["skill:mainhand"],
+			"skills": ["skill:mainhand"],
 			"description": "If a creature you wish to strike leaves your ${Threat Radius}$ without disengaging or other special circumstances then you may use your ${Reaction}$ to perform an ${Attack}$ against that creature.",
 			"icon": "game-icon game-icon-quick-slash",
 			"attribute": {}
@@ -293,7 +306,7 @@
 			"action_cost": {
 				"main": -1
 			},
-			"skils": ["skill:athletics", "skill:acrobatics"],
+			"skills": ["skill:athletics", "skill:acrobatics"],
 			"attribute": {}
 		}
     ]

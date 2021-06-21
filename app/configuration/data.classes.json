@@ -6,12 +6,12 @@
 		"fields": ["parent", "name", "icon", "description", "time", "associations", "is_preview", "attribute"]
 	}, {
 		"id": "meeting",
-		"name": "Meeting",
+		"name": "Session",
 		"description": "Stores data for a game meeting",
-		"fields": ["parent", "name", "description", "time", "date", "players", "absent", "entities", "is_preview", "attribute"]
+		"fields": ["parent", "name", "description", "time", "time_end", "date", "players", "absent", "entities", "is_preview", "attribute"]
 	}, {
 		"id": "dataset",
-		"name": "dataset",
+		"name": "Dataset",
 		"description": "Collections of data, usual for randomization/generation purposes",
 		"fields": ["parent", "name", "icon", "root", "spacing", "limited", "ordering", "next", "description", "disabled", "value", "is_preview", "attribute"]
 	}, {
@@ -38,17 +38,22 @@
 		"id": "dashboard",
 		"name": "Dashboard",
 		"description": "Describes the layout of widgets on a Dashboard",
-		"fields": ["parent", "name", "description", "default_value", "is_preview", "attribute", "widgets", "owned"]
+		"fields": ["parent", "name", "description", "concealed", "default_value", "is_preview", "attribute", "widgets", "owned"]
 	}, {
 		"id": "widget",
 		"name": "Widget",
 		"description": "Describes a widget available in the UI. The attributes specify available values for configuration and offer a string on field usage or an array of options.",
 		"fields": ["parent", "name", "icon", "component", "description", "disabled", "is_preview", "cell_width", "attribute"]
 	}, {
+		"id": "weather",
+		"name": "Weather",
+		"description": "Temporary environmental effects of a location.",
+		"fields": ["parent", "name", "icon", "effects", "disabled", "is_preview", "attribute"]
+	}, {
 		"id": "party",
 		"name": "Party",
 		"description": "Group of entities.",
-		"fields": ["parent", "name", "description", "tracked_timing", "tracked_time", "disabled", "entities", "is_preview", "attribute"]
+		"fields": ["parent", "icon", "symbol", "name", "description", "tracked_timing", "tracked_time", "disabled", "entities", "is_preview", "attribute"]
 	}, {
 		"id": "slot",
 		"name": "Slot",
@@ -68,12 +73,12 @@
 		"id": "entity",
 		"name": "Entity",
 		"description": "Generally a kind of living or interactable object within the Universe.",
-		"fields": ["parent", "name", "nickname", "profile", "portrait", "picture", "is_npc", "damage", "tracked_timing", "tracked_time", "dashboard", "concealed", "death_save", "death_fail", "ordering", "obscured", "mobility", "proficiency_rating", "feats", "hp_rolled", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "played_by", "gender", "gold", "race", "armor", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "archetype_level", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "notes", "slots_remaining", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "is_minion", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "nickname", "profile", "height", "age", "respond", "god", "concentrations", "backstory", "critical", "concentration_max", "portrait", "picture", "is_npc", "damage", "resistance", "tracked_timing", "tracked_time", "dashboard", "concealed", "death_save", "death_fail", "ordering", "obscured", "mobility", "proficiency_rating", "feats", "hp_rolled", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "played_by", "gender", "gold", "race", "armor", "warlock_slots", "warlock_slots_max", "warlock_slots_level", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "must_know", "state", "alignment", "spells", "size", "description", "types", "score", "location", "threat", "actions", "encumberance", "encumberance_max", "weight", "weight_max", "owned", "equipped", "attune_max", "level", "action_count", "action_max", "level_archetype", "archetype_history", "hp", "hp_temp", "hp_max", "equip_slots", "spell_slots", "spell_slot_max", "knowledges", "knowledge_matrix", "titles", "history", "notes", "slots_remaining", "main_weapon", "point_pool", "inventory", "strength", "population", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "skills", "skill_check", "effects", "movement_ground", "movement_swim", "movement_fly", "archetypes", "skill_advantage", "skill_disadvantage", "conditionals", "loyal_to", "contains", "operation_start", "operation_time", "attunements", "skill_proficiency", "proficiencies", "is_minion", "is_preview", "attribute"]
 	}, {
 		"id": "spell",
 		"name": "Spell",
 		"description": "Spell",
-		"fields": ["parent", "name", "icon", "acquired", "description", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_type", "cast_with", "cast_save", "duration", "archetypes", "ritual", "user", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "acquired", "description", "concentration", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_type", "cast_with", "cast_save", "duration", "archetypes", "ritual", "user", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items", "is_preview", "attribute"]
 	}, {
 		"id": "archetype",
 		"name": "Class",
@@ -88,7 +93,7 @@
 		"id": "effect",
 		"name": "Effect",
 		"description": "An effect on an object. Expiration is tracked via chronicle. These may subtract slots directly, or add through conditionals.",
-		"fields": ["parent", "name", "icon", "acquired", "description", "obscured", "skill_check", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "debuff", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "acquired", "description", "expiration", "obscured", "concealed", "respond", "skill_check", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "debuff", "spells_maximum", "cantrips_maximum", "potency", "spell_dc", "spell_attack", "score", "skills", "actions", "strength", "range_minimum", "range_normal", "range_maximum", "dexterity", "movement_ground", "movement_swim", "movement_fly", "skill_advantage", "skill_disadvantage", "constitution", "intelligence", "skill_proficiency", "proficiencies", "wisdom", "charisma", "threat", "spells", "damage", "action_max", "resistance", "hp_max", "attune_max", "spell_slot_max", "equip_slots", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "race",
 		"name": "Race",
@@ -118,7 +123,7 @@
 		"id": "feat",
 		"name": "Feat",
 		"description": "An inherant feature of this object that improves or diminishes this object",
-		"fields": ["parent", "name", "icon", "acquired", "description", "obscured", "mobility", "featbg", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "selectable", "pool_gain", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "action_max", "hp_max", "movement_ground", "movement_swim", "movement_fly", "spells", "skills", "skill_advantage", "skill_disadvantage", "recharges_on", "actions", "skill_proficiency", "proficiencies", "resistance", "damage", "score", "threat", "charges", "recharges_at_short", "recharges_at_long", "recharges_after", "spell_slot_max", "attune_max", "recharging", "conditionals", "selection", "effects", "user", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "acquired", "description", "obscured", "mobility", "respond", "featbg", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "selectable", "pool_gain", "disabled", "spells_maximum", "cantrips_maximum", "spell_dc", "spell_attack", "action_max", "hp_max", "movement_ground", "movement_swim", "movement_fly", "spells", "skills", "skill_advantage", "skill_disadvantage", "recharges_on", "actions", "skill_proficiency", "proficiencies", "resistance", "damage", "score", "threat", "charges", "charges_max", "recharges_at_short", "recharges_at_long", "recharges_after", "spell_slot_max", "attune_max", "recharging", "conditionals", "selection", "effects", "user", "is_preview", "attribute"]
 	}, {
 		"id": "skill",
 		"name": "Skill",
@@ -133,17 +138,27 @@
 		"id": "damage_type",
 		"name": "Damage Type",
 		"description": "A form of damage that can occur",
-		"fields": ["parent", "name", "icon", "description", "disabled", "is_preview", "attribute"]
+		"fields": ["parent", "name", "icon", "description", "ordering", "disabled", "is_preview", "attribute"]
+	}, {
+		"id": "stat",
+		"name": "Primary Stat",
+		"description": "A primary stat for an entity",
+		"fields": ["parent", "name", "icon", "stat", "description", "disabled", "is_preview", "attribute"]
 	}, {
 		"id": "item",
 		"name": "Item",
 		"description": "An item used by entities",
-		"fields": ["parent", "name", "description", "acquired", "icon", "price", "mobility", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "inventory", "gold", "armor", "profile", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "skill_advantage", "skill_disadvantage", "conditionals", "is_preview", "attribute"]
+		"fields": ["parent", "name", "description", "backstory", "acquired", "icon", "price", "mobility", "respond", "god", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "inventory", "gold", "armor", "profile", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "charges_max", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "skill_advantage", "skill_disadvantage", "duration", "conditionals", "is_preview", "attribute"]
 	}, {
 		"id": "knowledge",
 		"name": "Knowledge",
 		"description": "Knowledge held by an entity in the universe.",
 		"fields": ["parent", "name", "description", "acquired", "concealed", "icon", "category", "spells_maximum", "feats", "cantrips_maximum", "spell_dc", "spell_attack", "state", "skills", "actions", "spells", "screen", "spell_slot_max", "skill_advantage", "skill_disadvantage", "associations", "skill_check", "skill_proficiency", "proficiencies", "knowns", "effects", "conditionals", "is_preview", "attribute"]
+	}, {
+		"id": "skirmish",
+		"name": "Skirmish",
+		"description": "A fight.",
+		"fields": ["parent", "name", "description", "icon", "category", "events", "time", "entities", "location", "killed", "retreated", "is_preview", "attribute"]
 	}, {
 		"id": "quest",
 		"name": "Quest",
@@ -160,9 +175,24 @@
 		"description": "Describes the state of a mini-game",
 		"fields": ["parent", "name", "description", "game", "is_preview", "attribute", "time", "date", "last", "expiry", "conditionals"]
 	}, {
+		"id": "god",
+		"name": "God",
+		"description": "A God in the universe.",
+		"fields": ["parent", "name", "icon", "symbol", "description", "backstory", "capital", "locations", "alinment", "is_preview", "attribute"]
+	}, {
+		"id": "nation",
+		"name": "Nation",
+		"description": "A nation or empire in the universe.",
+		"fields": ["parent", "name", "icon", "backstory", "description", "capital", "locations", "is_preview", "attribute"]
+	}, {
+		"id": "state",
+		"name": "State",
+		"description": "A general state for something such as 'Deceased', 'Active', or 'Unconscious'.",
+		"fields": ["parent", "name", "icon", "description", "is_preview", "attribute"]
+	}, {
 		"id": "location",
 		"name": "Location",
 		"description": "A location in the universe that is of importance. Possibly a point such as a city on a world map, a simple path with lines tracing it, or an area with a defined perimeter and area",
-		"fields": ["parent", "name", "icon", "description", "location", "obscured", "population", "populace", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "profile", "background", "map", "links_to", "is_preview", "attribute", "conditionals"]
+		"fields": ["parent", "name", "icon", "symbol", "backstory", "description", "location", "obscured", "nation", "population", "populace", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "profile", "background", "map", "links_to", "is_preview", "attribute", "conditionals"]
 	}]
 }

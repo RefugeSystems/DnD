@@ -38,6 +38,12 @@ rsSystem.component("rsStatBlock", {
 				classed,
 				field,
 				x;
+
+			if(this.object.concealed && this.size < 150) {
+				return fields;
+			} else if(this.object.must_know) {
+				// TODO: Implement "Known" filtering
+			}
 			
 			if(this.object._class) {
 				classed = this.universe.index.classes[this.object._class];
@@ -68,7 +74,8 @@ rsSystem.component("rsStatBlock", {
 				}
 			}
 
-			fields.sort(rsSystem.utility.sortData);
+			fields.sort(rsSystem.utility.sortByID);
+			// fields.sort(rsSystem.utility.sortData);
 			
 			return fields;
 		}

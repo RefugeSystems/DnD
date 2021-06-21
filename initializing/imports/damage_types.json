@@ -3,92 +3,110 @@
             "id": "damage_type:bludgeoning",
             "name": "Bludgeoning",
             "description": "Bludgeoning",
+			"ordering": 5,
             "icon": "fas fa-hammer-war"
         }, {
             "id": "damage_type:piercing",
             "name": "Piercing",
             "description": "Piercing",
+			"ordering": 10,
             "icon": "fas fa-dagger"
         }, {
             "id": "damage_type:crushing",
             "name": "Crushing",
             "description": "Crushing",
+			"ordering": 15,
             "icon": "fas fa-compress-arrows-alt"
         }, {
             "id": "damage_type:slashing",
             "name": "Slashing",
             "description": "Slashing",
+			"ordering": 20,
             "icon": "game-icon game-icon-crossed-slashes"
         }, {
             "id": "damage_type:acid",
             "name": "Acid",
             "description": "Acid",
+			"ordering": 25,
             "icon": "ra ra-acid"
         }, {
             "id": "damage_type:cold",
             "name": "Cold",
             "description": "Cold",
+			"ordering": 30,
             "icon": "fas fa-snowflakes"
         }, {
             "id": "damage_type:fire",
             "name": "Fire",
             "description": "Fire",
+			"ordering": 35,
             "icon": "fas fa-fire-alt"
         }, {
             "id": "damage_type:force",
             "name": "Force",
             "description": "Force",
+			"ordering": 40,
             "icon": "game-icon game-icon-smash-arrows rot270"
         }, {
             "id": "damage_type:holy",
             "name": "Holy",
             "description": "Holy",
+			"ordering": 45,
             "icon": "game-icon game-icon-holy-water"
         }, {
             "id": "damage_type:lightning",
             "name": "Lightning",
             "description": "Lightning",
+			"ordering": 50,
             "icon": "fas fa-thunderstorm"
         }, {
             "id": "damage_type:necrotic",
             "name": "Necrotic",
             "description": "Necrotic",
+			"ordering": 55,
             "icon": "game-icon game-icon-death-juice"
         }, {
             "id": "damage_type:poison",
             "name": "Poison",
             "description": "Poison",
+			"ordering": 60,
             "icon": "game-icon game-icon-poison-gas"
         }, {
             "id": "damage_type:psychic",
             "name": "Psychic",
             "description": "Psychic",
+			"ordering": 65,
             "icon": "game-icon game-icon-psychic-waves"
         }, {
             "id": "damage_type:radiant",
             "name": "Radiant",
             "description": "Radiant",
+			"ordering": 70,
             "icon": "game-icon game-icon-crystal-shine"
         }, {
             "id": "damage_type:sonic",
             "name": "Sonic",
             "description": "Sonic",
-            "icon": "fas fa-sound-on"
+			"ordering": 75,
+            "icon": "fas fa-waveform-path"
         }, {
             "id": "damage_type:thunder",
             "name": "Thunder",
             "description": "Thunder",
+			"ordering": 80,
             "icon": "fas fa-wifi rot90"
         }, {
             "id": "damage_type:chromatic",
             "name": "Chromatic",
-            "description": "You choose any of the following magical damage types; ${Acid}$, ${Cold}$, ${Fire}$, ${Force}$, ${Holt}$, ${Lightning}$, ${Necrotic}$, ${Poison}$, ${Radiant}$, ${Sonic}$, ${Thunder}$. There may be additional restrictions to the choosable type.",
+            "description": "You choose any of the following magical damage types; ${Acid}$, ${Cold}$, ${Fire}$, ${Force}$, ${Holy}$, ${Lightning}$, ${Necrotic}$, ${Poison}$, ${Radiant}$, ${Sonic}$, ${Thunder}$. There may be additional restrictions to the choosable type.",
+			"ordering": 85,
             "icon": "game-icon game-icon-abstract-047"
         }, {
             "id": "damage_type:heal",
             "name": "Heal",
             "description": "Heal damage to to creature",
-            "icon": "fas fa-heartbeat"
+			"ordering": 0,
+            "icon": "fas fa-heartbeat rs-green"
         }
     ]
 }

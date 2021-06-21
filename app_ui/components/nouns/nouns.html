@@ -12,7 +12,7 @@
 			<label class="">
 				<span>Copy:</span>
 				<select v-model="copy" v-on:change="copySource(copy)">
-					<option v-for="source in sources" :value="source.id" :title="source.id + ' - ' + source.description" v-if="usableSource(source)">{{source.name || source.id}}</option>
+					<option v-for="source in sources" :value="source.id" :title="source.id + ' - ' + source.description" v-if="usableSource(source)">{{nameSource(source)}}</option>
 				</select>
 			</label>
 		</div>

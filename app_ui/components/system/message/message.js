@@ -51,6 +51,7 @@
 		"mounted": function() {
 			rsSystem.register(this);
 			
+			this.universe.$on("dismiss-message", this.dismiss);
 			this.universe.$on("track-progress", this.trackProgress);
 			this.universe.$on("notification", this.receiveMessage);
 			this.universe.$on("warning", this.receiveMessage);
@@ -154,6 +155,21 @@
 							this.dismissMessage(this.messages[x]);
 							break;
 						}
+					}
+				}
+			},
+			"printMessage": function(message) {
+				console.log(_p(message));
+				this.dismissMessage(message, true);
+			},
+			"dismiss": function(event) {
+				var id = event.id || event.mid,
+					i;
+					
+				for(i=0; i<this.messages.length; i++) {
+					if(this.messages[i].id === id) {
+						this.dismissMessage(this.messages[i]);
+						break;
 					}
 				}
 			},

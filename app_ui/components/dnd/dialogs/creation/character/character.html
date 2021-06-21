@@ -20,6 +20,24 @@
 							</td>
 						</tr>
 						<tr>
+							<td class="align-right align-top">Weight:</td>
+							<td><input type="number" v-model.number="building.weight" /></td>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<td class="align-right align-top">Height:</td>
+							<td>
+								<select v-model.number="building.height">
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+								</select>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>
 							<td class="align-right align-top">Gender:</td>
 							<td>
 								<select type="text" v-model="building.gender">

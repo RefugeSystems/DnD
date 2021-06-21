@@ -34,8 +34,10 @@ module.exports = function(universe) {
 		variableExpression = new RegExp("([a-z_]+)(\\.?[a-z:_]+)*", "gi"),
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
 		spaces = new RegExp(" ", "g"),
+		dots = new RegExp("\\.", "g"),
 		zeros = new RegExp("(null|undefined)", "g"),
-		maths = new RegExp("([^a-zA-Z_.])(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g");
+		maths = new RegExp("([^a-zA-Z_.])?(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g"),
+		doubled = new RegExp("Math.Math.", "g"); // TODO: Ajust maths regex to accoutn for this AS WELL AS starting a line, which seems to be the issue with the leading "." check
 
 	var calculate = function(original) {
 		if(original && original[0] === "+") { // Other operators would expressly be an issue
@@ -45,7 +47,7 @@ module.exports = function(universe) {
 		if(debug) {
 			console.log(" > Seen: " + original);
 		}
-		var expression = original.replace(maths, "$1Math.$2(").replace(zeros, "0");
+		var expression = original.replace(maths, "$1Math.$2(").replace(zeros, "0").replace(doubled, "Math.");
 		if(debug) {
 			console.log(" > Expanded: " + expression);
 		}
@@ -146,6 +148,12 @@ module.exports = function(universe) {
 					} else if(!path[x]) {
 						path.splice(x);
 					}
+					if(path[x]) {
+						path[x] = path[x].replace(dots, "");
+					}
+				}
+				if(debug) {
+					console.log(" > Path: ", path);
 				}
 				value = source.calculatedValue(path, referenced);
 				if(value !== undefined && value !== null) {
@@ -268,6 +276,11 @@ module.exports = function(universe) {
 			x;
 			
 		if(expression) {
+			if(typeof(expression) === "number") {
+				return {
+					"remainder": expression
+				};
+			}
 			expression = expression.replace(spaces, "");
 			x = diceReductionRegEx.exec(expression);
 			while(x !== null) {

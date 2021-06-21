@@ -7,6 +7,7 @@
  * @module Components
  * @param {Object} entity
  * @param {Object} profile
+ * @param {Object} dashboard To override the entity's normal dashboard
  */
 rsSystem.component("dndEntityOverview", {
 	"inherit": true,
@@ -17,6 +18,9 @@ rsSystem.component("dndEntityOverview", {
 	"props": {
 		"entity": {
 			"requried": true,
+			"type": Object
+		},
+		"forcedDashboard": {
 			"type": Object
 		},
 		"profile": {
@@ -71,6 +75,13 @@ rsSystem.component("dndEntityOverview", {
 			}
 
 			if(dashboard) {
+				if(!this.dashboard) {
+					Vue.set(this, "dashboard", dashboard);
+				}
+				if(dashboard.attribute && dashboard.attribute.classing && this.$el) {
+					this.$el.classList.add(dashboard.attribute.classing);
+				}
+
 				for(i=0; i<dashboard.widgets.length; i++) {
 					widget = this.universe.index.widget[dashboard.widgets[i]];
 					if(widget && !widget.disabled) {
@@ -84,6 +95,8 @@ rsSystem.component("dndEntityOverview", {
 	},
 	"data": function() {
 		var data = {};
+
+		data.dashboard = this.forcedDashboard || null;
 
 		return data;
 	},

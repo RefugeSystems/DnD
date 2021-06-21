@@ -1,4 +1,4 @@
-<div class="rs-component dnd-component character-overview">
+<div class="rs-component dnd-component character-overview" :class="dashboard && dashboard.attribute?dashboard.attribute.classing:''">
 	<div class="imagery-container">
 		<rs-image class="imagery" v-if="image" :image="image" />
 	</div>

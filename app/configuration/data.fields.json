@@ -133,7 +133,6 @@
 		"name": "Playing As",
 		"description": "Indicates the primary character for a player",
 		"type": "string",
-		"inheritance": {},
 		"inheritable": [
 			"entity"
 		],
@@ -143,7 +142,6 @@
 		"name": "Played By",
 		"description": "Indicates the primary player for an entity",
 		"type": "string",
-		"inheritance": {},
 		"inheritable": [
 			"player"
 		],
@@ -155,10 +153,19 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
+		"id": "time_end",
+		"name": "End Time",
+		"description": "When this finished",
+		"type": "integer",
+		"attribute": {}
+	}, {
 		"id": "loyal_to",
 		"name": "Loyal To",
 		"description": "Indicates who this entity is loyal to, used for summons and minions and the like",
 		"type": "array",
+		"inheritable": [
+			"entity"
+		],
 		"attribute": {}
 	}, {
 		"id": "title",
@@ -178,13 +185,15 @@
 		"name": "Skill",
 		"description": "The skill involved in using or operation this object, if any.",
 		"type": "string",
+		"inheritable": [
+			"skill"
+		],
 		"attribute": {}
 	}, {
 		"id": "alignment",
 		"name": "Alignment",
 		"description": "The alignment of this entity.",
 		"type": "string",
-		"inheritance": {},
 		"inheritable": [
 			"alignment"
 		],
@@ -193,7 +202,7 @@
 		"id": "population",
 		"name": "Population",
 		"description": "The theoretical number of creatures inside this object. This is NOT meant to reflect entities.length but rather total general population of something like a city where entites.length would represent the number of special creatures present and may or maynot be part of the population count.",
-		"type": "string",
+		"type": "calculated",
 		"attribute": {}
 	}, {
 		"id": "pool_gain",
@@ -247,6 +256,32 @@
 			"entity"
 		],
 		"attribute": {}
+	}, {
+		"id": "killed",
+		"name": "Killed",
+		"description": "List of creatures killed in a skirmish",
+		"type": "array",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "retreated",
+		"name": "Retreated",
+		"description": "List of creatures that escaped during combat",
+		"type": "array",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "events",
+		"name": "Events",
+		"description": "List of events, primarily rolls, for this fight. When active, chat events are also saved here.",
+		"type": "array",
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "contains",
 		"name": "Contains",
@@ -331,6 +366,9 @@
 		"name": "Main Weapon",
 		"description": "Indicates which of the weapons held by this creature is its primary weapon.",
 		"type": "string",
+		"inheritable": [
+			"item"
+		],
 		"attribute": {}
 	}, {
 		"id": "rendering_path",
@@ -399,7 +437,6 @@
 		"name": "Audios",
 		"description": "List of audio IDs",
 		"type": "array",
-		"inheritance": {},
 		"inheritable": [
 			"audio"
 		],
@@ -409,7 +446,6 @@
 		"name": "Audio",
 		"description": "Audio ID for this object",
 		"type": "string",
-		"inheritance": {},
 		"inheritable": [
 			"audio"
 		],
@@ -427,7 +463,6 @@
 		"name": "Journals",
 		"description": "The Journal objects associated with this object, typically for use with Pages",
 		"type": "array",
-		"inheritance": {},
 		"inheritable": [
 			"journal"
 		],
@@ -485,6 +520,24 @@
 		"type": "object",
 		"attribute": {}
 	}, {
+		"id": "warlock_slots",
+		"name": "Warlock Spell Slots",
+		"description": "Special spell slots for warlocks. Notably these are regained on short and long rests.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "warlock_slots_max",
+		"name": "Max Warlock Slots",
+		"description": "Maximum number of warlock spell slots",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "warlock_slots_level",
+		"name": "Warlock Spell Level",
+		"description": "The level at which a warlock spell slot casts spells",
+		"type": "integer",
+		"attribute": {}
+	}, {
 		"id": "equip_slots",
 		"name": "Equipment Slots",
 		"description": "Maps a Slot ID to the count of slots this object has to put equipment to",
@@ -500,9 +553,6 @@
 		"name": "Damage Type",
 		"description": "The damage type this object is considered to deal.",
 		"type": "string",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"damage_type"
 		],
@@ -579,7 +629,8 @@
 		"description": "The total amount of HP rolled for an entity while leveling",
 		"type": "integer",
 		"attribute": {
-			"default": 0
+			"default": 0,
+			"min": 0
 		}
 	}, {
 		"id": "damage",
@@ -675,8 +726,8 @@
 	}, {
 		"id": "duration",
 		"name": "Duration",
-		"description": "How long effects last",
-		"type": "integer",
+		"description": "How long something lasts once created; Such as effects or items. Spells may list this for how long a subsequent effect lasts.",
+		"type": "calculated",
 		"attribute": {}
 	}, {
 		"id": "effect_shape",
@@ -725,9 +776,6 @@
 		"name": "Performable Actions",
 		"description": "List of actions this entity can perform",
 		"type": "array",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"action"
 		],
@@ -737,12 +785,24 @@
 		"name": "Actions",
 		"description": "The current action count for this object by type; main, bonus, reaction",
 		"type": "object",
+		"displayed_as": {
+			"main": "Main",
+			"bonus": "Bonus",
+			"movement": "Movement",
+			"reaction": "Reaction"
+		},
 		"attribute": {}
 	}, {
 		"id": "action_cost",
 		"name": "Action Cost",
 		"description": "Indicates the action cost of this object by mapping the action types to their numeric costs; ie. action_cost.bonus = 1. Multiple costs are addative, so bonus = 1 & main = 1 means thsi object costs a main and bonus action",
 		"type": "object",
+		"displayed_as": {
+			"main": "Main",
+			"bonus": "Bonus",
+			"movement": "Movement",
+			"reaction": "Reaction"
+		},
 		"attribute": {}
 	}, {
 		"id": "action_max",
@@ -767,9 +827,6 @@
 		"name": "Targets",
 		"description": "Types that this object can target, for instance types of objects or creatures that a spell can affect",
 		"type": "array",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"type"
 		],
@@ -868,6 +925,14 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "backstory",
+		"name": "Back Story",
+		"description": "Backstory for this existance",
+		"type": "string",
+		"attribute": {
+			"long_text": true
+		}
+	}, {
 		"id": "caster",
 		"name": "Caster",
 		"description": "The entity that knows this spell. Used for spell value calculations.",
@@ -893,6 +958,53 @@
 		"description": "The maximum amount of gold this object or entity can hold",
 		"type": "integer",
 		"attribute": {}
+	}, {
+		"id": "height",
+		"name": "Height",
+		"description": "Height",
+		"type": "integer",
+		"ordering": 102,
+		"attribute": {
+			"display_size": 90,
+			"default": 0,
+			"min": 0
+		}
+	}, {
+		"id": "god",
+		"name": "Worshipped God",
+		"description": "Worshipped God",
+		"type": "string",
+		"ordering": 105,
+		"inheritable": [
+			"god"
+		],
+		"attribute": {
+			"display_size": 90,
+			"default": 0,
+			"min": 0
+		}
+	}, {
+		"id": "born",
+		"name": "Born",
+		"description": "The time at which this was born",
+		"type": "integer",
+		"ordering": 101,
+		"attribute": {
+			"display_size": 90,
+			"default": 0,
+			"min": 0
+		}
+	}, {
+		"id": "age",
+		"name": "Age",
+		"description": "This creature's age",
+		"type": "calculated",
+		"ordering": 100,
+		"attribute": {
+			"display_size": 90,
+			"default": 0,
+			"min": 0
+		}
 	}, {
 		"id": "movement_ground",
 		"name": "Move Speed",
@@ -925,14 +1037,19 @@
 		"name": "Needs",
 		"description": "Maps an object ID to a needed count. For instance, Slot IDs are used to map the ID to the number of that slot used by this object. Archetypes use this to mark prior needed archetypes before this one can be choosen.",
 		"type": "object",
+		"inheritable": [
+			"slot",
+			"archetype",
+			"feat"
+		],
 		"attribute": {
-			"inherited_key": ["slot", "archetype", "feat"]
+			"inherited_key": true
 		}
 	}, {
 		"id": "slots_remaining",
 		"name": "Remaining Slots",
 		"description": "The calculated list of slots that are unused. This is used primarily for conditionals",
-		"type": "array",
+		"type": "object",
 		"attribute": {
 			"inherited_key": ["slot"]
 		}
@@ -986,6 +1103,15 @@
 		"type": "array",
 		"inheritable": [
 			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "capital",
+		"name": "Capital",
+		"description": "The location of the capital for a nation",
+		"type": "string",
+		"inheritable": [
+			"location"
 		],
 		"attribute": {}
 	}, {
@@ -1088,7 +1214,6 @@
 		"name": "Variants",
 		"description": "Variations of this race",
 		"type": "array",
-		"inheritance": {},
 		"inheritable": [
 			"feat"
 		],
@@ -1225,12 +1350,6 @@
 		],
 		"attribute": {}
 	}, {
-		"id": "charges",
-		"name": "Charges",
-		"description": "Number of expendable charges available on this object.",
-		"type": "integer",
-		"attribute": {}
-	}, {
 		"id": "cell_width",
 		"name": "Cell Width",
 		"description": "Number of cells (out of 4) that the widget should occupy in width",
@@ -1238,6 +1357,18 @@
 		"attribute": {
 			"options": [1, 2, 3, 4]
 		}
+	}, {
+		"id": "charges",
+		"name": "Charges",
+		"description": "Number of expendable charges available on this object.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "charges_max",
+		"name": "Max Charges",
+		"description": "Maximum number of expendable charges available on this object.",
+		"type": "calculated",
+		"attribute": {}
 	}, {
 		"id": "recharges_at",
 		"name": "Recharges At",
@@ -1294,7 +1425,7 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
-		"id": "archetype_level",
+		"id": "level_archetype",
 		"name": "Class Levels",
 		"description": "Maps a Class ID to this object's level in that class.",
 		"type": "object",
@@ -1306,15 +1437,15 @@
 		"name": "Class Level History",
 		"description": "Stores the order in which this object leveled up classes",
 		"type": "array",
+		"inheritable": [
+			"archetype"
+		],
 		"attribute": {}
 	}, {
 		"id": "proficiency",
 		"name": "Proficiency",
 		"description": "Needed Proficiency for using this object with proficiency.",
 		"type": "string",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"proficiency"
 		],
@@ -1350,9 +1481,6 @@
 		"name": "Accepted Types",
 		"description": "Lists types that are accepted by this object.",
 		"type": "array",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"type"
 		],
@@ -1362,9 +1490,6 @@
 		"name": "Rejected Types",
 		"description": "Lists types that are rejected by this object.",
 		"type": "array",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"type"
 		],
@@ -1372,7 +1497,7 @@
 	}, {
 		"id": "category",
 		"name": "Category",
-		"description": "Category for this object.",
+		"description": "Category for this object. This is essentially just a flat qualifier and taken literally.",
 		"type": "string",
 		"attribute": {}
 	}, {
@@ -1380,6 +1505,9 @@
 		"name": "State",
 		"description": "General state indicator for the object.",
 		"type": "string",
+		"inheritable": [
+			"state"
+		],
 		"attribute": {}
 	}, {
 		"id": "screen",
@@ -1392,15 +1520,15 @@
 		"name": "Game",
 		"description": "Indicates a minigame supported by the instance to which this object refers.",
 		"type": "string",
+		"inheritable": [
+			"minigame"
+		],
 		"attribute": {}
 	}, {
 		"id": "proficiencies",
 		"name": "Proficiencies",
 		"description": "Proficiencies held by this object.",
 		"type": "array",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"proficiency"
 		],
@@ -1430,13 +1558,18 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "symbol",
+		"name": "Symbol",
+		"description": "The symbol for this god, city, or group.",
+		"type": "string",
+		"ordering": 20,
+		"attribute": {
+		}
+	}, {
 		"id": "use_from",
 		"name": "Uses From",
 		"description": "This uses charges from another property.",
 		"type": "string",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"entity"
 		],
@@ -1580,14 +1713,29 @@
 		"id": "ranged",
 		"name": "Ranged Weapon",
 		"description": "Flag to indicate if this object is considered a ranged weapon",
+		"ordering": 300,
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed_size": 90
+		}
+	}, {
+		"id": "respond",
+		"name": "respond",
+		"description": "Maps various 'event' names to arrays that describe responses that are then consumed in various parts",
+		"ordering": 1000,
+		"type": "object",
+		"attribute": {
+			"displayed_size": 110
+		}
 	}, {
 		"id": "is_minion",
 		"name": "Is Minion",
 		"description": "When true the entity is a minion",
+		"ordering": 100,
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed_size": 100
+		}
 	}, {
 		"id": "enchantments",
 		"name": "Enchantments",
@@ -1636,30 +1784,35 @@
 		"id": "melee",
 		"name": "Melee Weapon",
 		"description": "Flag to indicate if this object is considered a melee weapon",
+		"ordering": 300,
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed_size": 90
+		}
 	}, {
 		"id": "thrown",
 		"name": "Thrown Weapon",
 		"description": "Flag to indicate if this object is considered a throwable weapon",
+		"ordering": 300,
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed_size": 90
+		}
 	}, {
 		"id": "color_flag",
 		"name": "Color Flag",
 		"description": "The color of the lego hat to distinguish this NPC from other similar NPCs",
 		"type": "string",
+		"ordering": 1,
 		"attribute": {
-			"displayed": false
+			"displayed_size": 100
 		}
 	}, {
 		"id": "type",
 		"name": "Type",
 		"description": "The primary type for this object",
 		"type": "string",
-		"inheritance": {
-
-		},
+		"ordering": 150,
 		"inheritable": [
 			"type"
 		],
@@ -1669,9 +1822,7 @@
 		"name": "Types",
 		"description": "The types that apply to this object",
 		"type": "array",
-		"inheritance": {
-
-		},
+		"ordering": 155,
 		"inheritable": [
 			"type"
 		],
@@ -1699,6 +1850,9 @@
 		"name": "Locations",
 		"description": "List of locations connected to this object.",
 		"type": "array",
+		"inheritable": [
+			"location"
+		],
 		"attribute": {}
 	}, {
 		"id": "associations",
@@ -1717,19 +1871,24 @@
 		"name": "Knowns",
 		"description": "List of properties that are known through associated knowledges.",
 		"type": "array",
+		"inheritable": [
+			"knowledge"
+		],
 		"attribute": {}
 	}, {
 		"id": "spells",
 		"name": "Spells",
 		"description": "Spells contained inside of or granted by this object.",
 		"type": "array",
+		"inheritable": [
+			"spell"
+		],
 		"attribute": {}
 	}, {
 		"id": "skills",
 		"name": "Skills",
 		"description": "Skills that this object can perform.",
 		"type": "array",
-		"inheritance": {},
 		"inheritable": [
 			"skill"
 		],
@@ -1749,13 +1908,16 @@
 			"widget"
 		],
 		"attribute": {
-			"display_size": 10
+			"display_size": 90
 		}
 	}, {
 		"id": "pages",
 		"name": "Pages",
 		"description": "List of pages associated with this object. Primarily used for rendering journals.",
 		"type": "array",
+		"inheritable": [
+			"page"
+		],
 		"attribute": {}
 	}, {
 		"id": "carrying",
@@ -1781,14 +1943,34 @@
 		"name": "Price",
 		"description": "The base price for this object.",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {}
+	}, {
+		"id": "expiration",
+		"name": "Expiration",
+		"description": "When this effect or item expires. This is a conveience field for display as the length of anything that expires should be described as a duration.",
+		"type": "gametime",
+		"ordering": 200,
+		"attribute": {
+			"display_size": 10
+		}
+	}, {
+		"id": "critical",
+		"name": "Critical",
+		"description": "The minimum number needed to roll for an attack to be considered a critical strike.",
+		"type": "integer",
+		"attribute": {
+			"display_size": 70,
+			"default": 20,
+			"min": 0
+		}
 	}, {
 		"id": "score",
 		"name": "Score",
 		"description": "An abstract point value for this object, used in estimating power or worth or value for comparison.",
 		"type": "integer",
 		"attribute": {
-			"displayed": false
+			"display_size": 100
 		}
 	}, {
 		"id": "threat",
@@ -1796,13 +1978,14 @@
 		"description": "A general estimate of how threatening a creature is.",
 		"type": "integer",
 		"attribute": {
-			"displayed": false
+			"display_size": 100
 		}
 	}, {
 		"id": "label",
 		"name": "Label",
 		"description": "Used as display text for this object in certain situations instead of the name, such as on a map.",
 		"type": "string",
+		"ordering": 5,
 		"attribute": {}
 	}, {
 		"id": "links_to",
@@ -1810,6 +1993,33 @@
 		"description": "Used for locations (or similar) to note door or portal like effects for mapping purposes.",
 		"type": "string",
 		"attribute": {}
+	}, {
+		"id": "concentration",
+		"name": "Concentration",
+		"description": "A caster must maintain concentration on this spell and has a limited number of spells they can maintain this way.",
+		"type": "boolean",
+		"ordering": 300,
+		"attribute": {
+			"display_size": 30
+		}
+	}, {
+		"id": "concentration_max",
+		"name": "Max Concentrations",
+		"description": "The number of concentration spells a caster can maintain at once.",
+		"type": "boolean",
+		"ordering": 300,
+		"attribute": {
+			"display_size": 30
+		}
+	}, {
+		"id": "concentrations",
+		"name": "Concentrations",
+		"description": "List of spells that a caster is concentrating on with the oldest listed first.",
+		"type": "array",
+		"ordering": 305,
+		"attribute": {
+			"display_size": 90
+		}
 	}, {
 		"id": "concealed",
 		"name": "Concealed",
@@ -1844,13 +2054,13 @@
 		"id": "operation_start",
 		"name": "Opening Time",
 		"description": "Day offset in seconds at which in Game time when this object opens. Essentially for shops.",
-		"type": "integer",
+		"type": "calculated",
 		"attribute": {}
 	}, {
 		"id": "operation_time",
 		"name": "Operation Time",
 		"description": "How long this entity stays open Essentially for shops.",
-		"type": "integer",
+		"type": "calculated",
 		"attribute": {}
 	}, {
 		"id": "root",

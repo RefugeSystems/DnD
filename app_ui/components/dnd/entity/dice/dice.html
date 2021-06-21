@@ -1,0 +1,19 @@
+<div class="rs-component dnd-component entity-dice">
+	<div class="divider"></div>
+	<div class="available flex h centered">
+		<button class="general rounded quick action" v-on:click="clear()">
+			<span>{{storage.sum}}</span>
+		</button>
+		<button class="general rounded quick action" v-for="dice in rollable" v-on:click="roll(dice)" v-on:click.right.stop.prevent="roll(dice)">
+			<span class="action-icon" :class="dice.icon"></span>
+			<span class="action-count" v-if="storage.count[dice.icon]">{{storage.count[dice.icon]}}</span>
+		</button>
+	</div>
+	<div class="mini-divider"></div>
+	<div class="history flex h">
+		<button class="result general rounded action nowrap" v-for="(result, $index) in storage.results" v-on:click="noOp($index)" v-on:click.right.stop.prevent="dismiss($index, result)" :title="result.date">
+			<span class="dice" :class="result.dice"></span>
+			<span>{{result.value}}</span>
+		</button>
+	</div>
+</div>

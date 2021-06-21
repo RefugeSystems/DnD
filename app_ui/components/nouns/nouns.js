@@ -41,7 +41,7 @@
 			},
 			"sources": function() {
 				if(this.storage && this.storage.classification && this.universe.listing[this.storage.classification]) {
-					this.universe.listing[this.storage.classification].sort(rsSystem.utility.sortData);
+					this.universe.listing[this.storage.classification].sort(rsSystem.utility.sortTrueData);
 					return this.universe.listing[this.storage.classification];
 				}
 				return [];
@@ -62,7 +62,7 @@
 							console.warn("Invalid field[" + definition.fields[i] + "] in class definition[" + this.storage.classification + "]");
 						}
 					}
-					fields.sort(rsSystem.utility.sortData);
+					fields.sort(rsSystem.utility.sortByID);
 				}
 
 				return fields;
@@ -133,6 +133,13 @@
 		"methods": {
 			"usableSource": function(source) {
 				return source.id.indexOf(":preview:") === -1;
+			},
+			"nameSource": function(source) {
+				if(source._data.name === source.name) {
+					return source.name;
+				} else {
+					return source._data.name + " (" + source.name + ")";
+				}
 			},
 			"copySource": function(source) {
 				var x;

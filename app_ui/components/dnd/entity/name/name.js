@@ -32,6 +32,9 @@ rsSystem.component("dndEntityName", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"name": function() {
+
+		},
 		"levelUp": function() {
 
 		}

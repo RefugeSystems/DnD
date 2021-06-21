@@ -28,13 +28,16 @@ rsSystem.component("dndEntityEffects", {
 			if(this.entity.effects && this.entity.effects.length) {
 				var positive = [],
 					negative = [],
+					hidden = [],
 					effect,
 					i;
 				
 				for(i=0; i<this.entity.effects.length; i++) {
 					effect = this.universe.index.effect[this.entity.effects[i]];
 					if(effect) {
-						if(effect.debuff) {
+						if(this.storage && this.storage.hide && this.storage.hide[effect.id]) {
+							hidden.push(effect);
+						} else if(effect.debuff) {
 							negative.push(effect);
 						} else {
 							positive.push(effect);
@@ -42,9 +45,15 @@ rsSystem.component("dndEntityEffects", {
 					}
 				}
 
-				return positive.concat(negative);
+				return {
+					"shown": positive.concat(negative),
+					"hidden": hidden
+				};
 			} else {
-				return [];
+				return {
+					"hidden": [],
+					"shown": []
+				};
 			}
 		}
 	},
@@ -55,8 +64,17 @@ rsSystem.component("dndEntityEffects", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		if(!this.storage.hide) {
+			Vue.set(this.storage, "hide", {});
+		}
 	},
 	"methods": {
+		"toggleHide": function(feat) {
+			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);
+		},
+		"toggleHidden": function() {
+			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
+		},
 		"effectClasses": function(effect) {
 			var classes = effect.icon || "game-icon game-icon-abstract-041";
 

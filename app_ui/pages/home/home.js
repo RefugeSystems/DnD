@@ -178,6 +178,7 @@ rsSystem.component("RSHome", {
 			Vue.set(this.storage.profile, "screen_wake", true);
 		}
 		
+		this.universe.setProfile(this.storage.profile);
 		this.setActive();
 	},
 	"methods": {

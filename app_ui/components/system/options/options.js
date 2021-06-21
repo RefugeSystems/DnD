@@ -35,10 +35,28 @@ rsSystem.component("systemOptionsDialog", {
 			dashboards = [],
 			default_dash,
 			option,
+			sizes,
 			keys,
 			i,
 			x;
 			
+		sizes = [{
+			"name": "Minimum",
+			"id": 5
+		}, {
+			"name": "Small",
+			"id": 30
+		}, {
+			"name": "Medium",
+			"id": 50
+		}, {
+			"name": "Large",
+			"id": 70
+		}, {
+			"name": "Full",
+			"id": 90
+		}];
+
 		data.options = [];
 		data.report_mirror = {};
 		data.account_mirror = {};
@@ -55,7 +73,9 @@ rsSystem.component("systemOptionsDialog", {
 				if(this.universe.listing.dashboard[i].default_value) {
 					default_dash = this.universe.listing.dashboard[i];
 				}
-				dashboards.push(this.universe.listing.dashboard[i]);
+				if(this.player.gm || !this.universe.listing.dashboard[i].concealed) {
+					dashboards.push(this.universe.listing.dashboard[i]);
+				}
 			}
 		}
 		if(!this.profile.default_dashboard && default_dash) {
@@ -105,28 +125,7 @@ rsSystem.component("systemOptionsDialog", {
 					"label": "Information Detail Amount in Flyout",
 					"base": this.profile,
 					"type": "select",
-					"options": [{
-						"name": "Minimum",
-						"id": 5
-					}, {
-						"name": "Small",
-						"id": 30
-					}, {
-						"name": "Medium",
-						"id": 50
-					}, {
-						"name": "Large",
-						"id": 70
-					}, {
-						"name": "Full",
-						"id": 90
-					}, {
-						"name": "Complete",
-						"id": 100
-					}, {
-						"name": "Debug",
-						"id": 200
-					}]
+					"options": sizes
 				}, {
 					"id": "default_dashboard",
 					"label": "Default Character Dashboard",
@@ -254,11 +253,25 @@ rsSystem.component("systemOptionsDialog", {
 			});
 		}
 		if(this.player.gm) {
+			data.pages.profile.options.push({
+				"id": "collapse_system_alerts",
+				"label": "Collapse System Alerts",
+				"base": this.profile,
+				"type": "toggle"
+			});
 			data.pages.system.options.push({
 				"id": "universe-export",
 				"action": "universe-export",
 				"icon": "fas fa-download",
 				"label": "Export Universe"
+			});
+			sizes.push({
+				"name": "Complete",
+				"id": 100
+			});
+			sizes.push({
+				"name": "Debug",
+				"id": 200
 			});
 		}
 		
@@ -446,3 +459,8 @@ rsSystem.component("systemOptionsDialog", {
  * @type String
  */
 
+/**
+ * Game Masters Only, gives an ID to alerts from the server to keep them from sprawling.
+ * @property collapse_system_alerts
+ * @type Boolean
+ */

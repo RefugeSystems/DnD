@@ -245,7 +245,7 @@ class Chronicle extends EventEmitter {
 	 * 		is handled in the universe.
 	 */
 	getOccurrences(start, end, constrict, callback) {
-		var statement = "select * from chronicle where $start <= time and time < $end",
+		var statement = "select * from chronicle where $start <= time and time < $end and type != $excludeObjects",
 			suffix = " order by time",
 			values = {},
 			keys,
@@ -260,14 +260,15 @@ class Chronicle extends EventEmitter {
 			constrict = undefined;
 		}
 		
+		values["$excludeObjects"] = "object";
 		if(start <= end) {
 			values["$start"] = start;
 			values["$end"] = end;
-			suffix += "ASC";
+			suffix += " ASC";
 		} else {
 			values["$start"] = end;
 			values["$end"] = start;
-			suffix += "DESC";
+			suffix += " DESC";
 		}
 			
 		if(constrict) {

@@ -1,5 +1,4 @@
 
-
 var express = require("express");
 
 module.exports = new (function() {
@@ -50,8 +49,10 @@ module.exports = new (function() {
 			this.router.post("/calculate/:id", (req, res, next) => {
 				res.result = {};
 				res.result.referenced = [];
+				api.universe.calculator.debug(true);
 				var source = api.universe.objectHandler.retrieve(req.params.id);
-				res.result.value = api.universe.calculator.compute(req.body.formula, source, res.result.referenced);
+				res.result.value = api.universe.calculator.computedDiceRoll(req.body.formula, source, res.result.referenced);
+				api.universe.calculator.debug(false);
 				res.result.source = source; // Update object with source last to move this data to the bottom of the object naturally when encoded
 				next();
 			});
@@ -196,6 +197,36 @@ module.exports = new (function() {
 			this.router.get("/test/error", (req, res, next) => {
 				res.result = {};
 				api.universe.emit("error", new api.universe.Anomaly("test", "Test Error", 30));
+				next();
+			});
+
+			this.router.get("/test/damage", (req, res, next) => {
+				res.result = {};
+				api.universe.emit("send", {
+					"type": "notice",
+					"mid": "incoming:damage:entity:yre5an4cpc1623022606149mamw3djfz:10",
+					"recipient": "player:master",
+					"message": "Sabrina taking damage from God",
+					"icon": "game-icon game-icon-crossed-slashes rs-lightred",
+					"anchored": true,
+					"emission": {
+						"type": "dialog-open",
+						"component": "dndDialogRoll",
+						"storageKey": "store:roll:entity:yre5an4cpc1623022606149mamw3djfz",
+						"entity": "entity:yre5an4cpc1623022606149mamw3djfz",
+						"action": "action:free:damage",
+						"damage": {
+							"damage_type:slashing": 16,
+							"damage_type:fire": 4
+						// },
+						// "resist": {
+						// 	"damage_type:slashing": "1d6",
+						// 	"damage_type:necrotic": "1d6",
+						// 	"damage_type:cold": "1d6"
+						},
+						"closeAfterAction": true
+					}
+				});
 				next();
 			});
 			

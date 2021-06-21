@@ -62,10 +62,16 @@
 		"computed": {
 			"availableReferences": function() {
 				var available = [],
+					item,
 					x;
 				if(this.field && this.field.inheritable) {
 					for(x=0; x<this.field.inheritable.length; x++) {
-						available = available.concat(this.universe.listing[this.field.inheritable[x]]);
+						item = this.universe.listing[this.field.inheritable[x]];
+						if(item) {
+							available = available.concat(item);
+						} else {
+							console.error("Invalid Availability Reference: ", this.field);
+						}
 					}
 				}
 				return available;
@@ -74,15 +80,25 @@
 				if(this.field.attribute && this.field.attribute.inherited_key) {
 					if(typeof(this.field.attribute.inherited_key) === "boolean") {
 						var available = [],
+							item,
 							x;
 						if(this.field && this.field.inheritable) {
 							for(x=0; x<this.field.inheritable.length; x++) {
-								available = available.concat(this.universe.listing[this.field.inheritable[x]]);
+								item = this.universe.listing[this.field.inheritable[x]];
+								if(item) {
+									available = available.concat(item);
+								} else {
+									console.error("Invalid Keyside Reference: ", this.field);
+								}
 							}
 						}
 						return available;
 					} else {
-						return this.universe.listing[this.field.attribute.inherited_key];
+						if(this.universe.listing[this.field.attribute.inherited_key]) {
+							return this.universe.listing[this.field.attribute.inherited_key];
+						} else {
+							console.error("Invalid Keyside Reference: ", this.field);
+						}
 					}
 				}
 				return null;
@@ -91,15 +107,25 @@
 				if(this.field.attribute && this.field.attribute.inherited_value) {
 					if(typeof(this.field.attribute.inherited_value) === "boolean") {
 						var available = [],
+							item,
 							x;
 						if(this.field && this.field.inheritable) {
 							for(x=0; x<this.field.inheritable.length; x++) {
-								available = available.concat(this.universe.listing[this.field.inheritable[x]]);
+								item = this.universe.listing[this.field.inheritable[x]];
+								if(item) {
+									available = available.concat(item);
+								} else {
+									console.error("Invalid Valueside Reference: ", this.field);
+								}
 							}
 						}
 						return available;
 					} else {
-						return this.universe.listing[this.field.attribute.inherited_value];
+						if(this.universe.listing[this.field.attribute.inherited_value]) {
+							return this.universe.listing[this.field.attribute.inherited_value];
+						} else {
+							console.error("Invalid Valueside Reference: ", this.field);
+						}
 					}
 				}
 				return null;

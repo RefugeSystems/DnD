@@ -54,7 +54,12 @@ class PlayerConnection extends EventEmitter {
 			}
 		};
 		
+		var timeChanged = (event) => {
+			this.send("time:changed", event);
+		};
+		
 		universe.on("send", forwardMessage);
+		universe.on("time:changed", timeChanged);
 		universe.on("object-updated", receiveObject);
 		universe.on("object-created", receiveObject);
 		universe.on("unload", unloadObject);
@@ -176,7 +181,7 @@ class PlayerConnection extends EventEmitter {
 		this.emit("connected");
 		this.connects++;
 		this.last = Date.now();
-		console.log("Connected");
+		// console.log("Connected");
 		socket.send(JSON.stringify({
 			"type": "connected",
 			"sent": Date.now()
