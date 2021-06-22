@@ -35,10 +35,15 @@ rsSystem.component("dndEntityStats", {
 		rsSystem.register(this);
 	},
 	"methods": {
-		"viewActions": function() {
+		/**
+		 * Use the DialogList to list actions and highlight usable vs. not usable
+		 * with a way to then use those actions.
+		 * @method listActions
+		 */
+		"listActions": function() {
+			// TODO: Load List
 			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndActionsList",
-				"storageKey": "store:roll:" + this.entity.id,
+				"component": "dndDialogList",
 				"entity": this.entity.id
 			});
 		},
@@ -56,6 +61,18 @@ rsSystem.component("dndEntityStats", {
 			}
 			return "+" + attack;
 		},
+		/**
+		 * Use the DialogList to list memorized spells with basic search and a way to
+		 * switch into casting that spell.
+		 * @method listSpells
+		 */
+		"listSpells": function() {
+			// TODO: Load List
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogList",
+				"entity": this.entity.id
+			});
+		},
 		"getSpellAttack": function() {
 			var attack = this.entity.spell_attack || 0;
 			if(attack < 0) {
@@ -65,6 +82,18 @@ rsSystem.component("dndEntityStats", {
 		},
 		"getSpellDC": function() {
 			return this.entity.spell_dc || 0;
+		},
+		/**
+		 * Use the DialogList to list the contents of the entity's inventory with
+		 * basic search and a link to the Inventory page.
+		 * @method listInventory
+		 */
+		"listInventory": function() {
+			// TODO: Load List
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogList",
+				"entity": this.entity.id
+			});
 		},
 		"getWeightScales": function() {
 			if(this.entity.encumberance < this.entity.encumberance_max * .8) {

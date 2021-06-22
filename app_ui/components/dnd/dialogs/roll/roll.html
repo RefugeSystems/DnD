@@ -80,7 +80,7 @@
 				<span :class="check.skill.icon"></span>
 			</button>
 			<div class="roll-result flex v center" :class="getTrackedClass(check)">
-				<input type="text" v-model="check.computed" v-on:focus="setTracking(check)" v-on:click.right.stop.prevent="setTracking(check, true)" :placeholder="check.formula" v-on:keyup.enter="sendResults()" />
+				<input type="text" v-model="check.computed" :id="check.skill.id.substring(7)" v-on:focus="setTracking(check)" v-on:click.right.stop.prevent="setTracking(check, true)" :placeholder="check.formula" v-on:keyup.enter="sendSkill(check)" />
 			</div>
 			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check)">
 				<span class="fas fa-dice"></span>

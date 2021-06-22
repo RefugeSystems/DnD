@@ -21,17 +21,19 @@
 
 module.exports.initialize = function(universe) {
 	universe.on("player:action:check", function(event) {
-		var roll = {
-			"type": "entity:roll",
-			"result": event.message.data.result,
-			"entity": event.message.data.entity,
-			"skill": event.message.data.skill,
-			"target": event.message.data.target,
-			"action": event.message.data.action,
-			"name": event.message.data.name,
-			"dice": event.message.data.dice,
-			"recipients": universe.getMasters()
-		};
+		var entity,
+			skill,
+			roll = {
+				"type": "entity:roll",
+				"result": event.message.data.result,
+				"entity": event.message.data.entity,
+				"skill": event.message.data.skill,
+				"target": event.message.data.target,
+				"action": event.message.data.action,
+				"name": event.message.data.name,
+				"dice": event.message.data.dice,
+				"recipients": universe.getMasters()
+			};
 
 		roll.recipients[event.player.id] = true;
 
@@ -60,6 +62,24 @@ module.exports.initialize = function(universe) {
 					universe.emit("send", sending);
 				}
 			});
+		} else if(roll.skill === "skill:initiative") {
+			skill = {"initiative":roll.result};
+		} else if(roll.skill === "skill:investigation") {
+			skill = {"investigation":roll.result};
+		} else if(roll.skill === "skill:perception") {
+			skill = {"perception":roll.result};
+		} else if(roll.skill === "skill:stealth") {
+			skill = {"stealth":roll.result};
+		}
+
+		console.log(" > " + roll.skill);
+		if(skill) {
+			console.log(" > " + roll.skill);
+			entity = universe.get(roll.entity);
+			if(entity) {
+				console.log(" > " + roll.skill);
+				entity.setValues(skill);
+			}
 		}
 
 		universe.chronicle.addOccurrence("character:check", roll, Date.now(), null, event.player.id);
@@ -86,6 +106,7 @@ module.exports.initialize = function(universe) {
 		};
 
 		universe.emit(perform.action, perform);
+		
 		/*
 		if(actions[perform.action]) {
 			universe.chronicle.addOccurrence("character:action", perform, Date.now(), null, event.player.id);

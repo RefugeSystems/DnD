@@ -85,6 +85,7 @@ rsSystem.component("dndEntityInfo", {
 			});
 		},
 		"useHitDice": function() {
+			// TODO: Hit Dice List or Specialized Widget?
 
 		}
 	},

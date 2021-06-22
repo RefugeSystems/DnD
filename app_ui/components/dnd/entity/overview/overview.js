@@ -48,42 +48,48 @@ rsSystem.component("dndEntityOverview", {
 		 * @type Object
 		 */
 		"image": function() {
-			if(this.location && this.location.background) {
+			if(this.dashboard && this.dashboard.attribute.picture_only) {
+				return this.universe.index.image[this.entity.picture];
+			} else if(this.dashboard && this.dashboard.attribute.portrait_only) {
+				return this.universe.index.image[this.entity.portrait];
+			} else if(this.location && this.location.background && (!this.dashboard || !this.dashboard.attribute.picture_only)) {
 				return this.universe.index.image[this.location.background];
 			} else if(this.entity.picture) {
 				return this.universe.index.image[this.entity.picture];
 			}
 		},
 
-		"widgets": function() {
-			var widgets = [],
-				dashboard,
-				widget,
-				i;
+		"dashboard": function() {
+			var i;
 
-			if(this.entity.dashboard && (dashboard = this.universe.index.dashboard[this.entity.dashboard])) {
-				
-			} else if(this.profile.default_dashboard && (dashboard = this.universe.index.dashboard[this.profile.default_dashboard])) {
-
+			if(this.forcedDashboard) {
+				return this.forcedDashboard;
+			} else if(this.entity.dashboard && this.universe.index.dashboard[this.entity.dashboard]) {
+				return this.universe.index.dashboard[this.entity.dashboard];
+			} else if(this.profile.default_dashboard && this.universe.index.dashboard[this.profile.default_dashboard]) {
+				return this.universe.index.dashboard[this.profile.default_dashboard];
 			} else {
 				for(i=0; i<this.universe.listing.dashboard.length; i++) {
 					if(this.universe.listing.dashboard[i].default_value && !this.universe.listing.dashboard[i].is_preview && !this.universe.listing.dashboard[i].disabled) {
-						dashboard = this.universe.listing.dashboard[i];
-						break;
+						return this.universe.listing.dashboard[i];
 					}
 				}
 			}
+			return null;
+		},
 
-			if(dashboard) {
-				if(!this.dashboard) {
-					Vue.set(this, "dashboard", dashboard);
-				}
-				if(dashboard.attribute && dashboard.attribute.classing && this.$el) {
-					this.$el.classList.add(dashboard.attribute.classing);
+		"widgets": function() {
+			var widgets = [],
+				widget,
+				i;
+
+			if(this.dashboard) {
+				if(this.dashboard.attribute && this.dashboard.attribute.classing && this.$el) {
+					this.$el.classList.add(this.dashboard.attribute.classing);
 				}
 
-				for(i=0; i<dashboard.widgets.length; i++) {
-					widget = this.universe.index.widget[dashboard.widgets[i]];
+				for(i=0; i<this.dashboard.widgets.length; i++) {
+					widget = this.universe.index.widget[this.dashboard.widgets[i]];
 					if(widget && !widget.disabled) {
 						widgets.push(widget);
 					}
@@ -95,8 +101,6 @@ rsSystem.component("dndEntityOverview", {
 	},
 	"data": function() {
 		var data = {};
-
-		data.dashboard = this.forcedDashboard || null;
 
 		return data;
 	},

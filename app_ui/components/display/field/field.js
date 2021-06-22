@@ -114,9 +114,10 @@ rsSystem.component("rsDisplayField", {
 			});
 		},
 		"info": function(record) {
-			if(this.$route.query.info !== record.id) {
+			var id = record.id || record;
+			if(this.$route.query.info !== id) {
 				rsSystem.manipulateQuery({
-					"info": record.id
+					"info": id
 				});
 			} else {
 				rsSystem.manipulateQuery({

@@ -27,7 +27,7 @@ module.exports.initialize = function(universe) {
 			details.attribute = {};
 		}
 
-		console.log("Preview: ", details.name, " - ", details.damage, " - ", details.movement_fly);
+		// console.log("Preview: ", details.name, " - ", details.damage, " - ", details.movement_fly);
 		universe.getObject(details.id, function(err, object) {
 			if(err) {
 				console.log(err);

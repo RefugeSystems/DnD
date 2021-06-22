@@ -39,7 +39,7 @@ rsSystem.component("rsStatBlock", {
 				field,
 				x;
 
-			if(this.object.concealed && this.size < 150) {
+			if(this.object.concealed && this.size <= 150) {
 				return fields;
 			} else if(this.object.must_know) {
 				// TODO: Implement "Known" filtering
@@ -58,7 +58,7 @@ rsSystem.component("rsStatBlock", {
 					cfields = classed.fields;
 					for(x=0; x<cfields.length; x++) {
 						field = this.universe.index.fields[classed.fields[x]];
-						if(field && ((this.size >= 100 && field.attribute.displayed !== false) || (field.attribute.display_size !== undefined && field.attribute.display_size < this.size))) {
+						if(field && ((this.size > 100 && field.attribute.displayed !== false) || (field.attribute.display_size !== undefined && field.attribute.display_size <= this.size))) {
 							// fields.push(field.id);
 							fields.push(field);
 						}

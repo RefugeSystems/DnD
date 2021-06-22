@@ -182,7 +182,7 @@ class RSField extends EventEmitter {
 			this.attribute = {};
 		}
 		if(!this.attribute.display_size) {
-			this.attribute.display_size = 100;
+			this.attribute.display_size = 90;
 		}
 		/**
  		 * Used to map values to a display string in the case of simple values, such

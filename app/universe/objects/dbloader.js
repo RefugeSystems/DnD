@@ -276,7 +276,7 @@ fields.push({
 	"id": "icon",
 	"name": "Icon",
 	"description": "CSS class to display as short hand for this object.",
-	"type": "string",
+	"type": "icon",
 	"attribute": {
 		"display_size": 110,
 		"displayed": false
@@ -311,7 +311,7 @@ fields.push({
 	"id": "data",
 	"name": "Data",
 	"description": "Used for large data storage (Such as images). Typically Base64 encoded.",
-	"type": "string",
+	"type": "file",
 	"ordering": 100,
 	"attribute": {
 		"server_only": true,

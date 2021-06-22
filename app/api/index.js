@@ -105,7 +105,7 @@ class APIController extends EventEmitter {
 				var origin = req.get("origin"),
 					anomaly;
 					
-				console.log("Request[@" + origin + "]: ", req.path);
+				// console.log("Request[@" + origin + "]: ", req.path);
 				if(!origin || this.specification.origins[origin] === 0 || Date.now() < this.specification.origins[origin])  {
 					res.header("Access-Control-Allow-Origin", origin);
 					res.header("Access-Control-Allow-Headers", "*");

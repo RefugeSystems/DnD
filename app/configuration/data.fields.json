@@ -140,6 +140,7 @@
 	}, {
 		"id": "played_by",
 		"name": "Played By",
+		"icon": "fas fa-user",
 		"description": "Indicates the primary player for an entity",
 		"type": "string",
 		"inheritable": [
@@ -411,6 +412,26 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "acquired_in",
+		"name": "Acquired In",
+		"description": "Session when this was acquired",
+		"type": "string",
+		"ordering": 302,
+		"inheritable": [
+			"meeting"
+		],
+		"attribute": {}
+	}, {
+		"id": "learned_from",
+		"name": "From",
+		"description": "This was learned from this creature",
+		"type": "string",
+		"ordering": 310,
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
 		"id": "rendering_path_thickness",
 		"name": "Rendering Path Thickness",
 		"description": "Coloring",
@@ -431,11 +452,13 @@
 	}, {
 		"id": "cost",
 		"name": "Cost",
+		"icon": "fas fa-coins",
 		"description": "The general cost of this object",
 		"type": "integer",
 		"attribute": {}
 	}, {
 		"id": "initiative",
+		"icon": "fas fa-swords",
 		"name": "Initiative",
 		"description": "Combat order for this creature",
 		"type": "integer",
@@ -444,8 +467,9 @@
 	}, {
 		"id": "passive_perception",
 		"name": "Passive Perception",
+		"icon": "game-icon game-icon-eyelashes",
 		"description": "This creature's ability to notice things without specifically looking for them",
-		"type": "calculate",
+		"type": "calculated",
 		"ordering": 211,
 		"attribute": {
 			"default": "10 + wisdom"
@@ -453,6 +477,7 @@
 	}, {
 		"id": "stealth",
 		"name": "Current Stealth",
+		"icon": "fas fa-eye-slash",
 		"description": "Current stealth for this creature",
 		"type": "integer",
 		"ordering": 212,
@@ -460,6 +485,7 @@
 	}, {
 		"id": "perception",
 		"name": "Current Perception",
+		"icon": "game-icon game-icon-look-at",
 		"description": "Current perception for this creature",
 		"type": "integer",
 		"ordering": 213,
@@ -467,9 +493,21 @@
 	}, {
 		"id": "investigation",
 		"name": "Investigation",
+		"icon": "far fa-search-location",
 		"description": "Current investigative ability for this creature",
 		"type": "integer",
 		"ordering": 214,
+		"attribute": {}
+	}, {
+		"id": "skirmishes",
+		"name": "Skirmishes",
+		"icon": "far fa-swords",
+		"description": "List of fights that occurred in during this meeting",
+		"type": "array",
+		"ordering": 800,
+		"inheritable": [
+			"skirmish"
+		],
 		"attribute": {}
 	}, {
 		"id": "versioning",
@@ -800,7 +838,7 @@
 		"name": "Acquired",
 		"description": "When you acquired this",
 		"type": "integer",
-		"ordering": 100,
+		"ordering": 300,
 		"attribute": {
 			"display_size": 90
 		}
@@ -988,12 +1026,14 @@
 	}, {
 		"id": "armor",
 		"name": "Armor",
+		"icon": "fas fa-shield",
 		"description": "Your current Armor Class (AC)",
 		"type": "calculated",
 		"attribute": {}
 	}, {
 		"id": "gold",
 		"name": "Gold",
+		"icon": "fas fa-coins",
 		"description": "The amount of gold on or in this entity or object",
 		"type": "integer",
 		"attribute": {}
@@ -1559,7 +1599,17 @@
 		"name": "Master Screen",
 		"description": "When true, this object is flagged for display on a Game Master's screen.",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"display_size": 150
+		}
+	}, {
+		"id": "review",
+		"name": "Master Review",
+		"description": "When true, this object needs reviewed by a game master.",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "game",
 		"name": "Game",
@@ -2053,6 +2103,15 @@
 		"description": "Used for locations (or similar) to note door or portal like effects for mapping purposes.",
 		"type": "string",
 		"attribute": {}
+	}, {
+		"id": "note",
+		"name": "Note",
+		"description": "Game Master note.",
+		"type": "string",
+		"attribute": {
+			"display_size": 200,
+			"master_only": true
+		}
 	}, {
 		"id": "concentration",
 		"name": "Concentration",

@@ -1,4 +1,30 @@
 .dnd-component.master-entity {
 	width: 100%;
 
+	.roll {
+		box-shadow: 0px 0px 10px @rsWhite;
+		border: 0px;
+	}
+
+	.crit-fail {
+		box-shadow: 0px 0px 10px @rsLightRed;
+	}
+
+	.crit-pass {
+		box-shadow: 0px 0px 10px @rsLightGreen;
+	}
+
+	.widgets.container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		z-index: 2;
+		box-shadow: 0px 0px 10px inset white;
+		margin-bottom: 10px;
+		min-height: inherit;
+
+		.widget {
+			width: 100%;
+		}
+	}
 }

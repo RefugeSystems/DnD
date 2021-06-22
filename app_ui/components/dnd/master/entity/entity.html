@@ -1,25 +1,30 @@
 <div class="rs-component dnd-component master-entity">
-	<dnd-entity-name :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
-	<dnd-entity-healthbar :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
-	<dnd-entity-properties :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
-	<div class="master-actions flex h">
-		<button class="general rounded quick action" v-on:click="giveGold()">
-			<span class="fas fa-coins"></span>
-		</button>
-		<button class="general rounded quick action" v-on:click="givePoints()">
-			<span class="game-icon game-icon-skills"></span>
-		</button>
-		<button class="general rounded quick action" v-on:click="giveEffects()">
-			<span class="game-icon game-icon-beams-aura"></span>
-		</button>
-		<button class="general rounded quick action">
-			<span class="fas fa-dice rs-orange"></span>
-		</button>
-		<button class="general rounded action" v-for="(roll,$index) in rolls" v-on:click="info(roll.skill)" v-on:click.right.stop.prevent="dismissRoll($index)">
-			<span :class="roll.skill.icon"></span>
-			<span class="roll-result">{{roll.computed}}</span>
-		</button>
+	<div class="imagery-container">
+		<rs-image class="imagery" v-if="image" :image="image" />
 	</div>
-	<dnd-entity-equipment :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
-	<dnd-entity-effects :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+	<div class="widgets container flex v">
+		<dnd-entity-name class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<dnd-entity-healthbar class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<dnd-entity-properties class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<div class="master-actions widget flex h">
+			<button class="general rounded quick action" v-on:click="giveGold()">
+				<span class="fas fa-coins"></span>
+			</button>
+			<button class="general rounded quick action" v-on:click="givePoints()">
+				<span class="game-icon game-icon-skills"></span>
+			</button>
+			<button class="general rounded quick action" v-on:click="giveEffects()">
+				<span class="game-icon game-icon-beams-aura"></span>
+			</button>
+			<button class="general rounded quick action">
+				<span class="fas fa-dice rs-orange"></span>
+			</button>
+			<button class="general rounded action roll-result" :class="getRollClass(roll)" v-for="(roll,$index) in rolls" v-on:click="info(roll.skill)" v-on:click.right.stop.prevent="dismissRoll($index)">
+				<span :class="roll.skill.icon"></span>
+				<span class="roll-result">{{roll.result}}</span>
+			</button>
+		</div>
+		<dnd-entity-equipment class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<dnd-entity-effects class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+	</div>
 </div>

@@ -311,6 +311,12 @@ rsSystem.component("dndDialogRoll", {
 		if(!this.storage.rolls) {
 			this.storage.rolls = [];
 		}
+		if(this.skills.length === 1) {
+			var find = $(this.$el).find("#" + this.skills[0].skill.id.substring(7));
+			if(find && find.length) {
+				find[0].focus();
+			}
+		}
 	},
 	"methods": {
 		"addDamageType": function(type) {

@@ -7,156 +7,197 @@
  * @module Components
  * @zindex 1
  */
-(function() {
-	var storageKey = "_rs_menuComponentKey";
-	
-	rsSystem.component("rsTable", {
-		"inherit": true,
-		"mixins": [
-			rsSystem.components.RSCore
-		],
-		"props": {
-			"index": {
-				"required": true,
-				"type": Object
-			},
-			"corpus": {
-				"required": true,
-				"type": Array
-			},
-			"headers": {
-				"required": true,
-				"type": Array
-			},
-			"controls": {
-				"required": false,
-				"type": Array
-			},
-			"state": {
-				"required": true,
-				"type": Object
-			}
+rsSystem.component("rsTable", {
+	"inherit": true,
+	"mixins": [
+		rsSystem.components.StorageController,
+		rsSystem.components.RSCore
+	],
+	"props": {
+		"universe": {
+			"required": true,
+			"type": Object
 		},
-		"data": function() {
-			var data = {},
-				x;
+		"source": {
+			"required": true,
+			"type": Array
+		},
+		"control": {
+			"default": "rsTableControls",
+			"type": String
+		},
+		"paging": {
+			"default": "rsTablePaging",
+			"type": String
+		},
+		"formatter": {
+			"type": Object
+		},
+		"actions": {
+			"type": Object
+		},
+		"sorts": {
+			"type": Object
+		},
+		"size": {
+			"type": Integer
+		},
+		"headings": {
+			"type": Array
+		},
+		"hidden": {
+			"type": Object
+		}
+	},
+	"computed": {
+		"headers": function() {
+			var headers = [],
+				classing,
+				field,
+				i;
 
-			data.start = 0;
-			if(this.state && !this.state.filter) {
-				Vue.set(this.state, "filter", {});
+			if(this.storage && this.storage.headings && this.storage.headings.length) {
+				for(i=0; i<this.storage.headings.length; i++) {
+					field = this.universe.index.fields[this.storage.headings[i]];
+					if(field && !field.disabled) {
+						headers.push(field);
+					}
+				}
+			} else if(this.headings && this.headings.length) {
+				for(i=0; i<this.headings.length; i++) {
+					field = this.universe.index.fields[this.headings[i]];
+					if(field && !field.disabled) {
+						headers.push(field);
+					}
+				}
+			} else if(this.size && this.corpus.length && (classing = this.corpus[0]._class) && this.universe.index.managers[classing]) {
+				for(i=0; i< this.universe.index.managers[classing].fields.length; i++) {
+					field = this.universe.index.fields[this.universe.index.managers[classing].fields[i]];
+					if(field && !field.disabled) {
+						headers.push(field);
+					}
+				}
+			} else {
+				headers.push(this.universe.index.fields.icon);
+				headers.push(this.universe.index.fields.name);
+				headers.push(this.universe.index.fields.date);
 			}
-			if(this.state && this.state.filter && (this.state.filter["null"] === null || this.state.filter["null"] === undefined)) {
-				Vue.set(this.state.filter, "null", "");
+
+			return headers;
+		}
+	},
+	"computed": {
+		"corpus": function() {
+			var corpus = [],
+				filter = (this.storage.filter || "").toLowerCase(),
+				rows = this.storage.rows || 20,
+				page = this.storage.page || 0,
+				i;
+
+			for(i=0; i<this.source.length; i++) {
+				if(this.source[0]._search !== undefined && source[0]._search !== null) {
+					if(this.source[0]._search.indexOf(filter) !== -1) {
+						corpus.push(this.source[0]);
+					}
+				} else if(this.source[0].name && this.source[0].name.toLowerCase().indexOf(filter) !== -1) {
+					corpus.push(this.source[0]);
+				}
+			}
+
+			if(this.storage.key) {
+				this.corpus.sort(this.sortRows);
+			}
+
+			return corpus.splice(page * rows, rows);
+		}
+	},
+	"watch": {
+
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+		if(typeof(this.storage.page) !== "number") {
+			Vue.set(this.storage, "page", 0);
+		}
+		if(!this.storage.selected) {
+			Vue.set(this.storage, "selected", {});
+		}
+		if(!this.storage.order) {
+			Vue.set(this.storage, "reverse", -1);
+			Vue.set(this.storage, "order", 1);
+		}
+	},
+	"methods": {
+		"sortRows": function(a, b) {
+			var va = a[this.storage.key || "id"],
+				vb = b[this.storage.key || "id"];
+
+			if(va === undefined) {
+				va = null;
+			}
+			if(vb === undefined) {
+				vb = null;
 			}
 			
-			return data;
+			if(va === null && vb !== null) {
+				return this.storage.order;
+			} else if(va !== null && vb === null) {
+				return this.storage.reverse;
+			} else if(va < vb) {
+				return this.storage.reverse;
+			} else if(va > vb) {
+				return this.storage.order;
+			}
+
+			return 0
 		},
-		"watch": {
-			"index": function(newIndex, oldIndex) {
-//				console.warn("Table Index Updated: ", oldIndex, "\n -> \n", newIndex);
-				oldIndex.$off("selection", this.update);
-				oldIndex.$off("indexed", this.update);
-				newIndex.$on("selection", this.update);
-				newIndex.$on("indexed", this.update);
-				this.update();
-			},
-			"state.filter": {
-				"deep": true,
-				"handler": function() {
-					this.update();
-				}
-			},
-			"state.paging.current": {
-				"deep": true,
-				"handler": function(nV) {
-					if(this.state.paging.tracked !== nV) {
-						this.state.paging.tracked = nV;
-						this.update();
+		"headerAction": function(header) {
+			console.log("Header Action: ", header);
+			if(!header.attribute || !header.attribute.no_sort) {
+				if(this.storage.key === header.id) {
+					if(this.storage.order === 1) {
+						Vue.set(this.storage, "reverse", 1);
+						Vue.set(this.storage, "order", -1);
+					} else {
+						Vue.set(this.storage, "reverse", -1);
+						Vue.set(this.storage, "order", 1);
 					}
-				}
-			},
-			"state.paging.per": {
-				"handler": function() {
-					this.update();
+				} else {
+					Vue.set(this.storage, "key", header.field);
 				}
 			}
 		},
-		"mounted": function() {
-			rsSystem.register(this);
-			this.universe.$on("universe:modified", this.update);
-			this.index.$on("selection", this.update);
-			this.index.$on("indexed", this.update);
-			this.$on("update-table", this.update);
-			this.update();
+		"formatObjectHeader": function(object) {
+			var x, keys, html;
+			keys = Object.keys(object);
+			html = "<ul>";
+			for(x=0; x<keys.length; x++) {
+				html += "<li><span class='property'>" + keys[x] + "</span>: <span class='value'>" + object[keys[x]] + "</span></li>"; 
+			}
+			html += "<ul>";
 		},
-		"methods": {
-			"headerAction": function(header) {
-				console.log("Header Action: ", header);
-				if(typeof header.action === "function") {
-					header.action(header);
-				} else if(header.action === null) {
-					/* No Action */
+		"select": function(record, header) {
+			console.log("Table Selection: ", record, header);
+			if(typeof(this.actions[header.id]) === "function") {
+				this.actions[header.id](record, header);
+			} else if(!this.storage.selection) {
+				if(this.storage.selected[record.id]) {
+					Vue.set(this.storage.selected, record.id, false);
+					this.$emit("deselected", record, header);
 				} else {
-					if(this.state.sortKey === header.field) {
-						Vue.set(this.state, "order", !this.state.order);
-					} else {
-						Vue.set(this.state, "sortKey", header.field);
-					}
-					if(header.sorter) {
-						if(this.state.sorter !== header.sorter) {
-							Vue.set(this.state, "sorter", header.sorter);
-						}
-					} else {
-						Vue.delete(this.state, "sorter");
-					}
-				}
-				this.update();
-			},
-			"isArray": function(item) {
-				return (item instanceof Array) || (item && item.constructor && item.constructor.name.toLowerCase().indexOf("array") !== -1);
-			},
-			"formatObjectHeader": function(object) {
-				var x, keys, html;
-				keys = Object.keys(object);
-				html = "<ul>";
-				for(x=0; x<keys.length; x++) {
-					html += "<li><span class='property'>" + keys[x] + "</span>: <span class='value'>" + object[keys[x]] + "</span></li>"; 
-				}
-				html += "<ul>";
-			},
-			"select": function(record, header) {
-//				console.log("Table Selection: ", record, header);
-				if(header.recordAction) {
-					header.recordAction(record, header);
-				} else if(!this.state.noSelect) {
-					if(this.index.toggleSelect(record)) {
-						if(!this.state.noEmit) {
-							this.$emit("selected", record, header);
-						}
-					} else {
-						if(!this.state.noEmit) {
-							this.$emit("unselected", record, header);
-						}
-					}
-					this.$forceUpdate();
-				} else if(!this.state.noEmit) {
+					Vue.set(this.storage.selected, record.id, true);
 					this.$emit("selected", record, header);
-				} else {
-					// Selection is suppressed
 				}
-				this.update();
-			},
-			"update": function() {
-				this.corpus.splice(0);
-				this.index.list(this.state.filter, this.state, this.corpus);
-//				this.$forceUpdate();
 			}
-		},
-		"beforeDestroy": function() {
-			this.universe.$off("universe:modified", this.update);
-			this.index.$off("selection", this.update);
-			this.index.$off("indexed", this.update);
-		},
-		"template": Vue.templified("components/table.html")
-	});
-})();
+		}
+	},
+	"beforeDestroy": function() {
+
+	},
+	"template": Vue.templified("components/data/table.html")
+});

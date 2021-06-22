@@ -2,89 +2,57 @@
 /**
  * 
  * 
- * @class rsTable
+ * @class rsTableControls
  * @constructor
  * @module Components
  * @zindex 1
  */
-(function() {
-	var storageKey = "_rs_menuComponentKey";
-	
-	rsSystem.component("rsTableControls", {
-		"inherit": true,
-		"mixins": [
-			rsSystem.components.RSCore
-		],
-		"props": {
-			"index": {
-				"required": true,
-				"type": Object
-			},
-			"controls": {
-				"required": false,
-				"type": Array
-			},
-			"corpus": {
-				"required": true,
-				"type": Array
-			},
-			"state": {
-				"required": true,
-				"type": Object
-			}
+rsSystem.component("rsTableControls", {
+	"inherit": true,
+	"mixins": [
+	],
+	"props": {
+		"corpus": {
+			"required": false,
+			"type": Array
 		},
-		"data": function() {
-			var data = {},
-				x;
+		"storage": {
+			"required": true,
+			"type": Object
+		}
+	},
+	"computed": {
+		"pages": function() {
 
-			data.start = 0;
-			
-			return data;
 		},
-		"watch": {
-			"index": function(newIndex, oldIndex) {
-				console.warn("Controls Index Updated: ", oldIndex, "\n -> \n", newIndex);
-				oldIndex.$off("selection", this.update);
-				oldIndex.$off("indexed", this.update);
-				newIndex.$on("selection", this.update);
-				newIndex.$on("indexed", this.update);
-				this.update();
-			},
-			"state": {
-				"deep": true,
-				"handler": function() {
-					this.update();
-				}
-			}
+		"hasSelection": function() {
+			return Object.keys(this.storage.selected).length;
+		}
+	},
+	"watch": {
+
+	},
+	"data": function() {
+		var data = {};
+		
+		return data;
+	},
+	"mounted": function() {
+		rsSystem.register(this);
+	},
+	"methods": {
+		"clearSelection": function() {
+
 		},
-		"mounted": function() {
-			rsSystem.register(this);
-			this.index.$on("selection", this.update);
-			this.index.$on("indexed", this.update);
-			this.update();
+		"allSelection": function() {
+
 		},
-		"methods": {
-			"clearSelection": function() {
-				
-				this.index.clearSelection();
-				this.update();
-			},
-			"allSelection": function() {
-				this.index.select(this.corpus);
-				this.update();
-			},
-			"infoSelection": function(record) {
-				rsSystem.EventBus.$emit("display-info", record);
-			},
-			"update": function() {
-				this.$forceUpdate();
-			}
-		},
-		"beforeDestroy": function() {
-			this.universe.$off("universe:modified", this.update);
-			this.index.$off("selection", this.update);
-			this.index.$off("indexed", this.update);
-		},
-		"template": Vue.templified("components/table/controls.html")
-	});
-})();
+		"infoSelection": function(record) {
+			this.$emit("info", record);
+		}
+	},
+	"beforeDestroy": function() {
+
+	},
+	"template": Vue.templified("components/data/table/controls.html")
+});

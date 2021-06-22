@@ -30,6 +30,9 @@ mapping.integer = {
 mapping.calculated = mapping.computed = {
 	"type": "text"
 };
+mapping.icon = {
+	"type": "text"
+};
 mapping.text = mapping.string = {
 	"type": "text"
 };
@@ -1072,7 +1075,7 @@ class ClassManager extends EventEmitter {
 						console.log("Data Write Failed[" + this.id + "]: " + details.id);
 						callback(err, null);
 					} else {
-						console.log("Data Written[" + this.id + "]: " + details.id);
+						// console.log("Data Written[" + this.id + "]: " + details.id);
 						object = new object(universe, this, details);
 						object.created = details.created;
 						object.updated = details.updated;

@@ -37,6 +37,7 @@ rsSystem.component("DNDMasterScreen", {
 				main = {},
 				foes = [],
 				npcs = [],
+				meeting,
 				location,
 				entity,
 				player,
@@ -52,6 +53,7 @@ rsSystem.component("DNDMasterScreen", {
 			entities.foes = foes;
 			entities.npcs = npcs;
 
+			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
 				player = this.universe.listing.player[i];
 				if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
@@ -60,6 +62,24 @@ rsSystem.component("DNDMasterScreen", {
 						loaded[entity.id] = true;
 						mains.push(entity);
 						main[entity.id] = true;
+					}
+				}
+			}
+
+			// Pull from players listed in active meeting
+			for(i=0; i<this.universe.listing.meeting.length; i++) {
+				load = this.universe.listing.meeting[i];
+				if(load && !load.disabled && load.is_active && load.players && load.players.length) {
+					for(j=0; j<load.players.length; j++) {
+						player = this.universe.index.player[load.players[j]];
+						if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
+							entity = this.universe.index.entity[player.attribute.playing_as];
+							if(entity && !loaded[entity.id]) {
+								loaded[entity.id] = true;
+								mains.push(entity);
+								main[entity.id] = true;
+							}
+						}
 					}
 				}
 			}
@@ -84,6 +104,15 @@ rsSystem.component("DNDMasterScreen", {
 							}
 						}
 					}
+				}
+			}
+
+			// Scan for entities loyal to the active mains
+			for(i=0; i<this.universe.listing.entity.length; i++) {
+				entity = this.universe.index.entity[i];
+				if(entity && !loaded[entity.id] && main[entity.loyal_to]) {
+					loaded[entity.id] = true;
+					minions.push(entity);
 				}
 			}
 
@@ -141,17 +170,17 @@ rsSystem.component("DNDMasterScreen", {
 	},
 	"methods": {
 		"entityRolled": function(event) {
-			console.trace("Roll Event: ", event);
 			if(event) {
-				if(!this.rolled[event.entity]) {
-					this.rolled[event.entity] = [];
+				var roll = Object.assign({}, event);
+				if(!this.rolled[roll.entity]) {
+					this.rolled[roll.entity] = [];
 				}
-				if(typeof(event.skill) === "string") {
-					if(this.universe.index.skill[event.skill]) {
-						event.skill = this.universe.index.skill[event.skill];
+				if(typeof(roll.skill) === "string") {
+					if(this.universe.index.skill[roll.skill]) {
+						roll.skill = this.universe.index.skill[roll.skill];
 					}
 				}
-				this.rolled[event.entity].push(event);
+				this.rolled[roll.entity].push(roll);
 			}
 		},
 		"playerDisconnected": function(event) {

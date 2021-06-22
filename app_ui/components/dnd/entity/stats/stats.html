@@ -1,6 +1,6 @@
 <div class="rs-component dnd-component entity-stats">
 	<div class="property-container gold">
-		<button class="property" v-on:click="viewActions()">
+		<button class="property" v-on:click="listActions()">
 			<span class="icon game-icon game-icon-saber-slash"></span>
 			<span>{{getMainHand()}}</span>
 			<span class="seperator">|</span>
@@ -8,21 +8,21 @@
 		</button>
 	</div>
 	<div class="property-container armor">
-		<div class="property">
+		<button class="property" v-on:click="listSpells()">
 			<span class="icon fad fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
 			<span>{{getSpellDC()}}</span>
 			<span class="seperator">|</span>
 			<span>{{getSpellAttack()}}</span>
-		</div>
+		</button>
 	</div>
 	<div class="property-container weight">
-		<button class="property" v-on:click="checkWeight()">
+		<button class="property" v-on:click="listInventory()">
 			<span class="icon fas" :class="getWeightScales()"></span>
 			<span>{{entity.weight}}</span>
 		</button>
 	</div>
 	<div class="property-container speed">
-		<button class="property" v-on:click="move()">
+		<button class="property" v-on:click="info(entity.location)">
 			<span class="icon fas fa-running"></span>
 			<span>{{entity.movement_ground}}</span>
 		</button>

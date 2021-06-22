@@ -1,9 +1,9 @@
 <div class="rs-page dnd-page master-screen">
 	<div class="screen-panel">
 		<div class="screen-column">
-			<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
 			<dnd-master-meeting :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterMeeting"></dnd-master-meeting>
 			<dnd-master-note :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterNote"></dnd-master-note>
+			<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
 		</div>
 		<div class="screen-column">
 			<dnd-master-entity v-for="entity in activeEntities.list" :universe="universe" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :key="entity.id"></dnd-master-entity>
