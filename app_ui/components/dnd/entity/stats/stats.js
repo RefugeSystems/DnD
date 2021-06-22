@@ -35,6 +35,13 @@ rsSystem.component("dndEntityStats", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"viewActions": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndActionsList",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id
+			});
+		},
 		"getMainHand": function() {
 			var attack = this.entity.skill_check["skill:mainhand"] || 0;
 			if(attack < 0) {

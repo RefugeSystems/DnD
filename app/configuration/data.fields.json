@@ -319,6 +319,14 @@
 			"displayed": false
 		}
 	}, {
+		"id": "is_monster",
+		"name": "Is Monster",
+		"description": "Flag to indicate an entity is a monster",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "profile",
 		"name": "Profile",
 		"description": "Profile data to use for this object",
@@ -425,6 +433,43 @@
 		"name": "Cost",
 		"description": "The general cost of this object",
 		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "initiative",
+		"name": "Initiative",
+		"description": "Combat order for this creature",
+		"type": "integer",
+		"ordering": 210,
+		"attribute": {}
+	}, {
+		"id": "passive_perception",
+		"name": "Passive Perception",
+		"description": "This creature's ability to notice things without specifically looking for them",
+		"type": "calculate",
+		"ordering": 211,
+		"attribute": {
+			"default": "10 + wisdom"
+		}
+	}, {
+		"id": "stealth",
+		"name": "Current Stealth",
+		"description": "Current stealth for this creature",
+		"type": "integer",
+		"ordering": 212,
+		"attribute": {}
+	}, {
+		"id": "perception",
+		"name": "Current Perception",
+		"description": "Current perception for this creature",
+		"type": "integer",
+		"ordering": 213,
+		"attribute": {}
+	}, {
+		"id": "investigation",
+		"name": "Investigation",
+		"description": "Current investigative ability for this creature",
+		"type": "integer",
+		"ordering": 214,
 		"attribute": {}
 	}, {
 		"id": "versioning",
@@ -1635,6 +1680,12 @@
 		"type": "boolean",
 		"attribute": {}
 	}, {
+		"id": "is_active",
+		"name": "Active",
+		"description": "Flag to mark this as a current or active object.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
 		"id": "weight",
 		"name": "Weight",
 		"description": "The weight of this object",
@@ -1910,6 +1961,15 @@
 		"attribute": {
 			"display_size": 90
 		}
+	}, {
+		"id": "page",
+		"name": "Page",
+		"description": "A page that serves as a primary description for this.",
+		"type": "string",
+		"inheritable": [
+			"page"
+		],
+		"attribute": {}
 	}, {
 		"id": "pages",
 		"name": "Pages",

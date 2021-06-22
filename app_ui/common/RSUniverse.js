@@ -689,12 +689,11 @@ class RSUniverse extends EventEmitter {
 					}
 					
 					this.addLogEvent(message.type + " Message received", message.type === "error"?50:30, message);
-					this.$emit(message.type, message.event || message.data);
-					
 					if(this.processEvent[message.type]) {
 						this.processEvent[message.type](message);
 					} else {
-						this.$emit(message.type, message.event);
+						this.$emit(message.type, message.event || message.data);
+						// this.$emit(message.type, message.event);
 					}
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);

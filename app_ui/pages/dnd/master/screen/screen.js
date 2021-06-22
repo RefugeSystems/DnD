@@ -1,4 +1,3 @@
-
 /**
  *
  *
@@ -29,9 +28,98 @@ rsSystem.component("DNDMasterScreen", {
 			"type": Object
 		}
 	},
+	"computed": {
+		"activeEntities": function() {
+			var entities = {},
+				minions = [],
+				loaded = {},
+				mains = [],
+				main = {},
+				foes = [],
+				npcs = [],
+				location,
+				entity,
+				player,
+				party,
+				load,
+				i,
+				j,
+				k;
+
+			entities.list = [];
+			entities.mains = mains;
+			entities.minions = minions;
+			entities.foes = foes;
+			entities.npcs = npcs;
+
+			for(i=0; i<this.universe.listing.player.length; i++) {
+				player = this.universe.listing.player[i];
+				if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
+					entity = this.universe.index.entity[player.attribute.playing_as];
+					if(entity && !loaded[entity.id]) {
+						loaded[entity.id] = true;
+						mains.push(entity);
+						main[entity.id] = true;
+					}
+				}
+			}
+
+			for(i=0; i<mains.length; i++) {
+				entity = mains[0];
+				if(entity.location && !loaded[entity.location]) {
+					location = this.universe.index.location[entity.location];
+					loaded[entity.location] = true;
+					if(location && location.populace && location.populace.length) {
+						for(j=0; j<location.populace.length; j++) {
+							load = this.universe.index.entity[location.populace[j]];
+							if(load && !loaded[load.id]) {
+								loaded[load.id] = true;
+								if(entity.owned && Object.keys(entity.owned).length) {
+									minions.push(load);
+								} else if(load.is_npc) {
+									npcs.push(load);
+								} else {
+									foes.push(load);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			for(i=0; i<this.universe.listing.party.length; i++) {
+				party = this.universe.listing.party[i];
+				if(party && !party.disabled && party.entities && party.entities.length) {
+					for(k=0; k<main.length && !loaded[party.id]; k++) {
+						if(party.entities.indexOf(main[k].id) !== -1) {
+							loaded[party.id] = true;
+							for(j=0; j<party.entities.length; j++) {
+								entity = this.universe.index.entity[party.entities[j]];
+								if(entity && !entity.disabled && !loaded[entity.id]) {
+									loaded[entity.id] = true;
+									if(entity.owned && Object.keys(entity.owned).length) {
+										minions.push(entity);
+									} else if(entity.is_npc) {
+										npcs.push(entity);
+									} else {
+										foes.push(entity);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			entities.combat = mains.concat(minions, npcs, foes);
+			entities.combat.sort(rsSystem.utility.sortByInitiative);
+			entities.list = mains.concat(minions, npcs, foes);
+			entities.list.sort(rsSystem.utility.sortByInitiative);
+			return entities;
+		}
+	},
 	"data": function() {
 		var data = {},
-			buffer,
 			i;
 
 		data.tracking = {};
@@ -40,15 +128,32 @@ rsSystem.component("DNDMasterScreen", {
 			data.tracking.player[this.universe.listing.player[i].id] = this.universe.listing.player[i].connections || 0;
 		}
 
+		data.rolled = {};
+
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 		
-		this.universe.$on("player-disconnected", this.playerDisconnected);
-		this.universe.$on("player-connected", this.playerConnected);
+		// this.universe.$on("player-disconnected", this.playerDisconnected);
+		// this.universe.$on("player-connected", this.playerConnected);
+		this.universe.$on("entity:roll", this.entityRolled);
 	},
 	"methods": {
+		"entityRolled": function(event) {
+			console.trace("Roll Event: ", event);
+			if(event) {
+				if(!this.rolled[event.entity]) {
+					this.rolled[event.entity] = [];
+				}
+				if(typeof(event.skill) === "string") {
+					if(this.universe.index.skill[event.skill]) {
+						event.skill = this.universe.index.skill[event.skill];
+					}
+				}
+				this.rolled[event.entity].push(event);
+			}
+		},
 		"playerDisconnected": function(event) {
 			console.log("Disconnect: ", event);
 		},
@@ -57,10 +162,7 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"beforeDestroy": function() {
-		/*
-		this.universe.$off("universe:modified", this.update);
-		rsSystem.EventBus.$off("key:escape", this.closeInfo);
-		*/
+		this.universe.$off("entity:roll", this.entityRolled);
 	},
 	"template": Vue.templified("pages/dnd/master/screen.html")
 });

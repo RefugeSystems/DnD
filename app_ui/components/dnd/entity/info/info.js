@@ -78,7 +78,11 @@ rsSystem.component("dndEntityInfo", {
 			});
 		},
 		"transferGold": function() {
-
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndTransferGold",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id
+			});
 		},
 		"useHitDice": function() {
 

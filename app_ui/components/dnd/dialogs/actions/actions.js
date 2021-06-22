@@ -1,7 +1,7 @@
 /**
  *
  *
- * @class dndTakeDamage
+ * @class dndActionsList
  * @constructor
  * @module Components
  * @param {Object} universe
@@ -9,29 +9,32 @@
  * @param {Object} entity
  * @param {UIProfile} profile
  */
-rsSystem.component("dndTakeDamage", {
+rsSystem.component("dndActionsList", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
+		rsSystem.components.DnDLocale,
 		rsSystem.components.RSCore
 	],
 	"props": {
-		"entity": {
+		"details": {
 			"requried": true,
 			"type": Object
-		},
-		"profile": {
-			"type": Object,
-			"default": function () {
-				return {};
-			}
+		}
+	},
+	"computed": {
+		"actions": function() {
+			var actions = {},
+				action,
+				i;
+
+			return actions;
 		}
 	},
 	"data": function () {
 		var data = {};
 
-		data.types = [];
-
+		data.entity = this.universe.getObject(this.details.entity);
 
 		return data;
 	},
@@ -39,7 +42,12 @@ rsSystem.component("dndTakeDamage", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"canPerform": function(action) {
 
+		},
+		"perform": function (action) {
+			
+		}
 	},
 	"beforeDestroy": function () {
 		/*
@@ -47,5 +55,5 @@ rsSystem.component("dndTakeDamage", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/dialogs/actions/damage.html")
+	"template": Vue.templified("components/dnd/dialogs/actions.html")
 });

@@ -1,0 +1,66 @@
+<div class="rs-component dnd-component master-meeting flex v">
+	<div class="meeting flex v" v-if="active">
+		<h1>{{active.name}}</h1>
+		<div class="meeting-info">
+			<div class="meeting-description">
+				<textarea v-model="description"></textarea>
+			</div>
+
+		</div>
+		<div class="flex h wrap master-actions">
+			<button class="rounded general quick action" v-on:click="forwardTime(6)">
+				<span class="action-icon fas fa-history"></span>
+				<span class="action-count">1</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(60)">
+				<span class="action-icon fas fa-history"></span>
+				<span class="action-count">10</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(600)">
+				<span class="action-icon fas fa-history"></span>
+				<span class="action-count">100</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(3600)">
+				<span class="action-icon fal fa-hourglass-start"></span>
+				<span class="action-count">1</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(18000)">
+				<span class="action-icon fal fa-hourglass-start"></span>
+				<span class="action-count">5</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(86400)">
+				<span class="action-icon fal fa-calendar-date"></span>
+				<span class="action-count">1</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(432,000)">
+				<span class="action-icon fal fa-calendar-week"></span>
+				<span class="action-count">1</span>
+			</button>
+		</div>
+		<div class="flex h wrap master-actions">
+			<button class="rounded general quick action" v-on:click="setStartDate()">
+				<span class="fas fa-calendar-day"></span>
+			</button>
+			<button class="rounded general quick action" v-on:click="timeToMeeting(active)">
+				<span class="fas fa-clock"></span>
+			</button>
+			<button class="rounded general action" v-on:click="setStartTime()">
+				<span class="fas fa-clock"></span>
+				<span>Start</span>
+			</button>
+			<button class="rounded general action" v-on:click="setEndTime()">
+				<span class="fas fa-clock"></span>
+				<span>End</span>
+			</button>
+			<!-- TODO: Organize Players - Connected Taged as present, Unconnected moved to Absent - Meetings will be premade for notification purposes -->
+		</div>
+	</div>
+	<div class="flex h wrap master-actions">
+		<button class="rounded general quick action" v-on:click="createMeeting()">
+			<span class="fas fa-calendar-plus"></span>
+		</button>
+		<select class="select-meeting grow-1" v-model="id">
+			<option v-for="meet in meetings" :value="meet.id">{{meet.name}}</option>
+		</select>
+	</div>
+</div>

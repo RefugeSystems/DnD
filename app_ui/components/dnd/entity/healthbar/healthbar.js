@@ -31,15 +31,17 @@ rsSystem.component("dndEntityHealthbar", {
 	"methods": {
 		"updateBar": function() {
 			Vue.set(this, "health", Math.floor(100*(this.entity.hp || 0)/(this.entity.hp_max || 1)));
-			this.$el.classList.remove("okay");
-			this.$el.classList.remove("warn");
-			this.$el.classList.remove("bad");
-			if(this.health > 30) {
-				this.$el.classList.add("okay");
-			} else if(this.health > 10) {
-				this.$el.classList.add("warn");
-			} else {
-				this.$el.classList.add("bad");
+			if(this.$el && this.$el.classList) {
+				this.$el.classList.remove("okay");
+				this.$el.classList.remove("warn");
+				this.$el.classList.remove("bad");
+				if(this.health > 30) {
+					this.$el.classList.add("okay");
+				} else if(this.health > 10) {
+					this.$el.classList.add("warn");
+				} else {
+					this.$el.classList.add("bad");
+				}
 			}
 
 			// Set width and mange that "bar" may not have instantiated yet

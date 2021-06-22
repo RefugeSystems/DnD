@@ -1,5 +1,29 @@
 .dnd-page.master-screen {
+	width: 100%;
+	height: 100%;
 
-
+	.screen-panel {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		height: 100%;
+	}
 	
+	.screen-column {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		max-width: 420px;
+		min-width: 300px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		padding-right: 20px;
+	}
+
+	.master-actions {
+		.action {
+			margin: 0px 5px;
+		}
+	}
 }

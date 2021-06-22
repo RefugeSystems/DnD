@@ -31,25 +31,30 @@ rsSystem.component("DNDWidgetCore", {
 	"mounted": function() {
 		rsSystem.register(this);
 
-		this.$el.onclick = (event) => {
-			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow) {
-				rsSystem.EventBus.$emit("display-info", {
-					"info": follow
-				});
-				event.stopPropagation();
-				event.preventDefault();
-			}
-		};
+		if(this.$el) {
+			this.$el.onclick = (event) => {
+				var follow = event.srcElement.attributes.getNamedItem("data-id");
+				if(follow) {
+					rsSystem.EventBus.$emit("display-info", {
+						"info": follow
+					});
+					event.stopPropagation();
+					event.preventDefault();
+				}
+			};
 
-		this.$el.classList.add("dnd-widget");
-		this.$el.classList.remove("cell1");
-		this.$el.classList.remove("cell2");
-		this.$el.classList.remove("cell3");
-		this.$el.classList.remove("cell4");
-		this.$el.classList.remove("widget_left");
-		this.$el.classList.remove("widget_center");
-		this.$el.classList.remove("widget_right");
+			if(this.$el.classList) {
+				this.$el.classList.add("dnd-widget");
+				this.$el.classList.remove("cell1");
+				this.$el.classList.remove("cell2");
+				this.$el.classList.remove("cell3");
+				this.$el.classList.remove("cell4");
+				this.$el.classList.remove("widget_left");
+				this.$el.classList.remove("widget_center");
+				this.$el.classList.remove("widget_right");
+			}
+		}
+
 		if(this.widget) {
 			if(this.widget.cell_width) {
 				this.$el.classList.add("cell" + this.widget.cell_width);

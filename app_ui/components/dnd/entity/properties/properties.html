@@ -1,0 +1,9 @@
+<div class="dnd-component entity-properties">
+	<div class="flex h wrap">
+		<button class="rounded general action entity-property" v-for="field in properties">
+			<span :class="field.icon"></span>
+			<span v-if="!field.icon">{{field.name}}</span>
+			<span>{{entity[field.id]}}</span>
+		</button>
+	</div>
+</div>

@@ -107,6 +107,35 @@
 		},
 		/**
 		 *
+		 * @method sortByInitiative
+		 * @param a
+		 * @param b
+		 * @return {Number}
+		 */
+		"sortByInitiative": function(a, b) {
+			if((a.initiative === undefined || a.initiative === null) && b.initiative !== undefined && b.initiative !== null) {
+				return 1;
+			} else if((b.initiative === undefined || b.initiative === null) && a.initiative !== undefined && a.initiative !== null) {
+				return -1;
+			}
+			if(a.initiative !== undefined && b.initiative !== undefined && a.initiative !== null && b.initiative !== null) {
+				if(a.initiative < b.initiative) {
+					return -1;
+				} else if(a.initiative > b.initiative) {
+					return 1;
+				}
+			}
+
+			if(a.name < b.name) {
+				return -1;
+			} else if(a.name > b.name) {
+				return 1;
+			}
+			
+			return 0;
+		},
+		/**
+		 *
 		 * @method sortData
 		 * @param a
 		 * @param b
