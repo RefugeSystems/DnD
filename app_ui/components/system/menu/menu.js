@@ -124,6 +124,25 @@ rsSystem.component("systemMenu", {
 		"$route": {
 			"deep": true,
 			"handler": function() {
+				// Handle titling subsequent page navigations
+				var title,
+					item,
+					i;
+
+				if(this.configuration && this.configuration.navigations) {
+					for(i=0; i<this.configuration.navigations.length && !title; i++) {
+						item = this.configuration.navigations[i];	
+						if(item.label && item.highlight && this.$route.path.startsWith(item.highlight)) {
+							title = item.label;
+						}
+					}
+				}
+				if(title) {
+					document.title = title;
+				} else {
+					document.title = this.configuration.title || "RSDnD";
+				}
+				
 				this.$forceUpdate();
 			}
 		}
@@ -145,6 +164,26 @@ rsSystem.component("systemMenu", {
 		this.chatCore.$on("received", this.checkViewed);
 		this.chatCore.$on("viewed", this.checkViewed);
 		this.checkViewed();
+
+		// TODO: Consollidate Title Check
+		// Handle initial loading of page
+		var title,
+			item,
+			i;
+			
+		if(this.configuration && this.configuration.navigations) {
+			for(i=0; i<this.configuration.navigations.length && !title; i++) {
+				item = this.configuration.navigations[i];	
+				if(item.label && item.highlight && this.$route.path.startsWith(item.highlight)) {
+					title = item.label;
+				}
+			}
+		}
+		if(title) {
+			document.title = title;
+		} else {
+			document.title = this.configuration.title || "RSDnD";
+		}
 	},
 	"methods": {
 		"checkViewed": function() {

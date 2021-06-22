@@ -1,7 +1,7 @@
 /**
  *
  *
- * @class dndActionsList
+ * @class dndDialogList
  * @constructor
  * @module Components
  * @param {Object} universe
@@ -9,7 +9,7 @@
  * @param {Object} entity
  * @param {UIProfile} profile
  */
-rsSystem.component("dndActionsList", {
+rsSystem.component("dndDialogList", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
@@ -23,12 +23,12 @@ rsSystem.component("dndActionsList", {
 		}
 	},
 	"computed": {
-		"actions": function() {
-			var actions = {},
-				action,
+		"listing": function() {
+			var list = [],
+				item,
 				i;
 
-			return actions;
+			return list;
 		}
 	},
 	"data": function () {
@@ -50,10 +50,7 @@ rsSystem.component("dndActionsList", {
 		}
 	},
 	"beforeDestroy": function () {
-		/*
-		this.universe.$off("universe:modified", this.update);
-		rsSystem.EventBus.$off("key:escape", this.closeInfo);
-		*/
+		
 	},
-	"template": Vue.templified("components/dnd/dialogs/actions.html")
+	"template": Vue.templified("components/dnd/dialogs/list.html")
 });

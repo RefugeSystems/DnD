@@ -147,8 +147,9 @@ class RSUniverse extends EventEmitter {
 		this.processEvent = {};
 		
 		this.processEvent["time:changed"] = (event) => {
+			Vue.set(this, "timeline", event.data.timeline);
 			Vue.set(this, "time", event.data.time);
-			this.$emit("time:changed", event.data.time);
+			this.$emit("time:changed", event.data);
 		};
 		this.processEvent["unload"] = (event) => {
 			console.warn("Unload Data: ", event);

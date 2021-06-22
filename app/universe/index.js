@@ -818,6 +818,11 @@ class Universe extends EventEmitter {
 			if(err) {
 				this.emit("error", new Anomaly("universe:time:changing", "Failed to retrieve occurances within time period for universe", 50, {"start": this.time, "end": end}, err, this));
 			} else {
+				console.log("Time[" + start + " -> " + end + " @ " + occurrences.length + "]: ", {
+					"timeline": this.timeline,
+					"time": this.time
+				});
+
 				if(occurrences && occurrences.length) {
 					var processing = occurrences.length,
 						chronicler,

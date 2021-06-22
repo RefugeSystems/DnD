@@ -2151,6 +2151,15 @@
 			"inherited_key": "player"
 		}
 	}, {
+		"id": "discount",
+		"name": "Discount",
+		"description": "Maps entity IDs to a float for price to be paid (such as .8 for a 20% discount).",
+		"type": "object",
+		"attribute": {
+			"inherited_key": "entity",
+			"display": 110
+		}
+	}, {
 		"id": "players",
 		"name": "Players",
 		"description": "Player IDs associated with this object. Typically for use with dashboards and other high level display objects.",

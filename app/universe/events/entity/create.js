@@ -21,6 +21,7 @@
  * @param {String} event.message.data.description In markdown text
  * @param {String} event.message.data.icon CSS Classing, not typically specified here, possibly slated for inheritance from race
  * @param {String} event.message.data.gender Simply naming the gender; "Male", "Female", "Non-Binary", "Agender"
+ * @param {Number} event.message.data.age This is used to calculate the birthday
  * @param {Number} event.message.data.height 
  * @param {Number} event.message.data.weight 
  * @param {String} event.message.data.race ID
@@ -82,6 +83,9 @@ typeShort["png"] = "image/png";
 typeShort["svg"] = "image/svg";
 
 module.exports.initialize = function(universe) {
+	// TODO: Calendar time for year calibration/sync
+	var year = 60 * 60 * 24 * 25 * 8; 
+
 	universe.on("player:create:character", function(event) {
 		universe.emit("info", new universe.Anomaly("player:create:character", "Player character creation requested", 30, event.message, null, "event:" + event.type));
 		universe.emit("send", {
@@ -107,6 +111,7 @@ module.exports.initialize = function(universe) {
 		details.played_by = event.player.id;
 		details.gold = 0;
 		details.level = 1;
+		details.born = this.universe.time - year * (event.message.data.age || 0);
 
 		makeCharacter(universe, event, source, details)
 		.then(copyFeats)
