@@ -40,7 +40,7 @@ rsSystem.component("rsTable", {
 			"type": Object
 		},
 		"size": {
-			"type": Integer
+			"type": Number
 		},
 		"headings": {
 			"type": Array
@@ -95,7 +95,7 @@ rsSystem.component("rsTable", {
 				i;
 
 			for(i=0; i<this.source.length; i++) {
-				if(this.source[0]._search !== undefined && source[0]._search !== null) {
+				if(this.source[0]._search !== undefined && this.source[0]._search !== null) {
 					if(this.source[0]._search.indexOf(filter) !== -1) {
 						corpus.push(this.source[0]);
 					}
@@ -154,7 +154,7 @@ rsSystem.component("rsTable", {
 				return this.storage.order;
 			}
 
-			return 0
+			return 0;
 		},
 		"headerAction": function(header) {
 			console.log("Header Action: ", header);
