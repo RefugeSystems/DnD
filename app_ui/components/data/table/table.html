@@ -1,6 +1,6 @@
-<div class="system-component table-index">
-	<component :is="control" :state="storage" :corpus="corpus"  v-on:info="info($event)"/>
-	<div class="table-container">
+<div class="rs-table system-component table-index">
+	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :corpus="corpus" v-on:info="info($event)"/>
+	<div class="table-container" v-if="storage">
 		<table class="table-element" :class="storage.classes">
 			<thead>
 				<tr>
@@ -26,12 +26,12 @@
 						<span>No Items Available</span>
 					</td>
 				</tr>
-				<tr v-for="record in corpus" :key="record.id" :class="this.storage.selected[record.id]?'record-selected':''">
+				<tr v-for="record in corpus" :key="record.id" :class="storage.selected[record.id]?'record-selected':''">
 					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-on:click.stop="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
 						<!-- TODO: Field attribute Checks -->
 						<div v-if="!header.noCross" class="crosshair"></div>
-						<div v-if="!header.noHighlight && this.storage.selected[record.id] && i === 0" class="highlight starting"></div>
-						<div v-if="!header.noHighlight && this.storage.selected[record.id] && i === headers.length - 1" class="highlight ending"></div>
+						<div v-if="!header.noHighlight && storage.selected[record.id] && i === 0" class="highlight starting"></div>
+						<div v-if="!header.noHighlight && storage.selected[record.id] && i === headers.length - 1" class="highlight ending"></div>
 						<button class="table-content">
 							<slot name="table-content" :header="header" :record="record">
 								<div class="contents" :class="header.id?header.id:''" v-if="formatter[header.id]">
@@ -59,5 +59,5 @@
 			</tbody>
 		</table>
 	</div>
-	<component :is="paging" :state="storage" :corpus="corpus" v-on:info="info($event)"/>
+	<component :is="paging" :storage="storage" :source="source" :filtered="filtered" :corpus="corpus" :last-page="lastPage" v-on:info="info($event)"/>
 </div>

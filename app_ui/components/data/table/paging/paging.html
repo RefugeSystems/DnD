@@ -1,11 +1,8 @@
 <div class="system-component table-paging">
 	<button class="index-page" :class="classPage(0)" v-on:click="toPage(0)">
-		1
+		<span>1</span>
 	</button>
-	<button v-for="page in pages" class="index-page" :class="classPage(page)" v-on:click="toPage(page)">
-		{{page + 1}}
-	</button>
-	<button class="index-page" :class="classPage(lastPage)" v-if="lastPage > 0" v-on:click="toPage(lastPage)">
-		{{lastPage + 1}}
+	<button v-for="page in lastPage" class="index-page" :class="classPage(page)" v-on:click="toPage(page)">
+		<span>{{page + 1}}</span>
 	</button>
 </div>

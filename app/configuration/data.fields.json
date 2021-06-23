@@ -1969,6 +1969,8 @@
 		"name": "Associations",
 		"description": "Objects directly connected to this one. In the case of knowledge and similar classes, this indicates the objects that the knowledge conveys knowledge of",
 		"type": "array",
+		"inheritable": [
+		],
 		"attribute": {}
 	}, {
 		"id": "knowledge_matrix",

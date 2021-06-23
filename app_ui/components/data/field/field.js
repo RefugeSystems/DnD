@@ -74,6 +74,7 @@
 						}
 					}
 				}
+				available.sort(rsSystem.utility.sortData);
 				return available;
 			},
 			"keyside": function() {

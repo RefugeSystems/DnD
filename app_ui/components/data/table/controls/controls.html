@@ -10,7 +10,7 @@
 		<button class="ctrl selections all" v-if="selected !== corpus.length" v-on:click="allSelection()">
 			<span class="far fa-check-square"></span>
 		</button>
-		<button class="ctrl selections info" v-if="selected" v-on:click="infoSelection(index.selection[index.selection.length-1])">
+		<button class="ctrl selections info" v-if="selected" v-on:click="infoSelection()">
 			<span class="far fa-journal-whills"></span>
 		</button>
 	</div>

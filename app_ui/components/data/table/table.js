@@ -6,12 +6,23 @@
  * @constructor
  * @module Components
  * @zindex 1
+ * @param {Universe} universe
+ * @param {Array} source
+ * @param {Object} [headings] Array of field names to use for display. Defaults to icon, name, acquired.
+ * @param {String} [control] Naming the Component to use for controls. Defaults ot the generla table control
+ * 		for filtering and selection.
+ * @param {String} [paging] Naming the Component to use for paging. Defaults ot the generla table control
+ * 		for listing and selecting pages.
+ * @param {Object} [formatter] Maps field IDs to functions that handle formatting data.
+ * @param {Object} [actions] Maps field IDs to functions that handle actions for selecting rows in that column.
+ * @param {Object} [sorts] Maps field IDs to functions that handle sorting data for that field.
+ * @param {Object} [hidden] Maps field IDs to booleans to hide the heading for that field
+ * @param {Object} [size] Short hand for header selection based on field display sizing.
  */
 rsSystem.component("rsTable", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController,
-		rsSystem.components.RSCore
+		rsSystem.components.StorageController
 	],
 	"props": {
 		"universe": {
@@ -30,14 +41,29 @@ rsSystem.component("rsTable", {
 			"default": "rsTablePaging",
 			"type": String
 		},
+		"title": {
+			"type": Object,
+			"default": function() {
+				return {};
+			}
+		},
 		"formatter": {
-			"type": Object
+			"type": Object,
+			"default": function() {
+				return {};
+			}
 		},
 		"actions": {
-			"type": Object
+			"type": Object,
+			"default": function() {
+				return {};
+			}
 		},
 		"sorts": {
-			"type": Object
+			"type": Object,
+			"default": function() {
+				return {};
+			}
 		},
 		"size": {
 			"type": Number
@@ -46,7 +72,10 @@ rsSystem.component("rsTable", {
 			"type": Array
 		},
 		"hidden": {
-			"type": Object
+			"type": Object,
+			"default": function() {
+				return {};
+			}
 		}
 	},
 	"computed": {
@@ -84,31 +113,57 @@ rsSystem.component("rsTable", {
 			}
 
 			return headers;
-		}
-	},
-	"computed": {
-		"corpus": function() {
-			var corpus = [],
+		},
+		"filtered": function() {
+			var filtered = [],
 				filter = (this.storage.filter || "").toLowerCase(),
-				rows = this.storage.rows || 20,
-				page = this.storage.page || 0,
 				i;
 
 			for(i=0; i<this.source.length; i++) {
-				if(this.source[0]._search !== undefined && this.source[0]._search !== null) {
-					if(this.source[0]._search.indexOf(filter) !== -1) {
-						corpus.push(this.source[0]);
+				if(this.source[i]._search !== undefined && this.source[i]._search !== null) {
+					if(this.source[i]._search.indexOf(filter) !== -1) {
+						filtered.push(this.source[i]);
 					}
-				} else if(this.source[0].name && this.source[0].name.toLowerCase().indexOf(filter) !== -1) {
-					corpus.push(this.source[0]);
+				} else if(this.source[i].name && this.source[i].name.toLowerCase().indexOf(filter) !== -1) {
+					filtered.push(this.source[i]);
 				}
 			}
 
 			if(this.storage.key) {
-				this.corpus.sort(this.sortRows);
+				filtered.sort(this.sortRows);
 			}
 
-			return corpus.splice(page * rows, rows);
+			return filtered;
+		},
+		"lastPage": function() {
+			var rows = this.storage.rows || 20,
+				pages;
+
+			pages = Math.floor(this.filtered.length/rows);
+
+			// Handle aligned boundry
+			if(pages * rows === this.filtered.length) {
+				pages -= 1;
+			}
+
+			return pages;
+		},
+		"corpus": function() {
+			var rows = this.storage.rows || 20,
+				page = this.storage.page || 0;
+
+			if(isNaN(page)) {
+				page = 0;
+			} else if(page > this.lastPage) {
+				page = this.lastPage;
+			} else if(page < 0) {
+				page = 0;
+			}
+
+			if(page !== this.storage.page) {
+				Vue.set(this.storage, "page", page);
+			}
+			return this.filtered.slice(rows * page, rows * page + rows);
 		}
 	},
 	"watch": {
@@ -130,6 +185,12 @@ rsSystem.component("rsTable", {
 		if(!this.storage.order) {
 			Vue.set(this.storage, "reverse", -1);
 			Vue.set(this.storage, "order", 1);
+		}
+		if(isNaN(this.storage.page)) {
+			Vue.set(this.storage, "page", 0);
+		}
+		if(this.storage.page >= Math.floor(this.corpus.length/this.storage.rows)) {
+			Vue.set(this.storage, "page", 0);
 		}
 	},
 	"methods": {
@@ -168,7 +229,7 @@ rsSystem.component("rsTable", {
 						Vue.set(this.storage, "order", 1);
 					}
 				} else {
-					Vue.set(this.storage, "key", header.field);
+					Vue.set(this.storage, "key", header.id);
 				}
 			}
 		},
