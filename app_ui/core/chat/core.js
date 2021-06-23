@@ -45,13 +45,25 @@ class RSChatCore extends EventEmitter {
 		// Vue.set(this, "viewing", false);
 	}
 
+	deleteCache() {
+		localStorage.removeItem(this._storageKey);
+		Vue.set(this, "chat", {
+			"_recent": {},
+			"_last": {},
+			"_active": "all",
+			"master": [],
+			"locale": [],
+			"all": []
+		});
+	}
+
 	/**
 	 * 
 	 * @method receiveChat
 	 * @param {Object} event With chat data.
 	 */
 	receiveChat(event) {
-		console.log("Received Chat: ", _p(event));
+		// console.log("Received Chat: ", _p(event));
 		if(event.group) {
 			// For direct messages, swap "my group" to point to "them"
 			if(event.group === this.player.id) {

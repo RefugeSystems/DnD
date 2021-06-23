@@ -106,7 +106,7 @@ rsSystem.component("DNDEntities", {
 		var data = {};
 
 		// TODO: Universe Setting? Better control of some sort. Also prevent players from easily gathering intel
-		data.nearbyDashboard = this.universe.index.dashboard["dashboard:enarby"];
+		data.nearbyDashboard = this.universe.index.dashboard["dashboard:entity:nearby"];
 		data.nearbyMinion = this.universe.index.dashboard["dashboard:character:minion"];
 
 		return data;

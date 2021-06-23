@@ -173,12 +173,12 @@
 		"id": "minigame",
 		"name": "Minigame",
 		"description": "Describes the state of a mini-game",
-		"fields": ["parent", "name", "description", "game", "is_preview", "review", "attribute", "time", "date", "last", "expiry", "conditionals", "note", "attribute", "review"]
+		"fields": ["parent", "name", "description", "game", "is_preview", "time", "date", "last", "expiry", "conditionals", "note", "attribute", "review"]
 	}, {
 		"id": "god",
 		"name": "God",
 		"description": "A God in the universe.",
-		"fields": ["parent", "name", "icon", "symbol", "description", "backstory", "capital", "locations", "alinment", "is_preview", "review", "attribute"]
+		"fields": ["parent", "name", "icon", "symbol", "description", "backstory", "capital", "locations", "alignment", "is_preview", "review", "attribute"]
 	}, {
 		"id": "nation",
 		"name": "Nation",

@@ -782,7 +782,8 @@ class RSObject {
 				details.index = index;
 				// details.value = this._calculated[name[index]];
 				details.value = this[name[index]];
-				this._universe.emit("error", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 40, details, null, this));
+				// TODO: These anomalies are generally expected
+				this._universe.emit("info", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 20, details, null, this));
 				return null;
 			}
 		} else {
@@ -792,7 +793,7 @@ class RSObject {
 			details.index = index;
 			// details.value = this._calculated[name[index]];
 			details.value = this[name[index]];
-			this._universe.emit("error", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 40, details, null, this));
+			this._universe.emit("info", new this._universe.Anomaly("object:field:value", "Failed to follow a reference value for the specified dot-walking", 20, details, null, this));
 			return null;
 		}
 	}
@@ -1162,6 +1163,7 @@ class RSObject {
 	toJSON(include) {
 		var calculated = Object.assign({}, this._calculated),
 			data = Object.assign({}, this._data),
+			formulas = {},
 			json = {},
 			field,
 			keys,
@@ -1176,6 +1178,9 @@ class RSObject {
 							json[field.id] = this[field.id];
 						} else {
 							json[field.id] = null;
+						}
+						if(field.type === "calculated") {
+							formulas[field.id] = this._calculated[field.id];
 						}
 					} else {
 						delete(calculated[field.id]);
@@ -1205,6 +1210,8 @@ class RSObject {
 			json._grid = this._grid;
 			json._x = this._x;
 			json._y = this._y;
+		} else {
+			json._calculated = formulas;
 		}
 		if(!json.attribute) {
 			json.attribute = {};

@@ -270,7 +270,7 @@ rsSystem.component("dndDialogRoll", {
 				"skill": this.details.skill,
 				"key": this.details.skill
 			};
-			if(data.entity) {
+			if(data.entity && data.entity.skill_check && data.entity.skill_check[roll.skill.id]) {
 				roll.formula += " + " + data.entity.skill_check[roll.skill.id];
 			}
 			data.skills.push(roll);

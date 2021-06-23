@@ -85,13 +85,13 @@ rsSystem.component("DNDWidgetCore", {
 	},
 	"methods": {
 		"performSkillCheck": function(skill) {
-			var action = this.universe.index.action[action];
+			// var action = this.universe.index.action[action];
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
 				"storageKey": "store:roll:" + this.entity.id,
 				"entity": this.entity.id,
 				"skill": skill,
-				"action": action,
+				// "action": action,
 				"closeAfterCheck": true
 			});
 		},

@@ -46,6 +46,14 @@
 
 			return corpus;
 		},
+		/**
+		 * 
+		 * @method forceReload
+		 */
+		"forceReload": function() {
+			location.reload(true);
+			/* TODO: Implement Server side cache clearing response or signal to the ServiceWorker */
+		},
 		"isOwner": function(record, player) {
 			player = this.player || player;
 

@@ -197,8 +197,17 @@ class RSUniverse extends EventEmitter {
 			if(this.profile && this.profile.collapse_system_alerts) {
 				notice.id = "universe:log";
 			}
-
-			this.$emit("notification", notice);
+			if(!this.profile || !this.profile.suppress_system_alerts) {
+				this.$emit("notification", notice);
+			} else {
+				if(event.data.level <40) {
+					console.log(notice);
+				} else if(event.data.level <50) {
+					console.warn(notice);
+				} else {
+					console.error(notice);
+				}
+			}
 		};
 		this.processEvent["system-warning"] = (event) => {
 			this.$emit("notification", {

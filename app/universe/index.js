@@ -573,6 +573,7 @@ class Universe extends EventEmitter {
 	/**
 	 * 
 	 * @method getObject
+	 * @throws {Anomaly} universe:object:request
 	 * @param {String} id 
 	 * @param {Function} callback
 	 */

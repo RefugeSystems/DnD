@@ -771,6 +771,15 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "nation",
+		"name": "Nation",
+		"description": "The nation that owns this",
+		"type": "string",
+		"inheritable": [
+			"nation"
+		],
+		"attribute": {}
+	}, {
 		"id": "cast_save",
 		"name": "Save With",
 		"description": "Names the attribute with which to save against this object",

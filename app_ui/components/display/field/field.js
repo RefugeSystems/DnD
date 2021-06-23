@@ -46,6 +46,9 @@ rsSystem.component("rsDisplayField", {
 		"fieldData": function() {
 			return this.universe.index.fields[this.field];
 		},
+		"hasFormula": function() {
+			return this.object._calculated && this.fieldData && this.fieldData.type === "calculated" && this.object._calculated[this.field] !== undefined && this.object._calculated[this.field] !== null && isNaN(this.object._calculated[this.field]);
+		},
 		"displayed": function() {
 			if(this.object.picture === this.object.portrait && (this.field === "picture" || this.field === "portrait")) {
 				return false;
@@ -81,6 +84,7 @@ rsSystem.component("rsDisplayField", {
 		
 		data.canToggleField = !!this.profile;
 		data.viewInvolved = false;
+		data.viewFormula = false;
 		data.detailInvolved = {};
 
 		return data;
@@ -149,6 +153,9 @@ rsSystem.component("rsDisplayField", {
 		},
 		"toggleInvolvedDetail": function(key) {
 			Vue.set(this.detailInvolved, key, !this.detailInvolved[key]);
+		},
+		"toggleFormula": function() {
+			Vue.set(this, "viewFormula", !this.viewFormula);
 		},
 		"getValueDisplay": function(field, value) {
 			if(field.attribute.obscures) {

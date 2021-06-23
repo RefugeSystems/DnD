@@ -111,7 +111,7 @@ module.exports.initialize = function(universe) {
 		details.played_by = event.player.id;
 		details.gold = 0;
 		details.level = 1;
-		details.born = this.universe.time - year * (event.message.data.age || 0);
+		details.born = universe.time - year * (event.message.data.age || 0);
 
 		makeCharacter(universe, event, source, details)
 		.then(copyFeats)
@@ -158,7 +158,7 @@ var copyFeats = function(data) {
 		if(data.details.feats) {
 			mask.acquired = data.universe.time;
 			mask.user = data.character.id;
-			data.set.feats = [];
+			data.sets.feats = [];
 
 			collect = function(err, feat) {
 				if(err) {
@@ -172,7 +172,7 @@ var copyFeats = function(data) {
 						console.error(" [!] No Index for copied Feat?");
 						data.universe.handleError("universe:character:create", null, "Copied an feat not in array", {"source": data.details.feats, "copy": feat.id, "parent": feat.parent, "entity": data.character.id});
 					} else {
-						data.set.feats.push(feat.id);
+						data.sets.feats.push(feat.id);
 					}
 				}
 				count++;
@@ -285,7 +285,7 @@ var finish = function(data) {
 
 var errored = function(universe, event) {
 	return function(error) {
-		console.log("Creation Error: ", error);
+		console.log("Creation Error: ", error.message + JSON.stringify(error, null, 4).substring(0, 1000));
 		universe.emit("send", {
 			"type": "notice",
 			"mid": "create:character",

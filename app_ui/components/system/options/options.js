@@ -21,6 +21,9 @@ rsSystem.component("systemOptionsDialog", {
 			"required": true,
 			"type": Object
 		},
+		"chatCore": {
+			"type": Object
+		},
 		"profile": {
 			"required": true,
 			"type": Object
@@ -211,8 +214,13 @@ rsSystem.component("systemOptionsDialog", {
 				}, {
 					"id": "app-cache-delete",
 					"action": "uncache",
-					"icon": "fas fa-sync",
+					"icon": "fas fa-trash",
 					"label": "Delete Cache"
+				}, {
+					"id": "app-cache-delete",
+					"action": "uncache-messages",
+					"icon": "fas fa-trash",
+					"label": "Delete Messages"
 				}]
 			},
 			"report": {
@@ -256,6 +264,12 @@ rsSystem.component("systemOptionsDialog", {
 			data.pages.profile.options.push({
 				"id": "collapse_system_alerts",
 				"label": "Collapse System Alerts",
+				"base": this.profile,
+				"type": "toggle"
+			});
+			data.pages.profile.options.push({
+				"id": "suppress_system_alerts",
+				"label": "Suppress System Alerts",
 				"base": this.profile,
 				"type": "toggle"
 			});
@@ -355,7 +369,11 @@ rsSystem.component("systemOptionsDialog", {
 					break;
 				case "uncache":
 					this.universe.deleteCache();
-					location.reload(true);
+					// Handlea reload(true) with the forced reload being deprecated
+					rsSystem.utility.forceReload();
+					break;
+				case "uncache-messages":
+					this.chatCore.deleteCache();
 					break;
 				case "emit":
 					rsSystem.EventBus.$emit(key);
@@ -462,5 +480,11 @@ rsSystem.component("systemOptionsDialog", {
 /**
  * Game Masters Only, gives an ID to alerts from the server to keep them from sprawling.
  * @property collapse_system_alerts
+ * @type Boolean
+ */
+
+/**
+ * 
+ * @property suppress_system_alerts
  * @type Boolean
  */
