@@ -5,7 +5,6 @@
 	"debug": false
 }
 
-
 {
 	"title": "Tale of The Cave of Light",
 	"mainpage": "DNDEntities",
@@ -17,33 +16,37 @@
 		"icon": "fas fa-backpack",
 		"action": "navigate",
 		"label": "Inventory",
-		"path": "/inventory",
+		"path": "/inventory/:entity?",
 		"highlight": "/inventory",
-		"route": "/inventory/:id",
+		"route": "/inventory/:entity?",
+		"to": "/inventory",
 		"component": "DNDInventory"
 	}, {
 		"icon": "fas fa-map",
 		"action": "navigate",
 		"label": "Map",
-		"path": "/map",
+		"path": "/map/:location?",
 		"highlight": "/map",
-		"route": "/map/:id",
+		"route": "/map/:location?",
+		"to": "/map",
 		"component": "DNDMap"
 	}, {
-		"icon": "game-icon game-icon-mesh-network",
+		"icon": "fas fa-chart-network",
 		"action": "navigate",
 		"label": "Knowledge",
-		"path": "/knowledge",
+		"path": "/knowledge/:entity?",
 		"highlight": "/knowledge",
-		"route": "/knowledge/:entity",
+		"route": "/knowledge/:entity?",
+		"to": "/knowledge",
 		"component": "DNDKnowledge"
 	}, {
 		"icon": "fas fa-edit",
 		"action": "navigate",
 		"label": "Control",
-		"path": "/control",
+		"path": "/control/:classification?/:id?",
 		"highlight": "/control",
-		"route": "/control/:classification/:id",
+		"route": "/control/:classification?/:id?",
+		"to": "/control",
 		"component": "RSControl",
 		"conditionals": [{
 			"gm": true
@@ -52,9 +55,10 @@
 		"icon": "fas fa-solar-panel",
 		"action": "navigate",
 		"label": "Screen",
-		"path": "/screen/master",
+		"path": "/screen/:screen?",
 		"highlight": "/screen",
-		"route": "/screen/:id",
+		"route": "/screen/:screen?",
+		"to": "/screen",
 		"component": "DNDMasterScreen",
 		"conditionals": [{
 			"gm": true
