@@ -39,14 +39,14 @@
 	</button>
 
 	<!-- TODO: Add Game Calendar handler for "gametime" typed fields -->
-	<input :id="fid" :type="field.type" v-if="field.type === 'number' || field.type === 'integer' || field.type === 'gametime'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" :type="field.type" v-if="field.type === 'number' || field.type === 'integer' || field.type === 'gametime'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
+	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
+	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 
-	<input :id="fid" type="password" v-if="field.type === 'password' || field.attribute.encrypted || field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
-	<input :id="fid" type="text" v-if="availableReferences.length === 0 && !field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data && !field.attribute.encrypted && !field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="password" v-if="field.type === 'password' || field.attribute.encrypted || field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
+	<input :id="fid" type="text" v-if="availableReferences.length === 0 && !field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data && !field.attribute.encrypted && !field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 
-	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 	<span class="indicator" v-if="field.type === 'file' || field.attribute.file_data">
 		<span class="" v-if="root[field.id]">
 			<span class="rs-light-green">[</span>
@@ -136,11 +136,11 @@
 				<option v-for="option in keyside" :id="option.id" :value="option.id" :title="option.description">{{option.template?'(T) ' + option.name:option.name}}</option>
 			</select>
 			<div v-if="!keyside">
-				<input v-model="reference_key" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" />
+				<input v-model="reference_key" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" autocomplete="chrome-off" />
 			</div>
 			<span>:</span>
 			<div v-if="!valueside">
-				<input v-model="reference_value" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" />
+				<input v-model="reference_value" v-on:keydown.enter="addObjectReference(reference_key, reference_value)" autocomplete="chrome-off" />
 			</div>
 			<select v-model="reference_value" v-if="valueside" v-on:change="addObjectReference(reference_key, reference_value)">
 				<option value="">Select To Add</option>

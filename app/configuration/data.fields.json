@@ -657,14 +657,6 @@
 			"displayed": false
 		}
 	}, {
-		"id": "is_preview",
-		"name": "Is Preview",
-		"description": "Flag to mark this object as a preview of something and not an actual object",
-		"type": "boolean",
-		"attribute": {
-			"displayed": false
-		}
-	}, {
 		"id": "spell_slots",
 		"name": "Spell Slots",
 		"description": "Maps a spell level to the number of spell slots left for that object",
@@ -854,6 +846,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "combat_turn",
+		"name": "Whose Turn",
+		"description": "Indicates the entity whose turn it is in combat",
+		"type": "string",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
 		"id": "cast_save",
 		"name": "Save With",
 		"description": "Names the attribute with which to save against this object",
@@ -958,7 +959,7 @@
 		"id": "acquired",
 		"name": "Acquired",
 		"description": "When you acquired this",
-		"type": "integer",
+		"type": "gametime",
 		"ordering": 300,
 		"attribute": {
 			"display_size": 90
@@ -1427,6 +1428,58 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "weather",
+		"name": "Weather",
+		"description": "Weather at a location",
+		"type": "string",
+		"inheritance": {
+			"effects": "+",
+			"movement_ground": "+",
+			"movement_swim": "+",
+			"movement_fly": "+",
+			"conditionals": "+"
+		},
+		"inheritable": [
+			"weather"
+		],
+		"attribute": {}
+	}, {
+		"id": "weather_tabulation",
+		"name": "Weather Tabulation",
+		"description": "Used by locations to determine the next weather state. This in its simpliest form comes down to something like '3d6' which then uses the weather 'mode range' to determine the weather.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "weather_duration",
+		"name": "Weather Duration",
+		"description": "When a weather condition takes effect at a location, the duration is calculated using this string with 'weather' and 'location' being base properties for performing the calculation. This time then sets an occurrence in the Chronicler to end the current weather state and start a new one.",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "weather_mode_min",
+		"name": "Weather Min Mode",
+		"description": "Mode is essentially the range in which this weather state should be used and may vary by locational attributes. The basis of the range is to allow dice rolls to pick the weather and the mode range dicates which weather comes up.",
+		"type": "number",
+		"attribute": {}
+	}, {
+		"id": "weather_mode_max",
+		"name": "Weather Max Mode",
+		"description": "Mode is essentially the range in which this weather state should be used and may vary by locational attributes. The basis of the range is to allow dice rolls to pick the weather and the mode range dicates which weather comes up.",
+		"type": "number",
+		"attribute": {}
+	}, {
+		"id": "x_velocity",
+		"name": "Speed X",
+		"description": "Spedd traveling on the x axis",
+		"type": "number",
+		"attribute": {}
+	}, {
+		"id": "y_velocity",
+		"name": "Speed Y",
+		"description": "Spedd traveling on the y axis",
+		"type": "number",
+		"attribute": {}
+	}, {
 		"id": "variants",
 		"name": "Variants",
 		"description": "Variations of this race",
@@ -1435,6 +1488,15 @@
 			"feat"
 		],
 		"attribute": {}
+	}, {
+		"id": "is_singular",
+		"name": "Is Singular",
+		"description": "When true, this object will not be copied when given.",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false,
+			"default": false
+		}
 	}, {
 		"id": "death_save",
 		"name": "Death Saves",
@@ -1721,6 +1783,9 @@
 		"name": "Category",
 		"description": "Category for this object. This is essentially just a flat qualifier and taken literally.",
 		"type": "string",
+		"inheritable": [
+			"category"
+		],
 		"attribute": {}
 	}, {
 		"id": "state",

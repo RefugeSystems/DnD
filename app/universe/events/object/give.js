@@ -35,7 +35,7 @@ module.exports.initialize = function(universe) {
 				source = universe.get(event.message.data.source);
 			}
 
-			if(object.is_template) {
+			if(object.is_singular) {
 				values.acquired = universe.time;
 
 				if(object.duration) {
@@ -43,7 +43,6 @@ module.exports.initialize = function(universe) {
 				}
 
 				universe.copy(event.message.data.object, values, function(err, copy) {
-					console.log("Copy Template: ", values, copy.id);
 					if(copy.expiration) {
 						// TODO: Setting an expiration in the far future then rewinding time invalidates the previous expirations as they
 						//		are on the abandoned timeline. May need a fallback check on "time_end" field instead of relying on the

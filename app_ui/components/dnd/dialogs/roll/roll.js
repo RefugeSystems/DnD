@@ -320,14 +320,18 @@ rsSystem.component("dndDialogRoll", {
 	},
 	"methods": {
 		"addDamageType": function(type) {
-			var roll;
-			this.damageActive[type.id] = true;
-			this.damages.push({
+			var damage,
+				roll;
+
+			damage = {
 				"key": type,
 				"formula": "",
 				"ordering": type.ordering,
 				"computed": ""
-			});
+			};
+			Vue.set(this, "active", damage);
+			this.damageActive[type.id] = true;
+			this.damages.push(damage);
 			if(this.details.resist && this.details.resist[type.id]) {
 				roll = {
 					"key": type,

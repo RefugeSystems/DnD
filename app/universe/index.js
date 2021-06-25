@@ -589,8 +589,6 @@ class Universe extends EventEmitter {
 			mask.is_copy = true;
 			if(source.is_template) {
 				Object.assign(details, mask);
-				details.parent = id;
-
 				if(source.template_process) {
 					// TODO: Handle Template Processing
 				}
@@ -598,6 +596,7 @@ class Universe extends EventEmitter {
 				Object.assign(details, source._data, mask);
 			}
 			details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+			details.parent = id;
 			this.createObject(details, callback);
 		} else {
 			callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));

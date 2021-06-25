@@ -41,7 +41,10 @@ rsSystem.component("rsTableControls", {
 	},
 	"computed": {
 		"selected": function() {
-			return Object.keys(this.storage.selected).length;
+			if(this.storage) {
+				return Object.keys(this.storage.selected).length;
+			}
+			return 0;
 		}
 	},
 	"watch": {

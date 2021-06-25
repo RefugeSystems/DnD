@@ -270,10 +270,15 @@ rsSystem.component("rsDisplayField", {
 				if(value) {
 					return value.name || value.id;
 				} else {
-					return this.object[this.field];
+					return value;
 				}
 			} else {
-				return value;
+				switch(this.fieldData.type) {
+					case "gametime":
+						return this.universe.calendar.toDisplay(value, !!this.fieldData.attribute.include_time);
+					default:
+						return value;
+				}
 			}
 		}
 	},

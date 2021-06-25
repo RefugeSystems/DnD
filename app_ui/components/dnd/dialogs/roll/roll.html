@@ -150,7 +150,7 @@
 		</div>
 		<div class="h-container damage-types">
 			<div class="flex h">
-				<button class="roll-key general rounded quick action" v-for="dmg in damageTypes" v-if="!damageActive[dmg.id]" v-on:click="info(dmg)" v-on:click.right.prevent.stop="addDamageType(dmg)">
+				<button class="roll-key general rounded quick action" v-for="dmg in damageTypes" v-if="!damageActive[dmg.id]" v-on:click="addDamageType(dmg)" v-on:click.right.prevent.stop="info(dmg)">
 					<span :class="dmg.icon"></span>
 				</button>
 			</div>

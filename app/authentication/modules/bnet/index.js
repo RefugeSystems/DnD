@@ -50,7 +50,7 @@ module.exports = new (function() {
 				
 			for(x=0; x<universe.manager.player.objectIDs.length; x++) {
 				buffer = universe.manager.player.object[universe.manager.player.objectIDs[x]];
-				if(buffer && buffer.attribute && buffer.attribute.bnet && buffer.attribute.bnet.indexOf(id) !== -1) {
+				if(buffer && !buffer.disabled && !buffer.is_preview && buffer.attribute && buffer.attribute.bnet && buffer.attribute.bnet.indexOf(id) !== -1) {
 					user = buffer;
 					break;
 				}

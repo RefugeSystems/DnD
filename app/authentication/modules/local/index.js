@@ -55,8 +55,8 @@ module.exports = new (function() {
 					players = Object.keys(universe.manager.player.object);
 					for(x=0; x<players.length; x++) {
 						check = universe.manager.player.object[players[x]];
-						console.log(" > Check: \"" + check.username + "\" - \"" + check.password + "\"");
-						if(check && check.username === username && (check.password === password || !check.password)) {
+						console.log(" > Check[" + check.id + " - " + check.disabled + " | " + check.is_preview + "]: \"" + check.username + "\" - \"" + check.password + "\"");
+						if(check && !check.disabled && !check.is_preview && check.username === username && (check.password === password || !check.password)) {
 							player = check;
 						}
 					}

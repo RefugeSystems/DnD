@@ -93,7 +93,7 @@ rsSystem.component("dndEntityStats", {
 
 					for(i=0; i<keys.length; i++) {
 						if(!this.entity.action_count[keys[i]] || this.entity.action_count[keys[i]] < action.action_cost[keys[i]]) {
-							return "<div class=\"note\">You are missing " + section + " action oints</div>";
+							return "<div class=\"note\">You are short on " + section + " action points</div>";
 						}
 					}
 				}

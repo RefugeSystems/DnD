@@ -42,11 +42,13 @@ rsSystem.component("DNDEntities", {
 				i;
 
 			for(i=0; i<this.universe.listing.meeting.length; i++) {
-				meet = this.universe.listing.meeting.length[i];
+				meet = this.universe.listing.meeting[i];
 				if(meet && meet.is_active && !meet.disabled && !meet.is_preview) {
 					return meet;
 				}
 			}
+
+			return null;
 		},
 		"entities": function() {
 			var entities = [],
@@ -71,7 +73,7 @@ rsSystem.component("DNDEntities", {
 			if(this.meeting && this.meeting.entities) {
 				for(x=0; x<this.meeting.entities.length; x++) {
 					entity = this.universe.index.entity[this.meeting.entities[x]];
-					if(entity && !entity.is_preview && !entity.disabled && !entity.obscured) {
+					if(entity && entity.id !== this.main.id && !entity.is_preview && !entity.disabled && !entity.obscured) {
 						entities.uniquely(entity);
 					}
 				}
@@ -79,7 +81,7 @@ rsSystem.component("DNDEntities", {
 			if(this.location && this.location.populace) {
 				for(x=0; x<this.location.populace.length; x++) {
 					entity = this.universe.index.entity[this.location.populace[x]];
-					if(entity && !entity.is_preview && !entity.disabled && !entity.obscured) {
+					if(entity && entity.id !== this.main.id  && !entity.is_preview && !entity.disabled && !entity.obscured) {
 						entities.uniquely(entity);
 					}
 				}
@@ -107,7 +109,8 @@ rsSystem.component("DNDEntities", {
 
 		// TODO: Universe Setting? Better control of some sort. Also prevent players from easily gathering intel
 		data.nearbyDashboard = this.universe.index.dashboard["dashboard:entity:nearby"];
-		data.nearbyMinion = this.universe.index.dashboard["dashboard:character:minion"];
+		data.nearbyMinion = this.universe.index.dashboard["dashboard:entity:minion"];
+		data.nearbyFriend = this.universe.index.dashboard["dashboard:entity:friendly"];
 
 		return data;
 	},
@@ -123,6 +126,15 @@ rsSystem.component("DNDEntities", {
 				"id": "dndCreateCharacterDialog",
 				"max_size": true
 			});
+		},
+		"getNearbyDashboard": function(entity) {
+			if(this.minion[entity.id]) {
+				return this.nearbyMinion;
+			} else if(entity.played_by) {
+				return this.nearbyFriend;
+			}
+
+			return this.nearbyDashboard;
 		}
 	},
 	"beforeDestroy": function() {

@@ -4,79 +4,79 @@
             "name": "Bludgeoning",
             "description": "Bludgeoning",
 			"ordering": 5,
-            "icon": "fas fa-hammer-war"
+            "icon": "fas fa-hammer-war rs-light-gray"
         }, {
             "id": "damage_type:piercing",
             "name": "Piercing",
             "description": "Piercing",
 			"ordering": 10,
-            "icon": "fas fa-dagger"
+            "icon": "fas fa-dagger rs-light-gray"
         }, {
             "id": "damage_type:crushing",
             "name": "Crushing",
             "description": "Crushing",
 			"ordering": 15,
-            "icon": "fas fa-compress-arrows-alt"
+            "icon": "fas fa-compress-arrows-alt rs-light-gray"
         }, {
             "id": "damage_type:slashing",
             "name": "Slashing",
             "description": "Slashing",
 			"ordering": 20,
-            "icon": "game-icon game-icon-crossed-slashes"
+            "icon": "game-icon game-icon-crossed-slashes rs-light-gray"
         }, {
             "id": "damage_type:acid",
             "name": "Acid",
             "description": "Acid",
 			"ordering": 25,
-            "icon": "ra ra-acid"
+            "icon": "ra ra-acid rs-light-green"
         }, {
             "id": "damage_type:cold",
             "name": "Cold",
             "description": "Cold",
 			"ordering": 30,
-            "icon": "fas fa-snowflakes"
+            "icon": "fas fa-snowflakes rs-light-blue"
         }, {
             "id": "damage_type:fire",
             "name": "Fire",
             "description": "Fire",
 			"ordering": 35,
-            "icon": "fas fa-fire-alt"
+            "icon": "fas fa-fire-alt rs-light-red"
         }, {
             "id": "damage_type:force",
             "name": "Force",
             "description": "Force",
 			"ordering": 40,
-            "icon": "game-icon game-icon-smash-arrows rot270"
+            "icon": "game-icon game-icon-smash-arrows rot270 rs-light-purple"
         }, {
             "id": "damage_type:holy",
             "name": "Holy",
             "description": "Holy",
 			"ordering": 45,
-            "icon": "game-icon game-icon-holy-water"
+            "icon": "game-icon game-icon-holy-water rs-light-yellow"
         }, {
             "id": "damage_type:lightning",
             "name": "Lightning",
             "description": "Lightning",
 			"ordering": 50,
-            "icon": "fas fa-thunderstorm"
+            "icon": "fas fa-thunderstorm rs-dark-blue"
         }, {
             "id": "damage_type:necrotic",
             "name": "Necrotic",
             "description": "Necrotic",
 			"ordering": 55,
-            "icon": "game-icon game-icon-death-juice"
+            "icon": "game-icon game-icon-death-juice rs-dark-purple"
         }, {
             "id": "damage_type:poison",
             "name": "Poison",
             "description": "Poison",
 			"ordering": 60,
-            "icon": "game-icon game-icon-poison-gas"
+            "icon": "game-icon game-icon-poison-gas rs-dark-green"
         }, {
             "id": "damage_type:psychic",
             "name": "Psychic",
             "description": "Psychic",
 			"ordering": 65,
-            "icon": "game-icon game-icon-psychic-waves"
+            "icon": "game-icon game-icon-psychic-waves rs-purple"
         }, {
             "id": "damage_type:radiant",
             "name": "Radiant",
@@ -88,13 +88,13 @@
             "name": "Sonic",
             "description": "Sonic",
 			"ordering": 75,
-            "icon": "fas fa-waveform-path"
+            "icon": "fas fa-waveform-path rs-blue"
         }, {
             "id": "damage_type:thunder",
             "name": "Thunder",
             "description": "Thunder",
 			"ordering": 80,
-            "icon": "fas fa-wifi rot90"
+            "icon": "fas fa-wifi rot90 rs-blue"
         }, {
             "id": "damage_type:chromatic",
             "name": "Chromatic",
@@ -106,7 +106,7 @@
             "name": "Heal",
             "description": "Heal damage to to creature",
 			"ordering": 0,
-            "icon": "fas fa-heartbeat rs-green"
+            "icon": "fad fa-heartbeat rs-green rs-secondary-solid rs-secondary-white"
         }
     ]
 }

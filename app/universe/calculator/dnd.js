@@ -25,6 +25,7 @@ module.exports = function(universe) {
 		"int": "intelligence",
 		"wis": "wisdom",
 		"cha": "charisma",
+		"proficiency": "proficiency_rating",
 		"pro": "proficiency_rating"
 	};
 	

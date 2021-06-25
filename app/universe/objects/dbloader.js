@@ -340,6 +340,15 @@ fields.push({
 	}
 });
 fields.push({
+	"id": "is_preview",
+	"name": "Is Preview",
+	"description": "Flag to mark this object as a preview of something and not an actual object",
+	"type": "boolean",
+	"attribute": {
+		"displayed": false
+	}
+});
+fields.push({
 	"id": "x",
 	"name": "X Position",
 	"description": "X location of the object.",
@@ -372,6 +381,20 @@ fields.push({
 	"type": "integer",
 	"attribute": {}
 });
+fields.push({
+	"id": "preview_data",
+	"name": "Preview Data",
+	"description": "The properties to use when generating a preview.",
+	"type": "object",
+	"attribute": {}
+});
+fields.push({
+	"id": "preview_class",
+	"name": "Preview Class",
+	"description": "The class of object being previewed. Drives constructor choice.",
+	"type": "string",
+	"attribute": {}
+});
 
 /**
  * Classes to ensure exist
@@ -381,10 +404,16 @@ fields.push({
  */
 var classes = [];
 classes.push({
+	"id": "preview",
+	"name": "Preview",
+	"description": "A catch-all class used for player driven object generation for seeing effects of settings. As such, it has special handling for creation and return.",
+	"fields": ["name", "attribute", "preview_data", "preview_class"]
+});
+classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "parent", "email", "description", "gm", "auth_token", "last", "connections", "attribute"]
+	"fields": ["name", "disabled", "username", "password", "parent", "email", "description", "gm", "auth_token", "last", "connections", "is_preview", "attribute"]
 });
 classes.push({
 	"id": "session",
@@ -399,13 +428,13 @@ classes.push({
 	"id": "setting",
 	"name": "Setting",
 	"description": "Universe values",
-	"fields": ["name", "disabled", "description", "value", "parent", "gm_note"]
+	"fields": ["name", "disabled", "description", "value", "parent", "gm_note", "is_preview"]
 });
 classes.push({
 	"id": "conditional",
 	"name": "Conditional",
 	"description": "Represents a conditional addition to the object's properties.",
-	"fields": ["name", "description", "condition", "parent", "ifop", "adds", "subs", "sets"]
+	"fields": ["name", "description", "condition", "parent", "ifop", "adds", "subs", "sets", "is_preview", "attribute"]
 });
 
 
