@@ -136,4 +136,25 @@ describe("RSObject", function() {
 		expect(res.on.short_rest[0].b).toBe(11);
 		expect(res.on.attack.length).toBe(2);
 	});
+	
+	it("can subtract from Array values", function() {
+		var a = {},
+			b = {},
+			res;
+			
+		a.effects = ["a", "b", "c"];
+		b.effects = ["b"];
+
+		a.number = 9;
+		b.number = 4;
+
+		a.other = 19;
+		b.another = 51;
+
+		res = RSObject.subValues(a.effects, b.effects);
+		console.log("Result: ", res);
+		expect(res.indexOf("b")).toBe(-1);
+		expect(res.indexOf("a")).toBe(0);
+		expect(res.indexOf("c")).toBe(1);
+	});
 });

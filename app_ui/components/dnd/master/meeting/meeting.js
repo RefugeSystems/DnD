@@ -50,7 +50,7 @@ rsSystem.component("dndMasterMeeting", {
 
 			for(i=0; i<this.universe.listing.meeting.length; i++) {
 				meet = this.universe.listing.meeting[i];
-				if(meet.is_active && !meet.disabled) {
+				if(meet.is_active && !meet.disabled && !meet.is_preview) {
 					return meet;
 				}
 			}
@@ -60,6 +60,12 @@ rsSystem.component("dndMasterMeeting", {
 		"active.id": function(newValue, oldValue) {
 			this.syncDescription(oldValue, this.description);
 			Vue.set(this, "description", this.active.description);
+			Vue.set(this, "id", this.active.id);
+		},
+		"id": function(newValue, oldValue) {
+			if(newValue && newValue !== this.active.id) {
+				// this.universe.send
+			}
 		}
 	},
 	"data": function() {
@@ -80,7 +86,9 @@ rsSystem.component("dndMasterMeeting", {
 		 * @param {Integer} increment Seconds to go forward in time
 		 */
 		"forwardTime": function(increment) {
-
+			this.universe.send("time:forward", {
+				"increment": increment
+			});
 		},
 		/**
 		 * Set the exact start time for the meeting.

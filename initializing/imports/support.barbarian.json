@@ -36,8 +36,10 @@
             "icon": "game-icon game-icon-enrage",
             "name": "Raging",
             "description": "You are RAGING! You deal more damage and are more resistant to physical damage.",
+			"is_template": true,
+			"duration": 60,
 			"damage": {
-				"damage_type:bludgeoning": "user.level.barbarian/8 + 2"
+				"damage_type:bludgeoning": "user.level_archetype.barbarian/8 + 2"
 			},
 			"resistances": {
 				"damage_type:bludgeoning": "50%",

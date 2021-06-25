@@ -258,6 +258,23 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "pois",
+		"name": "Points of Interest",
+		"description": "List of locations that may be of interest. This field's data is usually inferred during render rather than being explicitly defined and is thus not currently attached to any class.",
+		"type": "array",
+		"inheritable": [
+			"location"
+		],
+		"attribute": {}
+	}, {
+		"id": "map_distance",
+		"name": "Map Distance",
+		"description": "Constant for distance measuring across a location.",
+		"type": "number",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "killed",
 		"name": "Killed",
 		"description": "List of creatures killed in a skirmish",
@@ -380,11 +397,37 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "coordinates",
+		"name": "Coordinates",
+		"description": "Array of coordinates to render on an image for thigns such as a map.",
+		"type": "array",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "rendering_has_path",
+		"name": "Has Rendering Path",
+		"description": "Flag to indicate this object has a rendering path.",
+		"type": "array",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "rendering_has_fill",
+		"name": "Has Rendering Filled",
+		"description": "Flag to indicate this object's rendered path should be filled in.",
+		"type": "array",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "rendering_path",
 		"name": "Rendering Path",
-		"description": "Point path for the polygon",
+		"description": "Point path for the polygon. This array contains 2 element arrays for the x & y coordinates.",
 		"type": "array",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "point_pool",
 		"name": "Point Pool",
@@ -398,19 +441,25 @@
 		"name": "Rendering Closed Path",
 		"description": "When true, this path is treated as a polygon with fill",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "rendering_fill_color",
 		"name": "Rendering Fill Color",
 		"description": "Coloring. Use Hex RGBA specification; ie. #FFFFFF60",
 		"type": "string",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "rendering_path_color",
 		"name": "Rendering Path Color",
 		"description": "Coloring. Use Hex RGBA specification; ie. #FFFFFF60",
 		"type": "string",
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "acquired_in",
 		"name": "Acquired In",
@@ -442,6 +491,18 @@
 		"name": "Map Image",
 		"description": "Map image for this object",
 		"type": "string",
+		"inheritable": [
+			"image"
+		],
+		"attribute": {}
+	}, {
+		"id": "mapbg",
+		"name": "Map Background Image",
+		"description": "Background image for the associated map. Something like a star field. fixed and covers the rest of the canvas.",
+		"type": "string",
+		"inheritable": [
+			"image"
+		],
 		"attribute": {}
 	}, {
 		"id": "urls",
@@ -509,6 +570,19 @@
 			"skirmish"
 		],
 		"attribute": {}
+	}, {
+		"id": "known_by",
+		"name": "Known By",
+		"icon": "far fa-brain",
+		"description": "List of entities that know this",
+		"type": "array",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {
+			"displayed": false,
+			"no_sort": true
+		}
 	}, {
 		"id": "versioning",
 		"name": "Versioning",
@@ -816,11 +890,49 @@
 		"type": "boolean",
 		"attribute": {}
 	}, {
+		"id": "is_default",
+		"name": "Is Default",
+		"description": "When true, this object is a copy and should be filtered out of some displays",
+		"ordering": 730,
+		"type": "boolean",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
+		"id": "is_copy",
+		"name": "Is Copy",
+		"description": "When true, this object is a copy and should be filtered out of some displays",
+		"ordering": 700,
+		"type": "boolean",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
+		"id": "is_template",
+		"name": "Is Template",
+		"description": "When true, this object is meant to be a source for information and not given directly",
+		"ordering": 705,
+		"type": "boolean",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
+		"id": "template_process",
+		"name": "Template Process",
+		"description": "Specifies the process for for copying this object",
+		"ordering": 710,
+		"type": "object",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
 		"id": "duration",
 		"name": "Duration",
 		"description": "How long something lasts once created; Such as effects or items. Spells may list this for how long a subsequent effect lasts.",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"display_format": "duration"
+		}
 	}, {
 		"id": "effect_shape",
 		"name": "Effect Shape",
@@ -1209,6 +1321,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "also",
+		"name": "Also",
+		"description": "Additional actions to fire with this one. Example, 'action:rest:finish' is an also for 'action:rest:trace' and 'action:rest:long' for common full rest triggers while allowing those 2 types of rest to be seperate.",
+		"type": "array",
+		"inheritable": [
+			"action"
+		],
+		"attribute": {}
+	}, {
 		"id": "race",
 		"name": "Race",
 		"description": "Race of this entity",
@@ -1232,6 +1353,7 @@
 			"movement_ground": "+",
 			"movement_swim": "+",
 			"movement_fly": "+",
+			"response": "+",
 			"armor": "+",
 			"damage": "+=",
 			"feats": "+",
@@ -1277,6 +1399,7 @@
 			"stat_charisma": "+",
 			"armor": "+",
 			"actions": "+",
+			"response": "+",
 			"spells": "+",
 			"resistance": "+=",
 			"damage": "+=",
@@ -1347,6 +1470,7 @@
 			"stat_wisdom": "+",
 			"stat_charisma": "+",
 			"encumberance_max": "+",
+			"response": "+",
 			"weight_max": "+",
 			"armor": "+",
 			"wisdom": "+",
@@ -1402,6 +1526,7 @@
 			"feats": "+",
 			"weight": "+",
 			"encumberance_max": "+",
+			"response": "+",
 			"weight_max": "+",
 			"encumberance": "+",
 			"resistance": "+=",
@@ -1531,6 +1656,9 @@
 		"name": "Class Level History",
 		"description": "Stores the order in which this object leveled up classes",
 		"type": "array",
+		"inheritance": {
+			"response": "+"
+		},
 		"inheritable": [
 			"archetype"
 		],
@@ -1829,12 +1957,16 @@
 			"displayed_size": 90
 		}
 	}, {
-		"id": "respond",
-		"name": "respond",
+		"id": "response",
+		"name": "Response",
 		"description": "Maps various 'event' names to arrays that describe responses that are then consumed in various parts",
 		"ordering": 1000,
 		"type": "object",
+		"inheritable": [
+			"action"
+		],
 		"attribute": {
+			"inherited_key": "action",
 			"displayed_size": 110
 		}
 	}, {
@@ -1947,6 +2079,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 			"conditionals": "+",
+			"response": "+",
 			"actions": "+",
 			"effects": "+",
 			"skills": "+"

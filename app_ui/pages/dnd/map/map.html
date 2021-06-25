@@ -1,3 +1,20 @@
 <div class="rs-page dnd-page dnd-map">
-	
+	<div class="notice" v-if="!location">
+		<span class="fas fa-exclamation-triangle"></span>
+		<span>Location Not Found:</span>
+		<span>{{$route.params.id}}</span>
+	</div>
+	<div class="notice" v-else-if="location.disabled">
+		<span class="fas fa-exclamation-triangle"></span>
+		<span v-if="!player.gm">Location Not Found:</span>
+		<span v-if="player.gm">This location is disabled:</span>
+		<span>{{$route.params.id}}</span>
+	</div>
+	<div class="notice" v-else-if="location.is_preview">
+		<span class="fas fa-exclamation-triangle"></span>
+		<span v-if="!player.gm">Location Not Found:</span>
+		<span v-if="player.gm">This location is a preview object:</span>
+		<span>{{$route.params.id}}</span>
+	</div>
+	<rs-viewer class="map" v-else :universe="universe" :player="player" :profile="profile" :configuration="configuration" :location="location" storage-key="rsmap:storage"></rs-viewer>
 </div>

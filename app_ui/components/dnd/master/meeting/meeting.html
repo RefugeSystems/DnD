@@ -9,15 +9,15 @@
 		</div>
 		<div class="flex h wrap master-actions">
 			<button class="rounded general quick action" v-on:click="forwardTime(6)">
-				<span class="action-icon fas fa-history"></span>
+				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">1</span>
 			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(60)">
-				<span class="action-icon fas fa-history"></span>
+				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">10</span>
 			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(600)">
-				<span class="action-icon fas fa-history"></span>
+				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">100</span>
 			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(3600)">
@@ -32,9 +32,17 @@
 				<span class="action-icon fal fa-calendar-date"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(432,000)">
+			<button class="rounded general quick action" v-on:click="forwardTime(432000)">
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">1</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(2160000)">
+				<span class="action-icon fal fa-calendar-week"></span>
+				<span class="action-count">5</span>
+			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(4320000)">
+				<span class="action-icon fal fa-calendar-week"></span>
+				<span class="action-count">10</span>
 			</button>
 		</div>
 		<div class="flex h wrap master-actions">

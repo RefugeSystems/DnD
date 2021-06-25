@@ -280,14 +280,52 @@
 		}, {
 			"id": "action:rest:long",
 			"name": "Long Rest",
+			"also": ["action:rest:finish"],
 			"description": "Sleep for 6 to 10 hours depending on your comfort and situation to regain your vitality.",
+			"icon": "fas fa-bed",
+			"attribute": {}
+		}, {
+			"id": "action:rest:finish",
+			"name": "Finished a Long Rest",
+			"description": "Fired when a long rest is finished.",
 			"icon": "fas fa-bed",
 			"attribute": {}
 		}, {
 			"id": "action:rest:trance",
 			"name": "Trance",
+			"also": ["action:rest:finish"],
 			"description": "Meditate for 4 to 5 hours depending on your comfort and situation to regain your vitality.",
 			"icon": "game-icon game-icon-meditation",
+			"attribute": {}
+		}, {
+			"id": "action:combat:quip",
+			"name": "Quip",
+			"description": "6 words may be spoken on your turn in combat without the need for an action. More will use your ${Bonus Action}$ or ${Main Action}$ depending on the words and the situation.",
+			"icon": "fas fa-comment",
+			"attribute": {}
+		}, {
+			"id": "action:combat:turn:start",
+			"name": "Start of Turn",
+			"description": "Start of your turn in combat.",
+			"icon": "fas fa-swords",
+			"attribute": {}
+		}, {
+			"id": "action:combat:turn:end",
+			"name": "End of Turn",
+			"description": "End of your turn in combat.",
+			"icon": "fas fa-swords",
+			"attribute": {}
+		}, {
+			"id": "action:combat:round:start",
+			"name": "Start of Round",
+			"description": "Start of the round of combat.",
+			"icon": "fas fa-swords",
+			"attribute": {}
+		}, {
+			"id": "action:combat:round:end",
+			"name": "End of Round",
+			"description": "End of a round of combat.",
+			"icon": "fas fa-swords",
 			"attribute": {}
 		}, {
 			"id": "action:feat:rage",

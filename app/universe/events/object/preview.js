@@ -21,7 +21,7 @@ module.exports.initialize = function(universe) {
 		details.id = classification + ":preview:" + event.player.id;
 		details.is_preview = true;
 		if(details.name) {
-			details.name += " (Preview)";
+			details.name;
 		}
 		if(!details.attribute) {
 			details.attribute = {};

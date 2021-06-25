@@ -1,8 +1,37 @@
 <div class="rs-component dnd-component dialog-list">
-	<h1>
-		<span>{{entity.name}}</span>
+	<h1 v-if="details.title" class="flex h">
+		<span>{{details.title}}</span>
+		<!-- <input class="filter grow-1" type="text" v-if="storage" v-delayed:500="storage.filter" /> -->
+		<rs-input class="grow-1" v-model="storage.filter" :delay="500"/>
 	</h1>
-	<div class="destinations">
-
+	<div class="listing">
+		<div class="list-container" v-for="section in sections">
+			<div class="card-container">
+				<div class="card" v-if="cards[section]">
+					<h2>{{cards[section].name || cards[section]}}</h2>
+					<div v-if="cards[section].description" v-html="rsshowdown(cards[section].description, cards[section])"></div>
+				</div>
+			</div>
+			<div class="list-data-container">
+				<div class="list-data flex h" v-if="listing[section].length === 0">
+					<button class="general rounded quick action">
+						<span class="fas fa-exclamation-triangle rs-light-yellow"></span>
+					</button>
+					<div class="list-data-details">
+						<h3>Filtered Out</h3>
+					</div>
+				</div>
+				<div class="list-data flex h" v-for="entry in listing[section]" :class="details.classing?details.classing(section, entry):''">
+					<button class="general rounded quick action" v-on:click="activate(section, entry)">
+						<span :class="entry.icon || 'fas fa-cube'"></span>
+					</button>
+					<div class="list-data-details">
+						<h3>{{entry.name}}</h3>
+						<div v-if="details.note" v-html="details.note(section, entry)"></div>
+						<div class="list-data-description" v-if="entry.description" v-html="rsshowdown(entry.description, entry)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

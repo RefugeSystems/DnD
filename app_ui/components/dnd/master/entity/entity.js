@@ -138,7 +138,65 @@ rsSystem.component("dndMasterEntity", {
 
 		},
 		"giveEffects": function() {
+			var details = {},
+				object,
+				i;
 
+			details.title = this.entity.name;
+			details.component = "dndDialogList";
+			details.sections = ["effects", "knowledges", "feats"];
+			details.cards = {};
+			details.limit = 20,
+			details.data = {
+				"effects": [],
+				"knowledges": [],
+				"feats": []
+			};
+
+			details.activate = (section, object) => {
+				console.log("Give[" + section + "]: ", object);
+				this.universe.send("give:copy", {
+					"target": this.entity.id,
+					"object": object.id,
+					"field": section
+				});
+			};
+
+			details.cards.effects = {
+				"name": "Effects",
+				"icon": "game-icon game-icon-beams-aura"
+			};
+			details.cards.knowledges = {
+				"name": "Knowledge",
+				"icon": "fas fa-brain"
+			};
+			details.cards.feats = {
+				"name": "Feats",
+				"icon": "fas fa-fist-raised"
+			};
+			
+			for(i=0; i<this.universe.listing.effect.length; i++) {
+				object = this.universe.listing.effect[i];
+				if(object && !object.disabled && !object.is_copy) {
+					details.data.effects.push(object);
+				}
+			}
+			
+			for(i=0; i<this.universe.listing.knowledge.length; i++) {
+				object = this.universe.listing.knowledge[i];
+				if(object && !object.disabled && !object.is_copy) {
+					details.data.knowledges.push(object);
+				}
+			}
+			
+			for(i=0; i<this.universe.listing.feat.length; i++) {
+				object = this.universe.listing.feat[i];
+				if(object && !object.disabled && !object.is_copy) {
+					details.data.feats.push(object);
+				}
+			}
+
+			rsSystem.EventBus.$emit("dialog-open", details);
 		},
 		"openRoll": function(roll) {
 

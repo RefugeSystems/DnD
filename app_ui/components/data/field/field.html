@@ -38,7 +38,8 @@
 		<span class="far" :class="root[field.id]?'fa-check-square':'fa-square'"></span>
 	</button>
 
-	<input :id="fid" :type="field.type" v-if="field.type === 'number' || field.type === 'integer'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
+	<!-- TODO: Add Game Calendar handler for "gametime" typed fields -->
+	<input :id="fid" :type="field.type" v-if="field.type === 'number' || field.type === 'integer' || field.type === 'gametime'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 	<input :id="fid" type="text" v-if="field.type === 'rawnumber'" v-model.number="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" />
 

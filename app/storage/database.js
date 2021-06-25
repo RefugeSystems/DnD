@@ -42,6 +42,9 @@ mapping.date = mapping.time = {
 mapping.gametime = {
 	"type": "integer"
 };
+mapping.duration = {
+	"type": "integer"
+};
 mapping.boolean = {
 	"type": "boolean"
 };

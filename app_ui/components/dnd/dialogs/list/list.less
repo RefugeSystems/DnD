@@ -1,3 +1,65 @@
 .dnd-component.dialog-list {
+	font-size: 15px;
 
+	.filter {
+		margin: 2px 0px 2px 6px;
+    	padding: 3px 6px;
+	}
+
+	.listing {
+		max-height: 400px;
+		overflow-x: hidden;
+		overflow-y: auto;
+
+		.list-container {
+			padding: 0px;
+
+			.card-container {
+				position: sticky;
+				width: 150px;
+				top: 0px;
+				left: 0px;
+
+				.card {
+					position: absolute;
+					border-top: 1px solid white;
+					background-color: @rsBlack;
+					top: 0px;
+					left: 0px;
+					min-width: 100px;
+					width: 100%;
+					padding: 5px;
+				}
+			}
+
+			.list-data-container {
+				border-top: 1px solid white;
+				margin-left: 150px;
+				min-width: 200px;
+				max-width: 400px;
+				padding: 5px;
+
+				.list-data {
+					padding: 0px;
+
+					h3 {
+						padding: 5px 0px;
+					}
+
+					.action {
+						margin: 5px;
+					}
+
+					.list-data-details {
+						padding: 0px;
+
+						p {
+							margin: 0px 0px 5px 0px;
+							padding: 0px;
+						}
+					}
+				}
+			}
+		}
+	}
 }

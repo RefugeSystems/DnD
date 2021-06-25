@@ -1,4 +1,4 @@
-<div class="system-component table-paging">
+<div class="system-component table-paging" v-if="lastPage >= 0">
 	<button class="index-page" :class="classPage(0)" v-on:click="toPage(0)">
 		<span>1</span>
 	</button>

@@ -390,7 +390,10 @@ classes.push({
 	"id": "session",
 	"name": "Session",
 	"description": "Tracks a Player connection session",
-	"fields": ["player", "username", "disabled", "parent", "last", "expiry"]
+	"fields": ["player", "username", "disabled", "parent", "last", "expiry"],
+	"attribute": {
+		"server_only": true
+	}
 });
 classes.push({
 	"id": "setting",

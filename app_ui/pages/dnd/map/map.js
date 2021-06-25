@@ -20,9 +20,30 @@ rsSystem.component("DNDMap", {
 			"required": true,
 			"type": Object
 		},
+		"profile": {
+			"required": true,
+			"type": Object
+		},
 		"configuration": {
 			"required": true,
 			"type": Object
+		}
+	},
+	"computed": {
+		"location": function() {
+			var location,
+				i;
+
+			if(this.$route.params.location) {
+				return this.universe.index.location[this.$route.params.location];
+			}
+
+			for(i=0; i<this.universe.listing.location.length; i++) {
+				location = this.universe.listing.location[i];
+				if(location && !location.disabled && !location.is_preview && location.is_default) {
+					return location;
+				}
+			}
 		}
 	},
 	"data": function() {

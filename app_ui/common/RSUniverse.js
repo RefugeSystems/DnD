@@ -392,6 +392,22 @@ class RSUniverse extends EventEmitter {
 		localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 	}
 
+	/**
+	 * 
+	 * @method getImagePath
+	 * @param {Object || String} id 
+	 */
+	getImagePath(image) {
+		return  location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (image.id || image);
+	}
+
+	/**
+	 * 
+	 * @method generalMessag
+	 * @param {String} message 
+	 * @param {String} icon 
+	 * @param {Boolean | Number} display When true, anchored. When a number, specifies a timeout in ms.
+	 */
 	generalMessage(message, icon, display) {
 		var notice = {
 			"id": "account:modification",

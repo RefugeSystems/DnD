@@ -143,6 +143,10 @@
 					} else {
 						element = $("<span class=\"rendered-value value-formula not-found not-known\">Unknown</span>");
 					}
+				} else if(value[0] === "@") {
+					value = value.substring(1).trim();
+					// buffer = universe.calendar.toDisplay(value, false, false);
+					element = $("<span class=\"rendered-value value-formula\"><span class=\"far fa-calendar\"></span> " + value + "</span>");
 				} else if(value[0] === "#") {
 					value = value.substring(1).trim();
 					if(value && (value = universe.getObject(value))) {

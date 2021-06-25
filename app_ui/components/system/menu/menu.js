@@ -52,6 +52,7 @@ rsSystem.component("systemMenu", {
 		if(this.configuration.mainpage) {
 			item = {
 				"path": "/home",
+				"to": "/home",
 				"component": rsSystem.components[this.configuration.mainpage],
 				"icon": "fas fa-globe"
 			};
@@ -250,9 +251,9 @@ rsSystem.component("systemMenu", {
 			if(item === this.collapseItem) {
 				Vue.set(this.profile, "navigation_collapsed", !this.profile.navigation_collapsed);
 				this.updateCollapse();
-			} else if(item.path) {
-				if(this.$route.path !== item.path) {
-					this.$router.push(item.path);
+			} else if(item.to) {
+				if(this.$route.path !== item.to) {
+					this.$router.push(item.to);
 				}
 			} else if(item.action) {
 				switch(item.action) {

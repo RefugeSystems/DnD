@@ -35,18 +35,32 @@ rsSystem.component("DNDKnowledge", {
 		"entity": function() {
 			return this.universe.index.entity[this.player.attribute.playing_as];
 		},
+		"today": function() {
+			return this.universe.calendar.toDisplay(this.universe.time, false);
+		},
 		"knowledge": function() {
 			var known = [],
 				cats = {},
 				knowledge,
-				i;
+				entity,
+				i,
+				j;
 
-			if(this.entity) {
-				for(i=0; i<this.entity.knowledges.length; i++) {
-					knowledge = this.universe.index.knowledge[this.entity.knowledges[i]];
-					if(knowledge && !knowledge.disabled && !knowledge.concealed) {
-						cats[knowledge.category] = true;
-						known.push(knowledge);
+			Vue.set(this, "known_by", {});
+			for(j=0; j<this.universe.listing.entity.length; j++) {
+				entity = this.universe.listing.entity[j];
+				if(entity && !entity.disabled && !entity.is_preview && entity.hp && (entity.played_by === this.player.id || (entity.owned && entity.owned[this.player.id])) && entity.knowledges && entity.knowledges.length) {
+					for(i=0; i<entity.knowledges.length; i++) {
+						knowledge = this.universe.index.knowledge[entity.knowledges[i]];
+						if(knowledge && !knowledge.disabled && !knowledge.concealed) {
+							if(!this.known_by[knowledge.id]) {
+								Vue.set(this.known_by, knowledge.id, [entity.name]);
+								cats[knowledge.category] = true;
+								known.uniquely(knowledge);
+							} else {
+								this.known_by[knowledge.id].uniquely(entity.name);
+							}
+						}
 					}
 				}
 			}
@@ -71,10 +85,34 @@ rsSystem.component("DNDKnowledge", {
 		var data = {};
 
 		data.categories = [];
-		data.headings = ["icon", "name", "category", "acquired"];
+		data.headings = ["icon", "name", "category", "known_by", "acquired", "age"];
+		data.known_by = {};
 		data.actions = {};
 		data.actions.icon = data.actions.name = data.actions.acquired = (record) => {
 			this.info(record);
+		};
+		data.actions.known_by = (record) => {
+			this.info(this.universe.named[this.known_by[record.id][0]]);
+		};
+		data.formatter = {};
+		data.formatter.known_by = (value, record, header) => {
+			if(record) {
+				return this.known_by[record.id].join(", ");
+			} else {
+				return "";
+			}
+		};
+		data.formatter.acquired = (value, record, header) => {
+			if(typeof(value) === "number") {
+				return this.universe.calendar.toDisplay(value, false, false);
+			}
+			return value;
+		};
+		data.formatter.age = (value, record, header) => {
+			if(typeof(record.acquired) === "number") {
+				return this.universe.calendar.displayDuration(this.universe.time - record.acquired, false, false);
+			}
+			return value;
 		};
 
 		return data;

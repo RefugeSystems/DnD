@@ -218,7 +218,6 @@ rsSystem.component("rsTable", {
 			return 0;
 		},
 		"headerAction": function(header) {
-			console.log("Header Action: ", header);
 			if(!header.attribute || !header.attribute.no_sort) {
 				if(this.storage.key === header.id) {
 					if(this.storage.order === 1) {
@@ -243,7 +242,6 @@ rsSystem.component("rsTable", {
 			html += "<ul>";
 		},
 		"select": function(record, header) {
-			console.log("Table Selection: ", record, header);
 			if(typeof(this.actions[header.id]) === "function") {
 				this.actions[header.id](record, header);
 			} else if(!this.storage.selection) {

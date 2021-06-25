@@ -288,6 +288,24 @@ class Universe extends EventEmitter {
 						});
 					}
 				}));
+				loading.push(new Promise((done, fail) => {
+					if(!this.manager.setting.object["setting:meeting"]) {
+						this.manager.setting.create(this, {
+							"id": "setting:meeting",
+							"description": "The current meeting of the game",
+							"value": ""
+						}, (err, object) => {
+							if(err) {
+								this.emit("error", new this.Anomaly("universe:settings:time", "Failed to load game time from universe settings", 40, {}, err, this));
+								fail(err);
+							} else {
+								done();
+							}
+						});
+					} else {
+						done();
+					}
+				}));
 				return Promise.all(loading);
 			}).then(() => {
 				return new Promise((done, fail) => {
@@ -360,7 +378,7 @@ class Universe extends EventEmitter {
 								if(paths[x][0] !== "_" && paths[x].endsWith(".js") && stat.isFile()) {
 									loading = require("./simulation" + cleaned + "/" + paths[x]);
 									if(typeof(loading.initialize) === "function" && loading.type) {
-										this.chroniclers[loading.type] = loading;
+										this.chronicler[loading.type] = loading;
 										loading = loading.initialize(this);
 										if(loading instanceof Promise) {
 											initializing.push(loading);
@@ -532,7 +550,7 @@ class Universe extends EventEmitter {
 		if(this.manager[classification]) {
 			return this.manager[classification].object[id];
 		}
-		this.emit("error", new Anomaly("universe:object:request", "Unable to find object", 50, {id, classification}, null, this));
+		this.emit("error", new Anomaly("universe:object:request", "Unable to find object class", 50, {"id": id, "classification": classification}, null, this));
 		return null;
 	}
 
@@ -552,18 +570,34 @@ class Universe extends EventEmitter {
 
 	/**
 	 * 
+	 * @method copy
 	 * @param {String} id 
+	 * @param {Object} [mask]
 	 * @param {Function} callback 
 	 */
 	copy(id, mask, callback) {
 		var source = this.get(id),
 			details = {};
+		
+		if(typeof(mask) === "function" && !callback) {
+			callback = mask;
+			mask = {};
+		}
 
-		// TODO: Handle Templates
 		if(source) {
+			mask.is_template = false;
+			mask.is_copy = true;
+			if(source.is_template) {
+				Object.assign(details, mask);
+				details.parent = id;
+
+				if(source.template_process) {
+					// TODO: Handle Template Processing
+				}
+			} else {
+				Object.assign(details, source._data, mask);
+			}
 			details.id = Random.identifier(source._class, 10, 32).toLowerCase();
-			details.parent = id;
-			Object.assign(details, mask);
 			this.createObject(details, callback);
 		} else {
 			callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
@@ -738,6 +772,9 @@ class Universe extends EventEmitter {
 										delete(sync[master_fields[f]]);
 									}
 								}
+							}
+							if(player.gm) {
+								sync._search += " ::: " + sync.id;
 							}
 							state[manager.id].push(sync);
 						}

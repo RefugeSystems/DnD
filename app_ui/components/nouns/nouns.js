@@ -135,11 +135,21 @@
 				return source.id.indexOf(":preview:") === -1;
 			},
 			"nameSource": function(source) {
-				if(source._data.name === source.name) {
-					return source.name;
+				var name = source.is_copy?"[C] ":"";
+				if(source.name) {
+					if(source._data && source._data.name) {
+						if(source._data.name === source.name) {
+							name += source.name || source.id;
+						} else {
+							name += source._data.name + " (" + source.name + ")";
+						}
+					} else {
+						name += source.name + " (" + source.id + ")";
+					}
 				} else {
-					return source._data.name + " (" + source.name + ")";
+					name += source.id;
 				}
+				return name;
 			},
 			"copySource": function(source) {
 				var x;
@@ -196,7 +206,9 @@
 					});
 				}
 			},
-
+			"setTimeToNow": function(field) {
+				Vue.set(this.object, field.id, this.universe.time);
+			},
 			"fileAttach": function(event) {
 				console.log("Drop: ", event);
 			},

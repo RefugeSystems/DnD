@@ -1,0 +1,6 @@
+<div class="rs-input rs-component">
+	<input v-model="buffer" :type="type" v-on:keydown="press()"/>
+	<div class="flag" v-if="flagged">
+		<span :class="flagged"></span>
+	</div>
+</div>

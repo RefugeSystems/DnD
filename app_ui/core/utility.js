@@ -166,9 +166,9 @@
 				}
 			}
 
-			if(a._data.name !== undefined && b._data.name !== undefined && a._data.name !== null && b._data.name !== null) {
-				aName = a._data.name.toLowerCase();
-				bName = b._data.name.toLowerCase();
+			if(a.name !== undefined && b.name !== undefined && a.name !== null && b.name !== null) {
+				aName = a.name.toLowerCase();
+				bName = b.name.toLowerCase();
 				if(aName < bName) {
 					return -1;
 				} else if(aName > bName) {
@@ -177,10 +177,10 @@
 			}
 
 			if(a.updated || b.updated) {
-				if((a._data.name === undefined || a._data.name === null) && b._data.name !== undefined && b._data.name !== null) {
+				if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
 					return -1;
 				}
-				if((b._data.name === undefined || b._data.name === null) && a._data.name !== undefined && a._data.name !== null) {
+				if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
 					return 1;
 				}
 

@@ -133,7 +133,7 @@ var makeCharacter = function(universe, event, source, details) {
 	// Setup Archetype Level Tracking
 	data.archetype = universe.get(details.archetypes[0]);
 	details.level_archetype = {};
-	details.level_archetype[data.archetype.id] = 1;
+	details.level_archetype[data.archetype.name.toLowerCase()] = 1;
 
 	return new Promise(function(done, fail) {
 		data.universe.createObject(data.details, function(err, character) {

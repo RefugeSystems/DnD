@@ -292,7 +292,7 @@
 			time = Math.floor(time/60);
 			Vue.set(into, "hour", Math.floor(time%24));
 			time = Math.floor(time/24);
-			Vue.set(into, "day", Math.floor(time%(this.daysOfMonth[0] || 25)));
+			Vue.set(into, "day", Math.floor(time%(this.daysInMonth[0] || 25)));
 			time = Math.floor(time/25);
 			Vue.set(into, "month", Math.floor(time%this.monthsOfYear.length));
 			Vue.set(into, "year", Math.floor(time/this.monthsOfYear.length));
@@ -301,12 +301,76 @@
 
 		/**
 		 * 
+		 * @method displayDuration
+		 * @param {Integer} [time] Defaults to current time.
+		 * @param {Boolean} [includeTime] Included by default.
+		 * @returns {String}
+		 */
+		displayDuration(duration, includeTime = true, longForm = true) {
+			var root = this.breakdownGameTime(duration, {}),
+				string = [];
+
+			if(root.day) {
+				string.push(root.day);
+				if(longForm) {
+					if(root.day === 1) {
+						string.push(" Day ");
+					} else {
+						string.push(" Days ");
+					}
+				} else {
+					string.push("d ");
+				}
+			}
+			if(root.month) {
+				string.push(root.month);
+				if(longForm) {
+					if(root.month === 1) {
+						string.push(" Month ");
+					} else {
+						string.push(" Months ");
+					}
+				} else {
+					string.push("m ");
+				}
+			}
+			if(root.year) {
+				string.push(root.year);
+				if(longForm) {
+					if(root.year === 1) {
+						string.push(" Year ");
+					} else {
+						string.push(" Years ");
+					}
+				} else {
+					string.push("y ");
+				}
+			}
+			if(includeTime) {
+				if(root.hour < 10) {
+					string.push("0");
+				}
+				string.push(root.hour + ":");
+				if(root.minute < 10) {
+					string.push("0");
+				}
+				string.push(root.minute + ":");
+				if(root.second < 10) {
+					string.push("0");
+				}
+				string.push(root.second + ":");
+			}
+			
+			return string.join("");
+		 }
+		/**
+		 * 
 		 * @method toDisplay
 		 * @param {Integer} [time] Defaults to current time.
 		 * @param {Boolean} [includeTime] Included by default.
 		 * @returns {String}
 		 */
-		toDisplay(time, includeTime = true) {
+		toDisplay(time, includeTime = true, longForm = true) {
 			if(time) {
 				time = Math.floor(time);
 			} else {
@@ -329,12 +393,20 @@
 				time = Math.floor(time/86400);
 			}
 
-			day = this.daysOfWeek[time%this.daysOfWeek.length];
-			num = Math.floor(time%25) + 1;
-			time = Math.floor(time/25);
-			month = this.monthsOfYear[Math.floor(time%this.monthsOfYear.length)];
-			year = Math.floor(time/this.monthsOfYear.length) + 1;
-			return day + " " + month + " " + num + ", " + year + string;
+			if(longForm) {
+				day = this.daysOfWeek[time%this.daysOfWeek.length];
+				num = Math.floor(time%25) + 1;
+				time = Math.floor(time/25);
+				month = this.monthsOfYear[Math.floor(time%this.monthsOfYear.length)];
+				year = Math.floor(time/this.monthsOfYear.length) + 1;
+				return day + " " + month + " " + num + ", " + year + string;
+			} else {
+				num = Math.floor(time%25) + 1;
+				time = Math.floor(time/25);
+				month = Math.floor(time%this.monthsOfYear.length);
+				year = Math.floor(time/this.monthsOfYear.length) + 1;
+				return (month + 1) + "/" + num + "/" + year + string;
+			}
 		}
 	}
 

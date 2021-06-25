@@ -260,6 +260,14 @@ rsSystem.component("systemOptionsDialog", {
 				"label": "Update"
 			});
 		}
+		if(!this.universe.connection.socket) {
+			data.pages.system.options.push({
+				"id": "universe-reconnect",
+				"action": "universe-reconnect",
+				"icon": "fas fa-plug rs-lightgreen",
+				"label": "Reconnect"
+			});
+		}
 		if(this.player.gm) {
 			data.pages.profile.options.push({
 				"id": "collapse_system_alerts",
@@ -383,6 +391,9 @@ rsSystem.component("systemOptionsDialog", {
 					break;
 				case "universe-export":
 					this.universe.exportData(this.configuration.title);
+					break;
+				case "universe-reconnect":
+					this.universe.reconnect();
 					break;
 			}
 		},

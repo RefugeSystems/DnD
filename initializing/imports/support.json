@@ -33,7 +33,8 @@
 				"action:movement:swim",
 				"action:reaction:oppurtunity",
 				"action:rest:short",
-				"action:rest:long"
+				"action:rest:long",
+				"action:combat:quip"
 			],
 			"skill_check": {
 				"skill:acrobatics": "dexterity",

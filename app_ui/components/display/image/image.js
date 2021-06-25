@@ -2,7 +2,7 @@
 /**
  * 
  * 
- * @class rsRenderImage
+ * @class rsImage
  * @constructor
  * @module Components
  */
@@ -16,8 +16,7 @@
 		],
 		"props": {
 			"image": {
-				"required": true,
-				"type": Object
+				"required": true
 			},
 			"modes": {
 				"default": "general",
@@ -38,9 +37,9 @@
 			 */
 			"url": function() {
 				if(this.cacheSuffix) {
-					return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.image.id + "?ctrl=" + this.cacheSuffix;
+					return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (this.image.id || this.image) + "?ctrl=" + this.cacheSuffix;
 				}
-				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.image.id;
+				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (this.image.id || this.image);
 			}
 		},
 		"data": function() {
@@ -59,13 +58,7 @@
 
 			},
 			"classes": function() {
-				var classes;
-				
-				if(this.modes) {
-					classes = this.modes;
-				} else {
-					classes = "general";
-				}
+				var classes = "";
 				
 				if(this.linked) {
 					classes += " linked";

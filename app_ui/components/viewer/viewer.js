@@ -130,86 +130,25 @@
 	rsSystem.component("rsViewer", {
 		"inherit": true,
 		"mixins": [
+			rsSystem.components.StorageController,
 			rsSystem.components.RSCore
 		],
 		"props": {
 			"location": {
 				"required": true,
 				"type": Object
+			},
+			"entity": {
+				"type": Object
 			}
 		},
 		"data": function() {
 			var data = {};
 
-			data.storageKeyID = storageKey + this.location.id;
-			data.state = this.loadStorage(data.storageKeyID, {
-				"zoomStep": 1
-			});
-
 			data.generateLocationClassingMap = generateLocationClassingMap;
-			if(!data.state.crosshairing) {
-				data.state.crosshairing = {
-					"icon": "fal fa-crosshairs",
-					"event": "toggle-crosshair",
-					"text": "Crosshairs On",
-					"state": false
-				};
-			}
-			if(!data.state.pathing) {
-				data.state.pathing = {
-					"icon": "fad fa-chart-scatter rs-secondary-transparent",
-					"event": "toggle-pathing",
-					"text": "Point Path Off",
-					"state": false
-				};
-			}
-
 			data.viewingEntity = null;
-			data.state.generate_location = data.state.generate_location || "";
-			data.state.viewed_at = data.state.viewed_at || 0;
-			data.state.search = data.state.search || "";
-			data.state.alter = data.state.alter || "";
-			if(data.state.labels === undefined) {
-				data.state.labels = true;
-			}
-			if(data.state.image) {
-				data.image = data.state.image;
-			} else {
-				data.image = data.state.image = {};
-			}
-			if(data.state.markers === undefined) {
-				data.state.markers = true;
-			}
-			if(data.state.follow === undefined) {
-				data.state.follow = true;
-			}
-			if(data.state.master_view === undefined) {
-				data.state.master_view = "";
-			}
-			if(data.state.hidden_legend === undefined) {
-				data.state.hidden_legend = {};
-			}
-			if(data.state.path_fill === undefined) {
-				data.state.path_fill = "";
-			}
-			if(data.state.view_party === undefined) {
-				data.state.view_party = "";
-			}
-			if(data.state.distance_unit === undefined) {
-				data.state.distance_unit = "m";
-			}
-			if(data.state.distance === undefined) {
-				data.state.distance = 0;
-			}
-			if(data.state.measuring === undefined || data.state.measuring instanceof Array) {
-				data.state.measuring = {};
-			}
-
-			if(data.state.search) {
-				data.search_criteria = data.state.search.toLowerCase().split(" ");
-			} else {
-				data.search_criteria = [];
-			}
+			data.search_criteria = [];
+			data.image = [];
 
 			data.measurementCanvas = null;
 			data.initializing = true;
@@ -222,13 +161,9 @@
 			data.totalTime = 0;
 			data.distance = 0;
 
-			data.searchPrevious = data.state.search;
+			data.searchPrevious = null;;
 			data.searchError = "";
 			data.original = {};
-			data.backgroundImageNoun = null;
-			data.sourceImageNoun = null;
-			data.backgroundImage = null;
-			data.sourceImage = null;
 			data.parchment = null;
 			data.element = null;
 			data.ready = false;
@@ -336,25 +271,35 @@
 
 			return data;
 		},
+		"computed": {
+			"sourceImage": function() {
+				// console.log("Source Image:");
+				if(this.location.map) {
+					// console.log(" > Found: " + "/api/v1/image/" + this.location.map);
+					return this.location.map;
+				}
+				// console.log("Not Found? ", this.location);
+				return null;
+			},
+			"backgroundImage": function() {
+				if(this.location.mapbg) {
+					return this.location.mapbg;
+				}
+				return null;
+			}
+		},
 		"watch": {
-			"state": {
+			"storage": {
 				"deep": true,
 				"handler": function() {
-					if(this.state.search !== this.state.search.toLowerCase()) {
-						Vue.set(this.state, "search", this.state.search.toLowerCase());
+					if(this.storage.search !== this.storage.search.toLowerCase()) {
+						Vue.set(this.state, "search", this.storage.search.toLowerCase());
 					}
 					this.saveStorage(this.storageKeyID, this.state);
 				}
 			},
 			"location": {
 				"handler": function(newValue, oldValue) {
-					oldValue.$off("modified", this.update);
-					newValue.$on("modified", this.update);
-				}
-			},
-			"$route": {
-				"deep": true,
-				"handler": function() {
 					this.update();
 				}
 			}
@@ -362,13 +307,79 @@
 		"mounted": function() {
 			this.canvasElement = $("canvas.map-paths");
 			Vue.set(this, "element", $(this.$el));
+			if(!this.storage.crosshairing) {
+				Vue.set(this.storage, "crosshairing", {
+					"icon": "fal fa-crosshairs",
+					"event": "toggle-crosshair",
+					"text": "Crosshairs On",
+					"state": false
+				});
+			}
+			if(!this.storage.pathing) {
+				Vue.set(this.storage, "pathing", {
+					"icon": "fad fa-chart-scatter rs-secondary-transparent",
+					"event": "toggle-pathing",
+					"text": "Point Path Off",
+					"state": false
+				});
+			}
 
-			if(this.state.master_view !== "master") {
-				if(this.state.master_view) {
-					Vue.set(this, "viewingEntity", this.universe.indexes.entity.index[this.state.master_view]);
+			Vue.set(this.storage, "generate_location", this.storage.generate_location || "");
+			Vue.set(this.storage, "viewed_at", this.storage.viewed_at || 0);
+			Vue.set(this.storage, "search", this.storage.search || "");
+			Vue.set(this.storage, "alter", this.storage.alter || "");
+			if(this.storage.search) {
+				Vue.set(this, "searchPrevious", this.storage.search);
+			}
+			if(this.storage.labels === undefined) {
+				Vue.set(this.storage, "labels", true);
+			}
+			if(this.storage.image) {
+				Vue.set(this, "image", this.storage.image);
+			} else {
+				Vue.set(this, "image", {});
+				Vue.set(this.storage, "image", this.image);
+			}
+			if(this.storage.markers === undefined) {
+				Vue.set(this.storage, "markers", true);
+			}
+			if(this.storage.follow === undefined) {
+				Vue.set(this.storage, "follow", true);
+			}
+			if(this.storage.master_view === undefined) {
+				Vue.set(this.storage, "master_view", "");
+			}
+			if(this.storage.hidden_legend === undefined) {
+				Vue.set(this.storage, "hidden_legend", {});
+			}
+			if(this.storage.path_fill === undefined) {
+				Vue.set(this.storage, "path_fill", "");
+			}
+			if(this.storage.view_party === undefined) {
+				Vue.set(this.storage, "view_party", "");
+			}
+			if(this.storage.distance_unit === undefined) {
+				Vue.set(this.storage, "distance_unit", "m");
+			}
+			if(this.storage.distance === undefined) {
+				Vue.set(this.storage, "distance", 0);
+			}
+			if(this.storage.measuring === undefined || this.storage.measuring instanceof Array) {
+				Vue.set(this.storage, "measuring", {});
+			}
+
+			if(this.storage.search) {
+				Vue.set(this, "search_criteria", this.storage.search.toLowerCase().split(" "));
+			} else {
+				Vue.set(this, "search_criteria", []);
+			}
+
+			if(this.storage.master_view !== "master") {
+				if(this.storage.master_view) {
+					Vue.set(this, "viewingEntity", this.universe.index.entity[this.storage.master_view]);
 				}
 				if(!this.viewingEntity) {
-					Vue.set(this, "viewingEntity", this.universe.indexes.entity.index[this.player.entity]);
+					Vue.set(this, "viewingEntity", this.universe.index.entity[this.player.attribute.playing_as]);
 				}
 			}
 
@@ -376,9 +387,9 @@
 			rsSystem.EventBus.$on("measure-point", this.receiveMeasurementPoint);
 			rsSystem.EventBus.$on("info:closed", this.clearSearch);
 			rsSystem.EventBus.$on("copied-id", this.setMenuID);
-			this.universe.$on("universe:modified", this.update);
-			this.universe.$on("model:modified", this.update);
-			this.location.$on("modified", this.update);
+			// this.universe.$on("universe:modified", this.update);
+			// this.universe.$on("model:modified", this.update);
+			// this.location.$on("modified", this.update);
 			this.update();
 		},
 		"methods": {
@@ -397,9 +408,9 @@
 
 				Vue.set(this, "focusedLocation", null);
 				if(this.search_criteria[0] === "self") {
-					if((buffer = this.universe.indexes.entity.index[this.player.entity]) && (buffer = this.universe.indexes.location.index[buffer.location])) {
+					if((buffer = this.universe.index.entity[this.player.entity]) && (buffer = this.universe.index.location[buffer.location])) {
 						while(buffer && buffer.location !== this.location.id) {
-							buffer = this.universe.indexes.location.index[buffer.location];
+							buffer = this.universe.index.location[buffer.location];
 						}
 						if(buffer) {
 							Vue.set(this, "focusedLocation", buffer.id);
@@ -456,24 +467,24 @@
 				}
 			},
 			"getGeneratedClass": function() {
-				return generateLocationClassingMap[this.state.generate_location];
+				return generateLocationClassingMap[this.storage.generate_location];
 			},
 			"idFromName": function(name) {
-				return "location:" + this.state.generate_location + ":" + name.toLowerCase().replace(/[^0-9a-zA-Z_]+/g, "");
+				return "location:" + this.storage.generate_location + ":" + name.toLowerCase().replace(/[^0-9a-zA-Z_]+/g, "");
 			},
 			"generateLocationNoun": function(x, y) {
 				var noun = {};
 				noun._type = "location";
-				noun.name = this.state.generate_location_name;
-				noun.label = this.state.generate_location_name;
+				noun.name = this.storage.generate_location_name;
+				noun.label = this.storage.generate_location_name;
 				noun.id = this.idFromName(noun.name);
 				noun.icon = this.getGeneratedClass();
 				noun.location = this.location.id;
-				noun.type = [this.state.generate_location];
+				noun.type = [this.storage.generate_location];
 				noun.x = x;
 				noun.y = y;
 				noun.master_note = "Generated @" + (new Date()).toString();
-				if(!this.universe.indexes.location.index[noun.id]) {
+				if(!this.universe.index.location[noun.id]) {
 					this.universe.send("modify:location", noun);
 				} else {
 					console.warn("Noun Already Exists: " + noun.id);
@@ -486,7 +497,7 @@
 				this.search_criteria.splice(0);
 			},
 			"togglePOIFiltering": function() {
-				Vue.set(this.state, "poiFiltering", !this.state.poiFiltering);
+				Vue.set(this.state, "poiFiltering", !this.storage.poiFiltering);
 				this.filterPOIs();
 			},
 			"filterPOIs": function(text) {
@@ -540,7 +551,7 @@
 				Vue.set(this, "menuOpen", !this.menuOpen);
 			},
 			"toggleLocale": function(locale) {
-				Vue.set(this.state.hidden_legend, locale.id, !this.state.hidden_legend[locale.id]);
+				Vue.set(this.storage.hidden_legend, locale.id, !this.storage.hidden_legend[locale.id]);
 				this.redrawPaths();
 			},
 			"processAction": function(item, event) {
@@ -548,39 +559,29 @@
 				var buffer;
 				switch(item.action) {
 					case "zoomin":
-						/*
-						this.image.zoom = this.image.zoom || 0;
-						this.image.zoom += this.state.zoomStep;
-						this.apply(this.image);
-						*/
 						this.zoomInOne();
 						break;
 					case "zoomout":
-						/*
-						this.image.zoom = this.image.zoom || 0;
-						this.image.zoom -= this.state.zoomStep;
-						this.apply(this.image);
-						*/
 						this.zoomOutOne();
 						break;
 					case "markings":
-						Vue.set(this.state, "markers", !this.state.markers);
+						Vue.set(this.state, "markers", !this.storage.markers);
 						break;
 					case "labels":
-						Vue.set(this.state, "labels", !this.state.labels);
+						Vue.set(this.state, "labels", !this.storage.labels);
 						this.redrawPaths();
 						break;
 					case "follow":
-						Vue.set(this.state, "follow", !this.state.follow);
+						Vue.set(this.state, "follow", !this.storage.follow);
 						break;
 					case "reset":
 						this.resetViewport();
 						break;
 					case "up":
 						if(this.location.location) {
-							buffer = this.universe.indexes.location.index[this.location.location];
+							buffer = this.universe.index.location[this.location.location];
 							if(buffer) {
-								if(buffer.has_path) {
+								if(buffer.rendering_has_path) {
 									// Skip over routes/paths to their parent where an image shoould be present
 									if(buffer.location) {
 										this.$router.push("/map/" + buffer.location);
@@ -592,7 +593,7 @@
 						}
 						break;
 					case "fullscreen":
-						Vue.set(this.state, "fullscreen", !this.state.fullscreen);
+						Vue.set(this.state, "fullscreen", !this.storage.fullscreen);
 						break;
 				}
 			},
@@ -671,8 +672,8 @@
 							"id": "cross:" + (issuing++) + ":" + Date.now(),
 							"x": (this.actions.x/this.image.width*100),
 							"y": (this.actions.y/this.image.height*100),
-							"standalone": this.state.crosshairing.state,
-							"pathed": this.state.pathing.state,
+							"standalone": this.storage.crosshairing.state,
+							"pathed": this.storage.pathing.state,
 							"color": option.color
 						});
 						this.location.commit({
@@ -700,25 +701,25 @@
 						}
 						break;
 					case "toggle-crosshair":
-						if(this.state.crosshairing.state) {
-							Vue.set(this.state.crosshairing, "icon", "fal fa-crosshairs");
-							Vue.set(this.state.crosshairing, "text", "Crosshairs On");
-							Vue.set(this.state.crosshairing, "state", false);
+						if(this.storage.crosshairing.state) {
+							Vue.set(this.storage.crosshairing, "icon", "fal fa-crosshairs");
+							Vue.set(this.storage.crosshairing, "text", "Crosshairs On");
+							Vue.set(this.storage.crosshairing, "state", false);
 						} else {
-							Vue.set(this.state.crosshairing, "icon", "fal fa-location-slash");
-							Vue.set(this.state.crosshairing, "text", "Crosshairs Off");
-							Vue.set(this.state.crosshairing, "state", true);
+							Vue.set(this.storage.crosshairing, "icon", "fal fa-location-slash");
+							Vue.set(this.storage.crosshairing, "text", "Crosshairs Off");
+							Vue.set(this.storage.crosshairing, "state", true);
 						}
 						break;
 					case "toggle-pathing":
-						if(this.state.pathing.state) {
-							Vue.set(this.state.pathing, "icon", "fad fa-chart-scatter rs-secondary-transparent");
-							Vue.set(this.state.pathing, "text", "Point Path Off");
-							Vue.set(this.state.pathing, "state", false);
+						if(this.storage.pathing.state) {
+							Vue.set(this.storage.pathing, "icon", "fad fa-chart-scatter rs-secondary-transparent");
+							Vue.set(this.storage.pathing, "text", "Point Path Off");
+							Vue.set(this.storage.pathing, "state", false);
 						} else {
-							Vue.set(this.state.pathing, "icon", "fad fa-chart-network rs-secondary-transparent");
-							Vue.set(this.state.pathing, "text", "Point Path On");
-							Vue.set(this.state.pathing, "state", true);
+							Vue.set(this.storage.pathing, "icon", "fad fa-chart-network rs-secondary-transparent");
+							Vue.set(this.storage.pathing, "text", "Point Path On");
+							Vue.set(this.storage.pathing, "state", true);
 						}
 						break;
 					case "set-map":
@@ -728,8 +729,8 @@
 						});
 						break;
 					case "set-location":
-						buffer = this.universe.index.index[this.state.alter];
-						if(buffer && this.player.master) {
+						buffer = this.universe.index.index[this.storage.alter];
+						if(buffer && this.player.gm) {
 							buffer.commit({
 								"location": this.location.id,
 								"y": this.actions.y/this.image.height*100,
@@ -744,7 +745,7 @@
 						this.setNamePoint(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						break;
 					case "set-current":
-						if(this.player.master) {
+						if(this.player.gm) {
 							this.universe.send("control", {
 								"control": "page",
 								"url": "/map/" + this.location.id,
@@ -755,7 +756,7 @@
 						}
 						break;
 					case "generate-location":
-						if(this.player.master) {
+						if(this.player.gm) {
 							this.generateLocationNoun(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						}
 						break;
@@ -778,66 +779,40 @@
 							p2 = {},
 							length;
 
-						p1.x = this.state.measuring[this.location.id][0].x * this.image.width;
-						p1.y = this.state.measuring[this.location.id][0].y * this.image.height;
-						p2.x = this.state.measuring[this.location.id][1].x * this.image.width;
-						p2.y = this.state.measuring[this.location.id][1].y * this.image.height;
+						p1.x = this.storage.measuring[this.location.id][0].x * this.image.width;
+						p1.y = this.storage.measuring[this.location.id][0].y * this.image.height;
+						p2.x = this.storage.measuring[this.location.id][1].x * this.image.width;
+						p2.y = this.storage.measuring[this.location.id][1].y * this.image.height;
 
-						length = rsSystem.math.distance.points2D(p1, p2) / (1 + .1 * this.state.image.zoom);
+						length = rsSystem.math.distance.points2D(p1, p2) / (1 + .1 * this.storage.image.zoom);
 						length = Math.floor(length + .5);
 						// console.log("Set Length: " + length);
-						length = (this.state.distance * (rsSystem.math.distance.convert[this.state.distance_unit] || 1)) / length;
+						length = (this.storage.distance * (rsSystem.math.distance.convert[this.storage.distance_unit] || 1)) / length;
 						if(!isNaN(length)) {
 							this.location.commit({
 								"map_distance": length
 							});
 						}
-
-						/*
-						if(this.distancing.length) {
-							buffer = {
-								"x": this.actions.x / (1 + .1 * this.state.image.zoom),
-								"y": this.actions.y / (1 + .1 * this.state.image.zoom)
-							};
-
-							// TODO: Measure distance and set
-							buffer = rsSystem.math.distance.points2D(this.distancing[0], buffer);
-							path = this.state.distance * (rsSystem.math.distance.convert[this.state.distance_unit] || 1);
-							console.log("Commiting: " + buffer + " <> " + path + " = " + (path/buffer));
-							path = path/buffer;
-							if(!isNaN(path)) {
-								this.location.commit({
-									"map_distance": path
-								});
-							}
-							this.distancing.splice(0);
-						} else {
-							this.distancing.push({
-								"x": this.actions.x / (1 + .1 * this.state.image.zoom),
-								"y": this.actions.y / (1 + .1 * this.state.image.zoom)
-							});
-						}
-						*/
 						break;
 					case "clear-measuring":
-						if(this.state.measuring[this.location.id]) {
+						if(this.storage.measuring[this.location.id]) {
 							Vue.set(this, "totalLength", 0);
 							Vue.set(this, "totalTime", 0);
-							this.state.measuring[this.location.id].splice(0);
+							this.storage.measuring[this.location.id].splice(0);
 							this.renderMeasurements();
 							this.buildMenu();
 						}
 						break;
 					case "measure-line":
-						if(!this.state.measuring[this.location.id]) {
-							Vue.set(this.state.measuring, this.location.id, []);
+						if(!this.storage.measuring[this.location.id]) {
+							Vue.set(this.storage.measuring, this.location.id, []);
 						}
-						this.state.measuring[this.location.id].push({
+						this.storage.measuring[this.location.id].push({
 							"x": this.actions.x/this.image.width,
 							"y": this.actions.y/this.image.height
 						});
 						// this.renderMeasurements();
-						if(this.state.measuring[this.location.id].length === 1) {
+						if(this.storage.measuring[this.location.id].length === 1) {
 							this.buildMenu();
 						}
 						break;
@@ -853,9 +828,9 @@
 			},
 			"appendPath": function(x, y) {
 				var buffer;
-				if(this.state.path_fill) {
-					buffer = this.universe.indexes.location.index[this.state.path_fill];
-					if(buffer && this.player.master) {
+				if(this.storage.path_fill) {
+					buffer = this.universe.index.location[this.storage.path_fill];
+					if(buffer && this.player.gm) {
 						// console.log("Update Path[" + buffer.id + "]: ", buffer);
 						buffer.appendPath(x, y);
 					}
@@ -863,9 +838,9 @@
 			},
 			"setNamePoint": function(x, y) {
 				var buffer;
-				if(this.state.path_fill) {
-					buffer = this.universe.indexes.location.index[this.state.path_fill];
-					if(buffer && this.player.master) {
+				if(this.storage.path_fill) {
+					buffer = this.universe.index.location[this.storage.path_fill];
+					if(buffer && this.player.gm) {
 						buffer.commit({
 							"x": x,
 							"y": y
@@ -874,7 +849,7 @@
 				}
 			},
 			"dismissCoordinate": function(coordinate) {
-				if(this.player.master) {
+				if(this.player.gm) {
 					var index = this.coordinates.indexOf(coordinate);
 					if(index !== -1) {
 						this.coordinates.splice(index, 1);
@@ -1142,7 +1117,7 @@
 
 				for(x=0; x<this.locales.length; x++) {
 					path = this.locales[x];
-					if(path.location === this.location.id && path.has_path) {
+					if(path.location === this.location.id && path.rendering_has_path) {
 						if(!this.availableLocales[path.id] || !this.availableLocales[path.id].parentNode) {
 							buffer = $("[data-id='locale:" + path.id + "']");
 							if(buffer.length) {
@@ -1164,7 +1139,7 @@
 				this.renderMeasurements();
 			},
 			"drawPath": function(canvas, path) {
-				if(path && path.has_path && !this.state.hidden_legend[path.id]) {
+				if(path && path.rendering_has_path && !this.storage.hidden_legend[path.id]) {
 					var points = [],
 						buffer,
 						point,
@@ -1172,7 +1147,7 @@
 
 					if(path.pathed) {
 						for(x=0; x<path.pathing.length; x++) {
-							buffer = this.universe.indexes.location.index[path.pathing[x]];
+							buffer = this.universe.index.location[path.pathing[x]];
 							if(buffer && buffer.location === this.location.id) {
 								point = [buffer.x/100 * this.image.width, buffer.y/100 * this.image.height];
 								points.push(point);
@@ -1249,9 +1224,9 @@
 					canvas.closePath();
 					canvas.fill();
 
-					if(/*this.state.labels &&*/ path.render_name && path._x !== undefined && path._y !== undefined) {
+					if(/*this.storage.labels &&*/ path.render_name && path._x !== undefined && path._y !== undefined) {
 						canvas.fillStyle = path.label_color || path.color || "#FFFFFF";
-						canvas.font = "bold " + (12 + this.state.image.zoom) + "px Arial";
+						canvas.font = "bold " + (12 + this.storage.image.zoom) + "px Arial";
 						canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
 						canvas.shadowBlur = path.label_shadow_blur || 3;
 						canvas.globalAlpha = path.label_opacity || 1;
@@ -1271,22 +1246,22 @@
 					var x = point.x/100,
 						y = point.y/100;
 
-					if(!this.state.measuring[this.location.id]) {
-						Vue.set(this.state.measuring, this.location.id, []);
+					if(!this.storage.measuring[this.location.id]) {
+						Vue.set(this.storage.measuring, this.location.id, []);
 					}
 					// console.log("Receiving Point: " + point.x + ", " + point.y, zoom, x, y, _p(this.image));
-					this.state.measuring[this.location.id].push({
+					this.storage.measuring[this.location.id].push({
 						"x": x,
 						"y": y
 					});
 					this.renderMeasurements();
-					if(this.state.measuring[this.location.id].length === 1) {
+					if(this.storage.measuring[this.location.id].length === 1) {
 						this.buildMenu();
 					}
 				}
 			},
 			"renderMeasurements": function() {
-				// console.warn("Measurements[" + this.state.image.zoom + "]...");
+				// console.warn("Measurements[" + this.storage.image.zoom + "]...");
 				var canvas,
 					format,
 					party,
@@ -1315,8 +1290,8 @@
 					}
 				}
 
-				if(this.state.view_party) {
-					party = this.universe.indexes.party.index[this.state.view_party];
+				if(this.storage.view_party) {
+					party = this.universe.index.party[this.storage.view_party];
 				}
 
 				canvas = this.measurementCanvas;
@@ -1326,26 +1301,26 @@
 					canvas.width = this.image.width;
 					canvas = canvas.getContext("2d");
 					Vue.set(this, "initializing", false);
-					if(this.state.measuring[this.location.id] && this.state.measuring[this.location.id].length) {
+					if(this.storage.measuring[this.location.id] && this.storage.measuring[this.location.id].length) {
 						points = [];
 						canvas.clearRect(0, 0, canvas.width, canvas.height);
-						canvas.font = (14 + this.state.image.zoom) + "px serif";
+						canvas.font = (14 + this.storage.image.zoom) + "px serif";
 						canvas.strokeStyle = "#FFFFFF";
 						canvas.lineWidth = 2;
 						canvas.globalAlpha = .7;
 						canvas.fillStyle = "#FFFFFF";
 
-						zoom = 1 + .1 * this.state.image.zoom;
+						zoom = 1 + .1 * this.storage.image.zoom;
 
-						// console.log("Rendering[" + this.image.width + "x" + this.image.height + "@" + zoom + "]: ", JSON.stringify(this.state.measuring[this.location.id], null, 4));
+						// console.log("Rendering[" + this.image.width + "x" + this.image.height + "@" + zoom + "]: ", JSON.stringify(this.storage.measuring[this.location.id], null, 4));
 						canvas.beginPath();
-						x1 = this.state.measuring[this.location.id][0].x * this.image.width;
-						y1 = this.state.measuring[this.location.id][0].y * this.image.height;
+						x1 = this.storage.measuring[this.location.id][0].x * this.image.width;
+						y1 = this.storage.measuring[this.location.id][0].y * this.image.height;
 						canvas.moveTo(x1, y1);
 						points.push([x1, y1]);
-						for(i=1; i<this.state.measuring[this.location.id].length; i++) {
-							x2 = this.state.measuring[this.location.id][i].x * this.image.width;
-							y2 = this.state.measuring[this.location.id][i].y * this.image.height;
+						for(i=1; i<this.storage.measuring[this.location.id].length; i++) {
+							x2 = this.storage.measuring[this.location.id][i].x * this.image.width;
+							y2 = this.storage.measuring[this.location.id][i].y * this.image.height;
 							mx = x1 + (x2 - x1)/2;
 							my = y1 + (y2 - y1)/2;
 							canvas.lineTo(x2, y2);
@@ -1454,11 +1429,11 @@
 				}
 			},
 			"elementVisible": function(element, entity) {
-				if(element.template || element.hidden || (element.obscured && !this.player.master)) {
+				if(element.template || element.hidden || (element.obscured && !this.player.gm)) {
 					return false;
 				}
 
-				if(element.must_know && !this.player.master) {
+				if(element.must_know && !this.player.gm) {
 
 				}
 			},
@@ -1507,7 +1482,7 @@
 				return classStyle;
 			},
 			"poiNamed": function(link) {
-				if(link.has_path && !link.show_name) {
+				if(link.rendering_has_path && !link.show_name) {
 					return false;
 				}
 
@@ -1521,12 +1496,12 @@
 					return false;
 				}
 
-				//console.log("Link[" + link.id + " | " + link.must_know + "]: " + ( (!this.player.master || this.state.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) ), " | ", this.viewingEntity.knowsOf(link), "\n > ", this.viewingEntity);
-				if(link.must_know && ( (!this.player.master || this.state.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) )) {
+				//console.log("Link[" + link.id + " | " + link.must_know + "]: " + ( (!this.player.gm || this.storage.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) ), " | ", this.viewingEntity.knowsOf(link), "\n > ", this.viewingEntity);
+				if(link.must_know && ( (!this.player.gm || this.storage.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) )) {
 					return false;
 				}
 
-				if(this.state.poiFiltering && this.search_criteria.length) {
+				if(this.storage.poiFiltering && this.search_criteria.length) {
 					if(!link._search) {
 						return false;
 					}
@@ -1537,11 +1512,11 @@
 					}
 				}
 
-				if(this.player.master && this.state.master_view === "master") {
+				if(this.player.gm && this.storage.master_view === "master") {
 					return true;
 				}
 
-				if(link.hidden || (link.obscured && !this.player.master)) {
+				if(link.hidden || (link.obscured && !this.player.gm)) {
 					return false;
 				}
 
@@ -1558,7 +1533,7 @@
 			},
 			"renderState": function() {
 				var state = "";
-				if(this.state.fullscreen) {
+				if(this.storage.fullscreen) {
 					state += " fullscreen";
 				}
 				return state;
@@ -1582,7 +1557,7 @@
 			},
 			"buildMenu": function() {
 				this.actions.options.splice(0);
-				if(this.player.master) {
+				if(this.player.gm) {
 					if(this.localeInfo.shown) {
 						this.actions.options.push(this.localeInfo);
 					}
@@ -1611,8 +1586,8 @@
 						"text": "Clear Marks"
 					});
 
-					this.actions.options.push(this.state.crosshairing);
-					this.actions.options.push(this.state.pathing);
+					this.actions.options.push(this.storage.crosshairing);
+					this.actions.options.push(this.storage.pathing);
 
 					this.actions.options.push(this.takeMeasurements);
 					/*
@@ -1623,7 +1598,7 @@
 					}
 					*/
 
-					if(this.state.measuring[this.location.id] && this.state.measuring[this.location.id].length) {
+					if(this.storage.measuring[this.location.id] && this.storage.measuring[this.location.id].length) {
 						this.actions.options.push({
 							"icon": "far fa-compass-slash",
 							"event": "clear-measuring",
@@ -1646,139 +1621,79 @@
 					hold,
 					x;
 				
-
-				if(this.location.image && (!this.sourceImageNoun || this.sourceImageNoun.id !== this.location.image) && (image = this.universe.nouns.image[this.location.image])) {
-					if(this.sourceImageNoun) {
-						this.sourceImageNoun.$off("modified", this.update);
-					}
-					Vue.set(this, "sourceImageNoun", image);
-					this.sourceImageNoun.$on("modified", this.update);
-				} else {
-					image = this.sourceImageNoun;
-				}
-				if(this.location.background && (!this.backgroundImageNoun || this.backgroundImageNoun.id !== this.location.background) && (background = this.universe.nouns.image[this.location.background])) {
-					if(this.backgroundImageNoun) {
-						this.backgroundImageNoun.$off("modified", this.update);
-					}
-					Vue.set(this, "backgroundImageNoun", background);
-					this.backgroundImageNoun.$on("modified", this.update);
-				} else {
-					background = this.backgroundImageNoun;
-				}
-				
-				if(image && image.delayed_data) {
-					image.retrieve();
+				if(this.player.gm) {
+					this.buildMenu();
 				}
 
-				if(background && background.delayed_data) {
-					background.retrieve();
-				}
-
-				if((!image || !image.delayed_data) && (!background || !background.delayed_data) && (this.initializing || !source ||
-						((source.type === "location" || source.type === "entity" || source.type === "party") &&
-						source.modification &&
-						(source.modification.x !== undefined || source.modification.y !== undefined || source.modification.map_distance !== undefined)))) {
-					if(this.player.master) {
-						this.buildMenu();
-					}
-
-					this.coordinates.splice(0);
-					if(this.location.coordinates && this.location.coordinates.length) {
-						for(x=0; x<this.location.coordinates.length; x++) {
-							if(this.location.coordinates[x]) {
-								this.coordinates.push(this.location.coordinates[x]);
-							}
+				this.coordinates.splice(0);
+				if(this.location.coordinates && this.location.coordinates.length) {
+					for(x=0; x<this.location.coordinates.length; x++) {
+						if(this.location.coordinates[x]) {
+							this.coordinates.push(this.location.coordinates[x]);
 						}
 					}
+				}
 
-					this.availablePOIs.splice(0);
-					// while(this.pointsOfInterest.length !== 0) {
-					// 	buffer = this.pointsOfInterest.pop();
-					// 	if(buffer.$off) {
-					// 		buffer.$off("modified", this.minorUpdate);
-					// 	}
-					// }
-					this.locales.splice(0);
-					for(x=0; x<this.universe.indexes.location.listing.length; x++) {
-						buffer = this.universe.indexes.location.listing[x];
-						if(buffer.location === this.location.id || ((hold = this.universe.indexes.location.index[buffer.location]) && hold.location === this.location.id && hold.has_path)) {
-							this.availablePOIs.push(buffer);
-							// buffer.$on("modified", this.minorUpdate);
-							if(buffer.has_path) {
-								this.locales.push(buffer);
-							}
+				this.availablePOIs.splice(0);
+				// while(this.pointsOfInterest.length !== 0) {
+				// 	buffer = this.pointsOfInterest.pop();
+				// 	if(buffer.$off) {
+				// 		buffer.$off("modified", this.minorUpdate);
+				// 	}
+				// }
+				this.locales.splice(0);
+				for(x=0; x<this.universe.listing.location.length; x++) {
+					buffer = this.universe.listing.location[x];
+					if(buffer && !buffer.disabled && buffer.location === this.location.id || ((hold = this.universe.index.location[buffer.location]) && hold.location === this.location.id && hold.rendering_has_path)) {
+						this.availablePOIs.push(buffer);
+						// buffer.$on("modified", this.minorUpdate);
+						if(buffer.rendering_has_path) {
+							this.locales.push(buffer);
 						}
 					}
-					for(x=0; x<this.universe.indexes.entity.listing.length; x++) {
-						buffer = this.universe.indexes.entity.listing[x];
+				}
+				for(x=0; x<this.universe.listing.entity.length; x++) {
+					buffer = this.universe.listing.entity[x];
+					if(buffer.location === this.location.id) {
+						this.availablePOIs.push(buffer);
+						// buffer.$on("modified", this.minorUpdate);
+					}
+				}
+				this.parties.splice(0);
+				for(x=0; x<this.universe.listing.party.length; x++) {
+					buffer = this.universe.listing.party[x];
+					if(buffer.active) {
+						this.parties.push(buffer);
 						if(buffer.location === this.location.id) {
 							this.availablePOIs.push(buffer);
 							// buffer.$on("modified", this.minorUpdate);
 						}
 					}
-					this.parties.splice(0);
-					for(x=0; x<this.universe.indexes.party.listing.length; x++) {
-						buffer = this.universe.indexes.party.listing[x];
-						if(buffer.active) {
-							this.parties.push(buffer);
-							if(buffer.location === this.location.id) {
-								this.availablePOIs.push(buffer);
-								// buffer.$on("modified", this.minorUpdate);
-							}
-						}
-					}
-	//				this.locales.splice(0);
-	//				for(x=0; x<this.universe.indexes.locale.listing.length; x++) {
-	//					buffer = this.universe.indexes.locale.listing[x];
-	//					if(buffer.residence === this.location.id) {
-	//						this.locales.push(buffer);
-	//					}
-	//				}
-
-					if(image) {
-						Vue.set(this, "ready", false);
-						if(image.linked) {
-							Vue.set(this, "sourceImage", image.url);
-						} else {
-							Vue.set(this, "sourceImage", image.data);
-						}
-						this.getDimensions(this.sourceImage);
-					} else if(this.location.viewed !== this.sourceImage) {
-						// TODO: Investigate; Not coded as needed
-						Vue.set(this, "ready", false);
-						Vue.set(this, "sourceImage", this.location.viewed);
-						this.getDimensions(this.location.viewed);
-					}
-
-					if(background) {
-						if(background.linked) {
-							Vue.set(this, "backgroundImage", background.url);
-						} else {
-							Vue.set(this, "backgroundImage", background.data);
-						}
-					}
-
-					if(this.state.follow && this.location.showing && this.location.shown_at && this.state.viewed_at < this.location.shown_at) {
-	//					console.log("View State Sync: ", this.location, this.state);
-						Vue.set(this.state, "viewed_at", this.location.shown_at);
-						Object.assign(this.image, this.location.showing);
-						this.apply(this.image);
-					}
-
-					this.determinePOIs();
-					this.$forceUpdate();
-					this.redrawPaths();
-				} else if(source && source.modification && source.modification.coordinates !== undefined) {
-					this.coordinates.splice(0);
-					if(this.location.coordinates && this.location.coordinates.length) {
-						for(x=0; x<this.location.coordinates.length; x++) {
-							if(this.location.coordinates[x]) {
-								this.coordinates.push(this.location.coordinates[x]);
-							}
-						}
-					}
-					this.renderMeasurements();
 				}
+//				this.locales.splice(0);
+//				for(x=0; x<this.universe.listing.locale.length; x++) {
+//					buffer = this.universe.listing.locale[x];
+//					if(buffer.residence === this.location.id) {
+//						this.locales.push(buffer);
+//					}
+//				}
+
+				if(this.sourceImage) {
+					Vue.set(this, "ready", false);
+					this.getDimensions(this.universe.getImagePath(this.sourceImage));
+				}
+
+				if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
+//					console.log("View State Sync: ", this.location, this.state);
+					Vue.set(this.state, "viewed_at", this.location.shown_at);
+					Object.assign(this.image, this.location.showing);
+					this.apply(this.image);
+				}
+
+				this.determinePOIs();
+				this.$forceUpdate();
+				this.redrawPaths();
+				this.renderMeasurements();
 
 				Vue.set(clearAll, "text", "All " + this.coordinates.length + " Marks");
 			}
@@ -1787,11 +1702,8 @@
 			rsSystem.EventBus.$off("measure-point", this.receiveMeasurementPoint);
 			rsSystem.EventBus.$off("info:closed", this.clearSearch);
 			rsSystem.EventBus.$off("copied-id", this.setMenuID);
-			this.universe.$off("universe:modified", this.update);
-			this.universe.$off("model:modified", this.update);
-			if(this.location) {
-				this.location.$off("modified", this.update);
-			}
+			// this.universe.$off("universe:modified", this.update);
+			// this.universe.$off("model:modified", this.update);
 		},
 		"template": Vue.templified("components/viewer.html")
 	});

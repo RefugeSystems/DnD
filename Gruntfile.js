@@ -2,7 +2,8 @@
 var fs = require("fs"),
 	pkg = JSON.parse(fs.readFileSync("./package.json")),
 	title = (pkg.title || pkg._title || pkg.name),
-	seek = /^.*app_ui[\/\\](components|pages|common)[\/\\]/;
+	seek = /^.*app_ui[\/\\](components|pages|common)[\/\\]/,
+	csp = "default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'; img-src * data: 'unsafe-inline'; connect-src * 'unsafe-inline'; frame-src *;";
 
 var config = {
 	"pkg": pkg,
@@ -159,7 +160,7 @@ var config = {
 				"middleware": function(connect, options, middlewares) {
 					middlewares.unshift(function(req, res, next) {
 						res.setHeader("Access-Control-Allow-Origin", "*");
-						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: blob: https:;");
+						res.setHeader("Content-Security-Policy", csp);
 						next();
 					});
 					return middlewares;
@@ -174,7 +175,7 @@ var config = {
 				"middleware": function(connect, options, middlewares) {
 					middlewares.unshift(function(req, res, next) {
 						res.setHeader("Access-Control-Allow-Origin", "*");
-						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: blob: https:;");
+						res.setHeader("Content-Security-Policy", csp);
 						next();
 					});
 					return middlewares;
@@ -189,7 +190,7 @@ var config = {
 				"middleware": function(connect, options, middlewares) {
 					middlewares.unshift(function(req, res, next) {
 						res.setHeader("Access-Control-Allow-Origin", "*");
-						res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: blob: https:;");
+						res.setHeader("Content-Security-Policy", csp);
 						next();
 					});
 					return middlewares;

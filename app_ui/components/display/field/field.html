@@ -20,7 +20,10 @@
 		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula" :title="object._calculated[field]" v-on:click="toggleFormula(object[field])"></button>
 	</div>
 	<div class="formula" v-if="viewFormula">
-		<span>{{object._calculated[field]}}</span>
+		<span class="formula-value">
+			<span class="fas fa-function rs-blue"></span>
+			<span>{{object._calculated[field]}}</span>
+		</span>
 	</div>
 	<div class="pointed" v-if="!image">
 		<div class="value array flex v" v-if="viewInvolved">

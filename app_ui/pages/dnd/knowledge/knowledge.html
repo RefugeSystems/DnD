@@ -1,3 +1,6 @@
 <div class="rs-page dnd-page dnd-knowledge">
-	<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :headings="headings" :actions="actions" />
+	<div class="flex v">
+		<h1 class="today">Today: {{today}}</h1>
+		<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :headings="headings" :actions="actions" :formatter="formatter" />
+	</div>
 </div>
