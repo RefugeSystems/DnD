@@ -1,3 +1,101 @@
-<div class="rs-component dnd-component entity-skills">
-	
+<div class="rs-component dnd-component entity-spells">
+	<div class="divider"></div>
+	<div class="flex h justified">
+		<div class="flex h">
+			<button class="property" v-on:click="toggleList()">
+				<span class="fal" :class="storage && storage.collapsed?'fa-plus':'fa-minus'"></span>
+			</button>
+			<div class="property rsbg-lightBlue">
+				<span>Spells</span>
+			</div>
+			<button class="property" v-for="size in sizes" v-on:click="setSize(size)" :class="storage && storage.size === size.id?'active-size':'inactive-size'">
+				<span :class="size.icon"></span>
+			</button>
+		</div>
+		<div class="filter flex v">
+			<input v-if="storage" class="grow-1" type="text" placeholder="Filter Spells..." v-model="storage.filter" />
+		</div>
+	</div>
+	<div class="flex h" v-if="!storage.collapsed">
+		<div class="flex v slots">
+			<button class="general rounded slot action" v-for="slot in slots" v-on:click="use(slot)" :class="getSlotClass(slot)" :title="getSlotTitle(slot)">
+				<span class="text">{{slot}}</span>
+				<span :class="getSlotIcon(slot)"></span>
+				<span class="text">{{slotAvailable(slot)}}</span>
+				<span class="text">/</span>
+				<span class="text">{{slotMax(slot)}}</span>
+			</button>
+		</div>
+		<div class="spells grow-1" :style="styleSpellList">
+			<div class="spell flex h" v-for="spell in spells">
+				<div class="details flex v grow-1" v-on:click="cast(spell)">
+					<div class="details simple flex h grow-1">
+						<button class="flat action">
+							<span class="level">{{spell.level}}</span>
+							<span class="icon seperator" :class="spell.icon"></span>
+							<span class="name">{{spell.name}}</span>
+						</button>
+					</div>
+					<div class="details detail" v-if="storage.size>3">
+						<div class="mini-divider"></div>
+						<div class="flex h damage justified">
+							<div class="damage flex v" :style="styleTypeList" v-if="spell.damage">
+								<div class="damage flex h" v-for="(roll, damage) in spell.damage">
+									<button class="rounded general quick action" v-on:click.stop="info(damage)">
+										<span :class="damageIcon(damage)"></span>
+									</button>
+									<span class="roll">{{roll}}</span>
+								</div>
+							</div>
+							<div class="targets flex v" :style="styleTypeList" v-if="spell.targets && spell.targets.length">
+								<span class="target">Targets:</span>
+								<span class="target" v-for="target in spell.targets">{{typeName(target)}}</span>
+							</div>
+						</div>
+						<div class="mini-divider"></div>
+						<div class="detail-bar flex h justified">
+							<span class="">
+								<span class="fas fa-school"></span>
+								<span class="">{{typeName(spell.type)}}</span>
+							</span>
+							<span class="">
+								<span class="fas fa-save" v-if="spell.cast_save"></span>
+								<span class="">{{saveName(spell.cast_save)}}</span>
+							</span>
+						</div>
+					</div>
+					<div class="details stats" v-if="storage.size>1">
+						<div class="mini-divider"></div>
+						<div class="flex h justified">
+							<span class="components">
+								<button v-if="spell.cast_uses_somatic" class="flat action icon" v-on:click="info('fields:cast_uses_somatic')">
+									<span class="game-icon game-icon-magic-palm"></span>
+								</button>
+								<button v-if="spell.cast_uses_verbal" class="flat action icon" v-on:click="info('fields:cast_uses_verbal')">
+									<span class="fas fa-comment"></span>
+								</button>
+								<button v-if="spell.cast_uses_item" class="flat action icon" v-on:click="info('fields:cast_uses_item')">
+									<span class="fas fa-sack"></span>
+								</button>
+							</span>
+							<span class="concentration">
+								<button v-if="spell.concentration" class="flat action icon" v-on:click="info('fields:concentration')">
+									<span class="fas fa-brain"></span>
+								</button>
+							</span>
+							<button class="range flex h flat action icon" v-on:click="info('fields:range_normal')">
+								<span class="fad fa-expand-alt rs-secondary-transparent"></span>
+								<span>{{spellRange(spell)}}</span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="flex v information">
+					<button class="flat action grow 1" v-on:click="info(spell)">
+							<span class="fas fa-info-circle"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

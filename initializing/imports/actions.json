@@ -1,8 +1,20 @@
 {
     "import": [{
 			"id": "action:free:damage",
+			"name": "Damage Self",
+			"description": "Deal damage to yourself",
+			"icon": "fas fa-heartbeat",
+			"attribute": {}
+		}, {
+			"id": "action:damage:send",
+			"name": "Deal Damage",
+			"description": "Deal damage to another creature",
+			"icon": "game-icon game-icon-saber-slash",
+			"attribute": {}
+		}, {
+			"id": "action:damage:recv",
 			"name": "Take Damage",
-			"description": "Take damage",
+			"description": "Take damage from another entity, object, or the environment",
 			"icon": "fas fa-heartbeat",
 			"attribute": {}
 		}, {
@@ -260,6 +272,15 @@
 				"reaction": -1
 			},
 			"description": "Counter a spell. See ${Counterspell}$ for details.",
+			"icon": "game-icon game-icon-magic-palm",
+			"attribute": {}
+		}, {
+			"id": "action:reaction:spell",
+			"name": "Reaction Cast",
+			"action_cost": {
+				"reaction": -1
+			},
+			"description": "Cast a Spell as a reaction.",
 			"icon": "game-icon game-icon-magic-palm",
 			"attribute": {}
 		}, {

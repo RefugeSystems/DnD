@@ -5,7 +5,7 @@ var source = rsSystem.lookup().world.indexes.all.listing,
 
 for(x=0; x<source.length; x++) {
 	if(!source[x].id.startsWith("modifier")) {
-		toExport.push(source[x]);
+		toExport.push(source[x]._data);
 	}
 }
 

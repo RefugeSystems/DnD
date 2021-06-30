@@ -2,8 +2,8 @@
 	<div class="meeting flex v" v-if="active">
 		<h1>{{active.name}}</h1>
 		<div class="meeting-info">
-			<div class="meeting-description">
-				<textarea v-model="description"></textarea>
+			<div class="meeting-description flex h">
+				<textarea class="grow-1" v-model="description"></textarea>
 			</div>
 
 		</div>
@@ -29,7 +29,7 @@
 				<span class="action-count">5</span>
 			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(86400)">
-				<span class="action-icon fal fa-calendar-date"></span>
+				<span class="action-icon fal fa-calendar-day"></span>
 				<span class="action-count">1</span>
 			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(432000)">

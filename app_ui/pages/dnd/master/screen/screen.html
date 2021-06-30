@@ -1,12 +1,17 @@
 <div class="rs-page dnd-page master-screen">
 	<div class="screen-panel">
-		<div class="screen-column">
+		<div class="screen-column small">
 			<dnd-master-meeting :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterMeeting"></dnd-master-meeting>
 			<dnd-master-note :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterNote"></dnd-master-note>
 			<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
 		</div>
 		<div class="screen-column">
-			<dnd-master-entity v-for="entity in activeEntities.list" :universe="universe" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :key="entity.id"></dnd-master-entity>
+			<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :key="entity.id"></dnd-master-entity>
+		</div>
+		<div class="screen-action-column">
+			<button class="bucket general quick rounded action" v-for="bucket in activeEntities._keys" v-on:click="switchEntityBucket(bucket)" :class="bucketClass(bucket)" :title="bucket">
+				<span :class="bucketIcon[bucket] || 'fas fa-users'"></span>
+			</button>
 		</div>
 	</div>
 </div>

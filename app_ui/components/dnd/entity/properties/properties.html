@@ -1,6 +1,6 @@
 <div class="dnd-component entity-properties">
 	<div class="flex h wrap">
-		<button class="rounded general action entity-property" v-on:click="takeDamage()">
+		<button class="rounded general action entity-property" v-on:click="damaging()">
 			<span class="icon fas fa-heartbeat"></span>
 			<span>
 				<span>{{entity.hp}}</span>
@@ -8,7 +8,7 @@
 				<span>{{entity.hp_max}}</span>
 			</span>
 		</button>
-		<button class="rounded general action entity-property" v-for="field in properties">
+		<button class="rounded general action entity-property" v-for="field in properties" v-on:click="openProperty(field)" :title="field.name">
 			<span :class="field.icon"></span>
 			<span v-if="!field.icon">{{field.name}}</span>
 			<span>{{getName(field, entity[field.id])}}</span>

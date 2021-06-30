@@ -14,4 +14,16 @@
 
 	<component :is="view" v-if="info" v-on:click="processRequest($event)" v-on:close="closeInfo()" :info="info" :size="size" :universe="universe" :player="player" :configuration="configuration" :profile="profile"></component>
 	<!-- rs-object-info v-if="viewing" v-on:click="processRequest($event)" v-on:close="closeInfo()" :record="viewing" :universe="universe" :user="user" :player="player" :target="target" :base="base" :options="options"></rs-object-info -->
+
+	<div class="knowledge-matrix" v-if="relatedKnowledge.length">
+		<h3>Related Knowledge</h3>
+		<ul class="knowledge-related">
+			<li class="knowledge" v-on:click="info(knowledge)" v-for="knowledge in relatedKnowledge" :key="knowledge.id">
+				<button class="flat action" :data-id="knowledge.id">
+					<span class="fas fa-info-circle"></span>
+				</button>
+				<span>{{knowledge.name}}</span>
+			</li>
+		</ul>
+	</div>
 </div>

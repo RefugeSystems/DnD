@@ -748,7 +748,7 @@ class Universe extends EventEmitter {
 		
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
-			if(!omittedFromSync[managers[m]]) {
+			if(!omittedFromSync[managers[m]] && (!managers[m].attribute || !managers[m].attribute.server_only)) {
 				state.classes.push(manager.toJSON());
 				state[manager.id] = [];
 				if(!player.gm) {

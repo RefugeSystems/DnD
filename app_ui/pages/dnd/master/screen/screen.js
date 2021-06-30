@@ -52,6 +52,7 @@ rsSystem.component("DNDMasterScreen", {
 			entities.minions = minions;
 			entities.foes = foes;
 			entities.npcs = npcs;
+			entities.meeting = [];
 
 			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
@@ -140,6 +141,19 @@ rsSystem.component("DNDMasterScreen", {
 				}
 			}
 
+			// Meeting
+			for(i=0; i<this.universe.listing.meeting.length; i++) {
+				meeting = this.universe.listing.meeting[i];
+				if(meeting && !meeting.is_preview && !meeting.disabled && meeting.is_active) {
+					break;
+				}
+			}
+
+			if(meeting && meeting.is_active && !meeting.is_preview && !meeting.disabled && meeting.entities) {
+				this.universe.transcribeInto(meeting.entities, entities.meeting, "entity");
+			}
+
+			entities._keys = Object.keys(entities);
 			entities.combat = mains.concat(minions, npcs, foes);
 			entities.combat.sort(rsSystem.utility.sortByInitiative);
 			entities.list = mains.concat(minions, npcs, foes);
@@ -159,6 +173,16 @@ rsSystem.component("DNDMasterScreen", {
 
 		data.rolled = {};
 
+		data.bucketIcon = {
+			"list": "fas fa-user-friends",
+			"mains": "fas fa-users",
+			"meetings": "fas fa-calendar",
+			"foes": "fas fa-bullseye-arrow",
+			"npcs": "game-icon game-icon-character",
+			"meeting": "fas fa-calendar",
+			"minions": "fas fa-dog"
+		};
+
 		return data;
 	},
 	"mounted": function() {
@@ -167,6 +191,10 @@ rsSystem.component("DNDMasterScreen", {
 		// this.universe.$on("player-disconnected", this.playerDisconnected);
 		// this.universe.$on("player-connected", this.playerConnected);
 		this.universe.$on("entity:roll", this.entityRolled);
+
+		if(this.storage && !this.storage.activeBucket) {
+			this.storage.activeBucket = "list";
+		}
 	},
 	"methods": {
 		"entityRolled": function(event) {
@@ -182,6 +210,17 @@ rsSystem.component("DNDMasterScreen", {
 				}
 				this.rolled[roll.entity].push(roll);
 			}
+		},
+		"bucketClass": function(bucket) {
+			var classes = "";
+			if(this.storage.activeBucket === bucket) {
+				classes = "active ";
+			}
+			return classes;
+		},
+		"switchEntityBucket": function(bucket) {
+			Vue.set(this.storage, "activeBucket", bucket);
+			this.$forceUpdate();
 		},
 		"playerDisconnected": function(event) {
 			console.log("Disconnect: ", event);

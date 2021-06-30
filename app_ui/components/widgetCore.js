@@ -95,6 +95,14 @@ rsSystem.component("DNDWidgetCore", {
 				"closeAfterCheck": true
 			});
 		},
+		"performAction": function(action, using) {
+			// TODO: Check for action rolls and open roll dialog if needed
+			var perform = {};
+			perform.action = action;
+			perform.source = this.entity.id;
+			perform.channel = using;
+			this.universe.send("action:perform", perform);
+		},
 		"takeAction": function(action, using, rolls, targeted) {
 			rolls.unshift({});
 			var rolling = Object.assign.apply(Object.assign, rolls);
@@ -113,6 +121,47 @@ rsSystem.component("DNDWidgetCore", {
 				"closeAfterAction": true
 			});
 		},
+		/**
+		 * 
+		 * @method castSpell
+		 * @param {Integer} level 
+		 * @param {Object} spell 
+		 * @param {String | Object} [action] 
+		 */
+		"castSpell": function(level, spell, action) {
+			console.log("Cast at " + level + ": ", spell, action);
+			var targets = null;
+			if(typeof(spell) === "string") {
+				spell = this.universe.index.spell[spell];
+			}
+			if(spell && spell.targets && spell.targets.length) {
+				targets = spell.targets;
+			}
+
+			if(typeof(action) === "string") {
+				action = this.universe.index.action[action];
+			} else if(!action) {
+				if(spell && spell.action_cost && spell.action_cost.main) {
+					action = this.universe.index.action["action:main:cast"];
+				} else if(spell && spell.action_cost && spell.action_cost.bonus) {
+					action = this.universe.index.action["action:bonus:cast:spell"];
+				} else if(spell && spell.action_cost && spell.action_cost.reaction) {
+					action = this.universe.index.action["action:reaction:spell"];
+				}
+			}
+
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"spellLevel": level,
+				"targeted": targets,
+				"rolling": spell.damage,
+				"action": action,
+				"spell": spell,
+				"closeAfterAction": true
+			});
+		},
 		"startRoll": function(rolling, targeted) {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
@@ -121,6 +170,18 @@ rsSystem.component("DNDWidgetCore", {
 				"targeted": targeted,
 				"rolling": rolling
 			});
+		},
+		"sortSpells": function(a, b) {
+			if(a.level < b.level) {
+				return -1;
+			} else if(a.level > b.level) {
+				return 1;
+			} else if(a.name < b.name) {
+				return -1;
+			} else if(a.name > b.name) {
+				return 1;
+			}
+			return 0;
 		},
 		"sortData": rsSystem.utility.sortData,
 		"noOp": function() {}

@@ -15,9 +15,12 @@
 			"audio",
 			"profile",
 			"widget",
+			"category",
 			"conditional",
 			"dashboard",
 			"weather",
+			"jetstream",
+			"storm",
 			
 			"party",
 			"entity",

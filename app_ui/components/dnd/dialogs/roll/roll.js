@@ -68,58 +68,28 @@ rsSystem.component("dndDialogRoll", {
 			rolling.sort(rsSystem.utility.sortData);
 			return rolling;
 		},
-		/*
-		"damages": function() {
-			var rolling = [],
-				roll,
-				keys,
+		"meeting": function() {
+			var meet,
 				i;
 
-			if(this.details.damage) {
-				keys = Object.keys(this.details.damage);
-				for(i=0; i<keys.length; i++) {
-					roll = this.universe.getObject(keys[i]);
-					if(!roll) {
-						roll = keys[i];
-					}
-					rolling.push({
-						"key": roll,
-						"formula": this.details.damage[keys[i]],
-						"ordering": roll.ordering,
-						"computed": ""
-					});
+			for(i=0; i<this.universe.listing.meeting.length; i++) {
+				meet = this.universe.listing.meeting[i];
+				if(meet && meet.is_active && !meet.disabled && !meet.is_preview) {
+					return meet;
 				}
 			}
 
-			rolling.sort(rsSystem.utility.sortData);
-			return rolling;
+			return null;
 		},
-		"resists": function() {
-			var rolling = [],
-				roll,
-				keys,
-				i;
+		"entities": function() {
+			var entities = [];
 
-			if(this.details.resist) {
-				keys = Object.keys(this.details.resist);
-				for(i=0; i<keys.length; i++) {
-					roll = this.universe.getObject(keys[i]);
-					if(!roll) {
-						roll = keys[i];
-					}
-					rolling.push({
-						"key": roll,
-						"formula": this.details.resist[keys[i]],
-						"ordering": roll.ordering,
-						"computed": ""
-					});
-				}
+			if(this.meeting) {
+				this.universe.transcribeInto(this.meeting.entities, entities, "entity");
 			}
 
-			rolling.sort(rsSystem.utility.sortData);
-			return rolling;
+			return entities;
 		},
-		*/
 		/**
 		 * 
 		 * Event of "dialog-open" with "dndDialogRoll" passed as the component.
@@ -159,6 +129,15 @@ rsSystem.component("dndDialogRoll", {
 				}
 			}
 
+			if(this.meeting && this.meeting.entities) {
+				for(i=0; i<this.meeting.entities.length; i++) {
+					entity = this.universe.index.entity[this.meeting.entities[i]];
+					if(entity) {
+						targets.uniquely(entity);
+					}
+				}
+			}
+
 			return targets;
 		}
 	},
@@ -193,16 +172,28 @@ rsSystem.component("dndDialogRoll", {
 		data.suffixed = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th", "17th", "18th", "19th", "20th", "21st", "22nd", "23rd", "24th"];
 		data.die[6].icon = "fad fa-dice-d10";
 		data.statusResponse = null;
-		data.spellLevel = null;
+		data.spellLevel = this.details.spellLevel || null;
 		data.negative = false;
 		data.tracking = null;
 		data.active = null;
-		data.target = null;
+		data.source = null;
 		data.check = null;
 		data.skillCheck = {};
 		data.waiting = {};
 		data.seen = [];
 		data.warn = 0;
+
+		if(typeof(this.details.target) === "string") {
+			data.target = this.universe.index.entity[this.details.target];
+		} else {
+			data.target = this.details.target || null;
+		}
+
+		if(typeof(this.details.source) === "string") {
+			data.source = this.universe.index.entity[this.details.source];
+		} else {
+			data.source = this.details.source || null;
+		}
 
 		if(typeof(this.details.entity) === "string") {
 			data.entity = this.universe.index.entity[this.details.entity];
@@ -227,7 +218,7 @@ rsSystem.component("dndDialogRoll", {
 					roll = keys[i];
 				}
 				data.damageActive[roll.id] = true;
-				if(this.details.action && this.details.action.id === "action:damage:complete") {
+				if(this.details.action && (this.details.action.id === "action:damage:complete" || this.details.fill_damage)) {
 					data.damages.push({
 						"key": roll,
 						"formula": this.details.damage[keys[i]],
@@ -319,6 +310,10 @@ rsSystem.component("dndDialogRoll", {
 		}
 	},
 	"methods": {
+		"dismissDamage": function(roll) {
+			Vue.set(this.damageActive, roll.key.id, false);
+			this.damages.purge(roll);
+		},
 		"addDamageType": function(type) {
 			var damage,
 				roll;
@@ -430,6 +425,13 @@ rsSystem.component("dndDialogRoll", {
 			this.storage.rolls.splice(0);
 			this.$forceUpdate();
 		},
+		"selectSource": function(entity) {
+			if(this.source === entity) {
+				Vue.set(this, "source", null);
+			} else {
+				Vue.set(this, "source", entity);
+			}
+		},
 		"selectTarget": function(target){
 			Vue.set(this, "target", target);
 		},
@@ -511,7 +513,16 @@ rsSystem.component("dndDialogRoll", {
 			}
 
 			if(this.skills.length === 1) {
-				this.rollSkill(this.skills[0]);
+				var advantage = 0;
+	
+				if(this.entity.skill_advantage && this.entity.skill_advantage[this.skills[0].skill.id] && this.entity.skill_advantage[this.skills[0].skill.id] !== "0") {
+					advantage += parseInt(this.entity.skill_advantage[this.skills[0].skill.id] || 1);
+				}
+				if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[this.skills[0].skill.id] && this.entity.skill_disadvantage[this.skills[0].skill.id] !== "0") {
+					advantage -= parseInt(this.entity.skill_disadvantage[this.skills[0].skill.id] || 1);
+				}
+				// console.log("Advantage: ", advantage, this.entity.skill_advantage);
+				this.rollSkill(this.skills[0], advantage);
 			}
 		},
 		"clearSkillRolls": function(skip) {
@@ -565,6 +576,44 @@ rsSystem.component("dndDialogRoll", {
 			if(this.details.closeAfterCheck) {
 				this.closeDialog();
 			}
+		},
+		"getSkillAdvIcon": function(check) {
+			var skill = check.skill,
+				classes = "",
+				advantage = 0;
+
+			if(this.entity.skill_advantage && this.entity.skill_advantage[skill.id] && this.entity.skill_advantage[skill.id] !== "0") {
+				advantage += parseInt(this.entity.skill_advantage[skill.id] || 1);
+			}
+			if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[skill.id] && this.entity.skill_disadvantage[skill.id] !== "0") {
+				advantage -= parseInt(this.entity.skill_disadvantage[skill.id] || 1);
+			}
+			if(advantage > 0) {
+				classes += " has-advantage";
+			} else if(advantage < 0) {
+				// Disadvantage in separate method
+			}
+
+			return classes;
+		},
+		"getSkillDisIcon": function(check) {
+			var skill = check.skill,
+				classes = "",
+				advantage = 0;
+
+			if(this.entity.skill_advantage && this.entity.skill_advantage[skill.id] && this.entity.skill_advantage[skill.id] !== "0") {
+				advantage += parseInt(this.entity.skill_advantage[skill.id] || 1);
+			}
+			if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[skill.id] && this.entity.skill_disadvantage[skill.id] !== "0") {
+				advantage -= parseInt(this.entity.skill_disadvantage[skill.id] || 1);
+			}
+			if(advantage > 0) {
+				// Advantage in separate method
+			} else if(advantage < 0) {
+				classes += " has-disadvantage";
+			}
+
+			return classes;
 		},
 		"clearSkill": function(skill) {
 			var dice,
@@ -773,6 +822,9 @@ rsSystem.component("dndDialogRoll", {
 				if(this.target) {
 					perform.target = this.target.id;
 				}
+				if(this.source) {
+					perform.source = this.source.id;
+				}
 				if(this.check) {
 					perform.check = Object.assign({}, this.check);
 					if(perform.check.skill) {
@@ -803,7 +855,12 @@ rsSystem.component("dndDialogRoll", {
 					}
 				}
 
-				this.universe.send("action:perform", perform);
+				console.log("Performing: ", perform);
+				if(perform.action && perform.action !== "action:free:damage") {
+					this.universe.send(perform.action, perform);
+				} else {
+					this.universe.send("action:perform", perform);
+				}
 				if(this.details.closeAfterAction) {
 					this.closeDialog();
 				}

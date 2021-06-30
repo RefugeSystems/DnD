@@ -132,7 +132,10 @@ rsSystem.component("dndMasterEntity", {
 			}
 		},
 		"giveGold": function() {
-
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDistributeGold",
+				"entity": this.entity.id
+			});
 		},
 		"givePoints": function() {
 

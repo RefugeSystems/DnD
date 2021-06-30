@@ -20,6 +20,7 @@ deploy_web/externals.js
 # Deprecated or test files
 *.old
 *.test
+stitched.json
 
 # Logs
 logs

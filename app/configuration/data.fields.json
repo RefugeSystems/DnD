@@ -152,7 +152,9 @@
 		"name": "Limited",
 		"description": "Limit the number of chaining branches to take",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"display_size": 100
+		}
 	}, {
 		"id": "time_end",
 		"name": "End Time",
@@ -198,7 +200,10 @@
 		"inheritable": [
 			"alignment"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 100,
+			"private": true
+		}
 	}, {
 		"id": "population",
 		"name": "Population",
@@ -210,7 +215,10 @@
 		"name": "Pool Gain",
 		"description": "Adds to the character pool for selecting changes",
 		"type": "object",
-		"attribute": {}
+		"attribute": {
+			"display_size": 100,
+			"private": true
+		}
 	}, {
 		"id": "spacing",
 		"name": "Spacing",
@@ -224,7 +232,8 @@
 		"type": "object:dice",
 		"ordering": 30,
 		"attribute": {
-			"inherited_key": "skill"
+			"inherited_key": "skill",
+			"display_size": 110
 		}
 	}, {
 		"id": "incidents",
@@ -332,6 +341,14 @@
 		"id": "is_npc",
 		"name": "Is NPC",
 		"description": "Flag to indicate an entity is an NPC",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "is_primary",
+		"name": "Is Primary",
+		"description": "Marks an object as primary for display considerations",
 		"type": "boolean",
 		"attribute": {
 			"displayed": false
@@ -837,15 +854,6 @@
 		"type": "string",
 		"attribute": {}
 	}, {
-		"id": "nation",
-		"name": "Nation",
-		"description": "The nation that owns this",
-		"type": "string",
-		"inheritable": [
-			"nation"
-		],
-		"attribute": {}
-	}, {
 		"id": "combat_turn",
 		"name": "Whose Turn",
 		"description": "Indicates the entity whose turn it is in combat",
@@ -859,12 +867,18 @@
 		"name": "Save With",
 		"description": "Names the attribute with which to save against this object",
 		"type": "string",
+		"inheritable": [
+			"skill"
+		],
 		"attribute": {}
 	}, {
 		"id": "cast_with",
 		"name": "Cast With",
 		"description": "Overrides the default casting attribute of the casting creature for this spell",
 		"type": "string",
+		"inheritable": [
+			"skill"
+		],
 		"attribute": {}
 	}, {
 		"id": "cast_uses_verbal",
@@ -883,6 +897,39 @@
 		"name": "Material Components",
 		"description": "Array of items needed to cast this spell (Use parental IDs)",
 		"type": "array",
+		"inheritable": [
+			"item"
+		],
+		"attribute": {}
+	}, {
+		"id": "source",
+		"name": "Source",
+		"description": "The creature that told, taught, or gave you this",
+		"type": "string",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "instilled",
+		"name": "Instilled",
+		"description": "List of effects to instill on a target as part of taking damage. Leverages the `unique` and `damage_required` fields on effects to determine when/how to add them.",
+		"type": "array",
+		"inheritable": [
+			"effect"
+		],
+		"attribute": {}
+	}, {
+		"id": "damage_required",
+		"name": "Damage Required",
+		"description": "Used for instilling effects on entities from taking damage. Flags that damage must be dealt for the effect to be added",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "is_unique",
+		"name": "Unique",
+		"description": "Flag to indicate that this should only exist once in some context; ie. A unique effect should only exist for an entity once by parental ID",
+		"type": "boolean",
 		"attribute": {}
 	}, {
 		"id": "is_owned",
@@ -947,6 +994,12 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
+		"id": "receive",
+		"name": "Receive",
+		"description": "Each entry in the array indicates an ID to copy and where to put the copy as part of receiving this. This is processed server side instead of inherited to generate copies as needed. If no copy is needed, inheritance should be used instead.",
+		"type": "array",
+		"attribute": {}
+	}, {
 		"id": "importance",
 		"name": "Importance",
 		"description": "How important is this?",
@@ -996,6 +1049,16 @@
 			"movement": "Movement",
 			"reaction": "Reaction"
 		},
+		"attribute": {}
+	}, {
+		"id": "nation",
+		"name": "Nation",
+		"description": "The nation responsible for this",
+		"type": "string",
+		"ordering": 500,
+		"inheritable": [
+			"nation"
+		],
 		"attribute": {}
 	}, {
 		"id": "action_cost",
@@ -1267,6 +1330,12 @@
 		"type": "object",
 		"attribute": {}
 	}, {
+		"id": "last_rest",
+		"name": "Last Rest",
+		"description": "The last time you took a long rest. Used for checking exhaustion and if another long rest can be done.",
+		"type": "gametime",
+		"attribute": {}
+	}, {
 		"id": "archetypes",
 		"name": "Classes",
 		"description": "List of classes currently applied to this entity",
@@ -1374,7 +1443,8 @@
 			"proficiency_rating": "+",
 			"effects": "+",
 			"conditionals": "+",
-			"equip_slots": "+"
+			"equip_slots": "+",
+			"icon": "="
 		},
 		"inheritable": [
 			"race"
@@ -1408,6 +1478,8 @@
 			"weight_max": "+",
 
 			"spell_slot_max": "+",
+			"skill_advantage": "+",
+			"skill_disadvantage": "+",
 			"skill_proficiency": "=",
 			"skills": "+",
 			"skill_check": "+=",
@@ -2174,7 +2246,7 @@
 		"id": "knowledge_matrix",
 		"name": "Knowledge Matrix",
 		"description": "Maps object identities to arrays of properties explicitly known about that object. Forgotten objects map to null. Known with no explicit information map to empty arrays. This field is calculated during events that affect the object's knowledge.",
-		"type": "array",
+		"type": "object",
 		"attribute": {}
 	}, {
 		"id": "knowns",

@@ -20,6 +20,10 @@ rsSystem.component("rsStatBlock", {
 			"required": true,
 			"type": Object
 		},
+		"shown": {
+			"default": false,
+			"type": Boolean
+		},
 		"size": {
 			"default": 5,
 			"type": Number
@@ -50,7 +54,7 @@ rsSystem.component("rsStatBlock", {
 				if(classed.attribute && (cfields = classed.attribute["info_" + this.size] || classed.attribute.info_all)) {
 					for(x=0; x<cfields.length; x++) {
 						field = this.universe.index.fields[cfields[x]];
-						if(field) {
+						if(field && (!field.attribute || !field.attribute.private || this.shown)) {
 							fields.push(field);
 						}
 					}
@@ -58,7 +62,7 @@ rsSystem.component("rsStatBlock", {
 					cfields = classed.fields;
 					for(x=0; x<cfields.length; x++) {
 						field = this.universe.index.fields[classed.fields[x]];
-						if(field && ((this.size > 100 && field.attribute.displayed !== false) || (field.attribute.display_size !== undefined && field.attribute.display_size <= this.size))) {
+						if(field && (!field.attribute || !field.attribute.private || this.shown) && ((this.size > 100 && field.attribute.displayed !== false) || (field.attribute && field.attribute.display_size && field.attribute.display_size <= this.size)) || ((!field.attribute || !field.attribute.display_size) && 90 <= this.size)) {
 							// fields.push(field.id);
 							fields.push(field);
 						}

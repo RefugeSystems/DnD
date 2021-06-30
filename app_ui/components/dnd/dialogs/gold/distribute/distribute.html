@@ -1,0 +1,12 @@
+<div class="rs-component dnd-component distribute-gold">
+	<h1>
+		<span class="fas fa-coins"></span>
+		<span>{{entity.name}}</span>
+	</h1>
+	<div class="distribute flex h">
+		<input class="amount" id="amount" v-model.number="amount" v-on:keydown.enter="distributeGold()" />
+		<button class="rounded general quick action" v-on:click="distributeGold()">
+			<span class="fas fa-hand-holding-usd"></span>
+		</button>
+	</div>
+</div>

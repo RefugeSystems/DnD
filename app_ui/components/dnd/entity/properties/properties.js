@@ -35,18 +35,42 @@ rsSystem.component("dndEntityProperties", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"damaging": function() {
+			if(this.player.gm) {
+				if(this.entity.played_by && this.entity.played_by !== this.player.id) {
+					this.sendDamage();
+				} else {
+					this.takeDamage();
+				}
+			} else {
+				console.error("Invalid entity control");
+			}
+		},
 		"takeDamage": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
 				"storageKey": "store:roll:" + this.entity.id,
 				"entity": this.entity.id,
 				"damage": {},
-				"action": this.universe.index.action["action:free:damage"],
+				"action": this.universe.index.action["action:damage:take"],
+				"closeAfterAction": true
+			});
+		},
+		"sendDamage": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogRoll",
+				"storageKey": "store:roll:" + this.entity.id,
+				"entity": this.entity.id,
+				"target": this.entity.id,
+				"damage": {},
+				"sourcable": true,
+				"action": this.universe.index.action["action:damage:send"],
 				"closeAfterAction": true
 			});
 		},
 		"openProperty": function(field) {
 			console.log("Field: ", field);
+			this.$emit(field.id);
 		},
 		"getName": function(field, value) {
 			if(field.inheritable && field.inheritable.length) {

@@ -1,18 +1,20 @@
 <div class="rs-component dnd-component transfer-gold">
 	<h1>
-		<span>{{source.name}}</span>
+		<span class="fas fa-coins"></span>
+		<span v-if="source">{{source.name}}</span>
 	</h1>
-	<div class="destinations">
-		<div class="target-container flex h" v-for="target in locale">
-			<div class="target-name">
-				<span class="target">{{target.name}}</span>
-			</div>
-			<div class="target-amount">
-				<input type="number" v-model="amount[target.id]" :class="targetClass(target)" />
-			</div>
-			<button class="target-send" v-on:click="sendGold(target)">
-				<span class="fas fa-comment-dollar"></span>
-			</button>
+	<div class="destinations flex hr flex h">
+		<div class="target-amount grow-1 flex h">
+			<input class="grow-1" type="number" v-model.number="amount" :class="targetClass(target)" />
 		</div>
+		<div class="flex v center seperator">
+			<span class="break fas fa-share-all"></span>
+		</div>
+		<select class="target-name grow-5" v-model="target">
+			<option v-for="t in locale" v-if="!source || source.id !== t.id" :value="t.id">{{t.name}}</option>
+		</select>
+		<button class="general rounded quick action target-send" :class="target && amount?'ready':'not-ready'" v-on:click="sendGold()">
+			<span class="fas fa-comment-dollar"></span>
+		</button>
 	</div>
 </div>

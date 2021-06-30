@@ -15,29 +15,48 @@
 module.exports.initialize = function(universe) {
 
 	universe.on("player:send:gold", function(event) {
-		var entity = universe.get(event.message.entity),
-			target = universe.get(event.message.target),
-			amount = event.message.amount;
-		
+		var target = universe.get(event.message.data.target),
+			amount = parseInt(event.message.data.amount),
+			entity;
+
+		if(event.message.data.entity || event.message.data.source) {
+			entity = universe.get(event.message.data.entity || event.message.data.source);
+		}
+			
 		if(target) {
-			if(event.player.gm) {
-				target.setValues({
-					"gold": entity.gold + amount
-				});
-			} else if(entity.owned[event.player.id]) {
-				if(amount <= entity.gold) {
-					entity.setValues({
-						"gold": entity.gold - amount
-					});
+			if(!entity) {
+				if(event.player.gm) {
 					target.setValues({
-						"gold": entity.gold + amount
+						"gold": parseInt(target.gold) + amount
 					});
+				} else {
+					// TODO: Warning
+				}
+			} else if(entity) {
+				if(entity.owned[event.player.id]) {
+					if(amount <= entity.gold) {
+						entity.setValues({
+							"gold": parseInt(entity.gold) - amount
+						});
+						target.setValues({
+							"gold": parseInt(target.gold) + amount
+						});
+					} else {
+						universe.emit("send", {
+							"type": "notice",
+							"mid": "report:error:received",
+							"recipients": universe.getMasters(),
+							"message": "Failed gold transfer",
+							"data": event.message,
+							"anchored": true
+						});
+					}
 				} else {
 					universe.emit("send", {
 						"type": "notice",
 						"mid": "report:error:received",
 						"recipients": universe.getMasters(),
-						"message": "Failed gold transfer",
+						"message": "Attempt to send gold from un-owned entity",
 						"data": event.message,
 						"anchored": true
 					});
@@ -47,7 +66,7 @@ module.exports.initialize = function(universe) {
 					"type": "notice",
 					"mid": "report:error:received",
 					"recipients": universe.getMasters(),
-					"message": "Attempt to send gold from un-owned entity",
+					"message": "Attempted to send to " + target.name + " from unknown",
 					"data": event.message,
 					"anchored": true
 				});

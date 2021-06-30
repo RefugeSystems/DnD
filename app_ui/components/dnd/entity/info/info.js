@@ -78,9 +78,20 @@ rsSystem.component("dndEntityInfo", {
 			});
 		},
 		"transferGold": function() {
+			var list = [],
+				meeting,
+				i;
+
+			for(i=0; i<this.universe.listing.meeting.length && !list.length; i++) {
+				meeting = this.universe.listing.meeting[i];
+				if(meeting && !meeting.is_preview && !meeting.disabled && meeting.is_active) {
+					list = meeting.entities;
+				}
+			}
+
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndTransferGold",
-				"storageKey": "store:roll:" + this.entity.id,
+				"targets": list,
 				"entity": this.entity.id
 			});
 		},

@@ -4,17 +4,15 @@
 		<span v-if="details.action">: {{details.action.name}}</span>
 	</h1>
 	<div class="rolling spell-level" v-if="details.spell && spellLevel">
-		<!-- Show Spell Level
 		<div class="roll-label flex h">
-			<button class="roll-key general rounded quick action" v-on:click="info(target)">
-				<span :class="target.icon || 'fas fa-cube'"></span>
+			<button class="roll-key general rounded quick action" v-on:click="info(details.spell)">
+				<span :class="details.spell.icon || 'fas fa-cube'"></span>
 			</button>
 			<div class="target flex v center grow1">
-				<span>Target: {{target.name}}</span>
-				<dnd-health-bar :entity="target"></dnd-health-bar>
+				<span>Casting: {{details.spell.name}}</span>
+				<span>at Level {{spellLevel}}</span>
 			</div>
 		</div>
-		-->
 	</div>
 	<div class="rolling spell-level" v-if="details.spell && !spellLevel">
 		<!-- TODO: Select Spell Level for cast send -->
@@ -33,7 +31,7 @@
 			</button>
 		</div>
 	</div>
-	<div class="rolling target" v-if="details.rolling && details.targeted && !target">
+	<div class="rolling target" v-if="details.targeted && !target">
 		<div class="roll-label" v-if="!details.using">
 			Target for {{getRollName()}}
 		</div>
@@ -52,6 +50,20 @@
 			<button class="roll-result target flex v center general rounded" v-on:click="selectTarget(targetable)">
 				<span>{{targetable.name}}</span>
 				<dnd-health-bar :entity="targetable"></dnd-health-bar>
+			</button>
+		</div>
+	</div>
+	<div class="rolling source" v-if="details.sourcable">
+		<div class="roll-label" v-if="!details.using">
+			Source for {{getRollName()}}
+		</div>
+		<div class="to-roll flex h" v-for="entity in entities" :class="entity === source?'selected':'not-selected'">
+			<button class="roll-key general rounded quick action" v-on:click="info(entity)">
+				<span :class="entity.icon || 'fas fa-user'"></span>
+			</button>
+			<button class="roll-result target flex v center general rounded" v-on:click="selectSource(entity)">
+				<span>{{entity.name}}</span>
+				<dnd-health-bar :entity="entity"></dnd-health-bar>
 			</button>
 		</div>
 	</div>
@@ -85,10 +97,10 @@
 			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check)">
 				<span class="fas fa-dice"></span>
 			</button>
-			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check, 1)">
+			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" :class="getSkillAdvIcon(check)" v-on:click="rollSkill(check, 1)">
 				<span class="fas fa-chevron-double-up"></span>
 			</button>
-			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check, -1)">
+			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" :class="getSkillDisIcon(check)" v-on:click="rollSkill(check, -1)">
 				<span class="fas fa-chevron-double-down"></span>
 			</button>
 			<div class="rolled flex h" v-if="check.dice_rolls">
@@ -156,7 +168,7 @@
 			</div>
 		</div>
 		<div class="to-roll flex h" v-for="roll in damages">
-			<button class="roll-key general rounded quick action" v-if="roll.key.id" v-on:click="info(roll.key)">
+			<button class="roll-key general rounded quick action" v-if="roll.key.id" v-on:click="info(roll.key)" v-on:click.right.stop.prevent="dismissDamage(roll)">
 				<span :class="roll.key.icon"></span>
 			</button>
 			<div class="roll-key" v-if="!roll.key.id">

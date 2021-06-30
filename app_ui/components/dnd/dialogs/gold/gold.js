@@ -61,14 +61,21 @@ rsSystem.component("dndTransferGold", {
 				}
 			}
 
+			if(this.details.targets) {
+				this.universe.transcribeInto(this.details.targets, locale, "entity");
+			}
+
 			return locale;
+		},
+		"source": function() {
+			return this.universe.index.entity[this.details.entity];
 		}
 	},
 	"data": function () {
 		var data = {};
 
-		data.source = this.universe.getObject(this.details.entity);
-		data.amount = {};
+		data.target = this.details.target;
+		data.amount = null;
 
 		return data;
 	},
@@ -77,21 +84,21 @@ rsSystem.component("dndTransferGold", {
 	},
 	"methods": {
 		"targetClass": function(target) {
-			var amount = this.amount[target.id] || 0;
-			if(amount > this.source.gold) {
+			if(this.amount && this.amount > this.source.gold) {
 				return "rsbg-light-red";
 			}
 			return "";
 		},
-		"sendGold": function (target) {
-			var amount = this.amount[target.id] || 0;
-			if(this.source.gold < amount) {
+		"sendGold": function () {
+			console.log("Send: ", this.target, this.amount, this.source, this);
+			if(this.target && this.amount && 0 < this.amount && this.source && this.source.gold >= this.amount) {
 				this.universe.send("send:gold", {
 					"entity": this.source.id,
-					"target": target.id,
-					"amount": amount
+					"target": this.target,
+					"amount": this.amount
 				});
-				Vue.set(this.amount, target.id, 0);
+				Vue.set(this, "amount", null);
+				this.closeDialog();
 			}
 		}
 	},

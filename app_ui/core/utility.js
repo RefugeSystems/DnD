@@ -86,7 +86,7 @@
 		},
 		/**
 		 *
-		 * @method sortData
+		 * @method sortByID
 		 * @param a
 		 * @param b
 		 * @return {Number}
@@ -144,7 +144,7 @@
 		},
 		/**
 		 *
-		 * @method sortData
+		 * @method sortTrueData
 		 * @param a
 		 * @param b
 		 * @return {Number}

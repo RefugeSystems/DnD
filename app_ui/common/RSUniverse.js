@@ -947,6 +947,39 @@ class RSUniverse extends EventEmitter {
 	isOwner(player, object) {
 		return !object.is_owned || object.owned[player.id || player];
 	}
+
+	/**
+	 * 
+	 * @method transcribeInto
+	 * @param {Array} source 
+	 * @param {Array} [destination]
+	 * @param {String} [classificaiton]
+	 * @return {Array} The destination parameter or a newly instantiated array
+	 * 		if that parameter was omited.
+	 */
+	transcribeInto(source, destination = [], classificaiton, filter) {
+		filter = (filter || "").toLowerCase();
+		var buffer,
+			i;
+
+		if(classificaiton && this.index[classificaiton]) {
+			for(i=0; i<source.length; i++) {
+				buffer = this.index[classificaiton][source[i]];
+				if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+					destination.push(buffer);
+				}
+			}
+		} else {
+			for(i=0; i<source.length; i++) {
+				buffer = this.getObject(source[i]);
+				if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+					destination.push(buffer);
+				}
+			}
+		}
+
+		return destination;
+	}
 	
 	exportData(title) {
 		var appendTo = $(document).find("#anchors")[0],

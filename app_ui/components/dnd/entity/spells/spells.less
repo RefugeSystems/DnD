@@ -1,5 +1,94 @@
-.dnd-component.entity-knowledge {
+.dnd-component.entity-spells {
+
+	button {
+		span {
+			line-height: inherit;
+		}
+	}
+
+	.slots {
+		margin: 5px;
+
+		button.slot {
+			padding: 2px 6px;
+			margin: 5px;
+
+			&.active-slot {
+				box-shadow: 0px 0px 7px @rsOrange;
+				border-color: @rsOrange;
+			}
+		}
+
+		.slot {
+
+			.level {
+
+			}
+		}
+	}
+
+	.simple {
+		align-items: center;
+	}
+
+	.active-size {
+		box-shadow: 0px 0px 5px @rsLightBlue;
+	}
+
+	.filter {
 
 
-	
+		input {
+			padding: 0px 10px;
+			border-radius: 5px;
+		}
+	}
+
+	.spells {
+		overflow: auto;
+		margin: 5px;
+
+		.spell {
+			box-shadow: 0px 0px 5px @rsWhite;
+			border-bottom-right-radius: 10px;
+			border-top-right-radius: 10px;
+			transition: color .5s;
+			margin: 5px;
+
+			&:hover {
+				.level, .name, .icon {
+					color: @rsLightBlue;
+				}
+			}
+
+			.details {
+				// align-items: center;
+
+			}
+
+			.roll {
+				margin: 5px;
+			}
+
+			.information {
+
+
+				button.action {
+					border: 1px solid @rsWhite;
+					border-bottom-right-radius: 10px;
+					border-top-right-radius: 10px;
+					line-height: 30px;
+					font-size: 20px;
+					flex-grow: 1;
+					min-height: 30px;
+					width: 30px;
+
+					&:hover {
+						box-shadow: 0px 0px 5px @rsLightBlue;
+						color: @rsBlue;
+					}
+				}
+			}
+		}
+	}
 }

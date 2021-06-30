@@ -9,6 +9,22 @@
 
 var valid = new RegExp("^[a-z][a-z0-9_]+:[a-z0-9:_]+$");
 
+/**
+ * Lists the fields that are acceptable for an object to define and still be considered
+ * stackable.
+ * @property stackRestricted
+ * @type array
+ * @private
+ * @static
+ */
+var stackRestricted = [
+	"id",
+	"parent",
+	"is_copy",
+	"is_template",
+	"attribute"
+];
+
 require("../extensions/array");
 
 class RSObject {
@@ -33,6 +49,16 @@ class RSObject {
 		 * @type Boolean
 		 */
 		this._disconnected = details._disconnected;
+		/**
+		 * Flag for objects with properties that don't have any additional keys set that
+		 * affect the object; ie. only `id`, `parent`, `is_template`, `is_copy`, and
+		 * `attribute` can be set.
+		 * 
+		 * See the `stackRestricted` private static array.
+		 * @property _stackable
+		 * @type Boolean
+		 */
+		this._stackable = false;
 		/**
 		 * 
 		 * @property _parent
@@ -448,6 +474,7 @@ class RSObject {
 						break;
 					case "string":
 						if(field.attribute.searchable) {
+							// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
 							this._search += ":::" + this._calculated[field.id].toLowerCase();
 						}
 					default:
@@ -612,6 +639,22 @@ class RSObject {
 						this[field.id] = this._universe.calculator.reducedDiceRoll(this[field.id], this);
 					}
 				}
+				// Normalize Numeric Fields
+				if(field.type === "number" && isNaN(this[field.id])) {
+					this[field.id] = parseFloat(this[field.id]);
+					if(isNaN(this[field.id]) && field.attribute) {
+						this[field.id] = field.attribute.default || 0;
+					} else {
+						this[field.id] = 0;
+					}
+				} else if(field.type === "integer" && isNaN(this[field.id])) {
+					this[field.id] = parseInt(this[field.id]);
+					if(isNaN(this[field.id]) && field.attribute) {
+						this[field.id] = field.attribute.default || 0;
+					} else {
+						this[field.id] = 0;
+					}
+				}
 				// Defaults (For null computations) & Bounds
 				if(this[field.id] === null || this[field.id] === undefined) {
 					if(field.attribute.default) {
@@ -666,6 +709,22 @@ class RSObject {
 
 		if(this.is_preview) {
 			this.name += " (Preview)";
+		}
+
+		keys = Object.keys(this._data);
+		if(keys.length > stackRestricted.length) {
+			this._stackable = false;
+		} else {
+			this._stackable = null;
+			for(i=0; i<keys.length && this._stackable === null; i++) {
+				if(stackRestricted.indexOf(keys[i]) !== -1) {
+					this._stackable = false;
+					break;
+				}
+			}
+			if(this._stackable === null) {
+				this._stackable = true;
+			}
 		}
 
 		// console.log("Updated Self[" + this._data.id + "]");
@@ -891,6 +950,13 @@ class RSObject {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type);
+				if(field.attribute) {
+					if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
+						this._data[field.id] = result[field.id] = field.attribute.max;
+					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
+						this._data[field.id] = result[field.id] = field.attribute.min;
+					}
+				}
 			}
 		}
 		
@@ -934,6 +1000,13 @@ class RSObject {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.subValues(this._data[field.id], delta[field.id], field.type);
+				if(field.attribute) {
+					if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
+						this._data[field.id] = result[field.id] = field.attribute.max;
+					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
+						this._data[field.id] = result[field.id] = field.attribute.min;
+					}
+				}
 			}
 		}
 		
@@ -985,6 +1058,13 @@ class RSObject {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				this._data[field.id] = result[field.id] = RSObject.setValues(this._data[field.id], delta[field.id], field.type);
+				if(field.attribute) {
+					if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
+						this._data[field.id] = result[field.id] = field.attribute.max;
+					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
+						this._data[field.id] = result[field.id] = field.attribute.min;
+					}
+				}
 			}
 		}
 		

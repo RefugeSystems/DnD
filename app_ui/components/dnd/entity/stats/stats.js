@@ -196,10 +196,66 @@ rsSystem.component("dndEntityStats", {
 		 */
 		"listInventory": function() {
 			// TODO: Load List
-			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndDialogList",
-				"entity": this.entity.id
-			});
+
+			var details = {},
+				items = [],
+				added,
+				types,
+				item,
+				i,
+				j;
+
+			details.title = this.entity.name;
+			details.component = "dndDialogList";
+			details.entity = this.entity.id;
+			details.sections = ["effects", "knowledges", "feats"];
+			details.cards = {};
+			details.limit = 20,
+			details.data = {
+				"none": []
+			};
+			details.cards.none = {
+				"name": "No Type"
+			};
+
+			this.universe.transcribeInto(this.entity.inventory, items, "item");
+			for(i=0; i<items.length; i++) {
+				item = items[i];
+				if(item && !item.disabled) {
+					if(item.types && item.types.length) {
+						added = false;
+						types = [];
+						this.universe.transcribeInto(item.types, types, "type");
+						for(j=0; j<types.length; j++) {
+							if(types[j].is_primary) {
+								added = true;
+								if(!details.cards[types[j].id]) {
+									details.data[types[j].id] = [];
+									details.cards[types[j].id] = {
+										"name": types[j].name
+									};
+								}
+								details.data[types[j].id].push(item);
+							}
+						}
+						if(!added) {
+							details.data.none.push(item);
+						}
+					} else {
+						details.data.none.push(item);
+					}
+				}
+			}
+
+			details.sections = Object.keys(details.data);
+			for(i=0; i<details.sections.length; i++) {
+				details.data[details.sections[i]].sort(rsSystem.utility.sortData);
+			}
+			details.sections.splice(details.sections.indexOf("none"), 1);
+			details.sections.sort();
+			details.sections.push("none");
+
+			rsSystem.EventBus.$emit("dialog-open", details);
 		},
 		"getWeightScales": function() {
 			if(this.entity.encumberance < this.entity.encumberance_max * .8) {

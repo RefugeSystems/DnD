@@ -41,7 +41,7 @@
 		}, {
             "id": "effect:condition:frozen",
 			"name": "Frozen",
-            "icon": "game-icon game-icon-nested-ice-cube",
+            "icon": "game-icon game-icon-frozen-body",
 			"description": "You are frozen and unable to move",
 			"movement_speed": "-100%",
 			"movement_swim": "-100%",

@@ -28,7 +28,7 @@
 			</rs-field>
 			<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(field.id)" v-on:blur="adjust(field.id)" :key="field.id">
 				<span slot="info">
-					<span v-if="field.id === 'icon'" :class="details.icon"></span>
+					<span v-if="field.id === 'icon' || field.type === 'icon'" :class="details.icon"></span>
 					<button class="info-link ctrl-link copy-parent fas fa-copy" v-if="displayCopyFromParent(field.id)" v-on:click="copyParent(field.id)" tabindex=2>
 					</button>
 					<button class="clear-link ctrl-link flat fas fa-clock" v-if="field.type === 'gametime'" v-on:click="setTimeToNow(field)" tabindex=2>

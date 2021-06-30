@@ -1,0 +1,94 @@
+{
+	"export": [
+		{
+			"id": "dashboard:character:default",
+			"parent": null,
+			"name": "Character Default",
+			"description": "\t",
+			"concealed": null,
+			"default_value": 1,
+			"is_preview": null,
+			"review": null,
+			"attribute": {},
+			"widgets": [
+				"widget:entity:name",
+				"widget:entity:info:left",
+				"widget:entity:death",
+				"widget:entity:stats:right",
+				"widget:entity:effects",
+				"widget:entity:dice",
+				"widget:entity:spells",
+				"widget:entity:skills",
+				"widget:entity:feats",
+				"widget:entity:equipment"
+			],
+			"owned": null,
+			"_parent": null,
+			"_grid": null,
+			"_x": null,
+			"_y": null,
+			"updated": 1624748860745,
+			"created": 1624748748611
+		},
+		{
+			"id": "dashboard:preview:player:master",
+			"parent": "Friendly",
+			"name": null,
+			"description": null,
+			"concealed": true,
+			"default_value": null,
+			"is_preview": true,
+			"review": null,
+			"attribute": {},
+			"widgets": [
+				"widget:entity:heading",
+				"widget:entity:healthbar",
+				"widget:entity:effects"
+			],
+			"owned": null,
+			"_parent": null,
+			"_grid": null,
+			"_x": null,
+			"_y": null,
+			"updated": 1624777157271,
+			"created": 1624748716162
+		},
+		{
+			"id": "dashboard:entity:nearby",
+			"concealed": true,
+			"parent": "Nearby",
+			"widgets": [
+				"widget:entity:heading",
+				"widget:entity:healthbar",
+				"widget:entity:effects"
+			],
+			"updated": 1624785179799
+		},
+		{
+			"id": "dashboard:entity:minion",
+			"concealed": true,
+			"parent": "Minion",
+			"widgets": [
+				"widget:entity:name",
+				"widget:entity:healthbar",
+				"widget:entity:feats",
+				"widget:entity:effects",
+				"widget:entity:spells"
+			],
+			"updated": 1624785121477,
+			"created": 1624785121477
+		},
+		{
+			"id": "dashboard:entity:friendly",
+			"concealed": true,
+			"parent": "Friendly",
+			"widgets": [
+				"widget:entity:heading",
+				"widget:entity:healthbar",
+				"widget:entity:effects"
+			],
+			"updated": 1624785218419,
+			"created": 1624785218419
+		}
+	]
+}

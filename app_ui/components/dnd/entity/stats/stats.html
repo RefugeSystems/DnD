@@ -22,9 +22,12 @@
 		</button>
 	</div>
 	<div class="property-container speed">
-		<button class="property" v-on:click="info(entity.location)">
+		<button class="property" v-on:click="move()">
 			<span class="icon fas fa-running"></span>
 			<span>{{entity.movement_ground}}</span>
+		</button>
+		<button class="property" v-if="entity.location" v-on:click="info(entity.location)">
+			<span class="icon fas fa-globe"></span>
 		</button>
 	</div>
 	<!--div class="property-container dicebin">

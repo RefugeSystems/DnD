@@ -25,6 +25,7 @@ module.exports = function(universe) {
 		"int": "intelligence",
 		"wis": "wisdom",
 		"cha": "charisma",
+		"class_level": "archetype_level",
 		"proficiency": "proficiency_rating",
 		"pro": "proficiency_rating"
 	};
@@ -464,9 +465,9 @@ module.exports = function(universe) {
 		}
 		if(value) {
 			if(reduced) {
-				reduced += " + " + value;
+				reduced += " + " + value + "%";
 			} else {
-				reduced = value;
+				reduced = value + "%";
 			}
 		}
 		if(debug) {
@@ -482,8 +483,9 @@ module.exports = function(universe) {
 	 * @param {String} expression 
 	 * @param {*} source 
 	 * @param {Number} [incoming] Optional value that when specified is used against the
-	 * 		computed percentage value. When omitted, percentages are applied to the computed
-	 * 		value outside the percentage.
+	 * 		computed percentage value. When undefined, percentages are applied to the computed
+	 * 		value outside the percentage. When null, the percentage is returned with the
+	 * 		computed value to be used later.
 	 * @param {Object} [rolls] When specified, the dice can be tracked for the number
 	 * 		of each dice rolled.
 	 */
@@ -553,12 +555,14 @@ module.exports = function(universe) {
 			console.log(" > Dice[percent]: " + roll, value);
 		}
 		if(value) {
-			if(incoming) {
-				roll += Math.floor(value/100*incoming);
-				// console.log("Incoming[" + value + "]: " + roll);
-			} else {
+			if(incoming === undefined) {
 				roll += Math.floor(roll * value/100);
 				// console.log("Percentile[" + value + "]: " + roll);
+			} else if(incoming === null) {
+				return roll + " + " + value + "%";
+			} else {
+				roll += Math.floor(value/100*incoming);
+				// console.log("Incoming[" + value + "]: " + roll);
 			}
 		}
 		if(debug) {

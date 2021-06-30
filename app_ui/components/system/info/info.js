@@ -69,6 +69,21 @@
 		"computed": {
 			"size": function() {
 				return this.profile.info_size || 90;
+			},
+			"main": function() {
+				if(this.player && this.player.attribute && this.player.attribute.playing_as) {
+					return this.universe.index.entity[this.player.attribute.playing_as] || null;
+				}
+				return null;
+			},
+			"relatedKnowledge": function() {
+				var related = [];
+
+				if(this.main && this.info && this.main.knowledge_matrix && this.main.knowledge_matrix[this.info.id]) {
+					this.universe.transcribeInto(this.main.knowledge_matrix[this.info.id], related, "knowledge");
+				}
+
+				return related;
 			}
 		},
 		"watch": {

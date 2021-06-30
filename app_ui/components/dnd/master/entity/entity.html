@@ -5,7 +5,7 @@
 	<div class="widgets container flex v">
 		<dnd-entity-name class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 		<dnd-entity-healthbar class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
-		<dnd-entity-properties class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<dnd-entity-properties class="widget" v-on:gold="giveGold()" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 		<div class="master-actions widget flex h">
 			<button class="general rounded quick action" v-on:click="giveGold()">
 				<span class="fas fa-coins"></span>

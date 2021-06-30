@@ -3,52 +3,62 @@
             "id": "type:armor:helm",
             "name": "Armor:helm",
             "description": "An armor covering for your head",
-            "icon": "game-icon game-icon-horned-helm"
+            "icon": "game-icon game-icon-horned-helm",
+			"is_primary": true
         }, {
             "id": "type:glasses",
             "name": "Glasses",
             "description": "Glasses",
-            "icon": "far fa-glasses"
+            "icon": "far fa-glasses",
+			"is_primary": true
         }, {
             "id": "type:necklace",
             "name": "Necklace",
             "description": "Necklace",
-            "icon": "game-icon game-icon-necklace"
+            "icon": "game-icon game-icon-necklace",
+			"is_primary": true
         }, {
             "id": "type:cape",
             "name": "Cape",
             "description": "Cape",
-            "icon": "game-icon game-icon-cape"
+            "icon": "game-icon game-icon-cape",
+			"is_primary": true
         }, {
             "id": "type:backpack",
             "name": "Backpack",
             "description": "A bag for carrying things",
-            "icon": "fas fa-backpack"
+            "icon": "fas fa-backpack",
+			"is_primary": true
         }, {
             "id": "type:pouch",
             "name": "Pouch",
             "description": "A small bag",
-            "icon": "fas fa-sack"
+            "icon": "fas fa-sack",
+			"is_primary": true
         }, {
             "id": "type:charm",
             "name": "Charm",
             "description": "A small charm",
-            "icon": "game-icon game-icon-rune-stone"
+            "icon": "game-icon game-icon-rune-stone",
+			"is_primary": true
         }, {
             "id": "type:armor:chest",
             "name": "Chest Armor",
             "description": "A solid piece of armor for your chest",
-            "icon": "game-icon game-icon-chest-armor"
+            "icon": "game-icon game-icon-chest-armor",
+			"is_primary": true
         }, {
             "id": "type:weapon",
             "name": "Weapon",
             "description": "Item used in combat to inflict damage",
-            "icon": "fas fa-sword"
+            "icon": "fas fa-sword",
+			"is_primary": true
         }, {
             "id": "type:held",
             "name": "Held",
             "description": "An item that can be easily held",
-            "icon": "fas fa-person-carry"
+            "icon": "fas fa-person-carry",
+			"is_primary": true
         }, {
             "id": "type:weapon:melee",
             "name": "Melee Weapon",
@@ -68,37 +78,44 @@
             "id": "type:device",
             "name": "Device",
             "description": "An interactable object with some effect",
-            "icon": "game-icon game-icon-button-finger"
+            "icon": "game-icon game-icon-button-finger",
+			"is_primary": true
         }, {
             "id": "type:ring",
             "name": "Ring",
             "description": "Ring",
-            "icon": "game-icon game-icon-ring"
+            "icon": "game-icon game-icon-ring",
+			"is_primary": true
         }, {
             "id": "type:armor:bracers",
             "name": "Bracers",
             "description": "Bracers",
-            "icon": "game-icon game-icon-bracers"
+            "icon": "game-icon game-icon-bracers",
+			"is_primary": true
         }, {
             "id": "type:belt",
             "name": "Belt",
             "description": "Belt",
-            "icon": "game-icon game-icon-belt"
+            "icon": "game-icon game-icon-belt",
+			"is_primary": true
         }, {
             "id": "type:pants",
             "name": "Pants",
             "description": "Pants",
-            "icon": "game-icon game-icon-armored-pants"
+            "icon": "game-icon game-icon-armored-pants",
+			"is_primary": true
         }, {
             "id": "type:boots",
             "name": "Boots",
             "description": "Boots",
-            "icon": "game-icon game-icon-boots"
+            "icon": "game-icon game-icon-boots",
+			"is_primary": true
         }, {
             "id": "type:cannon",
             "name": "Cannon",
             "description": "Cannon",
-            "icon": "game-icon game-icon-cannon"
+            "icon": "game-icon game-icon-cannon",
+			"is_primary": true
         }, {
             "id": "type:module:boat:general",
             "name": "Module:boat:general",
@@ -108,32 +125,38 @@
             "id": "type:potion",
             "name": "Potion",
             "description": "Consumable Potion",
-            "icon": "fas fa-flask-potion"
+            "icon": "fas fa-flask-potion",
+			"is_primary": true
         }, {
             "id": "type:plant",
             "name": "Plant",
             "description": "A plant of a piece of one",
-            "icon": "fas fa-leaf"
+            "icon": "fas fa-leaf",
+			"is_primary": true
         }, {
             "id": "type:crystal",
             "name": "Crystal",
             "description": "A crystal",
-            "icon": "fas fa-gem"
+            "icon": "fas fa-gem",
+			"is_primary": true
         }, {
             "id": "type:ingredient",
             "name": "Ingredient",
             "description": "This is used in some way for recipes",
-            "icon": "fas fa-cube rot90"
+            "icon": "fas fa-cube rot90",
+			"is_primary": true
         }, {
             "id": "type:book",
             "name": "Book",
             "description": "A collection of pages from some form of printing",
-            "icon": "fas fa-book"
+            "icon": "fas fa-book",
+			"is_primary": true
         }, {
             "id": "type:journal",
             "name": "Journal",
             "description": "A collection of hand written pages",
-            "icon": "fas fa-book"
+            "icon": "fas fa-book",
+			"is_primary": true
         }, {
             "id": "type:scroll:normal",
             "name": "Scroll",
@@ -153,47 +176,56 @@
             "id": "type:note",
             "name": "Note",
             "description": "A small note",
-            "icon": "fas fa-sticky-note"
+            "icon": "fas fa-sticky-note",
+			"is_primary": true
         }, {
             "id": "type:instrument",
             "name": "Instrument",
             "description": "A musical instrument",
-            "icon": "fas fa-guitar"
+            "icon": "fas fa-guitar",
+			"is_primary": true
         }, {
             "id": "type:drug",
             "name": "Drug",
             "description": "A consumable with unusual effects",
-            "icon": "fas fa-capsules"
+            "icon": "fas fa-capsules",
+			"is_primary": true
         }, {
             "id": "type:kit",
             "name": "Kit",
             "description": "A small bag filled with tools for a particular activity",
-            "icon": "game-icon game-icon-briefcase"
+            "icon": "game-icon game-icon-briefcase",
+			"is_primary": true
         }, {
             "id": "type:artifact",
             "name": "Artifact",
             "description": "A powerful relic from an ancient time",
-            "icon": "game-icon game-icon-abstract-041"
+            "icon": "game-icon game-icon-abstract-041",
+			"is_primary": true
         }, {
             "id": "type:body:part",
             "name": "Body Part",
             "description": "Part of the body of a creature",
-            "icon": "game-icon game-icon-severed-hand"
+            "icon": "game-icon game-icon-severed-hand",
+			"is_primary": true
         }, {
             "id": "type:armor:shield",
             "name": "Shield",
             "description": "A held piece of armor for deflecting attacks",
-            "icon": "fas fa-shield"
+            "icon": "fas fa-shield",
+			"is_primary": true
         }, {
             "id": "type:key",
             "name": "Key",
             "description": "A key for opening locks",
-            "icon": "fas fa-key-skeleton"
+            "icon": "fas fa-key-skeleton",
+			"is_primary": true
         }, {
             "id": "type:rock",
             "name": "Rock",
             "description": "Rock",
-            "icon": "game-icon game-icon-rock-2"
+            "icon": "game-icon game-icon-rock-2",
+			"is_primary": true
         }, {
             "id": "type:beverage",
             "name": "Beverage",
@@ -203,62 +235,74 @@
             "id": "type:food",
             "name": "Food",
             "description": "Consumable sustenience",
-            "icon": "fas fa-meat"
+            "icon": "fas fa-meat",
+			"is_primary": true
         }, {
             "id": "type:bomb",
             "name": "Bomb",
             "description": "An explosive",
-            "icon": "fas fa-bomb"
+            "icon": "fas fa-bomb",
+			"is_primary": true
         }, {
             "id": "type:artwork",
             "name": "Artwork",
             "description": "Artwork",
-            "icon": "fas fa-image"
+            "icon": "fas fa-image",
+			"is_primary": true
         }, {
             "id": "type:tool",
             "name": "Tool",
             "description": "Tool",
-            "icon": "fas fa-hammer"
+            "icon": "fas fa-hammer",
+			"is_primary": true
 		}, {
             "id": "type:magic:abjuration",
             "name": "Magic: Abjuration",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-abstract-111"
+            "icon": "game-icon game-icon-abstract-111",
+			"is_primary": true
         }, {
             "id": "type:magic:conjuration",
             "name": "Magic: Conjuration",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-xxxx"
+            "icon": "game-icon game-icon-abstract-097",
+			"is_primary": true
         }, {
             "id": "type:magic:necromancy",
             "name": "Magic: Necromancy",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-half-dead"
+            "icon": "game-icon game-icon-half-dead",
+			"is_primary": true
         }, {
             "id": "type:magic:evocation",
             "name": "Magic: Evocation",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-beam-wake"
+            "icon": "game-icon game-icon-beam-wake",
+			"is_primary": true
         }, {
             "id": "type:magic:divination",
             "name": "Magic: Divination",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-water-diviner-stick"
+            "icon": "game-icon game-icon-water-diviner-stick",
+			"is_primary": true
         }, {
             "id": "type:magic:enchantment",
             "name": "Magic: Enchantment",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-psychic-waves"
+            "icon": "game-icon game-icon-psychic-waves",
+			"is_primary": true
         }, {
             "id": "type:magic:illusion",
             "name": "Magic: Illusion",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-eyelashes"
+            "icon": "game-icon game-icon-eyelashes",
+			"is_primary": true
         }, {
             "id": "type:magic:transmutation",
             "name": "Magic: Transmutation",
             "description": "The school of magic associated with this object",
-            "icon": "game-icon game-icon-transform"
+            "icon": "game-icon game-icon-transform",
+			"is_primary": true
 		}, {
             "id": "type:any",
             "name": "Any",
@@ -268,7 +312,8 @@
             "id": "type:creature",
             "name": "Creature",
             "description": "Any living organism capable of self induced motion",
-            "icon": "game-icon game-icon-seahorse"
+            "icon": "game-icon game-icon-seahorse",
+			"is_primary": true
         }, {
             "id": "type:dead",
             "name": "Dead",
@@ -288,12 +333,14 @@
             "id": "type:humanoid",
             "name": "Humanoid",
             "description": "A two legged creature, typically of moderate (4+) ${Intelligence}$",
-            "icon": "fas fa-user-alt"
+            "icon": "fas fa-user-alt",
+			"is_primary": true
         }, {
             "id": "type:magic",
             "name": "Magic",
             "description": "General a spell or an effect of one",
-            "icon": "game-icon game-icon-magic-palm"
+            "icon": "game-icon game-icon-magic-palm",
+			"is_primary": true
         }, {
             "id": "type:item",
             "name": "Item",
@@ -308,12 +355,14 @@
             "id": "type:hostile",
             "name": "Hostile",
             "description": "A creature readily attempting to harm you",
-            "icon": "fas fa-thumbs-down"
+            "icon": "fas fa-thumbs-down",
+			"is_primary": true
         }, {
             "id": "type:neutral",
             "name": "Neutral",
             "description": "A creature neither trusting you nor trying to harm you. With some grey area.",
-            "icon": "fas fa-peace"
+            "icon": "fas fa-peace",
+			"is_primary": true
         }
     ]
 }

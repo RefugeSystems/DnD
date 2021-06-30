@@ -1,0 +1,19 @@
+{
+	"import": [{
+		"id": "gender:male",
+		"icon": "fas fa-mars",
+		"name": "Male"
+	}, {
+		"id": "gender:female",
+		"icon": "fas fa-venus",
+		"name": "Female"
+	}, {
+		"id": "gender:nonbinary",
+		"icon": "fas fa-transgender-alt",
+		"name": "Non-Binary"
+	}, {
+		"id": "gender:agender",
+		"icon": "fas fa-genderless",
+		"name": "AGender"
+	}]
+}

@@ -13,6 +13,7 @@ module.exports.initialize = function(universe) {
 	 */
 	var takeDamage = function(entity, damage, resist) {
 		var keys = Object.keys(damage),
+			received,
 			set = {},
 			i;
 		
@@ -22,10 +23,17 @@ module.exports.initialize = function(universe) {
 		}
 
 		for(i = 0; i < keys.length; i++) {
+			if(typeof(resist[keys[i]]) === "string") {
+				resist[keys[i]] = universe.calculator.computedDiceRoll(resist[keys[i]], entity, undefined, damage[keys[i]]);
+			}
+			received = damage[keys[i]] - (resist[keys[i]] || 0);
+			if(received < 0) {
+				received = 0;
+			}
 			if(keys[i] === "damage_type:heal") {
-				set.hp += damage[keys[i]] - (resist[keys[i]] || 0);
+				set.hp += received;
 			} else {
-				set.hp -= damage[keys[i]] - (resist[keys[i]] || 0);
+				set.hp -= received;
 			}
 		}
 
@@ -33,6 +41,11 @@ module.exports.initialize = function(universe) {
 			set.hp = 0;
 		} else if(set.hp > entity.hp_max) {
 			set.hp = entity.hp_max;
+		}
+
+		if(set.hp) {
+			set.death_fail = 0;
+			set.death_save = 0;
 		}
 
 		entity.setValues(set, function(err) {
