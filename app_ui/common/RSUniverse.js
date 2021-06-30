@@ -28,6 +28,9 @@ class RSUniverse extends EventEmitter {
 	constructor(details) {
 		super();
 		
+		// TODO: Refactor to be cleaner
+		rsSystem.universe = this;
+
 		this.MAX_HISTORY_LENGTH = 400;
 		this.KEY = {};
 		this.KEY.CLASSPREFIX = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:objects";

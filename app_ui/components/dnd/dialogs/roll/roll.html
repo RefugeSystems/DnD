@@ -17,7 +17,7 @@
 	<div class="rolling spell-level" v-if="details.spell && !spellLevel">
 		<!-- TODO: Select Spell Level for cast send -->
 	</div>
-	<div class="rolling target" v-if="details.rolling && details.targeted && target">
+	<!-- div class="rolling target" v-if="details.targeted && target">
 		<div class="roll-label flex h">
 			<button class="roll-key general rounded quick action" v-on:click="info(target)">
 				<span :class="target.icon || 'fas fa-cube'"></span>
@@ -30,8 +30,8 @@
 				<span class="fas fa-ban"></span>
 			</button>
 		</div>
-	</div>
-	<div class="rolling target" v-if="details.targeted && !target">
+	</div-->
+	<div class="rolling target" v-if="details.targeted">
 		<div class="roll-label" v-if="!details.using">
 			Target for {{getRollName()}}
 		</div>
@@ -47,7 +47,7 @@
 			<button class="roll-key general rounded quick action" v-on:click="info(targetable)">
 				<span :class="targetable.icon"></span>
 			</button>
-			<button class="roll-result target flex v center general rounded" v-on:click="selectTarget(targetable)">
+			<button class="roll-result target flex v center general rounded" v-on:click="selectTarget(targetable)" :class="getTargetClass(targetable)">
 				<span>{{targetable.name}}</span>
 				<dnd-health-bar :entity="targetable"></dnd-health-bar>
 			</button>
@@ -211,16 +211,16 @@
 			</div>
 		</div>
 	</div>
-	<div class="roll-complete flex h" v-if="rolling.length || damages.length || resists.length">
+	<div class="roll-complete flex h">
 		<button class="general rounded action roll-action" v-if="getResultState() >= 0" v-on:click="sendResults(resists)">
 			<span :class="getSendResultIcon()"></span>
 			<span>{{getFinishName()}}</span>
 		</button>
-		<button class="general rounded action roll-action" v-on:click="autoRoll()">
+		<button class="general rounded action roll-action" v-if="rolling.length || damages.length || resists.length" v-on:click="autoRoll()">
 			<span class="game-icon game-icon-rolling-dice-cup"></span>
 			<span>Auto-Fill</span>
 		</button>
-		<button class="general rounded action roll-action" v-on:click="clearRolls()">
+		<button class="general rounded action roll-action" v-if="rolling.length || damages.length || resists.length" v-on:click="clearRolls()">
 			<span class="far fa-ban"></span>
 			<span>Clear</span>
 		</button>

@@ -179,6 +179,7 @@ rsSystem.component("dndDialogRoll", {
 		data.source = null;
 		data.check = null;
 		data.skillCheck = {};
+		data.targeting = {};
 		data.waiting = {};
 		data.seen = [];
 		data.warn = 0;
@@ -432,11 +433,27 @@ rsSystem.component("dndDialogRoll", {
 				Vue.set(this, "source", entity);
 			}
 		},
-		"selectTarget": function(target){
+		"getTargetClass": function(target) {
+			var classes = "";
+			if(this.targeting[target.id]) {
+				classes += " targeted";
+			}
+			return classes;
+		},
+		"selectTarget": function(target) {
+			if(this.targeting[target.id]) {
+				Vue.delete(this.targeting, target.id);
+			} else {
+				Vue.set(this.targeting, target.id, true);
+			}
 			Vue.set(this, "target", target);
 		},
-		"clearTarget": function(){
-			Vue.set(this, "target", null);
+		"clearTarget": function(target) {
+			if(target) {
+				Vue.delete(this.targeting, target);
+			} else {
+				Vue.set(this, "target", null);
+			}
 		},
 		"setTracking": function(roll, negative) {
 			Vue.set(this, "negative", !!negative);
@@ -741,6 +758,10 @@ rsSystem.component("dndDialogRoll", {
 			this.$forceUpdate();
 		},
 		"getResultState": function() {
+			if(!this.rolling || this.rolling.length === 0) {
+				return 0;
+			}
+
 			var i;
 			for(i=0; i<this.rolling.length; i++) {
 				if(!this.rolling[i].computed && this.rolling[i].computed !== 0) {
@@ -801,6 +822,7 @@ rsSystem.component("dndDialogRoll", {
 		"sendResults": function() {
 			var state = this.getResultState(),
 				perform,
+				keys,
 				i;
 
 			if(state > 0 && this.warn < state) {
@@ -822,8 +844,17 @@ rsSystem.component("dndDialogRoll", {
 				if(this.target) {
 					perform.target = this.target.id;
 				}
+				if(this.targeting) {
+					keys = Object.keys(this.targeting);
+					if(keys.length) {
+						perform.targets = keys;
+					}
+				}
 				if(this.source) {
 					perform.source = this.source.id;
+				}
+				if(this.details.spell) {
+					perform.spell = this.details.spell.id;
 				}
 				if(this.check) {
 					perform.check = Object.assign({}, this.check);
@@ -853,6 +884,9 @@ rsSystem.component("dndDialogRoll", {
 					for(i=0; i<this.resists.length; i++) {
 						perform.resist[this.resists[i].key.id || this.resists[i].key] = this.resists[i].computed;
 					}
+				}
+				if(this.details.spellLevel !== undefined) {
+					perform.spellLevel = parseInt(this.details.spellLevel) || 0;
 				}
 
 				console.log("Performing: ", perform);

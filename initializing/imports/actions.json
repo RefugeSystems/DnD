@@ -18,6 +18,18 @@
 			"icon": "fas fa-heartbeat",
 			"attribute": {}
 		}, {
+			"id": "action:save:send",
+			"name": "Send Save",
+			"description": "Send a save to perform",
+			"icon": "game-icon game-icon-avoidance",
+			"attribute": {}
+		}, {
+			"id": "action:save:recv",
+			"name": "Save Check",
+			"description": "Save against something happening to you",
+			"icon": "game-icon game-icon-avoidance",
+			"attribute": {}
+		}, {
 			"id": "action:movement:move",
 			"name": "Move",
 			"action_cost": {

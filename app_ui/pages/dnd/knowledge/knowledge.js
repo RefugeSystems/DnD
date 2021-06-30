@@ -114,6 +114,15 @@ rsSystem.component("DNDKnowledge", {
 			}
 			return value;
 		};
+		data.formatter.icon = (value) => {
+			return "<span class=\"" + (value || "") + "\"></span>";
+		};
+		data.formatter.category = (value) => {
+			if(value && (value = this.universe.getObject(value))) {
+				return value.name;
+			}
+			return "";
+		};
 
 		return data;
 	},

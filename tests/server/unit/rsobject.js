@@ -157,4 +157,19 @@ describe("RSObject", function() {
 		expect(res.indexOf("a")).toBe(0);
 		expect(res.indexOf("c")).toBe(1);
 	});
+	
+	it("can subtract from Object values", function() {
+		var a = {},
+			b = {},
+			res;
+			
+		a.effects = {"a": 5, "b": 9};
+		b.effects = {"b": 2, "c": 19};
+
+		res = RSObject.subValues(a, b);
+		console.log("Result: ", res);
+		expect(res.effects.a).toBe(5);
+		expect(res.effects.b).toBe(7);
+		expect(res.effects.c).toBe(-19);
+	});
 });

@@ -787,7 +787,10 @@ class RSObject {
 	 *
 	 * As `linkFieldValues` keeps all relevent objects loaded for the universe to access,
 	 * this method is 
-	 * 
+	 */
+	/**
+	 * Retrieves the value of the identified field from the top level of this object, following
+	 * any references as needed.
 	 * @method calculatedValue
 	 * @param {Array | String} name Matching the Field ID to be used.
 	 * @param {Integer} [index]
@@ -1422,9 +1425,37 @@ RSObject.addValues = function(a, b, type, op) {
  * @static
  * @param  {[type]} a [description]
  * @param  {[type]} b [description]
+ * @param  {[type]} type [description]
  * @return {[type]}   [description]
  */
-RSObject.subObjects = function(a, b) {
+RSObject.subObjects = function(a, b, type) {
+	if(a && !b) {
+		return b;
+	} else if(!a && b) {
+		return a;
+	} else if(a && b) {
+		var akeys = Object.keys(a),
+			bkeys = Object.keys(b),
+			checked = {},
+			result = {},
+			x;
+		
+		for(x=0; x<akeys.length; x++) {
+			result[akeys[x]] = RSObject.subValues(a[akeys[x]], b[akeys[x]], type);
+			checked[akeys[x]] = true;
+		}
+		for(x=0; x<bkeys.length; x++) {
+			if(!checked[bkeys[x]]) {
+				result[bkeys[x]] = RSObject.subValues(a[bkeys[x]], b[bkeys[x]], type);
+			}
+		}
+		
+		return result;
+	} else {
+		return null;
+	}
+
+	/*
 	if(!a) {
 		a = {};
 	}
@@ -1442,6 +1473,7 @@ RSObject.subObjects = function(a, b) {
 	}
 	
 	return result;
+	*/
 };
 
 /**
@@ -1454,8 +1486,20 @@ RSObject.subObjects = function(a, b) {
  * @return {[type]}      [description]
  */
 RSObject.subValues = function(a, b, type) {
+	// Level set for string differences; Affects object mapped values from the editor, need to add better tracking for object subvalues to keep them settled correctly
+	if(parseInt(a) == a && parseInt(b) == b) {
+		type = "number";
+		a = parseInt(a);
+		b = parseInt(b);
+	} else if(type === "string" && typeof(b) === "number") {
+		b = b.toString();
+	} else if(type === "number" && typeof(b) === "string") {
+		a = a.toString();
+		type = "string";
+	}
+
 	if(typeof(a) === "undefined") {
-		switch(type) {
+		switch(typeof(b)) {
 			case "string":
 				return "";
 			case "integer":
@@ -1485,6 +1529,11 @@ RSObject.subValues = function(a, b, type) {
 				type = typeof(a);
 			}
 		}
+
+		// console.log("A[" + typeof(a) + "]: " + a + " | B[" + typeof(b) + "]: " + b);
+		
+		// console.log(" > A[" + typeof(a) + "]: " + a + " | B[" + typeof(b) + "]: " + b);
+
 		switch(type) {
 			case "string":
 				return a.replace(b, "");
@@ -1506,7 +1555,7 @@ RSObject.subValues = function(a, b, type) {
 				return RSObject.subObjects(a, b);
 		}
 	} else {
-		throw new Error("Can not sub values as types do not match");
+		throw new Error("Can not sub values as types do not match: " + typeof(a) + ":" + a + ", " +  typeof(b) + ":" + b);
 	}
 };
 

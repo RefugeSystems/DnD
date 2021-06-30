@@ -130,12 +130,24 @@ rsSystem.component("DNDWidgetCore", {
 		 */
 		"castSpell": function(level, spell, action) {
 			console.log("Cast at " + level + ": ", spell, action);
-			var targets = null;
+			var targets = null,
+				damage = {},
+				cast,
+				keys,
+				i;
+
+
 			if(typeof(spell) === "string") {
 				spell = this.universe.index.spell[spell];
 			}
 			if(spell && spell.targets && spell.targets.length) {
 				targets = spell.targets;
+			}
+
+			// Upcast if needed, stored to cast to avoid mutation of spell
+			cast = Object.assign({}, spell);
+			if(level > spell.level) {
+				cast.level = level;
 			}
 
 			if(typeof(action) === "string") {
@@ -150,17 +162,27 @@ rsSystem.component("DNDWidgetCore", {
 				}
 			}
 
+			if(spell.damage) {
+				keys = Object.keys(spell.damage);
+				for(i=0; i<keys.length; i++) {
+					damage[keys[i]] = this.computeRoll(spell.damage[keys[i]], cast);
+				}
+			}
+
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
 				"storageKey": "store:roll:" + this.entity.id,
 				"entity": this.entity.id,
 				"spellLevel": level,
 				"targeted": targets,
-				"rolling": spell.damage,
+				"rolling": damage,
 				"action": action,
-				"spell": spell,
+				"spell": cast,
 				"closeAfterAction": true
 			});
+		},
+		"computeRoll": function(formula, source) {
+			return rsSystem.dnd.reducedDiceRoll(formula, source);
 		},
 		"startRoll": function(rolling, targeted) {
 			rsSystem.EventBus.$emit("dialog-open", {
@@ -171,7 +193,34 @@ rsSystem.component("DNDWidgetCore", {
 				"rolling": rolling
 			});
 		},
+		/**
+		 * 
+		 * @method sortSpells
+		 * @deprecated Use "sortByLevel"
+		 * @param {Object} a 
+		 * @param {Object} b 
+		 * @returns {Integer}
+		 */
 		"sortSpells": function(a, b) {
+			if(a.level < b.level) {
+				return -1;
+			} else if(a.level > b.level) {
+				return 1;
+			} else if(a.name < b.name) {
+				return -1;
+			} else if(a.name > b.name) {
+				return 1;
+			}
+			return 0;
+		},
+		/**
+		 * 
+		 * @method sortByLevel
+		 * @param {Object} a 
+		 * @param {Object} b 
+		 * @returns {Integer}
+		 */
+		"sortByLevel": function(a, b) {
 			if(a.level < b.level) {
 				return -1;
 			} else if(a.level > b.level) {

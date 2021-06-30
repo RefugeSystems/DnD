@@ -26,7 +26,9 @@ rsSystem.component("dndEntitySpells", {
 	},
 	"computed": {
 		"spells": function() {
-			return this.universe.transcribeInto(this.entity.spells, [], "spell", this.storage?this.storage.filter:null);
+			var spells = this.universe.transcribeInto(this.entity.spells, [], "spell", this.storage?this.storage.filter:null);
+			spells.sort(this.sortByLevel);
+			return spells;
 		},
 		"slots": function() {
 			var keys = Object.keys(this.entity.spell_slot_max),
@@ -94,12 +96,32 @@ rsSystem.component("dndEntitySpells", {
 		"toggleList": function() {
 			Vue.set(this.storage, "collapsed", !this.storage.collapsed);
 		},
+		"getSpellBoxDisplay": function(spell) {
+			if(spell.level > this.storage.slot) {
+				return "unusable-spell";
+			}
+			return "usable-spell";
+		},
+		"getDamageRoll": function(formula, spell) {
+			console.log("damage");
+			var castAt = parseInt(this.storage.slot),
+				anchor = Object.assign({}, spell),
+				roll;
+
+			if(spell.level < castAt) {
+				anchor.level = castAt;
+			}
+
+			roll = this.computeRoll(formula, anchor);
+
+			return roll;
+		},
 		"setSize": function(size) {
 			Vue.set(this.storage, "size", size.id);
 		},
 		"getSlotClass": function(slot) {
 			var classes = "";
-			if(this.storage.slot === slot) {
+			if(this.storage.slot == slot) {
 				return "active-slot";
 			}
 			return classes;
@@ -176,7 +198,7 @@ rsSystem.component("dndEntitySpells", {
 			}
 		},
 		"use": function(slot) {
-			Vue.set(this.storage, "slot", slot);
+			Vue.set(this.storage, "slot", parseInt(slot));
 		}
 	},
 	"beforeDestroy": function() {

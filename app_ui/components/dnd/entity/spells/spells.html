@@ -27,7 +27,7 @@
 			</button>
 		</div>
 		<div class="spells grow-1" :style="styleSpellList">
-			<div class="spell flex h" v-for="spell in spells">
+			<div class="spell flex h" v-for="spell in spells" :class="getSpellBoxDisplay(spell)">
 				<div class="details flex v grow-1" v-on:click="cast(spell)">
 					<div class="details simple flex h grow-1">
 						<button class="flat action">
@@ -44,7 +44,7 @@
 									<button class="rounded general quick action" v-on:click.stop="info(damage)">
 										<span :class="damageIcon(damage)"></span>
 									</button>
-									<span class="roll">{{roll}}</span>
+									<span class="roll">{{getDamageRoll(roll, spell)}}</span>
 								</div>
 							</div>
 							<div class="targets flex v" :style="styleTypeList" v-if="spell.targets && spell.targets.length">
@@ -68,18 +68,18 @@
 						<div class="mini-divider"></div>
 						<div class="flex h justified">
 							<span class="components">
-								<button v-if="spell.cast_uses_somatic" class="flat action icon" v-on:click="info('fields:cast_uses_somatic')">
+								<button v-if="spell.cast_uses_somatic" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_somatic')">
 									<span class="game-icon game-icon-magic-palm"></span>
 								</button>
-								<button v-if="spell.cast_uses_verbal" class="flat action icon" v-on:click="info('fields:cast_uses_verbal')">
+								<button v-if="spell.cast_uses_verbal" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_verbal')">
 									<span class="fas fa-comment"></span>
 								</button>
-								<button v-if="spell.cast_uses_item" class="flat action icon" v-on:click="info('fields:cast_uses_item')">
+								<button v-if="spell.cast_uses_item" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_item')">
 									<span class="fas fa-sack"></span>
 								</button>
 							</span>
 							<span class="concentration">
-								<button v-if="spell.concentration" class="flat action icon" v-on:click="info('fields:concentration')">
+								<button v-if="spell.concentration" class="flat action icon" v-on:click.stop.prevent="info('fields:concentration')">
 									<span class="fas fa-brain"></span>
 								</button>
 							</span>

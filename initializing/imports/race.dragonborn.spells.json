@@ -1,194 +1,203 @@
 {
 	"import": [{
-			"id": "spell:dragonborn:breathweapon:black",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:acid": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Acid",
-			"effect_shape": "line",
-			"range_normal": "24",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:blue",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:lightning": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Lightning",
-			"effect_shape": "line",
-			"range_normal": "24",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:brass",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:fire": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Fire",
-			"effect_shape": "line",
-			"range_normal": "24",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:bronze",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:lightning": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Lightning",
-			"effect_shape": "line",
-			"range_normal": "24",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:copper",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:acid": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Acid",
-			"effect_shape": "line",
-			"range_normal": "24",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:gold",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:fire": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Fire",
-			"effect_shape": "cone",
-			"range_normal": "12",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:green",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:constitution",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:poison": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Poison",
-			"effect_shape": "cone",
-			"range_normal": "12",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:red",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:dexterity",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:fire": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Fire",
-			"effect_shape": "cone",
-			"range_normal": "12",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:silver",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:constitution",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:cold": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Frost",
-			"effect_shape": "cone",
-			"range_normal": "12",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}, {
-			"id": "spell:dragonborn:breathweapon:white",
-			"action_cost": {
-				"main": 1
-			},
-			"cast_type": "cast",
-			"cast_save": "skill:constitution",
-			"cast_time": 0,
-			"damage": {
-				"damage_type:cold": "(2 + ((level - 1)/5))d6"
-			},
-			"description": "Let loose your Dragon Breath, damaging all creatures within the area",
-			"icon": "game-icon game-icon-fire-breath",
-			"name": "Breathe Frost",
-			"effect_shape": "cone",
-			"range_normal": "12",
-			"dc": "8 + con + pro",
-			"targets": ["type:ground"],
-			"type": ["type:magic:evocation"]
-		}
-	]
+		"id": "spell:dragonborn:breathweapon:black",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:acid": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Acid",
+		"effect_shape": "line",
+		"range_normal": "24",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:blue",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:lightning": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Lightning",
+		"effect_shape": "line",
+		"range_normal": "24",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:brass",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:fire": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Fire",
+		"effect_shape": "line",
+		"range_normal": "24",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:bronze",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:lightning": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Lightning",
+		"effect_shape": "line",
+		"range_normal": "24",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:copper",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:acid": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Acid",
+		"effect_shape": "line",
+		"range_normal": "24",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:gold",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:fire": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Fire",
+		"effect_shape": "cone",
+		"range_normal": "12",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:green",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:constitution",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:poison": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Poison",
+		"effect_shape": "cone",
+		"range_normal": "12",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:red",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:dexterity",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:fire": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Fire",
+		"effect_shape": "cone",
+		"range_normal": "12",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:silver",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:constitution",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:cold": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Frost",
+		"effect_shape": "cone",
+		"range_normal": "12",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}, {
+		"id": "spell:dragonborn:breathweapon:white",
+		"action_cost": {
+			"main": 1
+		},
+		"cast_type": "cast",
+		"cast_save": "skill:constitution",
+		"cast_time": 0,
+		"damage": {
+			"damage_type:cold": "(2 + ((level - 1)/5))d6"
+		},
+		"description": "Let loose your Dragon Breath, damaging all creatures within the area",
+		"is_template": true,
+		"icon": "game-icon game-icon-fire-breath",
+		"name": "Breathe Frost",
+		"effect_shape": "cone",
+		"range_normal": "12",
+		"dc": "8 + con + pro",
+		"targets": ["type:ground"],
+		"type": ["type:magic:evocation"]
+	}]
 }

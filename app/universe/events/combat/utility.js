@@ -8,10 +8,16 @@ var Random = require("rs-random");
  */
 module.exports.initialize = function(universe) {
 
-	var tracking = {},
+	var activityPrefix = "activity:",
+		tracking = {},
 		alarms = {},
 		logged = {},
 		
+		finishSave,
+		sendSaves,
+		sendSave,
+
+		finishDamage,
 		sendDamages,
 		sendDamage,
 		takeDamage;
@@ -19,13 +25,23 @@ module.exports.initialize = function(universe) {
 	/**
 	 * 
 	 * @method takeDamage
+	 * @deprecated
 	 * @staitc
 	 * @param {String} [activity]
 	 * @param {RSObject} entity 
 	 * @param {Object} damage 
 	 * @param {Object} [resist] 
 	 */
-	 takeDamage = module.exports.takeDamage = function(activity, entity, damage, resist = {}) {
+	/**
+	 * 
+	 * @method finishDamage
+	 * @staitc
+	 * @param {String} [activity]
+	 * @param {RSObject} entity 
+	 * @param {Object} damage 
+	 * @param {Object} [resist] 
+	 */
+	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}) {
 		var tracked = tracking[activity],
 			log = logged[activity],
 			keys = Object.keys(damage),
@@ -40,7 +56,7 @@ module.exports.initialize = function(universe) {
 			log.resist = resist;
 			universe.emit("send", {
 				"type": "dismiss-message",
-				"mid": "activity::" + activity,
+				"mid": activityPrefix + activity,
 				"recipients": tracked.target.owned
 			});
 		} else {
@@ -98,14 +114,13 @@ module.exports.initialize = function(universe) {
 	 * 
 	 * @method sendDamages
 	 * @staitc
-	 * @param {String} activity ID for the exchange
 	 * @param {RSObject} [source] 
 	 * @param {Array | RSObject} targets 
 	 * @param {RSObject | String} [channel] 
 	 * @param {Object} damage 
 	 */
 	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage) {
-		var id = Random.identifier("attack::", 10, 32),
+		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
 			target,
 			i;
@@ -164,7 +179,7 @@ module.exports.initialize = function(universe) {
 
 			universe.emit("send", {
 				"type": "notice",
-				"mid": "activity::" + activity,
+				"mid": activityPrefix + activity,
 				"message": type + (source?" from " + (source.nickname || source.name):""),
 				"icon": icon,
 				"anchored": true,
@@ -179,6 +194,103 @@ module.exports.initialize = function(universe) {
 					"entity": target.id,
 					"channel": channel,
 					"damage": damage,
+					"fill_damage": true,
+					"closeAfterAction": true
+				}
+			});
+
+			// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
+			alarms[activity] = setTimeout(notify, 5000);
+		};
+		notify();
+	};
+
+	/**
+	 * 
+	 * @method sendSaves
+	 * @staitc
+	 * @param {RSObject} [source] 
+	 * @param {Array | RSObject} targets 
+	 * @param {Integer} [level] 
+	 * @param {RSObject | String} [channel] 
+	 * @param {Object} skill 
+	 */
+	 sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill) {
+		var id = Random.identifier(activityPrefix, 10, 32),
+			activity,
+			target,
+			i;
+
+		if(typeof(channel) === "string") {
+			channel = universe.get(channel);
+		}
+		if(typeof(skill) === "string") {
+			skill = universe.get(skill);
+		}
+
+		for(i=0; i<targets.length; i++) {
+			target = targets[i];
+			activity = id + ":" + target.id;
+			tracking[activity] = {
+				"gametime": universe.time,
+				"time": Date.now(),
+				"source": source,
+				"target": target,
+				"channel": channel,
+				"skill": skill,
+				"level": level
+			};
+			logged[activity] = {
+				"gametime": universe.time,
+				"source": source?source.id:null,
+				"target": target.id,
+				"channel": channel?channel.id:null,
+				"skill": skill.id,
+				"level": level
+			};
+
+			universe.chronicle.addOccurrence("saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
+			sendSave(activity, source, target, channel, skill);
+		}
+	};
+
+	/**
+	 * Sends the damage notification and set an alarm to fire until completed
+	 * @method sendSave
+	 * @private
+	 * @static
+	 * @param {String} activity ID to complete for taking damage.
+	 * @param {RSObject} [source] Entity or item dealing the damage, if any. For instance, may be undefined for environmental
+	 * 		damage.
+	 * @param {RSObject} target Entity being hurt.
+	 * @param {Object} [channel] ID for the Spell, Item, or other method through which the damage is being delt, if any.
+	 * @param {String | Object} skill To use for the save
+	 */
+	sendSave = function(activity, source, target, channel, skill) {
+		var notify = function() {
+			var type,
+				icon;
+
+			type = (target.nickname || target.name) + " needs to save";
+			icon = "fas fa-save";
+
+			universe.emit("send", {
+				"type": "notice",
+				"mid": activityPrefix + activity,
+				"message": type + (source?" from " + (source.nickname || source.name):"") + (channel?" against " + channel.name:""),
+				"icon": icon,
+				"anchored": true,
+				"recipients": target.owned || universe.getMasters(),
+				"emission": {
+					"type": "dialog-open",
+					"component": "dndDialogRoll",
+					"storageKey": "store:roll:" + target,
+					"action": "action:save:send",
+					"activity": activity,
+					"source": source?source.id:null,
+					"entity": target.id,
+					"channel": channel.id,
+					"skill": skill.id || skill,
 					"fill_damage": true,
 					"closeAfterAction": true
 				}

@@ -15,7 +15,7 @@ class Constructor extends RSObject {
 	}
 	
 	postFieldUpdate() {
-		console.log(" ? Build Matrix - ", this._knowledge_matrix_length, this.knowledges?this.knowledges.length:"null");
+		// console.log(" ? Build Matrix - ", this._knowledge_matrix_length, this.knowledges?this.knowledges.length:"null");
 		var knowledge,
 			matrix,
 			i,

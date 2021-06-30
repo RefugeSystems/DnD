@@ -121,7 +121,10 @@
 				}
 			}
 			if(!this.storage.classification_ids) {
-				this.storage.classification_ids = {};
+				Vue.set(this.storage, "classification_ids", {});
+			}
+			if(!this.storage.swap) {
+				Vue.set(this.storage, "swap", {});
 			}
 			if(this.$route.params.classification) {
 				Vue.set(this.storage, "classification", this.$route.params.classification);
@@ -183,7 +186,35 @@
 				}
 			},
 			"reclassing": function() {
-				Vue.set(this.details, "id", this.storage.classification_ids[this.storage.classification] || "");
+				// Vue.set(this.details, "id", this.storage.classification_ids[this.storage.classification] || "");
+				var keys,
+					i;
+
+				if(!this.storage.swap[this.classification]) {
+					Vue.set(this.storage.swap, this.classification, {});
+				}
+				if(!this.storage.swap[this.storage.classification]) {
+					Vue.set(this.storage.swap, this.storage.classification, {});
+				}
+
+				// Update Current Class Swap
+				keys = Object.keys(this.storage.swap[this.classification]);
+				for(i=0; i<keys.length; i++) {
+					Vue.set(this.storage.swap[this.classification], keys[i], null);
+				}
+
+				keys = Object.keys(this.details);
+				for(i=0; i<keys.length; i++) {
+					Vue.set(this.storage.swap[this.classification], keys[i], this.details[keys[i]]);
+					Vue.set(this.details, keys[i], null);
+				}
+				
+				keys = Object.keys(this.storage.swap[this.storage.classification]);
+				for(i=0; i<keys.length; i++) {
+					Vue.set(this.details, keys[i], this.storage.swap[this.storage.classification][keys[i]]);
+				}
+
+				Vue.set(this, "classification", this.storage.classification);
 				this.$emit("classification", this.storage.classification);
 				this.previewObject();
 			},

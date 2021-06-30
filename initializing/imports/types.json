@@ -257,49 +257,49 @@
 			"is_primary": true
 		}, {
             "id": "type:magic:abjuration",
-            "name": "Magic: Abjuration",
+            "name": "Abjuration",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-abstract-111",
 			"is_primary": true
         }, {
             "id": "type:magic:conjuration",
-            "name": "Magic: Conjuration",
+            "name": "Conjuration",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-abstract-097",
 			"is_primary": true
         }, {
             "id": "type:magic:necromancy",
-            "name": "Magic: Necromancy",
+            "name": "Necromancy",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-half-dead",
 			"is_primary": true
         }, {
             "id": "type:magic:evocation",
-            "name": "Magic: Evocation",
+            "name": "Evocation",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-beam-wake",
 			"is_primary": true
         }, {
             "id": "type:magic:divination",
-            "name": "Magic: Divination",
+            "name": "Divination",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-water-diviner-stick",
 			"is_primary": true
         }, {
             "id": "type:magic:enchantment",
-            "name": "Magic: Enchantment",
+            "name": "Enchantment",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-psychic-waves",
 			"is_primary": true
         }, {
             "id": "type:magic:illusion",
-            "name": "Magic: Illusion",
+            "name": "Illusion",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-eyelashes",
 			"is_primary": true
         }, {
             "id": "type:magic:transmutation",
-            "name": "Magic: Transmutation",
+            "name": "Transmutation",
             "description": "The school of magic associated with this object",
             "icon": "game-icon game-icon-transform",
 			"is_primary": true
