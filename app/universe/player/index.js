@@ -25,6 +25,8 @@ class PlayerConnection extends EventEmitter {
 		
 		this.session = {};
 		
+		this.ready = {};
+		
 		this.connects = 0;
 		
 		this.leaves = 0;
@@ -46,6 +48,12 @@ class PlayerConnection extends EventEmitter {
 			this.forwardMessage(message);
 		};
 		
+		var chronicled = (event) => {
+			if(this.player.gm && event.type && event.type.indexOf(":") !== -1) {
+				this.send("chronicled", event);
+			}
+		};
+		
 		var masterLogEvent = (message) => {
 			if(this.player.gm) {
 				message = Object.assign({}, message);
@@ -64,6 +72,8 @@ class PlayerConnection extends EventEmitter {
 		universe.on("object-created", receiveObject);
 		universe.on("unload", unloadObject);
 		universe.on("error", masterLogEvent);
+
+		universe.chronicle.on("added", chronicled);
 	}
 	
 	connect(session, socket) {
@@ -72,7 +82,6 @@ class PlayerConnection extends EventEmitter {
 		// console.log("Connecting " + id);
 		this.connection[id] = socket;
 		this.session[id] = session;
-		this.socketIDs.push(id);
 		this.player.addValues({
 			"connections": 1
 		}, noOp);
@@ -181,6 +190,7 @@ class PlayerConnection extends EventEmitter {
 		this.emit("connected");
 		this.connects++;
 		this.last = Date.now();
+		this.socketIDs.push(id);
 		// console.log("Connected");
 		socket.send(JSON.stringify({
 			"type": "connected",

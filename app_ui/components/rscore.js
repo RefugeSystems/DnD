@@ -34,14 +34,16 @@ rsSystem.component("RSCore", {
 	"watch": {
 	},
 	"mounted": function() {
+		/*
 		this.$el.onclick = (event) => {
 			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow && (follow = this.universe.index.index[follow.value]) && this.isOwner(follow)) {
+			if(follow && (follow = this.universe.get(follow.value)) {
 				rsSystem.EventBus.$emit("display-info", follow);
 				event.stopPropagation();
 				event.preventDefault();
 			}
 		};
+		*/
 	},
 	"methods": {
 		"closeDialog": function() {

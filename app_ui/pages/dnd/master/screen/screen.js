@@ -193,10 +193,16 @@ rsSystem.component("DNDMasterScreen", {
 		this.universe.$on("entity:roll", this.entityRolled);
 
 		if(this.storage && !this.storage.activeBucket) {
-			this.storage.activeBucket = "list";
+			Vue.set(this.storage, "activeBucket", "list");
+		}
+		if(this.storage && !this.storage.witnessed_limit) {
+			Vue.set(this.storage, "witnessed_limit", 100);
 		}
 	},
 	"methods": {
+		"witnessLimit": function(mod) {
+			Vue.set(this.storage, "witnessed_limit", this.storage.witnessed_limit + mod);
+		},
 		"entityRolled": function(event) {
 			if(event) {
 				var roll = Object.assign({}, event);
@@ -230,7 +236,8 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"beforeDestroy": function() {
-		this.universe.$off("entity:roll", this.entityRolled);
+		this.universe.$off("entity:roll", this
+		.entityRolled);
 	},
 	"template": Vue.templified("pages/dnd/master/screen.html")
 });

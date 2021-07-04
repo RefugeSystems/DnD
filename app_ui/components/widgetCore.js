@@ -84,6 +84,20 @@ rsSystem.component("DNDWidgetCore", {
 		}
 	},
 	"methods": {
+		"formatNumber": function(number) {
+			if(typeof(number.toFixed) === "function") {
+				return number.toFixed(2);
+			}
+			return number;
+		},
+		"getSkillAdvantage": function(skill, entity) {
+			entity = entity || this.entity;
+			if(entity) {
+				return entity.skill_advantage[skill.id];
+			}
+			console.warn("No Entity Present: ", this);
+			return null;
+		},
 		"performSkillCheck": function(skill) {
 			// var action = this.universe.index.action[action];
 			rsSystem.EventBus.$emit("dialog-open", {
@@ -97,11 +111,31 @@ rsSystem.component("DNDWidgetCore", {
 		},
 		"performAction": function(action, using) {
 			// TODO: Check for action rolls and open roll dialog if needed
-			var perform = {};
-			perform.action = action;
-			perform.source = this.entity.id;
-			perform.channel = using;
-			this.universe.send("action:perform", perform);
+			var action = this.universe.index.action[action],
+				perform = {},
+				response,
+				i;
+
+			console.log("Action: ", this.entity, action, using, perform);
+			if(this.entity && action) {
+				perform.action = action.id;
+				perform.source = this.entity.id;
+				perform.channel = using;
+				this.universe.send("action:perform", perform);
+				console.log(" > Sent: ", perform);
+				
+				if(this.entity.response && this.entity.response[action.id]) {
+					for(i=0; i<this.entity.response[action.id].length; i++) {
+						response = this.entity.response[action.id][i];
+						console.log("UI Response: ", response);
+						if(response && response.ui) {
+						}
+					}
+				}
+			} else {
+				// Should only happen during development
+				console.warn("Action or Entity not found: ", this);
+			}
 		},
 		"takeAction": function(action, using, rolls, targeted) {
 			rolls.unshift({});

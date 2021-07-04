@@ -21,6 +21,7 @@
 
 module.exports.initialize = function(universe) {
 	universe.on("player:action:check", function(event) {
+		console.log("Chec: ", event.message.data);
 		var entity,
 			skill,
 			roll = {
@@ -32,6 +33,8 @@ module.exports.initialize = function(universe) {
 				"action": event.message.data.action,
 				"name": event.message.data.name,
 				"dice": event.message.data.dice,
+				"critical": event.message.data.critical,
+				"failure": event.message.data.failure,
 				"recipients": universe.getMasters()
 			};
 
@@ -72,17 +75,14 @@ module.exports.initialize = function(universe) {
 			skill = {"stealth":roll.result};
 		}
 
-		console.log(" > " + roll.skill);
 		if(skill) {
-			console.log(" > " + roll.skill);
 			entity = universe.get(roll.entity);
 			if(entity) {
-				console.log(" > " + roll.skill);
 				entity.setValues(skill);
 			}
 		}
 
-		universe.chronicle.addOccurrence("character:check", roll, Date.now(), null, event.player.id);
+		universe.chronicle.addOccurrence("character:check", roll, Date.now(), roll.source || roll.entity, roll.target);
 		universe.emit("send", roll);
 	});
 

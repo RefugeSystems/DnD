@@ -44,11 +44,13 @@ rsSystem.component("dndEntityStats", {
 			var details = {},
 				action,
 				types,
-				i;
+				i,
+				j;
 
 			details.title = this.entity.name + " Actions";
 			details.component = "dndDialogList";
 			details.sections = ["movement", "main", "bonus", "reaction", "multiple", "free"];
+			details.related = {};
 			details.cards = {};
 			details.data = {
 				"movement": [],
@@ -147,6 +149,14 @@ rsSystem.component("dndEntityStats", {
 						details.data[types[0]].push(action);
 					} else {
 						details.data.multiple.push(action);
+					}
+					if(this.entity.response && this.entity.response[action.id]) {
+						details.related[action.id] = [];
+						for(j=0; j<this.entity.response[action.id].length; j++) {
+							if(this.entity.response[action.id][j].name) {
+								details.related[action.id].push(this.entity.response[action.id][j].name);
+							}
+						}
 					}
 				}
 			}

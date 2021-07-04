@@ -10,6 +10,25 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"responses": {
+				"action:rest:short": [{
+					"name": "Regain Spell Slots",
+					"add": {
+						"spell_slots": {
+							"1": 100,
+							"2": 100,
+							"3": 100,
+							"4": 100,
+							"5": 100,
+							"6": 100,
+							"7": 100,
+							"8": 100,
+							"9": 100,
+							"10": 100
+						}
+					}
+				}]
+			},
 			"feats": [
 				"feat:otherworldlypatron",
 				"feat:pactmagic"

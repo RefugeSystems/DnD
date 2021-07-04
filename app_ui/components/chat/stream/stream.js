@@ -39,6 +39,9 @@ rsSystem.component("chatStream", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"processDrop": function(event) {
+			console.log("Stream Drop: ", event);
+		},
 		"printPlayer": function(message) {
 			if(this.names[message.from]) {
 				return this.names[message.from];

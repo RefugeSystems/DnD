@@ -25,6 +25,20 @@ var stackRestricted = [
 	"attribute"
 ];
 
+var fieldHasValue = function(value) {
+	if(value === null || value === undefined) {
+		return false;
+	}
+
+	if(typeof(value) === "object") {
+		if(value instanceof Array) {
+			return value.length !== 0;
+		}
+		return Object.keys(value).length !== 0;
+	}
+	return true;
+};
+
 require("../extensions/array");
 
 class RSObject {
@@ -59,6 +73,15 @@ class RSObject {
 		 * @type Boolean
 		 */
 		this._stackable = false;
+		/**
+		 * Tracks warning flags for use of deprecated fields to aid with clean-up.
+		 * 
+		 * A field ID is mapped to true is usage is found and that field has a
+		 * deprecated attribute.
+		 * @property _deprecation
+		 * @type Object
+		 */
+		this._deprecation = {};
 		/**
 		 * 
 		 * @property _parent
@@ -266,6 +289,7 @@ class RSObject {
 			source,
 			fields,
 			field,
+			keys,
 			i,
 			v,
 			x;
@@ -404,27 +428,61 @@ class RSObject {
 
 		// this._universe.objectHandler.trackReference(this, inheriting);
 		
-		// Gaurentee Objects and Arrays where no value is set
 		fields = this._manager.fieldIDs;
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
-			if(field && (this._calculated[field.id] === undefined || this._calculated[field.id] === null)) {
-				if(field.type === "object") {
-					if(field.attribute.default) {
-						// Risky: This maintains deeper mutable references in complex cases
-						this._calculated[field.id] = Object.assign({}, field.attribute.default);
-					} else {
-						this._calculated[field.id] = {};
+			if(field) {
+				// Gaurentee Objects and Arrays where no value is set
+				if(this._calculated[field.id] === undefined || this._calculated[field.id] === null) {
+					if(field.type === "object") {
+						if(field.attribute.default) {
+							// Risky: This maintains deeper mutable references in complex cases
+							this._calculated[field.id] = Object.assign({}, field.attribute.default);
+						} else {
+							this._calculated[field.id] = {};
+						}
+					} else if(field.type === "array") {
+						if(field.attribute.default) {
+							// Risky: This maintains deeper mutable references in even trivial cases
+							this._calculated[field.id] = [].concat(field.attribute.default);
+						} else {
+							this._calculated[field.id] = [];
+						}
+					} else if(field.attribute.default) {
+						this._calculated[field.id] = field.attribute.default;
 					}
-				} else if(field.type === "array") {
-					if(field.attribute.default) {
-						// Risky: This maintains deeper mutable references in even trivial cases
-						this._calculated[field.id] = [].concat(field.attribute.default);
-					} else {
-						this._calculated[field.id] = [];
+				}
+				// Cast final calculated values as needed
+				if(this._calculated[fields[x]]) {
+					switch(field.attribute.nested_value_type) { // Really only for casting nested values
+						case "number":
+							if(field.type === "object") {
+								keys = Object.keys(this._calculated[fields[x]]);
+								for(i=0; i<keys.length; i++) {
+									this._calculated[fields[x]][keys[i]] = parseInt(this._calculated[fields[x]][keys[i]]);
+								}
+							} else if(field.type instanceof Array) {
+								for(i=0; i<this._calculated[fields[x]].length; i++) {
+									this._calculated[fields[x]][i] = parseInt(this._calculated[fields[x]][i]);
+								}
+							}
+							break;
+						case "boolean":
+							if(field.type === "object") {
+								keys = Object.keys(this._calculated[fields[x]]);
+								for(i=0; i<keys.length; i++) {
+									this._calculated[fields[x]][keys[i]] = !!this._calculated[fields[x]][keys[i]];
+								}
+							} else if(field.type instanceof Array) {
+								for(i=0; i<this._calculated[fields[x]].length; i++) {
+									this._calculated[fields[x]][i] = !!this._calculated[fields[x]][i];
+								}
+							}
 					}
-				} else if(field.attribute.default) {
-					this._calculated[field.id] = field.attribute.default;
+				}
+				if(field.attribute.deprecated && this._data[field.id] !== null && this._data[field.id] !== undefined && !this._deprecation[field.id]) {
+					console.warn("Deprecated field[" + field.id + "] has value for object[" + this.id + "]");
+					this._deprecation[field.id] = true;
 				}
 			}
 		}
@@ -669,6 +727,13 @@ class RSObject {
 				} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
 					this[field.id] = field.attribute.max;
 				}
+
+				/* Check if an object HAS a deprecated value. Shifted to only warn on PROVIDING deprecated values during calculation
+				if(field.attribute.deprecated && this[field.id] !== null && this[field.id] !== undefined && !this._deprecation[field.id] && fieldHasValue()) {
+					console.warn("Deprecated field[" + field.id + "] has value for object[" + this.id + "]");
+					this._deprecation[field.id] = true;
+				}
+				*/
 			}
 		}
 
@@ -947,6 +1012,8 @@ class RSObject {
 		var result = {},
 			details,
 			field,
+			keys,
+			i,
 			x;
 		
 		for(x=0; x<this._manager.fieldIDs.length; x++) {
@@ -958,6 +1025,28 @@ class RSObject {
 						this._data[field.id] = result[field.id] = field.attribute.max;
 					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
 						this._data[field.id] = result[field.id] = field.attribute.min;
+					}
+					if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
+						result[field.id].splice(field.attribute.limit);
+					}
+					if(result[field.id] && field.attribute.bound_max) {
+						switch(typeof(result[field.id])) {
+							case "number":
+								if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
+									this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
+								}
+								break;
+							case "object":
+								if(typeof(this[field.attribute.bound_max]) === "object") {
+									keys = Object.keys(result[field.id]);
+									for(i=0; i<keys.length; i++) {
+										if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
+											result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
+										}
+									}
+								}
+								break;
+						}
 					}
 				}
 			}
@@ -1008,6 +1097,28 @@ class RSObject {
 						this._data[field.id] = result[field.id] = field.attribute.max;
 					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
 						this._data[field.id] = result[field.id] = field.attribute.min;
+					}
+					if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
+						result[field.id].splice(field.attribute.limit);
+					}
+					if(result[field.id] && field.attribute.bound_min) {
+						switch(typeof(result[field.id])) {
+							case "number":
+								if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
+									this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
+								}
+								break;
+							case "object":
+								if(typeof(this[field.attribute.bound_min]) === "object") {
+									keys = Object.keys(result[field.id]);
+									for(i=0; i<keys.length; i++) {
+										if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
+											result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
+										}
+									}
+								}
+								break;
+						}
 					}
 				}
 			}
@@ -1066,6 +1177,47 @@ class RSObject {
 						this._data[field.id] = result[field.id] = field.attribute.max;
 					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
 						this._data[field.id] = result[field.id] = field.attribute.min;
+					}
+					if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
+						result[field.id].splice(field.attribute.limit);
+					}
+					if(result[field.id] && field.attribute.bound_max) {
+						switch(typeof(result[field.id])) {
+							case "number":
+								if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
+									this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
+								}
+								break;
+							case "object":
+								if(typeof(this[field.attribute.bound_max]) === "object") {
+									keys = Object.keys(result[field.id]);
+									for(i=0; i<keys.length; i++) {
+										if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
+											result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
+										}
+									}
+								}
+								break;
+						}
+					}
+					if(result[field.id] && field.attribute.bound_min) {
+						switch(typeof(result[field.id])) {
+							case "number":
+								if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
+									this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
+								}
+								break;
+							case "object":
+								if(typeof(this[field.attribute.bound_min]) === "object") {
+									keys = Object.keys(result[field.id]);
+									for(i=0; i<keys.length; i++) {
+										if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
+											result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
+										}
+									}
+								}
+								break;
+						}
 					}
 				}
 			}

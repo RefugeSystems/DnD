@@ -40,11 +40,25 @@
 				return this.universe.listing.classes.sort(rsSystem.utility.sortData);
 			},
 			"sources": function() {
+				var sources = [],
+					source,
+					buffer,
+					i;
 				if(this.storage && this.storage.classification && this.universe.listing[this.storage.classification]) {
-					this.universe.listing[this.storage.classification].sort(rsSystem.utility.sortTrueData);
-					return this.universe.listing[this.storage.classification];
+					source = this.universe.listing[this.storage.classification];
+					for(i=0; i<source.length; i++) {
+						buffer = source[i];
+						if(buffer && (buffer.is_template || buffer.is_copy || buffer.is_preview || buffer.is_template || buffer.parent || this.storage.includes._base)
+								&& (!buffer.parent || this.storage.includes._parented)
+								&& (!buffer.is_template || this.storage.includes.is_template)
+								&& (!buffer.is_copy || this.storage.includes.is_copy)
+								&& (!buffer.is_preview || this.storage.includes.is_preview)) {
+							sources.push(buffer);
+						}
+					}
+					sources.sort(rsSystem.utility.sortTrueData);
 				}
-				return [];
+				return sources;
 			},
 			"fields": function() {
 				var fields = [],
@@ -74,6 +88,21 @@
 		"data": function() {
 			var data = {},
 				x;
+
+			data.includes = [
+				"_base",
+				"_parented",
+				"is_template",
+				"is_copy",
+				"is_preview"
+			];
+			data.includeIcons = {
+				"_base": "fas fa-cube",
+				"_parented": "fas fa-folder-tree",
+				"is_template": "fas fa-file-import",
+				"is_copy": "fas fa-copy",
+				"is_preview": "fas fa-search"
+			};
 
 			data.classification = this.$route.params.classification || this.universe.listing.classes[0].id;
 			data.rawValue = "";
@@ -126,6 +155,9 @@
 			if(!this.storage.swap) {
 				Vue.set(this.storage, "swap", {});
 			}
+			if(!this.storage.includes) {
+				Vue.set(this.storage, "includes", {});
+			}
 			if(this.$route.params.classification) {
 				Vue.set(this.storage, "classification", this.$route.params.classification);
 			} else if(!this.storage.classification) {
@@ -134,6 +166,18 @@
 			this.reclassing();
 		},
 		"methods": {
+			"toggleInclude": function(include) {
+				Vue.set(this.storage.includes, include, !this.storage.includes[include]);
+			},
+			"includeClasses": function(include) {
+				var classes = this.includeIcons[include] || "fas fa-square";
+				if(this.storage.includes[include]) {
+					classes += " enabled";
+				} else {
+					classes += " disabled";
+				}
+				return classes;
+			},
 			"usableSource": function(source) {
 				return source.id.indexOf(":preview:") === -1;
 			},

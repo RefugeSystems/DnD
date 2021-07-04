@@ -277,12 +277,11 @@ module.exports = function(universe) {
 			dice = {},
 			x;
 			
-		if(expression) {
-			if(typeof(expression) === "number") {
-				return {
-					"remainder": expression
-				};
-			}
+		if(typeof(expression) === "number") {
+			return {
+				"remainder": expression
+			};
+		} else if(typeof(expression) === "string") {
 			expression = expression.replace(spaces, "");
 			x = diceReductionRegEx.exec(expression);
 			while(x !== null) {
@@ -294,9 +293,12 @@ module.exports = function(universe) {
 				expression = expression.replace(buffer[x], "");
 			}
 			dice.remainder = expression;
+			return dice;
+		} else {
+			return {
+				"remainer": 0
+			};
 		}
-
-		return dice;
 	};
 	
 	/**

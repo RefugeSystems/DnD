@@ -54,11 +54,10 @@ rsSystem.component("chatWindow", {
 					data.name[player.id] = "Master";
 				} else {
 					data.groups.push(player.id);
-					entity = this.universe.getObject(player.attribute.playing_as);
-					if(entity) {
-						data.name[player.id] = entity.nickname || entity.name;
+					if(player.attribute && (entity = this.universe.getObject(player.attribute.playing_as))) {
+						data.name[player.id] = entity.nickname || entity.name || "Unnamed?";
 					} else {
-						data.name[player.id] = player.name;
+						data.name[player.id] = player.name || "Unnamed?";
 					}
 					index = data.name[player.id].indexOf(" ");
 					if(index !== -1) {
@@ -96,8 +95,17 @@ rsSystem.component("chatWindow", {
 		this.chatCore.$on("received", this.receive);
 	},
 	"methods": {
+		"processDrop": function(event) {
+			var data = rsSystem.dragndrop.general.drop();
+			// if(data && (data = this.universe.getObject(data))) {
+			// 	Vue.set(this.storage, "message", this.storage.message + "{{#" +  data.id + "}}");
+			// }
+			if(data) {
+				Vue.set(this.storage, "message", this.storage.message + "{{#" +  data + "}}");
+			}
+			$("#message-text")[0].focus();
+		},
 		"send": function(event) {
-			console.log("Send Event: ", event);
 			if(!event || !event.ctrl) {
 				var message = this.storage.message.trim();
 				if(message) {
@@ -115,7 +123,6 @@ rsSystem.component("chatWindow", {
 			}
 			setTimeout(() => {
 				var found = $(this.$el).find("#" + message.id);
-				console.log("Scroll: ", found, message);
 				if(found && found.length) {
 					found[0].scrollIntoView();
 				}

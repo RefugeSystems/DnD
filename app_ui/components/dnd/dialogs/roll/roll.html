@@ -212,9 +212,17 @@
 		</div>
 	</div>
 	<div class="roll-complete flex h">
-		<button class="general rounded action roll-action" v-if="getResultState() >= 0" v-on:click="sendResults(resists)">
+		<button class="general rounded action roll-action" v-if="details.action && getResultState() >= 0" v-on:click="sendResults(resists)">
 			<span :class="getSendResultIcon()"></span>
 			<span>{{getFinishName()}}</span>
+		</button>
+		<button class="general rounded action roll-action crited" v-if="skills.length" :class="isCritical?'active':''" v-on:click="toggleCritical()">
+			<span class="far" :class="isCritical?'fa-check-square':'fa-square'"></span>
+			<span>Critical</span>
+		</button>
+		<button class="general rounded action roll-action failed" v-if="skills.length" :class="isFailure?'active':''" v-on:click="toggleFailure()">
+			<span class="far" :class="isFailure?'fa-check-square':'fa-square'"></span>
+			<span>Failure</span>
 		</button>
 		<button class="general rounded action roll-action" v-if="rolling.length || damages.length || resists.length" v-on:click="autoRoll()">
 			<span class="game-icon game-icon-rolling-dice-cup"></span>

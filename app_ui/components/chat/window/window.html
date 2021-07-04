@@ -6,17 +6,19 @@
 				<span>{{getGroupName(group)}}</span>
 			</button>
 		</div>
-		<div class="flex v stream grow-1">
+		<div class="flex v stream grow-1" v-on:drop.stop.prevent="processDrop()" v-on:dragover.prevent="">
 			<div class="messages">
 				<chat-stream :universe="universe" :player="player" :profile="profile" :stream="stream"></chat-stream>
 			</div>
 			<div class="send flex h centered">
 				<div class="message text flex v grow-5">
-					<textarea v-model="storage.message" v-on:keypress.enter.stop.prevent="send($event)"></textarea>
+					<textarea id="message-text" v-model="storage.message" v-on:keypress.enter.stop.prevent="send($event)"></textarea>
 				</div>
-				<button class="rounded general quick action send" v-on:click="send()">
-					<span class="fas fa-comment-lines"></span>
-				</button>
+				<div class="flex v send-button">
+					<button class="rounded general quick action send grow-1" v-on:click="send()">
+						<span class="fas fa-comment-lines"></span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>

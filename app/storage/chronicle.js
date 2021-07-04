@@ -38,9 +38,10 @@ class Chronicle extends EventEmitter {
 				this.addOccurrence("object", delta, universe.time, null, delta.id);
 			}
 		};
-		
+		/*
 		universe.on("object-updated", receiveObjectData);
 		universe.on("object-created", receiveObjectData);
+		*/
 	}
 	
 	/**
@@ -121,6 +122,7 @@ class Chronicle extends EventEmitter {
 		values["$timeline"] = timeline || event.timeline || this.universe.timeline || null;
 		values["$time"] = time || event.time || this.universe.time || null;
 		values["$source"] = source || event.source || null;
+		console.log(" > Insert Source: " + values["$source"]);
 		values["$target"] = target || event.target || null;
 		values["$event"] = JSON.stringify(event);
 		values["$type"] = type;
@@ -137,9 +139,19 @@ class Chronicle extends EventEmitter {
 				});
 			}
 		});
+
+		event = Object.assign({}, event);
+		event.source = values["$source"];
+		event.target = values["$target"];
+		event.timeline = values["$timeline"];
+		event.time = values["$time"];
+		event.id = values["$id"];
+		event.type = type;
+		this.emit("added", event);
 		if(count > 1000) {
 			count = 0;
 		}
+
 		return values["$id"];
 	}
 	

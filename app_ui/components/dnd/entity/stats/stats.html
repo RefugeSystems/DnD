@@ -18,7 +18,7 @@
 	<div class="property-container weight">
 		<button class="property" v-on:click="listInventory()">
 			<span class="icon fas" :class="getWeightScales()"></span>
-			<span>{{entity.weight}}</span>
+			<span>{{formatNumber(entity.weight)}}</span>
 		</button>
 	</div>
 	<div class="property-container speed">
@@ -27,7 +27,7 @@
 			<span>{{entity.movement_ground}}</span>
 		</button>
 		<button class="property" v-if="entity.location" v-on:click="info(entity.location)">
-			<span class="icon fas fa-globe"></span>
+			<span class="fas fa-globe"></span>
 		</button>
 	</div>
 	<!--div class="property-container dicebin">

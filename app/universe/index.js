@@ -79,20 +79,20 @@ class Universe extends EventEmitter {
 		/**
 		 * Maps a chronicle type to the ChronicleProcessor that handles it
 		 * @property chronicler
-		 * @type {Object}
+		 * @type Chronicle
 		 */
 		this.chronicler = {};
 		/**
 		 * Maps player IDs to their connection handlers
 		 * @property connection
-		 * @type {Object}
+		 * @type Object
 		 */
 		this.connection = {};
 		this.connected = [];
 		/**
-		 * 
+		 * Maps a class ID to the manager that organizes the data
 		 * @property manager
-		 * @type {Object}
+		 * @type Object | ClassManager
 		 */
 		this.manager = {};
 		
@@ -600,6 +600,27 @@ class Universe extends EventEmitter {
 			this.createObject(details, callback);
 		} else {
 			callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
+		}
+	}
+
+	/**
+	 * 
+	 * @method trackExpiration
+	 * @param {RSObject} expiring 
+	 * @param {String} target RSObject ID. Mostly for effects as items will simply be updated in place
+	 * 		and target will essentially be irrelevent.
+	 * @param {String} field Where the object exists
+	 */
+	trackExpiration(expiring, target, field) {
+		if(expiring.expiration) {
+			// TODO: Setting an expiration in the far future then rewinding time invalidates the previous expirations as they
+			//		are on the abandoned timeline. May need a fallback check on "time_end" field instead of relying on the
+			//		chronicle. Or rescan all items and effects for future endings on a resumed forward.
+			this.chronicle.addOccurrence("object:expiration", {
+				"target": target,
+				"id": expiring.id,
+				"field": field
+			}, expiring.expiration);
 		}
 	}
 	

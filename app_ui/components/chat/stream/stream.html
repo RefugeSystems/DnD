@@ -1,6 +1,6 @@
 <div class="rs-component chat-stream flex v">
 	<div class="container" v-for="message in stream" :class="message.from === player.id?'me':'you'" :id="message.id">
-		<div class="message rsbg-white rs-black">
+		<div class="message rsbg-white rs-black" v-on:drop="processDrop()">
 			<div class="sender">{{printPlayer(message)}}</div>
 			<rs-text-block class="text" :universe="universe" :text="message.text"></rs-text-block>
 			<div class="time">{{printTime(message)}}</div>

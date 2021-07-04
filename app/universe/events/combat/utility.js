@@ -44,11 +44,7 @@ module.exports.initialize = function(universe) {
 	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}) {
 		var tracked = tracking[activity],
 			log = logged[activity],
-			keys = Object.keys(damage),
-			was_damaged = false,
-			received,
-			set = {},
-			i;
+			was_damaged;
 		
 		if(tracked) {
 			clearTimeout(alarms[activity]);
@@ -66,7 +62,124 @@ module.exports.initialize = function(universe) {
 			log.damage = damage;
 			log.resist = resist;
 		}
-		universe.chronicle.addOccurrence("damaged", log, universe.time, log.source, entity.id);
+		universe.chronicle.addOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
+		was_damaged = resolveDamage(entity, damage, resist);
+	};
+
+	/**
+	 * 
+	 * @method finishSave
+	 * @staitc
+	 * @param {String} [activity]
+	 * @param {RSObject} entity 
+	 * @param {Object} save 
+	 * @param {boolean} critical 
+	 * @param {boolean} failure 
+	 */
+	finishSave = module.exports.finishSave = function(activity, entity, save, resist, critical, failure) {
+		var tracked = tracking[activity],
+			log = logged[activity],
+			was_damaged,
+			succeeded,
+			castMask,
+			buffer,
+			keys,
+			i;
+		
+		if(tracked) {
+			clearTimeout(alarms[activity]);
+			delete(tracking[activity]);
+			console.log("Cleared: " + activity);
+			log.activity = activity;
+			log.resist = resist;
+			log.save = save;
+			log.critical = critical;
+			log.failure = failure;
+			log.succeeded = succeeded = tracked.difficulty <= save;
+			universe.emit("send", {
+				"type": "dismiss-message",
+				"mid": activityPrefix + activity,
+				"recipients": tracked.target.owned
+			});
+		} else {
+			log = {};
+			log.activity = activity;
+			log.target = null;
+			log.source = entity.id;
+			log.save = save;
+			log.critical = critical;
+			log.failure = failure;
+		}
+		universe.chronicle.addOccurrence("entity:saved", log, universe.time, log.source, entity.id);
+		if(tracked && tracked.target) {
+			castMask = {};
+			castMask.caster = log.source;
+			castMask.level = log.level;
+			if(tracked.channel && tracked.channel.duration) {
+				castMask.expiration = universe.time + tracked.channel.duration;
+			}
+
+			if(!failure && (critical || succeeded)) {
+				console.log("Succeed [" + save + " vs. DC" + tracked.difficulty + "]");
+				if(tracked.damage) {
+					// TODO: Improve logic for spell damage reduction as cantrip vs. full spell []
+					tracked.resist = tracked.resist || {};
+					if(log.level) {
+						keys = Object.keys(tracked.damage);
+						for(i=0; i<keys.length; i++) {
+							if(tracked.resist[keys[i]]) {
+								tracked.resist[keys[i]] = " + 50%";
+							} else {
+								tracked.resist[keys[i]] = "50%";
+							}
+						}
+					} else {
+						tracked.damage = {};
+					}
+				}
+			} else {
+				console.log("Failure [" + save + " vs. DC" + tracked.difficulty + "]");
+			}
+			was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
+			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
+				for(i=0; i<tracked.channel.instilled.length; i++) {
+					buffer = universe.get(tracked.channel.instilled[i]);
+					if(buffer && ((buffer.damage_required && was_damaged && buffer.hit_required && succeeded === false)
+							|| (buffer.damage_required && was_damaged && !buffer.hit_required)
+							|| (!buffer.damage_required && buffer.hit_required && succeeded === false)
+							|| (!buffer.damage_required && !buffer.hit_required))) {
+						universe.copy(buffer.id, castMask, function(err, effect) {
+							universe.trackExpiration(effect, log.target, "effects");
+							tracked.target.addValues({
+								"effects": [effect.id]
+							});
+						});
+					}
+				}
+			}
+
+
+		} else {
+			// No auto, just log to chronicle
+		}
+		console.log("Finishing Save: ", log);
+	 };
+
+	/**
+	 * 
+	 * @method resolveDamage
+	 * @param {RSObject} entity 
+	 * @param {Object} damage 
+	 * @param {Object} resist 
+	 * @returns {Boolean} True if damage was taken, false otherwise. If healing occurs, this will
+	 * 		return true that "healing" "damage" was taken. Merely indicates HP changed.
+	 */
+	var resolveDamage = function(entity, damage, resist = {}) {
+		var keys = Object.keys(damage),
+			was_damaged = false,
+			received,
+			set = {},
+			i;
 
 		set.hp = entity.hp;
 		for(i = 0; i < keys.length; i++) {
@@ -93,7 +206,7 @@ module.exports.initialize = function(universe) {
 
 		// TODO: Process channel.instilled if any[#178704758]; was_damaged -> effect.damage_required
 		if(set.hp !== entity.hp) {
-
+			was_damaged = true;
 		}
 
 		if(set.hp) {
@@ -108,6 +221,8 @@ module.exports.initialize = function(universe) {
 				
 			}
 		});
+
+		return was_damaged;
 	};
 
 	/**
@@ -119,7 +234,7 @@ module.exports.initialize = function(universe) {
 	 * @param {RSObject | String} [channel] 
 	 * @param {Object} damage 
 	 */
-	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage) {
+	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack) {
 		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
 			target,
@@ -138,6 +253,7 @@ module.exports.initialize = function(universe) {
 				"source": source,
 				"target": target,
 				"channel": channel,
+				"attack": attack,
 				"damage": damage
 			};
 			logged[activity] = {
@@ -145,10 +261,11 @@ module.exports.initialize = function(universe) {
 				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
+				"attack": attack,
 				"damage": damage
 			};
 
-			universe.chronicle.addOccurrence("damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
+			universe.chronicle.addOccurrence("entity:damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
 			sendDamage(activity, source, target, logged[activity].channel, damage);
 		}
 	};
@@ -200,7 +317,9 @@ module.exports.initialize = function(universe) {
 			});
 
 			// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
-			alarms[activity] = setTimeout(notify, 5000);
+			if(tracking[activity]) {
+				alarms[activity] = setTimeout(notify, 5000);
+			}
 		};
 		notify();
 	};
@@ -214,8 +333,15 @@ module.exports.initialize = function(universe) {
 	 * @param {Integer} [level] 
 	 * @param {RSObject | String} [channel] 
 	 * @param {Object} skill 
+	 * @param {Integer} difficulty 
+	 * @param {Object} damage 
 	 */
-	 sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill) {
+	sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill, difficulty, damage) {
+		if(!skill) {
+			// TODO: better error
+			universe.emit("error", new Error("Save called with no skill passed"));
+			return null;
+		}
 		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
 			target,
@@ -237,6 +363,8 @@ module.exports.initialize = function(universe) {
 				"source": source,
 				"target": target,
 				"channel": channel,
+				"damage": damage,
+				"difficulty": difficulty,
 				"skill": skill,
 				"level": level
 			};
@@ -245,12 +373,14 @@ module.exports.initialize = function(universe) {
 				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
+				"difficulty": difficulty,
+				"damage": damage,
 				"skill": skill.id,
 				"level": level
 			};
 
-			universe.chronicle.addOccurrence("saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
-			sendSave(activity, source, target, channel, skill);
+			universe.chronicle.addOccurrence("entity:saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
+			sendSave(activity, source, target, channel, skill, damage);
 		}
 	};
 
@@ -266,38 +396,41 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} [channel] ID for the Spell, Item, or other method through which the damage is being delt, if any.
 	 * @param {String | Object} skill To use for the save
 	 */
-	sendSave = function(activity, source, target, channel, skill) {
+	sendSave = function(activity, source, target, channel, skill, damage) {
 		var notify = function() {
-			var type,
-				icon;
+			if(tracking[activity]) {
+				var type,
+					icon;
 
-			type = (target.nickname || target.name) + " needs to save";
-			icon = "fas fa-save";
+				type = (target.nickname || target.name) + " needs to save";
+				icon = "fas fa-save";
 
-			universe.emit("send", {
-				"type": "notice",
-				"mid": activityPrefix + activity,
-				"message": type + (source?" from " + (source.nickname || source.name):"") + (channel?" against " + channel.name:""),
-				"icon": icon,
-				"anchored": true,
-				"recipients": target.owned || universe.getMasters(),
-				"emission": {
-					"type": "dialog-open",
-					"component": "dndDialogRoll",
-					"storageKey": "store:roll:" + target,
-					"action": "action:save:send",
-					"activity": activity,
-					"source": source?source.id:null,
-					"entity": target.id,
-					"channel": channel.id,
-					"skill": skill.id || skill,
-					"fill_damage": true,
-					"closeAfterAction": true
-				}
-			});
+				universe.emit("send", {
+					"type": "notice",
+					"mid": activityPrefix + activity,
+					"message": type + (source?" from " + (source.nickname || source.name):"") + (channel?" against " + channel.name:""),
+					"icon": icon,
+					"anchored": true,
+					"recipients": target.owned || universe.getMasters(),
+					"emission": {
+						"type": "dialog-open",
+						"component": "dndDialogRoll",
+						"storageKey": "store:roll:" + target,
+						"action": "action:save:send",
+						"activity": activity,
+						"source": source?source.id:null,
+						"entity": target.id,
+						"channel": channel.id,
+						"skill": skill.id || skill,
+						"damage": damage,
+						"fill_damage": true,
+						"closeAfterAction": true
+					}
+				});
 
-			// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
-			alarms[activity] = setTimeout(notify, 5000);
+				// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
+				alarms[activity] = setTimeout(notify, 5000);
+			}
 		};
 		notify();
 	};
@@ -385,7 +518,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.data.damage To take
 	 * @param {Object} event.message.data.resist 
 	 */
-	 universe.on("player:action:damage:recv", function(event) {
+	universe.on("player:action:damage:recv", function(event) {
 		 var entity = universe.get(event.message.data.entity);
 		 if(entity) {
 			 if(entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) {
@@ -394,6 +527,33 @@ module.exports.initialize = function(universe) {
 		} else {
 			// TODO: Log bad event
 			console.log("No entity for taking damage: ", event.message);
+		}
+	});
+
+	/**
+	 * 
+	 * @event player:action:save:send
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 */
+	universe.on("player:action:save:send", function(event) {
+		var entity = universe.get(event.message.data.entity),
+			critical = event.message.data.critical,
+			failure = event.message.data.failure,
+			activity = event.message.data.activity,
+			resist = event.message.data.resist,
+			save = event.message.data.check.computed;
+		
+		if(entity && activity) {
+			finishSave(activity, entity, save, resist, critical, failure);
 		}
 	});
 } ;

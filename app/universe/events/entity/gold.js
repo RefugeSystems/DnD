@@ -29,6 +29,10 @@ module.exports.initialize = function(universe) {
 					target.setValues({
 						"gold": parseInt(target.gold) + amount
 					});
+					universe.chronicler.addOccurrence("entity:give:gold", {
+						"source": entity.id,
+						"amount": amount
+					});
 				} else {
 					// TODO: Warning
 				}
@@ -40,6 +44,11 @@ module.exports.initialize = function(universe) {
 						});
 						target.setValues({
 							"gold": parseInt(target.gold) + amount
+						});
+						universe.chronicler.addOccurrence("entity:give:gold", {
+							"source": entity.id,
+							"target": target.id,
+							"amount": amount
 						});
 					} else {
 						universe.emit("send", {

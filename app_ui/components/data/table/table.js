@@ -65,6 +65,10 @@ rsSystem.component("rsTable", {
 				return {};
 			}
 		},
+		"controls": {
+			"required": false,
+			"type": Array
+		},
 		"size": {
 			"type": Number
 		},
@@ -198,6 +202,15 @@ rsSystem.component("rsTable", {
 			var va = a[this.storage.key || "id"],
 				vb = b[this.storage.key || "id"];
 
+			if(this.sorts[this.storage.key]) {
+				if(this.sorts[this.storage.key](va, vb) < -1) {
+					return this.storage.reverse;
+				} else if(this.sorts[this.storage.key](va, vb) > 1) {
+					return this.storage.order;
+				}
+				return 0;
+			}
+
 			if(va === undefined) {
 				va = null;
 			}
@@ -218,7 +231,7 @@ rsSystem.component("rsTable", {
 			return 0;
 		},
 		"headerAction": function(header) {
-			if(!header.attribute || !header.attribute.no_sort) {
+			if(!header.attribute || !header.attribute.no_sort || this.sorts[header.id]) {
 				if(this.storage.key === header.id) {
 					if(this.storage.order === 1) {
 						Vue.set(this.storage, "reverse", 1);
@@ -246,7 +259,7 @@ rsSystem.component("rsTable", {
 				this.actions[header.id](record, header);
 			} else if(!this.storage.selection) {
 				if(this.storage.selected[record.id]) {
-					Vue.set(this.storage.selected, record.id, false);
+					Vue.delete(this.storage.selected, record.id);
 					this.$emit("deselected", record, header);
 				} else {
 					Vue.set(this.storage.selected, record.id, true);

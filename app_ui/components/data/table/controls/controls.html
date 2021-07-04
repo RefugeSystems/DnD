@@ -4,6 +4,12 @@
 		<span class="search-icon fas fa-search"></span>
 	</div>
 	<div class="controls">
+		<div class="sub-controls" v-if="controls">
+			<button class="ctrl selections info" v-for="control in controls" v-on:click="control.process()" :title="control.title">
+				<span :class="control.icon"></span>
+				<span>{{control.name}}</span>
+			</button>
+		</div>
 		<button class="ctrl selections clear" v-if="selected" v-on:click="clearSelection()">
 			<span class="far fa-ban"></span>
 		</button>

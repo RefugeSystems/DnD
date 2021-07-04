@@ -17,7 +17,7 @@
 		<div class="skills flex h justified" v-if="storage && !storage[section.id]">
 			<div class="skills flex v" v-for="(column, $index) in section.skills" :class="$index?'col_right':'col_left'">
 				<div class="property-container skill flex h" v-for="(skill, $index) in column">
-					<button class="property nowrap" v-on:click="rollSkill(skill)" v-on:click.right.stop.prevent="dismissRoll(skill)" :class="storage && (storage.rolled[skill.id] || storage.rolled[skill.id] === 0)?'marked':''">
+					<button class="property nowrap" v-linkable="skill.id" v-on:click="rollSkill(skill)" v-on:click.right.stop.prevent="dismissRoll(skill)" :class="storage && (storage.rolled[skill.id] || storage.rolled[skill.id] === 0)?'marked':''">
 						<span>{{getValue(skill)}}</span>
 						<span class="seperator skill-icon" :class="getSkillIcon(skill)"></span>
 						<span class="skill-name">{{skill.name}}</span>

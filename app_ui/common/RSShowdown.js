@@ -34,9 +34,14 @@
 		}
 	};
 
+	var compatibility = {
+		"start": new RegExp("\\$\\{", "g"),
+		"end": new RegExp("\\}\\$", "g")
+	};
+
 	var marking = {
-		"start": "${",
-		"end": "}$"
+		"start": "{{",
+		"end": "}}"
 	};
 
 	var notFound = {
@@ -66,6 +71,7 @@
 
 	var formatMarkdown = function(sourceText, universe, entity, allow_js) {
 		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
+		sourceText = sourceText.replace(compatibility.start, marking.start).replace(compatibility.end, marking.end);
 		
 		// Deprecated and Removing
 		var targetObject = null,
@@ -103,17 +109,30 @@
 						properties.id = value[1].trim();
 					case 1:
 						value = value[0];
+						if(!value && properties.id) {
+							buffer = universe.getObject(properties.id);
+							if(buffer) {
+								value = buffer.name;
+							}
+						}
 				}
 			}
 
 			if(value) {
 				// console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
 				if(value[0] === "=") {
+					// Followed value
 					// value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
-					value = naiveObjectValue(universe, entity, value.substring(1));
+					value = value.substring(1);
+					if(isNaN(value)) {
+						value = naiveObjectValue(universe, entity, value);
+					} else {
+						value = parseFloat(value);
+					}
 
 					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
 				} else if(value[0] === "~") {
+					// Walked Reference
 					value = value.substring(1).split(".");
 					if(value.length === 2) {
 						switch(value[0]) {
@@ -132,6 +151,7 @@
 					}
 					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
 				} else if(value[0] === "?") {
+					// Formulas
 					value = value.substring(1).trim();
 					if(properties.id) {
 						buffer = universe.getObject(properties.id) || entity;
@@ -144,10 +164,21 @@
 						element = $("<span class=\"rendered-value value-formula not-found not-known\">Unknown</span>");
 					}
 				} else if(value[0] === "@") {
+					// Time Reference
 					value = value.substring(1).trim();
 					// buffer = universe.calendar.toDisplay(value, false, false);
 					element = $("<span class=\"rendered-value value-formula\"><span class=\"far fa-calendar\"></span> " + value + "</span>");
 				} else if(value[0] === "#") {
+					// ID Reference
+					value = value.substring(1).trim();
+					buffer = universe.getObject(value);
+					if(buffer) {
+						element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + buffer.id + "\">" + buffer.name + "</a>");
+					} else {
+						element = $("<a class=\"rendered-value not-found " + properties.classes + "\" data-id=\"" + value + "\">" + value + "</a>");
+					}
+				} else if(value[0] === "!") {
+					// Icon
 					value = value.substring(1).trim();
 					if(value && (value = universe.getObject(value))) {
 //						value = value;

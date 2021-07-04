@@ -137,6 +137,30 @@ describe("RSObject", function() {
 		expect(res.on.attack.length).toBe(2);
 	});
 	
+	it("can add deeply nested values", function() {
+		var res,
+			a,
+			b;
+		
+		a = {},
+		b = {},
+		res;
+
+		b.slots = {};
+		b.slots[4] = 1;
+			
+		res = RSObject.addObjects(a, b);
+		expect(res.slots["4"]).toBe(1);
+
+		a.slots = {};
+		a.slots[1] = 1;
+		b.slots = {};
+		b.slots[4] = 1;
+			
+		res = RSObject.addObjects(a.slots, b.slots);
+		expect(res["4"]).toBe(1);
+	});
+	
 	it("can subtract from Array values", function() {
 		var a = {},
 			b = {},
@@ -152,7 +176,6 @@ describe("RSObject", function() {
 		b.another = 51;
 
 		res = RSObject.subValues(a.effects, b.effects);
-		console.log("Result: ", res);
 		expect(res.indexOf("b")).toBe(-1);
 		expect(res.indexOf("a")).toBe(0);
 		expect(res.indexOf("c")).toBe(1);
@@ -167,7 +190,6 @@ describe("RSObject", function() {
 		b.effects = {"b": 2, "c": 19};
 
 		res = RSObject.subValues(a, b);
-		console.log("Result: ", res);
 		expect(res.effects.a).toBe(5);
 		expect(res.effects.b).toBe(7);
 		expect(res.effects.c).toBe(-19);

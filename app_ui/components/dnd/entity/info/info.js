@@ -42,6 +42,16 @@ rsSystem.component("dndEntityInfo", {
 	"data": function() {
 		var data = {};
 
+
+		data.shortRest = "action:rest:short";
+		if(this.entity.actions && this.entity.actions.indexOf("action:rest:trance") === -1) {
+			data.longRestIcon = "icon fas fa-bed";
+			data.longRest = "action:rest:long";
+		} else {
+			data.longRestIcon = "icon game-icon game-icon-meditation";
+			data.longRest = "action:rest:trance";
+		}
+
 		return data;
 	},
 	"mounted": function() {
@@ -94,10 +104,6 @@ rsSystem.component("dndEntityInfo", {
 				"targets": list,
 				"entity": this.entity.id
 			});
-		},
-		"useHitDice": function() {
-			// TODO: Hit Dice List or Specialized Widget?
-
 		}
 	},
 	"beforeDestroy": function() {

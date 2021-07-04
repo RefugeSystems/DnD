@@ -34,6 +34,10 @@ rsSystem.component("rsTableControls", {
 			"required": false,
 			"type": Array
 		},
+		"controls": {
+			"required": false,
+			"type": Array
+		},
 		"storage": {
 			"required": true,
 			"type": Object
@@ -57,6 +61,9 @@ rsSystem.component("rsTableControls", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		if(this.storage && !this.storage.selected) {
+			Vue.set(this.storage, "selected", {});
+		}
 	},
 	"methods": {
 		"clearSelection": function() {
@@ -64,7 +71,7 @@ rsSystem.component("rsTableControls", {
 				i;
 
 			for(i=0; i<keys.length; i++) {
-				Vue.set(this.storage.selected, keys[i], false);
+				Vue.delete(this.storage.selected, keys[i]);
 			}
 		},
 		"allSelection": function() {

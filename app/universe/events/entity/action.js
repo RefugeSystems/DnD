@@ -1,5 +1,35 @@
 
 module.exports.initialize = function(universe) {
+	var manager = universe.manager.action;
+
+	// ForEach used to create functional scopes
+	manager.objectIDs.forEach(function(id) {
+		universe.on(id, function(event) {
+			console.log("Response: " + id);
+			var entity = universe.get(event.source || event.entity);
+			if(entity && entity.response && entity.response[id] && entity.response[id].length) {
+				var response,
+					i;
+
+				for(i=0; i<entity.response[id].length; i++) {
+					response = entity.response[id][i];
+					if(response && !response.ui) {
+						if(response.add) {
+							entity.addValues(response.add);
+						}
+						if(response.sub) {
+							entity.subValues(response.sub);
+						}
+						if(response.set) {
+							entity.setValues(response.set);
+						}
+					}
+				}
+			}
+		});
+	});
+
+
 	/**
 	 * Generic action handling routing.
 	 * 
@@ -8,12 +38,13 @@ module.exports.initialize = function(universe) {
 	 * @event player:action:perform
 	 */
 	 universe.on("player:action:perform", function(event) {
-		// console.log("Incoming: ", event.message.data);
+		console.log("Incoming: ", event.message.data);
 
-		var action,
+		var perform,
+			action,
 			source,
-			target,
-			perform;
+			also,
+			i;
 
 		perform = {
 			"type": "entity:action",
@@ -28,16 +59,32 @@ module.exports.initialize = function(universe) {
 			"check": event.message.data.check,
 			"item": event.message.data.using,
 			"name": event.message.data.name,
+			"roll": event.message.data.roll,
 			"player": event.player.id
 		};
 
 		if(perform.action) {
-			if(perform.entity) {
+			action = manager.object[perform.action];
+			if(action && !action.disabled && !action.is_preview && perform.entity) {
+				// perform.action = action;
 				source = universe.get(perform.entity);
 				if(source && (source.played_by === event.player.id || (source.owned && source.owned[event.player.id]) || event.player.gm)) {
+					// perform.entity = source;
 					universe.emit(perform.action, perform);
+
+					if(action.also) {
+						for(i=0; i<action.also.length; i++) {
+							also = manager.object[action.also[i]];
+							if(action && !action.disabled && !action.is_preview) {
+								universe.emit({
+									"emtity": source,
+									"action": also
+								});
+							}
+						}
+					}
 				} else {
-					universe.emit("error", new universe.Anomaly("action:perform:warning", "Player not allowed to perform action for entity", perform, 40, null, "entity:action"));
+					universe.emit("error", new universe.Anomaly("action:perform:error", "Player not allowed to perform action for entity", perform, 50, null, "entity:action"));
 				}
 			} else {
 				universe.emit("error", new universe.Anomaly("action:perform:warning", "No action source found", perform, 40, null, "entity:action"));

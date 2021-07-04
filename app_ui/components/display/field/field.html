@@ -10,15 +10,16 @@
 		<div>
 			<span class="seperator">:</span>
 		</div>
-		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object' && fieldData.type !== 'object:dice'">
+		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object' && fieldData.type !== 'object:dice' && fieldData.type !== 'markdown'">
 			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
 			<span v-else class="text">{{getValue()}}</span>
 		</div>
-		<button class="flat action fas fa-info-circle display-info rs-blue" v-if="fieldData.inheritable && fieldData.type === 'string'" v-on:click="info(object[field])"></button>
+		<button class="flat action fas fa-info-circle display-info rs-blue" v-if="fieldData.inheritable && fieldData.type === 'string'" v-on:click="info(object[field])" v-linkable="object[field]"></button>
 		<button class="flat action fas rs-chevron-circle-down" :class="valuesContainerClass()" v-if="canToggleField" v-on:click="toggleField()"></button>
 		<button class="flat action fad rs-purple" :class="viewInvolved?'fa-layer-minus':'fa-layer-plus'" v-if="hasInvolved()" v-on:click="toggleInvolved()"></button>
 		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula" :title="object._calculated[field]" v-on:click="toggleFormula(object[field])"></button>
 	</div>
+	<div class="markdown" v-if="fieldData.type === 'markdown'" v-html="rsshowdown(object[field])"></div>
 	<div class="formula" v-if="viewFormula">
 		<span class="formula-value">
 			<span class="fas fa-function rs-blue"></span>
@@ -36,7 +37,7 @@
 					<button class="flat action fas fa-info-circle display-info rs-purple" v-if="value.id" v-on:click="info(value)">
 						<!--span class="fas fa-info-circle display-info rs-purple"></span-->
 					</button>
-					<button class="flat action fas rs-blue" :class="detailInvolved[value.id]?'fa-minus-circle':'fa-plus-circle'" v-if="involvesComplex(value.id)" v-on:click="toggleInvolvedDetail(value.id)">
+					<button class="flat action fas rs-blue" :class="detailInvolved[value.id]?'fa-minus-circle':'fa-plus-circle'" v-if="involvesComplex(value.id)" v-on:click="toggleInvolvedDetail(value.id)" v-linkable="value.id">
 						<!--span class="fas fa-info-circle display-info rs-purple"></span-->
 					</button>
 				</div>
@@ -57,7 +58,7 @@
 			<div class="value array flex v" v-if="fieldData.type === 'array'">
 				<div class="element" v-for="value in getArrayValue()">
 					<span class="text">{{getValueDisplay(fieldData, value)}}</span>
-					<button class="flat action" v-if="value.id" v-on:click="info(value)">
+					<button class="flat action" v-if="value.id" v-on:click="info(value)" v-linkable="value.id">
 						<span class="fas fa-info-circle"></span>
 					</button>
 				</div>

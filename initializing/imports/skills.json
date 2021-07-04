@@ -222,6 +222,14 @@
             "ordering": 37,
             "section": "Skill Checks"
         }, {
+            "id": "skill:spellattack",
+            "name": "Spell Attack",
+            "description": "Attack a creature using a spell",
+            "icon": "game-icon game-icon-magic-shield",
+            "stat": "",
+            "ordering": 14,
+            "section": "Combat Skills"
+        }, {
             "id": "skill:kit:disguise",
             "name": "Disguise Kit",
             "description": "Attempt to mask your appear using a kit",

@@ -601,11 +601,33 @@
 			"no_sort": true
 		}
 	}, {
+		"id": "held_by",
+		"name": "Held By",
+		"icon": "far fa-hand-holding",
+		"description": "The entity holding this object",
+		"type": "string",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {
+			"displayed": false,
+			"no_sort": true
+		}
+	}, {
 		"id": "versioning",
 		"name": "Versioning",
 		"description": "Background field used for large text entries to track changes",
 		"type": "integer",
 		"attribute": {}
+	}, {
+		"id": "versions",
+		"name": "Versions",
+		"description": "Stores previous versions of text",
+		"type": "array",
+		"attribute": {
+			"limit": 50,
+			"server_only": true
+		}
 	}, {
 		"id": "audios",
 		"name": "Audios",
@@ -647,7 +669,9 @@
 		"description": "Current health points for this object",
 		"type": "integer",
 		"attribute": {
-			"default": 0
+			"default": 0,
+			"bound_max": "hp_max",
+			"min": 0
 		}
 	}, {
 		"id": "hp_temp",
@@ -671,6 +695,7 @@
 		"description": "Flag to hide this from display to players",
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"displayed": false
 		}
 	}, {
@@ -678,7 +703,10 @@
 		"name": "Spell Slots",
 		"description": "Maps a spell level to the number of spell slots left for that object",
 		"type": "object",
-		"attribute": {}
+		"attribute": {
+			"bound_max": "spell_slot_max",
+			"min": 0
+		}
 	}, {
 		"id": "spell_slot_max",
 		"name": "Max Spell Slots",
@@ -848,6 +876,12 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
+		"id": "cast_attack",
+		"name": "Is Cast Attack",
+		"description": "Indicates this spell is an attack and is against creature Armor instead of a save for taking effect.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
 		"id": "cast_type",
 		"name": "Casting Type",
 		"description": "Usually Spell Cast or Spell Attack",
@@ -911,6 +945,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "cause",
+		"name": "Cause",
+		"description": "The spell that caused this. Typically an effect but possibly the creator of an object as well.",
+		"type": "string",
+		"inheritable": [
+			"spell"
+		],
+		"attribute": {}
+	}, {
 		"id": "instilled",
 		"name": "Instilled",
 		"description": "List of effects to instill on a target as part of taking damage. Leverages the `unique` and `damage_required` fields on effects to determine when/how to add them.",
@@ -926,17 +969,29 @@
 		"type": "boolean",
 		"attribute": {}
 	}, {
+		"id": "hit_required",
+		"name": "Hit Required",
+		"description": "Used for instilling effects on entities from taking successful attacks or failed saves against spells. Notably a spell with effects that have neither damage_required nor hit_required checked will always apply. This condition applying that the Hit roll exceeds AC or that the save is failed.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
 		"id": "is_unique",
 		"name": "Unique",
 		"description": "Flag to indicate that this should only exist once in some context; ie. A unique effect should only exist for an entity once by parental ID",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true,
+			"display_size": 200
+		}
 	}, {
 		"id": "is_owned",
 		"name": "Is Owned",
 		"description": "Quick flag to note that this object is owned by a specific player",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true,
+			"display_size": 200
+		}
 	}, {
 		"id": "is_default",
 		"name": "Is Default",
@@ -944,6 +999,7 @@
 		"ordering": 730,
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"display_size": 200
 		}
 	}, {
@@ -953,6 +1009,7 @@
 		"ordering": 700,
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"display_size": 200
 		}
 	}, {
@@ -962,6 +1019,7 @@
 		"ordering": 705,
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"display_size": 200
 		}
 	}, {
@@ -1196,10 +1254,8 @@
 		"id": "backstory",
 		"name": "Back Story",
 		"description": "Backstory for this existance",
-		"type": "string",
-		"attribute": {
-			"long_text": true
-		}
+		"type": "markdown",
+		"attribute": {}
 	}, {
 		"id": "caster",
 		"name": "Caster",
@@ -1365,6 +1421,7 @@
 			"weight_max": "+",
 			"hit_dice_max": "+",
 			"proficiencies": "+",
+			"response": "+",
 			"skills": "+",
 			"equip_slots": "+",
 			"conditionals": "+"
@@ -1571,6 +1628,15 @@
 			"default": false
 		}
 	}, {
+		"id": "is_sharing",
+		"name": "Is Sharing",
+		"description": "When true, this creature is sharing its inventory.",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false,
+			"default": false
+		}
+	}, {
 		"id": "death_save",
 		"name": "Death Saves",
 		"description": "Numer of successful death saves",
@@ -1633,7 +1699,7 @@
 		"id": "notes",
 		"name": "Notes",
 		"description": "General text for notes taken by this object.",
-		"type": "string",
+		"type": "markdown",
 		"attribute": {}
 	}, {
 		"id": "equipped",
@@ -1818,11 +1884,12 @@
 	}, {
 		"id": "skill_advantage",
 		"name": "Advantage",
-		"description": "Counts the amount of advantage this object has towards a skill check.",
+		"description": "Counts the amount of advantage this object has towards a skill check. Negative advantage here represents disadvantage on the check",
 		"type": "object",
 		"attribute": {
 			"inherited_key": "skill",
-			"display": false
+			"display": false,
+			"nested_value_type": "number"
 		}
 	}, {
 		"id": "skill_disadvantage",
@@ -1830,6 +1897,7 @@
 		"description": "Counts the amount of disadvantage this object has towards a skill check.",
 		"type": "object",
 		"attribute": {
+			"deprecated": "Use negative skill_advantage",
 			"inherited_key": "skill",
 			"display": false
 		}
@@ -1947,7 +2015,7 @@
 	}, {
 		"id": "dc",
 		"name": "DC",
-		"description": "The Difficulty Check associated with this object.",
+		"description": "The Difficulty Check associated with this object. The default for this when a creature is using it is generally that creature's {{Spell DC}}",
 		"type": "calculated",
 		"attribute": {}
 	}, {
@@ -1979,13 +2047,18 @@
 		"name": "Attunes",
 		"description": "Indicates if this object can attune to another object.",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "attunement_locked",
 		"name": "Attunement Locked",
 		"description": "Indicates if this object can be unattuned voluntarily.",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true,
+			"displayed": false
+		}
 	}, {
 		"id": "attuned",
 		"name": "Attuned",
@@ -1997,25 +2070,32 @@
 		"inheritable": [
 			"entity"
 		],
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "unattunable",
 		"name": "Unattunable",
 		"description": "When true, this object can not be unattuned as an action.",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "is_active",
 		"name": "Active",
 		"description": "Flag to mark this as a current or active object.",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"display_size": 200
+		}
 	}, {
 		"id": "weight",
 		"name": "Weight",
 		"description": "The weight of this object",
 		"type": "integer",
 		"attribute": {
+			"hide_when_not_set": true,
 			"default": 0,
 			"min": 0
 		}
@@ -2025,6 +2105,7 @@
 		"description": "The maximum weight of this object",
 		"type": "calculated",
 		"attribute": {
+			"hide_when_not_set": true,
 			"default": 0,
 			"min": 0
 		}
@@ -2034,6 +2115,7 @@
 		"description": "The maximum weight of this object",
 		"type": "calculated",
 		"attribute": {
+			"hide_when_not_set": true,
 			"default": 0,
 			"min": 0
 		}
@@ -2062,6 +2144,7 @@
 		"description": "The main stat for this object",
 		"type": "string",
 		"attribute": {
+			"hide_when_not_set": true,
 			"searchable": true
 		}
 	}, {
@@ -2069,7 +2152,9 @@
 		"name": "Max Attuned",
 		"description": "Maximum number of attunements",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "encumberance",
 		"name": "encumberance",
@@ -2092,6 +2177,7 @@
 		"ordering": 300,
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"displayed_size": 90
 		}
 	}, {
@@ -2114,7 +2200,8 @@
 		"ordering": 100,
 		"type": "boolean",
 		"attribute": {
-			"displayed_size": 100
+			"hide_when_not_set": true,
+			"displayed_size": 200
 		}
 	}, {
 		"id": "enchantments",
@@ -2167,6 +2254,7 @@
 		"ordering": 300,
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"displayed_size": 90
 		}
 	}, {
@@ -2176,6 +2264,7 @@
 		"ordering": 300,
 		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"displayed_size": 90
 		}
 	}, {
@@ -2185,6 +2274,7 @@
 		"type": "string",
 		"ordering": 1,
 		"attribute": {
+			"hide_when_not_set": true,
 			"displayed_size": 100
 		}
 	}, {
@@ -2347,13 +2437,33 @@
 			"display_size": 10
 		}
 	}, {
-		"id": "critical",
+		"id": "attack_critical",
 		"name": "Critical",
 		"description": "The minimum number needed to roll for an attack to be considered a critical strike.",
 		"type": "integer",
 		"attribute": {
 			"display_size": 70,
 			"default": 20,
+			"min": 0
+		}
+	}, {
+		"id": "skill_critical",
+		"name": "Critical",
+		"description": "The minimum number at which a skill check is considered to be a critical success.",
+		"type": "integer",
+		"attribute": {
+			"display_size": 70,
+			"default": 20,
+			"min": 0
+		}
+	}, {
+		"id": "skill_failure",
+		"name": "Failure",
+		"description": "The maximum number at which a skill check is considered to be a critical fail.",
+		"type": "integer",
+		"attribute": {
+			"display_size": 70,
+			"default": 1,
 			"min": 0
 		}
 	}, {
@@ -2389,10 +2499,27 @@
 		"id": "note",
 		"name": "Note",
 		"description": "Game Master note.",
-		"type": "string",
+		"type": "markdown",
 		"attribute": {
 			"display_size": 200,
 			"master_only": true
+		}
+	}, {
+		"id": "inventory_share",
+		"name": "Share Inventory",
+		"description": "Flag to share your inventory with companions.",
+		"type": "boolean",
+		"ordering": 910,
+		"attribute": {}
+	}, {
+		"id": "inventory_hidden",
+		"name": "Hidden Inventory",
+		"description": "List of items in your inventory to hide from sharing.",
+		"type": "object",
+		"ordering": 915,
+		"attribute": {
+			"inherited_key": "item",
+			"display": 200
 		}
 	}, {
 		"id": "concentration",

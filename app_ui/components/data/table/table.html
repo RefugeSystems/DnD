@@ -1,5 +1,5 @@
 <div class="rs-table system-component table-index">
-	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :corpus="corpus" v-on:info="info($event)"/>
+	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :corpus="corpus" v-on:info="info($event)"/>
 	<div class="table-container" v-if="storage">
 		<table class="table-element" :class="storage.classes">
 			<thead>
@@ -7,7 +7,7 @@
 					<th v-for="header in headers">
 						<button class="title actionable table-content" v-on:click="headerAction(header)" :class="header.thClass" v-if="!hidden[header.id]">
 							<span class="sort fas" v-if="storage.key === header.id" :class="{'fa-sort-down':storage.order === 1, 'fa-sort-up':storage.order === -1}"></span>
-							<span class="sort fas fa-sort" v-if="(!header.attribute || !header.attribute.no_sort) && storage.key !== header.id"></span>
+							<span class="sort fas fa-sort" v-if="(!header.attribute || !header.attribute.no_sort || sorts[header.id]) && storage.key !== header.id"></span>
 							<span>{{header.name}}</span>
 						</button>
 					</th>

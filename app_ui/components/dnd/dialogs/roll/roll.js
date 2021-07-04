@@ -252,15 +252,22 @@ rsSystem.component("dndDialogRoll", {
 			}
 		}
 		data.damages.sort(rsSystem.utility.sortData);
+		data.isCritical = false;
+		data.isFailure = false;
 
 		data.skills = [];
 		if(this.details.skill) {
+			if(typeof(this.details.skill) === "string") {
+				skill = this.universe.index.skill[this.details.skill];
+			} else {
+				skill = this.details.skill;
+			}
 			roll = {
 				"computed": "",
 				"formula": "1d20",
 				"dice_rolls": {},
-				"skill": this.details.skill,
-				"key": this.details.skill
+				"skill": skill,
+				"key": skill.id
 			};
 			if(data.entity && data.entity.skill_check && data.entity.skill_check[roll.skill.id]) {
 				roll.formula += " + " + data.entity.skill_check[roll.skill.id];
@@ -303,6 +310,7 @@ rsSystem.component("dndDialogRoll", {
 		if(!this.storage.rolls) {
 			this.storage.rolls = [];
 		}
+		console.log(" Skills: ", _p(this.skills));
 		if(this.skills.length === 1) {
 			var find = $(this.$el).find("#" + this.skills[0].skill.id.substring(7));
 			if(find && find.length) {
@@ -311,6 +319,26 @@ rsSystem.component("dndDialogRoll", {
 		}
 	},
 	"methods": {
+		"toggleFailure": function(state) {
+			if(state === undefined) {
+				Vue.set(this, "isFailure", !this.isFailure);
+			} else {
+				Vue.set(this, "isFailure", state);
+			}
+			if(this.isFailure) {
+				Vue.set(this, "isCritical", false);
+			}
+		},
+		"toggleCritical": function(state) {
+			if(state === undefined) {
+				Vue.set(this, "isCritical", !this.isCritical);
+			} else {
+				Vue.set(this, "isCritical", state);
+			}
+			if(this.isCritical) {
+				Vue.set(this, "isFailure", false);
+			}
+		},
 		"dismissDamage": function(roll) {
 			Vue.set(this.damageActive, roll.key.id, false);
 			this.damages.purge(roll);
@@ -391,6 +419,19 @@ rsSystem.component("dndDialogRoll", {
 			var footnote;
 			if(event.dice_rolls.vantage) {
 				footnote = event.dice_rolls.vantage[0] + " (" + event.dice_rolls.vantage[1] + ")";
+			}
+			console.log("Rec: ", event);
+			if(event.dice_rolls && event.dice_rolls.d20) {
+				if(event.dice_rolls.d20[0] === 20) {
+					Vue.set(this, "isCritical", true);
+					Vue.set(this, "isFailure", false);
+				} else if(event.dice_rolls.d20[0] === 1) {
+					Vue.set(this, "isCritical", false);
+					Vue.set(this, "isFailure", true);
+				} else {
+					Vue.set(this, "isCritical", false);
+					Vue.set(this, "isFailure", false);
+				}
 			}
 			if(typeof(this.waiting[event.callback_id]) === "number") {
 				event.delay = Date.now() - this.waiting[event.callback_id];
@@ -533,10 +574,10 @@ rsSystem.component("dndDialogRoll", {
 				var advantage = 0;
 	
 				if(this.entity.skill_advantage && this.entity.skill_advantage[this.skills[0].skill.id] && this.entity.skill_advantage[this.skills[0].skill.id] !== "0") {
-					advantage += parseInt(this.entity.skill_advantage[this.skills[0].skill.id] || 1);
+					advantage += parseInt(this.entity.skill_advantage[this.skills[0].skill.id]) || 1;
 				}
 				if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[this.skills[0].skill.id] && this.entity.skill_disadvantage[this.skills[0].skill.id] !== "0") {
-					advantage -= parseInt(this.entity.skill_disadvantage[this.skills[0].skill.id] || 1);
+					advantage -= parseInt(this.entity.skill_disadvantage[this.skills[0].skill.id]) || 1;
 				}
 				// console.log("Advantage: ", advantage, this.entity.skill_advantage);
 				this.rollSkill(this.skills[0], advantage);
@@ -583,6 +624,8 @@ rsSystem.component("dndDialogRoll", {
 			sending.name = check.skill.name;
 			sending.skill = check.skill.id;
 			sending.dice = check.dice_rolls;
+			sending.critical = !!this.isCritical;
+			sending.failure = !!this.isFailure;
 			if(this.details.action) {
 				sending.action = this.details.action.id;
 			}
@@ -615,21 +658,14 @@ rsSystem.component("dndDialogRoll", {
 		},
 		"getSkillDisIcon": function(check) {
 			var skill = check.skill,
-				classes = "",
-				advantage = 0;
+				classes = "";
 
-			if(this.entity.skill_advantage && this.entity.skill_advantage[skill.id] && this.entity.skill_advantage[skill.id] !== "0") {
-				advantage += parseInt(this.entity.skill_advantage[skill.id] || 1);
-			}
-			if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[skill.id] && this.entity.skill_disadvantage[skill.id] !== "0") {
-				advantage -= parseInt(this.entity.skill_disadvantage[skill.id] || 1);
-			}
-			if(advantage > 0) {
-				// Advantage in separate method
-			} else if(advantage < 0) {
+			if(this.entity.skill_advantage[skill.id] > 0) {
+				classes += " has-advantage";
+			} else if(this.entity.skill_advantage[skill.id] < 0) {
 				classes += " has-disadvantage";
 			}
-
+	
 			return classes;
 		},
 		"clearSkill": function(skill) {
@@ -707,6 +743,19 @@ rsSystem.component("dndDialogRoll", {
 				Vue.set(roll, "computed", store - rolled);
 			} else {
 				Vue.set(roll, "computed", store + rolled);
+			}
+
+			if(die === "d20") {
+				if(rolled >= this.entity.skill_critical) {
+					Vue.set(this, "isCritical", true);
+					Vue.set(this, "isFailure", false);
+				} else if(rolled <= this.entity.skill_failure) {
+					Vue.set(this, "isCritical", false);
+					Vue.set(this, "isFailure", true);
+				} else {
+					Vue.set(this, "isCritical", false);
+					Vue.set(this, "isFailure", false);
+				}
 			}
 
 			store = {
@@ -825,6 +874,7 @@ rsSystem.component("dndDialogRoll", {
 				keys,
 				i;
 
+				
 			if(state > 0 && this.warn < state) {
 				Vue.set(this, "warn", this.warn + 1);
 			} else if(state < 0) {
@@ -862,6 +912,12 @@ rsSystem.component("dndDialogRoll", {
 						perform.check.skill = perform.check.skill.id;
 					}
 					delete(perform.check.key);
+				} else if(this.skills.length === 1 && (this.skills[0].result !== undefined || this.skills[0].computed !== undefined)) {
+					perform.check = Object.assign({}, this.skills[0]);
+					if(perform.check.skill) {
+						perform.check.skill = perform.check.skill.id;
+					}
+					delete(perform.check.key);
 				}
 				if(this.statusResponse) {
 					perform.status = this.statusResponse;
@@ -888,6 +944,8 @@ rsSystem.component("dndDialogRoll", {
 				if(this.details.spellLevel !== undefined) {
 					perform.spellLevel = parseInt(this.details.spellLevel) || 0;
 				}
+				perform.critical = !!this.isCritical;
+				perform.failure = !!this.isFailure;
 
 				console.log("Performing: ", perform);
 				if(perform.action && perform.action !== "action:free:damage") {

@@ -143,7 +143,7 @@ fields.push({
 	"id": "description",
 	"name": "Description",
 	"description": "The description of the object.",
-	"type": "string",
+	"type": "markdown",
 	"attribute": {
 		"display_size": 110,
 		"displayed": false,
@@ -345,6 +345,7 @@ fields.push({
 	"description": "Flag to mark this object as a preview of something and not an actual object",
 	"type": "boolean",
 	"attribute": {
+		"hide_when_not_set": true,
 		"displayed": false
 	}
 });

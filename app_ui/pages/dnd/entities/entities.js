@@ -20,6 +20,9 @@ rsSystem.component("DNDEntities", {
 			"required": true,
 			"type": Object
 		},
+		"profile": {
+			"type": Object
+		},
 		"configuration": {
 			"required": true,
 			"type": Object
@@ -36,6 +39,9 @@ rsSystem.component("DNDEntities", {
 			if(this.main && this.main.location) {
 				return this.universe.index.location[this.main.location];
 			}
+		},
+		"page": function() {	
+			return this.universe.index.page[this.player.attribute.notes_page];
 		},
 		"meeting": function() {
 			var meet,
@@ -73,7 +79,7 @@ rsSystem.component("DNDEntities", {
 			if(this.meeting && this.meeting.entities) {
 				for(x=0; x<this.meeting.entities.length; x++) {
 					entity = this.universe.index.entity[this.meeting.entities[x]];
-					if(entity && entity.id !== this.main.id && !entity.is_preview && !entity.disabled && !entity.obscured) {
+					if(entity && (!this.main || entity.id !== this.main.id) && !entity.is_preview && !entity.disabled && !entity.obscured) {
 						entities.uniquely(entity);
 					}
 				}
@@ -112,13 +118,41 @@ rsSystem.component("DNDEntities", {
 		data.nearbyMinion = this.universe.index.dashboard["dashboard:entity:minion"];
 		data.nearbyFriend = this.universe.index.dashboard["dashboard:entity:friendly"];
 
+		data.controls = [];
+		data.notes = "";
+
 		return data;
+	},
+	"watch": {
+		"notes": function(notes, old) {
+			if(this.page) {
+				this.universe.send("page:update", {
+					"page": this.page.id,
+					"text": notes
+				});
+			}
+		}
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
+		if(!this.storage.notes) {
+			Vue.set(this.storage, "notes", {
+				"state": true
+			});
+			this.toggleNotes();
+		}
+		if(this.page) {
+			Vue.set(this, "notes", this.page.description);
+		}
 	},
 	"methods": {
+		"processDrop": function(event) {
+			var data = rsSystem.dragndrop.general.drop();
+			if(data && (data = this.universe.getObject(data))) {
+				Vue.set(this, "notes", this.notes + "{{" + data.name + ", " + data.id + "}}");
+			}
+			$("#player-note-page")[0].focus();
+		},
 		"createPlayer": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndCreateCharacterDialog",
@@ -135,6 +169,37 @@ rsSystem.component("DNDEntities", {
 			}
 
 			return this.nearbyDashboard;
+		},
+		"toggleNotes": function(swap) {
+			// TODO: Clean up open/swap logic
+			if(swap) {
+				if(!this.storage.notes.state) {
+					Vue.set(this.storage.notes, "icon", "game-icon game-icon-tied-scroll");
+					Vue.set(this.storage.notes, "state", true);
+				}
+				Vue.set(this.storage.notes, "swap", !this.storage.notes.swap);
+			} else {
+				if(this.storage.notes.state) {
+					Vue.set(this.storage.notes, "icon", "game-icon game-icon-scroll-quill");
+					Vue.set(this.storage.notes, "state", false);
+				} else {
+					Vue.set(this.storage.notes, "icon", "game-icon game-icon-tied-scroll");
+					Vue.set(this.storage.notes, "state", true);
+				}
+			}
+			var area;
+			if(this.storage.notes.state) {
+				area = "open";
+				if(this.storage.notes.swap) {
+					area += " swap";
+				}
+			} else {
+				area = "closed";
+			}
+			Vue.set(this.storage.notes, "area", area);
+		},
+		"fireControl": function(control) {
+
 		}
 	},
 	"beforeDestroy": function() {

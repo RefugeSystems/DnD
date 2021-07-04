@@ -5,12 +5,12 @@
 			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
 		</button>
 		<div class="feats flex h wrap hidden-list" v-if="storage && storage.show_hidden">
-			<button class="feat rounded general quick action hidden-shadow" v-for="feat in feats.hidden" v-on:click="info(feat)" v-on:click.right.prevent.stop="toggleHide(feat)">
+			<button class="feat rounded general quick action hidden-shadow" v-for="feat in feats.hidden" v-on:click="info(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id">
 				<span class="action-icon" :class="feat.icon"></span>
 				<span class="action-count" v-if="feat.charges !== undefined && feat.charges !== null">{{feat.charges}}</span>
 			</button>
 		</div>
-		<button class="feat rounded general quick action" v-for="feat in feats.shown" v-on:click="info(feat)" v-on:click.right.prevent.stop="toggleHide(feat)">
+		<button class="feat rounded general quick action" v-for="feat in feats.shown" v-on:click="info(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id">
 			<span class="action-icon" :class="feat.icon"></span>
 			<span class="action-count" v-if="feat.charges !== undefined && feat.charges !== null">{{feat.charges}}</span>
 		</button>

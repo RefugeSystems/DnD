@@ -192,13 +192,30 @@ rsSystem.component("dndEntitySpells", {
 		"cast": function(spell) {
 			var available = this.slotAvailable(this.storage.slot);
 			console.log("Cast: ", available, spell);
-			if(available > 0) {
+			if(!this.profile.enforce_requirements || available > 0) {
 				console.log("Cast[" + this.storage.slot + "]: " + spell.id, spell);
 				this.castSpell(this.storage.slot, spell);
 			}
 		},
+		"incrementSlot": function(slot) {
+			console.log("Increment: ", slot);
+			this.universe.send("slot:changes", {
+				"entity": this.entity.id,
+				"changes": 1,
+				"slot": slot
+			});
+		},
 		"use": function(slot) {
-			Vue.set(this.storage, "slot", parseInt(slot));
+			if(this.storage.slot == slot) {
+				console.log("Decrement: ", slot);
+				this.universe.send("slot:changes", {
+					"entity": this.entity.id,
+					"changes": -1,
+					"slot": slot
+				});
+			} else {
+				Vue.set(this.storage, "slot", parseInt(slot));
+			}
 		}
 	},
 	"beforeDestroy": function() {

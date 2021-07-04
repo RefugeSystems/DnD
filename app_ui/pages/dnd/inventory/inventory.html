@@ -1,3 +1,6 @@
 <div class="rs-page dnd-page dnd-inventory">
-	
+	<div class="flex v">
+		<h1 class="today">Today: {{today}}</h1>
+		<rs-table :universe="universe" :source="inventory" :storage-container="storage" :headings="headings" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls"/>
+	</div>
 </div>

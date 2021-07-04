@@ -7,15 +7,38 @@
 	.sourcing {
 		margin: 4px 0px;
 
-		span {
+		.labeling {
 			display: inline-block;
 			text-align: right;
 			width: 50px;
 		}
 
-		select {
-			width: 360px;
+		.include {
+			font-size: 20px;
+			margin: 5px;
 		}
+
+		.ctrl-row {
+			align-content: center;
+		}
+
+		select {
+			// width: 360px;
+		}
+	}
+
+	.include {
+		border-radius: 5px;;
+	}
+
+	.enabled {
+		border: 1px solid @rsGreen;
+		box-shadow: 0px 0px 6px @rsLightGreen;
+	}
+
+	.disabled {
+		border: 1px solid @rsRed;
+		box-shadow: 0px 0px 6px @rsLightRed;
 	}
 
 	.building {

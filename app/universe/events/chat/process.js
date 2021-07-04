@@ -19,7 +19,7 @@ var Random = require("rs-random");
 
 module.exports.initialize = function(universe) {
 	universe.on("player:chat", function(event) {
-		console.log("Received Chat: ", event.message);
+		// console.log("Received Chat: ", event.message);
 		universe.chronicle.addOccurrence("chat", event.message, universe.time, event.player.id, event.message.group);
 
 		var chat = {},

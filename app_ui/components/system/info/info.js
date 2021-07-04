@@ -114,6 +114,9 @@
 			this.checkView();
 		},
 		"methods": {
+			"processDrag": function(record) {
+				rsSystem.dragndrop.general.drag(record.id);
+			},
 			"getTabIndex": function() {
 				return this.open?5:-1;
 			},

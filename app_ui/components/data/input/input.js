@@ -60,7 +60,7 @@ rsSystem.component("rsInput", {
 				if(Date.now() > this.update) {
 					this.changed();
 				} else {
-					this.timeout = setTimeout(process, this.delay);
+					this.timeout = setTimeout(this.process, this.delay);
 				}
 			} else {
 				this.changed();

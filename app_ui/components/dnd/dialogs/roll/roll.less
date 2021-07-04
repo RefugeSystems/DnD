@@ -8,6 +8,7 @@
 		box-shadow: 0px 0px 5px @rsWhite;
 		border-radius: 5px;
 		min-width: 40px;
+		flex-shrink: 0;
 
 		& > * {
 			text-align: center;
@@ -22,6 +23,22 @@
 		.target {
 			box-shadow: 0px 0px 10px @rsGreen !important;
 			border-width: 0px;
+		}
+	}
+
+
+	.crited.active {
+		box-shadow: 0px 0px 5px @rsLightGreen;
+		.far {
+			color: @rsLightGreen;
+		}
+	}
+
+	.failed.active {
+		box-shadow: 0px 0px 5px @rsLightRed;
+		
+		.far {
+			color: @rsLightRed;
 		}
 	}
 
@@ -45,7 +62,8 @@
 	}
 
 	.to-roll {
-		margin: 5px 0px;
+		padding: 5px 0px;
+		overflow: auto;
 
 		.roll.quick.action {
 			margin: 0px 0px 0px 5px;

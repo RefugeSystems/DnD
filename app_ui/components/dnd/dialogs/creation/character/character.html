@@ -5,8 +5,8 @@
 				<div class="selection input">
 					<table>
 						<tr>
-							<td class="align-right align-top">Name:</td>
-							<td><input type="text" v-model="building.name" /></td>
+							<td class="align-right align-middle">Name:</td>
+							<td class="align-middle"><input type="text" v-model="building.name" /></td>
 							<td>
 								<button class="general quick action" v-for="dataset in nameGenerators" v-on:click="randomName(dataset)">
 									<span :class="dataset.icon"></span>

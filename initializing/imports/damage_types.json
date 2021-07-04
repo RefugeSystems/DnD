@@ -102,6 +102,12 @@
 			"ordering": 85,
             "icon": "game-icon game-icon-abstract-047"
         }, {
+            "id": "damage_type:sleep",
+            "name": "Sleep",
+            "description": "If the remaining HP of a creature is matched in ${Sleep}$ damage, then the creature falls unconscious.",
+			"ordering": 100,
+            "icon": "game-icon game-icon-sleepy"
+        }, {
             "id": "damage_type:heal",
             "name": "Heal",
             "description": "Heal damage to to creature",

@@ -5,11 +5,11 @@
 			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
 		</button>
 		<div class="feats flex h wrap hidden-list" v-if="storage && storage.show_hidden">
-			<button class="feat rounded general quick action hidden-shadow" v-for="effect in effects.hidden" v-on:click="info(effect)" v-on:click.right.prevent.stop="toggleHide(effect)">
+			<button class="feat rounded general quick action hidden-shadow" v-for="effect in effects.hidden" v-on:click="info(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id">
 				<span class="action-icon" :class="effectClasses(effect)"></span>
 			</button>
 		</div>
-		<button class="effect rounded general quick action" v-for="effect in effects.shown" v-on:click="info(effect)" v-on:click.right.prevent.stop="toggleHide(effect)">
+		<button class="effect rounded general quick action" v-for="effect in effects.shown" v-on:click="info(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id">
 			<span class="action-icon" :class="effectClasses(effect)"></span>
 		</button>
 	</div>

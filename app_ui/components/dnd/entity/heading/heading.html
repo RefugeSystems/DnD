@@ -1,6 +1,6 @@
 <div class="rs-component dnd-component entity-heading">
 	<div class="justified flex h bar">
-		<div class="property-container name flex h centered">
+		<div class="property-container name flex h centered" v-linkable="entity.id">
 			<button class="property" v-on:click="info(entity)">
 				{{entity.nickname || entity.name}}
 			</button>

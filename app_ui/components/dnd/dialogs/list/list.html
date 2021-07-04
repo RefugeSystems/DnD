@@ -29,6 +29,12 @@
 						<h3>{{entry.name}}</h3>
 						<div v-if="details.note" v-html="details.note(section, entry)"></div>
 						<div class="list-data-description" v-if="entry.description" v-html="rsshowdown(entry.description, entry)"></div>
+						<ul class="list-data-related" v-if="details.related && details.related[entry.id]">
+							<li v-for="related in details.related[entry.id]">
+								<a v-if="related.id" :data-id="related.id">{{related.name}}</a>
+								<span v-else>{{related}}</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>

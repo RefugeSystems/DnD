@@ -18,12 +18,14 @@ module.exports.initialize = function(universe) {
 		 * @param {Object} event.message.type Original event type indicated by the UI
 		 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
 		 * @param {Object} event.message.data Typical location of data from the UI
+		 * @param {Object} event.message.data.attack Roll value
 		 */
 		universe.on("player:action:main:cast", function(event) {
 			console.log(event.message.data);
 			var spell = universe.get(event.message.data.spell),
 				damage = event.message.data.result || {},
 				level = parseInt(event.message.data.spellLevel),
+				attack = event.message.data.attack,
 				targets = [],
 				source,
 				load,
@@ -51,7 +53,13 @@ module.exports.initialize = function(universe) {
 					}
 				}
 	
-				utility.sendSaves(source, targets, level, spell, spell.cast_save);
+				if(spell.cast_save) {
+					utility.sendSaves(source, targets, level, spell, spell.cast_save, source.spell_dc, damage);
+				} else if(spell.cast_attack) {
+					utility.sendDamages(source, targets, level, spell, damage, attack);
+				} else {
+					console.log("Unclassed spell? " + spell.id);
+				}
 				
 				load = {};
 				load.spell_slots = {};

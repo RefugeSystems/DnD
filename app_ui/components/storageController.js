@@ -13,6 +13,9 @@ rsSystem.component("StorageController", {
 		"storageKey": {
 			"type": String
 		},
+		"storageContainer": {
+			"type": Object
+		},
 		"defaultStorage": {
 			"type": Object,
 			"default": function() {
@@ -23,7 +26,11 @@ rsSystem.component("StorageController", {
 	"data": function() {
 		// console.log("Loading Controller[" + this.storageKey + "]: ", this);
 		var data = {};
-		data.storage = this.loadStorage();
+		if(this.storageContainer) {
+			data.storage = this.storageContainer;
+		} else {
+			data.storage = this.loadStorage();
+		}
 		return data;
 	},
 	"watch": {
@@ -39,17 +46,17 @@ rsSystem.component("StorageController", {
 	},
 	"methods": {
 		"loadStorage": function(defaults) {
-			if(this.storageKey) {
+			if(this.storageKey && !this.storageContainer) {
 				var data = localStorage.getItem(this.storageKey);
 				if(data) {
 					return JSON.parse(data);
 				} else {
-					return defaults || this.defaultStorage;
+					return defaults || this.defaultStorage || {};
 				}
 			}
 		},
 		"saveStorage": function() {
-			if(this && this.storageKey) {
+			if(this && this.storageKey && !this.storageContainer) {
 				localStorage.setItem(this.storageKey, JSON.stringify(this.storage));
 			}
 		},

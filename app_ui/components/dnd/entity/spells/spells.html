@@ -18,7 +18,7 @@
 	</div>
 	<div class="flex h" v-if="!storage.collapsed">
 		<div class="flex v slots">
-			<button class="general rounded slot action" v-for="slot in slots" v-on:click="use(slot)" :class="getSlotClass(slot)" :title="getSlotTitle(slot)">
+			<button class="general rounded slot action" v-for="slot in slots" v-on:click="use(slot)" v-on:click.right.stop.prevent="incrementSlot(slot)" :class="getSlotClass(slot)" :title="getSlotTitle(slot)">
 				<span class="text">{{slot}}</span>
 				<span :class="getSlotIcon(slot)"></span>
 				<span class="text">{{slotAvailable(slot)}}</span>

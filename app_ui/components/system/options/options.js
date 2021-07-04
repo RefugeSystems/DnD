@@ -119,6 +119,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "enforce_requirements",
+					"label": "Enforce Action Requirements",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "silence_messaging",
 					"label": "No Message Alerts",
 					"base": this.profile,
@@ -252,6 +257,13 @@ rsSystem.component("systemOptionsDialog", {
 		};
 		
 		data.pageList = Object.keys(data.pages);
+
+		data.controlDebugging = {
+			"id": "universe-debugging",
+			"action": "universe-debugging",
+			"icon": "fas fa-bug",
+			"label": "Enable Debugging"
+		};
 		
 		if(this.universe.version !== rsSystem.version) {
 			data.pages.system.options.push({
@@ -281,6 +293,7 @@ rsSystem.component("systemOptionsDialog", {
 				"base": this.profile,
 				"type": "toggle"
 			});
+			data.pages.profile.options.push(data.controlDebugging);
 			data.pages.system.options.push({
 				"id": "universe-export",
 				"action": "universe-export",
@@ -370,6 +383,15 @@ rsSystem.component("systemOptionsDialog", {
 							"icon": "fas fa-exclamation-triangle rs-lightred"
 							// "event": event
 						});
+					}
+					break;
+				case "universe-debugging":
+					if(this.universe.debug) {
+						Vue.set(this.universe, "debug", false);
+						Vue.set(this.controlDebugging, "label", "Enable Debugging");
+					} else {
+						Vue.set(this.universe, "debug", true);
+						Vue.set(this.controlDebugging, "label", "Disable Debugging");
 					}
 					break;
 				case "report-submit":

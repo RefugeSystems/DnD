@@ -52,7 +52,7 @@ rsSystem.component("dndEntityProperties", {
 				"storageKey": "store:roll:" + this.entity.id,
 				"entity": this.entity.id,
 				"damage": {},
-				"action": this.universe.index.action["action:damage:take"],
+				"action": this.universe.index.action["action:damage:recv"],
 				"closeAfterAction": true
 			});
 		},

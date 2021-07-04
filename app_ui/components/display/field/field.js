@@ -9,7 +9,7 @@
 rsSystem.component("rsDisplayField", {
 	"inherit": true,
 	"mixins": [
-		
+		rsSystem.components.RSShowdown
 	],
 	"props": {
 		/**
@@ -51,6 +51,9 @@ rsSystem.component("rsDisplayField", {
 		},
 		"displayed": function() {
 			if(this.object.picture === this.object.portrait && (this.field === "picture" || this.field === "portrait")) {
+				return false;
+			}
+			if(this.fieldData.attribute.hide_when_not_set && !this.object[this.field]) {
 				return false;
 			}
 			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
@@ -270,7 +273,7 @@ rsSystem.component("rsDisplayField", {
 				if(value) {
 					return value.name || value.id;
 				} else {
-					return value;
+					return this.object[this.field];
 				}
 			} else {
 				switch(this.fieldData.type) {

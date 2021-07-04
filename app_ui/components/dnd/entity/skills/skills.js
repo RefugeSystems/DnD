@@ -99,18 +99,11 @@ rsSystem.component("dndEntitySkills", {
 			Vue.set(this.storage, section, !this.storage[section]);
 		},
 		"getSkillIcon": function(skill) {
-			var classes = skill.icon,
-				advantage = 0;
+			var classes = skill.icon || "";
 
-			if(this.entity.skill_advantage && this.entity.skill_advantage[skill.id] && this.entity.skill_advantage[skill.id] !== "0") {
-				advantage += parseInt(this.entity.skill_advantage[skill.id] || 1);
-			}
-			if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[skill.id] && this.entity.skill_disadvantage[skill.id] !== "0") {
-				advantage -= parseInt(this.entity.skill_disadvantage[skill.id] || 1);
-			}
-			if(advantage > 0) {
+			if(this.entity.skill_advantage[skill.id] > 0) {
 				classes += " has-advantage";
-			} else if(advantage < 0) {
+			} else if(this.entity.skill_advantage[skill.id] < 0) {
 				classes += " has-disadvantage";
 			}
 
