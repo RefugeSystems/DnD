@@ -2338,7 +2338,9 @@
 		"name": "Knowledge Matrix",
 		"description": "Maps object identities to arrays of properties explicitly known about that object. Forgotten objects map to null. Known with no explicit information map to empty arrays. This field is calculated during events that affect the object's knowledge.",
 		"type": "object",
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "knowns",
 		"name": "Knowns",
@@ -2347,7 +2349,9 @@
 		"inheritable": [
 			"knowledge"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "spells",
 		"name": "Spells",
@@ -2365,13 +2369,17 @@
 		"inheritable": [
 			"skill"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "must_know",
 		"name": "Must Know",
 		"description": "When flagged, this object is hidden unless the viewing object has knowledge for it.",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "widgets",
 		"name": "Widgets",
@@ -2386,12 +2394,14 @@
 	}, {
 		"id": "page",
 		"name": "Page",
-		"description": "A page that serves as a primary description for this.",
+		"description": "A page that serves as a method for storing information.",
 		"type": "string",
 		"inheritable": [
 			"page"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "pages",
 		"name": "Pages",
@@ -2400,7 +2410,9 @@
 		"inheritable": [
 			"page"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "carrying",
 		"name": "Carried Weight",

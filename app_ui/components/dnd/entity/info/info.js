@@ -42,7 +42,8 @@ rsSystem.component("dndEntityInfo", {
 	"data": function() {
 		var data = {};
 
-
+		data.action = null;
+		data.timeout = null;
 		data.shortRest = "action:rest:short";
 		if(this.entity.actions && this.entity.actions.indexOf("action:rest:trance") === -1) {
 			data.longRestIcon = "icon fas fa-bed";
@@ -58,6 +59,27 @@ rsSystem.component("dndEntityInfo", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"focusAction": function(action) {
+			if(this.action === action) {
+				Vue.set(this, "action", null);
+				this.performAction(action);
+			} else {
+				Vue.set(this, "action", action);
+			}
+			if(this.timeout) {
+				clearTimeout(this.timeout);
+			}
+			Vue.set(this, "timeout", setTimeout(() => {
+				Vue.set(this, "action", null);
+			}, 1000));
+		},
+		"getActionClass": function(action) {
+			if(this.action === action) {
+				return "active-action";
+			} else {
+				return "";
+			}
+		},
 		"takeDamage": function() {
 			var rolling = {},
 				action = this.universe.index.action["action:free:damage"],

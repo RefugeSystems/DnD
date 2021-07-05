@@ -28,11 +28,11 @@
 		</button>
 	</div>
 	<div class="property-container hitdice" v-if="!widget.attribute.hide_hit_dice">
-		<button class="property" v-on:click="performAction(shortRest)">
+		<button class="property" v-on:click="focusAction(shortRest)" :class="getActionClass(shortRest)">
 			<span class="icon fas fa-dice"></span>
 			<span>{{totalHitDice}}</span>
 		</button>
-		<button class="property" v-on:click="performAction(longRest)">
+		<button class="property" v-on:click="focusAction(longRest)" :class="getActionClass(longRest)">
 			<span :class="longRestIcon"></span>
 		</button>
 	</div>

@@ -1021,33 +1021,7 @@ class RSObject {
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type);
 				if(field.attribute) {
-					if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
-						this._data[field.id] = result[field.id] = field.attribute.max;
-					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
-						this._data[field.id] = result[field.id] = field.attribute.min;
-					}
-					if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
-						result[field.id].splice(field.attribute.limit);
-					}
-					if(result[field.id] && field.attribute.bound_max) {
-						switch(typeof(result[field.id])) {
-							case "number":
-								if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
-									this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
-								}
-								break;
-							case "object":
-								if(typeof(this[field.attribute.bound_max]) === "object") {
-									keys = Object.keys(result[field.id]);
-									for(i=0; i<keys.length; i++) {
-										if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
-											result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
-										}
-									}
-								}
-								break;
-						}
-					}
+					this.levelField(field, result);
 				}
 			}
 		}
@@ -1093,33 +1067,7 @@ class RSObject {
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.subValues(this._data[field.id], delta[field.id], field.type);
 				if(field.attribute) {
-					if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
-						this._data[field.id] = result[field.id] = field.attribute.max;
-					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
-						this._data[field.id] = result[field.id] = field.attribute.min;
-					}
-					if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
-						result[field.id].splice(field.attribute.limit);
-					}
-					if(result[field.id] && field.attribute.bound_min) {
-						switch(typeof(result[field.id])) {
-							case "number":
-								if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
-									this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
-								}
-								break;
-							case "object":
-								if(typeof(this[field.attribute.bound_min]) === "object") {
-									keys = Object.keys(result[field.id]);
-									for(i=0; i<keys.length; i++) {
-										if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
-											result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
-										}
-									}
-								}
-								break;
-						}
-					}
+					this.levelField(field, result);
 				}
 			}
 		}
@@ -1173,52 +1121,7 @@ class RSObject {
 			if(field && delta[field.id] !== undefined) {
 				this._data[field.id] = result[field.id] = RSObject.setValues(this._data[field.id], delta[field.id], field.type);
 				if(field.attribute) {
-					if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
-						this._data[field.id] = result[field.id] = field.attribute.max;
-					} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
-						this._data[field.id] = result[field.id] = field.attribute.min;
-					}
-					if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
-						result[field.id].splice(field.attribute.limit);
-					}
-					if(result[field.id] && field.attribute.bound_max) {
-						switch(typeof(result[field.id])) {
-							case "number":
-								if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
-									this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
-								}
-								break;
-							case "object":
-								if(typeof(this[field.attribute.bound_max]) === "object") {
-									keys = Object.keys(result[field.id]);
-									for(i=0; i<keys.length; i++) {
-										if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
-											result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
-										}
-									}
-								}
-								break;
-						}
-					}
-					if(result[field.id] && field.attribute.bound_min) {
-						switch(typeof(result[field.id])) {
-							case "number":
-								if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
-									this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
-								}
-								break;
-							case "object":
-								if(typeof(this[field.attribute.bound_min]) === "object") {
-									keys = Object.keys(result[field.id]);
-									for(i=0; i<keys.length; i++) {
-										if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
-											result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
-										}
-									}
-								}
-								break;
-						}
-					}
+					this.levelField(field, result);
 				}
 			}
 		}
@@ -1250,6 +1153,75 @@ class RSObject {
 				callback(err, this);
 			}
 		});
+	}
+
+	
+	levelField(field, result) {
+		var keys,
+			i;
+
+		if(typeof(field.attribute.max) === "number" && this._data[field.id] > field.attribute.max) {
+			this._data[field.id] = result[field.id] = field.attribute.max;
+		} else if(typeof(field.attribute.min) === "number" && this._data[field.id] < field.attribute.min) {
+			this._data[field.id] = result[field.id] = field.attribute.min;
+		}
+		if(typeof(field.attribute.max) === "number" && typeof(result[field.id]) === "object") {
+			keys = Object.keys(result[field.id]);
+			for(i=0; i<keys.length; i++) {
+				if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > field.attribute.max) {
+					result[field.id][keys[i]] = field.attribute.max;
+				}
+			}
+		}
+		if(typeof(field.attribute.min) === "number" && typeof(result[field.id]) === "object") {
+			keys = Object.keys(result[field.id]);
+			for(i=0; i<keys.length; i++) {
+				if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < field.attribute.min) {
+					result[field.id][keys[i]] = field.attribute.min;
+				}
+			}
+		}
+		if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
+			result[field.id].splice(field.attribute.limit);
+		}
+		if(result[field.id] && field.attribute.bound_max) {
+			switch(typeof(result[field.id])) {
+				case "number":
+					if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
+						this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
+					}
+					break;
+				case "object":
+					if(typeof(this[field.attribute.bound_max]) === "object") {
+						keys = Object.keys(result[field.id]);
+						for(i=0; i<keys.length; i++) {
+							if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
+								result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
+							}
+						}
+					}
+					break;
+			}
+		}
+		if(result[field.id] && field.attribute.bound_min) {
+			switch(typeof(result[field.id])) {
+				case "number":
+					if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
+						this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
+					}
+					break;
+				case "object":
+					if(typeof(this[field.attribute.bound_min]) === "object") {
+						keys = Object.keys(result[field.id]);
+						for(i=0; i<keys.length; i++) {
+							if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
+								result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
+							}
+						}
+					}
+					break;
+			}
+		}
 	}
 	
 	/**

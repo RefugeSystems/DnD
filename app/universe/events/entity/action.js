@@ -74,10 +74,12 @@ module.exports.initialize = function(universe) {
 
 					if(action.also) {
 						for(i=0; i<action.also.length; i++) {
+							console.log("Also: " + action.also[i]);
 							also = manager.object[action.also[i]];
-							if(action && !action.disabled && !action.is_preview) {
-								universe.emit({
-									"emtity": source,
+							if(also && !also.disabled && !also.is_preview) {
+								console.log(" > Emit: " + also.id);
+								universe.emit(also.id, {
+									"entity": source,
 									"action": also
 								});
 							}
