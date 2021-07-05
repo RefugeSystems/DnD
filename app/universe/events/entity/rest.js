@@ -9,7 +9,7 @@ module.exports.initialize = function(universe) {
 	 * @param {String} event.entity The event name being fired, should match this event's name
 	 */
 	universe.on("action:rest:finish", function(event) {
-		var entity
+		var entity;
 		if(typeof(event.entity) === "object") {
 			entity = event.entity;
 		} else {
