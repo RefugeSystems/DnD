@@ -7,9 +7,17 @@ module.exports.initialize = function(universe) {
 	 * @for Universe
 	 * @param {Object} event With data from the system
 	 * @param {String} event.entity The event name being fired, should match this event's name
+	 * @param {String} [event.item] To attune
 	 */
 	universe.on("action:rest:finish", function(event) {
-		var entity;
+		var entity,
+			item,
+			feat,
+			add,
+			has,
+			die,
+			i;
+
 		if(typeof(event.entity) === "object") {
 			entity = event.entity;
 		} else {
@@ -17,27 +25,161 @@ module.exports.initialize = function(universe) {
 		}
 		
 		if(entity) {
+			// Track Last Rest for Exhaustion
 			entity.setValues({
 				"last_rest": universe.time
 			});
+
+			// Add hit die
+			if(entity.hit_dice_max) {
+				die = Object.keys(entity.hit_dice_max);
+				add = {
+					"hit_dice": {}
+				};
+				for(i=0; i<die.length; i++) {
+					add.hit_dice[die[i]] = Math.ceil(parseInt(entity.hit_dice_max[die[i]])/2);
+				}
+				console.log("Adding: ", add);
+				entity.addValues(add);
+			}
+
+			// Attune if present
+			item = event.item;
+			if(typeof(item) === "string") {
+				item = universe.get(item);
+			}
+			if(item && entity.inventory && entity.inventory.indexOf(item.id) !== -1) {
+				universe.emit("action:item:attune", {
+					"action": "action:item:attune",
+					"entity": entity,
+					"item": item
+				});
+			}
+
+			// Recharge Items
+			for(i=0; i<entity.inventory.length; i++) {
+				item = universe.manager.item.object[entity.inventory[i]];
+				if(item && !item.disabled && typeof(item.charges_max) === "number" && typeof(item.recharges_at_long) === "number" && item.recharges_at_long) {
+					has = (item.recharges_long || 0) + 1;
+					if(item.recharges_at_long <= has) {
+						item.addValues({
+							"recharges_long": -1 * has,
+							"charges": 1
+						});
+					} else {
+						item.addValues({
+							"recharges_long": 1
+						});
+					}
+				}
+			}
+
+			// Recharge Feats
+			for(i=0; i<entity.feats.length; i++) {
+				feat = universe.manager.feat.object[entity.feats[i]];
+				if(feat && !feat.disabled && typeof(feat.charges_max) === "number" && typeof(feat.recharges_at_long) === "number" && feat.recharges_at_long) {
+					has = (feat.recharges_long || 0) + 1;
+					if(feat.recharges_at_long <= has) {
+						feat.addValues({
+							"recharges_long": -1 * has,
+							"charges": 1
+						});
+					} else {
+						feat.addValues({
+							"recharges_long": 1
+						});
+					}
+				}
+			}
 		}
 	});
 
 	/**
 	 * 
-	 * @event player:rest:short
+	 * @event action:rest:short
 	 * @for Universe
-	 * @param {Object} event With data from the system
-	 * @param {String} event.type The event name being fired, should match this event's name
-	 * @param {Integer} event.received Timestamp of when the server received the event
-	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
-	 * @param {RSObject} event.player That triggered the event
-	 * @param {Object} event.message The payload from the UI
-	 * @param {Object} event.message.entity 
-	 * @param {Object} event.message.target 
-	 * @param {Object} event.message.amount 
+	 * @param {Object} event 
+	 * @param {String | Object} event.entity
+	 * @param {Object} event.result HitDie used
+	 * @param {Integer} event.roll Health to heal 
+	 * @param {String} [event.item] To attune
 	 */
-	universe.on("player:rest:long", function(event) {
+	universe.on("action:rest:short", function(event) {
+		console.log("Short: ", event.entity.id);
+		var entity,
+			item,
+			feat,
+			need,
+			has,
+			i;
 
+		if(typeof(event.entity) === "object") {
+			entity = event.entity;
+		} else {
+			entity = universe.manager.entity.object[event.entity];
+		}
+		
+		if(entity) {
+			// Update Hitdice Usage
+			if(event.roll) {
+				entity.addValues({
+					"hp": event.roll
+				});
+			}
+			if(event.result) {
+				entity.subValues({
+					"hit_dice": event.result
+				});
+			}
+
+			// Attune if present
+			item = event.item;
+			if(typeof(item) === "string") {
+				item = universe.get(item);
+			}
+			if(item && entity.inventory && entity.inventory.indexOf(item.id) !== -1) {
+				universe.emit("action:item:attune", {
+					"action": "action:item:attune",
+					"entity": entity,
+					"item": item
+				});
+			}
+
+			// Recharge Items
+			for(i=0; i<entity.inventory.length; i++) {
+				item = universe.manager.item.object[entity.inventory[i]];
+				if(item && !item.disabled && typeof(item.charges_max) === "number" && typeof(item.recharges_at_short) === "number" && item.recharges_at_short) {
+					has = (item.recharges_short || 0) + 1;
+					if(item.recharges_at_short <= has) {
+						item.addValues({
+							"recharges_short": -1 * has,
+							"charges": 1
+						});
+					} else {
+						item.addValues({
+							"recharges_short": 1
+						});
+					}
+				}
+			}
+
+			// Recharge Feats
+			for(i=0; i<entity.feats.length; i++) {
+				feat = universe.manager.feat.object[entity.feats[i]];
+				if(feat && !feat.disabled && typeof(feat.charges_max) === "number" && typeof(feat.recharges_at_short) === "number" && feat.recharges_at_short) {
+					has = (feat.recharges_short || 0) + 1;
+					if(feat.recharges_at_short <= has) {
+						feat.addValues({
+							"recharges_short": -1 * has,
+							"charges": 1
+						});
+					} else {
+						feat.addValues({
+							"recharges_short": 1
+						});
+					}
+				}
+			}
+		}
 	});
 };

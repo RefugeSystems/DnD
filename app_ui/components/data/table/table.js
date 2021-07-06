@@ -254,6 +254,22 @@ rsSystem.component("rsTable", {
 			}
 			html += "<ul>";
 		},
+		/**
+		 * 
+		 * @method select
+		 * @param {Object} record 
+		 * @param {Object} header 
+		 */
+		/**
+		 * 
+		 * @event selected
+		 * @param {Object} record
+		 */
+		/**
+		 * 
+		 * @event deselected
+		 * @param {Object} record
+		 */
 		"select": function(record, header) {
 			if(typeof(this.actions[header.id]) === "function") {
 				this.actions[header.id](record, header);

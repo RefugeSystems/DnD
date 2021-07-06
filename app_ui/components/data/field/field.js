@@ -4,6 +4,10 @@
  * @class rsField
  * @constructor
  * @module Components
+ * @param {Universe} universe
+ * @param {Object} root
+ * @param {Field} field
+ * @param {Object} [storage] Maps the value to the field.id property when passed
  */
 (function() {
 	var offset = (new Date()).getTimezoneOffset() * 60 * 1000,
@@ -46,6 +50,9 @@
 		"mixins": [
 		],
 		"props": {
+			"storage": {
+				"type": Object
+			},
 			"universe": {
 				"required": true,
 				"type": Object
@@ -518,7 +525,7 @@
 			"bufferChangeProcess": function() {
 				if(this.bufferMark < Date.now()) {
 					if(this.field.type === "object") {
-
+						// TODO: Object buffered change
 					} else {
 						Vue.set(this.root, this.field.id, this.buffer);
 					}
@@ -556,6 +563,10 @@
 
 				if(!this.focused) {
 					this.$emit("complete", this.field);
+				}
+
+				if(this.storage && this.field.type !== "file" && this.field.type !== "data" && (!this.root[this.field.id].length || this.root[this.field.id].length < 50000) && (!this.field.attribute || (!this.field.attribute.server_only && !this.field.attribute.file_data))) {
+					Vue.set(this.storage, this.field.id, this.root[this.field.id]);
 				}
 
 				Vue.set(this, "bufferChanging", false);

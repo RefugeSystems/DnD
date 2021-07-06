@@ -525,30 +525,35 @@ class RSObject {
 		// Establish Base Values
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
-			if(field && this._calculated[field.id] !== undefined && this._calculated[field.id] !== null) {
-				switch(field.type) {
-					case "calculated":
-						// this._calculated[fields[x]] = this.calculateField(fields[x], this._data[fields[x]]);
-						break;
-					case "string":
-						if(field.attribute.searchable) {
-							// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
-							this._search += ":::" + this._calculated[field.id].toLowerCase();
-						}
-					default:
-					case "dice":
-					case "formula": // formula Reduction handled in updateFieldValues
-					case "number":
-					case "boolean":
-						this[fields[x]] = this._calculated[fields[x]];
-						break;
-					case "object:dice":
-					case "object":
-						this[fields[x]] = Object.assign({}, this._calculated[fields[x]]);
-						break;
-					case "array":
-						this[fields[x]] = [].concat(this._calculated[fields[x]]);
-						break;
+			// if(field && this._calculated[field.id] !== undefined && this._calculated[field.id] !== null) {
+			if(field && this._calculated[field.id] !== undefined) {
+				if(this._calculated[field.id] === null) {
+					this[fields[x]] = null;
+				} else {
+					switch(field.type) {
+						case "calculated":
+							// this._calculated[fields[x]] = this.calculateField(fields[x], this._data[fields[x]]);
+							break;
+						case "string":
+							if(field.attribute.searchable) {
+								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
+								this._search += ":::" + this._calculated[field.id].toLowerCase();
+							}
+						default:
+						case "dice":
+						case "formula": // formula Reduction handled in updateFieldValues
+						case "number":
+						case "boolean":
+							this[fields[x]] = this._calculated[fields[x]];
+							break;
+						case "object:dice":
+						case "object":
+							this[fields[x]] = Object.assign({}, this._calculated[fields[x]]);
+							break;
+						case "array":
+							this[fields[x]] = [].concat(this._calculated[fields[x]]);
+							break;
+					}
 				}
 			}
 		}
@@ -890,7 +895,7 @@ class RSObject {
 			// console.log(" [=T] > " + this[name[index]], referenced);
 			// return this._calculated[name[index]];
 			return this[name[index]];
-		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
+		} else if(this[name[index]] !== null && typeof(this[name[index]]) === "object" && index + 2 === name.length) {
 			// console.log(" [=O] > " + this[name[index]]);
 			if(referenced) {
 				referenced.push(this.id);
@@ -1173,53 +1178,55 @@ class RSObject {
 				}
 			}
 		}
-		if(typeof(field.attribute.min) === "number" && typeof(result[field.id]) === "object") {
-			keys = Object.keys(result[field.id]);
-			for(i=0; i<keys.length; i++) {
-				if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < field.attribute.min) {
-					result[field.id][keys[i]] = field.attribute.min;
+		if(result[field.id] !== undefined && result[field.id] !== null) {
+			if(typeof(field.attribute.min) === "number" && typeof(result[field.id]) === "object") {
+				keys = Object.keys(result[field.id]);
+				for(i=0; i<keys.length; i++) {
+					if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < field.attribute.min) {
+						result[field.id][keys[i]] = field.attribute.min;
+					}
 				}
 			}
-		}
-		if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
-			result[field.id].splice(field.attribute.limit);
-		}
-		if(result[field.id] && field.attribute.bound_max) {
-			switch(typeof(result[field.id])) {
-				case "number":
-					if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
-						this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
-					}
-					break;
-				case "object":
-					if(typeof(this[field.attribute.bound_max]) === "object") {
-						keys = Object.keys(result[field.id]);
-						for(i=0; i<keys.length; i++) {
-							if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
-								result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
-							}
-						}
-					}
-					break;
+			if(result[field.id] && field.attribute.limit && result[field.id].length > field.attribute.limit) {
+				result[field.id].splice(field.attribute.limit);
 			}
-		}
-		if(result[field.id] && field.attribute.bound_min) {
-			switch(typeof(result[field.id])) {
-				case "number":
-					if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
-						this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
-					}
-					break;
-				case "object":
-					if(typeof(this[field.attribute.bound_min]) === "object") {
-						keys = Object.keys(result[field.id]);
-						for(i=0; i<keys.length; i++) {
-							if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
-								result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
+			if(result[field.id] && field.attribute.bound_max) {
+				switch(typeof(result[field.id])) {
+					case "number":
+						if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
+							this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
+						}
+						break;
+					case "object":
+						if(typeof(this[field.attribute.bound_max]) === "object") {
+							keys = Object.keys(result[field.id]);
+							for(i=0; i<keys.length; i++) {
+								if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
+									result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
+								}
 							}
 						}
-					}
-					break;
+						break;
+				}
+			}
+			if(result[field.id] && field.attribute.bound_min) {
+				switch(typeof(result[field.id])) {
+					case "number":
+						if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
+							this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
+						}
+						break;
+					case "object":
+						if(typeof(this[field.attribute.bound_min]) === "object") {
+							keys = Object.keys(result[field.id]);
+							for(i=0; i<keys.length; i++) {
+								if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
+									result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
+								}
+							}
+						}
+						break;
+				}
 			}
 		}
 	}
@@ -1691,14 +1698,25 @@ RSObject.subValues = function(a, b, type) {
  * @param  {[type]} b [description]
  * @return {[type]}   [description]
  */
-RSObject.setObjects = function(a, b) {
-	var keys = Object.keys(a),
+RSObject.setObjects = function(a, b, type) {
+	if(!b) {
+		return a;
+	}
+	
+	var akeys = Object.keys(a),
+		bkeys = Object.keys(b),
+		checked = {},
 		result = {},
 		x;
 	
-	keys.uniquely.apply(keys, Object.keys(b));
-	for(x=0; x<keys.length; x++) {
-		result[keys[x]] = RSObject.setValues(a[keys[x]], b[keys[x]]);
+	for(x=0; x<akeys.length; x++) {
+		result[akeys[x]] = RSObject.setValues(a[akeys[x]], b[akeys[x]], type);
+		checked[akeys[x]] = true;
+	}
+	for(x=0; x<bkeys.length; x++) {
+		if(!checked[bkeys[x]]) {
+			result[bkeys[x]] = RSObject.setValues(a[bkeys[x]], b[bkeys[x]], type);
+		}
 	}
 	
 	return result;
@@ -1714,7 +1732,9 @@ RSObject.setObjects = function(a, b) {
  * @return The value to be set.
  */
 RSObject.setValues = function(a, b, type) {
-	if(b === null) {
+	if(typeof(a) === "object" && typeof(b) === "object") {
+		return RSObject.setObjects(a, b, type);
+	} else if(b === null) {
 		return null;
 	} else if(typeof(b) === "undefined") {
 		return a;

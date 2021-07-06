@@ -8,6 +8,7 @@
  */
 (function() {
 	rsSystem.dnd = rsSystem.dnd || {};
+	rsSystem.dnd.Calculator = {};
 
 	var diceReductionRegEx = new RegExp("\\+?(-?[0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\. ]+?\\))(d[0-9]+|%)", "g"),
 		calculateSecurityRegEx = new RegExp("^([<>a-zA-Z0-9\\(\\)+-\\/\\* ]+|Math\\.[a-zA-Z]+)$"),
@@ -117,7 +118,7 @@
 		}
 	};
 
-	rsSystem.dnd.debug = function(state) {
+	rsSystem.dnd.Calculator.debug = rsSystem.dnd.debug = function(state) {
 		if(state === undefined) {
 			return debug;
 		} else {
@@ -131,7 +132,7 @@
 	 * @param {String} dice ie. d6 or d27319
 	 * @return {Integer} Value determined for the die roll.
 	 */
-	var diceRoll = rsSystem.dnd.diceRoll = function(dice) {
+	var diceRoll = rsSystem.dnd.Calculator.diceRoll = rsSystem.dnd.diceRoll = function(dice) {
 		return Math.floor(parseInt(dice.substring(1)) * Math.random()) + 1;
 	};
 
@@ -140,7 +141,7 @@
 	 * @param {String} original 
 	 * @returns {Number}
 	 */
-	var calculate = rsSystem.dnd.calculate = function(original) {
+	var calculate = rsSystem.dnd.Calculator.calculate = rsSystem.dnd.calculate = function(original) {
 		if(original && original[0] === "+") { // Other operators would expressly be an issue
 			original = original.substring(1);
 		}
@@ -179,7 +180,7 @@
 	 * @param {Integer} [depth] 
 	 * @returns 
 	 */
-	var compute = rsSystem.dnd.compute = function(expression, source, referenced, depth = 0) {
+	var compute = rsSystem.dnd.Calculator.compute = rsSystem.dnd.compute = function(expression, source, referenced, depth = 0) {
 		referenced = referenced || [];
 		if(!expression) {
 			return 0;
@@ -255,7 +256,7 @@
 	 * @return {Object} With the dice names as keys mapping to their indicated counts.
 	 * 		The non-dice portion is returned under `remainder`.
 	 */
-	 var parseDiceRoll = rsSystem.dnd.parseDiceRoll = function(expression) {
+	 var parseDiceRoll = rsSystem.dnd.Calculator.parseDiceRoll = rsSystem.dnd.parseDiceRoll = function(expression) {
 		var buffer = [],
 			dice = {},
 			x;
@@ -289,7 +290,7 @@
 	 * @param {Object} [source] 
 	 * @returns 
 	 */
-	var reducedDiceRoll = rsSystem.dnd.reducedDiceRoll = function(expression, source) {
+	var reducedDiceRoll = rsSystem.dnd.Calculator.reducedDiceRoll = rsSystem.dnd.reducedDiceRoll = function(expression, source) {
 		var reduced = "",
 			value,
 			dice,

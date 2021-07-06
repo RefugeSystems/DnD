@@ -72,7 +72,7 @@
 						if(field) {
 							fields.push(field);
 						} else {
-							// TODO: Improved tracking
+							// TODO: Improve tracking
 							console.warn("Invalid field[" + definition.fields[i] + "] in class definition[" + this.storage.classification + "]");
 						}
 					}
@@ -118,35 +118,27 @@
 
 			return data;
 		},
-		"watch": {
-			"details": {
-				"deep": true,
-				"handler": function(newValue) {
-					Vue.set(this.storage, "detail_data", JSON.stringify(newValue));
-				}
-			}
-		},
 		"mounted": function() {
 			rsSystem.register(this);
-			if(!this.storage.rawValue) {
-				Vue.set(this.storage, "rawValue", "{}");
-			}
-			if(this.storage.detail_data) {
-				try {
-					var parse = JSON.parse(this.storage.detail_data),
-						keys,
-						x;
+			var keys,
+				x;
 
-					keys = Object.keys(this.details);
-					for(x=0; x<keys.length; x++) {
-						Vue.delete(this.details, keys[x]);
-					}
-					keys = Object.keys(parse);
-					for(x=0; x<keys.length; x++) {
-						Vue.set(this.details, keys[x], parse[keys[x]]);
-					}
-				} catch(e) {
-					Vue.delete(this.storage, "detail_data");
+			if(typeof(this.storage.detail_data) === "object") {
+				keys = Object.keys(this.details);
+				for(x=0; x<keys.length; x++) {
+					Vue.delete(this.details, keys[x]);
+				}
+				keys = Object.keys(this.storage.detail_data);
+				for(x=0; x<keys.length; x++) {
+					Vue.set(this.details, keys[x], this.storage.detail_data[keys[x]]);
+				}
+				if(!this.storage.rawValue) {
+					Vue.set(this.storage, "rawValue", JSON.stringify(this.details, null, 4));
+				}
+			} else {
+				Vue.set(this.storage, "detail_data", {});
+				if(!this.storage.rawValue) {
+					Vue.set(this.storage, "rawValue", "{}");
 				}
 			}
 			if(!this.storage.classification_ids) {
@@ -242,14 +234,14 @@
 				}
 
 				// Update Current Class Swap
-				keys = Object.keys(this.storage.swap[this.classification]);
-				for(i=0; i<keys.length; i++) {
-					Vue.set(this.storage.swap[this.classification], keys[i], null);
-				}
+				// keys = Object.keys(this.storage.swap[this.classification]);
+				// for(i=0; i<keys.length; i++) {
+				// 	Vue.set(this.storage.swap[this.classification], keys[i], null);
+				// }
 
 				keys = Object.keys(this.details);
 				for(i=0; i<keys.length; i++) {
-					Vue.set(this.storage.swap[this.classification], keys[i], this.details[keys[i]]);
+					// Vue.set(this.storage.swap[this.classification], keys[i], this.details[keys[i]]);
 					Vue.set(this.details, keys[i], null);
 				}
 				

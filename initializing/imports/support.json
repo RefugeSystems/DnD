@@ -16,10 +16,13 @@
 				"add": {
 					"hp": 1000
 				}
+			}, {
+				"name": "Recover Hitdice",
+				"is_display": true
 			}],
 			"action:rest:short": [{
 				"name": "Use Hitdice",
-				"ui": true,
+				"is_display": true,
 				"emit": {
 					"type": "dialog:open",
 					"component": "dndDialogHitdice"

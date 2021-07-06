@@ -108,8 +108,14 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.recipients To notify of the damage
 	 */
 	universe.on("action:free:damage", function(event) {
-		var entity = universe.get(event.target || event.entity),
-			player = universe.get(event.player);
+		var entity = event.target || event.entity,
+			player = event.player;
+		if(typeof(player) === "string") {
+			player = universe.get(player);
+		}
+		if(typeof(entity) === "string") {
+			entity = universe.get(entity);
+		}
 		if(player && (player.gm || entity.owned[event.player])) {
 			universe.chronicle.addOccurrence("entity:damage", event, universe.time, entity.id, entity.id);
 			takeDamage(entity, event.damage, event.resist);

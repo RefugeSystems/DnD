@@ -55,6 +55,24 @@
 			border-color: @rsWhite;
 		}
 	}
+		
+	button.accept,
+	button.continue,
+	button.okay {
+		background-color: @rsDarkGreen;
+		color: @rsWhite;
+		border: 1px solid @rsLightGreen;
+		// transition: background-color .5s, color .5s;
+		
+		&:hover {
+			background-color: @rsWhite;
+			color: @rsDarkGreen;
+		}
+		
+		&:active {
+			border-color: @rsWhite;
+		}
+	}
 	
 	button.quick.action {
 		width: 34px;

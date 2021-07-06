@@ -338,9 +338,33 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "is_chest",
+		"name": "Is Chest",
+		"description": "Flag to indicate an entity is treasure chest of some kind that allows easy player viewing/looting",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "is_locked",
+		"name": "Is Locked",
+		"description": "Indicates that this is closed in some fashion, such as a locked up shop or locked chest.",
+		"type": "boolean",
+		"attribute": {
+			"display_size": 30
+		}
+	}, {
 		"id": "is_npc",
 		"name": "Is NPC",
 		"description": "Flag to indicate an entity is an NPC",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "is_shop",
+		"name": "Is Shop",
+		"description": "Flag to indicate an entity has shop functionality",
 		"type": "boolean",
 		"attribute": {
 			"displayed": false
@@ -655,6 +679,15 @@
 			"default": 100
 		}
 	}, {
+		"id": "journal",
+		"name": "Journal",
+		"description": "The Journal objects associated with this object, typically for use with Pages",
+		"type": "string",
+		"inheritable": [
+			"journal"
+		],
+		"attribute": {}
+	}, {
 		"id": "journals",
 		"name": "Journals",
 		"description": "The Journal objects associated with this object, typically for use with Pages",
@@ -663,6 +696,28 @@
 			"journal"
 		],
 		"attribute": {}
+	}, {
+		"id": "prepared",
+		"name": "Prepared",
+		"description": "List of spells that were explicitly prepared",
+		"type": "array",
+		"inheritable": [
+			"spell"
+		],
+		"attribute": {
+			"display_size": 110
+		}
+	}, {
+		"id": "memorized",
+		"name": "Memorized",
+		"description": "List of spells that were explicitly memorized",
+		"type": "array",
+		"inheritable": [
+			"spell"
+		],
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "hp",
 		"name": "HP",
@@ -768,7 +823,10 @@
 		"name": "Hit Dice",
 		"description": "Hit dice present for this object, mapping the dice type (ie. d8) to the count possessed",
 		"type": "object",
-		"attribute": {}
+		"attribute": {
+			"bound_max": "hit_dice_max",
+			"min": 0
+		}
 	}, {
 		"id": "hit_dice_max",
 		"name": "Hit Dice Maximum",
@@ -823,6 +881,7 @@
 		"description": "The total amount of HP rolled for an entity while leveling",
 		"type": "integer",
 		"attribute": {
+			"display_size": 90,
 			"default": 0,
 			"min": 0
 		}
@@ -835,7 +894,8 @@
 			"damage_type"
 		],
 		"attribute": {
-			"inherited_key": "damage_type"
+			"inherited_key": "damage_type",
+			"display_size": 30
 		}
 	}, {
 		"id": "debuff",
@@ -848,7 +908,9 @@
 		"name": "Ritual",
 		"description": "Indicates this can be performed as a ritual as well as cast",
 		"type": "boolean",
-		"attribute": {}
+		"attribute": {
+			"display_size": 50
+		}
 	}, {
 		"id": "knowledges",
 		"name": "Known Knowledge",
@@ -868,7 +930,9 @@
 		"inheritable": [
 			"knowledge"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "cast_time",
 		"name": "Casting Time",
@@ -974,6 +1038,15 @@
 		"description": "Used for instilling effects on entities from taking successful attacks or failed saves against spells. Notably a spell with effects that have neither damage_required nor hit_required checked will always apply. This condition applying that the Hit roll exceeds AC or that the save is failed.",
 		"type": "boolean",
 		"attribute": {}
+	}, {
+		"id": "is_display",
+		"name": "Is Display",
+		"description": "Flags an object as used for display purposes only in cases where objects that `fire` are grouped with non-fired elements",
+		"type": "boolean",
+		"attribute": {
+			"hide_when_not_set": true,
+			"display_size": 200
+		}
 	}, {
 		"id": "is_unique",
 		"name": "Unique",
@@ -1107,7 +1180,10 @@
 			"movement": "Movement",
 			"reaction": "Reaction"
 		},
-		"attribute": {}
+		"attribute": {
+			"bound_max": "action_max",
+			"min": 0
+		}
 	}, {
 		"id": "nation",
 		"name": "Nation",
@@ -1278,13 +1354,18 @@
 		"icon": "fas fa-coins",
 		"description": "The amount of gold on or in this entity or object",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"bound_max": "gold_max",
+			"min": 0
+		}
 	}, {
 		"id": "gold_max",
 		"name": "Max Gold",
 		"description": "The maximum amount of gold this object or entity can hold",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"default": 50000
+		}
 	}, {
 		"id": "height",
 		"name": "Height",
@@ -1782,7 +1863,10 @@
 		"name": "Charges",
 		"description": "Number of expendable charges available on this object.",
 		"type": "calculated",
-		"attribute": {}
+		"attribute": {
+			"bound_max": "charges_max",
+			"min": 0
+		}
 	}, {
 		"id": "charges_max",
 		"name": "Max Charges",
@@ -1795,6 +1879,18 @@
 		"description": "[Deprecated] Maps an event to the number of times that event must occur for this object to gain a charge.",
 		"type": "object",
 		"deprecated": true,
+		"attribute": {}
+	}, {
+		"id": "recharges_short",
+		"name": "Short Rests",
+		"description": "Number of short rests towards a charge.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "recharges_long",
+		"name": "Long Rests",
+		"description": "Number of long rests towards a charge.",
+		"type": "integer",
 		"attribute": {}
 	}, {
 		"id": "recharges_at_short",
@@ -2041,6 +2137,9 @@
 		"name": "Attunements",
 		"description": "List of objects to whith this object is attuned.",
 		"type": "array",
+		"inheritable": [
+			"item"
+		],
 		"attribute": {}
 	}, {
 		"id": "attunes",
@@ -2053,7 +2152,16 @@
 	}, {
 		"id": "attunement_locked",
 		"name": "Attunement Locked",
-		"description": "Indicates if this object can be unattuned voluntarily.",
+		"description": "Indicates if this object can not unattune voluntarily.",
+		"type": "boolean",
+		"attribute": {
+			"hide_when_not_set": true,
+			"displayed": false
+		}
+	}, {
+		"id": "attunement_blocked",
+		"name": "Attunement BLocked",
+		"description": "Indicates that attunements to this object or from this entity can not be started voluntarily.",
 		"type": "boolean",
 		"attribute": {
 			"hide_when_not_set": true,
@@ -2064,12 +2172,17 @@
 		"name": "Attuned",
 		"description": "The object attuned to this object.",
 		"type": "string",
-		"inheritance": {
-
-		},
 		"inheritable": [
 			"entity"
 		],
+		"attribute": {
+			"hide_when_not_set": true
+		}
+	}, {
+		"id": "attuned_on",
+		"name": "Attuned On",
+		"description": "The date you attuned to this object.",
+		"type": "gametime",
 		"attribute": {
 			"hide_when_not_set": true
 		}
@@ -2298,6 +2411,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "inside",
+		"name": "Inside",
+		"description": "The entity this entity currently resides, such as a building or ship.",
+		"type": "string",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
 		"id": "location",
 		"name": "Location",
 		"description": "Where this object is currently considered to be located.",
@@ -2375,8 +2497,8 @@
 	}, {
 		"id": "must_know",
 		"name": "Must Know",
-		"description": "When flagged, this object is hidden unless the viewing object has knowledge for it.",
-		"type": "boolean",
+		"description": "When set, this object is hidden unless the viewing object has knowledge of this object or possess the specifically mention knowledge ID mentioned here.",
+		"type": "string",
 		"attribute": {
 			"display_size": 110
 		}

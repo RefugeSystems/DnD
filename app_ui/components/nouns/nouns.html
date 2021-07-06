@@ -18,13 +18,13 @@
 
 	<div class="building">
 		<div class="simplified-editor" v-if="!storage.advanced_editor">
-			<rs-field :root="details" :field="idfield" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(idfield.id)" v-on:blur="adjust(idfield.id)">
+			<rs-field :root="details" :field="idfield" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(idfield.id)" v-on:blur="adjust(idfield.id)" :storage="storage.swap[classification]">
 				<span slot="info">
 					<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearField(idfield.id)" tabindex=2>
 					</button>
 				</span>
 			</rs-field>
-			<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(field.id)" v-on:blur="adjust(field.id)" :key="field.id">
+			<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(field.id)" v-on:blur="adjust(field.id)" :key="field.id" :storage="storage.swap[classification]">
 				<span slot="info">
 					<span v-if="field.id === 'icon' || field.type === 'icon'" :class="details.icon"></span>
 					<button class="info-link ctrl-link copy-parent fas fa-copy" v-if="displayCopyFromParent(field.id)" v-on:click="copyParent(field.id)" tabindex=2>

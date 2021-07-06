@@ -153,7 +153,7 @@ rsSystem.component("dndEntityStats", {
 					if(this.entity.response && this.entity.response[action.id]) {
 						details.related[action.id] = [];
 						for(j=0; j<this.entity.response[action.id].length; j++) {
-							if(this.entity.response[action.id][j].name) {
+							if(this.entity.response[action.id][j].name && !this.entity.response[action.id][j].hidden) {
 								details.related[action.id].push(this.entity.response[action.id][j].name);
 							}
 						}

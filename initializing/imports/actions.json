@@ -331,6 +331,18 @@
 			"icon": "game-icon game-icon-meditation",
 			"attribute": {}
 		}, {
+			"id": "action:item:attuning",
+			"name": "Attuning",
+			"description": "Taking some time during a rest, you attune with an object.",
+			"icon": "game-icon game-icon-meditation",
+			"attribute": {}
+		}, {
+			"id": "action:item:attuned",
+			"name": "Attuned",
+			"description": "You have attuned with an object.",
+			"icon": "game-icon game-icon-meditation",
+			"attribute": {}
+		}, {
 			"id": "action:combat:quip",
 			"name": "Quip",
 			"description": "6 words may be spoken on your turn in combat without the need for an action. More will use your ${Bonus Action}$ or ${Main Action}$ depending on the words and the situation.",

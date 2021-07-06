@@ -59,6 +59,20 @@ rsSystem.component("dndEntityInfo", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"takeShortRest": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogShortRest",
+				"entity": this.entity.id,
+				"closeAfterAction": true
+			});
+		},
+		"takeLongRest": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDialogLongRest",
+				"entity": this.entity.id,
+				"closeAfterAction": true
+			});
+		},
 		"focusAction": function(action) {
 			if(this.action === action) {
 				Vue.set(this, "action", null);

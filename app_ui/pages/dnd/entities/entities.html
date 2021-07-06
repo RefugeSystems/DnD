@@ -27,7 +27,7 @@
 			<textarea v-if="page" id="player-note-page" v-delayed:300="notes" v-on:drop.stop.prevent="processDrop()" v-on:dragover.prevent="">
 			</textarea>
 		</div>
-		<button class="general rounded quick action" v-for="control in controls" v-on:click="fireControl(control)">
+		<button class="general rounded quick action" v-for="control in controls" v-on:click="fireControl(control)" :class="getControlClass(control)">
 			<span :class="control.icon"></span>
 		</button>
 	</div>

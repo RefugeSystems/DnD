@@ -1,0 +1,29 @@
+<div class="rs-component dnd-component dialog-rest-long">
+	<div class="dialog-header align-center">
+		<span>Long Rest</span>
+	</div>
+	<div class="dialog-contents">
+		<table>
+			<tr v-if="attunables.length">
+				<td>
+					<span>Attune</span>
+				</td>
+				<td>
+					<select v-model="attune">
+						<option v-for="attunable in attunables" :value="attunable.id">{{attunable.name}}</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="dialog-confirmation flex h justified">
+		<button class="rounded accept action" v-on:click="rest()">
+			<span class="fas fa-bed"></span>
+			<span>Rest</span>
+		</button>
+		<button class="rounded cancel action" v-on:click="closeDialog()">
+			<span class="fas fa-times"></span>
+			<span>Cancel</span>
+		</button>
+	</div>
+</div>

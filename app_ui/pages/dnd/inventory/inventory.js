@@ -104,6 +104,9 @@ rsSystem.component("DNDInventory", {
 					Vue.set(this.share, "icon", "fas fa-users");
 				}
 			}
+		},
+		"entity.inventory_hidden": function() {
+			this.buildControls();
 		}
 	},
 	"data": function() {
@@ -175,27 +178,9 @@ rsSystem.component("DNDInventory", {
 			}
 		};
 
-		data.controls = [data.share, {
-			"name": "",
-			"icon": "fas fa-eye-slash",
-			"process": function() {
-				console.log("Selected: ", reference.storage.selected);
-				reference.universe.send("inventory:hide", {
-					"items": Object.keys(reference.storage.selected),
-					"entity": reference.entity.id
-				});
-			}
-		}, {
-			"name": "",
-			"icon": "fas fa-eye",
-			"process": function() {
-				console.log("Selected: ", reference.storage.selected);
-				reference.universe.send("inventory:reveal", {
-					"items": Object.keys(reference.storage.selected),
-					"entity": reference.entity.id
-				});
-			}
-		}];
+		data.controls = [];
+		data.attunable = [];
+		data.unattunable = [];
 
 		return data;
 	},
@@ -206,8 +191,92 @@ rsSystem.component("DNDInventory", {
 		} else {
 			Vue.set(this.share, "icon", "fas fa-users");
 		}
+		this.buildControls();
 	},
 	"methods": {
+		"buildControls": function() {
+			var selected = Object.keys(this.storage.selected),
+				reference = this,
+				hide = false,
+				show = false,
+				buffer,
+				i;
+
+			this.attunable.splice(0);
+			this.unattunable.splice(0);
+			this.controls.splice(0);
+			if(this.share) {
+				this.controls.push(this.share);
+			}
+
+			for(i=0; i<selected.length; i++) {
+				buffer = this.universe.index.item[selected[i]];
+				if(buffer && !buffer.disabled && !buffer.is_preview && this.entity.owned[this.player.id] && this.entity.inventory.indexOf(buffer.id) !== -1) {
+					if(this.entity.inventory_hidden && this.entity.inventory_hidden[buffer.id]) {
+						show = true;
+					} else {
+						hide = true;
+					}
+					if(buffer.attunes) {
+						console.log("Buffer: ", buffer.attuned, this.entity.id);
+						if(buffer.attuned === this.entity.id) {
+							this.unattunable.push(buffer.id);
+						} else {
+							this.attunable.push(buffer.id);
+						}
+					}
+				}
+			}
+
+			if(hide) {
+				this.controls.push({
+					"title": "Hide Items",
+					"icon": "fas fa-eye-slash",
+					"process": function() {
+						reference.universe.send("inventory:hide", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(show) {
+				this.controls.push({
+					"title": "Reveal Items",
+					"icon": "fas fa-eye",
+					"process": function() {
+						reference.universe.send("inventory:reveal", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(this.attunable.length) {
+				this.controls.push({
+					"title": "Attune",
+					"icon": "fas fa-user-lock",
+					"process": function() {
+						reference.universe.send("items:attune", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(this.unattunable.length) {
+				this.controls.push({
+					"title": "Unattune",
+					"icon": "fas fa-user-unlock",
+					"process": function() {
+						reference.universe.send("items:unattune", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+		}
 	},
 	"beforeDestroy": function() {
 		/*

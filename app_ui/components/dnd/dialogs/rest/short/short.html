@@ -1,0 +1,48 @@
+<div class="rs-component dnd-component dialog-rest-short">
+	<div class="dialog-header align-center">
+		<span>Short Rest</span>
+	</div>
+	<div class="dialog-contents">
+		<table>
+			<tr>
+				<td>
+					<span>Hit Dice:</span>
+				</td>
+				<td>
+					<button class="general rounded quick action" v-for="die in hitdie" v-on:click="addDie(die)" v-on:click.right.stop.prevent="subDie(die)">
+						<span :class="'fas fa-dice-' + die"></span>
+						<span class="action-count">{{used[die]}}/{{entity.hit_dice[die]}}</span>
+					</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span>Rolled:</span>
+				</td>
+				<td>
+					<input class="grow-1" type="number" v-model.number="roll"/>
+				</td>
+			</tr>
+			<tr v-if="attunables.length">
+				<td>
+					<span>Attune</span>
+				</td>
+				<td>
+					<select v-model="attune">
+						<option v-for="attunable in attunables" :value="attunable.id">{{attunable.name}}</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="dialog-confirmation flex h justified">
+		<button class="rounded accept action" v-on:click="rest()">
+			<span class="fas fa-campfire"></span>
+			<span>Rest</span>
+		</button>
+		<button class="rounded cancel action" v-on:click="closeDialog()">
+			<span class="fas fa-times"></span>
+			<span>Cancel</span>
+		</button>
+	</div>
+</div>

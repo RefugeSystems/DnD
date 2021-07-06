@@ -116,13 +116,13 @@ rsSystem.component("DNDWidgetCore", {
 				response,
 				i;
 
-			console.log("Action: ", this.entity, action, using, perform);
+			// console.log("Action: ", this.entity, action, using, perform);
 			if(this.entity && action) {
 				perform.action = action.id;
 				perform.source = this.entity.id;
 				perform.channel = using;
 				this.universe.send("action:perform", perform);
-				console.log(" > Sent: ", perform);
+				// console.log(" > Sent: ", perform);
 				
 				if(this.entity.response && this.entity.response[action.id]) {
 					for(i=0; i<this.entity.response[action.id].length; i++) {
@@ -274,6 +274,5 @@ rsSystem.component("DNDWidgetCore", {
 		this.universe.$off("universe:modified", this.update);
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
-	},
-	"template": Vue.templified("components/dnd/entity/space.html")
+	}
 });

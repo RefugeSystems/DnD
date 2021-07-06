@@ -976,6 +976,39 @@ class Universe extends EventEmitter {
 		var anomaly = new Anomaly(code, message, 50, details, error);
 		this.emit("error", anomaly);
 	}
+
+	/**
+	 * 
+	 * @method notifyMasters
+	 * @param {String} message 
+	 * @param {Object} [data] 
+	 */
+	notifyMasters(message, data) {
+		this.emit("send", {
+			"type": "notice",
+			"recipients": this.getMasters(),
+			"message": message,
+			"data": data,
+			"timeout": 8000
+		});
+	}
+
+	/**
+	 * 
+	 * @method notifyMasters
+	 * @param {String} message 
+	 * @param {Object} [data] 
+	 */
+	warnMasters(message, data) {
+		this.emit("send", {
+			"type": "notice",
+			"icon": "fas fa-exclamation-triangle rs-lightred",
+			"recipients": this.getMasters(),
+			"message": message,
+			"data": data,
+			"anchored": true
+		});
+	}
 }
 
 /**

@@ -41,7 +41,7 @@ rsSystem.component("DNDEntities", {
 			}
 		},
 		"page": function() {	
-			return this.universe.index.page[this.player.attribute.notes_page];
+			return this.universe.index.page[this.main.page];
 		},
 		"meeting": function() {
 			var meet,
@@ -51,6 +51,19 @@ rsSystem.component("DNDEntities", {
 				meet = this.universe.listing.meeting[i];
 				if(meet && meet.is_active && !meet.disabled && !meet.is_preview) {
 					return meet;
+				}
+			}
+
+			return null;
+		},
+		"skirmish": function() {
+			var skirmish,
+				i;
+
+			for(i=0; i<this.universe.listing.skirmish.length; i++) {
+				skirmish = this.universe.listing.skirmish[i];
+				if(skirmish && skirmish.is_active && !skirmish.disabled && !skirmish.is_preview) {
+					return skirmish;
 				}
 			}
 
@@ -79,7 +92,7 @@ rsSystem.component("DNDEntities", {
 			if(this.meeting && this.meeting.entities) {
 				for(x=0; x<this.meeting.entities.length; x++) {
 					entity = this.universe.index.entity[this.meeting.entities[x]];
-					if(entity && (!this.main || entity.id !== this.main.id) && !entity.is_preview && !entity.disabled && !entity.obscured) {
+					if(this.isShownEntity(entity)) {
 						entities.uniquely(entity);
 					}
 				}
@@ -94,6 +107,66 @@ rsSystem.component("DNDEntities", {
 			}
 			
 			return entities;
+		},
+		"controls": function() {
+			var controls = [],
+				load,
+				i;
+
+			controls.push({
+				"icon": "fas fa-users",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "all"
+			});
+			if(this.skirmish) {
+				controls.push({
+					"icon": "fas fa-swords",
+					"ctrl": "list",
+					"type": "flip",
+					"id": "combat"
+				});
+			}
+			if(this.meeting && this.meeting.entities) {
+				for(i=0; i<this.meeting.entities.length; i++) {
+					load = this.universe.index.entity[this.meeting.entities[i]];
+					if(load && !load.disabled && !load.obscured && !load.is_preview && load.is_chest) {
+						controls.push({
+							"icon": "fas fa-treasure-chest",
+							"ctrl": "list",
+							"type": "flip",
+							"id": "treasure"
+						});
+					}
+				}
+			}
+			controls.push({
+				"icon": "fas fa-street-view",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "location"
+			});
+			controls.push({
+				"icon": "fas fa-users-crown",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "party"
+			});
+			controls.push({
+				"icon": "fas fa-users-cog",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "npcs"
+			});
+			controls.push({
+				"icon": "fas fa-store",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "shop"
+			});
+
+
+			return controls;
 		},
 		"minion": function() {
 			var entities = {},
@@ -118,7 +191,6 @@ rsSystem.component("DNDEntities", {
 		data.nearbyMinion = this.universe.index.dashboard["dashboard:entity:minion"];
 		data.nearbyFriend = this.universe.index.dashboard["dashboard:entity:friendly"];
 
-		data.controls = [];
 		data.notes = "";
 
 		return data;
@@ -140,6 +212,13 @@ rsSystem.component("DNDEntities", {
 				"state": true
 			});
 			this.toggleNotes();
+		}
+		if(!this.storage.ctrl) {
+			Vue.set(this.storage, "ctrl", {
+				"list": {
+					"all": true
+				}
+			});
 		}
 		if(this.page) {
 			Vue.set(this, "notes", this.page.description);
@@ -198,8 +277,50 @@ rsSystem.component("DNDEntities", {
 			}
 			Vue.set(this.storage.notes, "area", area);
 		},
-		"fireControl": function(control) {
+		"getControlClass": function(control) {
+			var classes = "";
 
+			if(this.storage.ctrl[control.ctrl] && this.storage.ctrl[control.ctrl][control.id]) {
+				classes += " active-ctrl";
+			}
+
+			return classes;
+		},
+		"fireControl": function(control) {
+			switch(control.type) {
+				case "flip":
+					if(!this.storage.ctrl[control.ctrl]) {
+						Vue.set(!this.storage.ctrl, control.ctrl, {});
+					}
+					Vue.set(this.storage.ctrl[control.ctrl], control.id, !this.storage.ctrl[control.ctrl][control.id]);
+					break;
+			}
+		},
+		"isShownEntity": function(entity) {
+			if(entity && (!this.main || entity.id !== this.main.id) && !entity.is_preview && !entity.disabled && !entity.obscured) {
+				if(this.storage.ctrl.list.all) {
+					return true;
+				}
+				if(this.storage.ctrl.list.party && entity.played_by) {
+					return true;
+				}
+				if(this.storage.ctrl.list.shop && entity.is_shop) {
+					return true;
+				}
+				if(this.storage.ctrl.list.npcs && entity.is_npc) {
+					return true;
+				}
+				if(this.storage.ctrl.list.treasure && entity.is_chest) {
+					return true;
+				}
+				if(this.storage.ctrl.list.location && entity.location === this.main.location) {
+					return true;
+				}
+				if(this.storage.ctrl.list.combat && this.skirmish && this.skirmish.entities && this.skirmish.entities.indexOf(entity.id) !== -1) {
+					return true;
+				}
+			}
+			return false;
 		}
 	},
 	"beforeDestroy": function() {

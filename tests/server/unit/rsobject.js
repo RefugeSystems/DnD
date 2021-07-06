@@ -194,4 +194,24 @@ describe("RSObject", function() {
 		expect(res.effects.b).toBe(7);
 		expect(res.effects.c).toBe(-19);
 	});
+	
+	it("can nullify Object values", function() {
+		var a = {},
+			b = {},
+			res;
+		
+		a.effects = {"a": 5, "b": 9, "d": 22};
+		a.temp = "k";
+		a.k = 9;
+		b.effects = {"b": 2, "c": null, "d": null};
+		b.temp = null;
+
+		res = RSObject.setValues(a, b);
+		expect(res.effects.a).toBe(5);
+		expect(res.effects.b).toBe(2);
+		expect(res.effects.c).toBe(null);
+		expect(res.effects.d).toBe(null);
+		expect(res.temp).toBe(null);
+		expect(res.k).toBe(9);
+	});
 });

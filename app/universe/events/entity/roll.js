@@ -85,18 +85,4 @@ module.exports.initialize = function(universe) {
 		universe.chronicle.addOccurrence("character:check", roll, Date.now(), roll.source || roll.entity, roll.target);
 		universe.emit("send", roll);
 	});
-
-
-	var actions = {};
-	/**
-	 * 
-	 * @event action:free:damage
-	 * @for Universe
-	 * @param {Object} event 
-	 * @param {Object} perform 
-	 * @param {Function} callback 
-	 */
-	actions["action:free:damage"] = function(event, perform, callback) {
-		
-	};
 };

@@ -2,18 +2,27 @@
 module.exports.initialize = function(universe) {
 	var manager = universe.manager.action;
 
-	// ForEach used to create functional scopes
+	/**
+	 * General action bindings processed here.
+	 * 
+	 * This currently specifically applies to entity responses.
+	 * @event action
+	 */
 	manager.objectIDs.forEach(function(id) {
+		// console.log("Actionable - " + id);
 		universe.on(id, function(event) {
-			console.log("Response: " + id);
-			var entity = universe.get(event.source || event.entity);
+			// console.log("Action: ", event.action?event.action.id || event.action:"none?");
+			var entity = event.source || event.entity;
+			if(typeof(entity) === "string") {
+				entity = universe.get(entity);
+			}
 			if(entity && entity.response && entity.response[id] && entity.response[id].length) {
 				var response,
 					i;
 
 				for(i=0; i<entity.response[id].length; i++) {
 					response = entity.response[id][i];
-					if(response && !response.ui) {
+					if(response && !response.ui && !response.is_display) {
 						if(response.add) {
 							entity.addValues(response.add);
 						}
@@ -38,8 +47,6 @@ module.exports.initialize = function(universe) {
 	 * @event player:action:perform
 	 */
 	 universe.on("player:action:perform", function(event) {
-		console.log("Incoming: ", event.message.data);
-
 		var perform,
 			action,
 			source,
@@ -57,20 +64,25 @@ module.exports.initialize = function(universe) {
 			"target": event.message.data.target,
 			"skill": event.message.data.skill,
 			"check": event.message.data.check,
-			"item": event.message.data.using,
+			"channel": event.message.data.using,
+			"spell": event.message.data.spell,
+			"item": event.message.data.item,
 			"name": event.message.data.name,
 			"roll": event.message.data.roll,
 			"player": event.player.id
 		};
 
+		console.log("Perform: ", perform);
+
 		if(perform.action) {
 			action = manager.object[perform.action];
 			if(action && !action.disabled && !action.is_preview && perform.entity) {
-				// perform.action = action;
+				perform.action = action;
 				source = universe.get(perform.entity);
 				if(source && (source.played_by === event.player.id || (source.owned && source.owned[event.player.id]) || event.player.gm)) {
-					// perform.entity = source;
-					universe.emit(perform.action, perform);
+					perform.entity = source;
+					universe.emit(perform.action.id, perform);
+					console.log("Performed: ", perform.action.id);
 
 					if(action.also) {
 						for(i=0; i<action.also.length; i++) {
