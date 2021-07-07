@@ -71,6 +71,7 @@ rsSystem.component("dndMasterMeeting", {
 	"data": function() {
 		var data = {};
 
+		data.name = "";
 		data.description = "";
 		data.id = "";
 
@@ -80,6 +81,13 @@ rsSystem.component("dndMasterMeeting", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		/**
+		 * 
+		 * @method toggleTimeLock
+		 */
+		"toggleTimeLock": function() {
+			Vue.set(this.storage, "timeLocked", !this.storage.timeLocked);
+		},
 		/**
 		 * 
 		 * @method forwardTime
@@ -129,7 +137,7 @@ rsSystem.component("dndMasterMeeting", {
 		 * Used to send the meeting description back to the server.
 		 * 
 		 * Additionally, when the active meeting changes, the current
-		 * description is sync.
+		 * description is synced.
 		 * 
 		 * TODO: This is to be replaced by a `page` object for dynamic
 		 * multi-client synced editing.
@@ -137,8 +145,11 @@ rsSystem.component("dndMasterMeeting", {
 		 * @param {String} meeting ID
 		 * @param {String} description Text
 		 */
-		"syncDescription": function(meeting, description) {
-
+		"syncDescription": function(meeting, name, description) {
+			this.universe.send("meeting:details", {
+				"name": name,
+				"description": description
+			});
 		}
 	},
 	"beforeDestroy": function() {

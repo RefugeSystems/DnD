@@ -859,85 +859,91 @@ class Universe extends EventEmitter {
 	 * 
 	 * @method forwardTime
 	 * @param {Integer} increment [description]
+	 * @param {Boolean} lock The Timeline. Pass as true to jump times without processing or timeline jumping.
 	 */
-	forwardTime(increment) {
-		this.toTime((this.time || 0) + increment);
+	forwardTime(increment, lock) {
+		this.toTime((this.time || 0) + increment, lock);
 	}
 	
 	/**
 	 * 
 	 * @method toTime
 	 * @param {Integer} end [description]
+	 * @param {Boolean} lock The Timeline. Pass as true to jump times without processing or timeline jumping.
 	 */
-	 toTime(end) {
-		var reverse = end < this.time,
-			start = this.time;
-		this.chronicle.getOccurrences(this.time, end, null, (err, occurrences) => {
-			if(err) {
-				this.emit("error", new Anomaly("universe:time:changing", "Failed to retrieve occurances within time period for universe", 50, {"start": this.time, "end": end}, err, this));
-			} else {
-				console.log("Time[" + start + " -> " + end + " @ " + occurrences.length + "]: ", {
-					"timeline": this.timeline,
-					"time": this.time
-				});
+	 toTime(end, lock) {
+		var reverse = end < this.time;
 
-				if(occurrences && occurrences.length) {
-					var processing = occurrences.length,
-						chronicler,
-						occurrence,
-						process;
-					
-					process = () => {
-						occurrence = occurrences.shift();
-						if(occurrence) {
-							chronicler = this.chronicler[occurrence.type];
-							occurrence.reverse = reverse;
-							if(chronicler) {
-								chronicler.process(this, occurrence, process);
-							} else if(occurrence.emit) {
-								this.emit(occurrence.emit, occurrence);
-							}
-						}
-						if(occurrences.length) {
-							setTimeout(process, 0);
-						} else {
-							// console.log("Time[" + start + " -> " + end + " @ " + processing + "]: ", {
-							// 	"timeline": this.timeline,
-							// 	"time": this.time
-							// });
-							this.emit("time:changed", {
-								"timeline": this.timeline,
-								"time": this.time
-							});
-						}
-					};
-					
-					process();
+		if(!lock) {
+			this.chronicle.getOccurrences(this.time, end, null, (err, occurrences) => {
+				if(err) {
+					this.emit("error", new Anomaly("universe:time:changing", "Failed to retrieve occurances within time period for universe", 50, {"start": this.time, "end": end}, err, this));
 				} else {
-					// console.log("Time[" + start + " -> " + end + "]: ", {
+					// console.log("Time[" + this.time + " -> " + end + " @ " + occurrences.length + "]: ", {
 					// 	"timeline": this.timeline,
 					// 	"time": this.time
 					// });
-					this.emit("time:changed", {
-						"timeline": this.timeline,
-						"time": this.time
-					});
+
+					if(occurrences && occurrences.length) {
+						var processing = occurrences.length,
+							chronicler,
+							occurrence,
+							process;
+						
+						process = () => {
+							occurrence = occurrences.shift();
+							if(occurrence) {
+								chronicler = this.chronicler[occurrence.type];
+								occurrence.reverse = reverse;
+								if(chronicler) {
+									chronicler.process(this, occurrence, process);
+								} else if(occurrence.emit) {
+									this.emit(occurrence.emit, occurrence);
+								}
+							}
+							if(occurrences.length) {
+								setTimeout(process, 0);
+							} else {
+								// console.log("Time[" + this.time + " -> " + end + " @ " + processing + "]: ", {
+								// 	"timeline": this.timeline,
+								// 	"time": this.time
+								// });
+								this.emit("time:changed", {
+									"timeline": this.timeline,
+									"time": this.time
+								});
+							}
+						};
+						
+						process();
+					} else {
+						// console.log("Time[" + this.time + " -> " + end + "]: ", {
+						// 	"timeline": this.timeline,
+						// 	"time": this.time
+						// });
+						this.emit("time:changed", {
+							"timeline": this.timeline,
+							"time": this.time
+						});
+					}
 				}
+			});
+
+			if(reverse && !this.reversing) {
+				this.reversing = true;
+				this.timeline++;
+				this.manager.setting.object["setting:timeline"].setValues({
+					"value": this.timeline
+				});
+			} else if(!reverse && this.reversing) {
+				this.reversing = false;
 			}
-		});
+		}
+
 		this.time = end;
 		this.manager.setting.object["setting:time"].setValues({
 			"value": this.time
 		});
-		if(reverse && !this.reversing) {
-			this.reversing = true;
-			this.timeline++;
-			this.manager.setting.object["setting:timeline"].setValues({
-				"value": this.timeline
-			});
-		} else if(!reverse && this.reversing) {
-			this.reversing = false;
-		}
 	}
 
 	/**

@@ -1702,6 +1702,9 @@ RSObject.setObjects = function(a, b, type) {
 	if(!b) {
 		return a;
 	}
+	if(!a) {
+		return b;
+	}
 	
 	var akeys = Object.keys(a),
 		bkeys = Object.keys(b),

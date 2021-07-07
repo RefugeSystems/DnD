@@ -69,7 +69,7 @@
 				if(this.storage && this.storage.classification && (definition = this.universe.index.classes[this.storage.classification])) {
 					for(i=0; i<definition.fields.length; i++) {
 						field = this.universe.index.fields[definition.fields[i]];
-						if(field) {
+						if(field && (!field.attribute || !field.attribute.no_edit)) {
 							fields.push(field);
 						} else {
 							// TODO: Improve tracking

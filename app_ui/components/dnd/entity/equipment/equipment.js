@@ -76,7 +76,6 @@ rsSystem.component("dndEntityEquipment", {
 			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
 		},
 		"use": function(item) {
-			console.log("Use: ", item);
 			this.takeAction(this.universe.index.action["action:main:attack"], item, [item.damage]);
 		}
 	},

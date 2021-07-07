@@ -1,3 +1,19 @@
+/**
+ * When no compare function is specified for the extended array functions, this
+ * method is used.
+ * 
+ * This method checks the initial object for an `equal` method for testing and
+ * falls back on comparing the ID of both parameters should they exist.
+ * @method DEFAULT_CompareFunction
+ * @private
+ * @static
+ * @param a 
+ * @param b 
+ * @returns {Boolean}
+ */
+var DEFAULT_CompareFunction = function(a, b) {
+	return a === b || (a.equal && a.equal(b)) || (a && b && a.id && b.id && a.id === b.id);
+};
 
 /**
  * Add an item to an array if and only if that item is not currently in this array.
@@ -76,7 +92,7 @@ if(!Array.prototype.contains) {
 if(!Array.prototype.intersection) {
 	Array.prototype.intersection = function(intersecting, compare) {
 		var p, t, i, add, intersection = [];
-		compare = compare || function(a, b) {return (a.equal && a.equal(b)) || a === b;};
+		compare = compare || DEFAULT_CompareFunction;
 
 		var process = [intersecting];
 		/* Add arbitrary additional arguments to process list if provided */
@@ -130,7 +146,7 @@ if(!Array.prototype.intersection) {
 if(!Array.prototype.difference) {
 	Array.prototype.difference = function(diff, compare) {
 		var t, i, add, difference = [];
-		compare = compare || function(a, b) {return (a.equal && a.equal(b)) || a === b;};
+		compare = compare || DEFAULT_CompareFunction;
 
 		for(t=0; t<this.length; t++) {
 			add = true;
@@ -171,7 +187,7 @@ if(!Array.prototype.difference) {
 if(!Array.prototype.union) {
 	Array.prototype.union = function(unioning, compare) {
 		var p, t, r, add, result = [];
-		compare = compare || function(a, b) {return (a.equal && a.equal(b)) || a === b;};
+		compare = compare || DEFAULT_CompareFunction;
 
 		var process = [this, unioning];
 		/* Add arbitrary additional arguments to process list if provided */

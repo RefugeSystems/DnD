@@ -218,7 +218,6 @@ rsSystem.component("DNDInventory", {
 						hide = true;
 					}
 					if(buffer.attunes) {
-						console.log("Buffer: ", buffer.attuned, this.entity.id);
 						if(buffer.attuned === this.entity.id) {
 							this.unattunable.push(buffer.id);
 						} else {

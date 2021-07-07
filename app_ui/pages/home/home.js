@@ -98,6 +98,7 @@ rsSystem.component("RSHome", {
 		rsSystem.register(this);
 		var path = location.pathname,
 			index = path.lastIndexOf("/");
+
 		if(index !== -1) {
 			path = path.substring(0, index);
 		}
@@ -116,13 +117,6 @@ rsSystem.component("RSHome", {
 				this.universe.logout();
 			}
 		});
-		
-		var path = location.pathname,
-			index = path.lastIndexOf("/"),
-			timeout;
-		if(index !== -1) {
-			path = path.substring(0, index);
-		}
 		
 		if(rsSystem.configuration) {
 			Vue.set(this, "configuration", rsSystem.configuration);

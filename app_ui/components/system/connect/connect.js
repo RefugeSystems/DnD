@@ -134,6 +134,13 @@
 					}
 				}
 				Vue.set(this, "loading", false);
+				
+				setTimeout(() => {
+					var login = $(this.$el).find("#login-username");
+					if(login && login.length) {
+						login[0].focus();
+					}
+				}, 10);
 			}).catch((error) => {
 				console.error("Error processing Available Authentication Modules: ", error);
 				this.$emit("message", {

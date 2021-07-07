@@ -345,8 +345,8 @@ fields.push({
 	"description": "Flag to mark this object as a preview of something and not an actual object",
 	"type": "boolean",
 	"attribute": {
-		"hide_when_not_set": true,
-		"displayed": false
+		"displayed": false,
+		"no_edit": true
 	}
 });
 fields.push({

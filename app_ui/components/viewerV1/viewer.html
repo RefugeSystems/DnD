@@ -1,0 +1,173 @@
+
+<div class="rs-component component-viewer" :class="renderState()">
+
+	<div class="map" v-if="location && location.map" :style="" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
+		<div class="view" onexit="true" v-pan="pan">
+			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" :style="'font-size: ' + (baseFontSize + image.zoom) + 'px;'">
+				<div class="pointsOfInterest" v-if="pointsOfInterest.length && storage.markers">
+					<!--
+					<button class="scaled poi" :class="poiStyling(link)" v-if="poiNamed(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%; font-size: ' + ((link.label_sizing || baseFontSize) + image.zoom) + 'px;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
+					-->
+					<button class="scaled poi" :class="poiStyling(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click="openLink(link)" v-on:click.stop.prevent="poiMenu(link)">
+						<span class="poi-icon scaled" :class="poiClass(link)"></span>
+						<span class="labeling scaled" v-if="link.label" :class="link.label && storage.labels?'shown':'hidden'">{{link.label || link.nickname || link.name}}</span>
+					</button>
+				</div>
+				<div class="coordinates" v-for="coordinate in location.coordinates" v-if="!coordinate.standalone">
+					<span class="coordinate top left" :style="'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
+					<span class="coordinate bottom right" :style="'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
+				</div>
+				<div class="coordinate-dots">
+					<button class="dot" v-for="coordinate in location.coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button>
+				</div>
+				<div class="map-paths">
+					<canvas v-for="loc in locales" :data-id="'locale:' + loc.id"></canvas>
+					<canvas id="measuring"></canvas>
+				</div>
+				<div class="actions" v-if="actions.open" :style="getActionMenuStyle()">
+					<div class="action-grouped">
+						<div class="actions-header">
+							<span class="titling">
+								{{actions.header}}
+							</span>
+							<button class="actions-close alert" v-on:click.stop.prevent="closeActions()">
+								<span class="fas fa-times"></span>
+							</button>
+						</div>
+						<div class="actions-options">
+							<div class="generator flex h" v-if="storage.generate_location">
+								<input type="text" id="viewgen" v-model="storage.generate_location_name" v-on:keyup.enter="fire(menuItems.generateLocation, $event)"/>
+								<button v-on:click="fire(menuItems.generateLocation, $event)" class="normal">
+									<span :class="getGeneratedClass()"></span>
+								</button>
+							</div>
+							<button class="option normal" v-for="option in actions.options" v-on:click.stop.prevent="fire(option, $event)">
+								<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
+								<span>{{option.text}}</span>
+							</button>
+							<button class="option normal" v-if="storage.path_fill" v-on:click.stop.prevent="fire(setNamePointOption, $event)">
+								<span class="fal fa-code-commit"></span>
+								<span>Set Name Point</span>
+							</button>
+							<button class="option normal" v-if="storage.path_fill" v-on:click.stop.prevent="fire(addPointOption, $event)">
+								<span class="fas fa-code-commit"></span>
+								<span>Add Point</span>
+							</button>
+							<div class="set-distance flex h" v-if="player.gm && storage.measuring[location.id] && storage.measuring[location.id].length === 2">
+								<input type="number" v-model.number="storage.distance" v-on:keyup.enter="fire(setMeasurements, $event)"/>
+								<select v-model.number="storage.distance_unit">
+									<option v-for="unit in lengths" :value="unit.symbol">{{unit.symbol}}</option>
+								</select>
+							</div>
+							<input type="text" v-model="storage.alter" v-if="player.gm"/>
+						</div>
+					</div>
+					<div class="action-suboptions" :class="submenuClasses()">
+						<div class="grouped flex v" v-if="action && action.options">
+							<button class="option normal" v-for="option in action.options" v-on:click.stop.prevent="fire(option, $event)">
+								<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
+								<span>{{option.text}}</span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<rs-image :image="location.map" modes="viewer-map" draggable="false" />
+			</div>
+			<rs-image class="background-image" :image="location.mapbg" modes="viewer-map"  v-if="location.mapbg" draggable="false" />
+		</div>
+	</div>
+
+
+	<div class="menu" :class="menuOpen?'open':'closed'">
+		<button class="control toggle" v-on:click="toggleMenu()">
+			<!-- span class="rotational-icon fas fa-caret-square-down" :class="menuOpen?'fa-caret-square-up':'fa-caret-square-down'"></span -->
+			<span class="rotational-icon fas fa-caret-square-down" :class="menuOpen?'rot180':''"></span>
+		</button>
+		<div class="menu-items flow-v">
+			<div class="search flex h">
+				<div class="text" :title="searchError">
+					<input class="search-text" type="text" v-model="storage.search" v-on:keyup.enter="searchMap(storage.search)" v-on:keyup="filterPOIs(storage.search)" v-on:keyup.escape="clearSearch()" v-on:keyup.esc="clearSearch()" :class="searchError?'search-error':''"/>
+				</div>
+				<button class="control action" v-on:click="togglePOIFiltering()" title="Hide locations that do not match from the display">
+					<span class="icon" :class="storage.poiFiltering?'fas fa-map-marker-slash':'fas fa-map-marker'"></span>
+				</button>
+				<button class="control action" v-on:click="searchMap(storage.search)" title="Center on the first matching location found">
+					<span class="icon far fa-search-location"></span>
+				</button>
+			</div>
+			<div class="control-row flex h fill" v-for="row in menuItems">
+				<button class="control grow-3" v-if="!row.length && row.length !== 0 && (!row.conditional || row.conditional())" v-on:click="processAction(row, $event)" :class="row.action">
+					<span class="icon" :class="row.icon"></span>
+					<span class="text">{{row.text}}</span>
+				</button>
+				<button class="control grow-3" v-if="row.length" v-for="menuItem in row" v-on:click="processAction(menuItem, $event)" :class="menuItem.action">
+					<span class="icon" :class="menuItem.icon"></span>
+					<span class="text">{{menuItem.text}}</span>
+				</button>
+			</div>
+			<div class="flex h fill">
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.labelItem, $event)">
+					<span class="icon fal" :class="storage.labels?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.labelItem.text}}</span>
+				</button>
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.markerItem, $event)">
+					<span class="icon fal" :class="storage.markers?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.markerItem.text}}</span>
+				</button>
+			</div>
+			<div class="flex h fill">
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.followItem, $event)">
+					<span class="icon fal" :class="storage.follow?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.followItem.text}}</span>
+				</button>
+				<button class="control follow grow-3" v-on:click="processAction(menuItems.fullscreen, $event)">
+					<span class="icon fal" :class="storage.fullscreen?'fa-check-square':'fa-square'"></span>
+					<span class="text">{{menuItems.fullscreen.text}}</span>
+				</button>
+			</div>
+			<select class="control master" v-model="storage.master_view" v-if="player.gm" v-on:change="filterPOIs()">
+				<option value="">Player Character</option>
+				<option value="master">Master</option>
+				<option v-for="entity in universe.listing.entity" :value="entity.id">{{entity.name}}</option>
+			</select>
+			<select class="control master" v-model="storage.generate_location" v-if="player.gm">
+				<option value="">Hide Creator</option>
+				<option value="star_system">Making Star Systems</option>
+				<option value="station">Making Stations</option>
+				<option value="planet">Making Planets</option>
+				<option value="moon">Making Moons</option>
+				<option value="city">Making Cities</option>
+				<option value="marker">Making Marker</option>
+			</select>
+			<select class="control master" v-model="storage.path_fill" v-if="player.gm">
+				<option value="">No Modify</option>
+				<option v-for="locale in locales" :value="locale.id">{{locale.name}}</option>
+			</select>
+			<select class="control master" v-model="storage.view_party" v-if="player.gm">
+				<option value="">No Party Stats</option>
+				<option v-for="party in parties" :value="party.id">{{party.name}}</option>
+			</select>
+			<div class="measuring-total length" v-if="totalLength">
+				{{totalLength}}
+			</div>
+			<div class="measuring-total length" v-if="totalTime">
+				{{totalTime}}
+			</div>
+		</div>
+	</div>
+
+	<div class="legend" :class="legendOpen?'open':'closed'" v-if="legendDisplayed && locales.length">
+		<button class="control toggle" v-on:click="toggleLegend()">
+			<span class="rotational-icon fas fa-caret-square-up" :class="legendOpen?'rot180':''"></span>
+		</button>
+		<div class="menu-items flow-v">
+			<div class="legend-list flex v fill">
+				<button class="control follow grow-3" v-for="locale in locales" v-on:click="toggleLocale(locale)">
+					<span class="icon fal" :class="storage.hidden_legend[locale.id]?'fa-square':'fa-check-square'"></span>
+					<span class="icon far" :class="locale.contained?'fa-draw-polygon':'fa-horizontal-rule'" :style="'color: ' + locale.color + ';'"></span>
+					<span class="text">{{locale.name}}</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

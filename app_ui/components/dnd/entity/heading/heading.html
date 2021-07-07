@@ -1,6 +1,12 @@
 <div class="rs-component dnd-component entity-heading">
 	<div class="justified flex h bar">
 		<div class="property-container name flex h centered" v-linkable="entity.id">
+			<button class="property" v-if="entity.is_locked === true" v-on:click="info('knowledge:locked')">
+				<span class="fas fa-lock-alt"></span>
+			</button>
+			<button class="property" v-if="entity.is_locked === false" v-on:click="info('knowledge:locked')">
+				<span class="fas fa-unlock-alt"></span>
+			</button>
 			<button class="property" v-on:click="info(entity)">
 				{{entity.nickname || entity.name}}
 			</button>

@@ -16,5 +16,5 @@
 		<span v-if="player.gm">This location is a preview object:</span>
 		<span>{{$route.params.id}}</span>
 	</div>
-	<rs-viewer class="map" v-else :universe="universe" :player="player" :profile="profile" :configuration="configuration" :location="location" storage-key="rsmap:storage"></rs-viewer>
+	<rs-viewer-v1 class="map" v-else :universe="universe" :player="player" :profile="profile" :configuration="configuration" :location="location" storage-key="rsmap:storage"></rs-viewer-v1>
 </div>

@@ -310,7 +310,6 @@ rsSystem.component("dndDialogRoll", {
 		if(!this.storage.rolls) {
 			this.storage.rolls = [];
 		}
-		console.log(" Skills: ", _p(this.skills));
 		if(this.skills.length === 1) {
 			var find = $(this.$el).find("#" + this.skills[0].skill.id.substring(7));
 			if(find && find.length) {
@@ -420,7 +419,6 @@ rsSystem.component("dndDialogRoll", {
 			if(event.dice_rolls.vantage) {
 				footnote = event.dice_rolls.vantage[0] + " (" + event.dice_rolls.vantage[1] + ")";
 			}
-			console.log("Rec: ", event);
 			if(event.dice_rolls && event.dice_rolls.d20) {
 				if(event.dice_rolls.d20[0] === 20) {
 					Vue.set(this, "isCritical", true);

@@ -449,33 +449,34 @@
 		"id": "rendering_has_path",
 		"name": "Has Rendering Path",
 		"description": "Flag to indicate this object has a rendering path.",
-		"type": "array",
+		"type": "boolean",
 		"attribute": {
+			"hide_when_not_set": true,
 			"displayed": false
 		}
 	}, {
 		"id": "rendering_has_fill",
 		"name": "Has Rendering Filled",
 		"description": "Flag to indicate this object's rendered path should be filled in.",
-		"type": "array",
+		"type": "boolean",
 		"attribute": {
-			"displayed": false
+			"hide_when_not_set": true,
+			"displayed": false,
+			"depends_on": {
+				"rendering_has_path": true
+			}
 		}
 	}, {
 		"id": "rendering_path",
 		"name": "Rendering Path",
-		"description": "Point path for the polygon. This array contains 2 element arrays for the x & y coordinates.",
+		"description": "Point path for the polygon. This array contains 2 element arrays for the x & y coordinates. May also contain a reference to an Entity or Location and subsequently leverages the x,y coordinates of that object. The Entity/Location note is not restrictive, resolved object just requires an x and y numeric property. Unresolvable values are skipped with a console warning.",
 		"type": "array",
 		"attribute": {
-			"displayed": false
-		}
-	}, {
-		"id": "point_pool",
-		"name": "Point Pool",
-		"description": "Various points for improving your character in various ways",
-		"type": "object",
-		"attribute": {
-			"displayed": false
+			"hide_when_not_set": true,
+			"displayed": false,
+			"depends_on": {
+				"rendering_has_path": true
+			}
 		}
 	}, {
 		"id": "rendering_path_closed",
@@ -483,7 +484,11 @@
 		"description": "When true, this path is treated as a polygon with fill",
 		"type": "boolean",
 		"attribute": {
-			"displayed": false
+			"hide_when_not_set": true,
+			"displayed": false,
+			"depends_on": {
+				"rendering_has_path": true
+			}
 		}
 	}, {
 		"id": "rendering_fill_color",
@@ -491,13 +496,29 @@
 		"description": "Coloring. Use Hex RGBA specification; ie. #FFFFFF60",
 		"type": "string",
 		"attribute": {
-			"displayed": false
+			"hide_when_not_set": true,
+			"displayed": false,
+			"depends_on": {
+				"rendering_has_path": true
+			}
 		}
 	}, {
 		"id": "rendering_path_color",
 		"name": "Rendering Path Color",
 		"description": "Coloring. Use Hex RGBA specification; ie. #FFFFFF60",
 		"type": "string",
+		"attribute": {
+			"hide_when_not_set": true,
+			"displayed": false,
+			"depends_on": {
+				"rendering_has_path": true
+			}
+		}
+	}, {
+		"id": "point_pool",
+		"name": "Point Pool",
+		"description": "Various points for improving your character in various ways",
+		"type": "object",
 		"attribute": {
 			"displayed": false
 		}
