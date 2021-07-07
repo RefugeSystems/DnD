@@ -143,51 +143,6 @@
 			}
 		},
 		"computed": {
-			"availablePOIs": function() {
-				var availablePOIs = [],
-					entity,
-					buffer,
-					x;
-
-				if(this.locales) {
-					this.locales.splice(0);
-				}
-
-				for(x=0; x<this.universe.listing.location.length; x++) {
-					buffer = this.universe.listing.location[x];
-					if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-						availablePOIs.push(buffer);
-						// buffer.$on("modified", this.minorUpdate);
-						if(buffer.rendering_has_path && this.locales) {
-							this.locales.push(buffer);
-						}
-					}
-				}
-
-				for(x=0; x<this.universe.listing.entity.length; x++) {
-					buffer = this.universe.listing.entity[x];
-					if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-						availablePOIs.push(buffer);
-					}
-				}
-
-				for(x=0; x<this.universe.listing.party.length; x++) {
-					buffer = this.universe.listing.party[x];
-					if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-						availablePOIs.push(buffer);
-					}
-				}
-
-				for(x=0; x<this.universe.listing.storm.length; x++) {
-					buffer = this.universe.listing.storm[x];
-					if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-						availablePOIs.push(buffer);
-					}
-				}
-
-				this.redrawPaths();
-				return availablePOIs;
-			}
 			// "coordinates": function() {
 			// 	var coordinates = [];
 			// 	if(this.location.coordinates && this.location.coordinates.length) {
@@ -235,7 +190,7 @@
 			data.availableCanvases = {};
 			data.availableLocales = {};
 			data.pointsOfInterest = [];
-			// data.availablePOIs = [];
+			data.availablePOIs = [];
 			// data.coordinates = [];
 			data.parties = [];
 			data.locales = [];
@@ -427,6 +382,7 @@
 			rsSystem.EventBus.$on("measure-point", this.receiveMeasurementPoint);
 			rsSystem.EventBus.$on("info:closed", this.clearSearch);
 			rsSystem.EventBus.$on("copied-id", this.setMenuID);
+			this.universe.$on("updated", this.update);
 			// this.universe.$on("universe:modified", this.update);
 			// this.universe.$on("model:modified", this.update);
 			// this.location.$on("modified", this.update);
@@ -876,6 +832,13 @@
 							} else {
 								this.info(option.location);
 							}
+						}
+						break;
+					case "copy-key":
+						console.log("Copy Info: ", option);
+						// this.info(option.location);
+						if(this.localeInfo.location) {
+							Vue.set(this.storage, "alter", this.localeInfo.location.id);
 						}
 						break;
 				}
@@ -1560,6 +1523,10 @@
 					classStyle += " map-border";
 				}
 
+				if(link.color_flag) {
+					classStyle += " color-flag-" + link.color_flag + " rsbg-" + link.color_flag;
+				}
+
 				return classStyle;
 			},
 			"poiNamed": function(link) {
@@ -1690,6 +1657,11 @@
 					*/
 
 					this.actions.options.push({
+						"icon": "fas fa-copy",
+						"event": "copy-key",
+						"text": "Copy ID"
+					});
+					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",
 						"event": "set-location",
 						"text": "Set Location"
@@ -1697,66 +1669,67 @@
 				}
 			},
 			"update": function(source) {
-				// console.log("Update: ", source);
-				var background,
-					image,
-					buffer,
-					hold,
-					x;
-				
-				this.buildMenu();
+				if(!source || source.location === this.location.id) {
+					var buffer,
+						x;
+					
+					this.availablePOIs.splice(0);
+					this.locales.splice(0);
 
-				// this.availablePOIs.splice(0);
-				// this.locales.splice(0);
-				// for(x=0; x<this.universe.listing.location.length; x++) {
-				// 	buffer = this.universe.listing.location[x];
-				// 	if(buffer && !buffer.disabled && buffer.location === this.location.id || ((hold = this.universe.index.location[buffer.location]) && hold.location === this.location.id && hold.rendering_has_path)) {
-				// 		this.availablePOIs.push(buffer);
-				// 		// buffer.$on("modified", this.minorUpdate);
-				// 		if(buffer.rendering_has_path) {
-				// 			this.locales.push(buffer);
-				// 		}
-				// 	}
-				// }
-				// for(x=0; x<this.universe.listing.entity.length; x++) {
-				// 	buffer = this.universe.listing.entity[x];
-				// 	if(buffer.location === this.location.id) {
-				// 		this.availablePOIs.push(buffer);
-				// 		// buffer.$on("modified", this.minorUpdate);
-				// 	}
-				// }
-				// this.parties.splice(0);
-				// for(x=0; x<this.universe.listing.party.length; x++) {
-				// 	buffer = this.universe.listing.party[x];
-				// 	if(buffer.active) {
-				// 		this.parties.push(buffer);
-				// 		if(buffer.location === this.location.id) {
-				// 			this.availablePOIs.push(buffer);
-				// 		}
-				// 	}
-				// }
+					for(x=0; x<this.universe.listing.location.length; x++) {
+						buffer = this.universe.listing.location[x];
+						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							this.availablePOIs.push(buffer);
+							if(buffer.rendering_has_path && this.locales) {
+								this.locales.push(buffer);
+							}
+						}
+					}
 
-				if(this.location) {
-					Vue.set(this, "ready", false);
-					this.getDimensions(this.universe.getImagePath(this.location.map));
+					for(x=0; x<this.universe.listing.entity.length; x++) {
+						buffer = this.universe.listing.entity[x];
+						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							this.availablePOIs.push(buffer);
+						}
+					}
+
+					for(x=0; x<this.universe.listing.party.length; x++) {
+						buffer = this.universe.listing.party[x];
+						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							this.availablePOIs.push(buffer);
+						}
+					}
+
+					for(x=0; x<this.universe.listing.storm.length; x++) {
+						buffer = this.universe.listing.storm[x];
+						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							this.availablePOIs.push(buffer);
+						}
+					}
+
+					if(this.location) {
+						Vue.set(this, "ready", false);
+						this.getDimensions(this.universe.getImagePath(this.location.map));
+					}
+
+					if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
+						Vue.set(this.storage, "viewed_at", this.location.shown_at);
+						Object.assign(this.image, this.location.showing);
+						this.apply(this.image);
+					}
+
+					this.buildMenu();
+					this.determinePOIs();
+					this.redrawPaths();
+					this.renderMeasurements();
 				}
-
-				if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
-					Vue.set(this.storage, "viewed_at", this.location.shown_at);
-					Object.assign(this.image, this.location.showing);
-					this.apply(this.image);
-				}
-
-				this.determinePOIs();
-				this.$forceUpdate();
-				this.redrawPaths();
-				this.renderMeasurements();
 			}
 		},
 		"beforeDestroy": function() {
 			rsSystem.EventBus.$off("measure-point", this.receiveMeasurementPoint);
 			rsSystem.EventBus.$off("info:closed", this.clearSearch);
 			rsSystem.EventBus.$off("copied-id", this.setMenuID);
+			this.universe.$off("updated", this.update);
 			// this.universe.$off("universe:modified", this.update);
 			// this.universe.$off("model:modified", this.update);
 		},

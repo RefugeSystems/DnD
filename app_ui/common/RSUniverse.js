@@ -457,6 +457,7 @@ class RSUniverse extends EventEmitter {
 					for(x=0; x<keys.length; x++) {
 						Vue.set(this.index[classification][id]._sync, keys[x], received);
 					}
+					this.$emit("created", this.index[classification][id]);
 				} else {
 					for(x=0; x<keys.length; x++) {
 						if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
@@ -485,6 +486,7 @@ class RSUniverse extends EventEmitter {
 						}
 					}
 				}
+				this.$emit("updated", this.index[classification][id]);
 			} else {
 				rsSystem.log.error("Unknown Classification[@" + id + "]: " + classification, delta);
 			}
