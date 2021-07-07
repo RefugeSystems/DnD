@@ -9,7 +9,7 @@
 					<span>Attune</span>
 				</td>
 				<td>
-					<select v-model="attune">
+					<select v-model="attune" v-on:keyup.enter="rest()">
 						<option v-for="attunable in attunables" :value="attunable.id">{{attunable.name}}</option>
 					</select>
 				</td>

@@ -2649,7 +2649,12 @@
 		"name": "Links To",
 		"description": "Used for locations (or similar) to note door or portal like effects for mapping purposes.",
 		"type": "string",
-		"attribute": {}
+		"inheritable": [
+			"location"
+		],
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "note",
 		"name": "Note",

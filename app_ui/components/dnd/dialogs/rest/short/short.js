@@ -40,7 +40,6 @@ rsSystem.component("dndDialogShortRest", {
 	},
 	"data": function () {
 		var data = {},
-			item,
 			i;
 
 		if(typeof(this.details.entity) === "string") {
@@ -51,10 +50,15 @@ rsSystem.component("dndDialogShortRest", {
 
 		data.attune = null;
 		data.roll = 0;
-		data.hitdie = Object.keys(data.entity.hit_dice);
-		data.used = {};
-		for(i=0; i<data.hitdie.length; i++) {
-			data.used[data.hitdie[i]] = 0;
+		if(data.entity.hit_dice) {
+			data.hitdie = Object.keys(data.entity.hit_dice);
+			data.used = {};
+			for(i=0; i<data.hitdie.length; i++) {
+				data.used[data.hitdie[i]] = 0;
+			}
+		} else {
+			data.hitdie = [];
+			data.used = {};
 		}
 
 		return data;

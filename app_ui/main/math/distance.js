@@ -1,3 +1,10 @@
+/**
+ * 
+ * @class distance
+ * @namespace rsSystem.math
+ * @constructor
+ * @static
+ */
 rsSystem.math = rsSystem.math || {};
 rsSystem.math.distance = rsSystem.math.distance || {};
 

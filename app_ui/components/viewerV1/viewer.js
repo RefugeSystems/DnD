@@ -333,6 +333,9 @@
 			"location": {
 				"handler": function(newValue, oldValue) {
 					this.update();
+					setTimeout(() => {
+						this.resetViewport();
+					}, 100);
 				}
 			},
 			"location.coordinates": {
@@ -865,11 +868,11 @@
 						}
 						break;
 					case "info-key":
-//						console.log("Show Info: ", option);
+						// console.log("Show Info: ", option);
 						// this.info(option.location);
 						if(option.location) {
-							if(option.location._class === "location" && option.location.map) {
-								this.$router.push("/map/" + option.location.id);
+							if(option.location.links_to || option.location.map) {
+								this.$router.push("/map/" + (option.location.links_to || option.location.id));
 							} else {
 								this.info(option.location);
 							}
@@ -1330,6 +1333,8 @@
 					y2,
 					mx,
 					my,
+					uS, // unumStud
+					kS, // kiloStud
 					i,
 					j;
 
@@ -1356,9 +1361,9 @@
 						canvas.clearRect(0, 0, canvas.width, canvas.height);
 						canvas.font = (14 + this.storage.image.zoom) + "px serif";
 						canvas.strokeStyle = "#FFFFFF";
-						canvas.lineWidth = 2;
-						canvas.globalAlpha = .7;
 						canvas.fillStyle = "#FFFFFF";
+						canvas.globalAlpha = .7;
+						canvas.lineWidth = 2;
 
 						zoom = 1 + .1 * this.storage.image.zoom;
 
@@ -1380,7 +1385,14 @@
 								path = rsSystem.math.distance.points2D(x1, y1, x2, y2) / zoom;
 								path = Math.floor(path + .5);
 								path = this.location.map_distance * path;
-								len = rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(path), "", ["pc", "ly", "km"]);
+								uS = Math.ceil(path%1000);
+								kS = Math.floor(path/1000);
+								if(kS) {
+									len = kS + "kS " + uS + "uS";
+								} else {
+									len = uS + "uS";
+								}
+								// len = rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(path), "", ["pc", "ly", "km"]);
 								total_length += path;
 								if(party && party.speed) {
 									time = path / party.speed;
@@ -1403,6 +1415,15 @@
 								}
 								//canvas.fillRect(tx - 5, ty - 5, len.length * (20 + this.image.zoom), 30 + this.image.zoom);
 								canvas.fillText(len, mx, my);
+								canvas.strokeStyle = "#000000";
+								canvas.fillStyle = "#000000";
+								canvas.globalAlpha = .7;
+								canvas.lineWidth = 1;
+								canvas.fillText(len, mx, my);
+								canvas.strokeStyle = "#FFFFFF";
+								canvas.fillStyle = "#FFFFFF";
+								canvas.globalAlpha = .7;
+								canvas.lineWidth = 2;
 							}
 
 							x1 = x2;
@@ -1422,7 +1443,16 @@
 						}
 
 						if(total_length) {
-							Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["pc", "ly", "km"]));
+							console.log("Total Length: ", total_length);
+							// Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["pc", "ly", "km"]));
+							// Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["km", "m"]));
+							uS = Math.ceil(total_length%1000);
+							kS = Math.floor(total_length/1000);
+							if(kS) {
+								Vue.set(this, "totalLength", kS + "kS " + uS + "uS");
+							} else {
+								Vue.set(this, "totalLength", uS + "uS");
+							}
 						} else {
 							Vue.set(this, "totalLength", null);
 						}
