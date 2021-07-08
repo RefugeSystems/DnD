@@ -254,6 +254,15 @@ rsSystem.component("rsTable", {
 			}
 			html += "<ul>";
 		},
+		"getValue": function(field, value) {
+			if(field.inheritable) {
+				var referenced = this.universe.getObject(value);
+				if(referenced && !referenced.disabled && !referenced.is_preview) {
+					return referenced.name || referenced.id;
+				}
+			}
+			return value;
+		},
 		/**
 		 * 
 		 * @method select
@@ -282,6 +291,12 @@ rsSystem.component("rsTable", {
 					this.$emit("selected", record, header);
 				}
 			}
+		},
+		"repeatSelect": function(event) {
+			this.$emit("selected", event);
+		},
+		"repeatDeselect": function(event) {
+			this.$emit("deselected", event);
 		}
 	},
 	"beforeDestroy": function() {

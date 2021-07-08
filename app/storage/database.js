@@ -33,7 +33,7 @@ mapping.calculated = mapping.computed = {
 mapping.icon = {
 	"type": "text"
 };
-mapping.text = mapping.string = mapping.md = {
+mapping.text = mapping.string = mapping.md = mapping.markdown = {
 	"type": "text"
 };
 mapping.date = mapping.time = {

@@ -184,10 +184,64 @@ rsSystem.component("dndEntityStats", {
 		 */
 		"listSpells": function() {
 			// TODO: Load List
-			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndDialogList",
-				"entity": this.entity.id
-			});
+			var details = {},
+				known,
+				spell,
+				i;
+
+			details.title = this.entity.name;
+			details.component = "dndDialogList";
+			details.link = "/spells/" + this.entity.id;
+			details.entity = this.entity.id;
+			details.sections = ["prepared", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+			details.cards = {};
+			details.limit = 20,
+			details.data = {
+				"prepared": this.universe.transcribeInto(this.entity.spells, [], "spell"),
+				"0": [],
+				"1": [],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": [],
+				"9": [],
+				"10": [],
+				"none": []
+			};
+			details.cards.none = {
+				"name": "No Level"
+			};
+			details.cards.prepared = {
+				"name": "Prepared"
+			};
+			details.cards[0] = {"name": "Cantrips"};
+			details.cards[1] = {"name": "Level 1"};
+			details.cards[2] = {"name": "Level 2"};
+			details.cards[3] = {"name": "Level 3"};
+			details.cards[4] = {"name": "Level 4"};
+			details.cards[5] = {"name": "Level 5"};
+			details.cards[6] = {"name": "Level 6"};
+			details.cards[7] = {"name": "Level 7"};
+			details.cards[8] = {"name": "Level 8"};
+			details.cards[9] = {"name": "Level 9"};
+			details.cards[10] = {"name": "Level 10"};
+
+			known = Object.keys(this.entity.knowledge_matrix);
+			for(i=0; i<known.length; i++) {
+				spell = this.universe.index.spell[known[i]];
+				if(spell && !spell.disabled && !spell.is_preview && details.data[spell.level]) {
+					details.data[spell.level].push(spell);
+				}
+			}
+
+			for(i=0; i<details.sections.length; i++) {
+				details.data[details.sections[i]].sort(this.sortByLevel);
+			}
+		
+			rsSystem.EventBus.$emit("dialog-open", details);
 		},
 		"getSpellAttack": function() {
 			var attack = this.entity.spell_attack || 0;
@@ -205,8 +259,7 @@ rsSystem.component("dndEntityStats", {
 		 * @method listInventory
 		 */
 		"listInventory": function() {
-			// TODO: Load List
-
+			// TODO: Investigate adding equip controls to the list
 			var details = {},
 				items = [],
 				added,
@@ -216,6 +269,7 @@ rsSystem.component("dndEntityStats", {
 				j;
 
 			details.title = this.entity.name;
+			details.link = "/inventory/" + this.entity.id;
 			details.component = "dndDialogList";
 			details.entity = this.entity.id;
 			details.sections = ["effects", "knowledges", "feats"];

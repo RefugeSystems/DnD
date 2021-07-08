@@ -324,16 +324,20 @@ class RSObject {
 						// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
 						switch(field.inheritance[field.inheritanceFields[i]]) {
 							case "+=":
-								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+								// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 								break;
 							case "+":
-								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type);
+								// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 								break;
 							case "-":
-								this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type);
+								// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+								this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 								break;
 							case "=":
-								this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._combined[field.inheritanceFields[i]], ifield.type);
+								// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+								this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 								break;
 							default:
 								loading = {};
@@ -415,13 +419,13 @@ class RSObject {
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			// console.log("Inheriting Field: ", field);
-			if(field && this._combined[field.id]) {
-				if(this._combined[field.id] instanceof Array) {
-					for(v=0; v<this._combined[field.id].length; v++) {
-						inherit(field, this._combined[field.id][v]);
+			if(field && this._calculated[field.id]) {
+				if(this._calculated[field.id] instanceof Array) {
+					for(v=0; v<this._calculated[field.id].length; v++) {
+						inherit(field, this._calculated[field.id][v]);
 					}
 				} else {
-					inherit(field, this._combined[field.id]);
+					inherit(field, this._calculated[field.id]);
 				}
 			}
 		}
@@ -716,6 +720,11 @@ class RSObject {
 						this[field.id] = field.attribute.default || 0;
 					} else {
 						this[field.id] = 0;
+					}
+				} else if((field.type === "object" && field.attribute && field.attribute.values === "integer") || field.type === "object:integer") {
+					keys = Object.keys(this[field.id]);
+					for(i=0; i<keys.length; i++) {
+						this[field.id][keys[i]] = parseInt(this[field.id][keys[i]]);
 					}
 				}
 				// Defaults (For null computations) & Bounds
@@ -1514,8 +1523,9 @@ RSObject.addValues = function(a, b, type, op) {
 			case "string":
 				return a + " " + b;
 			case "integer":
+				return parseInt(a || 0) + parseInt(b || 0);
 			case "number":
-				return (a || 0) + (b || 0);
+				return parseFloat(a || 0) + parseFloat(b || 0);
 			case "object:dice":
 			case "calculated":
 			case "dice":

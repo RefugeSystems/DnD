@@ -1,0 +1,36 @@
+.dnd-page.dnd-master-list {
+
+
+	.rs-table {
+		.name {
+			text-align: left;
+		}
+
+		.table-record.held_by {
+			max-width: 200px;
+			overflow: hidden;
+		}
+
+		.icon {
+
+			span {
+				border: 2px solid transparent;
+				border-radius: 4px;
+				padding: 2px;
+			}
+
+			.hidden_item {
+				border-bottom-color: @rsLightRed;
+			}
+
+			.attuned_item {
+				border-top-color: @rsLightBlue;
+			}
+
+			.equipped_item {
+				background-color: @rsDarkOrange;
+				color: @rsWhite;
+			}
+		}
+	}
+}

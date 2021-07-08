@@ -54,6 +54,9 @@
 	};
 	
 	var naiveObjectTrace = function(universe, base, path, index) {
+		if(!base) {
+			return null;
+		}
 		var value = base[path[index++]],
 			load;
 		if(index >= path.length) {

@@ -205,7 +205,7 @@ rsSystem.component("systemMenu", {
 			Vue.set(this.storage, "classing", this.profile.navigation_collapsed?"collapsed":"extended");
 		},
 		"isActive": function(item) {
-			if(item.path || item.emit) {
+			if(!item.hidden && !item.inactive && (item.path || item.emit)) {
 				if(item.conditionals) {
 					for(var x=0; x<item.conditionals.length; x++) {
 						if(this.evaluateConditional(item.conditionals[x])) {

@@ -338,6 +338,30 @@
 		"type": "string",
 		"attribute": {}
 	}, {
+		"id": "npc_task",
+		"name": "NPC Task",
+		"description": "The general task or job for this NPC",
+		"type": "string",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
+		"id": "npc_voice",
+		"name": "NPC Voice",
+		"description": "The general tone of voice for this NPC",
+		"type": "string",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
+		"id": "npc_personality",
+		"name": "NPC Personality",
+		"description": "The general personality of this NPC",
+		"type": "string",
+		"attribute": {
+			"display_size": 200
+		}
+	}, {
 		"id": "is_chest",
 		"name": "Is Chest",
 		"description": "Flag to indicate an entity is treasure chest of some kind that allows easy player viewing/looting",
@@ -378,9 +402,9 @@
 			"displayed": false
 		}
 	}, {
-		"id": "is_monster",
-		"name": "Is Monster",
-		"description": "Flag to indicate an entity is a monster",
+		"id": "is_hostile",
+		"name": "Is Hostile",
+		"description": "Flag to indicate an entity is explicitly hostile, generally for monster-esq creatures",
 		"type": "boolean",
 		"attribute": {
 			"displayed": false
@@ -816,7 +840,8 @@
 			"slot"
 		],
 		"attribute": {
-			"inherited_key": "slot"
+			"inherited_key": "slot",
+			"values": "integer"
 		}
 	}, {
 		"id": "damage_type",
@@ -1839,6 +1864,7 @@
 			"knowledge_matrix": "+",
 			"knowledges": "+",
 			"spell_slot_max": "+",
+			"equip_slots": "-",
 			"threat": "+",
 			"score": "+",
 			"conditionals": "+"
@@ -1883,7 +1909,7 @@
 		"id": "charges",
 		"name": "Charges",
 		"description": "Number of expendable charges available on this object.",
-		"type": "calculated",
+		"type": "integer",
 		"attribute": {
 			"bound_max": "charges_max",
 			"min": 0
@@ -2382,6 +2408,25 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "versatile",
+		"name": "Versatile Weapon",
+		"description": "Flag to indicate if this object can be wielded with different hand combinations",
+		"ordering": 300,
+		"type": "boolean",
+		"attribute": {
+			"hide_when_not_set": true,
+			"displayed_size": 90
+		}
+	}, {
+		"id": "versatility",
+		"name": "Versatillity",
+		"description": "Maps a number to new parent to assume for the usage of that many hands.",
+		"ordering": 300,
+		"type": "object",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "melee",
 		"name": "Melee Weapon",
 		"description": "Flag to indicate if this object is considered a melee weapon",
@@ -2474,6 +2519,24 @@
 		"description": "Objects directly connected to this one. In the case of knowledge and similar classes, this indicates the objects that the knowledge conveys knowledge of",
 		"type": "array",
 		"inheritable": [
+			"entity",
+			"location",
+			"storm",
+			"effect",
+			"quest",
+			"god",
+			"race",
+			"enchantment",
+			"feat",
+			"spell",
+			"profession",
+			"weather",
+			"meeting",
+			"jetstream",
+			"nation",
+			"item",
+			"knowledge",
+			"skirmish"
 		],
 		"attribute": {}
 	}, {
@@ -2498,8 +2561,17 @@
 	}, {
 		"id": "spells",
 		"name": "Spells",
-		"description": "Spells contained inside of or granted by this object.",
+		"description": "Spells contained inside of, prepared for, or granted by this object.",
 		"type": "array",
+		"inheritable": [
+			"spell"
+		],
+		"attribute": {}
+	}, {
+		"id": "spells_known",
+		"name": "Known Spells",
+		"description": "Spells that this entity knows and can possibly prepare or memorize. Maps the Spell ID to the time it was learned. This is mostly used as a control lookup.",
+		"type": "object",
 		"inheritable": [
 			"spell"
 		],

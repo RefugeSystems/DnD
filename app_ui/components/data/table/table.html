@@ -1,5 +1,5 @@
 <div class="rs-table system-component table-index">
-	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :corpus="corpus" v-on:info="info($event)"/>
+	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :corpus="corpus" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
 	<div class="table-container" v-if="storage">
 		<table class="table-element" :class="storage.classes">
 			<thead>
@@ -39,7 +39,7 @@
 								</div>
 								<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'array'">
 									<ul>
-										<li v-for="item in record[header.id]">{{item.name || item}}</li>
+										<li v-for="item in record[header.id]">{{getValue(header, item.name || item)}}</li>
 									</ul>
 								</div>
 								<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'object' || header.type === 'object:dice'">
@@ -47,7 +47,7 @@
 									</div>
 								</div>
 								<div class="contents" :class="header.id?header.id:''" v-else-if="record[header.id]">
-									{{record[header.id]}}
+									{{getValue(header, record[header.id])}}
 								</div>
 								<div class="contents" :class="header.id?header.id:''" v-else>
 									<span> </span>

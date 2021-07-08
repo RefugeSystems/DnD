@@ -21,7 +21,7 @@
 
 module.exports.initialize = function(universe) {
 	universe.on("player:action:check", function(event) {
-		console.log("Chec: ", event.message.data);
+		// console.log("Chec: ", event.message.data);
 		var entity,
 			skill,
 			roll = {
@@ -75,9 +75,12 @@ module.exports.initialize = function(universe) {
 			skill = {"stealth":roll.result};
 		}
 
+		// console.log("Check: ", roll);
 		if(skill) {
+			// console.log("Has");
 			entity = universe.get(roll.entity);
 			if(entity) {
+				// console.log("Set");
 				entity.setValues(skill);
 			}
 		}

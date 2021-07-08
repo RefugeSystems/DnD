@@ -56,7 +56,7 @@ rsSystem.component("DNDWidgetCore", {
 		}
 
 		if(this.widget) {
-			if(this.widget.cell_width) {
+			if(this.widget.cell_width && this.$el.classList) {
 				this.$el.classList.add("cell" + this.widget.cell_width);
 			}
 
@@ -85,7 +85,7 @@ rsSystem.component("DNDWidgetCore", {
 	},
 	"methods": {
 		"formatNumber": function(number) {
-			if(typeof(number.toFixed) === "function") {
+			if(number && typeof(number.toFixed) === "function") {
 				return number.toFixed(2);
 			}
 			return number;

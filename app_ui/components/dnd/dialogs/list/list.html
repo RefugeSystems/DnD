@@ -2,6 +2,9 @@
 	<h1 v-if="details.title" class="flex h">
 		<span>{{details.title}}</span>
 		<!-- <input class="filter grow-1" type="text" v-if="storage" v-delayed:500="storage.filter" /> -->
+		<button class="general quick rounded action" v-if="details.link" v-on:click="toLink()">
+			<span class="fas fa-link"></span>
+		</button>
 		<rs-input class="grow-1" v-model="storage.filter" :delay="500"/>
 	</h1>
 	<div class="listing">
@@ -9,6 +12,11 @@
 			<div class="card-container">
 				<div class="card" v-if="cards[section]">
 					<h2>{{cards[section].name || cards[section]}}</h2>
+					<div class="count flex h">
+						<span class="shown">{{listing[section].length + (extras[section] || 0)}}</span>
+						<span class="balanced-seperator">/</span>
+						<span class="shown">{{details.data[section].length}}</span>
+					</div>
 					<div v-if="cards[section].description" v-html="rsshowdown(cards[section].description, cards[section])"></div>
 				</div>
 			</div>
@@ -29,6 +37,12 @@
 						<h3>{{entry.name}}</h3>
 						<div v-if="details.note" v-html="details.note(section, entry)"></div>
 						<div class="list-data-description" v-if="entry.description" v-html="rsshowdown(entry.description, entry)"></div>
+						<div class="controls" v-if="controls && controls[section]">
+							<button v-for="ctrl in controls[section].available":class="controls[section].classes" v-on:click="ctrl.action(entry)" :title="ctrl.title || ''">
+								<span v-if="ctrl.icon" :class="ctrl.icon"></span>
+								<span v-if="ctrl.text">{{ctrl.text}}</span>
+							</button>
+						</div>
 						<ul class="list-data-related" v-if="details.related && details.related[entry.id]">
 							<li v-for="related in details.related[entry.id]">
 								<a v-if="related.id" :data-id="related.id">{{related.name}}</a>

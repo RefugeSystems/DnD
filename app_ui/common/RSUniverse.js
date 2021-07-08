@@ -109,6 +109,11 @@ class RSUniverse extends EventEmitter {
 		this._noBuffer = {};
 		this._noBuffer.ping = true;
 		
+		/**
+		 * 
+		 * @property calendar
+		 * @type rsSystem.Calendar
+		 */
 		this.calendar = new rsSystem.Calendar(this);
 		// TODO: Abstract calendar
 		this.calendar.nameMonths([
@@ -130,13 +135,37 @@ class RSUniverse extends EventEmitter {
 			"Horakkir"
 		]);
 		this.calendar.setDays([25]);
-
+		/**
+		 * Maps class IDs to another object which maps object IDs
+		 * to their corresponding object.
+		 * @property index
+		 * @type Object
+		 */
 		this.index = {};
-		
+		/**
+		 * Maps class IDs to another object which maps object Names
+		 * to their corresponding object. This is primarily for
+		 * loose searches, such as the Showdown renderer, to allow
+		 * data to specify an object inexactly.
+		 * @property named
+		 * @type Object
+		 */
 		this.named = {};
-		
+		/**
+		 * Maps class IDs to a list of all objects of that class.
+		 * Primarily for loop usage across a class.
+		 * @property listing
+		 * @type Object
+		 */
 		this.listing = {};
-
+		/**
+		 * The UI profile in use. This reference point for the profile
+		 * should only be used by the universe or explicitly called out
+		 * in Pivotal for tracking as this is slated for removal/cleaning
+		 * to remove the dependency.
+		 * @property profile
+		 * @type Object
+		 */
 		this.profile = {};
 		
 		rsSystem.EventBus.$on("universe-reconnect", () => {
@@ -146,7 +175,15 @@ class RSUniverse extends EventEmitter {
 				this.reconnect();
 			}
 		});
-		
+		/**
+		 * Maps event types that are handled internally to the
+		 * methods that process them.
+		 * 
+		 * Should be considered private for dependency purposes.
+		 * @property processEvent
+		 * @type Object
+		 * @private
+		 */
 		this.processEvent = {};
 		
 		this.processEvent["time:changed"] = (event) => {
@@ -380,6 +417,14 @@ class RSUniverse extends EventEmitter {
 		}
 	}
 
+	/**
+	 * 
+	 * @method setProfile
+	 * @deprecated Want to remove this dependency but currently need this for simple access to the profile.
+	 * 		Will likely open control methods to manipulate the Universe object in relevent ways then mirror
+	 * 		or move the profile under the universe for persistence.
+	 * @param {Object} profile 
+	 */
 	setProfile(profile) {
 		if(profile) {
 			this.profile = profile;
@@ -405,8 +450,8 @@ class RSUniverse extends EventEmitter {
 	}
 
 	/**
-	 * 
-	 * @method generalMessag
+	 * Quick method for creating a simple notification for the UI.
+	 * @method generalMessage
 	 * @param {String} message 
 	 * @param {String} icon 
 	 * @param {Boolean | Number} display When true, anchored. When a number, specifies a timeout in ms.
@@ -426,8 +471,12 @@ class RSUniverse extends EventEmitter {
 	}
 	
 	/**
+	 * Handles processing data from the Server and pushing it into the Objects as needed.
 	 * 
+	 * Additionally, if the universe is not ready, the delta is buffered and read after
+	 * a universe synchronization event. See the `processEvent.sync` method.
 	 * @method receiveDelta
+	 * @see Method at processEvent.sync
 	 * @param {Integer} received 
 	 * @param {String} classification 
 	 * @param {String} id 
@@ -503,6 +552,19 @@ class RSUniverse extends EventEmitter {
 		// }
 	}
 	
+	/**
+	 * Add an event to the UI log.
+	 * 
+	 * This is typically network events and used for diagnostics. These are NOT synced back
+	 * to the server and primarily include general data regarding information from the
+	 * server and thus should not be synced back.
+	 * @method addLogEvent
+	 * @param {String | Object} event A message or an object detailing various parts of
+	 * 		the data to log.
+	 * @param {Integer} [level] 
+	 * @param {Object} [details] Describing the data for issue in an enumerated fashion,
+	 * 		such as mapping key field IDs like `"entity": entity.id`.
+	 */
 	addLogEvent(event, level, details) {
 		if(typeof(event) === "string") {
 			event = {

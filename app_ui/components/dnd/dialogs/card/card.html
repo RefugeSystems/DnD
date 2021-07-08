@@ -1,0 +1,41 @@
+<div class="rs-component dnd-component dialog-dnd-card">
+	<div class="card-flavor"></div>
+	<div class="card-box">
+		<div class="card-image" v-if="card.picture || card.portrait">
+			<rs-image :image="card.picture || card.portrait"/>
+		</div>
+		<div class="card-details flex v" :class="card.picture || card.portrait?'padded':''">
+			<div class="detail name" v-on:click="info(card)">
+				<h1>
+					<button class="general rounded quick action">
+						<span :class="card.icon || 'fas fa-scroll-old'"></span>
+					</button>
+					<span>{{card.name}}</span>
+				</h1>
+			</div>
+			<div class="detail description" v-if="card.description">
+				<div v-html="rsshowdown(card.description, card, profile?profile.inline_javascript:false)"></div>
+			</div>
+			<div class="bubble-details flex h wrap">
+				<div v-for="field in bubbles" v-if="isVisible(field)" class="bubble detail" :class="field.id">
+					<component v-if="details.fieldComponent[field.id]" :is="details.fieldComponent[field.id]" :entity="entity" :field="field" :object="card" :universe="universe" :player="player" :profile="profile"></component>
+					<rs-display-field v-else :object="card" :field="field.id" :universe="universe" :player="player" :profile="profile"></rs-display-field>
+				</div>
+			</div>
+			<div v-for="field in fields" v-if="isVisible(field)" class="full detail" :class="field.id">
+				<component v-if="details.fieldComponent[field.id]" :is="details.fieldComponent[field.id]" :entity="entity" :field="field" :object="card" :universe="universe" :player="player" :profile="profile"></component>
+				<rs-display-field v-else :object="card" :field="field.id" :universe="universe" :player="player" :profile="profile"></rs-display-field>
+				<!--
+				<div v-else class="data">
+					<span class="label">{{field.name}}</span>
+					<span class="seperator">:</span>
+					<span class="value">{{getValue(field)}}</span>
+				</div>
+				-->
+			</div>
+			<div class="info">
+				<div class="bubble detail" v-if="card.acquired">Acquired: {{formatDate(card.acquired)}}</div>
+			</div>
+		</div>
+	</div>
+</div>

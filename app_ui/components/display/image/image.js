@@ -5,6 +5,9 @@
  * @class rsImage
  * @constructor
  * @module Components
+ * @param {String | Object} image Object or ID for the object
+ * @param {String} [cacheSuffix] 
+ * @param {Object} [linked]
  */
 (function() {
 	
@@ -18,10 +21,6 @@
 			"image": {
 				"required": true
 			},
-			"modes": {
-				"default": "general",
-				"type": String
-			},
 			"cacheSuffix": {
 				default: ""
 			},
@@ -32,8 +31,8 @@
 		"computed": {
 			/**
 			 * 
-			 * @property location
-			 * @type Object
+			 * @property url
+			 * @type String
 			 */
 			"url": function() {
 				if(this.cacheSuffix) {

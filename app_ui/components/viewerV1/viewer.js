@@ -404,18 +404,24 @@
 			"searchMap": function() {
 				var set = false,
 					buffer,
+					entity,
 					x;
 
 				Vue.set(this, "focusedLocation", null);
-				if(this.search_criteria[0] === "self") {
-					if((buffer = this.universe.index.entity[this.player.entity]) && (buffer = this.universe.index.location[buffer.location])) {
-						while(buffer && buffer.location !== this.location.id) {
-							buffer = this.universe.index.location[buffer.location];
-						}
-						if(buffer) {
-							Vue.set(this, "focusedLocation", buffer.id);
-							this.centerView(buffer);
+				if(this.search_criteria[0] === "self" || this.search_criteria[0] === "me") {
+					if(this.player.attribute && (entity = this.universe.index.entity[this.player.attribute.playing_as]) && (buffer = this.universe.index.location[entity.location])) {
+						if(entity.x && entity.y && entity.location === this.location.id) {
+							this.centerView(entity);
 							set = true;
+						} else {
+							while(buffer && buffer.location !== this.location.id) {
+								buffer = this.universe.index.location[buffer.location];
+							}
+							if(buffer) {
+								Vue.set(this, "focusedLocation", buffer.id);
+								this.centerView(buffer);
+								set = true;
+							}
 						}
 					}
 				} else {
@@ -448,11 +454,17 @@
 					}
 				}
 			},
+			/**
+			 * 
+			 * @method centerView
+			 * @param {Object} location
+			 * @param {Number} location.x
+			 * @param {Number} location.y
+			 */
 			"centerView": function(location) {
 				var locX,
 					locY,
-					view,
-					x;
+					view;
 
 				if(location) {
 					locY = location.y/100 * this.image.height;
@@ -835,10 +847,19 @@
 						}
 						break;
 					case "copy-key":
-						console.log("Copy Info: ", option);
 						// this.info(option.location);
 						if(this.localeInfo.location) {
-							Vue.set(this.storage, "alter", this.localeInfo.location.id);
+							Vue.set(this.storage, "alter", this.localeInfo.location.id || this.location.id);
+						} else {
+							Vue.set(this.storage, "alter", this.location.id);
+						}
+						break;
+					case "edit-key":
+						// this.info(option.location);
+						if(this.localeInfo.location && this.localeInfo.shown) {
+							this.$router.push("/control/" + (this.localeInfo.location._class || "location") + "/" + this.localeInfo.location.id);
+						} else {
+							this.$router.push("/control/" + this.location._class + "/" + this.location.id);
 						}
 						break;
 				}
@@ -1647,19 +1668,15 @@
 						"event": "set-map",
 						"text": "Set Location View"
 					});
-
-					/*
-					if(this.location.map_distance) {
-						this.actions.options.push(this.takeMeasurements);
-					} else {
-						this.actions.options.push(this.setMeasurements);
-					}
-					*/
-
 					this.actions.options.push({
 						"icon": "fas fa-copy",
 						"event": "copy-key",
 						"text": "Copy ID"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-edit",
+						"event": "edit-key",
+						"text": "Edit ID"
 					});
 					this.actions.options.push({
 						"icon": "fas fa-chevron-double-right",

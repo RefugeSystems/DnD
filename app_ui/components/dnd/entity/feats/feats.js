@@ -63,6 +63,41 @@ rsSystem.component("dndEntityFeats", {
 		},
 		"toggleHidden": function() {
 			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
+		},
+		"open": function(feat) {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndCard",
+				"entity": this.entity.id,
+				"object": feat,
+				"bubbles": [
+					"attuned",
+					"armor",
+					"damage_type",
+					"dice_type",
+					"dc",
+					"range",
+					"durability",
+					"charges",
+					"strength",
+					"dexterity",
+					"constitution",
+					"intelligence",
+					"wisdom",
+					"charisma",
+					"movement_ground",
+					"movement_walk" /* Future Proofing */ ,
+					"movement_fly",
+					"movement_swim",
+					"duration"],
+				"fields": [
+					"damage",
+					"resistance",
+					"advantage",
+					"disadvantage"],
+				"fieldComponent": {
+					"charges": "dndObjectCharges"
+				}
+			});
 		}
 	},
 	"beforeDestroy": function() {

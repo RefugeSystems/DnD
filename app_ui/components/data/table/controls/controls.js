@@ -73,11 +73,13 @@ rsSystem.component("rsTableControls", {
 			for(i=0; i<keys.length; i++) {
 				Vue.delete(this.storage.selected, keys[i]);
 			}
+			this.$emit("deselected");
 		},
 		"allSelection": function() {
 			for(var i=0; i<this.corpus.length; i++) {
 				Vue.set(this.storage.selected, this.corpus[i].id, true);
 			}
+			this.$emit("selected");
 		},
 		"infoSelection": function() {
 			this.$emit("info", Object.keys(this.storage.selected)[0]);

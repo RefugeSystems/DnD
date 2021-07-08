@@ -80,7 +80,7 @@ module.exports.initialize = function(universe) {
 		}
 		
 		if(entity && item && entity.inventory && entity.inventory.indexOf(item.id) !== -1) {
-			if(!item.attunement_blocked && !entity.attunement_blocked && entity.attunements && entity.attunements.length < entity.attune_max) {
+			if(item.attunes && !item.attunement_blocked && !entity.attunement_blocked && entity.attunements && entity.attunements.length < entity.attune_max) {
 				item.setValues({
 					"attuned_on": universe.time,
 					"attuned_to": entity.id, // Potential future proofing
@@ -120,7 +120,7 @@ module.exports.initialize = function(universe) {
 		}
 		
 		if(entity && item && entity.inventory && entity.inventory.indexOf(item.id) !== -1) {
-			if(!item.attunement_locked && !entity.attunement_locked) {
+			if(item.attunes && !item.attunement_locked && !entity.attunement_locked) {
 				item.setValues({
 					"attuned_on": null,
 					"attuned_to": null, // Potential future proofing

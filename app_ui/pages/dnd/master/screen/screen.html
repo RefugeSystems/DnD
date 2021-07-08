@@ -19,7 +19,14 @@
 		</div>
 		<div class="screen-action-column">
 			<dnd-chronicle-readout :player="player" :universe="universe" :configuration="configuration" :profile="profile" :storage="storage"></dnd-chronicle-readout>
-			
+		</div>
+	</div>
+	<div class="screen-panel">
+		<div class="screen-data-column">
+			<rs-table :universe="universe" :source="universe.listing.item" :headings="itemHeadings" :formatter="formatter" :controls="itemControls" :storage-container="storage.itemTable"/>
+		</div>
+		<div class="screen-data-column">
+			<rs-table :universe="universe" :source="universe.listing.entity" :headings="entityHeadings" :formatter="formatter" :controls="entityControls" :storage-container="storage.entityTable"/>
 		</div>
 	</div>
 </div>

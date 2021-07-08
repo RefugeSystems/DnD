@@ -53,7 +53,7 @@ rsSystem.EventBus.$on("sys-ready", function() {
 		if(configuration.navigations) {
 			for(i=0; i<configuration.navigations.length; i++) {
 				item = Object.assign({}, configuration.navigations[i]); // TODO: Nested children processing
-				if(item.route && item.component) {
+				if(item.route && item.component && !item.inactive) {
 					if(rsSystem.components[item.component]) {
 						item.component = rsSystem.components[item.component];
 						navigation.push(item);

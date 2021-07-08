@@ -173,6 +173,9 @@
 			"usableSource": function(source) {
 				return source.id.indexOf(":preview:") === -1;
 			},
+			"isVisible": function(field) {
+				return !this.storage.fieldFilter || field.id.indexOf(this.storage.fieldFilter) !== -1;
+			},
 			"nameSource": function(source) {
 				var name = source.is_copy?"[C] ":"";
 				if(source.name) {

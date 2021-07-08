@@ -106,6 +106,11 @@ rsSystem.component("DNDEntities", {
 				}
 			}
 			
+			if(this.storage.ctrl.list.atoz) {
+				entities.sort(rsSystem.utility.sortData);
+			} else {
+				entities.sort(rsSystem.utility.sortByInitiative);
+			}
 			return entities;
 		},
 		"controls": function() {
@@ -119,14 +124,32 @@ rsSystem.component("DNDEntities", {
 				"type": "flip",
 				"id": "all"
 			});
-			if(this.skirmish) {
-				controls.push({
-					"icon": "fas fa-swords",
-					"ctrl": "list",
-					"type": "flip",
-					"id": "combat"
-				});
-			}
+			controls.push({
+				"icon": "fas fa-user-alt",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "self"
+			});
+			controls.push({
+				"icon": "fas fa-sort-alpha-up-alt",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "atoz"
+			});
+			// if(this.skirmish) {
+			// 	controls.push({
+			// 		"icon": "fas fa-swords",
+			// 		"ctrl": "list",
+			// 		"type": "flip",
+			// 		"id": "combat"
+			// 	});
+			// }
+			controls.push({
+				"icon": "fas fa-swords",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "combat"
+			});
 			if(this.meeting && this.meeting.entities) {
 				for(i=0; i<this.meeting.entities.length; i++) {
 					load = this.universe.index.entity[this.meeting.entities[i]];
@@ -157,6 +180,12 @@ rsSystem.component("DNDEntities", {
 				"ctrl": "list",
 				"type": "flip",
 				"id": "npcs"
+			});
+			controls.push({
+				"icon": "far fa-crosshairs",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "hostile"
 			});
 			controls.push({
 				"icon": "fas fa-store",
@@ -249,6 +278,16 @@ rsSystem.component("DNDEntities", {
 
 			return this.nearbyDashboard;
 		},
+		"getNearbyClasses": function(entity) {
+			var classes = "";
+			if(this.skirmish && this.skirmish.combat_turn === entity.id) {
+				classes += "combat_turn ";
+			}
+			if(this.main && this.main.id === entity.id) {
+				classes += "self ";
+			}
+			return classes;
+		},
 		"toggleNotes": function(swap) {
 			// TODO: Clean up open/swap logic
 			if(swap) {
@@ -297,8 +336,11 @@ rsSystem.component("DNDEntities", {
 			}
 		},
 		"isShownEntity": function(entity) {
-			if(entity && (!this.main || entity.id !== this.main.id) && !entity.is_preview && !entity.disabled && !entity.obscured) {
-				if(this.storage.ctrl.list.all) {
+			if(entity && !entity.is_preview && !entity.disabled && !entity.obscured) {
+				if(this.main && entity.id === this.main.id && this.storage.ctrl.list.self) {
+					return true;
+				}
+				if(this.storage.ctrl.list.all && (!this.main || entity.id !== this.main.id)) {
 					return true;
 				}
 				if(this.storage.ctrl.list.party && entity.played_by) {
@@ -313,12 +355,18 @@ rsSystem.component("DNDEntities", {
 				if(this.storage.ctrl.list.treasure && entity.is_chest) {
 					return true;
 				}
+				if(this.storage.ctrl.list.hostile && entity.is_hostile) {
+					return true;
+				}
 				if(this.storage.ctrl.list.location && entity.location === this.main.location) {
 					return true;
 				}
-				if(this.storage.ctrl.list.combat && this.skirmish && this.skirmish.entities && this.skirmish.entities.indexOf(entity.id) !== -1) {
+				if(this.storage.ctrl.list.combat && typeof(entity.initiative) === "number") {
 					return true;
 				}
+				// if(this.storage.ctrl.list.combat && this.skirmish && this.skirmish.entities && this.skirmish.entities.indexOf(entity.id) !== -1) {
+				// 	return true;
+				// }
 			}
 			return false;
 		}

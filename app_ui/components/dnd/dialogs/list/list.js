@@ -18,6 +18,7 @@ rsSystem.component("dndDialogList", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
+		rsSystem.components.DialogController,
 		rsSystem.components.RSShowdown
 	],
 	"props": {
@@ -40,19 +41,29 @@ rsSystem.component("dndDialogList", {
 
 			return sections;
 		},
+		"controls": function(){
+			return this.details.controls;
+		},
 		"listing": function() {
 			var listing = [],
+				extras,
 				entry,
 				i,
 				j;
 
 			for(i=0; i<this.sections.length; i++) {
 				listing[this.sections[i]] = [];
-				for(j=0; j<this.details.data[this.sections[i]].length && (!this.details.limit || listing[this.sections[i]].length < this.details.limit); j++) {
+				extras = 0;
+				for(j=0; j<this.details.data[this.sections[i]].length; j++) {
 					entry = this.details.data[this.sections[i]][j];
 					if(entry && !entry.disabled && !entry.concealed && (!this.storage || !this.storage.filter || (entry._search && entry._search.indexOf(this.storage.filter) !== -1))) {
-						listing[this.sections[i]].push(entry);
+						if(!this.details.limit || listing[this.sections[i]].length < this.details.limit) {
+							listing[this.sections[i]].push(entry);
+						} else {
+							extras += 1;
+						}
 					}
+					Vue.set(this.extras, this.sections[i], extras);
 				}
 			}
 			
@@ -63,6 +74,7 @@ rsSystem.component("dndDialogList", {
 		var data = {};
 
 		data.cards = this.details.cards;
+		data.extra = {};
 
 		return data;
 	},
@@ -70,6 +82,12 @@ rsSystem.component("dndDialogList", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"toLink": function() {
+			if(this.details.link) {
+				rsSystem.toPath(this.details.link);
+				this.closeDialog();
+			}
+		},
 		"activate": function(section, record) {
 			if(this.details.activate) {
 				this.details.activate(section, record);

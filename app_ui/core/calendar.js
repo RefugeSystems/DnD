@@ -1,6 +1,11 @@
 (function() {
 	/**
-	 *
+	 * Handle the calendar for a universe.
+	 * 
+	 * TODO: This should be made to mirror the default `Calendar` object
+	 * as far as methods and behaviors to allow easy usage of "normal"
+	 * time or other custom calendars where the standard is used as a
+	 * reference model.
 	 * @class Calendar
 	 * @extends EventEmitter
 	 * @namespace rsSystem
@@ -30,36 +35,37 @@
 			/**
 			 * Contains second duration for the named time span.
 			 * @property CONSTANTS
+			 * @deprecated This should be replaced by a definition object of some kind to allow deeper changes to the way time is used
 			 * @type Object
 			 */
 			this.CONSTANTS = {};
 			/**
 			 * 
-			 * @property second
+			 * @property CONSTANTS.second
 			 * @type Integer
 			 */
 			this.CONSTANTS.second = 1;
 			/**
 			 * 
-			 * @property minute
+			 * @property CONSTANTS.minute
 			 * @type Integer
 			 */
 			this.CONSTANTS.minute = this.CONSTANTS.second * 60;
 			/**
 			 * 
-			 * @property hour
+			 * @property CONSTANTS.hour
 			 * @type Integer
 			 */
 			this.CONSTANTS.hour = this.CONSTANTS.minute * 60;
 			/**
 			 * 
-			 * @property day
+			 * @property CONSTANTS.day
 			 * @type Integer
 			 */
 			this.CONSTANTS.day = this.CONSTANTS.hour * 24;
 			/**
 			 * Upated by a call to nameDays
-			 * @property week
+			 * @property CONSTANTS.week
 			 * @type Integer
 			 * @default 7 Days
 			 */
@@ -67,14 +73,14 @@
 			/**
 			 * Should generally be avoided or used as a guide, but
 			 * can be set.
-			 * @property month
+			 * @property CONSTANTS.month
 			 * @type Integer
 			 */
 			this.CONSTANTS.month = this.CONSTANTS.week * 5;
 			/**
 			 * Updated once the number of days a month and the months
 			 * are named.
-			 * @property year
+			 * @property CONSTANTS.year
 			 * @type Integer
 			 * @default 365 Days
 			 */

@@ -33,7 +33,7 @@ rsSystem.component("DNDKnowledge", {
 	},
 	"computed": {
 		"entity": function() {
-			return this.universe.index.entity[this.player.attribute.playing_as];
+			return this.universe.index.entity[this.$route.params.entity || this.player.attribute.playing_as];
 		},
 		"today": function() {
 			return this.universe.calendar.toDisplay(this.universe.time, false);
@@ -46,35 +46,37 @@ rsSystem.component("DNDKnowledge", {
 				i,
 				j;
 
-			Vue.set(this, "known_by", {});
-			for(j=0; j<this.universe.listing.entity.length; j++) {
-				entity = this.universe.listing.entity[j];
-				if(entity && !entity.disabled && !entity.is_preview && entity.hp && (entity.played_by === this.player.id || (entity.owned && entity.owned[this.player.id])) && entity.knowledges && entity.knowledges.length) {
-					for(i=0; i<entity.knowledges.length; i++) {
-						knowledge = this.universe.index.knowledge[entity.knowledges[i]];
-						if(knowledge && !knowledge.disabled && !knowledge.concealed) {
-							if(!this.known_by[knowledge.id]) {
-								Vue.set(this.known_by, knowledge.id, [entity.name]);
-								cats[knowledge.category] = true;
-								known.uniquely(knowledge);
-							} else {
-								this.known_by[knowledge.id].uniquely(entity.name);
+			if(this.entity.owned[this.player.id]) {
+				Vue.set(this, "known_by", {});
+				for(j=0; j<this.universe.listing.entity.length; j++) {
+					entity = this.universe.listing.entity[j];
+					if(entity && !entity.disabled && !entity.is_preview && entity.hp && (entity.played_by === this.player.id || (entity.owned && entity.owned[this.player.id])) && entity.knowledges && entity.knowledges.length) {
+						for(i=0; i<entity.knowledges.length; i++) {
+							knowledge = this.universe.index.knowledge[entity.knowledges[i]];
+							if(knowledge && !knowledge.disabled && !knowledge.concealed) {
+								if(!this.known_by[knowledge.id]) {
+									Vue.set(this.known_by, knowledge.id, [entity.name]);
+									cats[knowledge.category] = true;
+									known.uniquely(knowledge);
+								} else {
+									this.known_by[knowledge.id].uniquely(entity.name);
+								}
 							}
 						}
 					}
 				}
-			}
 
-			if(this.categories) {
-				this.categories.splice(0);
-				cats = Object.keys(cats);
-				try {
-					for(i=0; i<cats.length; i++) {
-						this.categories.push(cats[i]);
-					}
-				} catch(vueException) {
-					console.warn(vueException);
+				if(this.categories) {
 					this.categories.splice(0);
+					cats = Object.keys(cats);
+					try {
+						for(i=0; i<cats.length; i++) {
+							this.categories.push(cats[i]);
+						}
+					} catch(vueException) {
+						console.warn(vueException);
+						this.categories.splice(0);
+					}
 				}
 			}
 

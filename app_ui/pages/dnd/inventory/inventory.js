@@ -45,7 +45,7 @@ rsSystem.component("DNDInventory", {
 			return null;
 		},
 		"entity": function() {
-			return this.universe.index.entity[this.player.attribute.playing_as];
+			return this.universe.index.entity[this.$route.params.entity || this.player.attribute.playing_as];
 		},
 		"today": function() {
 			return this.universe.calendar.toDisplay(this.universe.time, false);
@@ -59,31 +59,32 @@ rsSystem.component("DNDInventory", {
 				j;
 
 			Vue.set(this, "held_by", {});
-			if(this.entity) {
-				for(i=0; i<this.entity.inventory.length; i++) {
-					item = this.universe.getObject(this.entity.inventory[i]);
-					if(item) {
-						Vue.set(this.held_by, item.id, this.entity.nickname || this.entity.name);
-						inventory.push(item);
-					} else {
-						console.warn("Item Missing: " + this.entity.inventory[i]);
+			if(this.entity.owned[this.player.id]) {
+				if(this.entity) {
+					for(i=0; i<this.entity.inventory.length; i++) {
+						item = this.universe.getObject(this.entity.inventory[i]);
+						if(item) {
+							Vue.set(this.held_by, item.id, this.entity.nickname || this.entity.name);
+							inventory.push(item);
+						} else {
+							console.warn("Item Missing: " + this.entity.inventory[i]);
+						}
 					}
 				}
-			}
-			if(this.meeting && this.meeting.entities) {
-				for(j=0; j<this.meeting.entities.length; j++) {
-					if(!this.entity || this.meeting.entities[j] !== this.entity.id) {
-						entity = this.universe.getObject(this.meeting.entities[j]);
-						if(entity.inventory_share) {
-							for(i=0; i<entity.inventory.length; i++) {
-								console.log("Hide: ", entity.inventory_hidden);
-								if(!entity.inventory_hidden || !entity.inventory_hidden[entity.inventory[i]]) {
-									item = this.universe.getObject(entity.inventory[i]);
-									if(item) {
-										Vue.set(this.held_by, item.id, entity.nickname || entity.name);
-										inventory.push(item);
-									} else {
-										console.warn("Item Missing: " + entity.inventory[i]);
+				if(this.meeting && this.meeting.entities) {
+					for(j=0; j<this.meeting.entities.length; j++) {
+						if(!this.entity || this.meeting.entities[j] !== this.entity.id) {
+							entity = this.universe.getObject(this.meeting.entities[j]);
+							if(entity.inventory_share) {
+								for(i=0; i<entity.inventory.length; i++) {
+									if(!entity.inventory_hidden || !entity.inventory_hidden[entity.inventory[i]]) {
+										item = this.universe.getObject(entity.inventory[i]);
+										if(item) {
+											Vue.set(this.held_by, item.id, entity.nickname || entity.name);
+											inventory.push(item);
+										} else {
+											console.warn("Item Missing: " + entity.inventory[i]);
+										}
 									}
 								}
 							}
@@ -141,11 +142,19 @@ rsSystem.component("DNDInventory", {
 			return value;
 		};
 		data.formatter.icon = (value, record) => {
-			if(record && this.entity.inventory_hidden && this.entity.inventory_hidden[record.id]) {
-				return "<span class=\"hidden_item " + (value || "") + "\"></span>";
-			} else {
-				return "<span class=\"" + (value || "") + "\"></span>";
+			var classes = "";
+			if(record) {
+				if(this.entity.inventory_hidden && this.entity.inventory_hidden[record.id]) {
+					classes += "hidden_item ";
+				}
+				if(this.entity.equipped && this.entity.equipped.indexOf(record.id) !== -1) {
+					classes += "equipped_item ";
+				}
+				if(record.attuned === this.entity.id) {
+					classes += "attuned_item ";
+				}
 			}
+			return "<span class=\"" + classes + (value || "") + "\"></span>";
 		};
 		data.formatter.category = (value) => {
 			if(value && (value = this.universe.getObject(value))) {
@@ -199,6 +208,10 @@ rsSystem.component("DNDInventory", {
 				reference = this,
 				hide = false,
 				show = false,
+				v1h = false,
+				v2h = false,
+				unequip = [],
+				equip = [],
 				buffer,
 				i;
 
@@ -216,6 +229,20 @@ rsSystem.component("DNDInventory", {
 						show = true;
 					} else {
 						hide = true;
+					}
+					if(buffer.equip_slots && Object.keys(buffer.equip_slots).length) {
+						if(!this.entity.equipped || this.entity.equipped.indexOf(buffer.id) === -1) {
+							equip.push(buffer.id);
+						} else {
+							unequip.push(buffer.id);
+						}
+						if(buffer.versatile && buffer.is_copy) {
+							if(buffer.parent === buffer.versatility[1]) {
+								v2h = true;
+							} else if(buffer.parent === buffer.versatility[2]) {
+								v1h = true;
+							}
+						}
 					}
 					if(buffer.attunes) {
 						if(buffer.attuned === this.entity.id) {
@@ -245,6 +272,54 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-eye",
 					"process": function() {
 						reference.universe.send("inventory:reveal", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(equip.length) {
+				this.controls.push({
+					"title": "Equip Items",
+					"icon": "game-icon game-icon-sword-brandish",
+					"process": function() {
+						reference.universe.send("equip:items", {
+							"items": equip,
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(unequip.length) {
+				this.controls.push({
+					"title": "Unequip Items",
+					"icon": "game-icon game-icon-drop-weapon",
+					"process": function() {
+						reference.universe.send("unequip:items", {
+							"items": unequip,
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(v1h) {
+				this.controls.push({
+					"title": "Switch to 1 Handed",
+					"icon": "fad fa-praying-hands rs-secondary-transparent",
+					"process": function() {
+						reference.universe.send("items:verstility:1handed", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(v2h) {
+				this.controls.push({
+					"title": "Switch to 2 Handed",
+					"icon": "fas fa-praying-hands",
+					"process": function() {
+						reference.universe.send("items:verstility:2handed", {
 							"items": Object.keys(reference.storage.selected),
 							"entity": reference.entity.id
 						});

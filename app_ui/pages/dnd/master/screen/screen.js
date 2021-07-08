@@ -163,6 +163,7 @@ rsSystem.component("DNDMasterScreen", {
 	},
 	"data": function() {
 		var data = {},
+			reference = this,
 			i;
 
 		data.tracking = {};
@@ -183,6 +184,76 @@ rsSystem.component("DNDMasterScreen", {
 			"minions": "fas fa-dog"
 		};
 
+		data.itemHeadings = ["icon", "name", "is_template", "is_copy", "acquired", "created"];
+		data.itemControls = [{
+			"title": "Give Items",
+			"icon": "game-icon game-icon-sword-brandish",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					items = Object.keys(reference.storage.itemTable.selected),
+					giving = [],
+					item,
+					i;
+				
+				console.log("Give Items:\n", items, " > To >\n", entities);
+
+			}
+		}, {
+			"title": "Take Items",
+			"icon": "game-icon game-icon-drop-weapon",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					items = Object.keys(reference.storage.itemTable.selected),
+					taking = [],
+					item,
+					i;
+
+				console.log("Take Items:\n", items, " > To >\n", entities);
+			}
+		}];
+		data.entityHeadings = ["name", "played_by", "race", "npc_task", "npc_voice", "npc_personality", "created"];
+		data.entityControls = [];
+
+		
+		data.formatter = {};
+		data.formatter.held_by = (value, record, header) => {
+			if(record) {
+				return this.held_by[record.id];
+			} else {
+				return "";
+			}
+		};
+		data.formatter.acquired = (value, record, header) => {
+			if(typeof(value) === "number") {
+				return this.universe.calendar.toDisplay(value, false, false);
+			}
+			return value;
+		};
+		data.formatter.created = (value, record, header) => {
+			if(typeof(value) === "number") {
+				return new Date(value).toLocaleDateString();
+			}
+			return value;
+		};
+		data.formatter.is_template = data.formatter.is_copy = (value, record, header) => {
+			if(value) {
+				return "<span class=\"fas fa-check rs-lightgreen\"></span>";
+			}
+			return "<span class=\"fas fa-times\"></span>";
+		};
+		data.formatter.age = (value, record, header) => {
+			if(typeof(record.acquired) === "number") {
+				return this.universe.calendar.displayDuration(this.universe.time - record.acquired, false, false);
+			}
+			return value;
+		};
+		data.formatter.icon = (value, record) => {
+			var classes = "";
+			if(record) {
+			}
+			return "<span class=\"" + classes + (value || "") + "\"></span>";
+		};
+
 		return data;
 	},
 	"mounted": function() {
@@ -197,6 +268,12 @@ rsSystem.component("DNDMasterScreen", {
 		}
 		if(this.storage && !this.storage.witnessed_limit) {
 			Vue.set(this.storage, "witnessed_limit", 100);
+		}
+		if(this.storage && !this.storage.entityTable) {
+			Vue.set(this.storage, "entityTable", {});
+		}
+		if(this.storage && !this.storage.itemTable) {
+			Vue.set(this.storage, "itemTable", {});
 		}
 	},
 	"methods": {

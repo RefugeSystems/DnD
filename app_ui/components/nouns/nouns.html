@@ -7,6 +7,9 @@
 			</select>
 			<div class="separator">Inc:</div>
 			<button class="flat rs-white action far include" v-for="included in includes" v-on:click="toggleInclude(included)" :title="included"  :class="includeClasses(included)"></button>
+			<div class="filter-containter flex v">
+				<input type="text" class="filter-input grow-1" v-delayed:200.lower="storage.fieldFilter"/>
+			</div>
 		</div>
 		<div class="sourcing ctrl-row">
 			<span class="labeling">Copy:</span>
@@ -24,7 +27,7 @@
 					</button>
 				</span>
 			</rs-field>
-			<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(field.id)" v-on:blur="adjust(field.id)" :key="field.id" :storage="storage.swap[classification]">
+			<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-on:changed="sync($event)" v-on:complete="completed(field.id)" v-on:blur="adjust(field.id)" v-if="isVisible(field)" :key="field.id" :storage="storage.swap[classification]">
 				<span slot="info">
 					<span v-if="field.id === 'icon' || field.type === 'icon'" :class="details.icon"></span>
 					<button class="info-link ctrl-link copy-parent fas fa-copy" v-if="displayCopyFromParent(field.id)" v-on:click="copyParent(field.id)" tabindex=2>

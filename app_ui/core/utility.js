@@ -128,9 +128,9 @@
 			}
 			if(a.initiative !== undefined && b.initiative !== undefined && a.initiative !== null && b.initiative !== null) {
 				if(a.initiative < b.initiative) {
-					return -1;
-				} else if(a.initiative > b.initiative) {
 					return 1;
+				} else if(a.initiative > b.initiative) {
+					return -1;
 				}
 			}
 

@@ -76,7 +76,48 @@ rsSystem.component("dndEntityEquipment", {
 			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
 		},
 		"use": function(item) {
-			this.takeAction(this.universe.index.action["action:main:attack"], item, [item.damage]);
+			if(item.is_melee || item.is_ranged || item.melee || item.ranged) {
+				this.takeAction(this.universe.index.action["action:main:attack"], item, [item.damage]);
+			} else {
+				this.open(item);
+			}
+		},
+		"open": function(item) {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndCard",
+				"entity": this.entity.id,
+				"object": item,
+				"bubbles": [
+					"attuned",
+					"armor",
+					"damage_type",
+					"dice_type",
+					"dc",
+					"range",
+					"durability",
+					"charges",
+					"strength",
+					"dexterity",
+					"constitution",
+					"intelligence",
+					"wisdom",
+					"charisma",
+					"movement_ground",
+					"movement_walk" /* Future Proofing */ ,
+					"movement_fly",
+					"movement_swim",
+					"duration"],
+				"fields": [
+					"damage",
+					"resistance",
+					"advantage",
+					"disadvantage",
+					"enchantments",
+					"inventory"],
+				"fieldComponent": {
+					"charges": "dndObjectCharges"
+				}
+			});
 		}
 	},
 	"beforeDestroy": function() {
