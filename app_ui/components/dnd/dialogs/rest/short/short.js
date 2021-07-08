@@ -90,7 +90,12 @@ rsSystem.component("dndDialogShortRest", {
 		},
 		"subDie": function(die) {
 			if(this.used[die] > 0) {
-				Vue.set(this.used, die, this.used[die] - 1);
+				if(this.profile.auto_roll) {
+					Vue.set(this.used, die, 0);
+					Vue.set(this, "roll", 0);
+				} else {
+					Vue.set(this.used, die, this.used[die] - 1);
+				}
 			}
 		}
 	},

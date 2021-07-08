@@ -21,7 +21,7 @@
 			<dnd-chronicle-readout :player="player" :universe="universe" :configuration="configuration" :profile="profile" :storage="storage"></dnd-chronicle-readout>
 		</div>
 	</div>
-	<div class="screen-panel">
+	<div class="screen-panel" v-if="storage && storage.itemTable && storage.entityTable">
 		<div class="screen-data-column">
 			<rs-table :universe="universe" :source="universe.listing.item" :headings="itemHeadings" :formatter="formatter" :controls="itemControls" :storage-container="storage.itemTable"/>
 		</div>

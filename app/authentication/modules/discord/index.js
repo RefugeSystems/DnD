@@ -37,7 +37,7 @@ module.exports = new (function() {
 		var strategy = {
 			"clientID": specification.app_id,
 			"clientSecret": specification.app_secret,
-			"callbackURL": specification.callback || authentication.public + "login/discord/link",
+			"callbackURL": specification.callback || (authentication.public + "login/discord/link"),
 			"scorpe": ["identify", "email"]
 		};
 		

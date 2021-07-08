@@ -37,7 +37,7 @@ module.exports = new (function() {
 		var strategy = {
 			"clientID": specification.OAUTH2_CLIENT_ID,
 			"clientSecret": specification.OAUTH2_CLIENT_SECRET,
-			"callbackURL": specification.callback || authentication.public + "login/google/link",
+			"callbackURL": specification.callback || (authentication.public + "login/google/link"),
 			"accessType": "offline"
 		};
 		

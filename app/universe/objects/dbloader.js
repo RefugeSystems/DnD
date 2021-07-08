@@ -37,7 +37,6 @@ fields.push({
 	"name": "Parent",
 	"description": "Parental object reference for base object properties. References any object.",
 	"type": "string",
-	"inheritance": {},
 	"inheritable": [],
 	"attribute": {
 		"displayed": false,
