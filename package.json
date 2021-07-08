@@ -1,7 +1,7 @@
 {
 	"name": "rs-dnd",
 	"title": "RSDnD",
-	"version": "0.0.1",
+	"version": "0.8.0",
 	"description": "RefugeSsytems DnD Project.",
 	"core_version": "0.1.0",
 	"main": "app/index.js",
