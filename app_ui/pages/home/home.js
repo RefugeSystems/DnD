@@ -171,6 +171,9 @@ rsSystem.component("RSHome", {
 		if(!this.storage.profile.screen_wake === undefined) {
 			Vue.set(this.storage.profile, "screen_wake", true);
 		}
+		if(!this.storage.profile.default_dashboard === undefined) {
+			Vue.set(this.storage.profile, "default_dashboard", "dashboard:character:default");
+		}
 		
 		this.universe.setProfile(this.storage.profile);
 		this.setActive();

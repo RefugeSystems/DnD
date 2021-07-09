@@ -69,8 +69,10 @@
 				if(this.storage && this.storage.classification && (definition = this.universe.index.classes[this.storage.classification])) {
 					for(i=0; i<definition.fields.length; i++) {
 						field = this.universe.index.fields[definition.fields[i]];
-						if(field && (!field.attribute || !field.attribute.no_edit)) {
-							fields.push(field);
+						if(field) {
+							if(!field.attribute || !field.attribute.no_edit) {
+								fields.push(field);
+							}
 						} else {
 							// TODO: Improve tracking
 							console.warn("Invalid field[" + definition.fields[i] + "] in class definition[" + this.storage.classification + "]");
@@ -163,7 +165,7 @@
 			},
 			"includeClasses": function(include) {
 				var classes = this.includeIcons[include] || "fas fa-square";
-				if(this.storage.includes[include]) {
+				if(this.storage && this.storage.includes && this.storage.includes[include]) {
 					classes += " enabled";
 				} else {
 					classes += " disabled";

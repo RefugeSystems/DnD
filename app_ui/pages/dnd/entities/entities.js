@@ -39,9 +39,13 @@ rsSystem.component("DNDEntities", {
 			if(this.main && this.main.location) {
 				return this.universe.index.location[this.main.location];
 			}
+			return null;
 		},
-		"page": function() {	
-			return this.universe.index.page[this.main.page];
+		"page": function() {
+			if(this.main) {
+				return this.universe.index.page[this.main.page];
+			}
+			return null;
 		},
 		"meeting": function() {
 			var meet,
@@ -106,7 +110,7 @@ rsSystem.component("DNDEntities", {
 				}
 			}
 			
-			if(this.storage.ctrl.list.atoz) {
+			if(this.storage && this.storage.ctrl && this.storage.ctrl.list && this.storage.ctrl.list.atoz) {
 				entities.sort(rsSystem.utility.sortData);
 			} else {
 				entities.sort(rsSystem.utility.sortByInitiative);
@@ -319,8 +323,10 @@ rsSystem.component("DNDEntities", {
 		"getControlClass": function(control) {
 			var classes = "";
 
-			if(this.storage.ctrl[control.ctrl] && this.storage.ctrl[control.ctrl][control.id]) {
-				classes += " active-ctrl";
+			if(this.storage && this.storage.ctrl) {
+				if(this.storage.ctrl[control.ctrl] && this.storage.ctrl[control.ctrl][control.id]) {
+					classes += " active-ctrl";
+				}
 			}
 
 			return classes;

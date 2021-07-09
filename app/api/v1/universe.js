@@ -153,7 +153,7 @@ module.exports = new (function() {
 								"recipients": api.universe.getMasters(),
 								"message": "Importing data: " + res.result.imported.length + "/" + importing.length + ":" + res.result.errors.length,
 								"icon": "fas fa-sync fa-spin",
-								"timeout": 10000
+								"anchored": true
 							});
 							if((res.result.errors.length + res.result.imported.length) === importing.length) {
 								api.universe.emit("send", {
@@ -162,7 +162,7 @@ module.exports = new (function() {
 									"recipients": api.universe.getMasters(),
 									"message": "Import Complete: " + res.result.imported.length + "/" + importing.length + ":" + res.result.errors.length,
 									"icon": "fas " + (res.result.errors.length?"fa-exclamation-triangle rs-lightred":"fa-check rs-lightgreen"),
-									"timeout": 10000
+									"anchored": true
 								});
 								next();
 							}

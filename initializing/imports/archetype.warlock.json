@@ -29,10 +29,7 @@
 					}
 				}]
 			},
-			"feats": [
-				"feat:otherworldlypatron",
-				"feat:pactmagic"
-			],
+			"feats": [],
 			"cantrips_maximum": "2",
 			"spells_maximum": "2",
 			"spell_slot_max": {

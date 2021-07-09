@@ -45,7 +45,7 @@ rsSystem.component("rsTableControls", {
 	},
 	"computed": {
 		"selected": function() {
-			if(this.storage) {
+			if(this.storage && this.storage.selected) {
 				return Object.keys(this.storage.selected).length;
 			}
 			return 0;

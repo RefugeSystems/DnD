@@ -11,5 +11,7 @@
         "id": "feat:patron:greatoldone",
         "name": "Great Old One",
         "spells": ["spell:dissonantwhispers", "spell:tashashideouslaughter"]
+	}, {
+		"id": "feat:otherworldlypatron"
     }]
 }

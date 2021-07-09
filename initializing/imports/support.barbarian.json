@@ -1,5 +1,16 @@
 {
     "import": [{
+			"id": "conditional:barbarian:unarmored",
+			"condition": {
+				"slots_remaining": "slot:armor:chest"
+			},
+			"ifop": {
+				"slots_remaining": "isin"
+			},
+			"add": {
+				"armor": "con"
+			}
+		}, {
             "id": "feat:rage",
             "icon": "game-icon game-icon-enrage",
             "name": "Rage",
@@ -17,17 +28,7 @@
             "icon": "game-icon game-icon-muscular-torso",
             "name": "Unarmored Defense",
             "description": "As long as you have no chest armor equipped, you gain bonus armor.",
-            "conditionals": [{
-				"condition": {
-					"slots_remaining": "slot:armor:chest"
-				},
-				"ifop": {
-					"slots_remaining": "isin"
-				},
-				"add": {
-					"armor": "con"
-				}
-			}],
+            "conditionals": ["conditional:barbarian:unarmored"],
             "score": 1,
             "selectable": false,
             "threat": 1

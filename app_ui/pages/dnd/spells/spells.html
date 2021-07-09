@@ -1,6 +1,10 @@
 <div class="rs-page dnd-page dnd-spells">
-	<div class="flex v">
+	<div class="flex v" v-if="entity">
 		<h1 class="today">Today: {{today}}</h1>
 		<rs-table :universe="universe" :source="inventory" :storage-container="storage" :headings="headings" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
+	</div>
+	<div class="general-warning" v-else>
+		<span class="rs-lightyellow fas fa-exclamation-triangle"></span>
+		<span>No Character Found</span>
 	</div>
 </div>

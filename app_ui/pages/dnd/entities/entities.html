@@ -14,9 +14,9 @@
 	</div>
 	<div class="control-column sticky left">
 		<button class="general rounded quick action z9" v-on:click="toggleNotes()" v-on:click.right.stop.prevent="toggleNotes(true)">
-			<span :class="storage.notes.icon"></span>
+			<span :class="storage.notes?storage.notes.icon || 'fas fa-sticky-note':'fas fa-sticky-note'"></span>
 		</button>
-		<div class="note-area" :class="storage.notes.area">
+		<div class="note-area" :class="storage.notes?storage.notes.area:''">
 			<div class="warning" v-if="!page">
 				<span class="fas fa-exclamation-triangle rs-yellow"></span>
 				<span>No Page Found</span>

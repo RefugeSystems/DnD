@@ -1,6 +1,10 @@
 <div class="rs-page dnd-page dnd-knowledge">
-	<div class="flex v">
+	<div class="flex v" v-if="entity">
 		<h1 class="today">Today: {{today}}</h1>
 		<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :headings="headings" :actions="actions" :formatter="formatter" />
+	</div>
+	<div class="general-warning" v-else>
+		<span class="rs-lightyellow fas fa-exclamation-triangle"></span>
+		<span>No Character Found</span>
 	</div>
 </div>

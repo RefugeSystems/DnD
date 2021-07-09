@@ -313,73 +313,75 @@ class RSObject {
 		// TODO: Investigate fixing errant variable references (See: i, v, x and their uses)
 		inherit = (field, id) => {
 			// console.log("Inherit: ", id);
-			source = this._universe.objectHandler.retrieve(id);
-			var ifield;
-			if(source) {
-				// this._universe.objectHandler.trackInheritance(source, field.inheritanceFields);
-				inheriting.push(source.id);
-				for(i=0; i<field.inheritanceFields.length; i++) {
-					ifield = this._manager.database.field[field.inheritanceFields[i]];
-					try {
-						// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
-						switch(field.inheritance[field.inheritanceFields[i]]) {
-							case "+=":
-								// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
-								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
-								break;
-							case "+":
-								// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-								this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
-								break;
-							case "-":
-								// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-								this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
-								break;
-							case "=":
-								// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-								this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
-								break;
-							default:
-								loading = {};
-								loading.id = this.id;
-								loading.value = this._combined[field.id];
-								loading.field = field;
-								loading.source = source.id || source;
-								loading.full_source = !!source.id;
-								this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
-						}
-						if(!this._involved[field.inheritanceFields[i]]) {
-							this._involved[field.inheritanceFields[i]] = {};
-						}
-						// console.log(this.id + "[" + field.inheritanceFields[i] + "] -> " + source.id);
-						if(source._combined[field.inheritanceFields[i]]) { // Intentionally ignoring 0, false, and other falsey values as they essentially aren't contributing
-							switch(ifield.type) {
-								case "object":
-									if(Object.keys(source._combined[field.inheritanceFields[i]]).length) {
-										this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
-									}
+			if(field.inheritanceFields && field.inheritanceFields.length) {
+				source = this._universe.objectHandler.retrieve(id);
+				var ifield;
+				if(source) {
+					// this._universe.objectHandler.trackInheritance(source, field.inheritanceFields);
+					inheriting.push(source.id);
+					for(i=0; i<field.inheritanceFields.length; i++) {
+						ifield = this._manager.database.field[field.inheritanceFields[i]];
+						try {
+							// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
+							switch(field.inheritance[field.inheritanceFields[i]]) {
+								case "+=":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									break;
-								case "array":
-									if(source._combined[field.inheritanceFields[i]].length) {
-										this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
-									}
+								case "+":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									break;
+								case "-":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									break;
+								case "=":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								default:
-									this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+									loading = {};
+									loading.id = this.id;
+									loading.value = this._combined[field.id];
+									loading.field = field;
+									loading.source = source.id || source;
+									loading.full_source = !!source.id;
+									this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
 							}
+							if(!this._involved[field.inheritanceFields[i]]) {
+								this._involved[field.inheritanceFields[i]] = {};
+							}
+							// console.log(this.id + "[" + field.inheritanceFields[i] + "] -> " + source.id);
+							if(source._combined[field.inheritanceFields[i]]) { // Intentionally ignoring 0, false, and other falsey values as they essentially aren't contributing
+								switch(ifield.type) {
+									case "object":
+										if(Object.keys(source._combined[field.inheritanceFields[i]]).length) {
+											this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+										}
+										break;
+									case "array":
+										if(source._combined[field.inheritanceFields[i]].length) {
+											this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+										}
+										break;
+									default:
+										this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
+								}
+							}
+							// console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
+						} catch (e) {
+							console.log("Ref Fail: " + field.id, e);
 						}
-						// console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
-					} catch (e) {
-						console.log("Ref Fail: " + field.id, e);
 					}
+				} else {
+					loading = {};
+					loading.id = this.id;
+					loading.value = this._combined[field.id];
+					loading.field = field;
+					loading.source_id = id;
+					this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to load object to pull inherited fields.", 50, loading, null, this));
 				}
-			} else {
-				loading = {};
-				loading.id = this.id;
-				loading.value = this._combined[field.id];
-				loading.field = field;
-				loading.source_id = id;
-				this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to load object to pull inherited fields.", 50, loading, null, this));
 			}
 		};
 		

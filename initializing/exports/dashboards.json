@@ -31,32 +31,9 @@
 			"created": 1624748748611
 		},
 		{
-			"id": "dashboard:preview:player:master",
-			"parent": "Friendly",
-			"name": null,
-			"description": null,
-			"concealed": true,
-			"default_value": null,
-			"is_preview": true,
-			"review": null,
-			"attribute": {},
-			"widgets": [
-				"widget:entity:heading",
-				"widget:entity:healthbar",
-				"widget:entity:effects"
-			],
-			"owned": null,
-			"_parent": null,
-			"_grid": null,
-			"_x": null,
-			"_y": null,
-			"updated": 1624777157271,
-			"created": 1624748716162
-		},
-		{
 			"id": "dashboard:entity:nearby",
 			"concealed": true,
-			"parent": "Nearby",
+			"name": "Nearby",
 			"widgets": [
 				"widget:entity:heading",
 				"widget:entity:healthbar",
@@ -67,7 +44,7 @@
 		{
 			"id": "dashboard:entity:minion",
 			"concealed": true,
-			"parent": "Minion",
+			"name": "Minion",
 			"widgets": [
 				"widget:entity:name",
 				"widget:entity:healthbar",
@@ -81,7 +58,7 @@
 		{
 			"id": "dashboard:entity:friendly",
 			"concealed": true,
-			"parent": "Friendly",
+			"name": "Friendly",
 			"widgets": [
 				"widget:entity:heading",
 				"widget:entity:healthbar",

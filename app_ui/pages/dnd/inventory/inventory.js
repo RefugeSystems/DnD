@@ -195,16 +195,18 @@ rsSystem.component("DNDInventory", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		if(this.entity.inventory_share) {
-			Vue.set(this.share, "icon", "fas fa-users-slash");
-		} else {
-			Vue.set(this.share, "icon", "fas fa-users");
+		if(this.entity) {
+			if(this.entity.inventory_share) {
+				Vue.set(this.share, "icon", "fas fa-users-slash");
+			} else {
+				Vue.set(this.share, "icon", "fas fa-users");
+			}
 		}
 		this.buildControls();
 	},
 	"methods": {
 		"buildControls": function() {
-			var selected = Object.keys(this.storage.selected),
+			var selected = this.storage && this.storage.selected?Object.keys(this.storage.selected):[],
 				reference = this,
 				hide = false,
 				show = false,
@@ -218,7 +220,7 @@ rsSystem.component("DNDInventory", {
 			this.attunable.splice(0);
 			this.unattunable.splice(0);
 			this.controls.splice(0);
-			if(this.share) {
+			if(this.entity && this.share) {
 				this.controls.push(this.share);
 			}
 

@@ -815,7 +815,7 @@ class ClassManager extends EventEmitter {
 			for(x=0; x<reference.fieldIDs.length; x++) {
 				loading = reference.database.field[reference.fieldIDs[x]];
 				if(loading) {
-					if(loading.inheritance) {
+					if(loading.inheritance && Object.keys(loading.inheritance).length) {
 						reference.inheritableFields.push(loading.id);
 					}
 				} else {
@@ -842,7 +842,12 @@ class ClassManager extends EventEmitter {
 		 */
 		this.attribute = specification.attribute || {};
 		if(typeof(this.attribute) === "string") {
-			this.attribute = JSON.parse(this.attribute);
+			try {
+				this.attribute = JSON.parse(this.attribute);
+				console.log("Loaded: " + this.id);
+			} catch(e) {
+				console.log("Failed to parse attributes for field " + this.id, this.attribute, e);
+			}
 		}
 		
 		this.fieldIDs.sort(function(a, b) {
