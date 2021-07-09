@@ -17,6 +17,9 @@ rsSystem.component("sysInfoGeneral", {
 			"requried": true,
 			"type": Object
 		},
+		"player": {
+			"type": Object
+		},
 		"size": {
 			"type": Number,
 			"default": 90

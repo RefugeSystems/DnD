@@ -325,20 +325,20 @@ class RSObject {
 							// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
 							switch(field.inheritance[field.inheritanceFields[i]]) {
 								case "+=":
-									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
-									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									break;
 								case "+":
-									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "-":
-									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-									this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "=":
-									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								default:
 									loading = {};
@@ -395,26 +395,53 @@ class RSObject {
 		// console.log("Calculating Self[" + this._data.id + "]");
 		fields = this._manager.fieldIDs;
 		for(x=0; x<fields.length; x++) {
-			this._calculated[fields[x]] = this._combined[fields[x]];
-			/*
 			field = this._manager.database.field[fields[x]];
-			if(field && this._combined[field.id] !== undefined && this._combined[field.id] !== null) {
-				switch(field.type) {
-					case "string":
-					default:
-					case "calculated":
-					case "array":
-					case "object":
-					case "dice":
-					case "formula": // formula Reduction handled in updateFieldValues
-					case "number":
-					case "boolean":
-					case "object":
-						this._calculated[fields[x]] = this._combined[fields[x]];
-						break;
+			if(field) {
+				this._calculated[fields[x]] = this._combined[fields[x]];
+				
+				// Normalize Numeric Fields
+				if(this._calculated[field.id]) {
+					if(field.type === "number" && isNaN(this._calculated[field.id])) {
+						this._calculated[field.id] = parseFloat(this._calculated[field.id]);
+						if(isNaN(this._calculated[field.id]) && field.attribute) {
+							this._calculated[field.id] = field.attribute.default || 0;
+						} else {
+							this._calculated[field.id] = 0;
+						}
+					} else if(field.type === "integer" && isNaN(this._calculated[field.id])) {
+						this._calculated[field.id] = parseInt(this._calculated[field.id]);
+						if(isNaN(this._calculated[field.id]) && field.attribute) {
+							this._calculated[field.id] = field.attribute.default || 0;
+						} else {
+							this._calculated[field.id] = 0;
+						}
+					} else if((field.type === "object" && field.attribute && field.attribute.values === "integer") || field.type === "object:integer") {
+						keys = Object.keys(this._calculated[field.id]);
+						for(i=0; i<keys.length; i++) {
+							this._calculated[field.id][keys[i]] = parseInt(this._calculated[field.id][keys[i]]);
+						}
+					}
 				}
+				/*
+				field = this._manager.database.field[fields[x]];
+				if(field && this._combined[field.id] !== undefined && this._combined[field.id] !== null) {
+					switch(field.type) {
+						case "string":
+						default:
+						case "calculated":
+						case "array":
+						case "object":
+						case "dice":
+						case "formula": // formula Reduction handled in updateFieldValues
+						case "number":
+						case "boolean":
+						case "object":
+							this._calculated[fields[x]] = this._combined[fields[x]];
+							break;
+					}
+				}
+				*/
 			}
-			*/
 		}
 		
 		fields = this._manager.inheritableFields;
@@ -1427,6 +1454,7 @@ class RSObject {
 		json._involved = this._involved;
 		json._search = this._search;
 		json._data = data;
+		json._stackable = this._stackable;
 		if(include) {
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
@@ -1747,12 +1775,14 @@ RSObject.setObjects = function(a, b, type) {
  * @return The value to be set.
  */
 RSObject.setValues = function(a, b, type) {
-	if(typeof(a) === "object" && typeof(b) === "object") {
-		return RSObject.setObjects(a, b, type);
-	} else if(b === null) {
+	if(b === null) {
 		return null;
 	} else if(typeof(b) === "undefined") {
 		return a;
+	} else if(type === "array" || (a instanceof Array && b instanceof Array)) {
+		return b;
+	} else if(typeof(a) === "object" && typeof(b) === "object") {
+		return RSObject.setObjects(a, b, type);
 	} else {
 		return b;
 	}

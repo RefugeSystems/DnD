@@ -1,9 +1,9 @@
 <div class="rs-component dnd-component master-meeting flex v">
 	<div class="meeting flex v" v-if="active">
-		<h1>{{active.name}}</h1>
+		<h1 v-on:click="toggleNameEdit()">{{active.name}}</h1>
 		<div class="meeting-info">
-			<div class="meeting-name flex h">
-				<input class="grow-1" v-delayed:500="name" />
+			<div class="meeting-name flex h" v-if="editName">
+				<input class="grow-1" v-delayed:1500="name" />
 			</div>
 			<div class="meeting-description flex h">
 				<textarea class="grow-1" v-delayed:500="description"></textarea>
@@ -49,6 +49,18 @@
 			<button class="rounded general quick action" v-on:click="toggleTimeLock()">
 				<span class="action-icon fas" :class="storage.timeLocked?'fa-lock':'fa-unlock'"></span>
 			</button>
+			<button class="rounded general quick action" v-if="!skirmish" v-on:click="startSkirmish()">
+				<span class="action-icon fas fa-swords"></span>
+			</button>
+			<button class="rounded general quick action" v-if="skirmish" v-on:click="finishSkirmish()">
+				<span class="action-icon fas fa-treasure-chest"></span>
+			</button>
+			<button class="rounded general quick action" v-if="skirmish" v-on:click="nextTurmSkirmish()">
+				<span class="action-icon fas fa-step-forward"></span>
+			</button>
+		</div>
+		<div class="calendar-date">
+			<span>{{renderedDate}}</span>
 		</div>
 		<div class="flex h wrap master-actions">
 			<button class="rounded general quick action" v-on:click="setStartDate()">
@@ -75,5 +87,12 @@
 		<select class="select-meeting grow-1" v-model="id">
 			<option v-for="meet in meetings" :value="meet.id">{{meet.name}}</option>
 		</select>
+	</div>
+	<div class="flex v" v-if="entities.length">
+		<div class="entity" v-for="entity in entities">
+			<span class="etity-icon" :class="entity.icon"></span>
+			<span class="entity-name">{{entity.name}} - </span>
+			<span class="entity-player">{{universe.index.player[entity.played_by]?universe.index.player[entity.played_by].name:entity.played_by}}</span>
+		</div>
 	</div>
 </div>

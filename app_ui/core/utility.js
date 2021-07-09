@@ -144,6 +144,25 @@
 		},
 		/**
 		 *
+		 * @method sortByInitiative
+		 * @param a
+		 * @param b
+		 * @return {Number}
+		 */
+		"sortByName": function(a, b) {
+			if((a.name === undefined || a.name === null) && b.name !== undefined && b.name !== null) {
+				return 1;
+			} else if((b.name === undefined || b.name === null) && a.name !== undefined && a.name !== null) {
+				return -1;
+			} else if(a.name < b.name) {
+				return -1;
+			} else if(a.name > b.name) {
+				return 1;
+			}
+			return 0;
+		},
+		/**
+		 *
 		 * @method sortTrueData
 		 * @param a
 		 * @param b

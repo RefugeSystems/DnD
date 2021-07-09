@@ -253,6 +253,7 @@ var finish = function(data) {
 		};
 		data.event.player.setValues(attributes, function(p_err) {
 			data.sets.hp = data.character.hp_max;
+			console.log("Create Sets: ", data.sets);
 			data.character.setValues(data.sets, function(err) {
 				data.universe.chronicle.addOccurrence("character:created", data.event.message.data, Date.now(), null, data.event.player?data.event.player.id:null);
 				data.event.player.setValues(data.sets, function(err) {

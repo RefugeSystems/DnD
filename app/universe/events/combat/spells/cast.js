@@ -64,6 +64,7 @@ module.exports.initialize = function(universe) {
 				load = {};
 				load.spell_slots = {};
 				load.spell_slots[level] = 1;
+				load.action_count = spell.action_cost;
 				console.log("Remove Slot: ", load);
 				source.subValues(load, function(err, obj) {
 					console.log("Subed: ", err);

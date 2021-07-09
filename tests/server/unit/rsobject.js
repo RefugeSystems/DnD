@@ -214,4 +214,26 @@ describe("RSObject", function() {
 		expect(res.temp).toBe(null);
 		expect(res.k).toBe(9);
 	});
+	
+	it("can set Object values", function() {
+		var a = {},
+			b = {},
+			res;
+		
+		a.effects = ["a", "b", "c"];
+		b.effects = ["b"];
+		
+		a.lookup = {"a": 5, "b": 9, "d": 22};
+		a.temp = "k";
+		a.k = 9;
+		b.cool = {"b": 2, "c": null, "d": null};
+		b.temp = null;
+
+		res = RSObject.setValues(a, b);
+		expect(res.effects.length).toBe(1);
+		expect(res.effects[0]).toBe("b");
+		expect(res.lookup.a).toBe(5);
+		expect(res.cool.b).toBe(2);
+		expect(res.temp).toBe(null);
+	});
 });

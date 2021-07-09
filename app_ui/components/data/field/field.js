@@ -206,7 +206,6 @@
 		},
 		"methods": {
 			"fieldInfo": function(field) {
-				console.log("Field Info: ", field);
 				rsSystem.EventBus.$emit("display-info", {
 					"info": "fields:" + field
 				});

@@ -9,9 +9,12 @@ module.exports.initialize = function(universe) {
 	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
 	 * @param {RSObject} event.player That triggered the event
 	 * @param {Object} event.message The payload from the UI
-	 * @param {String} event.message.meeting
-	 * @param {Number} event.message.time
-	 * @param {Array} event.message.players
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
+	 * @param {Number} event.message.data.time
+	 * @param {Array} event.message.data.players
 	 */
 	universe.on("player:meeting:start", function(event) {
 		if(event.player.gm) {
@@ -34,8 +37,11 @@ module.exports.initialize = function(universe) {
 	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
 	 * @param {RSObject} event.player That triggered the event
 	 * @param {Object} event.message The payload from the UI
-	 * @param {String} event.message.meeting
-	 * @param {Number} event.message.time
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
+	 * @param {Number} event.message.data.time
 	 */
 	universe.on("player:meeting:end", function(event) {
 		if(event.player.gm) {

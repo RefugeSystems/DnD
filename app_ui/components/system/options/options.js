@@ -415,7 +415,7 @@ rsSystem.component("systemOptionsDialog", {
 					this.universe.exportData(this.configuration.title);
 					break;
 				case "universe-reconnect":
-					this.universe.reconnect();
+					rsSystem.EventBus.$emit("universe-reconnect");
 					break;
 			}
 		},

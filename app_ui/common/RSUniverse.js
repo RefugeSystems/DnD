@@ -987,7 +987,6 @@ class RSUniverse extends EventEmitter {
 				case "classes":
 				case "fields":
 					return this.index[c][id.substring(id.indexOf(":") + 1)];
-					break;
 				default:
 					return this.index[c][id];
 			}

@@ -8,9 +8,11 @@
  * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
  * @param {RSObject} event.player That triggered the event
  * @param {Object} event.message The payload from the UI
- * @param {Object} event.message.entity 
- * @param {Object} event.message.target 
- * @param {Object} event.message.amount 
+ * @param {Object} event.message.data Object data from UI
+ * @param {String | Object} event.message.data.entity 
+ * @param {String | Object} event.message.data.target 
+ * @param {Number} event.message.data.amount Of gold
+ * @param {Boolean} event.message.data.hide To not add history when true and from master
  */
 module.exports.initialize = function(universe) {
 
@@ -26,9 +28,21 @@ module.exports.initialize = function(universe) {
 		if(target) {
 			if(!entity) {
 				if(event.player.gm) {
-					target.setValues({
-						"gold": parseInt(target.gold) + amount
-					});
+					if(event.message.data.hide) {
+						target.addValues({
+							"gold": amount
+						});
+					} else {
+						target.addValues({
+							"gold": amount,
+							"history": {
+								"event": "recv:gold",
+								"time": universe.time,
+								"amount": amount,
+								"from": null
+							}
+						});
+					}
 					universe.chronicler.addOccurrence("entity:give:gold", {
 						"source": entity.id,
 						"amount": amount
@@ -39,11 +53,21 @@ module.exports.initialize = function(universe) {
 			} else if(entity) {
 				if(entity.owned[event.player.id]) {
 					if(amount <= entity.gold) {
-						entity.setValues({
-							"gold": parseInt(entity.gold) - amount
+						entity.addValues({
+							"gold": -1 * amount,
+							"history": {
+								"event": "give:gold",
+								"time": universe.time,
+								"to": target.id
+							}
 						});
-						target.setValues({
-							"gold": parseInt(target.gold) + amount
+						target.addValues({
+							"gold": amount,
+							"history": {
+								"event": "recv:gold",
+								"time": universe.time,
+								"from": entity.id
+							}
 						});
 						universe.chronicler.addOccurrence("entity:give:gold", {
 							"source": entity.id,

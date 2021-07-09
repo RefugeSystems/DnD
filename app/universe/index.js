@@ -21,6 +21,7 @@ var appPackage = require("../../package.json"),
 	PlayerConnection = require("./player"),
 	ObjectHandler = require("./objects"),
 	
+	NOOP = function() {},
 	omittedFromSync = {},
 	defaultClasses = [
 		"player",
@@ -571,13 +572,20 @@ class Universe extends EventEmitter {
 	/**
 	 * 
 	 * @method copy
-	 * @param {String} id 
+	 * @param {String | RSObject} source
 	 * @param {Object} [mask]
 	 * @param {Function} callback 
 	 */
-	copy(id, mask, callback) {
-		var source = this.get(id),
-			details = {};
+	copy(source, mask, callback) {
+		var details = {},
+			id;
+		
+		if(typeof(source) === "string") {
+			id = source;
+			source = this.get(source);
+		} else {
+			id = source.id || source;
+		}
 		
 		if(typeof(mask) === "function" && !callback) {
 			callback = mask;
@@ -585,17 +593,19 @@ class Universe extends EventEmitter {
 		}
 
 		if(source) {
-			mask.is_template = false;
-			mask.is_copy = true;
 			if(source.is_template) {
 				Object.assign(details, mask);
 				if(source.template_process) {
 					// TODO: Handle Template Processing
 				}
 			} else {
-				Object.assign(details, source._data, mask);
+				// Add check for hard-copy?
+				// Object.assign(details, source._data, mask);
+				Object.assign(details, mask);
 			}
 			details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+			details.is_template = false;
+			details.is_copy = true;
 			details.parent = id;
 			this.createObject(details, callback);
 		} else {
@@ -694,7 +704,7 @@ class Universe extends EventEmitter {
 	 * @param  {Function} callback [description]
 	 * @return {[type]}            [description]
 	 */
-	createObject(details, callback) {
+	createObject(details, callback = NOOP) {
 		if(details) {
 			var classification = this.getClassFromID(details.id);
 			if(!this.manager[classification]) {
@@ -985,6 +995,36 @@ class Universe extends EventEmitter {
 
 	/**
 	 * 
+	 * @method messagePlayer
+	 * @param {String | RSObject} player ID
+	 * @param {String} message Text
+	 */
+	messagePlayer(player, message) {
+		this.emit("send", {
+			"type": "notice",
+			"recipient": player.id || player,
+			"message": message,
+			"anchored": true
+		});
+	}
+
+	/**
+	 * 
+	 * @method messagePlayers
+	 * @param {Object | String} player IDs
+	 * @param {String} message Text
+	 */
+	messagePlayers(player, message) {
+		this.emit("send", {
+			"type": "notice",
+			"recipients": player,
+			"message": message,
+			"anchored": true
+		});
+	}
+
+	/**
+	 * 
 	 * @method notifyMasters
 	 * @param {String} message 
 	 * @param {Object} [data] 
@@ -1001,7 +1041,7 @@ class Universe extends EventEmitter {
 
 	/**
 	 * 
-	 * @method notifyMasters
+	 * @method warnMasters
 	 * @param {String} message 
 	 * @param {Object} [data] 
 	 */

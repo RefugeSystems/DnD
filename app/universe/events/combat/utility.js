@@ -285,6 +285,7 @@ module.exports.initialize = function(universe) {
 	sendDamage = function(activity, source, target, channel, damage) {
 		var notify = function() {
 			var type = Object.keys(damage),
+				recipients,
 				icon;
 			if(type.length === 1 && type[0] === "damage_type:heal") {
 				type = (target.nickname || target.name) + " receiving healing";
@@ -294,13 +295,19 @@ module.exports.initialize = function(universe) {
 				icon = "game-icon game-icon-crossed-slashes rs-lightred";
 			}
 
+			if(target.owned && Object.keys(target.owned).length) {
+				recipients = target.owned;
+			} else {
+				recipients = universe.getMasters();
+			}
+
 			universe.emit("send", {
 				"type": "notice",
 				"mid": activityPrefix + activity,
 				"message": type + (source?" from " + (source.nickname || source.name):""),
 				"icon": icon,
 				"anchored": true,
-				"recipients": target.owned || universe.getMasters(),
+				"recipients": recipients,
 				"emission": {
 					"type": "dialog-open",
 					"component": "dndDialogRoll",
@@ -400,10 +407,17 @@ module.exports.initialize = function(universe) {
 		var notify = function() {
 			if(tracking[activity]) {
 				var type,
+					recipients,
 					icon;
 
 				type = (target.nickname || target.name) + " needs to save";
 				icon = "fas fa-save";
+
+				if(target.owned && Object.keys(target.owned).length) {
+					recipients = target.owned;
+				} else {
+					recipients = universe.getMasters();
+				}
 
 				universe.emit("send", {
 					"type": "notice",
@@ -411,7 +425,7 @@ module.exports.initialize = function(universe) {
 					"message": type + (source?" from " + (source.nickname || source.name):"") + (channel?" against " + channel.name:""),
 					"icon": icon,
 					"anchored": true,
-					"recipients": target.owned || universe.getMasters(),
+					"recipients": recipients,
 					"emission": {
 						"type": "dialog-open",
 						"component": "dndDialogRoll",

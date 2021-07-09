@@ -75,6 +75,9 @@ rsSystem.component("rsTableControls", {
 			}
 			this.$emit("deselected");
 		},
+		"clearFilter": function() {
+			Vue.set(this.storage, "filter", "");
+		},
 		"allSelection": function() {
 			for(var i=0; i<this.corpus.length; i++) {
 				Vue.set(this.storage.selected, this.corpus[i].id, true);

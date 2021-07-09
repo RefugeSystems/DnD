@@ -77,6 +77,26 @@ rsSystem.component("dndMasterEntity", {
 		this.universe.$on("entity:roll", this.entityRolled);
 	},
 	"methods": {
+		"fireProperty": function(property) {
+			console.log("DFie: ", property);
+			var search,
+				i;
+
+			switch(property.id) {
+				case "initiative":
+					for(i=0; i<this.universe.listing.skirmish.length; i++) {
+						search = this.universe.listing.skirmish[i];
+						if(search.is_active && !search.disabled && !search.is_preview) {
+							this.universe.send("skimish:turn", {
+								"skirmish": search.id,
+								"entity": this.entity.id
+							});
+							break;
+						}
+					}
+					break;
+			}
+		},
 		"getRollClass": function(roll) {
 			if(roll && roll.dice && roll.dice.d20) {
 				if(roll.dice.d20 && roll.dice.d20.length) {

@@ -31,93 +31,44 @@ rsSystem.component("DNDSpells", {
 		}
 	},
 	"computed": {
-		"meeting": function() {
-			var meet,
-				i;
-
-			for(i=0; i<this.universe.listing.meeting.length; i++) {
-				meet = this.universe.listing.meeting[i];
-				if(meet && meet.is_active && !meet.disabled && !meet.is_preview) {
-					return meet;
-				}
-			}
-
-			return null;
-		},
 		"entity": function() {
-			return this.universe.index.entity[this.$route.params.entity || this.player.attribute.playing_as];
+			if(this.player && this.player.attribute) {
+				return this.universe.index.entity[this.$route.params.entity || this.player.attribute.playing_as];
+			}
+			return null;
 		},
 		"today": function() {
 			return this.universe.calendar.toDisplay(this.universe.time, false);
 		},
-		"inventory": function() {
-			var inventory = [],
-				cats = {},
-				entity,
-				item,
-				i,
-				j;
-
-			Vue.set(this, "held_by", {});
-			if(this.entity.owned[this.player.id]) {
-				if(this.entity) {
-					for(i=0; i<this.entity.inventory.length; i++) {
-						item = this.universe.getObject(this.entity.inventory[i]);
-						if(item) {
-							Vue.set(this.held_by, item.id, this.entity.nickname || this.entity.name);
-							inventory.push(item);
-						} else {
-							console.warn("Item Missing: " + this.entity.inventory[i]);
-						}
-					}
-				}
-				if(this.meeting && this.meeting.entities) {
-					for(j=0; j<this.meeting.entities.length; j++) {
-						if(!this.entity || this.meeting.entities[j] !== this.entity.id) {
-							entity = this.universe.getObject(this.meeting.entities[j]);
-							if(entity.inventory_share) {
-								for(i=0; i<entity.inventory.length; i++) {
-									if(!entity.inventory_hidden || !entity.inventory_hidden[entity.inventory[i]]) {
-										item = this.universe.getObject(entity.inventory[i]);
-										if(item) {
-											Vue.set(this.held_by, item.id, entity.nickname || entity.name);
-											inventory.push(item);
-										} else {
-											console.warn("Item Missing: " + entity.inventory[i]);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+		"spells": function() {
+			if(this.entity && this.entity.spells) {
+				return this.universe.transcribeInto(this.entity.spells, [], "spell");
 			}
-
-			return inventory;
-		}
-	},
-	"watch": {
-		"entity.inventory_share": function(set) {
-			if(this.share) {
-				if(set) {
-					Vue.set(this.share, "icon", "fas fa-users-slash");
-				} else {
-					Vue.set(this.share, "icon", "fas fa-users");
-				}
-			}
+			return [];
 		},
-		"entity.inventory_hidden": function() {
-			this.buildControls();
+		"prepared": function() {
+			if(this.entity && this.entity.spells_prepared) {
+				return this.universe.transcribeInto(this.entity.spells_prepared, [], "spell");
+			}
+			return [];
+		},
+		"known": function() {
+			if(this.entity && this.entity.spells_known) {
+				return this.universe.transcribeInto(this.entity.spells_known, [], "spell");
+			}
+			return [];
 		}
 	},
 	"data": function() {
-		var reference = this,
-			data = {};
+		var data = {};
 
 		data.categories = [];
-		data.headings = ["icon", "name", "types", "acquired"];
+		data.headings = ["icon", "name", "damage", "acquired"];
+		data.controls = [];
 		data.held_by = {};
 		data.actions = {};
+
+		data.formatter = {};
 		data.formatter.acquired = (value, record, header) => {
 			if(typeof(value) === "number") {
 				return this.universe.calendar.toDisplay(value, false, false);
@@ -127,14 +78,10 @@ rsSystem.component("DNDSpells", {
 		data.formatter.icon = (value, record) => {
 			var classes = "";
 			if(record) {
-				if(this.entity.inventory_hidden && this.entity.inventory_hidden[record.id]) {
-					classes += "hidden_item ";
-				}
-				if(this.entity.equipped && this.entity.equipped.indexOf(record.id) !== -1) {
-					classes += "equipped_item ";
-				}
-				if(record.attuned === this.entity.id) {
-					classes += "attuned_item ";
+				if(this.prepared.indexOf(record.id) !== -1) {
+					classes += "prepared-spell ";
+				} else if(this.spells.indexOf(record.id) !== -1) {
+					classes += "inherited-spell ";
 				}
 			}
 			return "<span class=\"" + classes + (value || "") + "\"></span>";
@@ -158,10 +105,6 @@ rsSystem.component("DNDSpells", {
 			return 0;
 		};
 
-		data.controls = [];
-		data.preparable = [];
-		data.forgettable = [];
-
 		return data;
 	},
 	"mounted": function() {
@@ -184,8 +127,8 @@ rsSystem.component("DNDSpells", {
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.spell[selected[i]];
 				if(buffer && !buffer.disabled && !buffer.is_preview && buffer.caster === this.entity.id) {
-					if(this.entity.spells_known[buffer.id]) {
-						if(this.entity._data.spells.indexOf(buffer.id) === -1) {
+					if(this.entity.spells_known.indexOf(buffer.id) !== -1) {
+						if(this.entity.spells.indexOf(buffer.id) === -1) {
 							preparable.push(buffer.id);
 						} else {
 							forgettable.push(buffer.id);

@@ -103,7 +103,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"piercing": "1d6"
 		},
 		"reduction": {},
@@ -1102,8 +1102,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": null,
@@ -1156,7 +1156,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"slashing": "1d8"
 		},
 		"reduction": {},
@@ -1213,8 +1213,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "1d8"
 		},
 		"reduction": {},
@@ -1271,7 +1271,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"bludgeoning": "",
 			"fire": "1d4"
 		},
@@ -1329,9 +1329,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"bludgeoning": "",
-			"fire": "",
+			
 			"cold": "1d4"
 		},
 		"reduction": null,
@@ -1388,10 +1388,10 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"bludgeoning": "",
-			"fire": "",
-			"cold": "",
+			
+			
 			"thunder": "1d4"
 		},
 		"reduction": null,
@@ -1448,11 +1448,11 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"bludgeoning": "",
-			"fire": "",
-			"cold": "",
-			"thunder": "",
+			
+			
+			
 			"radiant": "1d4"
 		},
 		"reduction": null,
@@ -1509,11 +1509,11 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"bludgeoning": "1d6",
-			"fire": "",
-			"cold": "",
-			"thunder": "",
+			
+			
+			
 			"radiant": ""
 		},
 		"reduction": null,
@@ -1626,12 +1626,12 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"bludgeoning": "",
-			"fire": "",
-			"cold": "",
-			"thunder": "",
-			"radiant": "",
+			
+			
+			
+			
 			"necrotic": "1d4"
 		},
 		"reduction": null,
@@ -1688,7 +1688,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
+			
 			"fire": "1d10"
 		},
 		"reduction": {},
@@ -3338,8 +3338,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": null,
@@ -3392,7 +3392,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
+			
 			"fire": "8d6"
 		},
 		"reduction": {},
@@ -3450,16 +3450,16 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
-			"piercing": "",
+			
 			"slashing": ""
 		},
 		"reduction": {
 			"piercing": "50%",
 			"slashing": "50%",
-			"crushing": "",
+			
 			"bludgeoning": "50%"
 		},
 		"vampirism": null,
@@ -3515,17 +3515,17 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
-			"piercing": "",
-			"slashing": "",
+			
+			
 			"thunder": "1d8"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -3581,18 +3581,18 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
-			"piercing": "",
-			"slashing": "",
-			"thunder": "",
+			
+			
+			
 			"necrotic": "1d8"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -3648,18 +3648,18 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
+			
 			"fire": "1d8",
 			"bludgeoning": "",
-			"piercing": "",
-			"slashing": "",
-			"thunder": "",
+			
+			
+			
 			"necrotic": ""
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -3715,19 +3715,19 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
-			"piercing": "",
-			"slashing": "",
-			"thunder": "",
-			"necrotic": "",
+			
+			
+			
+			
 			"force": "1d10"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -3783,8 +3783,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"necrotic": "1d12"
 		},
 		"reduction": {},
@@ -3841,9 +3841,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
-			"necrotic": "",
+			
+			
+			
 			"force": "1d6"
 		},
 		"reduction": {},
@@ -3900,10 +3900,10 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
-			"necrotic": "",
-			"force": "",
+			
+			
+			
+			
 			"cold": "1d8"
 		},
 		"reduction": {},
@@ -3961,10 +3961,10 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
-			"necrotic": "",
-			"force": "",
+			
+			
+			
+			
 			"cold": "1d8"
 		},
 		"reduction": {},
@@ -4078,9 +4078,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
-			"necrotic": "",
+			
+			
+			
 			"force": "1d8",
 			"cold": ""
 		},
@@ -4139,10 +4139,10 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"necrotic": "1d8",
-			"force": "",
+			
 			"cold": ""
 		},
 		"reduction": {},
@@ -4200,8 +4200,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"cold": "1d8"
 		},
 		"reduction": {},
@@ -4258,8 +4258,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": {},
@@ -4316,8 +4316,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": {
@@ -4376,8 +4376,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": {
@@ -4436,7 +4436,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
+			
 			"fire": "3d6",
 			"cold": ""
 		},
@@ -4496,7 +4496,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
+			
 			"fire": "1d6",
 			"cold": ""
 		},
@@ -4556,16 +4556,16 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "3d8",
-			"piercing": "",
+			
 			"slashing": ""
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -4621,16 +4621,16 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "1d8",
-			"piercing": "",
+			
 			"slashing": ""
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -4686,16 +4686,16 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
 			"piercing": "1d10",
 			"slashing": ""
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -4751,17 +4751,17 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
-			"piercing": "",
-			"slashing": "",
+			
+			
 			"poison": "2d8"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -4817,17 +4817,17 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"acid": "",
-			"fire": "",
+			
+			
 			"bludgeoning": "",
-			"piercing": "",
-			"slashing": "",
+			
+			
 			"poison": "1d8"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -4886,9 +4886,9 @@
 			"fire": "2d6"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -4947,9 +4947,9 @@
 			"fire": "1d6"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5008,9 +5008,9 @@
 			"fire": "2d6"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5066,13 +5066,13 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "3d12"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5128,13 +5128,13 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "1d12"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5190,14 +5190,14 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "",
 			"necrotic": "3d6"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5253,14 +5253,14 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "",
 			"necrotic": "1d6"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5316,14 +5316,14 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "",
 			"necrotic": "8d8"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5379,14 +5379,14 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "",
 			"necrotic": "1d8"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5442,14 +5442,14 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "3d6",
 			"necrotic": ""
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5505,14 +5505,14 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "1d6",
 			"necrotic": ""
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5568,15 +5568,15 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "",
-			"necrotic": "",
+			
 			"slashing": "4d4"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5632,15 +5632,15 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"bludgeoning": "",
-			"necrotic": "",
+			
 			"slashing": "2d4"
 		},
 		"reduction": {
-			"piercing": "",
-			"slashing": "",
-			"crushing": "",
+			
+			
+			
 			"bludgeoning": ""
 		},
 		"vampirism": null,
@@ -5985,8 +5985,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "1d8"
 		},
 		"reduction": {},
@@ -6044,8 +6044,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "1d8"
 		},
 		"reduction": {},
@@ -6104,7 +6104,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"slashing": "1d6",
 			"bludgeoning": ""
 		},
@@ -6163,7 +6163,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"slashing": "1d8",
 			"bludgeoning": ""
 		},
@@ -6223,8 +6223,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "",
 			"piercing": "1d8"
 		},
@@ -6284,8 +6284,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "",
 			"piercing": ""
 		},
@@ -11673,7 +11673,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"slashing": "1d6"
 		},
 		"reduction": {},
@@ -11731,7 +11731,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"slashing": "1d12"
 		},
 		"reduction": {},
@@ -11790,8 +11790,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": {},
@@ -12380,8 +12380,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "",
 			"piercing": ""
 		},
@@ -12440,8 +12440,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"slashing": "",
+			
+			
 			"bludgeoning": "",
 			"piercing": ""
 		},
@@ -13063,7 +13063,7 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
+			
 			"lightning": "50%"
 		},
 		"vampirism": null,
@@ -13123,9 +13123,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"lightning": "2d6",
-			"cold": "",
+			
 			"poison": ""
 		},
 		"reduction": {},
@@ -13183,7 +13183,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"lightning": "1d6"
 		},
 		"reduction": {},
@@ -14451,7 +14451,7 @@
 		"acClass": null,
 		"damage": {
 			"fire": "1d6",
-			"lightning": "",
+			
 			"cold": ""
 		},
 		"reduction": {},
@@ -14509,8 +14509,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"lightning": "",
+			
+			
 			"cold": "1d6"
 		},
 		"reduction": {},
@@ -14568,8 +14568,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"lightning": "",
+			
+			
 			"cold": "2d6"
 		},
 		"reduction": {},
@@ -14627,9 +14627,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"lightning": "",
-			"cold": "",
+			
+			
+			
 			"poison": "2d6"
 		},
 		"reduction": {},
@@ -14687,9 +14687,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"lightning": "",
-			"cold": "",
+			
+			
+			
 			"poison": "1d6"
 		},
 		"reduction": {},
@@ -14748,8 +14748,8 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
+			
+			
 			"fire": "50%"
 		},
 		"vampirism": null,
@@ -14810,8 +14810,8 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
+			
+			
 			"fire": "50%"
 		},
 		"vampirism": null,
@@ -14871,8 +14871,8 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
+			
+			
 			"fire": "50%"
 		},
 		"vampirism": null,
@@ -14933,7 +14933,7 @@
 		"damage": {},
 		"reduction": {
 			"acid": "50%",
-			"lightning": "",
+			
 			"fire": ""
 		},
 		"vampirism": null,
@@ -14993,9 +14993,9 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
-			"fire": "",
+			
+			
+			
 			"cold": "50%"
 		},
 		"vampirism": null,
@@ -15055,9 +15055,9 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
-			"fire": "",
+			
+			
+			
 			"cold": "50%"
 		},
 		"vampirism": null,
@@ -15118,8 +15118,8 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
+			
+			
 			"fire": "50%",
 			"cold": ""
 		},
@@ -15180,10 +15180,10 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"acid": "",
-			"lightning": "",
-			"fire": "",
-			"cold": "",
+			
+			
+			
+			
 			"poison": "50%"
 		},
 		"vampirism": null,
@@ -79820,7 +79820,7 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"fire": "",
+			
 			"force": "50%"
 		},
 		"vampirism": null,
@@ -80607,7 +80607,7 @@
 		"acClass": null,
 		"damage": {
 			"piercing": "2d6",
-			"poison": "",
+			
 			"crushing": "1d6"
 		},
 		"reduction": {},
@@ -80666,7 +80666,7 @@
 		"acClass": null,
 		"damage": {
 			"piercing": "2d6",
-			"poison": "",
+			
 			"crushing": "2d6"
 		},
 		"reduction": {},
@@ -85620,7 +85620,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"lightning": "",
+			
 			"slashing": "1d6",
 			"piercing": "1d6"
 		},
@@ -88169,7 +88169,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"psychic": "",
+			
 			"radiant": "wis"
 		},
 		"reduction": {},
@@ -88230,7 +88230,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"psychic": "",
+			
 			"radiant": "int"
 		},
 		"reduction": {},
@@ -90014,7 +90014,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"lightning": "int"
 		},
 		"reduction": {},
@@ -90339,9 +90339,9 @@
 		"damage": {},
 		"reduction": {
 			"bludgeoning": "",
-			"piercing": "",
-			"crushing": "",
-			"slashing": "",
+			
+			
+			
 			"lightning": "50%",
 			"necrotic": "50%",
 			"radiant": "50%",
@@ -92510,7 +92510,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"cold": "(dex)d6+dex"
 		},
 		"reduction": {},
@@ -92579,8 +92579,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
-			"cold": "",
+			
+			
 			"necrotic": "(dex)d6+dex"
 		},
 		"reduction": {},
@@ -95178,7 +95178,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"piercing": "",
+			
 			"slashing": "1d4"
 		},
 		"reduction": {},
@@ -102883,8 +102883,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"radiant": "",
-			"necrotic": "",
+			
+			
 			"bludgeoning": "",
 			"force": "2d8"
 		},
@@ -102960,7 +102960,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"radiant": "",
+			
 			"necrotic": "2d8"
 		},
 		"reduction": {},
@@ -104953,7 +104953,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"piercing": "",
+			
 			"poison": "2d12",
 			"acid": "2d12"
 		},
@@ -105174,9 +105174,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"piercing": "",
-			"poison": "",
-			"acid": "",
+			
+			
+			
 			"necrotic": "4d12"
 		},
 		"reduction": {},
@@ -105250,8 +105250,8 @@
 		"acClass": null,
 		"damage": {
 			"piercing": "4d12",
-			"poison": "",
-			"acid": "",
+			
+			
 			"necrotic": ""
 		},
 		"reduction": {},
@@ -105324,9 +105324,9 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"piercing": "",
+			
 			"poison": "2d12",
-			"acid": "",
+			
 			"necrotic": ""
 		},
 		"reduction": {},
@@ -105475,10 +105475,10 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"piercing": "",
-			"poison": "",
-			"acid": "",
-			"necrotic": "",
+			
+			
+			
+			
 			"radiant": "3d12"
 		},
 		"reduction": {},
@@ -106382,7 +106382,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"force": "",
+			
 			"poison": "1d12"
 		},
 		"reduction": {
@@ -106463,7 +106463,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"force": "",
+			
 			"poison": ""
 		},
 		"reduction": {
@@ -107357,7 +107357,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"cold": "2d4"
 		},
 		"reduction": {},
@@ -107653,8 +107653,8 @@
 			"bludgeoning": "3d8",
 			"piercing": "1d8",
 			"slashing": "2d8",
-			"acid": "",
-			"fire": "",
+			
+			
 			"poison": "3d8"
 		},
 		"vampirism": null,
@@ -108246,7 +108246,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"fire": "",
+			
 			"lightning": "int/2",
 			"thunder": "int/2"
 		},
@@ -108697,16 +108697,16 @@
 		"damage": {},
 		"reduction": {
 			"bludgeoning": "",
-			"crushing": "",
-			"slashing": "",
-			"force": "",
+			
+			
+			
 			"fire": "3d8",
 			"necrotic": "100%",
 			"lightning": "3d8",
-			"thunder": "",
+			
 			"radiant": "-3d8",
-			"holy": "",
-			"acid": "",
+			
+			
 			"poison": "100%"
 		},
 		"vampirism": null,
@@ -108974,7 +108974,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"poison": "",
+			
 			"piercing": "1d4 + 2"
 		},
 		"reduction": {},
@@ -109060,10 +109060,10 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"lightning": "",
-			"thunder": "",
-			"cold": "",
-			"acid": "",
+			
+			
+			
+			
 			"poison": ""
 		},
 		"reduction": {
@@ -111862,7 +111862,7 @@
 		"acClass": null,
 		"damage": {
 			"psychic": "1d12",
-			"slashing": "",
+			
 			"cold": "2d12"
 		},
 		"reduction": {},
@@ -111941,9 +111941,9 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"chromatic": "",
+			
 			"cold": "100%",
-			"force": "",
+			
 			"holy": "50%",
 			"acid": "50%"
 		},
@@ -112020,9 +112020,9 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"force": "",
+			
 			"lightning": "50%",
-			"thunder": "",
+			
 			"necrotic": "50%"
 		},
 		"vampirism": null,
@@ -117570,7 +117570,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"piercing": "",
+			
 			"crushing": "-50%"
 		},
 		"reduction": {},
@@ -117721,7 +117721,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
+			
 			"acid": "-50%"
 		},
 		"reduction": {},
@@ -117797,8 +117797,8 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"slashing": "",
-			"acid": "",
+			
+			
 			"cold": "-50%"
 		},
 		"reduction": {},
@@ -118100,7 +118100,7 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"force": "",
+			
 			"holy": "-50%"
 		},
 		"vampirism": null,
@@ -119151,8 +119151,8 @@
 		"acClass": null,
 		"damage": {},
 		"reduction": {
-			"force": "",
-			"holy": "",
+			
+			
 			"lightning": "-50%"
 		},
 		"vampirism": null,
@@ -127771,7 +127771,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"sonic": "",
+			
 			"fire": "3d4"
 		},
 		"reduction": {},
@@ -127831,7 +127831,7 @@
 		"range": {},
 		"acClass": null,
 		"damage": {
-			"sonic": "",
+			
 			"fire": "2d4"
 		},
 		"reduction": {},

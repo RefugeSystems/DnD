@@ -63,6 +63,16 @@ rsSystem.component("rsTablePaging", {
 		"toPage": function(page) {
 			Vue.set(this.storage, "page", page);
 		},
+		"keyPaging": function(event) {
+			switch(event.key) {
+				case "ArrowRight":
+					this.toPage(this.storage.page + 1);
+					break;
+				case "ArrowLeft":
+					this.toPage(this.storage.page - 1);
+					break;
+			}
+		},
 		"classPage": function(page) {
 			if(page === this.storage.page) {
 				return "current-page";

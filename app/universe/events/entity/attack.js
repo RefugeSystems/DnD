@@ -69,13 +69,21 @@ module.exports.initialize = function(universe) {
 	 */
 	var sendDamage = function(activity, source, target, channel, damage) {
 		console.log("Sending: ", activity, source.id, target.id, channel, damage);
+		var recipients;
+
+		if(target.owned && Object.keys(target.owned).length) {
+			recipients = target.owned;
+		} else {
+			recipients = universe.getMasters();
+		}
+
 		universe.emit("send", {
 			"type": "notice",
 			"mid": "activity::" + activity,
 			"message": (target.nickname || target.name) + " taking damage from " + (source.nickname || source.name),
 			"icon": "game-icon game-icon-crossed-slashes rs-lightred",
 			"anchored": true,
-			"recipients": target.owned || universe.getMasters(),
+			"recipients": recipients,
 			"emission": {
 				"type": "dialog-open",
 				"component": "dndDialogRoll",

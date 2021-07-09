@@ -30,6 +30,9 @@ rsSystem.component("dndMasterMeeting", {
 		}
 	},
 	"computed": {
+		"renderedDate": function() {
+			return this.universe.calendar.toDisplay();
+		},
 		"meetings": function() {
 			var meetings = [],
 				meet,
@@ -51,9 +54,36 @@ rsSystem.component("dndMasterMeeting", {
 			for(i=0; i<this.universe.listing.meeting.length; i++) {
 				meet = this.universe.listing.meeting[i];
 				if(meet.is_active && !meet.disabled && !meet.is_preview) {
+					if(!meet.name) {
+						Vue.set(this, "editName", true);
+					} else {
+						Vue.set(this, "editName", false);
+						Vue.set(this, "name", "");
+					}
 					return meet;
 				}
 			}
+			
+			return null;
+		},
+		"skirmish": function() {
+			var skirmish,
+				i;
+
+			for(i=0; i<this.universe.listing.skirmish.length; i++) {
+				skirmish = this.universe.listing.skirmish[i];
+				if(skirmish.is_active && !skirmish.disabled && !skirmish.is_preview) {
+					return skirmish;
+				}
+			}
+
+			return null;
+		},
+		"entities": function() {
+			if(this.active && this.active.entities) {
+				return this.universe.transcribeInto(this.active.entities, [], "entity");
+			}
+			return [];
 		}
 	},
 	"watch": {
@@ -66,11 +96,18 @@ rsSystem.component("dndMasterMeeting", {
 			if(newValue && newValue !== this.active.id) {
 				// this.universe.send
 			}
+		},
+		"name": function(text) {
+			this.syncDescription();
+		},
+		"description": function(text) {
+			this.syncDescription();
 		}
 	},
 	"data": function() {
 		var data = {};
 
+		data.editName = false;
 		data.name = "";
 		data.description = "";
 		data.id = "";
@@ -81,6 +118,36 @@ rsSystem.component("dndMasterMeeting", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"toggleNameEdit": function() {
+			Vue.set(this, "editName", !this.editName);
+			if(this.editName && this.active && this.active.name) {
+				Vue.set(this, "name", this.active.name);
+			}
+		},
+
+		"startSkirmish": function() {
+			if(this.active && !this.skirmish) {
+				this.universe.send("meeting:combat", {
+					"meeting": this.active.id
+				});
+			}
+		},
+
+		"nextTurmSkirmish": function() {
+			if(this.skirmish) {
+				this.universe.send("skimish:turn:next", {
+					"skirmish": this.skirmish.id
+				});
+			}
+		},
+
+		"finishSkirmish": function() {
+			if(this.skirmish) {
+				this.universe.send("skirmish:finish", {
+					"skirmish": this.skirmish.id
+				});
+			}
+		},
 		/**
 		 * 
 		 * @method toggleTimeLock
@@ -142,14 +209,15 @@ rsSystem.component("dndMasterMeeting", {
 		 * TODO: This is to be replaced by a `page` object for dynamic
 		 * multi-client synced editing.
 		 * @method syncDescription
-		 * @param {String} meeting ID
-		 * @param {String} description Text
 		 */
-		"syncDescription": function(meeting, name, description) {
-			this.universe.send("meeting:details", {
-				"name": name,
-				"description": description
-			});
+		"syncDescription": function() {
+			if(this.active) {
+				this.universe.send("meeting:details", {
+					"meeting": this.active.id,
+					"name": this.name,
+					"description": this.description
+				});
+			}
 		}
 	},
 	"beforeDestroy": function() {

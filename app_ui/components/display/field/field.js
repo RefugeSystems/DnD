@@ -279,6 +279,8 @@ rsSystem.component("rsDisplayField", {
 				switch(this.fieldData.type) {
 					case "gametime":
 						return this.universe.calendar.toDisplay(value, !!this.fieldData.attribute.include_time);
+					case "date":
+						return new Date(value).toLocaleString();
 					default:
 						return value;
 				}

@@ -1,4 +1,4 @@
-<div class="rs-page page-home">
+<div class="rs-page page-home" :style="styleSplash()">
 	<div class="login prompt" v-if="state <= 0 && configuration && !active">
 		<div class="boxed">
 			<rs-connect v-if="state === 0" v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" storage-key="session"></rs-connect>

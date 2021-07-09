@@ -179,6 +179,17 @@ rsSystem.component("RSHome", {
 		this.setActive();
 	},
 	"methods": {
+		"styleSplash": function() {
+			if(this.universe && this.universe.connection && this.universe.connection.socket) {
+				return "";
+			}
+
+			if(this.configuration && this.configuration.background) {
+				return "background-image: url(\"" + this.configuration.background + "\");";
+			}
+			
+			return "";
+		},
 		"setActive": function() {
 			if(this.$route.query.p) {
 				Vue.set(this, "active", this.$route.query.p);

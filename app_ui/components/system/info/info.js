@@ -160,6 +160,8 @@
 			}
 		},
 		"beforeDestroy": function() {
+			rsSystem.EventBus.$off("display-info", this.displayRecord);
+			rsSystem.EventBus.$off("key:escape", this.closeInfo);
 			/*
 			this.universe.$off("universe:modified", this.update);
 			rsSystem.EventBus.$off("key:escape", this.closeInfo);

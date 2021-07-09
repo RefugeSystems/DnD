@@ -24641,33 +24641,6 @@
 			]
 		},
 		{
-			"id": "knowledgetest:1",
-			"name": "Test Spell",
-			"icon": null,
-			"threat": null,
-			"effects": [],
-			"category": "ideas:spells",
-			"obscuredStats": null,
-			"obscured": null,
-			"description": null,
-			"is_template": true,
-			"secondary": [
-				"spell:communewithnature"
-			],
-			"details": null,
-			"acquired": null,
-			"from": null,
-			"type": null,
-			"note": null,
-			"x": null,
-			"y": null,
-			"review": true,
-			"associations": [
-				"knowledge:spell:divination",
-				"item:tome:spell:communewithnature"
-			]
-		},
-		{
 			"id": "knowledge:ruamokaspower:ash",
 			"name": "Ruamoka's Power of Ash",
 			"icon": null,

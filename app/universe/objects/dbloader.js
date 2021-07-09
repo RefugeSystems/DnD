@@ -214,7 +214,7 @@ fields.push({
 });
 fields.push({
 	"id": "time",
-	"name": "time",
+	"name": "Time",
 	"description": "Tracks game time offset.",
 	"type": "gametime",
 	"attribute": {}
@@ -245,7 +245,7 @@ fields.push({
 });
 fields.push({
 	"id": "date",
-	"name": "date",
+	"name": "Date",
 	"description": "Tracks the real time offset.",
 	"type": "date",
 	"attribute": {}
@@ -344,6 +344,7 @@ fields.push({
 	"description": "Flag to mark this object as a preview of something and not an actual object",
 	"type": "boolean",
 	"attribute": {
+		"display_size": 200,
 		"displayed": false,
 		"no_edit": true
 	}

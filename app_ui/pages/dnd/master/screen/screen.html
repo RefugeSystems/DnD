@@ -5,8 +5,8 @@
 			<dnd-master-note :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterNote"></dnd-master-note>
 			<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
 		</div>
-		<div class="screen-column large">
-			<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :key="entity.id"></dnd-master-entity>
+		<div class="screen-column large entities">
+			<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
 		</div>
 		<div class="screen-action-column">
 			<button class="bucket general quick rounded action" v-on:click="witnessLimit(5)"  v-on:click.right.stop.prevent="witnessLimit(-5)">
@@ -27,6 +27,14 @@
 		</div>
 		<div class="screen-data-column">
 			<rs-table :universe="universe" :source="universe.listing.entity" :headings="entityHeadings" :formatter="formatter" :controls="entityControls" :storage-container="storage.entityTable"/>
+		</div>
+	</div>
+	<div class="screen-panel" v-if="storage && storage.itemTable && storage.entityTable">
+		<div class="screen-data-column">
+			<rs-table :universe="universe" :source="availableSpells" :headings="spellHeadings" :formatter="formatter" :controls="spellControls" :storage-container="storage.spellTable"/>
+		</div>
+		<div class="screen-data-column">
+			<rs-table :universe="universe" :source="availableKnowledge" :headings="knowledgeHeadings" :formatter="formatter" :controls="knowledgeControls" :storage-container="storage.knowledgeTable"/>
 		</div>
 	</div>
 </div>

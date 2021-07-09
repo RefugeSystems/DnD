@@ -46,6 +46,24 @@
 			text-align: center;
 			min-width: 48px;
 			vertical-align: top; // Compensating for icon sizing issues
+			background-color: @rsBlack;
+			color: @rsWhite;
+			border: 1px solid @rsWhite;
+			margin: 0px 2px;
+			transition: color .2s, background-color .2s;
+
+			&:last-child {
+				margin: 0px 0px 0px 2px;
+			}
+
+			&:hover {
+				color: @rsBlack;
+				background-color: @rsWhite;
+			}
+
+			&:active {
+				border-color: @rsLightBlue;
+			}
 		}
 
 		.options {

@@ -78,11 +78,21 @@ rsSystem.component("DNDEntities", {
 				entity,
 				x;
 				
-			
-			for(x=0; x<this.universe.listing.entity.length; x++) {
-				entity = this.universe.listing.entity[x];
-				if(entity.played_by === this.player.id && !entity.disabled && entity.state !== "deceased" && !entity.is_preview && !entity.obscured && !entity.is_minion && entity.id !== this.player.attribute.playing_as) {
-					entities.uniquely(entity);
+			if(this.player && this.player.gm) {
+				if(this.meeting) {
+					for(x=0; x<this.meeting.entities.length; x++) {
+						entity = this.universe.index.entity[this.meeting.entities[x]];
+						if(entity && !entity.played_by) {
+							entities.push(entity);
+						}
+					}
+				}
+			} else {
+				for(x=0; x<this.universe.listing.entity.length; x++) {
+					entity = this.universe.listing.entity[x];
+					if(entity && entity.played_by === this.player.id && !entity.disabled && entity.state !== "deceased" && !entity.is_preview && !entity.obscured && !entity.is_minion && entity.id !== this.player.attribute.playing_as) {
+						entities.uniquely(entity);
+					}
 				}
 			}
 			
@@ -111,7 +121,7 @@ rsSystem.component("DNDEntities", {
 			}
 			
 			if(this.storage && this.storage.ctrl && this.storage.ctrl.list && this.storage.ctrl.list.atoz) {
-				entities.sort(rsSystem.utility.sortData);
+				entities.sort(rsSystem.utility.sortByName);
 			} else {
 				entities.sort(rsSystem.utility.sortByInitiative);
 			}
@@ -135,7 +145,7 @@ rsSystem.component("DNDEntities", {
 				"id": "self"
 			});
 			controls.push({
-				"icon": "fas fa-sort-alpha-up-alt",
+				"icon": "fas fa-sort-alpha-down",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "atoz"
@@ -289,6 +299,12 @@ rsSystem.component("DNDEntities", {
 			}
 			if(this.main && this.main.id === entity.id) {
 				classes += "self ";
+			}
+			if(entity.is_hostile) {
+				classes += "hostile ";
+			}
+			if(entity.is_npc) {
+				classes += "npc ";
 			}
 			return classes;
 		},

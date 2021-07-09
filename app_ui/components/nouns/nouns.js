@@ -328,7 +328,7 @@
 				});
 			},
 			"sync": function(event) {
-				Vue.set(this.storage.classification_ids, this.storage.classification, this.details.id);
+				// Vue.set(this.storage.classification_ids, this.storage.classification, this.details.id);
 				this.previewObject();
 				this.$emit("sync", event);
 			},

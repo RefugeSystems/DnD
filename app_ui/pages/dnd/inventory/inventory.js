@@ -255,7 +255,18 @@ rsSystem.component("DNDInventory", {
 					}
 				}
 			}
-
+			if(selected.length) {
+				this.controls.push({
+					"title": "Drop Items",
+					"icon": "fas fa-arrow-alt-to-bottom",
+					"process": function() {
+						reference.universe.send("inventory:drop", {
+							"items": Object.keys(reference.storage.selected),
+							"entity": reference.entity.id
+						});
+					}
+				});
+			}
 			if(hide) {
 				this.controls.push({
 					"title": "Hide Items",

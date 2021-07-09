@@ -24,6 +24,9 @@ rsSystem.component("rsStatBlock", {
 			"default": false,
 			"type": Boolean
 		},
+		"player": {
+			"type": Object
+		},
 		"size": {
 			"default": 5,
 			"type": Number
@@ -38,8 +41,10 @@ rsSystem.component("rsStatBlock", {
 	"computed": {
 		"fields": function() {
 			var fields = [],
+				knowledge,
 				cfields,
 				classed,
+				entity,
 				field,
 				x;
 
@@ -47,6 +52,9 @@ rsSystem.component("rsStatBlock", {
 				return fields;
 			} else if(this.object.must_know) {
 				// TODO: Implement "Known" filtering
+				if(!this.player || !this.player.gm && (!this.player.attribute || !(entity = this.universe.index.entity[this.player.attribute.playing_as]) || !entity.knowledges || (entity.knowledges.indexOf(this.object.must_know) === -1 && (!entity.knowledge_matrix || !entity.knowledge_matrix[this.object.id])))) {
+					return fields;
+				}
 			}
 			
 			if(this.object._class) {

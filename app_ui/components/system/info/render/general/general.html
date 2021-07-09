@@ -2,5 +2,5 @@
 	<img class="image" v-if="info && info._class === 'image'" :src="getImageURL(info)" />
 	<rs-image v-if="image" :image="image" />
 	<div class="description" v-html="description"/>
-	<rs-stat-block :universe="universe" :object="info" :size="size" :empties="false" marking="fad fa-dot-circle rs-secondary-transparent"/>
+	<rs-stat-block :universe="universe" :object="info" :player="player" :size="size" :empties="false" marking="fad fa-dot-circle rs-secondary-transparent"/>
 </div>

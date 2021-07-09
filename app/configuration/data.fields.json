@@ -159,7 +159,7 @@
 		"id": "time_end",
 		"name": "End Time",
 		"description": "When this finished",
-		"type": "integer",
+		"type": "gametime",
 		"attribute": {}
 	}, {
 		"id": "loyal_to",
@@ -742,7 +742,7 @@
 		],
 		"attribute": {}
 	}, {
-		"id": "prepared",
+		"id": "spells_prepared",
 		"name": "Prepared",
 		"description": "List of spells that were explicitly prepared",
 		"type": "array",
@@ -1159,17 +1159,13 @@
 			"display_format": "duration"
 		}
 	}, {
-		"id": "effect_shape",
-		"name": "Effect Shape",
-		"description": "The shape of the effect",
-		"type": "string",
-		"attribute": {}
-	}, {
 		"id": "potency",
 		"name": "Potency",
 		"description": "How strong this object is. This is for use as part of computed values",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "receive",
 		"name": "Receive",
@@ -1198,14 +1194,26 @@
 		"id": "effect_height",
 		"name": "Effect Height",
 		"description": "The height of the effect",
-		"type": "string",
-		"attribute": {}
+		"type": "calculated",
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "effect_radius",
 		"name": "Effect Radius",
 		"description": "The radius of the effect",
+		"type": "calculated",
+		"attribute": {
+			"hide_when_not_set": true
+		}
+	}, {
+		"id": "effect_shape",
+		"name": "Effect Shape",
+		"description": "The shape of the effect",
 		"type": "string",
-		"attribute": {}
+		"attribute": {
+			"hide_when_not_set": true
+		}
 	}, {
 		"id": "actions",
 		"name": "Performable Actions",
@@ -1751,6 +1759,7 @@
 		"description": "When true, this object will not be copied when given.",
 		"type": "boolean",
 		"attribute": {
+			"display_size": 200,
 			"displayed": false,
 			"default": false
 		}
@@ -2094,6 +2103,7 @@
 		"description": "When true, this object needs reviewed by a game master.",
 		"type": "boolean",
 		"attribute": {
+			"display_size": 200,
 			"displayed": false
 		}
 	}, {
@@ -2424,6 +2434,7 @@
 		"ordering": 300,
 		"type": "object",
 		"attribute": {
+			"inherited_value": "item",
 			"displayed": false
 		}
 	}, {
@@ -2570,8 +2581,8 @@
 	}, {
 		"id": "spells_known",
 		"name": "Known Spells",
-		"description": "Spells that this entity knows and can possibly prepare or memorize. Maps the Spell ID to the time it was learned. This is mostly used as a control lookup.",
-		"type": "object",
+		"description": "Spells that this entity knows for changing prepared spell list (`spells`).",
+		"type": "array",
 		"inheritable": [
 			"spell"
 		],

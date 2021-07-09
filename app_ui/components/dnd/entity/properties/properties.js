@@ -70,7 +70,8 @@ rsSystem.component("dndEntityProperties", {
 		},
 		"openProperty": function(field) {
 			console.log("Field: ", field);
-			this.$emit(field.id);
+			this.$emit("property", field);
+			this.$emit(field.id, this.entity[field.id]);
 		},
 		"getName": function(field, value) {
 			if(field.inheritable && field.inheritable.length) {

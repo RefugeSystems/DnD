@@ -29,6 +29,41 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"computed": {
+		"skirmish": function() {
+			var skirmish,
+				i;
+			for(i=0; i<this.universe.listing.skirmish.length; i++) {
+				skirmish = this.universe.listing.skirmish[i];
+				if(skirmish && !skirmish.is_preview && !skirmish.disabled && skirmish.is_active) {
+					return skirmish;
+				}
+			}
+			return null;
+		},
+		"availableSpells": function() {
+			var available = [],
+				buffer,
+				i;
+			for(i=0; i<this.universe.listing.spell.length; i++) {
+				buffer = this.universe.listing.spell[i];
+				if(buffer && !buffer.disabled && !buffer.is_preview && !buffer.is_copy) {
+					available.push(buffer);
+				}
+			}
+			return available;
+		},
+		"availableKnowledge": function() {
+			var available = [],
+				buffer,
+				i;
+			for(i=0; i<this.universe.listing.knowledge.length; i++) {
+				buffer = this.universe.listing.knowledge[i];
+				if(buffer && !buffer.disabled && !buffer.is_preview && !buffer.is_copy && !buffer.is_template) {
+					available.push(buffer);
+				}
+			}
+			return available;
+		},
 		"activeEntities": function() {
 			var entities = {},
 				minions = [],
@@ -53,6 +88,7 @@ rsSystem.component("DNDMasterScreen", {
 			entities.foes = foes;
 			entities.npcs = npcs;
 			entities.meeting = [];
+			entities.combat = [];
 
 			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
@@ -153,17 +189,22 @@ rsSystem.component("DNDMasterScreen", {
 				this.universe.transcribeInto(meeting.entities, entities.meeting, "entity");
 			}
 
-			entities._keys = Object.keys(entities);
-			entities.combat = mains.concat(minions, npcs, foes);
+			// Combat
+			if(this.skirmish && this.skirmish.entities) {
+				this.universe.transcribeInto(this.skirmish.entities, entities.combat, "entity");
+			}
+
 			entities.combat.sort(rsSystem.utility.sortByInitiative);
 			entities.list = mains.concat(minions, npcs, foes);
 			entities.list.sort(rsSystem.utility.sortByInitiative);
+			entities._keys = Object.keys(entities);
 			return entities;
 		}
 	},
 	"data": function() {
 		var data = {},
 			reference = this,
+			getMeeting,
 			i;
 
 		data.tracking = {};
@@ -181,38 +222,139 @@ rsSystem.component("DNDMasterScreen", {
 			"foes": "fas fa-bullseye-arrow",
 			"npcs": "game-icon game-icon-character",
 			"meeting": "fas fa-calendar",
+			"combat": "fas fa-swords",
 			"minions": "fas fa-dog"
 		};
 
 		data.itemHeadings = ["icon", "name", "is_template", "is_copy", "acquired", "created"];
 		data.itemControls = [{
-			"title": "Give Items",
-			"icon": "game-icon game-icon-sword-brandish",
+			"title": "Distribute Items",
+			"icon": "fas fa-abacus",
 			"process": function() {
 				var entities = Object.keys(reference.storage.entityTable.selected),
-					items = Object.keys(reference.storage.itemTable.selected),
-					giving = [],
-					item,
-					i;
+					items = Object.keys(reference.storage.itemTable.selected);
 				
 				console.log("Give Items:\n", items, " > To >\n", entities);
 
+				reference.universe.send("distribute:items", {
+					"targets": entities,
+					"items": items
+				});
 			}
 		}, {
 			"title": "Take Items",
 			"icon": "game-icon game-icon-drop-weapon",
 			"process": function() {
 				var entities = Object.keys(reference.storage.entityTable.selected),
-					items = Object.keys(reference.storage.itemTable.selected),
-					taking = [],
-					item,
-					i;
+					items = Object.keys(reference.storage.itemTable.selected);
+				
+				console.log("Remove Items:\n", items, " > To >\n", entities);
 
-				console.log("Take Items:\n", items, " > To >\n", entities);
+				reference.universe.send("undistribute:items", {
+					"targets": entities,
+					"items": items
+				});
 			}
 		}];
+
 		data.entityHeadings = ["name", "played_by", "race", "npc_task", "npc_voice", "npc_personality", "created"];
-		data.entityControls = [];
+		data.entityControls = [{
+			"title": "Add to Meeting",
+			"icon": "fas fa-user-plus rs-secondary-light-green",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					meeting = reference.getMeeting();
+				if(entities.length && meeting) {
+					reference.universe.send("meeting:add:entities", {
+						"meeting": meeting.id,
+						"entities": entities
+					});
+				} else {
+					console.warn("Missing Information to Add to Meeting; Meeting: " + (meeting?meeting.id:"! No Meeting") + "\n - ", entities);
+				}
+			}
+		}, {
+			"title": "Remove from Meeting",
+			"icon": "fas fa-user-minus rs-secondary-light-red",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					meeting = reference.getMeeting();
+				if(entities.length && meeting) {
+					reference.universe.send("meeting:remove:entities", {
+						"meeting": meeting.id,
+						"entities": entities
+					});
+				} else {
+					console.warn("Missing Information to Remove to Meeting; Meeting: " + (meeting?meeting.id:"! No Meeting") + "\n - ", entities);
+				}
+			}
+		}];
+
+		data.spellHeadings = ["name", "damage", "type", "level", "range_normal", "cast_time", "created"];
+		data.spellControls = [{
+			"title": "Grant Spell",
+			"icon": "fas fa-book-spells",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					spells = Object.keys(reference.storage.spellTable.selected);
+				if(entities.length && spells.length) {
+					reference.universe.send("spells:grant", {
+						"entities": entities,
+						"spells": spells
+					});
+				} else {
+					console.warn("Missing Information to Add to Spells");
+				}
+			}
+		}, {
+			"title": "Revoke Spell",
+			"icon": "fas fa-mind-share",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					spells = Object.keys(reference.storage.spellTable.selected);
+				if(entities.length && spells.length) {
+					reference.universe.send("spells:revoke", {
+						"entities": entities,
+						"spells": spells
+					});
+				} else {
+					console.warn("Missing Information to Remove to Spells");
+				}
+			}
+		}];
+
+		data.knowledgeHeadings = ["name", "category", "level", "range_normal", "cast_time", "created"];
+		data.knowledgeControls = [{
+			"title": "Grant Knowledge",
+			"icon": "fas fa-brain",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					knowledge = Object.keys(reference.storage.knowledgeTable.selected);
+				if(entities.length && knowledge.length) {
+					reference.universe.send("knowledge:grant", {
+						"entities": entities,
+						"knowledges": knowledge
+					});
+				} else {
+					console.warn("Missing Information to Add to Knowledge");
+				}
+			}
+		}, {
+			"title": "Revoke Knowledge",
+			"icon": "fas fa-mind-share",
+			"process": function() {
+				var entities = Object.keys(reference.storage.entityTable.selected),
+					knowledge = Object.keys(reference.storage.knowledgeTable.selected);
+				if(entities.length && knowledge.length) {
+					reference.universe.send("knowledge:revoke", {
+						"entities": entities,
+						"knowledges": knowledge
+					});
+				} else {
+					console.warn("Missing Information to Remove to Knowledge");
+				}
+			}
+		}];
 
 		
 		data.formatter = {};
@@ -275,8 +417,34 @@ rsSystem.component("DNDMasterScreen", {
 		if(this.storage && !this.storage.itemTable) {
 			Vue.set(this.storage, "itemTable", {});
 		}
+		if(this.storage && !this.storage.spellTable) {
+			Vue.set(this.storage, "spellTable", {});
+		}
+		if(this.storage && !this.storage.knowledgeTable) {
+			Vue.set(this.storage, "knowledgeTable", {});
+		}
 	},
 	"methods": {
+		"getMeeting": function() {
+			var meeting,
+				i;
+			for(i=0; i<this.universe.listing.meeting.length; i++) {
+				meeting = this.universe.listing.meeting[i];
+				if(meeting && meeting.is_active && !meeting.is_preview) {
+					return meeting;
+				}
+			}
+			return null;
+		},
+		"getEntityClass": function(entity) {
+			var classes = "";
+
+			if(this.skirmish && this.skirmish.combat_turn === entity.id) {
+				classes += "current_turn ";
+			}
+
+			return classes;
+		},
 		"witnessLimit": function(mod) {
 			Vue.set(this.storage, "witnessed_limit", this.storage.witnessed_limit + mod);
 		},

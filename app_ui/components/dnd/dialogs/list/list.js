@@ -74,7 +74,7 @@ rsSystem.component("dndDialogList", {
 		var data = {};
 
 		data.cards = this.details.cards;
-		data.extra = {};
+		data.extras = {};
 
 		return data;
 	},

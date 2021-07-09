@@ -1,3 +1,6 @@
+
+var Random = require("rs-random");
+
 module.exports.initialize = function(universe) {
 	/**
 	 * 
@@ -9,13 +12,65 @@ module.exports.initialize = function(universe) {
 	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
 	 * @param {RSObject} event.player That triggered the event
 	 * @param {Object} event.message The payload from the UI
-	 * @param {String} event.message.meeting
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
 	 */
 	universe.on("player:meeting:combat", function(event) {
-		if(event.player.gm) {
-			
+		var meeting = event.message.data.meeting,
+			details = {},
+			location,
+			entity,
+			i;
+
+		if(typeof(meeting) === "string") {
+			meeting = universe.manager.meeting.object[meeting];
+		}
+
+		if(meeting && meeting.entities && meeting.entities.length && event.player.gm) {
+			for(i=0; i<meeting.entities.length; i++) {
+				entity = meeting.entities[i];
+				if(typeof(entity) === "string") {
+					entity = universe.manager.entity.object[entity];
+				}
+				if(entity) {
+					if(!entity.is_shop && (entity.is_npc || entity.is_hostile)) {
+						entity.setValues({
+							"initiative": Random.integer(20,1) + (entity.skill_check?entity.skill_check["skill:initiative"] || 0:0)
+						});
+					} else {
+						entity.setValues({
+							"initiative": null
+						});
+					}
+					if(!details.location && entity.location) {
+						details.location = entity.location;
+						if(details.location) {
+							location = universe.manager.location.object[details.location];
+						}
+					}
+				}
+			}
+
+			details.id = Random.identifier("skirmish", 10, 32).toLowerCase();
+			details.is_active = true;
+			details.start = universe.time;
+			details.entities = meeting.entities;
+			details.time = universe.time;
+			details.icon = "fas fa-swords";
+			details.name = "Skirmish" + (location?" in " + location.name:"");
+			universe.createObject(details, function(err, skirmish) {
+				if(err) {
+					universe.handleError("meeting:combat:start", "Failed to start a skirmish", err);
+				} else {
+					meeting.addValues({
+						"skimishes": [skirmish]
+					});
+				}
+			});
 		} else {
-			universe.handleError("universe:time", "Non-Gamemaster attempted to modify meeting time", null, {
+			universe.handleError("meeting:combat:start", "Non-Gamemaster attempted to start combat", null, {
 				"player": event.player.id,
 				"message": event.message
 			});
