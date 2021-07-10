@@ -43,3 +43,7 @@ rsSystem.App = new Vue({
 
 	}
 });
+
+rsSystem.diagnostics = {};
+rsSystem.diagnostics.at = {};
+rsSystem.diagnostics.at.start = Date.now();

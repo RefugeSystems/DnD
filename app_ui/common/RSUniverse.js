@@ -329,6 +329,8 @@ class RSUniverse extends EventEmitter {
 		};
 		this.processEvent.sync = (event) => {
 			this.$emit("loading", this);
+			console.log("Syncing: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+			rsSystem.diagnostics.at.sync = Date.now();
 			setTimeout(() => {
 				// Let the display update then load the data
 				var classes = Object.keys(event.data),
@@ -358,6 +360,8 @@ class RSUniverse extends EventEmitter {
 					"timeline": event.data._timeline,
 					"time": event.data._time
 				});
+				console.log("Caching: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+				rsSystem.diagnostics.at.cache = Date.now();
 				this.cacheData();
 				// localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 				// localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
@@ -365,6 +369,8 @@ class RSUniverse extends EventEmitter {
 				Vue.set(this, "version", event.version);
 				this.checkVersion();
 				
+				console.log("Unbuffering: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+				rsSystem.diagnostics.at.buffer = Date.now();
 				if(this.buffer_delta.length) {
 					for(i=0; i<this.buffer_delta.length; i++) {
 						this.receiveDelta(this.buffer_delta[i].received, this.buffer_delta[i].classification, this.buffer_delta[i].id, this.buffer_delta[i].delta);
@@ -373,47 +379,54 @@ class RSUniverse extends EventEmitter {
 				
 				this.state.synchronizing = false;
 				this.$emit("loaded", this);
+				console.log("Ready: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+				rsSystem.diagnostics.finish = Date.now();
+				console.log("Load Time: " + (rsSystem.diagnostics.at.finish - rsSystem.diagnostics.at.start) + "ms");
 			}, 0);
 		};
 		
 		// TODO: Load Previous state, possibly caching universe state data to save sync time
 		// 		Note: this.metrics is sent for the sync, so restoring its "sync" time will
 		// 		offset data from the universe.
-		try {
-			var loadListing = localStorage.getItem(this.KEY.CLASSPREFIX),
-				loadMetrics = localStorage.getItem(this.KEY.METRICS),
-				loadIndex = {},
-				loadNamed = {},
-				keys,
-				i,
-				j;
-				
-			if(loadIndex && loadMetrics) {
-				try {
-					loadListing = JSON.parse(LZString.decompressFromUTF16(loadListing));
-					keys = Object.keys(loadListing);
-					for(i=0; i<keys.length; i++) {
-						loadIndex[keys[i]] = {};
-						for(j=0; j<loadListing[keys[i]].length; j++) {
-							loadIndex[keys[i]][loadListing[keys[i]][j].id] = loadListing[keys[i]][j];
-							loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
+		if(!this.profile || !this.profile.disable_cache) {
+			try {
+				var loadListing = localStorage.getItem(this.KEY.CLASSPREFIX),
+					loadMetrics = localStorage.getItem(this.KEY.METRICS),
+					loadIndex = {},
+					loadNamed = {},
+					keys,
+					i,
+					j;
+					
+				console.log("Loading Cache: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
+				rsSystem.diagnostics.at.load = Date.now();
+				if(loadIndex && loadMetrics) {
+					try {
+						loadListing = JSON.parse(LZString.decompressFromUTF16(loadListing));
+						keys = Object.keys(loadListing);
+						for(i=0; i<keys.length; i++) {
+							loadIndex[keys[i]] = {};
+							for(j=0; j<loadListing[keys[i]].length; j++) {
+								loadIndex[keys[i]][loadListing[keys[i]][j].id] = loadListing[keys[i]][j];
+								loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
+							}
 						}
+						// console.log("Cached Action Max: ", _p(loadIndex.fields.action_max));
+						// console.log("Cached Size: ", _p(loadIndex.fields.size));
+						this.metrics = JSON.parse(loadMetrics);
+						this.listing = loadListing;
+						this.index = loadIndex;
+						this.named = loadNamed;
+					} catch(exception) {
+						console.error("Clearing cache, failed to load: ", exception);
+						localStorage.removeItem(this.KEY.CLASSPREFIX);
+						localStorage.removeItem(this.KEY.METRICS);
 					}
-					// console.log("Cached Action Max: ", _p(loadIndex.fields.action_max));
-					// console.log("Cached Size: ", _p(loadIndex.fields.size));
-					this.metrics = JSON.parse(loadMetrics);
-					this.listing = loadListing;
-					this.index = loadIndex;
-					this.named = loadNamed;
-				} catch(exception) {
-					console.error("Clearing cache, failed to load: ", exception);
-					localStorage.removeItem(this.KEY.CLASSPREFIX);
-					localStorage.removeItem(this.KEY.METRICS);
 				}
+			} catch(abort) {
+				this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
+				Vue.set(this.metrics, "sync", 0);
 			}
-		} catch(abort) {
-			this.addLogEvent("Failed to load saved universe data, aborting and allowing normal sync", 50, abort);
-			Vue.set(this.metrics, "sync", 0);
 		}
 	}
 
@@ -424,10 +437,16 @@ class RSUniverse extends EventEmitter {
 	 * 		Will likely open control methods to manipulate the Universe object in relevent ways then mirror
 	 * 		or move the profile under the universe for persistence.
 	 * @param {Object} profile 
+	 * @param {Boolean} [profile.disable_cache] When true, the current cache is deleted
 	 */
 	setProfile(profile) {
+		console.log("Set Profile: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
+		rsSystem.diagnostics.at.profile = Date.now();
 		if(profile) {
 			this.profile = profile;
+			if(profile.disable_cache) {
+				this.deleteCache();
+			}
 		}
 	}
 
@@ -436,8 +455,14 @@ class RSUniverse extends EventEmitter {
 	 * @method cacheData
 	 */
 	cacheData() {
-		localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
-		localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
+		console.log("Cache Data");
+		if(!this.profile || !this.profile.disable_cache) {
+			localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
+			localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
+		} else {
+			localStorage.removeItem(this.KEY.METRICS);
+			localStorage.removeItem(this.KEY.CLASSPREFIX);
+		}
 	}
 
 	/**
@@ -631,6 +656,8 @@ class RSUniverse extends EventEmitter {
 		this.version = "Unknown";
 		this.connection.session = session;
 		this.connection.address = address;
+		console.log("Connecting: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
+		rsSystem.diagnostics.at.connect = Date.now();
 
 		return new Promise((done, fail) => {
 			this.loggedOut = false;
@@ -717,7 +744,9 @@ class RSUniverse extends EventEmitter {
 					console.error("Connect Fault: ", event);
 					fail(event);
 				} else {
-					this.reconnect();
+					setTimeout(() => {
+						this.reconnect();
+					}, rsSystem.reconnectTimeout);
 				}
 			};
 

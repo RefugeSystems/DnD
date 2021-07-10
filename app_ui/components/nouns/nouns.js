@@ -84,7 +84,20 @@
 				return fields;
 			},
 			"nameGenerators": function() {
-
+				// TODO:
+			}
+		},
+		"watch": {
+			"$route.params.classification": function(classing) {
+				if(classing && this.storage.classification !== classing) {
+					Vue.set(this.storage, "classification", classing);
+					this.reclassing();
+				}
+			},
+			"$route.params.id": function(id) {
+				if(id) {
+					this.reclassing();
+				}
 			}
 		},
 		"data": function() {
@@ -103,7 +116,7 @@
 				"_parented": "fas fa-folder-tree",
 				"is_template": "fas fa-file-import",
 				"is_copy": "fas fa-copy",
-				"is_preview": "fas fa-search"
+				"is_preview": "fas fa-eye"
 			};
 
 			data.classification = this.$route.params.classification || this.universe.listing.classes[0].id;
@@ -122,30 +135,28 @@
 		},
 		"mounted": function() {
 			rsSystem.register(this);
-			var keys,
+			var source,
+				keys,
 				x;
 
-			if(typeof(this.storage.detail_data) === "object") {
-				keys = Object.keys(this.details);
-				for(x=0; x<keys.length; x++) {
-					Vue.delete(this.details, keys[x]);
-				}
-				keys = Object.keys(this.storage.detail_data);
-				for(x=0; x<keys.length; x++) {
-					Vue.set(this.details, keys[x], this.storage.detail_data[keys[x]]);
-				}
-				if(!this.storage.rawValue) {
-					Vue.set(this.storage, "rawValue", JSON.stringify(this.details, null, 4));
-				}
-			} else {
-				Vue.set(this.storage, "detail_data", {});
-				if(!this.storage.rawValue) {
-					Vue.set(this.storage, "rawValue", "{}");
-				}
-			}
-			if(!this.storage.classification_ids) {
-				Vue.set(this.storage, "classification_ids", {});
-			}
+			// if(typeof(this.storage.detail_data) === "object") {
+			// 	keys = Object.keys(this.details);
+			// 	for(x=0; x<keys.length; x++) {
+			// 		Vue.delete(this.details, keys[x]);
+			// 	}
+			// 	keys = Object.keys(this.storage.detail_data);
+			// 	for(x=0; x<keys.length; x++) {
+			// 		Vue.set(this.details, keys[x], this.storage.detail_data[keys[x]]);
+			// 	}
+			// 	if(!this.storage.rawValue) {
+			// 		Vue.set(this.storage, "rawValue", JSON.stringify(this.details, null, 4));
+			// 	}
+			// } else {
+			// 	Vue.set(this.storage, "detail_data", {});
+			// 	if(!this.storage.rawValue) {
+			// 		Vue.set(this.storage, "rawValue", "{}");
+			// 	}
+			// }
 			if(!this.storage.swap) {
 				Vue.set(this.storage, "swap", {});
 			}
@@ -227,8 +238,7 @@
 				}
 			},
 			"reclassing": function() {
-				// Vue.set(this.details, "id", this.storage.classification_ids[this.storage.classification] || "");
-				var keys,
+				var source,
 					i;
 
 				if(!this.storage.swap[this.classification]) {
@@ -238,21 +248,23 @@
 					Vue.set(this.storage.swap, this.storage.classification, {});
 				}
 
-				// Update Current Class Swap
-				// keys = Object.keys(this.storage.swap[this.classification]);
-				// for(i=0; i<keys.length; i++) {
-				// 	Vue.set(this.storage.swap[this.classification], keys[i], null);
-				// }
-
-				keys = Object.keys(this.details);
-				for(i=0; i<keys.length; i++) {
-					// Vue.set(this.storage.swap[this.classification], keys[i], this.details[keys[i]]);
-					Vue.set(this.details, keys[i], null);
-				}
-				
-				keys = Object.keys(this.storage.swap[this.storage.classification]);
-				for(i=0; i<keys.length; i++) {
-					Vue.set(this.details, keys[i], this.storage.swap[this.storage.classification][keys[i]]);
+				if(this.$route.params.classification && this.$route.params.classification === this.storage.classification) {
+					if(this.$route.params.id && (source = this.universe.index[this.$route.params.classification][this.$route.params.id])) {
+						Vue.set(this.details, "id", source.id || null);
+						for(i=0; i<this.fields.length; i++) {
+							Vue.set(this.details, this.fields[i].id, source[this.fields[i].id] || null);
+						}
+					} else {
+						Vue.set(this.details, "id", null);
+						for(i=0; i<this.fields.length; i++) {
+							Vue.set(this.details, this.fields[i].id, null);
+						}
+					}
+				} else {
+					Vue.set(this.details, "id", this.storage.swap.id || null);
+					for(i=0; i<this.fields.length; i++) {
+						Vue.set(this.details, this.fields[i].id, this.storage.swap[this.storage.classification][this.fields[i].id] || null);
+					}
 				}
 
 				Vue.set(this, "classification", this.storage.classification);
@@ -310,17 +322,22 @@
 				// Clean eroneous fields
 				previewing.id = this.details.id;
 				for(i=0; i<this.fields.length; i++) {
-					if(this.details[this.fields[i].id] !== undefined && this.details[this.fields[i].id] !== null) {
-						if(this.fields[i].type === "array" && this.details[this.fields[i].id].length === 0) {
-							previewing[this.fields[i].id] = null;
-						} else if(this.fields[i].type === "object") {
-							previewing[this.fields[i].id] = Object.assign({}, this.details[this.fields[i].id]);
-						} else {
-							previewing[this.fields[i].id] = this.details[this.fields[i].id];
-						}
-					} else {
+					if(this.details[this.fields[i].id] === undefined) {
 						previewing[this.fields[i].id] = null;
+					} else {
+						previewing[this.fields[i].id] = this.details[this.fields[i].id];
 					}
+					// if(this.details[this.fields[i].id] !== undefined && this.details[this.fields[i].id] !== null) {
+					// 	if(this.fields[i].type === "array" && this.details[this.fields[i].id].length === 0) {
+					// 		previewing[this.fields[i].id] = null;
+					// 	} else if(this.fields[i].type === "object") {
+					// 		previewing[this.fields[i].id] = Object.assign({}, this.details[this.fields[i].id]);
+					// 	} else {
+					// 		previewing[this.fields[i].id] = this.details[this.fields[i].id];
+					// 	}
+					// } else {
+					// 	previewing[this.fields[i].id] = null;
+					// }
 				}
 				this.universe.send("preview:object", {
 					"classification": this.storage.classification,
@@ -328,7 +345,6 @@
 				});
 			},
 			"sync": function(event) {
-				// Vue.set(this.storage.classification_ids, this.storage.classification, this.details.id);
 				this.previewObject();
 				this.$emit("sync", event);
 			},
@@ -358,7 +374,6 @@
 			"copyParent": function(field) {
 				// TODO
 			},
-			
 			"toggleEditMode": function() {
 				if(this.storage.advanced_editor) {
 					// Parse Back to Details
@@ -418,7 +433,11 @@
 				for(i=0; i<this.fields.length; i++) {
 					switch(typeof(this.details[this.fields[i].id])) {
 						case "object":
-							saving[this.fields[i].id] = JSON.parse(JSON.stringify(this.details[this.fields[i].id]));
+							if(this.details[this.fields[i].id] === null) {
+								saving[this.fields[i].id] = null;
+							} else if(Object.keys(this.details[this.fields[i].id]).length) {
+								saving[this.fields[i].id] = JSON.parse(JSON.stringify(this.details[this.fields[i].id]));
+							}
 							break;
 						default:
 							saving[this.fields[i].id] = this.details[this.fields[i].id];

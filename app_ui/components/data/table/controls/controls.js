@@ -64,6 +64,9 @@ rsSystem.component("rsTableControls", {
 		if(this.storage && !this.storage.selected) {
 			Vue.set(this.storage, "selected", {});
 		}
+		if(this.storage && typeof(this.storage.filter) !== "string") {
+			Vue.set(this.storage, "filter", "");
+		}
 	},
 	"methods": {
 		"clearSelection": function() {

@@ -30,7 +30,7 @@ var source = rsSystem.lookup().world.indexes.character.listing,
 exp = new RegExp("[0-9]");
 
 for(x=0; x<source.length; x++) {
-	if(!source[x].id.startsWith("modifier") && source[x].name && !exp.test(source[x].name)) {
+	if(!source[x].id.startsWith("modifier") && source[x].name && !exp.test(source[x].name) && !source[x].mob && typeof(source[x].health) === "number" && source[x].health > 0) {
 		toExport.push(source[x]);
 	}
 }

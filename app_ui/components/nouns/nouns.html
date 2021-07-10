@@ -5,15 +5,14 @@
 			<select v-model="storage.classification" v-on:change="reclassing()">
 				<option v-for="type in classes" :value="type.id">{{type.name}}</option>
 			</select>
-			<div class="separator">Inc:</div>
 			<button class="flat rs-white action far include" v-for="included in includes" v-on:click="toggleInclude(included)" :title="included"  :class="includeClasses(included)"></button>
 			<div class="filter-containter flex v">
 				<input type="text" class="filter-input grow-1" v-delayed:200.lower="storage.fieldFilter"/>
 			</div>
 		</div>
-		<div class="sourcing ctrl-row">
+		<div class="sourcing ctrl-row flex h">
 			<span class="labeling">Copy:</span>
-			<select v-model="copy" v-on:change="copySource(copy)">
+			<select class="grow-1" v-model="copy" v-on:change="copySource(copy)">
 				<option v-for="source in sources" :value="source.id" :title="source.id + ' - ' + source.description" v-if="usableSource(source)">{{nameSource(source)}}</option>
 			</select>
 		</div>
@@ -42,6 +41,9 @@
 					</button>
 					<span v-if="field.attribute.server_only">
 						<span class="fas fa-server rs-light-red" title="Field data restricted to the Server"></span>
+					</span>
+					<span v-if="field.attribute.deprecated">
+						<span class="fas fa-sensor-alert rs-light-red" title="This field is deprecated"></span>
 					</span>
 				</span>
 			</rs-field>

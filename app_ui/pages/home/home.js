@@ -180,7 +180,7 @@ rsSystem.component("RSHome", {
 	},
 	"methods": {
 		"styleSplash": function() {
-			if(this.universe && this.universe.connection && this.universe.connection.socket) {
+			if(this.universe && this.universe.connection && this.universe.connection.socket && !rsSystem.connection.metrics.connected_server) {
 				return "";
 			}
 

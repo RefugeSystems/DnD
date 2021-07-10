@@ -246,7 +246,9 @@ class RSField extends EventEmitter {
 				this.displayed_as = {};
 			}
 		}
-		
+		if(!this.attribute) {
+			this.attribute = {};
+		}
 		this.updated = Date.now();
 		this.emit("changed");
 	}

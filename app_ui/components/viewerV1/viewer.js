@@ -393,6 +393,9 @@
 			this.update();
 		},
 		"methods": {
+			"getMarkerSize": function() {
+				return Math.min(this.baseFontSize + this.image.zoom, this.location.max_font_size || 50);
+			},
 			"clearSearch": function(record) {
 				if(record && this.focusedLocation === record.id) {
 					Vue.set(this, "focusedLocation", null);
@@ -998,7 +1001,7 @@
 				};
 			},
 			"zoom": function(level) {
-				if(10 > level && level > -10) {
+				if(50 > level && level > -50) {
 					var targetHeight = this.original.height * (1 + .1 * level),
 						targetWidth = this.original.width * (1 + .1 * level),
 						view = this.getViewport(),
@@ -1263,7 +1266,7 @@
 
 					if(/*this.storage.labels && path.rendering_name &&*/ typeof(path.x) === "number" && typeof(path.y) === "number") {
 						canvas.fillStyle = path.label_color || path.rendering_path_color || "#FFFFFF";
-						canvas.font = "bold " + (12 + this.storage.image.zoom) + "px Arial";
+						canvas.font = "bold " + Math.min(12 + this.storage.image.zoom, location.max_font_size || 50) + "px Arial";
 						canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
 						canvas.shadowBlur = path.label_shadow_blur || 3;
 						canvas.globalAlpha = path.label_opacity || 1;
@@ -1343,7 +1346,7 @@
 					if(this.storage.measuring[this.location.id] && this.storage.measuring[this.location.id].length) {
 						points = [];
 						canvas.clearRect(0, 0, canvas.width, canvas.height);
-						canvas.font = (14 + this.storage.image.zoom) + "px serif";
+						canvas.font = Math.min(14 + this.storage.image.zoom, location.max_font_size || 50) + "px serif";
 						canvas.strokeStyle = "#FFFFFF";
 						canvas.fillStyle = "#FFFFFF";
 						canvas.globalAlpha = .7;
@@ -1686,12 +1689,13 @@
 				}
 			},
 			"update": function(source) {
-				if(!source || source.location === this.location.id) {
+				if(this.location && !source || source.location === this.location.id) {
 					var buffer,
 						x;
 					
 					this.availablePOIs.splice(0);
 					this.locales.splice(0);
+					Vue.set(this, "baseFontSize", this.location.base_font_size || 10);
 
 					for(x=0; x<this.universe.listing.location.length; x++) {
 						buffer = this.universe.listing.location[x];

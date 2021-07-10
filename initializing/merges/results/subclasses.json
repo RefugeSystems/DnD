@@ -1,0 +1,1807 @@
+{
+	"import": [
+		{
+			"created": 1548905982210,
+			"updated": 1548912786574,
+			"id": "archetype:barbarian:path:totem:spirit:1",
+			"name": "Path of the Totem Warrior Spirit Walking",
+			"description": "",
+			"icon": "fas fa-walking",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 10
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1548915466266,
+			"id": "archetype:barbarian:path:elemental:warrior:1",
+			"name": "Path of the Crouching Warrior",
+			"description": "",
+			"icon": "fas fa-smoke",
+			"note": null,
+			"root": false,
+			"next": "undefined",
+			"feats": [],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1549112913878,
+			"id": "archetype:barbarian:path:berserker:2",
+			"name": "Path of the Frenzied Berserker",
+			"description": "Your rage grows and your desire to eliminate your enemies has only grown with your experience in combat.",
+			"icon": "fas fa-fist-raised",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:barbarian:path:berserker:3"
+			],
+			"feats": [
+				"feat:mindlessrage"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023452189,
+			"id": "archetype:cleric:domain:war:3",
+			"name": "War Domain (3)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:war:5"
+			],
+			"feats": [
+				"feat:warpriest:3"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023461081,
+			"id": "archetype:cleric:domain:war:5",
+			"name": "War Domain (5)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:war:6"
+			],
+			"feats": [
+				"feat:warpriest:5"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 5,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023472901,
+			"id": "archetype:cleric:domain:war:7",
+			"name": "War Domain (7)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:war:8"
+			],
+			"feats": [
+				"feat:warpriest:7"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023660707,
+			"id": "archetype:cleric:domain:war:8",
+			"name": "War Domain (8)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:war:9"
+			],
+			"feats": [
+				"feat:divinestrike"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 8,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023488425,
+			"id": "archetype:cleric:domain:war:9",
+			"name": "War Domain (9)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:war:17"
+			],
+			"feats": [
+				"feat:warpriest:9"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023497390,
+			"id": "archetype:cleric:domain:war:17",
+			"name": "War Domain (17)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:avatarofbattle"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 17,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1587270334358,
+			"id": "archetype:rogue:arcanetrickster:8",
+			"name": "Arcane Trickster (8)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:9"
+			],
+			"feats": [
+				"feat:arcanetrickster:level8"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 8,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030694252,
+			"id": "archetype:rogue:arcanetrickster:10",
+			"name": "Arcane Trickster (10)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:11"
+			],
+			"feats": [
+				"feat:arcanetrickster:level10"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030698975,
+			"id": "archetype:rogue:arcanetrickster:11",
+			"name": "Arcane Trickster (11)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:13"
+			],
+			"feats": [
+				"feat:arcanetrickster:level11"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030687884,
+			"id": "archetype:rogue:arcanetrickster:9",
+			"name": "Arcane Trickster (9)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:10"
+			],
+			"feats": [
+				"feat:magicalambush"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030702390,
+			"id": "archetype:rogue:arcanetrickster:13",
+			"name": "Arcane Trickster (13)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:14"
+			],
+			"feats": [
+				"feat:arcanetrickster:level13",
+				"feat:versatiletrickster"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 13,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1548915422120,
+			"id": "archetype:barbarian:path:elemental:fire:1",
+			"name": "Path of the Fire Walker",
+			"description": "",
+			"icon": "fas fa-fire",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:barbarian:path:elemental:warrior:1"
+			],
+			"feats": [],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:elemental:frost:1",
+				"archetype:barbarian:path:elemental:fire:1",
+				"archetype:barbarian:path:elemental:lightning:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1548915430911,
+			"id": "archetype:barbarian:path:elemental:lightning:1",
+			"name": "Path of the Lightning Walker",
+			"description": "",
+			"icon": "fas fa-bolt",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:barbarian:path:elemental:warrior:1"
+			],
+			"feats": [],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:elemental:frost:1",
+				"archetype:barbarian:path:elemental:lightning:1",
+				"archetype:barbarian:path:elemental:fire:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1548915426667,
+			"id": "archetype:barbarian:path:elemental:frost:1",
+			"name": "Path of the Frost Walker",
+			"description": "",
+			"icon": "fal fa-snowflake",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:barbarian:path:elemental:warrior:1"
+			],
+			"feats": [],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:elemental:lightning:1",
+				"archetype:barbarian:path:elemental:frost:1",
+				"archetype:barbarian:path:elemental:fire:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1549109985902,
+			"id": "archetype:barbarian:path:berserker:1",
+			"name": "Path of the Berserker",
+			"description": "Blind rage fuels your blood lust as you seek to swiftly crush your enemies.",
+			"icon": "fas fa-fist-raised",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:barbarian:path:berserker:2"
+			],
+			"feats": [
+				"feat:frenzy"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554884130258,
+			"id": "archetype:barbarian:path:totem:bear:1",
+			"name": "Path of the Bear Warrior",
+			"description": "",
+			"icon": "fas fa-paw",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:spirittofthebear"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1548988028964,
+			"id": "archetype:barbarian:path:elemental:1",
+			"name": "Path of Elemental Ruin",
+			"description": "",
+			"icon": "fas fa-fire-smoke",
+			"note": null,
+			"root": true,
+			"next": "undefined",
+			"feats": [],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			],
+			"review": true
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554884135234,
+			"id": "archetype:barbarian:path:totem:eagle:1",
+			"name": "Path of the Eagle Warrior",
+			"description": "",
+			"icon": "fal fa-crow",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:spirittoftheeagle"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554884140805,
+			"id": "archetype:barbarian:path:totem:wolf:1",
+			"name": "Path of the Wolf Warrior",
+			"description": "",
+			"icon": "fas fa-claw-marks",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:spirittofthewolf"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554884273532,
+			"id": "archetype:barbarian:path:totem:bear:2",
+			"name": "Aspect of the Bear Totem Warrior",
+			"description": "",
+			"icon": "fas fa-paw",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:aspectofthebear"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:totem:bear:2",
+				"archetype:barbarian:path:totem:eagle:2",
+				"archetype:barbarian:path:totem:wolf:2",
+				"archetype:barbarian:path:berserker:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1549112129958,
+			"id": "archetype:barbarian:path:totem:bear:3",
+			"name": " Bear Spirit Walking",
+			"description": "",
+			"icon": "fal fa-ghost",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:spiritwalker"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554884302459,
+			"id": "archetype:barbarian:path:totem:eagle:2",
+			"name": "Aspect of the Eagle Totem Warrior",
+			"description": "",
+			"icon": "fal fa-crow",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:aspectoftheeagle"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:totem:bear:2",
+				"archetype:barbarian:path:totem:eagle:2",
+				"archetype:barbarian:path:totem:wolf:2"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1549112132734,
+			"id": "archetype:barbarian:path:totem:eagle:3",
+			"name": "Eagle Spirit Walking",
+			"description": "",
+			"icon": "fal fa-ghost",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:spiritwalker"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554884333326,
+			"id": "archetype:barbarian:path:totem:wolf:2",
+			"name": "Aspect of the Wolf Warrior",
+			"description": "",
+			"icon": "fas fa-claw-marks",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:aspectofthewolf"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:totem:bear:2",
+				"archetype:barbarian:path:totem:eagle:2",
+				"archetype:barbarian:path:totem:wolf:2"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1549112120108,
+			"id": "archetype:barbarian:path:totem:wolf:3",
+			"name": "Wolf Spirit Walking",
+			"description": "",
+			"icon": "fal fa-ghost",
+			"note": null,
+			"root": false,
+			"next": "undefined",
+			"feats": [
+				"feat:spiritwalker"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": [
+				"archetype:barbarian:path:berserker:1",
+				"archetype:barbarian:path:elemental:1",
+				"archetype:barbarian:path:totem:eagle:1",
+				"archetype:barbarian:path:totem:bear:1",
+				"archetype:barbarian:path:totem:wolf:1"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1549112903460,
+			"id": "archetype:barbarian:path:berserker:3",
+			"name": "Path of the Intimidating Berserker",
+			"description": "You gain the ability to intimidate creatures",
+			"icon": "fas fa-fist-raised",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:intimidatingpresence"
+			],
+			"subclassing": "archetype:barbarian:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030675261,
+			"id": "archetype:rogue:arcanetrickster:7",
+			"name": "Arcane Trickster (7)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:8"
+			],
+			"feats": [
+				"feat:arcanetrickster:level7"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1549118897606,
+			"id": "archetype:rogue:arcanetrickster",
+			"name": "Arcane Trickster",
+			"description": "You can cast spells as well as you can wield your dagger",
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:rogue:arcanetrickster:4"
+			],
+			"feats": [
+				"feat:arcanetrickster",
+				"feat:magehandlegerdemain"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:rogue:assassin",
+				"archetype:rogue:thief",
+				"archetype:rogue:arcanetrickster"
+			]
+		},
+		{
+			"created": 1549118787363,
+			"updated": 1549118863995,
+			"id": "archetype:rogue:arcanetrickster:4",
+			"name": "Arcane Trickster (4)",
+			"description": "You can cast spells as well as you can wield your dagger",
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:7"
+			],
+			"feats": [
+				"feat:arcanetrickster:level4"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 4,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1585778464167,
+			"id": "archetype:rogue:assassin",
+			"name": "Assassin",
+			"description": "You specialize in killing enemies quickly and quietly.",
+			"icon": "fal fa-dagger",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:rogue:assassin:9"
+			],
+			"feats": [
+				"feat:assassinkits",
+				"feat:assassinate"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:rogue:assassin",
+				"archetype:rogue:thief",
+				"archetype:rogue:arcanetrickster"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1585778806893,
+			"id": "archetype:rogue:thief",
+			"name": "Thief",
+			"description": "You specialize in sneaking around and working from the shadows. Stealing and hiding are your strengths.",
+			"icon": "fal fa-hood-cloak",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:rogue:thief:9"
+			],
+			"feats": [
+				"feat:fasthands",
+				"feat:secondstorywork"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": [
+				"archetype:rogue:assassin",
+				"archetype:rogue:thief",
+				"archetype:rogue:arcanetrickster"
+			]
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1549120271627,
+			"id": "archetype:ranger:beastmaster:1",
+			"name": "Beast Master",
+			"description": "You may find and befriend a beast companion to fight alongside you and your companions.\n\nThe beast has its' own skills and stats and follows your commands as best it can.",
+			"icon": "fal fa-paw-claws",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [],
+			"subclassing": "archetype:ranger:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1549143497790,
+			"id": "archetype:ranger:hunter:colossus:1",
+			"name": "Hunter",
+			"description": "Emulating the Hunter archetype means accepting your place as a bulwark between civilization and the terrors of the wilderness. As you walk the Hunter’s path, you learn specialized techniques for fighting the threats you face, from rampaging ogres and hordes of orcs to towering giants and terrifying dragons.",
+			"icon": "fal fa-bullseye-arrow",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:hunterinitiate"
+			],
+			"subclassing": "archetype:ranger:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550023468421,
+			"id": "archetype:cleric:domain:war:6",
+			"name": "War Domain (6)",
+			"description": null,
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:war:7"
+			],
+			"feats": [
+				"feat:warpriest:6"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030787231,
+			"id": "archetype:rogue:arcanetrickster:14",
+			"name": "Arcane Trickster (14)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:16"
+			],
+			"feats": [
+				"feat:arcanetrickster:level14"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 14,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030791181,
+			"id": "archetype:rogue:arcanetrickster:16",
+			"name": "Arcane Trickster (16)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:17"
+			],
+			"feats": [
+				"feat:arcanetrickster:level16"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 16,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030713755,
+			"id": "archetype:rogue:arcanetrickster:17",
+			"name": "Arcane Trickster (17)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:19"
+			],
+			"feats": [
+				"feat:spellthief"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 17,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030717394,
+			"id": "archetype:rogue:arcanetrickster:19",
+			"name": "Arcane Trickster (19)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": [
+				"archetype:rogue:arcanetrickster:20"
+			],
+			"feats": [
+				"feat:arcanetrickster:level19"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 19,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550030665362,
+			"id": "archetype:rogue:arcanetrickster:20",
+			"name": "Arcane Trickster (20)",
+			"description": null,
+			"icon": "fal fa-wand",
+			"note": null,
+			"root": null,
+			"next": null,
+			"feats": [
+				"feat:arcanetrickster:level20"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 20,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035430963,
+			"id": "archetype:cleric:tempest:3",
+			"name": "Tempest Domain (3)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:tempest:5"
+			],
+			"feats": [
+				"feat:tempestpriest:3"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035402015,
+			"id": "archetype:cleric:tempest:5",
+			"name": "Tempest Domain (5)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:tempest:6"
+			],
+			"feats": [
+				"feat:tempestpriest:5"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 5,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035414878,
+			"id": "archetype:cleric:tempest:7",
+			"name": "Tempest Domain (7)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:tempest:8"
+			],
+			"feats": [
+				"feat:tempestpriest:7"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035428070,
+			"id": "archetype:cleric:tempest:9",
+			"name": "Tempest Domain (9)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:tempest:17"
+			],
+			"feats": [
+				"feat:tempestpriest:9"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035410725,
+			"id": "archetype:cleric:tempest:6",
+			"name": "Tempest Domain (6)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:tempest:7"
+			],
+			"feats": [
+				"feat:thunderboltstrike"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035419125,
+			"id": "archetype:cleric:tempest:8",
+			"name": "Tempest Domain (8)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:tempest:9"
+			],
+			"feats": [
+				"feat:divinestrike"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 8,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1550035367501,
+			"id": "archetype:cleric:tempest:17",
+			"name": "Tempest Domain (17)",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:stormborn"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 17,
+			"exclusives": []
+		},
+		{
+			"created": 1550016977563,
+			"updated": 1550035541712,
+			"id": "archetype:cleric:domain:war",
+			"name": "War Domain",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fal fa-hammer-war",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:cleric:domain:war:3"
+			],
+			"feats": [
+				"feat:warpriest",
+				"feat:channeldivinity"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": [
+				"archetype:cleric:domain:war",
+				"archetype:cleric:tempest"
+			]
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553232304629,
+			"id": "archetype:wizard:necromancy",
+			"name": "School of Necromancy",
+			"description": "Your area of study is in the control of the very essence of life.",
+			"icon": "fas fa-skull",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:wizard:necromancy:6"
+			],
+			"feats": [
+				"feat:grimharvest"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553231759799,
+			"id": "archetype:wizard:conjuration",
+			"name": "School of Conjuration",
+			"description": "A conjurer, summoning material from the aether.",
+			"icon": "fal fa-cat",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:wizard:conjuration:6"
+			],
+			"feats": [
+				"feat:conjurer:0"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553231773343,
+			"id": "archetype:wizard:conjuration:6",
+			"name": "School of Conjuration (6)",
+			"description": "A conjurer, summoning material from the aether.",
+			"icon": "fal fa-cat",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:wizard:conjuration:10"
+			],
+			"feats": [
+				"feat:conjurer:1"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1554093668092,
+			"id": "archetype:cleric:tempest",
+			"name": "Tempest Domain",
+			"description": "The water is where you find your tranquility.",
+			"icon": "fas fa-hurricane",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:cleric:tempest:3"
+			],
+			"feats": [
+				"feat:tempestpriest",
+				"feat:channeldivinity"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": [
+				"archetype:cleric:domain:war",
+				"archetype:cleric:tempest"
+			]
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553231783114,
+			"id": "archetype:wizard:conjuration:10",
+			"name": "School of Conjuration (10)",
+			"description": "A conjurer, summoning material from the aether.",
+			"icon": "fal fa-cat",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:focusedconjuration"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553232262115,
+			"id": "archetype:wizard:necromancy:10",
+			"name": "School of Necromancy (10)",
+			"description": "Your area of study is in the control of the very essence of life.",
+			"icon": "fas fa-skull",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:inuredtoundeath"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 10,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553232276316,
+			"id": "archetype:wizard:necromancy:6",
+			"name": "School of Necromancy (6)",
+			"description": "Your area of study is in the control of the very essence of life.",
+			"icon": "fas fa-skull",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:wizard:necromancy:10"
+			],
+			"feats": [
+				"feat:undeadthralls"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553234466851,
+			"id": "archetype:wizard:transmutation",
+			"name": "School of Transmutation",
+			"description": "Your area of study is in the control of the very essence of life.",
+			"icon": "far fa-flask",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:wizard:transmutation:6"
+			],
+			"feats": [
+				"feat:minoralchemy"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1553234458506,
+			"id": "archetype:wizard:transmutation:6",
+			"name": "School of Transmutation (6)",
+			"description": "Your area of study is in the control of the very essence of life.",
+			"icon": "far fa-flask",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:transmutersstone"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1554093659083,
+			"id": "archetype:cleric:domain:knowledge:1",
+			"name": "Knowledge Domain",
+			"description": "You value learning and the pursuit of knowledge. Teaching others while furthering your own understanding of the world.\n\nChoosing this Domain, you choose 2 expertise feats and 2 language feats.",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:cleric:domain:knowledge:2"
+			],
+			"feats": [
+				"feat:knowledgepriest",
+				"feat:channeldivinity"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 1,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1602978513794,
+			"id": "archetype:cleric:domain:knowledge:6",
+			"name": "Knowledge Domain (6)",
+			"description": "",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:knowledge:7"
+			],
+			"feats": [
+				"feat:knowledgepriest (6)"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1555317401031,
+			"id": "archetype:cleric:domain:knowledge:5",
+			"name": "Knowledge Domain (5)",
+			"description": "",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:knowledge:6"
+			],
+			"feats": [
+				"feat:knowledgepriest (5)"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 5,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1555317406751,
+			"id": "archetype:cleric:domain:knowledge:3",
+			"name": "Knowledge Domain (3)",
+			"description": "",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:knowledge:5"
+			],
+			"feats": [
+				"feat:knowledgepriest (3)"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1555317413971,
+			"id": "archetype:cleric:domain:knowledge:2",
+			"name": "Knowledge Domain (2)",
+			"description": "",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:knowledge:3"
+			],
+			"feats": [
+				"feat:knowledgepriest (2)"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": []
+		},
+		{
+			"created": 1549118770116,
+			"updated": 1554670271633,
+			"id": "archetype:wizard:illusion",
+			"name": "School of Illusion",
+			"description": "Your studies focused on illusions and trickery.",
+			"icon": "fas fa-ghost",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:illusioner"
+			],
+			"subclassing": "archetype:wizard:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417435221,
+			"id": "archetype:paladin:oath:devotion:3",
+			"name": "Oath of Devotion",
+			"description": "The Oath of Devotion binds a paladin to the loftiest ideals of justice, virtue, and order. Sometimes called cavaliers, white knights, or holy warriors, these paladins meet the ideal of the knight in shining armor, acting with honor in pursuit of justice and the greater good. They hold themselves to the highest standards of conduct, and some, for better or worse, hold the rest of the world to the same standards. Many who swear this oath are devoted to gods of law and good and use their gods’ tenets as the measure of their devotion. They hold angels—the perfect servants of good—as their ideals, and incorporate images of angelic wings into their helmets or coats of arms.\n\n# Tenets of Devotion\nThough the exact words and strictures of the Oath of\nDevotion vary, paladins of this oath share these tenets.\n\n+ **Honesty**. Don’t lie or cheat. Let your word be\nyour promise.\n\n+ **Courage**. Never fear to act, though caution is wise. Compassion. Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with wisdom.\n\n+ **Honor**. Treat others with fairness, and let your honorable deeds be an example to them. Do as much good as possible while causing the least amount of harm.\n\n+ **Duty**. Be responsible for your actions and their consequences, protect those entrusted to your care, and obey those who have just authority over you.\n",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:paladin:oath:devotion:5"
+			],
+			"feats": [
+				"feat:paladin:oathbound",
+				"feat:paladin:oathofdevotion:3"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417450000,
+			"id": "archetype:paladin:oath:devotion:5",
+			"name": "Oath of Devotion (5)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:paladin:oath:devotion:7"
+			],
+			"feats": [
+				"feat:paladin:oathofdevotion:5"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 5,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417424247,
+			"id": "archetype:paladin:oath:devotion:7",
+			"name": "Oath of Devotion (7)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:paladin:oath:devotion:9"
+			],
+			"feats": [
+				"feat:auraofdevotion"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559408415733,
+			"id": "archetype:paladin:oath:devotion:9",
+			"name": "Oath of Devotion (9)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:paladin:oathofdevotion:9"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417312481,
+			"id": "archetype:paladin:oath:ancients:3",
+			"name": "Oath of the Ancients",
+			"description": "The Oath of the Ancients is as old as the race of elves and the rituals of the druids. Sometimes called fey knights, green knights, or horned knights, paladins who swear this oath cast their lot with the side of the light in the cosm ic struggle against darkness because they love the beautiful and life-giving things of the world, not necessarily because they believe in principles of honor, courage, and justice. They adorn their arm or and clothing with images of growing things—leaves, antlers, or flowers—to reflect their commitment to preserving life and light in the world.\n\n# Tenets of the Ancients\n\nThe tenets of the Oath of the Ancients have been preserved for uncounted centuries. This oath emphasizes the principles of good above any concerns of law or chaos. Its four central principles are simple.\n\n+ **Kindle the Light**. Through your acts of mercy, kindness, and forgiveness, kindle the light of hope in the world, beating back despair.\n\n+ **Shelter the Light**. Where there is good, beauty, love, and laughter in the world, stand against the wickedness that would swallow it. Where life flourishes, stand against the forces that would render it barren.\n\n+ **Preserve Your Own Light**. Delight in song and laughter, in beauty and art. If you allow the light to die in your own heart, you can’t preserve it in the world.\n\n+ **Be the Light**. Be a glorious beacon for all who live in despair. Let the light of your joy and courage shine forth in all your deeds.\n",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:paladin:oath:ancients:5"
+			],
+			"feats": [
+				"feat:paladin:oathbound",
+				"feat:paladin:oathoftheancients:3"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417327323,
+			"id": "archetype:paladin:oath:ancients:5",
+			"name": "Oath of the Ancients (5)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:paladin:oath:ancients:7"
+			],
+			"feats": [
+				"feat:paladin:oathoftheancients:5"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 5,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417347408,
+			"id": "archetype:paladin:oath:ancients:7",
+			"name": "Oath of the Ancients (7)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:paladin:oath:ancients:9"
+			],
+			"feats": [
+				"feat:auraofwarding"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": []
+		},
+		{
+			"created": 1559416744552,
+			"updated": 1559417276984,
+			"id": "archetype:paladin:oath:vengeance:3",
+			"name": "Oath of Vengeance",
+			"description": "The Oath of Vengeance is a solemn commitment to punish those who have committed a grievous sin. When evil forces slaughter helpless villagers, when an entire people turns against the will of the gods, when a thieves’ guild grow s too violent and powerful, when a dragon rampages through the countryside—at times like these, paladins arise and swear an Oath of Vengeance to set right that which has gone wrong. To these paladins—sometimes called avengers or dark knights—their own purity is not as important as delivering justice.\n\n# Tenets of Vengeance\nThe tenets of the Oath of Vengeance vary by paladin, but all the tenets revolve around punishing wrongdoers by any means necessary. Paladins who uphold these tenets are willing to sacrifice even their own righteousness to mete out justice upon those who do evil, so the paladins are often neutral or lawful neutral in alignment. The core principles of the tenets are brutally simple.\n\n+ **Fight the Greater Evil**. Faced with a choice of fighting my sworn foes or combating a lesser evil. I choose the greater evil.\n\n+ **No Mercy for the Wicked**. Ordinary foes might win my mercy, but my sworn enemies do not.\n\n+ **By Any Means Necessary**. My qualms can’t get in the way of exterminating my foes.\n\n+ **Restitution**. If my foes wreak ruin on the world, it is because I failed to stop them. I must help those harmed by their misdeeds.\n",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:paladin:oath:vengeance:5"
+			],
+			"feats": [
+				"feat:paladin:oathofvengeance:3",
+				"feat:paladin:oathbound"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 3,
+			"exclusives": []
+		},
+		{
+			"created": 1559416803211,
+			"updated": 1559417259828,
+			"id": "archetype:paladin:oath:vengeance:5",
+			"name": "Oath of Vengeance (5)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:paladin:oath:ancients:7"
+			],
+			"feats": [
+				"feat:paladin:oathofvengeance:5"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 5,
+			"exclusives": []
+		},
+		{
+			"created": 1559416817483,
+			"updated": 1559417371730,
+			"id": "archetype:paladin:oath:vengeance:9",
+			"name": "Oath of Vengeance (9)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:paladin:oathofvengeance:9"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": []
+		},
+		{
+			"created": 1559416836538,
+			"updated": 1559417228818,
+			"id": "archetype:paladin:oath:vengeance:7",
+			"name": "Oath of Vengeance (7)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": [
+				"archetype:paladin:oath:vengeance:9"
+			],
+			"feats": [
+				"feat:relentlessavenger"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1559417197503,
+			"id": "archetype:paladin:oath:ancients:9",
+			"name": "Oath of the Ancients (9)",
+			"description": "",
+			"icon": "fas fa-cross",
+			"note": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:paladin:oathoftheancients:9"
+			],
+			"subclassing": "archetype:paladin:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1563578453908,
+			"id": "archetype:cleric:domain:death:1",
+			"name": "Death Domain",
+			"description": "",
+			"icon": "fas fa-skull",
+			"note": null,
+			"root": true,
+			"next": [
+				"archetype:cleric:domain:knowledge:2"
+			],
+			"feats": [
+				"feat:channeldivinity"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 1,
+			"exclusives": [],
+			"review": true
+		},
+		{
+			"created": 1563578409647,
+			"updated": 1563578450417,
+			"id": "archetype:cleric:domain:death",
+			"name": "Death Domain",
+			"description": "The Death domain is concerned with the forces that cause death, as well as the negative energy that gives rise to undead creatures.\n\nThe main deities that linger in this domain are Lucian and Cthulu, however Zeus and Dionysus have been known to have followers here when the times called for it.",
+			"icon": "fal fa-skeleton",
+			"note": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:deathcleric"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 1,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1585778450421,
+			"id": "archetype:rogue:assassin:9",
+			"name": "Assassin (9)",
+			"description": "You specialize in killing enemies quickly and quietly.",
+			"icon": "fal fa-dagger",
+			"note": null,
+			"obscured": false,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:infiltrationexpertise"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": [
+				"archetype:rogue:assassin",
+				"archetype:rogue:thief",
+				"archetype:rogue:arcanetrickster"
+			]
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1585778792049,
+			"id": "archetype:rogue:thief:9",
+			"name": "Thief (9)",
+			"description": "You specialize in sneaking around and working from the shadows. Stealing and hiding are your strengths.",
+			"icon": "fal fa-hood-cloak",
+			"note": null,
+			"obscured": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:supremesneak"
+			],
+			"subclassing": "archetype:rogue:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": [
+				"archetype:rogue:assassin",
+				"archetype:rogue:thief",
+				"archetype:rogue:arcanetrickster"
+			]
+		},
+		{
+			"created": 1589999231408,
+			"updated": 1590182172053,
+			"id": "archetype:bloodline:draconic:brass",
+			"name": "Draconic Ancestry: Brass",
+			"description": "At 1st Level, you choose one type of dragon as your ancestor. The damage type associated with each dragon is used by features you gain later.\n\nYou can speak, read, and write Draconic. Additionally, whenever you make a Charisma check when interacting with Dragons, your Proficiency Bonus is doubled if it applies to the check.",
+			"icon": "fas fa-shield rs-light-yellow rot270",
+			"note": null,
+			"obscured": null,
+			"root": true,
+			"next": [
+				"archetype:bloodline:draconic:brass:6"
+			],
+			"feats": [
+				"feat:sorcerer:draconicbloodline:ancestry"
+			],
+			"subclassing": "archetype:sorcerer:1",
+			"is_subclass": true,
+			"level": 1,
+			"exclusives": []
+		},
+		{
+			"created": 1589999231408,
+			"updated": 1589999614446,
+			"id": "archetype:bloodline:draconic:brass:6",
+			"name": "Draconic Ancestry: Brass (6)",
+			"description": "",
+			"icon": "fas fa-shield rs-light-yellow rot270",
+			"note": null,
+			"obscured": false,
+			"root": false,
+			"next": [
+				"archetype:bloodline:draconic:brass:14"
+			],
+			"feats": [
+				"feat:sorcerer:draconicbloodline:affinity:brass"
+			],
+			"subclassing": "archetype:sorcerer:1",
+			"is_subclass": true,
+			"level": 6,
+			"exclusives": []
+		},
+		{
+			"created": 1589999231408,
+			"updated": 1589999815414,
+			"id": "archetype:bloodline:draconic:brass:14",
+			"name": "Draconic Ancestry: Brass (14)",
+			"description": "",
+			"icon": "fas fa-shield rs-light-yellow rot270",
+			"note": null,
+			"obscured": false,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:sorcerer:draconicbloodline:dragonwings"
+			],
+			"subclassing": "archetype:sorcerer:1",
+			"is_subclass": true,
+			"level": 14,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1602978308464,
+			"id": "archetype:cleric:domain:knowledge:9",
+			"name": "Knowledge Domain (9)",
+			"description": "",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"obscured": null,
+			"root": false,
+			"next": null,
+			"feats": [
+				"feat:knowledgepriest (9)"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 9,
+			"exclusives": []
+		},
+		{
+			"created": 1548905982210,
+			"updated": 1602978361666,
+			"id": "archetype:cleric:domain:knowledge:7",
+			"name": "Knowledge Domain (7)",
+			"description": "",
+			"icon": "fas fa-atlas",
+			"note": null,
+			"obscured": null,
+			"root": false,
+			"next": [
+				"archetype:cleric:domain:knowledge:9"
+			],
+			"feats": [
+				"feat:knowledgepriest (7)"
+			],
+			"subclassing": "archetype:cleric:1",
+			"is_subclass": true,
+			"level": 7,
+			"exclusives": []
+		},
+		{
+			"created": 1622414795887,
+			"updated": 1622414795887,
+			"id": "archetype:druid:circle:moon",
+			"name": "Circle of the Moon",
+			"description": null,
+			"icon": "fas fa-moon",
+			"note": null,
+			"obscured": null,
+			"root": true,
+			"next": null,
+			"feats": [
+				"feat:wildshape:combat",
+				"feat:circleforms"
+			],
+			"subclassing": "archetype:druid:1",
+			"is_subclass": true,
+			"level": 2,
+			"exclusives": []
+		}
+	]
+}

@@ -28,7 +28,7 @@
 	</div>
 	<div class="pointed" v-if="!image">
 		<div class="value array flex v" v-if="viewInvolved">
-			<div class="involved" v-for="value in involved">
+			<div class="involved" v-for="value in involved" v-if="!value.obscured && !value.hidden">
 				<div class="flex h involved entry">
 					<span class="marking fad fa-layer-minus rs-transparent rs-secondary-solid rs-secondary-purple"></span>
 					<span class="text">{{value.name}}</span>
@@ -56,7 +56,7 @@
 		</div>
 		<div class="values" :class="valuesContainerClass()">
 			<div class="value array flex v" v-if="fieldData.type === 'array'">
-				<div class="element" v-for="value in getArrayValue()">
+				<div class="element" v-for="value in getArrayValue()" v-if="!value.obscured && !value.hidden">
 					<span class="text">{{getValueDisplay(fieldData, value)}}</span>
 					<button class="flat action" v-if="value.id" v-on:click="info(value)" v-linkable="value.id">
 						<span class="fas fa-info-circle"></span>

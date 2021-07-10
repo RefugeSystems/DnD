@@ -1566,6 +1566,30 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "exclusives",
+		"name": "Exclusivity",
+		"description": "List of archetypes that possessing this archetype blocks",
+		"type": "array",
+		"inheritable": [
+			"archetype"
+		],
+		"attribute": {}
+	}, {
+		"id": "is_subclass",
+		"name": "Is Subclass",
+		"description": "Flags this class as a subclass",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "subclassing",
+		"name": "Subclass For",
+		"description": "Indicates the primary class for which this is a subclass",
+		"type": "string",
+		"inheritable": [
+			"archetype"
+		],
+		"attribute": {}
+	}, {
 		"id": "populace",
 		"name": "Populace",
 		"description": "List of entities that are considered active at the location",
@@ -1617,6 +1641,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 			"response": "+",
+			"view": "+",
 			"armor": "+",
 			"damage": "+=",
 			"feats": "+",
@@ -1627,6 +1652,8 @@
 			"threat": "+",
 			"spell_slot_max": "+",
 			"spells": "+",
+			"spell_attack": "+",
+			"spell_dc": "+",
 			"skills": "+",
 			"skill_check": "+=",
 			"skill_proficiency": "=",
@@ -1914,6 +1941,12 @@
 		"attribute": {
 			"options": [1, 2, 3, 4]
 		}
+	}, {
+		"id": "view",
+		"name": "View",
+		"description": "Generalization of the distance out to which this object can reasonably see.",
+		"type": "calculated",
+		"attribute": {}
 	}, {
 		"id": "charges",
 		"name": "Charges",
@@ -2524,6 +2557,23 @@
 			"location"
 		],
 		"attribute": {}
+	}, {
+		"id": "max_font_size",
+		"name": "Max Font Size",
+		"description": "Caps the icon indicator sizing in maps",
+		"type": "integer",
+		"attribute": {
+			"hide_when_not_set": true
+		}
+	}, {
+		"id": "base_font_size",
+		"name": "Base Font Size",
+		"description": "Starting font size for markers",
+		"type": "integer",
+		"attribute": {
+			"hide_when_not_set": true,
+			"default": 10
+		}
 	}, {
 		"id": "associations",
 		"name": "Associations",

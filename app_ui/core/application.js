@@ -84,6 +84,18 @@ rsSystem.lookup = function(element) {
 
 
 rsSystem.settings = {};
+/**
+ * Control which system logging channels are active:
+ * + default
+ * + trace 
+ * + debug 
+ * + info
+ * + warn
+ * + error 
+ * + fatal 
+ * @property settings.logging
+ * @type Object
+ */
 rsSystem.settings.logging = {};
 rsSystem.settings.logging.default = false;
 rsSystem.settings.logging.trace = false;
@@ -92,7 +104,18 @@ rsSystem.settings.logging.info = false;
 rsSystem.settings.logging.warn = false;
 rsSystem.settings.logging.error = true;
 rsSystem.settings.logging.fatal = true;
+/**
+ * 
+ * @property settings.reconnectTimeout
+ * @type Integer
+ */
+rsSystem.settings.reconnectTimeout = 10000;
 
+/**
+ * 
+ * @property console
+ * @type Integer
+ */
 rsSystem.console = {};
 rsSystem.console.log = function(...args) {
 	if(rsSystem.settings.logging.default) {

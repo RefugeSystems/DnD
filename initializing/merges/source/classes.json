@@ -1,0 +1,543 @@
+{
+	"export": [
+		{
+			"id": "class:sorceress",
+			"name": "Sorceress",
+			"hitDice": "d6",
+			"icon": "fas fa-hand-holding-magic",
+			"description": "A powerful spell wielder who's power comes from a past event in their family that bestowed them with power.\n\nThe event may not have been pleasant, but your power comes from that.",
+			"note": "",
+			"obscured": "",
+			"playable": false,
+			"requirement": {},
+			"modifiers": {
+				"1": [
+					"modifier:class:sorceress:level:1"
+				],
+				"2": [
+					"modifier:class:sorceress:level:2"
+				],
+				"3": [
+					"modifier:class:sorceress:level:3"
+				],
+				"4": [
+					"modifier:class:sorceress:level:4"
+				],
+				"5": [
+					"modifier:class:sorceress:level:5"
+				],
+				"6": [
+					"modifier:class:sorceress:level:6"
+				],
+				"7": [
+					"modifier:class:sorceress:level:7"
+				]
+			},
+			"feats": {},
+			"_search": "sorceressclass:sorceressa powerful spell wielder who's power comes from a past event in their family that bestowed them with power.\n\nthe event may not have been pleasant, but your power comes from that."
+		},
+		{
+			"id": "class:summon",
+			"name": "Summoned",
+			"hitDice": "d8",
+			"icon": "fas fa-skull",
+			"description": "Used for Summons, Conjurations, and Constructs that receive Hit Die.",
+			"note": "",
+			"obscured": "",
+			"playable": false,
+			"requirement": {},
+			"modifiers": {},
+			"feats": {},
+			"_search": "summonedclass:summonused for summons, conjurations, and constructs that receive hit die."
+		},
+		{
+			"id": "class:warlock",
+			"name": "Warlock",
+			"hitDice": "d8",
+			"icon": "fas fa-hand-holding-magic",
+			"description": "",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"charisma": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:warlock:level:1"
+				],
+				"2": [
+					"modifier:class:warlock:level:2"
+				]
+			},
+			"feats": {},
+			"_search": "warlockclass:warlock"
+		},
+		{
+			"id": "class:battlemage",
+			"name": "Battlemage",
+			"hitDice": "d6",
+			"icon": "fas fa-shield-cross",
+			"description": "A mage who enjoys the frontline.",
+			"note": "",
+			"obscured": "",
+			"playable": false,
+			"requirement": {},
+			"modifiers": {
+				"1": [
+					"modifier:class:barbarian:level:1"
+				],
+				"2": [
+					"modifier:class:barbarian:level:2"
+				],
+				"3": [
+					"modifier:class:barbarian:level:3"
+				],
+				"4": [
+					"modifier:class:barbarian:level:4"
+				],
+				"5": [
+					"modifier:class:barbarian:level:5"
+				],
+				"6": [
+					"modifier:class:barbarian:level:6"
+				],
+				"7": [
+					"modifier:class:barbarian:level:7"
+				]
+			},
+			"feats": {},
+			"_search": "battlemageclass:battlemagea mage who enjoys the frontline."
+		},
+		{
+			"id": "class:fighter",
+			"name": "Fighter",
+			"hitDice": "d10",
+			"icon": "fas rot315 fa-sword",
+			"description": "Fighters learn the basics of all combat styles. Every fighter can swing an axe, fence with a rapier, wield a longsword or a greatsword, use a bow, and even trap foes in a net with some degree of skill. Likewise, a fighter is adept with shields and every form of armor. Beyond that basic degree of familiarity, each fighter specializes in a certain style of combat. Some concentrate on archery, some on fighting with two weapons at once, and some on augmenting their martial skills with magic. This combination of broad general ability and extensive specialization makes fighters superior combatants on battlefields and in dungeons alike.\n\nAdditionally, choose two proficiencies from the following:\n+ Acrobatics\n+ Animal Handling\n+ Athletics\n+ History\n+ Insight\n+ Intimidation\n+ Perception\n+ Survival",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"strength": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:fighter:level:1"
+				],
+				"2": [
+					"modifier:class:fighter:level:2"
+				]
+			},
+			"feats": {},
+			"_search": "fighterclass:fighterfighters learn the basics of all combat styles. every fighter can swing an axe, fence with a rapier, wield a longsword or a greatsword, use a bow, and even trap foes in a net with some degree of skill. likewise, a fighter is adept with shields and every form of armor. beyond that basic degree of familiarity, each fighter specializes in a certain style of combat. some concentrate on archery, some on fighting with two weapons at once, and some on augmenting their martial skills with magic. this combination of broad general ability and extensive specialization makes fighters superior combatants on battlefields and in dungeons alike.\n\nadditionally, choose two proficiencies from the following:\n+ acrobatics\n+ animal handling\n+ athletics\n+ history\n+ insight\n+ intimidation\n+ perception\n+ survival"
+		},
+		{
+			"id": "class:monk",
+			"name": "Monk",
+			"hitDice": "d8",
+			"icon": "fas rot270 fa-fist-raised",
+			"description": "Monks make careful study of a magical energy that most monastic traditions call ki. This energy is an element of the magic that suffuses the multiverse—specifically, the element that flows through living bodies. Monks harness this power within themselves to create magical effects and exceed their bodies’ physical capabilities, and some of their special attacks can hinder the flow of ki in their opponents. Using this energy, monks channel uncanny speed and strength into their unarmed strikes. As they gain experience, their martial training and their mastery of ki gives them more power over their bodies and the bodies of their foes.\n\nAdditionally, choose two proficiencies from the following:\n+ Acrobatics\n+ Athletics\n+ History\n+ Insight\n+ Religion\n+ Stealth",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"wisdom": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:fighter:level:1"
+				],
+				"2": [
+					"modifier:class:fighter:level:2"
+				]
+			},
+			"feats": {},
+			"_search": "monkclass:monkmonks make careful study of a magical energy that most monastic traditions call ki. this energy is an element of the magic that suffuses the multiverse—specifically, the element that flows through living bodies. monks harness this power within themselves to create magical effects and exceed their bodies’ physical capabilities, and some of their special attacks can hinder the flow of ki in their opponents. using this energy, monks channel uncanny speed and strength into their unarmed strikes. as they gain experience, their martial training and their mastery of ki gives them more power over their bodies and the bodies of their foes.\n\nadditionally, choose two proficiencies from the following:\n+ acrobatics\n+ athletics\n+ history\n+ insight\n+ religion\n+ stealth"
+		},
+		{
+			"id": "class:barbarian",
+			"name": "Barbarian",
+			"hitDice": "d12",
+			"icon": "fal fa-fist-raised",
+			"description": "People of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one’s own nature was a mark of superiority. To a barbarian, though, civilization is no virtue, but a sign of weakness. The strong embrace their animal nature—keen instincts, primal physicality, and ferocious rage. Barbarians are uncomfortable when hedged in by walls and crowds. They thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt.\n\nBarbarians come alive in the chaos of combat. They can enter a berserk state where rage takes over, giving them superhuman strength and resilience. A barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.\n\nAdditionally, choose two proficiencies from the following:\n+ Animal Handling\n+ Athletics\n+ Intimidation\n+ Nature\n+ Perception\n+ Survival",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"strength": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:barbarian:level:1"
+				],
+				"2": [
+					"modifier:class:barbarian:level:2"
+				],
+				"3": [
+					"modifier:class:barbarian:level:3"
+				],
+				"4": [
+					"modifier:class:barbarian:level:4"
+				],
+				"5": [
+					"modifier:class:barbarian:level:5"
+				],
+				"6": [
+					"modifier:class:barbarian:level:6"
+				],
+				"7": [
+					"modifier:class:barbarian:level:7"
+				],
+				"8": [
+					"modifier:class:barbarian:level:8"
+				],
+				"9": [
+					"modifier:class:barbarian:level:9"
+				],
+				"10": [
+					"modifier:class:barbarian:level:10"
+				]
+			},
+			"feats": {},
+			"_search": "barbarianclass:barbarianpeople of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one’s own nature was a mark of superiority. to a barbarian, though, civilization is no virtue, but a sign of weakness. the strong embrace their animal nature—keen instincts, primal physicality, and ferocious rage. barbarians are uncomfortable when hedged in by walls and crowds. they thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt.\n\nbarbarians come alive in the chaos of combat. they can enter a berserk state where rage takes over, giving them superhuman strength and resilience. a barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.\n\nadditionally, choose two proficiencies from the following:\n+ animal handling\n+ athletics\n+ intimidation\n+ nature\n+ perception\n+ survival"
+		},
+		{
+			"id": "class:bard",
+			"name": "Bard",
+			"hitDice": "d8",
+			"icon": "fas fa-mandolin",
+			"description": "In the worlds of D&D, words and music are not just vibrations of air, but vocalizations with power all their own. The bard is a master of song, speech, and the magic they contain. Bards say that the multiverse was spoken into existence, that the words of the gods gave it shape, and that echoes of these primordial Words of Creation still resound throughout the cosmos. The music of bards is an attempt to snatch and harness those echoes, subtly woven into their spells and powers.\n\nThe greatest strength of bards is their sheer versatility. Many bards prefer to stick to the sidelines in combat, using their magic to inspire their allies and hinder their foes from a distance. But bards are capable of defending themselves in melee if necessary, using their magic to bolster their swords and armor. Their spells lean toward charms and illusions rather than blatantly destructive spells. They have a wide-ranging knowledge of many subjects and a natural aptitude that lets them do almost anything well. Bards become masters of the talents they set their minds to perfecting, from musical performance to esoteric knowledge.\n\n\nAdditionally, choose any three skill proficiencies from the following:\n+ Initiative\n+ Acrobatics\n+ Animal Handling\n+ Arcana\n+ Athletics\n+ Concentration\n+ Deception\n+ History\n+ Insight\n+ Intimidation\n+ Investigation\n+ Medicine\n+ Nature\n+ Perception\n+ Performance\n+ Persuasion\n+ Religion\n+ Sleight of Hand\n+ Stealth\n+ Survival\n",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"charisma": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:bard:level:1"
+				],
+				"2": [
+					"modifier:class:bard:level:2"
+				]
+			},
+			"feats": {},
+			"_search": "bardclass:bardin the worlds of d&d, words and music are not just vibrations of air, but vocalizations with power all their own. the bard is a master of song, speech, and the magic they contain. bards say that the multiverse was spoken into existence, that the words of the gods gave it shape, and that echoes of these primordial words of creation still resound throughout the cosmos. the music of bards is an attempt to snatch and harness those echoes, subtly woven into their spells and powers.\n\nthe greatest strength of bards is their sheer versatility. many bards prefer to stick to the sidelines in combat, using their magic to inspire their allies and hinder their foes from a distance. but bards are capable of defending themselves in melee if necessary, using their magic to bolster their swords and armor. their spells lean toward charms and illusions rather than blatantly destructive spells. they have a wide-ranging knowledge of many subjects and a natural aptitude that lets them do almost anything well. bards become masters of the talents they set their minds to perfecting, from musical performance to esoteric knowledge.\n\n\nadditionally, choose any three skill proficiencies from the following:\n+ initiative\n+ acrobatics\n+ animal handling\n+ arcana\n+ athletics\n+ concentration\n+ deception\n+ history\n+ insight\n+ intimidation\n+ investigation\n+ medicine\n+ nature\n+ perception\n+ performance\n+ persuasion\n+ religion\n+ sleight of hand\n+ stealth\n+ survival\n"
+		},
+		{
+			"id": "class:cleric",
+			"name": "Cleric",
+			"hitDice": "d8",
+			"icon": "fas fa-hammer-war",
+			"description": "Divine magic, as the name suggests, is the power of the gods, flowing from them into the world. Clerics are conduits for that power, manifesting it as miraculous effects. The gods don’t grant this power to everyone who seeks it, but only to those chosen to fulfill a high calling.\n\nHarnessing divine magic doesn’t rely on study or training. A cleric might learn formulaic prayers and ancient rites, but the ability to cast cleric spells relies on devotion and an intuitive sense of a deity’s wishes.\n\nClerics combine the helpful magic of healing and inspiring their allies with spells that harm and hinder foes. They can provoke awe and dread, lay curses of plague or poison, and even call down flames from heaven to consume their enemies. For those evildoers who will benefit most from a mace to the head, clerics depend on their combat training to let them wade into melee with the power of the gods on their side.\n\nAdditionally, choose two proficiencies from the following:\n+ History\n+ Insight\n+ Medicine\n+ Persuasion\n+ Religion",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"wisdom": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:cleric:level:1"
+				],
+				"2": [
+					"modifier:class:cleric:level:2"
+				],
+				"3": [
+					"modifier:class:cleric:level:3"
+				],
+				"4": [
+					"modifier:class:cleric:level:4"
+				],
+				"5": [
+					"modifier:class:cleric:level:5"
+				],
+				"6": [
+					"modifier:class:cleric:level:6"
+				],
+				"7": [
+					"modifier:class:cleric:level:7"
+				],
+				"8": [
+					"modifier:class:cleric:level:8"
+				],
+				"9": [
+					"modifier:class:cleric:level:9"
+				],
+				"10": [
+					"modifier:class:cleric:level:10"
+				],
+				"11": [
+					"modifier:class:cleric:level:11"
+				]
+			},
+			"feats": {},
+			"_search": "clericclass:clericdivine magic, as the name suggests, is the power of the gods, flowing from them into the world. clerics are conduits for that power, manifesting it as miraculous effects. the gods don’t grant this power to everyone who seeks it, but only to those chosen to fulfill a high calling.\n\nharnessing divine magic doesn’t rely on study or training. a cleric might learn formulaic prayers and ancient rites, but the ability to cast cleric spells relies on devotion and an intuitive sense of a deity’s wishes.\n\nclerics combine the helpful magic of healing and inspiring their allies with spells that harm and hinder foes. they can provoke awe and dread, lay curses of plague or poison, and even call down flames from heaven to consume their enemies. for those evildoers who will benefit most from a mace to the head, clerics depend on their combat training to let them wade into melee with the power of the gods on their side.\n\nadditionally, choose two proficiencies from the following:\n+ history\n+ insight\n+ medicine\n+ persuasion\n+ religion"
+		},
+		{
+			"id": "class:druid",
+			"name": "Druid",
+			"hitDice": "d8",
+			"icon": "fas fa-tree-alt",
+			"description": "Druids revere nature above all, gaining their spells and other magical powers either from the force of nature itself or from a nature deity. Many druids pursue a mystic spirituality of transcendent union with nature rather than devotion to a divine entity, while others serve gods of wild nature, animals, or elemental forces. The ancient druidic traditions are sometimes called the Old Faith, in contrast to the worship of gods in temples and shrines.\n\nDruid spells are oriented toward nature and animals—the power of tooth and claw, of sun and moon, of fire and storm. Druids also gain the ability to take on animal forms, and some druids make a particular study of this practice, even to the point where they prefer animal form to their natural form.\n\nAdditionally, choose two proficiencies from the following:\n+ Animal Handling\n+ Arcana\n+ Insight\n+ Medicine\n+ Nature\n+ Perception\n+ Religion\n+ Survival",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"wisdom": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:druid:level:1"
+				],
+				"2": [
+					"modifier:class:druid:level:2"
+				],
+				"3": [
+					"modifier:class:druid:level:3"
+				]
+			},
+			"feats": {},
+			"_search": "druidclass:druiddruids revere nature above all, gaining their spells and other magical powers either from the force of nature itself or from a nature deity. many druids pursue a mystic spirituality of transcendent union with nature rather than devotion to a divine entity, while others serve gods of wild nature, animals, or elemental forces. the ancient druidic traditions are sometimes called the old faith, in contrast to the worship of gods in temples and shrines.\n\ndruid spells are oriented toward nature and animals—the power of tooth and claw, of sun and moon, of fire and storm. druids also gain the ability to take on animal forms, and some druids make a particular study of this practice, even to the point where they prefer animal form to their natural form.\n\nadditionally, choose two proficiencies from the following:\n+ animal handling\n+ arcana\n+ insight\n+ medicine\n+ nature\n+ perception\n+ religion\n+ survival"
+		},
+		{
+			"id": "class:paladin",
+			"name": "Paladin",
+			"hitDice": "d10",
+			"icon": "fas fa-shield-cross",
+			"description": "A paladin swears to uphold justice and righteousness, to stand with the good things of the world against the encroaching darkness, and to hunt the forces of evil wherever they lurk. Different paladins focus on various aspects of the cause of righteousness, but all are bound by the oaths that grant them power to do their sacred work. Although many paladins are devoted to gods of good, a paladin’s power comes as much from a commitment to justice itself as it does from a god.\n\nPaladins train for years to learn the skills of combat, mastering a variety of weapons and armor. Even so, their martial skills are secondary to the magical power they wield: power to heal the sick and injured, to smite the wicked and the undead, and to protect the innocent and those who join them in the fight for justice.\n\nChoose two proficiencies from the following:\n+ Athletics\n+ Insight\n+ Intimidation\n+ Medicine\n+ Persuasion\n+ Religion",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"charisma": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:paladin:level:1"
+				],
+				"2": [
+					"modifier:class:paladin:level:2"
+				],
+				"3": [
+					"modifier:class:paladin:level:3"
+				],
+				"4": [
+					"modifier:class:paladin:level:4"
+				],
+				"5": [
+					"modifier:class:paladin:level:5"
+				],
+				"6": [
+					"modifier:class:paladin:level:6"
+				],
+				"7": [
+					"modifier:class:paladin:level:7"
+				],
+				"8": [
+					"modifier:class:paladin:level:8"
+				],
+				"9": [
+					"modifier:class:paladin:level:9"
+				]
+			},
+			"feats": {},
+			"_search": "paladinclass:paladina paladin swears to uphold justice and righteousness, to stand with the good things of the world against the encroaching darkness, and to hunt the forces of evil wherever they lurk. different paladins focus on various aspects of the cause of righteousness, but all are bound by the oaths that grant them power to do their sacred work. although many paladins are devoted to gods of good, a paladin’s power comes as much from a commitment to justice itself as it does from a god.\n\npaladins train for years to learn the skills of combat, mastering a variety of weapons and armor. even so, their martial skills are secondary to the magical power they wield: power to heal the sick and injured, to smite the wicked and the undead, and to protect the innocent and those who join them in the fight for justice.\n\nchoose two proficiencies from the following:\n+ athletics\n+ insight\n+ intimidation\n+ medicine\n+ persuasion\n+ religion"
+		},
+		{
+			"id": "class:ranger",
+			"name": "Ranger",
+			"hitDice": "d10",
+			"icon": "fas fa-bow-arrow",
+			"description": "Warriors of the wilderness, rangers specialize in hunting the monsters that threaten the edges of civilization—humanoid raiders, rampaging beasts and monstrosities, terrible giants, and deadly dragons. They learn to track their quarry as a predator does, moving stealthily through the wilds and hiding themselves in brush and rubble. Rangers focus their combat training on techniques that are particularly useful against their specific favored foes.\n\nThanks to their familiarity with the wilds, rangers acquire the ability to cast spells that harness nature’s power, much as a druid does. Their spells, like their combat abilities, emphasize speed, stealth, and the hunt. A ranger’s talents and abilities are honed with deadly focus on the grim task of protecting the borderlands.\n\nAdditionally; \n1. Choosing 1 favored terrain type. Note this next to the Favored Terrain feat\n2. Choose three proficiencies from the following:\n+ Animal Handling\n+ Athletics\n+ Insight\n+ Investigation\n+ Nature\n+ Perception\n+ Stealth\n+ Survival",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"dexterity": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:ranger:level:1"
+				],
+				"2": [
+					"modifier:class:ranger:level:2"
+				],
+				"3": [
+					"modifier:class:ranger:level:3"
+				],
+				"4": [
+					"modifier:class:ranger:level:4"
+				],
+				"5": [
+					"modifier:class:ranger:level:5"
+				],
+				"6": [
+					"modifier:class:ranger:level:6"
+				],
+				"7": [
+					"modifier:class:ranger:level:7"
+				],
+				"8": [
+					"modifier:class:ranger:level:8"
+				],
+				"9": [
+					"modifier:class:ranger:level:9"
+				]
+			},
+			"feats": {},
+			"_search": "rangerclass:rangerwarriors of the wilderness, rangers specialize in hunting the monsters that threaten the edges of civilization—humanoid raiders, rampaging beasts and monstrosities, terrible giants, and deadly dragons. they learn to track their quarry as a predator does, moving stealthily through the wilds and hiding themselves in brush and rubble. rangers focus their combat training on techniques that are particularly useful against their specific favored foes.\n\nthanks to their familiarity with the wilds, rangers acquire the ability to cast spells that harness nature’s power, much as a druid does. their spells, like their combat abilities, emphasize speed, stealth, and the hunt. a ranger’s talents and abilities are honed with deadly focus on the grim task of protecting the borderlands.\n\nadditionally; \n1. choosing 1 favored terrain type. note this next to the favored terrain feat\n2. choose three proficiencies from the following:\n+ animal handling\n+ athletics\n+ insight\n+ investigation\n+ nature\n+ perception\n+ stealth\n+ survival"
+		},
+		{
+			"id": "class:rogue",
+			"name": "Rogue",
+			"hitDice": "d8",
+			"icon": "fas fa-dagger",
+			"description": "Rogues devote as much effort to mastering the use of a variety of skills as they do to perfecting their combat abilities, giving them a broad expertise that few other characters can match. Many rogues focus on stealth and deception, while others refine the skills that help them in a dungeon environment, such as climbing, finding and disarming traps, and opening locks.\n\nWhen it comes to combat, rogues prioritize cunning over brute strength. A rogue would rather make one precise strike, placing it exactly where the attack will hurt the target most, than wear an opponent down with a barrage of attacks. Rogues have an almost supernatural knack for avoiding danger, and a few learn magical tricks to supplement their other abilities.\n\n\nAdditionally; \n1. Choose two expertise features\n2. Choose four proficiencies from the following:\n+ Acrobatics\n+ Athletics\n+ Deception\n+ Insight\n+ Intimidation\n+ Investigation\n+ Perception\n+ Performance\n+ Persuasion\n+ Sleight of Hand\n+ Stealth\n\nAt level 6 you gain two additional expertise feats.",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"dexterity": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:rogue:level:1"
+				],
+				"2": [
+					"modifier:class:rogue:level:2"
+				],
+				"3": [
+					"modifier:class:rogue:level:3"
+				],
+				"4": [
+					"modifier:class:rogue:level:4"
+				],
+				"5": [
+					"modifier:class:rogue:level:5"
+				],
+				"6": [
+					"modifier:class:rogue:level:6"
+				],
+				"7": [
+					"modifier:class:rogue:level:7"
+				],
+				"8": [
+					"modifier:class:rogue:level:8"
+				],
+				"9": [
+					"modifier:class:rogue:level:9"
+				],
+				"10": [
+					"modifier:class:rogue:level:10"
+				]
+			},
+			"feats": {},
+			"_search": "rogueclass:roguerogues devote as much effort to mastering the use of a variety of skills as they do to perfecting their combat abilities, giving them a broad expertise that few other characters can match. many rogues focus on stealth and deception, while others refine the skills that help them in a dungeon environment, such as climbing, finding and disarming traps, and opening locks.\n\nwhen it comes to combat, rogues prioritize cunning over brute strength. a rogue would rather make one precise strike, placing it exactly where the attack will hurt the target most, than wear an opponent down with a barrage of attacks. rogues have an almost supernatural knack for avoiding danger, and a few learn magical tricks to supplement their other abilities.\n\n\nadditionally; \n1. choose two expertise features\n2. choose four proficiencies from the following:\n+ acrobatics\n+ athletics\n+ deception\n+ insight\n+ intimidation\n+ investigation\n+ perception\n+ performance\n+ persuasion\n+ sleight of hand\n+ stealth\n\nat level 6 you gain two additional expertise feats."
+		},
+		{
+			"id": "class:wizard",
+			"name": "Wizard",
+			"hitDice": "d6",
+			"icon": "fal fa-hat-wizard",
+			"description": "Wild and enigmatic, varied in form and function, the power of magic draws students who seek to master its mysteries. Some aspire to become like the gods, shaping reality itself. Though the casting of a typical spell requires merely the utterance of a few strange words, fleeting gestures, and sometimes a pinch or clump of exotic materials, these surface components barely hint at the expertise attained after years of apprenticeship and countless hours of study.\n\nWizards live and die by their spells. Everything else is secondary. They learn new spells as they experiment and grow in experience. They can also learn them from other wizards, from ancient tomes or inscriptions, and from ancient creatures (such as the fey) that are steeped in magic.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ History\n+ Insight\n+ Investigation\n+ Medicine\n+ Religion",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"intelligence": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:wizard:level:1"
+				],
+				"2": [
+					"modifier:class:wizard:level:2"
+				],
+				"3": [
+					"modifier:class:wizard:level:3"
+				],
+				"4": [
+					"modifier:class:wizard:level:4"
+				],
+				"5": [
+					"modifier:class:wizard:level:5"
+				],
+				"6": [
+					"modifier:class:wizard:level:6"
+				],
+				"7": [
+					"modifier:class:wizard:level:7"
+				],
+				"8": [
+					"modifier:class:wizard:level:8"
+				],
+				"9": [
+					"modifier:class:wizard:level:9"
+				],
+				"10": [
+					"modifier:class:wizard:level:10"
+				],
+				"11": [
+					"modifier:class:wizard:level:11"
+				],
+				"13": [
+					"modifier:class:wizard:level:13"
+				]
+			},
+			"feats": {},
+			"_search": "wizardclass:wizardwild and enigmatic, varied in form and function, the power of magic draws students who seek to master its mysteries. some aspire to become like the gods, shaping reality itself. though the casting of a typical spell requires merely the utterance of a few strange words, fleeting gestures, and sometimes a pinch or clump of exotic materials, these surface components barely hint at the expertise attained after years of apprenticeship and countless hours of study.\n\nwizards live and die by their spells. everything else is secondary. they learn new spells as they experiment and grow in experience. they can also learn them from other wizards, from ancient tomes or inscriptions, and from ancient creatures (such as the fey) that are steeped in magic.\n\nadditionally, choose two proficiencies from the following:\n+ arcana\n+ history\n+ insight\n+ investigation\n+ medicine\n+ religion"
+		},
+		{
+			"id": "class:sorcerer",
+			"name": "Sorcerer",
+			"hitDice": "d6",
+			"icon": "fas fa-hand-holding-magic",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,orange}$, you will select ${2,orange}$ feats for <span class=\"rs-darkorange\">Meta-Magic</span>. Then you select another <span class=\"rs-darkorange\">Meta-Magic</span> every ${7,orange}$ levels after level ${3,orange}$; ${10,orange}$, ${17,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"note": "",
+			"obscured": "",
+			"playable": true,
+			"requirement": {
+				"charisma": 10
+			},
+			"modifiers": {
+				"1": [
+					"modifier:class:sorcerer:level:1"
+				],
+				"2": [
+					"modifier:class:sorcerer:level:2"
+				],
+				"3": [
+					"modifier:class:sorcerer:level:3"
+				],
+				"4": [
+					"modifier:class:sorcerer:level:4"
+				],
+				"5": [
+					"modifier:class:sorcerer:level:5"
+				],
+				"6": [
+					"modifier:class:sorcerer:level:6"
+				],
+				"7": [
+					"modifier:class:sorcerer:level:7"
+				],
+				"8": [
+					"modifier:class:sorcerer:level:8"
+				],
+				"9": [
+					"modifier:class:sorcerer:level:9"
+				],
+				"10": [
+					"modifier:class:sorcerer:level:10"
+				],
+				"11": [
+					"modifier:class:sorcerer:level:11"
+				]
+			},
+			"feats": {},
+			"_search": "sorcererclass:sorcerermagic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nthe appearance of sorcerous powers is wildly unpredictable. some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. most of the time, the talents of sorcery appear as apparent flukes. some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. the touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. so too might the gift of a deity of magic, exposure to the elemental forces of the inner planes or the maddening chaos of limbo, or a glimpse into the inner workings of reality.\n\nsorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. by learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nas a note, at level ${3,orange}$, you will select ${2,orange}$ feats for <span class=\"rs-darkorange\">meta-magic</span>. then you select another <span class=\"rs-darkorange\">meta-magic</span> every ${7,orange}$ levels after level ${3,orange}$; ${10,orange}$, ${17,orange}$, and so on.\n\nadditionally, choose two proficiencies from the following:\n+ arcana\n+ deception\n+ insight\n+ intimidation\n+ persuasion\n+ religion"
+		}
+	]
+}

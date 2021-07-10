@@ -315,28 +315,36 @@ class RSObject {
 			// console.log("Inherit: ", id);
 			if(field.inheritanceFields && field.inheritanceFields.length) {
 				source = this._universe.objectHandler.retrieve(id);
-				var ifield;
+				var ifield,
+					debugA,
+					debugB;
 				if(source) {
 					// this._universe.objectHandler.trackInheritance(source, field.inheritanceFields);
 					inheriting.push(source.id);
 					for(i=0; i<field.inheritanceFields.length; i++) {
 						ifield = this._manager.database.field[field.inheritanceFields[i]];
+						debugA = JSON.stringify(this._calculated[field.inheritanceFields[i]]);
+						debugB = JSON.stringify(source._calculated[field.inheritanceFields[i]]);
 						try {
 							// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
 							switch(field.inheritance[field.inheritanceFields[i]]) {
 								case "+=":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									break;
 								case "+":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]]);
 									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "-":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]]);
 									this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
 									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "=":
+									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]]);
 									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
 									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
@@ -345,6 +353,7 @@ class RSObject {
 									loading.id = this.id;
 									loading.value = this._combined[field.id];
 									loading.field = field;
+									loading.inheriting_field = ifield;
 									loading.source = source.id || source;
 									loading.full_source = !!source.id;
 									this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
@@ -371,7 +380,7 @@ class RSObject {
 							}
 							// console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
 						} catch (e) {
-							console.log("Ref Fail: " + field.id, e);
+							console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield?ifield.id:"") + "]", debugA, debugB, e);
 						}
 					}
 				} else {
@@ -464,19 +473,19 @@ class RSObject {
 		fields = this._manager.fieldIDs;
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
-			if(field) {
+			if(field && field.attribute) {
 				// Gaurentee Objects and Arrays where no value is set
 				if(this._calculated[field.id] === undefined || this._calculated[field.id] === null) {
 					if(field.type === "object") {
 						if(field.attribute.default) {
-							// Risky: This maintains deeper mutable references in complex cases
+							// Risky: This maintains deeper mutatable references in complex cases
 							this._calculated[field.id] = Object.assign({}, field.attribute.default);
 						} else {
 							this._calculated[field.id] = {};
 						}
 					} else if(field.type === "array") {
 						if(field.attribute.default) {
-							// Risky: This maintains deeper mutable references in even trivial cases
+							// Risky: This maintains deeper mutatable references in even trivial cases
 							this._calculated[field.id] = [].concat(field.attribute.default);
 						} else {
 							this._calculated[field.id] = [];
@@ -1537,9 +1546,11 @@ RSObject.addObjects = function(a, b, type) {
  * @return {[type]}      [description]
  */
 RSObject.addValues = function(a, b, type, op) {
-	if(typeof(a) == "undefined" || a === null) {
+	if((a === undefined || a === null || a === "undefined") && (b === undefined || b === null || b === "undefined")) {
+		return null;
+	} else if(a == undefined || a === null || a === "undefined") {
 		return b;
-	} else if(typeof(b) == "undefined" || b === null) {
+	} else if(b == undefined || b === null || b === "undefined") {
 		return a;
 	} else if(type || typeof(a) === typeof(b)) {
 		if(!type) {
@@ -1568,7 +1579,7 @@ RSObject.addValues = function(a, b, type, op) {
 				try {
 					return a.concat(b);
 				} catch(e) {
-					// console.log("A: ", a, "B: ", b, e);
+					// console.log("A: ", a, JSON.stringify(a), e);
 					throw e;
 					// return null;
 				}

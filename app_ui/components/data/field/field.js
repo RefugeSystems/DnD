@@ -211,39 +211,39 @@
 				});
 			},
 			"isVisible": function() {
-				if(!this.field.condition) {
+				if(!this.field.attribute || !this.field.attribute.condition) {
 					return true;
 				}
 
-				var keys = Object.keys(this.field.condition),
+				var keys = Object.keys(this.field.attribute.condition),
 					test,
 					x,
 					v;
 
 				for(x=0; x<keys.length; x++) {
-					switch(this.field.condition[keys[x]].operation) {
+					switch(this.field.attribute.condition[keys[x]].operation) {
 						case "<":
-							if(this.root[keys[x]] >= this.field.condition[keys[x]].value) {
+							if(this.root[keys[x]] >= this.field.attribute.condition[keys[x]].value) {
 								return false;
 							}
 							break;
 						case "<=":
-							if(this.root[keys[x]] > this.field.condition[keys[x]].value) {
+							if(this.root[keys[x]] > this.field.attribute.condition[keys[x]].value) {
 								return false;
 							}
 							break;
 						case ">":
-							if(this.root[keys[x]] <= this.field.condition[keys[x]].value) {
+							if(this.root[keys[x]] <= this.field.attribute.condition[keys[x]].value) {
 								return false;
 							}
 							break;
 						case ">=":
-							if(this.root[keys[x]] < this.field.condition[keys[x]].value) {
+							if(this.root[keys[x]] < this.field.attribute.condition[keys[x]].value) {
 								return false;
 							}
 							break;
 						case "=":
-							if(this.root[keys[x]] != this.field.condition[keys[x]].value) {
+							if(this.root[keys[x]] != this.field.attribute.condition[keys[x]].value) {
 								return false;
 							}
 							break;
@@ -258,18 +258,18 @@
 							}
 							break;
 						case "test":
-							return !!this.root[keys[x]] === this.field.condition[keys[x]].value;
+							return !!this.root[keys[x]] === this.field.attribute.condition[keys[x]].value;
 						case "contains":
-							if(this.field.condition[keys[x]].values) {
-								for(v=0; v<this.field.condition[keys[x]].values.length; v++) {
-									if(this.root[keys[x]].indexOf(this.field.condition[keys[x]].values[v]) === -1) {
+							if(this.field.attribute.condition[keys[x]].values) {
+								for(v=0; v<this.field.attribute.condition[keys[x]].values.length; v++) {
+									if(this.root[keys[x]].indexOf(this.field.attribute.condition[keys[x]].values[v]) === -1) {
 										return false;
 									}
 								}
-							} else if(this.field.condition[keys[x]].oneof) {
+							} else if(this.field.attribute.condition[keys[x]].oneof) {
 								test = true;
-								for(v=0; test && v<this.field.condition[keys[x]].oneof.length; v++) {
-									if(this.root[keys[x]] && this.root[keys[x]].indexOf(this.field.condition[keys[x]].oneof[v]) !== -1) {
+								for(v=0; test && v<this.field.attribute.condition[keys[x]].oneof.length; v++) {
+									if(this.root[keys[x]] && this.root[keys[x]].indexOf(this.field.attribute.condition[keys[x]].oneof[v]) !== -1) {
 										test = false;
 									}
 								}
@@ -277,13 +277,13 @@
 									return false;
 								}
 							} else {
-								if(this.root[keys[x]].indexOf(this.field.condition[keys[x]].value) === -1) {
+								if(this.root[keys[x]].indexOf(this.field.attribute.condition[keys[x]].value) === -1) {
 									return false;
 								}
 							}
 							break;
 						default:
-							if(this.root[keys[x]] != this.field.condition[keys[x]]) {
+							if(this.root[keys[x]] != this.field.attribute.condition[keys[x]]) {
 								return false;
 							}
 					}

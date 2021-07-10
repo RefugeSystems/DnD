@@ -3,7 +3,7 @@
 
 	<div class="map" v-if="location && location.map" :style="" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
 		<div class="view" onexit="true" v-pan="pan">
-			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" :style="'font-size: ' + (baseFontSize + image.zoom) + 'px;'">
+			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" :style="'font-size: ' + getMarkerSize() + 'px;'">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && storage.markers">
 					<!--
 					<button class="scaled poi" :class="poiStyling(link)" v-if="poiNamed(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%; font-size: ' + ((link.label_sizing || baseFontSize) + image.zoom) + 'px;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">

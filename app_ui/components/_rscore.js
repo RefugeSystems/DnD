@@ -49,6 +49,15 @@ rsSystem.component("RSCore", {
 		"closeDialog": function() {
 			rsSystem.EventBus.$emit("dialog-dismiss");
 		},
+		"editNoun": function(record) {
+			if(this.player.gm) {
+				if(this.profile.edit_new_window) {
+					window.open("/#/control/" + record._class + "/" + record.id, "edit");
+				} else {
+					this.$router.push("/control/" + record._class + "/" + record.id);
+				}
+			}
+		},
 		"getPlayer": function() {
 			return this.universe.nouns.player[this.user.id];
 		}

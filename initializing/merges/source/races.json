@@ -1,0 +1,1684 @@
+{
+	"export": [
+		{
+			"id": "race:boat",
+			"name": "Boat",
+			"description": "More of an entity, but used to create characters for Ships for damage and storage",
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 1000000,
+			"heavy": 100000000,
+			"note": null,
+			"_search": "boatrace:boatmore of an entity, but used to create characters for ships for damage and storage"
+		},
+		{
+			"id": "race:monster",
+			"name": "Monster",
+			"description": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 5,
+			"light": 1,
+			"heavy": 500,
+			"note": null,
+			"_search": "monsterrace:monster"
+		},
+		{
+			"id": "race:animale",
+			"name": "Animal",
+			"description": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 5,
+			"light": 1,
+			"heavy": 500,
+			"note": null,
+			"_search": "animalrace:animale"
+		},
+		{
+			"id": "race:psuedodragon",
+			"name": "Pseudodragon",
+			"icon": "fas fa-dragon",
+			"description": "A large winged reptile. Known mainly for being confused for a dragon but it lacks the glands to form elemental breath attacks.",
+			"modifiers": [
+				"modifier:monster:pseudodragon"
+			],
+			"playable": null,
+			"feats": [
+				"feat:keensenses",
+				"feat:magicresistance",
+				"feat:darkvision",
+				"feat:limitedtelepathy",
+				"feat:blindsight",
+				"feat:mute",
+				"feat:pseudodragon:sting"
+			],
+			"young": 0,
+			"old": 15,
+			"light": 2,
+			"heavy": 12,
+			"note": null,
+			"_search": "pseudodragonrace:psuedodragona large winged reptile. known mainly for being confused for a dragon but it lacks the glands to form elemental breath attacks."
+		},
+		{
+			"id": "race:spider",
+			"name": "Spider",
+			"description": "Spiders are common across Somnicael.",
+			"modifiers": [
+				"modifier:racial:spider"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "spiderrace:spiderspiders are common across somnicael."
+		},
+		{
+			"id": "race:kintari",
+			"name": "Kintari",
+			"description": "",
+			"obscured": true,
+			"modifiers": [
+				"modifier:racial:monster:kintari"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 5,
+			"old": 30,
+			"light": 5,
+			"heavy": 25,
+			"note": null,
+			"_search": "kintarirace:kintari"
+		},
+		{
+			"id": "race:bear:black",
+			"name": "Black Bear",
+			"description": "",
+			"modifiers": [
+				"modifier:racial:blackbear"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 20,
+			"heavy": 50,
+			"note": null,
+			"_search": "black bearrace:bear:black"
+		},
+		{
+			"id": "race:bear:brown",
+			"name": "Brown Bear",
+			"description": "",
+			"modifiers": [
+				"modifier:racial:brownbear"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 20,
+			"heavy": 50,
+			"note": null,
+			"_search": "brown bearrace:bear:brown"
+		},
+		{
+			"id": "race:veldyr:tame",
+			"name": "Tame Veldýr",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:veldyr:tame"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 5000,
+			"old": 100000,
+			"light": 90,
+			"heavy": 130,
+			"note": null,
+			"_search": "tame veldýrrace:veldyr:tame"
+		},
+		{
+			"id": "race:wagon",
+			"name": "Wagon",
+			"icon": "far fa-wagon-covered",
+			"description": null,
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 30,
+			"light": 100,
+			"heavy": 10000,
+			"note": null,
+			"_search": "wagonrace:wagon"
+		},
+		{
+			"id": "race:spider:rock",
+			"name": "Rock Spider",
+			"icon": "far fa-spider",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:spider:rock"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 300,
+			"light": 100,
+			"heavy": 10000,
+			"note": null,
+			"_search": "rock spiderrace:spider:rock"
+		},
+		{
+			"id": "race:spider:rock:engorged",
+			"name": "Engorged Rock Spider",
+			"icon": "fad fa-spider",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:spider:rock",
+				"modifier:npc:cornoset"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 300,
+			"light": 100,
+			"heavy": 10000,
+			"note": null,
+			"_search": "engorged rock spiderrace:spider:rock:engorged"
+		},
+		{
+			"id": "race:scorpian:nested",
+			"name": "Nested Scorpion",
+			"icon": "ra ra-insect-jaws",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:scorpian:nested"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 10,
+			"light": 3,
+			"heavy": 6,
+			"note": null,
+			"_search": "nested scorpionrace:scorpian:nested"
+		},
+		{
+			"id": "race:wolf",
+			"name": "Moon Wolf",
+			"icon": "fab fa-wolf-pack-battalion",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:wolf"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 30,
+			"light": 30,
+			"heavy": 300,
+			"note": null,
+			"_search": "moon wolfrace:wolf"
+		},
+		{
+			"id": "race:kintari:priest",
+			"name": "Kintari Priest",
+			"icon": "ra ra-spider-face",
+			"description": "",
+			"obscured": true,
+			"modifiers": [
+				"modifier:racial:monster:kintari:priest"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 40,
+			"old": 200,
+			"light": 10,
+			"heavy": 30,
+			"note": null,
+			"_search": "kintari priestrace:kintari:priest"
+		},
+		{
+			"id": "race:scorpion:metallic",
+			"name": "Metallic Scorpion",
+			"icon": "ra ra-insect-jaws",
+			"description": null,
+			"obscured": true,
+			"modifiers": [
+				"modifier:race:scoprion:metalic"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 500,
+			"light": 5,
+			"heavy": 5000,
+			"note": null,
+			"_search": "metallic scorpionrace:scorpion:metallic"
+		},
+		{
+			"id": "race:mimic:normal",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": null,
+			"obscured": true,
+			"modifiers": [
+				"modifier:race:mimic:normal"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 0,
+			"light": 5,
+			"heavy": 20,
+			"note": null,
+			"_search": "mimicrace:mimic:normal"
+		},
+		{
+			"id": "race:demonpet",
+			"name": "Demon Pet",
+			"icon": "ra ra-desert-skull",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:demonpet"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 10000,
+			"light": 1,
+			"heavy": 1000,
+			"note": null,
+			"_search": "demon petrace:demonpet"
+		},
+		{
+			"id": "race:location",
+			"name": "Location",
+			"description": "Used for tracking location contents as a character.\n\nIn cases of buildings or other structural objects, also tracks feasibly related traits",
+			"modifiers": [],
+			"playable": false,
+			"feats": [],
+			"young": 0,
+			"old": 10000,
+			"light": 100,
+			"heavy": 100000,
+			"note": null,
+			"_search": "locationrace:locationused for tracking location contents as a character.\n\nin cases of buildings or other structural objects, also tracks feasibly related traits"
+		},
+		{
+			"id": "race:bat",
+			"name": "Bat",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:bat"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "batrace:bat"
+		},
+		{
+			"id": "race:cat",
+			"name": "Cat",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:cat"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "catrace:cat"
+		},
+		{
+			"id": "race:crab",
+			"name": "Crab",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:crab"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "crabrace:crab"
+		},
+		{
+			"id": "race:hawk",
+			"name": "Hawk",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:hawk"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "hawkrace:hawk"
+		},
+		{
+			"id": "race:octopus",
+			"name": "Octopus",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:octopus"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "octopusrace:octopus"
+		},
+		{
+			"id": "race:rat",
+			"name": "Rat",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:rat"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "ratrace:rat"
+		},
+		{
+			"id": "race:raven",
+			"name": "Raven",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:raven"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "ravenrace:raven"
+		},
+		{
+			"id": "race:snake",
+			"name": "Snake",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:snake"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "snakerace:snake"
+		},
+		{
+			"id": "race:weasel",
+			"name": "Weasel",
+			"description": null,
+			"modifiers": [
+				"modifier:racial:weasel"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "weaselrace:weasel"
+		},
+		{
+			"id": "race:gisengard",
+			"name": "Gisengard",
+			"description": "A sturdy and magical crocodile.\n\n\n\n",
+			"modifiers": [
+				"modifier:racial:gisengard"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "gisengardrace:gisengarda sturdy and magical crocodile.\n\n\n\n"
+		},
+		{
+			"id": "race:undead",
+			"name": "Undead",
+			"description": "Undead creature.\n\nCertain perks to being essentially a lifeless being, but certain drawbacks as well.",
+			"modifiers": [
+				"modifier:racial:undead",
+				"modifier:standard:actionmap"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 1000000,
+			"heavy": 100000000,
+			"note": null,
+			"_search": "undeadrace:undeadundead creature.\n\ncertain perks to being essentially a lifeless being, but certain drawbacks as well."
+		},
+		{
+			"id": "race:wolf:bone",
+			"name": "Bone Wolf",
+			"description": "",
+			"modifiers": [
+				"modifier:racial:bonewolf"
+			],
+			"playable": null,
+			"feats": [
+				"feat:multiattack:biteslash",
+				"feat:keensenses"
+			],
+			"young": 1,
+			"old": 5,
+			"light": 10,
+			"heavy": 20,
+			"note": null,
+			"_search": "bone wolfrace:wolf:bone"
+		},
+		{
+			"id": "race:building",
+			"name": "Building",
+			"description": "",
+			"modifiers": [],
+			"playable": false,
+			"feats": [],
+			"young": 0,
+			"old": 1000,
+			"light": 100,
+			"heavy": 100000,
+			"note": null,
+			"_search": "buildingrace:building"
+		},
+		{
+			"id": "race:eagle",
+			"name": "Bird of Prey",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:throw:up4:perception",
+				"modifier:racial:bird"
+			],
+			"playable": null,
+			"feats": [
+				"feat:keensight",
+				"feat:animal"
+			],
+			"young": 1,
+			"old": 30,
+			"light": 1,
+			"heavy": 10,
+			"note": null,
+			"_search": "bird of preyrace:eagle"
+		},
+		{
+			"id": "race:largecat",
+			"name": "Large Cat",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:throw:up3:perception",
+				"modifier:racial:largecat"
+			],
+			"playable": null,
+			"feats": [
+				"feat:racial:stalking",
+				"feat:keensmell"
+			],
+			"young": 1,
+			"old": 30,
+			"light": 1,
+			"heavy": 10,
+			"note": null,
+			"_search": "large catrace:largecat"
+		},
+		{
+			"id": "race:horse",
+			"name": "Horse",
+			"icon": "fas fa-horse",
+			"description": null,
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [
+				"feat:steady"
+			],
+			"young": 1,
+			"old": 20,
+			"light": 10,
+			"heavy": 50,
+			"note": null,
+			"_search": "horserace:horse"
+		},
+		{
+			"id": "race:owl",
+			"name": "Owl",
+			"description": null,
+			"modifiers": [
+				"modifier:throw:up3:perception",
+				"modifier:throw:up3:stealth"
+			],
+			"playable": null,
+			"feats": [
+				"feat:keenhearing",
+				"feat:keensight",
+				"feat:flyby",
+				"feat:superiordarkvision"
+			],
+			"young": 1,
+			"old": 20,
+			"light": 10,
+			"heavy": 50,
+			"note": null,
+			"_search": "owlrace:owl"
+		},
+		{
+			"id": "race:ogre",
+			"name": "Orge",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:ogre"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 20,
+			"light": 200,
+			"heavy": 1000,
+			"note": null,
+			"_search": "orgerace:ogre"
+		},
+		{
+			"id": "race:worm:greatfire",
+			"name": "Great Fire Worm",
+			"description": "Great Fire Worm",
+			"obscured": null,
+			"modifiers": [
+				"modifier:worm:great:fire"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 20,
+			"old": 500,
+			"light": 20,
+			"heavy": 50,
+			"note": null,
+			"_search": "great fire wormrace:worm:greatfiregreat fire worm"
+		},
+		{
+			"id": "race:worm:greatfrost",
+			"name": "Great Frost Worm",
+			"description": "Great Fire Worm",
+			"obscured": null,
+			"modifiers": [
+				"modifier:worm:great:frost"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 20,
+			"old": 500,
+			"light": 20,
+			"heavy": 50,
+			"note": null,
+			"_search": "great frost wormrace:worm:greatfrostgreat fire worm"
+		},
+		{
+			"id": "race:tiefling",
+			"name": "Tiefling",
+			"description": "Tieflings are derived from human bloodlines, and in the broadest possible sense, they still look human. However, their infernal heritage has left a clear imprint on their appearance. Tieflings have large horns that take any of a variety of shapes: some have curling horns like a ram, others have straight and tall horns like a gazelle’s, and some spiral upward like an antelopes’ horns. They have thick tails, four to five feet long, which lash or coil around their legs when they get upset or nervous. Their canine teeth are sharply pointed, and their eyes are solid colors—black, red, white, silver, or gold—with no visible sclera or pupil. Their skin tones cover the full range of human coloration, but also include various shades of red. Their hair, cascading down from behind their horns, is usually dark, from black or brown to dark red, blue, or purple.",
+			"modifiers": [
+				"modifier:racial:tiefling",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [
+				"feat:darkvision"
+			],
+			"young": 18,
+			"old": 100,
+			"light": 125,
+			"heavy": 250,
+			"note": "Insult: Polite Demon",
+			"_search": "tieflingrace:tieflingtieflings are derived from human bloodlines, and in the broadest possible sense, they still look human. however, their infernal heritage has left a clear imprint on their appearance. tieflings have large horns that take any of a variety of shapes: some have curling horns like a ram, others have straight and tall horns like a gazelle’s, and some spiral upward like an antelopes’ horns. they have thick tails, four to five feet long, which lash or coil around their legs when they get upset or nervous. their canine teeth are sharply pointed, and their eyes are solid colors—black, red, white, silver, or gold—with no visible sclera or pupil. their skin tones cover the full range of human coloration, but also include various shades of red. their hair, cascading down from behind their horns, is usually dark, from black or brown to dark red, blue, or purple.insult: polite demon"
+		},
+		{
+			"id": "race:dwarf",
+			"name": "Dwarf",
+			"description": "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller. Their courage and endurance are also easily a match for any of the larger folk.\n\nDwarven skin ranges from deep brown to a paler hue tinged with red, but the most common shades are light brown or deep tan, like certain tones of earth. Their hair, worn long but in simple styles, is usually black, gray, or brown, though paler dwarves often have red hair. Male dwarves value their beards highly and groom them carefully.",
+			"modifiers": [
+				"modifier:racial:dwarf",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [],
+			"young": 50,
+			"old": 350,
+			"light": 110,
+			"heavy": 190,
+			"note": "Insult: Wooden Hammer",
+			"_search": "dwarfrace:dwarfbold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller. their courage and endurance are also easily a match for any of the larger folk.\n\ndwarven skin ranges from deep brown to a paler hue tinged with red, but the most common shades are light brown or deep tan, like certain tones of earth. their hair, worn long but in simple styles, is usually black, gray, or brown, though paler dwarves often have red hair. male dwarves value their beards highly and groom them carefully.insult: wooden hammer"
+		},
+		{
+			"id": "race:gnome",
+			"name": "Gnome",
+			"description": "A gnome’s energy and enthusiasm for living shines through every inch of his or her tiny body. Gnomes average slightly over 3 feet tall and weigh 40 to 45 pounds. Their tan or brown faces are usually adorned with broad smiles (beneath their prodigious noses), and their bright eyes shine with excitement. Their fair hair has a tendency to stick out in every direction, as if expressing the gnome’s insatiable interest in everything around.\n\nA gnome’s personality is writ large in his or her appearance. A male gnome’s beard, in contrast to his wild hair, is kept carefully trimmed but often styled into curious forks or neat points. A gnome’s clothing, though usually made in modest earth tones, is elaborately decorated with embroidery, embossing, or gleaming jewels.",
+			"modifiers": [
+				"modifier:stat:int:up2",
+				"modifier:movement:dn3",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [
+				"feat:darkvision",
+				"feat:gnomecunning"
+			],
+			"young": 20,
+			"old": 500,
+			"light": 20,
+			"heavy": 60,
+			"note": "Insult: abortive rune",
+			"_search": "gnomerace:gnomea gnome’s energy and enthusiasm for living shines through every inch of his or her tiny body. gnomes average slightly over 3 feet tall and weigh 40 to 45 pounds. their tan or brown faces are usually adorned with broad smiles (beneath their prodigious noses), and their bright eyes shine with excitement. their fair hair has a tendency to stick out in every direction, as if expressing the gnome’s insatiable interest in everything around.\n\na gnome’s personality is writ large in his or her appearance. a male gnome’s beard, in contrast to his wild hair, is kept carefully trimmed but often styled into curious forks or neat points. a gnome’s clothing, though usually made in modest earth tones, is elaborately decorated with embroidery, embossing, or gleaming jewels.insult: abortive rune"
+		},
+		{
+			"id": "race:elf",
+			"name": "Elf",
+			"description": "With their unearthly grace and fine features, elves appear hauntingly beautiful to humans and members of many other races. They are slightly shorter than humans on average, ranging from well under 5 feet tall to just over 6 feet. They are more slender than humans, weighing only 100 to 145 pounds. Males and females are about the same height, and males are only marginally heavier than females.\n\nElves’ coloration encompasses the normal human range and also includes skin in shades of copper, bronze, and almost bluish-white, hair of green or blue, and eyes like pools of liquid gold or silver. Elves have no facial and little body hair. They favor elegant clothing in bright colors, and they enjoy simple yet lovely jewelry.",
+			"modifiers": [
+				"modifier:racial:elf",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [
+				"feat:darkvision"
+			],
+			"young": 80,
+			"old": 700,
+			"light": 90,
+			"heavy": 150,
+			"note": "Insult: The mysteries of the universe elude you don't they?",
+			"_search": "elfrace:elfwith their unearthly grace and fine features, elves appear hauntingly beautiful to humans and members of many other races. they are slightly shorter than humans on average, ranging from well under 5 feet tall to just over 6 feet. they are more slender than humans, weighing only 100 to 145 pounds. males and females are about the same height, and males are only marginally heavier than females.\n\nelves’ coloration encompasses the normal human range and also includes skin in shades of copper, bronze, and almost bluish-white, hair of green or blue, and eyes like pools of liquid gold or silver. elves have no facial and little body hair. they favor elegant clothing in bright colors, and they enjoy simple yet lovely jewelry.insult: the mysteries of the universe elude you don't they?"
+		},
+		{
+			"id": "race:dragonborn",
+			"name": "Dragonborn",
+			"description": "Dragonborn look very much like dragons standing erect in humanoid form, though they lack wings or a tail. The first dragonborn had scales of vibrant hues matching the colors of their dragon kin, but generations of interbreeding have created a more uniform appearance. Their small, fine scales are usually brass or bronze in color, sometimes ranging to scarlet, rust, gold, or copper-green. They are tall and strongly built, often standing close to 6½ feet tall and weighing 300 pounds or more. Their hands and feet are strong, talonlike claws with three fingers and a thumb on each hand.\n\nThe blood of a particular type of dragon runs very strong through some dragonborn clans. These dragonborn often boast scales that more closely match those of their dragon ancestor—bright red, green, blue, or white, lustrous black, or gleaming metallic gold, silver, brass, copper, or bronze.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:dragonborn",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [],
+			"young": 15,
+			"old": 90,
+			"light": 250,
+			"heavy": 400,
+			"note": "Insult: Flaccid Scale",
+			"_search": "dragonbornrace:dragonborndragonborn look very much like dragons standing erect in humanoid form, though they lack wings or a tail. the first dragonborn had scales of vibrant hues matching the colors of their dragon kin, but generations of interbreeding have created a more uniform appearance. their small, fine scales are usually brass or bronze in color, sometimes ranging to scarlet, rust, gold, or copper-green. they are tall and strongly built, often standing close to 6½ feet tall and weighing 300 pounds or more. their hands and feet are strong, talonlike claws with three fingers and a thumb on each hand.\n\nthe blood of a particular type of dragon runs very strong through some dragonborn clans. these dragonborn often boast scales that more closely match those of their dragon ancestor—bright red, green, blue, or white, lustrous black, or gleaming metallic gold, silver, brass, copper, or bronze.insult: flaccid scale"
+		},
+		{
+			"id": "race:halfelf",
+			"name": "Half-elf",
+			"description": "To humans, half-elves look like elves, and to elves, they look human. In height, they’re on par with both parents, though they’re neither as slender as elves nor as broad as humans. They range from under 5 feet to about 6 feet tall, and from 100 to 180 pounds, with men only slightly taller and heavier than women. Half-elf men do have facial hair, and sometimes grow beards to mask their elven ancestry. Half-elven coloration and features lie somewhere between their human and elf parents, and thus show a variety even more pronounced than that found among either race. They tend to have the eyes of their elven parents.\n\nIn addition, you can increase 2 attributes by 1 point and you are proficient in 2 skills of your choice.\n\nYou may **not** increase 1 attribute by 2 points.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:standard:actionmap",
+				"modifier:racial:halfelf"
+			],
+			"playable": true,
+			"feats": [
+				"feat:feyancestry",
+				"feat:darkvision"
+			],
+			"young": 20,
+			"old": 200,
+			"light": 100,
+			"heavy": 200,
+			"note": "Insult: Universal Turd",
+			"_search": "half-elfrace:halfelfto humans, half-elves look like elves, and to elves, they look human. in height, they’re on par with both parents, though they’re neither as slender as elves nor as broad as humans. they range from under 5 feet to about 6 feet tall, and from 100 to 180 pounds, with men only slightly taller and heavier than women. half-elf men do have facial hair, and sometimes grow beards to mask their elven ancestry. half-elven coloration and features lie somewhere between their human and elf parents, and thus show a variety even more pronounced than that found among either race. they tend to have the eyes of their elven parents.\n\nin addition, you can increase 2 attributes by 1 point and you are proficient in 2 skills of your choice.\n\nyou may **not** increase 1 attribute by 2 points.insult: universal turd"
+		},
+		{
+			"id": "race:halfling",
+			"name": "Halfling",
+			"description": "The diminutive halflings survive in a world full of larger creatures by avoiding notice or, barring that, avoiding offense. Standing about 3 feet tall, they appear relatively harmless and so have managed to survive for centuries in the shadow of empires and on the edges of wars and political strife. They are inclined to be stout, weighing between 40 and 45 pounds.\n\nHalflings’ skin ranges from tan to pale with a ruddy cast, and their hair is usually brown or sandy brown and wavy. They have brown or hazel eyes. Halfling men often sport long sideburns, but beards are rare among them and mustaches even more so. They like to wear simple, comfortable, and practical clothes, favoring bright colors.\n\nHalfling practicality extends beyond their clothing. They’re concerned with basic needs and simple pleasures and have little use for ostentation. Even the wealthiest of halflings keep their treasures locked in a cellar rather than on display for all to see. They have a knack for finding the most straightforward solution to a problem, and have little patience for dithering.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:halfling",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [
+				"feat:brave",
+				"feat:halflingnimbleness",
+				"feat:lucky"
+			],
+			"young": 20,
+			"old": 150,
+			"light": 30,
+			"heavy": 60,
+			"note": "Insult: Daft dagger",
+			"_search": "halflingrace:halflingthe diminutive halflings survive in a world full of larger creatures by avoiding notice or, barring that, avoiding offense. standing about 3 feet tall, they appear relatively harmless and so have managed to survive for centuries in the shadow of empires and on the edges of wars and political strife. they are inclined to be stout, weighing between 40 and 45 pounds.\n\nhalflings’ skin ranges from tan to pale with a ruddy cast, and their hair is usually brown or sandy brown and wavy. they have brown or hazel eyes. halfling men often sport long sideburns, but beards are rare among them and mustaches even more so. they like to wear simple, comfortable, and practical clothes, favoring bright colors.\n\nhalfling practicality extends beyond their clothing. they’re concerned with basic needs and simple pleasures and have little use for ostentation. even the wealthiest of halflings keep their treasures locked in a cellar rather than on display for all to see. they have a knack for finding the most straightforward solution to a problem, and have little patience for dithering.insult: daft dagger"
+		},
+		{
+			"id": "race:halforc",
+			"name": "Half-Orc",
+			"description": "Half-orcs’ grayish pigmentation, sloping foreheads, jutting jaws, prominent teeth, and towering builds make their orcish heritage plain for all to see. Half-orcs stand between 5 and 7 feet tall and usually weigh between 180 and 250 pounds.\n\nOrcs regard battle scars as tokens of pride and ornamental scars as things of beauty. Other scars, though, mark an orc or half-orc as a former slave or a disgraced exile. Any half-orc who has lived among or near orcs has scars, whether they are marks of humiliation or of pride, recounting their past exploits and injuries. Such a half-orc living among humans might display these scars proudly or hide them in shame.",
+			"modifiers": [
+				"modifier:racial:halforc",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [
+				"feat:relentlessendurance",
+				"feat:savageattacks"
+			],
+			"young": 14,
+			"old": 60,
+			"light": 180,
+			"heavy": 250,
+			"note": "Insult: Unfertilized Garden Gnome",
+			"_search": "half-orcrace:halforchalf-orcs’ grayish pigmentation, sloping foreheads, jutting jaws, prominent teeth, and towering builds make their orcish heritage plain for all to see. half-orcs stand between 5 and 7 feet tall and usually weigh between 180 and 250 pounds.\n\norcs regard battle scars as tokens of pride and ornamental scars as things of beauty. other scars, though, mark an orc or half-orc as a former slave or a disgraced exile. any half-orc who has lived among or near orcs has scars, whether they are marks of humiliation or of pride, recounting their past exploits and injuries. such a half-orc living among humans might display these scars proudly or hide them in shame.insult: unfertilized garden gnome"
+		},
+		{
+			"id": "race:demon:oblit",
+			"name": "Oblit Demon",
+			"icon": null,
+			"description": "Resembles a Tiefling but is a much more ancient and powerful creature.",
+			"obscured": false,
+			"modifiers": [
+				"modifier:item:armor:light:improved",
+				"modifier:resistance:poison:1d10",
+				"modifier:resistance:force:1d10",
+				"modifier:resistance:fire:2d12",
+				"modifier:resistance:cold:1d6",
+				"modifier:race:oblitdemon"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1000,
+			"old": 10000,
+			"light": 100,
+			"heavy": 300,
+			"note": null,
+			"_search": "oblit demonrace:demon:oblitresembles a tiefling but is a much more ancient and powerful creature."
+		},
+		{
+			"id": "race:dragon:black",
+			"name": "Black Dragon",
+			"icon": "ra ra-dragon",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:dragon:black",
+				"modifier:immunity:frightened",
+				"modifier:immunity:acid"
+			],
+			"playable": null,
+			"feats": [
+				"feat:blindsight",
+				"feat:superiordarkvision",
+				"feat:truesight:superior",
+				"feat:language:draconic",
+				"feat:language:common"
+			],
+			"young": 30,
+			"old": 10000,
+			"light": 800,
+			"heavy": 3000,
+			"note": null,
+			"_search": "black dragonrace:dragon:black"
+		},
+		{
+			"id": "race:wraith",
+			"name": "Wraith",
+			"icon": "fas fa-ghost",
+			"description": "Sneaky and vicious spirits, Wraiths are nimble and dangerous.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:grant:spell:feastofsouls",
+				"modifier:grant:featwraithclaws",
+				"modifier:grant:feat:etherealsight",
+				"modifier:grant:feat:etherealtravel",
+				"modifier:resistance:psychic",
+				"modifier:race:apparition",
+				"modifier:resistance:acid",
+				"modifier:resistance:cold",
+				"modifier:resistance:poison"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 1000,
+			"light": 1,
+			"heavy": 4,
+			"note": null,
+			"_search": "wraithrace:wraithsneaky and vicious spirits, wraiths are nimble and dangerous."
+		},
+		{
+			"id": "race:spider:crystal:blue",
+			"name": "Water Crystal Spider",
+			"icon": "fad fa-spider-black-widow",
+			"description": "The few reports of blue crystaline spiders that anyone is aware of are always along a shore. Their harmonics seem to be attuned with the sea and they are considered incredible rare. Their larger versions are also considered incredibly dangerous.",
+			"obscured": true,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 500,
+			"light": 1,
+			"heavy": 1000,
+			"note": null,
+			"_search": "water crystal spiderrace:spider:crystal:bluethe few reports of blue crystaline spiders that anyone is aware of are always along a shore. their harmonics seem to be attuned with the sea and they are considered incredible rare. their larger versions are also considered incredibly dangerous."
+		},
+		{
+			"id": "race:kintari:warrior",
+			"name": "Kintari Warrior",
+			"icon": "ra ra-spider-face",
+			"description": "",
+			"obscured": true,
+			"modifiers": [
+				"modifier:racial:monster:kintari:warrior"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 40,
+			"old": 200,
+			"light": 10,
+			"heavy": 30,
+			"note": null,
+			"_search": "kintari warriorrace:kintari:warrior"
+		},
+		{
+			"id": "race:veldyr:wild",
+			"name": "Wild Veldýr",
+			"description": null,
+			"obscured": true,
+			"modifiers": [
+				"modifier:racial:veldyr:wild"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 5000,
+			"old": 100000,
+			"light": 90,
+			"heavy": 130,
+			"note": null,
+			"_search": "wild veldýrrace:veldyr:wild"
+		},
+		{
+			"id": "race:mimic:major",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": null,
+			"obscured": true,
+			"modifiers": [
+				"modifier:race:mimic:major"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 0,
+			"light": 5,
+			"heavy": 20,
+			"note": null,
+			"_search": "mimicrace:mimic:major"
+		},
+		{
+			"id": "race:mimic:morphic",
+			"name": "Mimic",
+			"icon": "fas fa-male",
+			"description": null,
+			"obscured": true,
+			"modifiers": [
+				"modifier:race:mimic:morphic"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 0,
+			"light": 5,
+			"heavy": 20,
+			"note": null,
+			"_search": "mimicrace:mimic:morphic"
+		},
+		{
+			"id": "race:panther:black",
+			"name": "Black Panther",
+			"icon": "ra ra-cat",
+			"description": null,
+			"obscured": true,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 5,
+			"old": 50,
+			"light": 100,
+			"heavy": 400,
+			"note": null,
+			"_search": "black pantherrace:panther:black"
+		},
+		{
+			"id": "race:ferret",
+			"name": "Ferret",
+			"icon": "fas fa-squirrel",
+			"description": null,
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 12,
+			"light": null,
+			"heavy": null,
+			"note": null,
+			"_search": "ferretrace:ferret"
+		},
+		{
+			"id": "race:plant",
+			"name": "Plant",
+			"icon": "ra ra-thorny-vine",
+			"description": null,
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 20,
+			"light": 4,
+			"heavy": 16,
+			"note": null,
+			"_search": "plantrace:plant"
+		},
+		{
+			"id": "race:spirit",
+			"name": "Spirit",
+			"icon": "fas fa-ghost",
+			"description": "",
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 1000,
+			"light": 1,
+			"heavy": 4,
+			"note": null,
+			"_search": "spiritrace:spirit"
+		},
+		{
+			"id": "race:ancient",
+			"name": "Ancient",
+			"description": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 100000,
+			"old": 1000000,
+			"light": 10,
+			"heavy": 10000,
+			"note": "Insult: \"Flying Boltan\"\n\nSee: Legend of Boltan",
+			"_search": "ancientrace:ancientinsult: \"flying boltan\"\n\nsee: legend of boltan"
+		},
+		{
+			"id": "race:raccoon",
+			"name": "Raccoon",
+			"icon": null,
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:racial:raccoon"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 10,
+			"light": 0,
+			"heavy": 10,
+			"note": null,
+			"_search": "raccoonrace:raccoon"
+		},
+		{
+			"id": "race:deathfish",
+			"name": "Death Fish",
+			"icon": "ra ra-shark",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:deathfish"
+			],
+			"playable": null,
+			"feats": [
+				"feat:magicimmunity"
+			],
+			"young": 1,
+			"old": 100,
+			"light": 2000,
+			"heavy": 6000,
+			"note": null,
+			"_search": "death fishrace:deathfish"
+		},
+		{
+			"id": "race:mimic:minor",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": null,
+			"obscured": true,
+			"modifiers": [
+				"modifier:race:mimic:minor"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 0,
+			"old": 0,
+			"light": 5,
+			"heavy": 20,
+			"note": null,
+			"_search": "mimicrace:mimic:minor"
+		},
+		{
+			"id": "race:panther:dreadgeon",
+			"name": "Dreagiddo Panther",
+			"icon": "ra ra-cat",
+			"description": "Similar in look to a ${\"content\":\"Black Panther\",\"class\":\"rs-darkorange\"}$, these panthers hunt in small packs and are linked to one another, allowing them to share health, vision, and wisdom.\n\nTheir bodies are also imbued with magical essence that shines in their eyes.\n\nTravellers that live to tell about the encounters describe them as \"${\"content\":\"The Stalking Death\",\"class\":\"rs-orange\"}$\". Many simply dying in their first attack, leaving few to tell the tale.",
+			"obscured": true,
+			"modifiers": [
+				"damage:slashing:3d12",
+				"damage:piercing:2d8",
+				"modifier:racial:cat"
+			],
+			"playable": null,
+			"feats": [
+				"feat:alert"
+			],
+			"young": 5,
+			"old": 50,
+			"light": 100,
+			"heavy": 400,
+			"note": "Derived from Armageddon, Hebrew: har megiddo where \"megiddo\" means crowd.",
+			"_search": "dreagiddo pantherrace:panther:dreadgeonsimilar in look to a ${\"content\":\"black panther\",\"class\":\"rs-darkorange\"}$, these panthers hunt in small packs and are linked to one another, allowing them to share health, vision, and wisdom.\n\ntheir bodies are also imbued with magical essence that shines in their eyes.\n\ntravellers that live to tell about the encounters describe them as \"${\"content\":\"the stalking death\",\"class\":\"rs-orange\"}$\". many simply dying in their first attack, leaving few to tell the tale.derived from armageddon, hebrew: har megiddo where \"megiddo\" means crowd."
+		},
+		{
+			"id": "race:skeleton",
+			"name": "Skeleton",
+			"icon": null,
+			"description": "Certain perks to being essentially a lifeless being, but certain drawbacks as well.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:standard:actionmap",
+				"modifier:race:skeleton"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 1000000,
+			"heavy": 100000000,
+			"note": null,
+			"_search": "skeletonrace:skeletoncertain perks to being essentially a lifeless being, but certain drawbacks as well."
+		},
+		{
+			"id": "race:elemental:water",
+			"name": "Water Elemental",
+			"icon": "fas fa-tint",
+			"description": "Water Elementals have several properties:\n+ Can walk across water\n+ Can occupy the same space as another creature\n+ When grappling a creature, that creature is considered to be unable to breathe\n+ Parts of the elemental can be frozen",
+			"obscured": null,
+			"modifiers": [
+				"modifier:immunity:grappled",
+				"modifier:immunity:poisoned",
+				"modifier:immunity:restrained",
+				"modifier:immunity:acid",
+				"modifier:spellattack:7",
+				"modifier:race:elemental:water:core",
+				"modifier:grant:feat:walkonwater",
+				"modifier:grant:feat:whelm",
+				"modifier:grant:feat:waterform",
+				"modifier:elemental:actionmap"
+			],
+			"playable": null,
+			"feats": [],
+			"young": null,
+			"old": null,
+			"light": 100,
+			"heavy": 900,
+			"note": null,
+			"_search": "water elementalrace:elemental:waterwater elementals have several properties:\n+ can walk across water\n+ can occupy the same space as another creature\n+ when grappling a creature, that creature is considered to be unable to breathe\n+ parts of the elemental can be frozen"
+		},
+		{
+			"id": "race:elemental:fire",
+			"name": "Fire Elemental",
+			"icon": "ra ra-fire rs-orange",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:immunity:fire",
+				"modifier:racial:elemental:fire",
+				"modifier:immunity:poisoned",
+				"modifier:resistance:bludgeoning",
+				"modifier:resistance:slashing",
+				"modifier:resistance:piercing",
+				"modifier:resistance:poison:protection",
+				"modifier:resistance:fire:protection",
+				"modifier:grant:feat:fireform",
+				"modifier:grant:spell:touch",
+				"modifier:grant:feat:watersusceptibility",
+				"modifier:elemental:actionmap"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 10,
+			"light": 1,
+			"heavy": 100,
+			"note": null,
+			"_search": "fire elementalrace:elemental:fire"
+		},
+		{
+			"id": "race:elemental:earth",
+			"name": "Earth Elemental",
+			"icon": "fad fa-cube rs-orange rs-secondary-darkorange",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:elemental:actionmap",
+				"modifier:grant:feat:earthglide",
+				"modifier:immunity:poisoned",
+				"modifier:immunity:paralyzed",
+				"modifier:immunity:petrified",
+				"modifier:resistance:poison:protection",
+				"modifier:resistance:piercing",
+				"modifier:resistance:slashing",
+				"modifier:resistance:bludgeoning",
+				"modifier:vulnerability:thunder",
+				"modifier:grant:spell:slam"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 100,
+			"heavy": 1000,
+			"note": null,
+			"_search": "earth elementalrace:elemental:earth"
+		},
+		{
+			"id": "race:elemental:air",
+			"name": "Air Elemental",
+			"icon": "fas fa-wind",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:immunity:poisoned",
+				"modifier:immunity:grappled",
+				"modifier:immunity:paralyzed",
+				"modifier:immunity:petrified",
+				"modifier:immunity:restrained",
+				"modifier:resistance:poison:protection",
+				"modifier:resistance:lightning",
+				"modifier:resistance:thunder",
+				"modifier:resistance:bludgeoning",
+				"modifier:resistance:piercing",
+				"modifier:resistance:slashing",
+				"modifier:feat:darkvision",
+				"modifier:grant:ability:whirlwind",
+				"modifier:grant:spell:slam",
+				"modifier:feat:airform",
+				"modifier:elemental:actionmap"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 50,
+			"light": 100,
+			"heavy": 1000,
+			"note": null,
+			"_search": "air elementalrace:elemental:air"
+		},
+		{
+			"id": "race:elemental:ice",
+			"name": "Ice Elemental",
+			"icon": "fas fa-icicles",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:grant:feat:iceform",
+				"modifier:grant:ability:icelance",
+				"modifier:immunity:frozen",
+				"modifier:immunity:poisoned",
+				"modifier:resistance:acid",
+				"modifier:resistance:lightning",
+				"modifier:resistance:slashing",
+				"modifier:resistance:piercing",
+				"modifier:weakness:force:normal",
+				"modifier:weakness:bludgeoning:normal",
+				"modifier:weakness:crushing:normal",
+				"modifier:weakness:sonic:normal",
+				"modifier:vulnerability:fire:normal",
+				"modifier:elemental:actionmap"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 10,
+			"light": 1,
+			"heavy": 100,
+			"note": null,
+			"_search": "ice elementalrace:elemental:ice"
+		},
+		{
+			"id": "race:elemental:lightning",
+			"name": "Lightning Elemental",
+			"icon": "fas fa-thunderstorm",
+			"description": null,
+			"obscured": null,
+			"modifiers": [
+				"modifier:immunity:acid",
+				"modifier:immunity:grappled",
+				"modifier:immunity:paralyzed",
+				"modifier:immunity:petrified",
+				"modifier:immunity:poisoned",
+				"modifier:immunity:restrained",
+				"modifier:resistance:crushing",
+				"modifier:resistance:bludgeoning",
+				"modifier:resistance:radiant",
+				"modifier:resistance:piercing:protection",
+				"modifier:resistance:slashing:protection",
+				"modifier:resistance:lightning:protection",
+				"modifier:resistance:poison:protection",
+				"modifier:resistance:fire",
+				"modifier:elemental:actionmap"
+			],
+			"playable": null,
+			"feats": [
+				"feat:airform"
+			],
+			"young": 1,
+			"old": 50,
+			"light": 100,
+			"heavy": 1000,
+			"note": null,
+			"_search": "lightning elementalrace:elemental:lightning"
+		},
+		{
+			"id": "race:shark:reef:noble",
+			"name": "Noble Reef Shark",
+			"icon": "ra ra-shark rot90",
+			"description": "A large more powerful incarnation of the <span class=\"rs-darkorange\">Reef Shark</span>, these are faster and stronger.",
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [
+				"feat:underwaterbreathing",
+				"feat:blindsight"
+			],
+			"young": 1,
+			"old": 20,
+			"light": 200,
+			"heavy": 600,
+			"note": null,
+			"_search": "noble reef sharkrace:shark:reef:noblea large more powerful incarnation of the <span class=\"rs-darkorange\">reef shark</span>, these are faster and stronger."
+		},
+		{
+			"id": "race:ogre:twoheaded",
+			"name": "Two Headed Ogre",
+			"icon": null,
+			"description": "Large and strong, these ogres feature a misgrown head. If they've lived long enough, the heads have learned to work together, making them extremely deadly if they have combat experience. But many die in the process due to the difficulty of such management.",
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [
+				"feat:splitvision",
+				"feat:alert",
+				"feat:unarmoreddefense",
+				"feat:actionsurge",
+				"feat:athlete"
+			],
+			"young": 12,
+			"old": 38,
+			"light": 500,
+			"heavy": 800,
+			"note": null,
+			"_search": "two headed ogrerace:ogre:twoheadedlarge and strong, these ogres feature a misgrown head. if they've lived long enough, the heads have learned to work together, making them extremely deadly if they have combat experience. but many die in the process due to the difficulty of such management."
+		},
+		{
+			"id": "race:golem:bone",
+			"name": "Bone Golem",
+			"icon": "ra ra-desert-skull",
+			"description": "Imposing in stature, these creatures server well for protection. However, due to their large size they are noticeable slow.\n\nHowever their size restricts them from using any equipment and their varied structure makes creation of any armor or weapons difficult.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:spell:grant:bonecage",
+				"modifier:spell:grant:bonelance",
+				"modifier:immunity:poisoned",
+				"modifier:immunity:charmed",
+				"modifier:resistance:necrotic",
+				"modifier:grant:feat:imposing",
+				"modifier:resistance:piercing:2d12",
+				"modifier:resistance:slashing:2d12",
+				"modifier:resistance:bludgeoning:1d12"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 1,
+			"light": 300,
+			"heavy": 400,
+			"note": null,
+			"_search": "bone golemrace:golem:boneimposing in stature, these creatures server well for protection. however, due to their large size they are noticeable slow.\n\nhowever their size restricts them from using any equipment and their varied structure makes creation of any armor or weapons difficult."
+		},
+		{
+			"id": "race:dybbuk",
+			"name": "Dybbuk",
+			"icon": "ra ra-skull",
+			"description": "Dybbuks are a type of loumara, disembodied, demonic spirits, that could possess and control dead bodies. Utterly depraved and completely immoral, they parasitically inhabited mortal corpses in order to partake in their vices and would murder others to steal their forms.\n\nTranslucent and undefined, a dybbuk's true form was rarely seen as they floated silently through the air. Even when unseen, their presence was followed by brief sensations, the reek of rotting lilies, a chilling breeze and sudden feelings of loss. Even when noticed, most could only make out a faint flicker of light trailed by tendrils of faded haze.\n\nWhen properly seen, dybbuks appeared as see-through jellyfish with the nebulous features of a humanoid face drifting across their bodies' surface. They wriggled through the air with smoky scores 3 stud long tendrils on their undersides that could intertwine to form a pair of arms if needed.",
+			"obscured": null,
+			"modifiers": [],
+			"playable": null,
+			"feats": [],
+			"young": 40,
+			"old": 1000,
+			"light": 5,
+			"heavy": 15,
+			"note": null,
+			"_search": "dybbukrace:dybbukdybbuks are a type of loumara, disembodied, demonic spirits, that could possess and control dead bodies. utterly depraved and completely immoral, they parasitically inhabited mortal corpses in order to partake in their vices and would murder others to steal their forms.\n\ntranslucent and undefined, a dybbuk's true form was rarely seen as they floated silently through the air. even when unseen, their presence was followed by brief sensations, the reek of rotting lilies, a chilling breeze and sudden feelings of loss. even when noticed, most could only make out a faint flicker of light trailed by tendrils of faded haze.\n\nwhen properly seen, dybbuks appeared as see-through jellyfish with the nebulous features of a humanoid face drifting across their bodies' surface. they wriggled through the air with smoky scores 3 stud long tendrils on their undersides that could intertwine to form a pair of arms if needed."
+		},
+		{
+			"id": "race:geist",
+			"name": "Geist",
+			"icon": "fas fa-ghost",
+			"description": "Violent spirits seeking out to attack the living, these are among the most intelligent of ghostly apparitions.\n\nWhile in their native realm of <span class=\"rs-darkorange\">Reykurax</span>, these creatures receive +${5,orange}$DC and Attack as well as an additional ${15,orange}$ Movement.\n\nWhen killed outside of <span class=\"rs-darkorange\">Reykurax</span>, this creature disperses into a light gas, potentially dropping any odd material or items held, but eventually returning to <span class=\"rs-darkorange\">Reykurax</span>.\n\nWhen killed while in <span class=\"rs-darkorange\">Reykurax</span>, the creature crystallizes into an <span class=\"rs-darkorange\">Umoya Crystal</span> in a flurry of dust.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:grant:feat:etherealtravel",
+				"modifier:grant:feat:etherealsight",
+				"modifier:grant:apparition"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 1000,
+			"light": 1,
+			"heavy": 4,
+			"note": null,
+			"_search": "geistrace:geistviolent spirits seeking out to attack the living, these are among the most intelligent of ghostly apparitions.\n\nwhile in their native realm of <span class=\"rs-darkorange\">reykurax</span>, these creatures receive +${5,orange}$dc and attack as well as an additional ${15,orange}$ movement.\n\nwhen killed outside of <span class=\"rs-darkorange\">reykurax</span>, this creature disperses into a light gas, potentially dropping any odd material or items held, but eventually returning to <span class=\"rs-darkorange\">reykurax</span>.\n\nwhen killed while in <span class=\"rs-darkorange\">reykurax</span>, the creature crystallizes into an <span class=\"rs-darkorange\">umoya crystal</span> in a flurry of dust."
+		},
+		{
+			"id": "race:ghost",
+			"name": "Spirit",
+			"icon": "fas fa-ghost",
+			"description": "Ghostly apparition of a passed soul.\n\nWhile not directly vulnerable to <span class=\"rs-orange\">Radiant</span> damage, it is the type recommended for use when fighting one such creature.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:apparition",
+				"modifier:resistance:cold",
+				"modifier:resistance:psychic"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 1000,
+			"light": 1,
+			"heavy": 4,
+			"note": null,
+			"_search": "spiritrace:ghostghostly apparition of a passed soul.\n\nwhile not directly vulnerable to <span class=\"rs-orange\">radiant</span> damage, it is the type recommended for use when fighting one such creature."
+		},
+		{
+			"id": "race:hellhound",
+			"name": "Hell Hound",
+			"icon": "ra ra-lion",
+			"description": "Fire-breathing fiends that take the form of powerful dogs, these hounds commonly serve evil creatures that use them as guard animals and companions.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:resistance:fire:protection",
+				"modifier:throw:up5:perception",
+				"modifier:prof:infernal",
+				"modifier:grant:spell:flamingbreath"
+			],
+			"playable": null,
+			"feats": [
+				"feat:darkvision",
+				"feat:keensmell",
+				"feat:keenhearing",
+				"feat:flamingpaws",
+				"feat:packtactics"
+			],
+			"young": 1,
+			"old": 10000,
+			"light": 90,
+			"heavy": 200,
+			"note": null,
+			"_search": "hell houndrace:hellhoundfire-breathing fiends that take the form of powerful dogs, these hounds commonly serve evil creatures that use them as guard animals and companions."
+		},
+		{
+			"id": "race:orc",
+			"name": "Orc",
+			"description": "",
+			"modifiers": [
+				"modifier:racial:orc",
+				"modifier:standard:actionmap"
+			],
+			"playable": false,
+			"feats": [],
+			"young": 14,
+			"old": 75,
+			"light": 100,
+			"heavy": 200,
+			"note": "Insult: Simple Radish",
+			"_search": "orcrace:orcinsult: simple radish"
+		},
+		{
+			"id": "race:golem:ancient",
+			"name": "Ancient Golem",
+			"icon": "ra ra-sea-serpent",
+			"description": "A stone formed snake creature, animated by ancient runes inscribed on each stone.\n\nEternal in their nature, they are known to guard important ancient places.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:immunity:blinded",
+				"modifier:immunity:charmed",
+				"modifier:immunity:deafened",
+				"modifier:immunity:fire",
+				"modifier:immunity:frightened",
+				"modifier:immunity:fatigued",
+				"modifier:immunity:muted",
+				"modifier:immunity:paralyzed",
+				"modifier:immunity:petrified",
+				"modifier:immunity:poisoned",
+				"modifier:immunity:stunned",
+				"modifier:resistance:psychic:protection",
+				"modifier:resistance:necrotic:protection",
+				"modifier:resistance:lightning:protection",
+				"modifier:resistance:slashing:protection",
+				"modifier:resistance:crushing:protection",
+				"modifier:resistance:piercing:protection",
+				"modifier:resistance:bludgeoning:protection",
+				"modifier:resistance:piercing:2d12",
+				"modifier:resistance:bludgeoning:1d12",
+				"modifier:resistance:slashing:2d12",
+				"modifier:resistance:radiant:6d6",
+				"modifier:resistance:poison:2d8",
+				"modifier:resistance:cold:2d8"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 1,
+			"light": 1,
+			"heavy": 1,
+			"note": "Vary in size depending on the importance of their station.\n\nCan be unbound by a high arcana check with a White Prismatic Array.",
+			"_search": "ancient golemrace:golem:ancienta stone formed snake creature, animated by ancient runes inscribed on each stone.\n\neternal in their nature, they are known to guard important ancient places.vary in size depending on the importance of their station.\n\ncan be unbound by a high arcana check with a white prismatic array."
+		},
+		{
+			"id": "race:aarakocra",
+			"name": "Aarakocra",
+			"icon": "fas fa-crow",
+			"description": "Sequestered in high mountains atop tall trees, the\nAarakocra, sometimes called birdfolk, evoke fear and\nwonder. Many Aarakocra aren’t even native to the\n<span class=\"rs-darkorange\">Material Plane</span>. They hail from a world beyond, from\nthe boundless vistas of the <span class=\"rs-darkorange\">Elemental Planes</span>.\n\nThey are immigrants, refugees, scouts, and explorers,\ntheir outposts functioning as footholds in a world both\nstrange and alien.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:aarakocra "
+			],
+			"playable": null,
+			"feats": [],
+			"young": 3,
+			"old": 30,
+			"light": 30,
+			"heavy": 60,
+			"note": null,
+			"_search": "aarakocrarace:aarakocrasequestered in high mountains atop tall trees, the\naarakocra, sometimes called birdfolk, evoke fear and\nwonder. many aarakocra aren’t even native to the\n<span class=\"rs-darkorange\">material plane</span>. they hail from a world beyond, from\nthe boundless vistas of the <span class=\"rs-darkorange\">elemental planes</span>.\n\nthey are immigrants, refugees, scouts, and explorers,\ntheir outposts functioning as footholds in a world both\nstrange and alien."
+		},
+		{
+			"id": "race:shark",
+			"name": "Shark",
+			"icon": "ra ra-shark",
+			"description": "An aggressive water creature.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:shark"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 3,
+			"old": 36,
+			"light": 10,
+			"heavy": 1000,
+			"note": null,
+			"_search": "sharkrace:sharkan aggressive water creature."
+		},
+		{
+			"id": "race:human",
+			"name": "Human",
+			"description": "With their penchant for migration and conquest, humans are more physically diverse than other common races. There is no typical human. An individual can stand from 5 feet to a little over 6 feet tall and weigh from 125 to 250 pounds. Human skin shades range from nearly black to very pale, and hair colors from black to blond (curly, kinky, or straight); males might sport facial hair that is sparse or thick. A lot of humans have a dash of nonhuman blood, revealing hints of elf, orc, or other lineages. Humans reach adulthood in their late teens and rarely live even a single century.\n\nAdditionally, choose 1 language proficiency.",
+			"modifiers": [
+				"modifier:racial:human",
+				"modifier:standard:actionmap"
+			],
+			"playable": true,
+			"feats": [],
+			"young": 18,
+			"old": 75,
+			"light": 125,
+			"heavy": 250,
+			"note": "Insult: Turd Slinging Monkey",
+			"_search": "humanrace:humanwith their penchant for migration and conquest, humans are more physically diverse than other common races. there is no typical human. an individual can stand from 5 feet to a little over 6 feet tall and weigh from 125 to 250 pounds. human skin shades range from nearly black to very pale, and hair colors from black to blond (curly, kinky, or straight); males might sport facial hair that is sparse or thick. a lot of humans have a dash of nonhuman blood, revealing hints of elf, orc, or other lineages. humans reach adulthood in their late teens and rarely live even a single century.\n\nadditionally, choose 1 language proficiency.insult: turd slinging monkey"
+		},
+		{
+			"id": "race:craghound",
+			"name": "Crag Hound",
+			"icon": "fas fa-dog",
+			"description": "Native to the arid stone lands of Lurus, these creatures are capable of great feats of strength and dexterity and fiercely loyal and quite teritorial.\n\nIn mountainous areas they can be practically invisible as long as they hold still, making them dangerous in the wilderness where it can be easy to stumble across a sleeping pack.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:race:craghouond"
+			],
+			"playable": null,
+			"feats": [],
+			"young": 1,
+			"old": 30,
+			"light": 400,
+			"heavy": 1000,
+			"note": null,
+			"_search": "crag houndrace:craghoundnative to the arid stone lands of lurus, these creatures are capable of great feats of strength and dexterity and fiercely loyal and quite teritorial.\n\nin mountainous areas they can be practically invisible as long as they hold still, making them dangerous in the wilderness where it can be easy to stumble across a sleeping pack."
+		},
+		{
+			"id": "race:mimic",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": "Known for taking the form of valuables and catching would be adventurer's off guard.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:immunity:acid"
+			],
+			"playable": null,
+			"feats": [
+				"feat:darkvision",
+				"feat:shapechanger",
+				"feat:grappler:mimic",
+				"feat:falseappearance"
+			],
+			"young": 1,
+			"old": 30,
+			"light": 400,
+			"heavy": 1000,
+			"note": null,
+			"_search": "mimicrace:mimicknown for taking the form of valuables and catching would be adventurer's off guard."
+		},
+		{
+			"id": "race:cthulhuianinfiltrator",
+			"name": "Cthulhuian Infiltrator",
+			"icon": "ra ra-desert-skull",
+			"description": "Adaptive skin allow them to turn invisible seemingly at will and grant them a hardened immunity to many magics and weapons.\n\nHighly threatening by themselves, they are rarely known to have existed but when successfully they leave nothing but a mystery.",
+			"obscured": null,
+			"modifiers": [
+				"modifier:resistance:bludgeoning:2d8",
+				"modifier:resistance:piercing:4d8",
+				"modifier:resistance:slashing:4d8",
+				"modifier:resistance:lightning:4d8",
+				"modifier:resistance:radiant:4d8",
+				"modifier:resistance:thunder:4d8",
+				"modifier:resistance:acid:4d8",
+				"modifier:resistance:fire:8d8",
+				"modifier:resistance:force:2d8",
+				"modifier:actions:up2",
+				"modifier:reactions:up2",
+				"modifier:action:bonus:1"
+			],
+			"playable": null,
+			"feats": [
+				"feat:adaptivearmor",
+				"feat:adaptivescales",
+				"feat:adaptiveclaws",
+				"feat:pocketdimensionpack",
+				"feat:fasthands"
+			],
+			"young": 1,
+			"old": 100000,
+			"light": 70,
+			"heavy": 110,
+			"note": null,
+			"_search": "cthulhuian infiltratorrace:cthulhuianinfiltratoradaptive skin allow them to turn invisible seemingly at will and grant them a hardened immunity to many magics and weapons.\n\nhighly threatening by themselves, they are rarely known to have existed but when successfully they leave nothing but a mystery."
+		}
+	]
+}

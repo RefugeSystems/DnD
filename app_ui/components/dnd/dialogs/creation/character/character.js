@@ -22,13 +22,13 @@ rsSystem.component("dndCreateCharacterDialog", {
 		},
 		"profile": {
 			"type": Object,
-			"default": function () {
+			"default": function() {
 				return {};
 			}
 		}
 	},
 	"computed": {
-		"corpus": function () {
+		"corpus": function() {
 			var corpus = {},
 				selectable,
 				source,
@@ -36,8 +36,8 @@ rsSystem.component("dndCreateCharacterDialog", {
 				x;
 
 			selectable = [];
-			for (x = 0; x < this.universe.listing.race.length; x++) {
-				if (this.universe.listing.race[x].playable && !this.universe.listing.race[x].attribute.no_show && !this.universe.listing.race[x].is_preview) {
+			for(x = 0; x < this.universe.listing.race.length; x++) {
+				if(this.universe.listing.race[x].playable && !this.universe.listing.race[x].attribute.no_show && !this.universe.listing.race[x].is_preview) {
 					selectable.push(this.universe.listing.race[x]);
 				}
 			}
@@ -45,16 +45,16 @@ rsSystem.component("dndCreateCharacterDialog", {
 			corpus.race = selectable;
 
 			selectable = [];
-			if (this.building.race) {
-				for (x = 0; x < this.building.race.variants.length; x++) {
+			if(this.building.race) {
+				for(x = 0; x < this.building.race.variants.length; x++) {
 					feat = this.universe.getObject(this.building.race.variants[x]);
-					if (feat && !feat.inactive && !feat.attribute.no_show && !feat.is_preview) {
+					if(feat && !feat.inactive && !feat.attribute.no_show && !feat.is_preview) {
 						selectable.push(feat);
 					} else {
 						this.universe.log.error("Unknown racial variant: " + this.building.race.variants[x]);
 					}
 				}
-				if (!selectable.length) {
+				if(!selectable.length) {
 					// selectable.push({
 					// 	"id": null,
 					// 	"name": "Normal",
@@ -67,8 +67,8 @@ rsSystem.component("dndCreateCharacterDialog", {
 			corpus.variant = selectable;
 
 			selectable = [];
-			for (x = 0; x < this.universe.listing.archetype.length; x++) {
-				if (this.universe.listing.archetype[x].playable && !this.universe.listing.archetype[x].attribute.no_show && !this.universe.listing.archetype[x].is_preview) {
+			for(x = 0; x < this.universe.listing.archetype.length; x++) {
+				if(this.universe.listing.archetype[x].playable && this.universe.listing.archetype[x].root && !this.universe.listing.archetype[x].attribute.no_show && !this.universe.listing.archetype[x].is_preview) {
 					selectable.push(this.universe.listing.archetype[x]);
 				}
 			}
@@ -76,8 +76,8 @@ rsSystem.component("dndCreateCharacterDialog", {
 			corpus.archetype = selectable;
 
 			selectable = [];
-			for (x = 0; x < this.universe.listing.feat.length; x++) {
-				if (this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show && !this.universe.listing.feat[x].is_preview) {
+			for(x = 0; x < this.universe.listing.feat.length; x++) {
+				if(this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show && !this.universe.listing.feat[x].is_preview) {
 					selectable.push(this.universe.listing.feat[x]);
 				}
 			}
@@ -85,8 +85,8 @@ rsSystem.component("dndCreateCharacterDialog", {
 			corpus.background = selectable;
 
 			selectable = [];
-			for (x = 0; x < this.universe.listing.alignment.length; x++) {
-				if (this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show && !this.universe.listing.alignment[x].is_preview) {
+			for(x = 0; x < this.universe.listing.alignment.length; x++) {
+				if(this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show && !this.universe.listing.alignment[x].is_preview) {
 					selectable.push(this.universe.listing.alignment[x]);
 				}
 			}
@@ -111,7 +111,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			return corpus;
 		},
-		"choiceBlocks": function () {
+		"choiceBlocks": function() {
 			var choiceBlocks = [],
 				block,
 				record,
@@ -119,30 +119,30 @@ rsSystem.component("dndCreateCharacterDialog", {
 				i,
 				j;
 
-			if (this.building.race && this.building.race.selection) {
+			if(this.building.race && this.building.race.selection) {
 				choiceBlocks = choiceBlocks.concat(this.building.race.selection);
 			}
-			if (this.building.variant && this.building.variant.selection) {
+			if(this.building.variant && this.building.variant.selection) {
 				choiceBlocks = choiceBlocks.concat(this.building.variant.selection);
 			}
-			if (this.building.archetype && this.building.archetype.selection) {
+			if(this.building.archetype && this.building.archetype.selection) {
 				choiceBlocks = choiceBlocks.concat(this.building.archetype.selection);
 			}
-			if (this.building.background && this.building.background.selection) {
+			if(this.building.background && this.building.background.selection) {
 				choiceBlocks = choiceBlocks.concat(this.building.background.selection);
 			}
 
 			return choiceBlocks;
 		},
-		"nameGenerators": function () {
+		"nameGenerators": function() {
 			var datasets = [],
 				record,
 				x;
 
-			if (this.building.race && this.building.race.datasets) {
-				for (x = 0; x < this.building.race.datasets.length; x++) {
+			if(this.building.race && this.building.race.datasets) {
+				for(x = 0; x < this.building.race.datasets.length; x++) {
 					record = this.universe.getObject(this.building.race.datasets[x]);
-					if (record) {
+					if(record) {
 						datasets.push(record);
 					}
 				}
@@ -150,7 +150,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			return datasets;
 		},
-		"limit": function () {
+		"limit": function() {
 			var limit = {},
 				record,
 				i;
@@ -158,7 +158,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 			return limit;
 		}
 	},
-	"data": function () {
+	"data": function() {
 		var data = {};
 
 		data.stage = 0;
@@ -222,17 +222,17 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 		return data;
 	},
-	"mounted": function () {
+	"mounted": function() {
 		rsSystem.register(this);
 		if(this.profile.auto_roll) {
 			Vue.set(this, "muted", true);
-			for(var i=0; i<this.stats.length; i++) {
+			for(var i = 0; i < this.stats.length; i++) {
 				this.rollStat(this.stats[i]);
 			}
 		}
 	},
 	"methods": {
-		"create": function () {
+		"create": function() {
 			if(this.errorCount === 0) {
 				var details = {},
 					buffer,
@@ -253,24 +253,24 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.portrait = this.building.portrait;
 				details.picture = this.building.picture;
 
-				for(i=0; i<this.stats.length; i++) {
+				for(i = 0; i < this.stats.length; i++) {
 					details["stat_" + this.stats[i]] = this.building[this.stats[i]];
 				}
 
 				if(this.building.variant) {
 					details.feats.push(this.building.variant.id);
 				}
-				
+
 				try {
-					for(i=0; i<this.choiceBlocks.length; i++) {
+					for(i = 0; i < this.choiceBlocks.length; i++) {
 						buffer = details[this.choiceBlocks[i].field];
 						if(buffer) {
 							if(buffer instanceof Array) {
-								for(j=0; j<this.choiceBlocks[i]._selected.length; j++) {
+								for(j = 0; j < this.choiceBlocks[i]._selected.length; j++) {
 									buffer.push(this.choiceBlocks[i]._selected[j]);
 								}
 							} else if(typeof(buffer) === "object") {
-								for(j=0; j<this.choiceBlocks[i]._selected.length; j++) {
+								for(j = 0; j < this.choiceBlocks[i]._selected.length; j++) {
 									buffer[this.choiceBlocks[i]._selected[j]] = 1;
 								}
 							} else {
@@ -284,7 +284,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 					}
 
 					this.universe.send("create:character", details);
-				} catch(exception) {
+				} catch (exception) {
 					// TODO: Improve choiceBlock isolation to be resistant against the below or update display before
 					//		the client submits for "smoothness" (tm)
 					// This occurs when the universe updates and essentially nukes the underlying block for the client
@@ -296,16 +296,16 @@ rsSystem.component("dndCreateCharacterDialog", {
 				this.goToError();
 			}
 		},
-		"validate": function (stage) {
+		"validate": function(stage) {
 			var buffer,
 				x;
 
-			if (stage == undefined) {
+			if(stage == undefined) {
 				stage = this.stage;
 			}
 
 			console.log("Validate[" + stage + "]: " + this.stages[this.stage]);
-			switch(this.stages[stage]) {
+			switch (this.stages[stage]) {
 				case "race":
 				case "variant":
 				case "archetype":
@@ -321,7 +321,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 					break;
 				case "additional":
 					buffer = false;
-					for(x=0; x<this.choiceBlocks.length; x++) {
+					for(x = 0; x < this.choiceBlocks.length; x++) {
 						if(!this.choiceBlocks[x]._selected || this.choiceBlocks[x].limit !== this.choiceBlocks[x]._selected.length) {
 							buffer = true;
 						}
@@ -359,20 +359,20 @@ rsSystem.component("dndCreateCharacterDialog", {
 		"errorStages": function() {
 			var stages = Object.keys(this.errors),
 				x;
-			for(x=0; x<stages.length; x++) {
+			for(x = 0; x < stages.length; x++) {
 				stages[x] = parseInt(stages[x]) + 1;
 			}
 			return stages.join(", ");
 		},
 		"goToError": function() {
-			for(var x=0; x<this.stages.length; x++) {
+			for(var x = 0; x < this.stages.length; x++) {
 				if(this.errors[x]) {
 					Vue.set(this, "stage", x);
 					return null;
 				}
 			}
 		},
-		"randomName": function (dataset) {
+		"randomName": function(dataset) {
 			console.log("Random Name: " + dataset.name, dataset);
 			var limit = dataset.limit || 10,
 				spacing = dataset.spacing || " ",
@@ -381,16 +381,16 @@ rsSystem.component("dndCreateCharacterDialog", {
 				gen,
 				x;
 
-			if (this.flipFlop) {
+			if(this.flipFlop) {
 				Vue.set(this, "flipFlop", false);
-				while (dataset && c < limit) {
+				while(dataset && c < limit) {
 					gen = new NameGenerator(dataset.value);
-					if (name) {
+					if(name) {
 						name += spacing + gen.create().capitalize();
 					} else {
 						name = gen.create().capitalize();
 					}
-					if (dataset.next) {
+					if(dataset.next) {
 						dataset = this.universe.getObject(dataset.next[Random.integer(dataset.next.length)]);
 					} else {
 						dataset = null;
@@ -398,14 +398,14 @@ rsSystem.component("dndCreateCharacterDialog", {
 				}
 			} else {
 				Vue.set(this, "flipFlop", true);
-				while (dataset && c < limit) {
+				while(dataset && c < limit) {
 					gen = dataset.value.split(" ");
-					if (name) {
+					if(name) {
 						name += spacing + gen[Random.integer(gen.length)].capitalize();
 					} else {
 						name = gen[Random.integer(gen.length)].capitalize();
 					}
-					if (dataset.next) {
+					if(dataset.next) {
 						dataset = this.universe.getObject(dataset.next[Random.integer(dataset.next.length)]);
 					} else {
 						dataset = null;
@@ -416,7 +416,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 			Vue.set(this.building, "name", name);
 		},
 		"choiceBlockSelected": function(skip) {
-			for(var x=0; x<this.choiceBlocks.length; x++) {
+			for(var x = 0; x < this.choiceBlocks.length; x++) {
 				if(!this.choiceBlocks[x]._selected || this.choiceBlocks[x]._selected.length !== this.choiceBlocks[x].limit) {
 					return false;
 				}
@@ -428,7 +428,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 			return true;
 		},
 		"statsDone": function() {
-			for(var x=0; x<this.stats.length; x++) {
+			for(var x = 0; x < this.stats.length; x++) {
 				if(!this.building[this.stats[x]]) {
 					return false;
 				}
@@ -464,7 +464,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 		},
 		"statUp": function(stat) {
 			var index = this.stats.indexOf(stat),
-				to = (index - 1 + this.stats.length)%this.stats.length,
+				to = (index - 1 + this.stats.length) % this.stats.length,
 				swap = this.stats[to],
 				hold = this.building[swap];
 			Vue.set(this.building, swap, this.building[stat]);
@@ -472,15 +472,15 @@ rsSystem.component("dndCreateCharacterDialog", {
 		},
 		"statDown": function(stat) {
 			var index = this.stats.indexOf(stat),
-				to = (index + 1 + this.stats.length)%this.stats.length,
+				to = (index + 1 + this.stats.length) % this.stats.length,
 				swap = this.stats[to],
 				hold = this.building[swap];
 			Vue.set(this.building, swap, this.building[stat]);
 			Vue.set(this.building, stat, hold);
 		},
-		"infoRecord": function (record) {
+		"infoRecord": function(record) {
 			console.log("Character Select");
-			if (this.$route.query.info !== record.id) {
+			if(this.$route.query.info !== record.id) {
 				rsSystem.manipulateQuery({
 					"info": record.id
 				});
@@ -496,15 +496,15 @@ rsSystem.component("dndCreateCharacterDialog", {
 				// }
 			}
 		},
-		"choose": function (record) {
+		"choose": function(record) {
 			console.log("Chosen[" + this.stages[this.stage] + "]: ", record);
-			if (this.building[this.stages[this.stage]] instanceof Array) {
-				if (this.building[this.stages[this.stage]].indexOf(record) === -1) {
+			if(this.building[this.stages[this.stage]] instanceof Array) {
+				if(this.building[this.stages[this.stage]].indexOf(record) === -1) {
 					this.building[this.stages[this.stage]].push(record);
 				} else {
 					this.building[this.stages[this.stage]].purge(record);
 				}
-				if (this.limit[this.stages[this.stage]] === this.building[this.stages[this.stage]].length || (!this.limit[this.stages[this.stage]] && this.building[this.stages[this.stage]].length === 1)) {
+				if(this.limit[this.stages[this.stage]] === this.building[this.stages[this.stage]].length || (!this.limit[this.stages[this.stage]] && this.building[this.stages[this.stage]].length === 1)) {
 					this.forward();
 				}
 			} else {
@@ -512,17 +512,17 @@ rsSystem.component("dndCreateCharacterDialog", {
 				this.forward();
 			}
 		},
-		"getName": function (record, prefixed) {
-			if (!record) {
+		"getName": function(record, prefixed) {
+			if(!record) {
 				return "";
 			}
-			if (typeof (record) !== "object") {
+			if(typeof(record) !== "object") {
 				var buffer = this.universe.getObject(record);
-				if (buffer) {
+				if(buffer) {
 					return buffer.name || buffer.id || record;
 				}
 			}
-			if (prefixed) {
+			if(prefixed) {
 				return (record.name || record) + " ";
 			}
 			return record.name || record;
@@ -530,32 +530,32 @@ rsSystem.component("dndCreateCharacterDialog", {
 		"syncPortrait": function() {
 
 		},
-		"info": function (record) {
+		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record
 			});
 		},
-		"getProgressInidcatorStyle": function () {
+		"getProgressInidcatorStyle": function() {
 			return "width:" + (100 * (this.stage / (this.stages.length - 1))).toFixed(2) + "%;";
 		},
-		"forward": function () {
-			if (this.stage < this.stages.length - 1) {
+		"forward": function() {
+			if(this.stage < this.stages.length - 1) {
 				this.validate();
 				Vue.set(this, "stage", this.stage + 1);
-				if (this.stages[this.stage] === "additional" && this.choiceBlocks.length === 0) {
+				if(this.stages[this.stage] === "additional" && this.choiceBlocks.length === 0) {
 					this.forward();
-				} else if (this.stages[this.stage] === "variant" && this.corpus.variant.length === 0) {
+				} else if(this.stages[this.stage] === "variant" && this.corpus.variant.length === 0) {
 					this.forward();
 				}
 			}
 		},
-		"backward": function () {
-			if (this.stage > 0) {
+		"backward": function() {
+			if(this.stage > 0) {
 				Vue.set(this, "stage", this.stage - 1);
 			}
 		}
 	},
-	"beforeDestroy": function () {
+	"beforeDestroy": function() {
 		/*
 		this.universe.$off("universe:modified", this.update);
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);

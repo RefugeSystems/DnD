@@ -26,8 +26,8 @@
 						<span>No Items Available</span>
 					</td>
 				</tr>
-				<tr v-for="record in corpus" :key="record.id" :class="storage.selected[record.id]?'record-selected':''">
-					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-on:click.stop="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
+				<tr v-for="record in corpus" :key="record.id" :class="storage.selected[record.id]?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id">
+					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
 						<!-- TODO: Field attribute Checks -->
 						<div v-if="!header.noCross" class="crosshair"></div>
 						<div v-if="!header.noHighlight && storage.selected[record.id] && i === 0" class="highlight starting"></div>

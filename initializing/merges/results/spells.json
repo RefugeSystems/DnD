@@ -1,7 +1,7 @@
 {
 	"import": [
 		{
-			"id": "spell:firebolt damage:fire:d10:level:5",
+			"id": "spell:firebolt",
 			"name": "Firebolt",
 			"description": "Hurl a bolt of fire at a target.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "fas fa-flame fa-rotate-270",
@@ -34,7 +34,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:icebolt damage:cold:d8:level:5",
+			"id": "spell:icebolt",
 			"name": "Icebolt",
 			"description": "Shoot a icebolt at a target.  Failed saving throws result in slowed movement.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "fas fa-icicles",
@@ -69,7 +69,7 @@
 			"range_normal": 20
 		},
 		{
-			"id": "spell:frostbite damage:cold:d6:level:5",
+			"id": "spell:frostbite",
 			"name": "Frostbite",
 			"description": "Afflicted have a disadvantage on their next attack.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "ra ra-snowflake",
@@ -104,7 +104,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:fireball modifier:spell:fireball",
+			"id": "spell:fireball",
 			"name": "Fireball",
 			"description": "Shoot an explosive fireball at a target or the ground",
 			"icon": "fas fa-meteor rot225",
@@ -123,7 +123,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:acid": "",
 				"damage_type:fire": "8d6"
 			},
 			"vampirism": null,
@@ -163,7 +162,7 @@
 			"spell_slots": null
 		},
 		{
-			"id": "spell:leech modifier:spell:leech",
+			"id": "spell:leech",
 			"name": "Leech",
 			"description": "Leech life from a target. Dealing damage and healing you. ",
 			"icon": "",
@@ -181,10 +180,7 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:acid": "",
-				"damage_type:fire": "",
 				"damage_type:necrotic": "1d8",
-				"damage_type:force": "",
 				"damage_type:cold": ""
 			},
 			"vampirism": null,
@@ -282,7 +278,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:spiritualweapon modifier:spell:spiritualweapon",
+			"id": "spell:spiritualweapon",
 			"name": "Spirtual Weapon",
 			"description": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your wisdom modifier.\n\nAs a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.\n\nThe weapon can take whatever form you choose. Clerics of deities who are associated with a particular weapon (as St. Cuthbert is known for his mace and Thor for his hammer) make this spell's effect resemble that weapon.\n\nAt Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd.",
 			"icon": "fas fa-bible",
@@ -337,7 +333,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:tollthedead damage:necrotic:d12:level:5",
+			"id": "spell:tollthedead",
 			"name": "Toll the Dead",
 			"description": "An injured creature you can see takes full damage. If the creature is uninjured, it takes half your roll.\n\nOn save, the creature takes no damage.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "fas fa-bell",
@@ -426,7 +422,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:chromaticorb damage:chromatic:3d8",
+			"id": "spell:chromaticorb",
 			"name": "Chromatic Orb",
 			"description": "Ranged spell attack of 3d8 of any magical damage type of your choice; Acid, Cold, Fire, Lightning, Poison, Thunder.\n\nAn additional 1d8 damage for every additional level of casting beyond the first.",
 			"icon": "fas fa-sun-dust fa-rotate-90",
@@ -512,7 +508,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:divinity:guidedstrike modifier:attack:10",
+			"id": "spell:divinity:guidedstrike",
 			"name": "Channel Divinity: Guided Strike",
 			"description": "When you make an attack roll, you may use your channel divinity to add 10 to your attack roll.",
 			"icon": "fal fa-gavel",
@@ -637,7 +633,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:divinesmite damage:radiant:2d8",
+			"id": "spell:divinesmite",
 			"name": "Divine Smite",
 			"description": "When you hit a creature with a melee weapon Attack, you may cast this spell as part of that action.\n\nDeal an additional 1d8 radiant damage if the creature is undead or a fiend.",
 			"icon": "fas fa-sword",
@@ -658,7 +654,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:flamingbreath damage:fire:6d6",
+			"id": "spell:flamingbreath",
 			"name": "Flaming Breath",
 			"description": "Exhale flame from your mouth in a small cone in front of you. Creatures with successful saves take half damage.",
 			"icon": "ra ra-fire-breath",
@@ -716,7 +712,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:burninghands modifier:spell:burninghands",
+			"id": "spell:burninghands",
 			"name": "Burning Hands",
 			"description": "Shoot a cone of flames from your hands. Can start fires.",
 			"icon": "fas fa-fire-alt",
@@ -735,7 +731,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:acid": "",
 				"damage_type:fire": "3d6",
 				"damage_type:cold": ""
 			},
@@ -811,7 +806,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:catapult modifier:spell:catapult",
+			"id": "spell:catapult",
 			"name": "Catapult",
 			"description": "Throw up to a 5 pound object in a direction up to 90 feet.\n\nAny creature that would be hit makes a save and on fail, takes damage.\n\nFor every level above the first, the object can weigh an additional 5 pounds and does an additional 1d8 damage.",
 			"icon": "",
@@ -830,10 +825,7 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:acid": "",
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "3d8",
-				"damage_type:piercing": "",
 				"damage_type:slashing": ""
 			},
 			"vampirism": null,
@@ -875,9 +867,6 @@
 			"range_normal": 30,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
@@ -941,7 +930,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:iceknife modifier:spell:iceknife",
+			"id": "spell:iceknife",
 			"name": "Ice Knife",
 			"description": "Make a ranged spell attack. On hit, the target takes 1d10 piercing damage. Hit or miss, the knife explodes. The target and each creature within 5 feet must pass a Dexterity save or take 2d6 cold damage.\n\nAt Higher Levels: The cold damage increases by 1d6 for each slot level above first.",
 			"icon": "",
@@ -960,8 +949,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:acid": "",
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "",
 				"damage_type:piercing": "1d10",
 				"damage_type:slashing": ""
@@ -1005,14 +992,11 @@
 			"range_normal": 60,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
 		{
-			"id": "spell:rayofsickness modifier:spell:rayofsickness",
+			"id": "spell:rayofsickness",
 			"name": "Ray of Sickness",
 			"description": "Make a ranged spell attack. On hit, the target takes 2d8 poison damage and must make a Constitution save. On a fail, it's poisoned until the end of your next turn.",
 			"icon": "",
@@ -1031,11 +1015,7 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:acid": "",
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "",
-				"damage_type:piercing": "",
-				"damage_type:slashing": "",
 				"damage_type:poison": "2d8"
 			},
 			"vampirism": null,
@@ -1077,9 +1057,6 @@
 			"range_normal": 30,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
@@ -1287,7 +1264,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:flamingsphere modifier:spell:flamesphere",
+			"id": "spell:flamingsphere",
 			"name": "Flaming Sphere",
 			"description": "A 5-foot-diameter Sphere of fire appears in an unoccupied space of your choice within range and lasts for the duration. Any creature that ends its turn within 2 studs of the sphere must make a Dexterity save. It takes 2d6 fire damage on a fail, or half damage on a success.\n\nAs a bonus action, you can move the sphere up to 15 studs. If you ram the sphere into a creature, that creature must make the saving throw against the sphere's damage, and the sphere stops moving this turn.\n\nWhen you move the sphere, it can go over barriers up to 2 studs tall and jump across pits up to 5 studs wide. The sphere ignites flammable objects not being worn or carried, and it sheds bright light for 10 studs and dim light for an extra 10 studs. \n\nAt Higher Levels: The damage increases by 1d6 for each slot level above 2nd.",
 			"icon": "fas fa-burn",
@@ -1347,9 +1324,6 @@
 			"range_normal": 30,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
@@ -1413,7 +1387,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:scorchingray damage:fire:2d6",
+			"id": "spell:scorchingray",
 			"name": "Scorching Ray",
 			"description": "You create three fire rays that each deal this spell's damage individually. You can hurl them at one target or several.\n\nMake a ranged spell attack for each ray. Multiple rays can target the same creature but the attacks are still rolled separately.\n\nFor Example:  \nIf you target Creature A with 2 rays and Creature B with 1 ray, you still make 3 attack rolls, but if all hit then Creature A takes 4d6 Fire damage and creature B takes 2d6 Fire damage.\n\n\nFor every level beyond the second, you create an additional ray.",
 			"icon": "far fa-minus",
@@ -1529,7 +1503,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:eruptingearth modifier:spell:eruptingearth",
+			"id": "spell:eruptingearth",
 			"name": "Erupting Earth",
 			"description": "Choose a point on the ground that you can see. A 20-foot cube centered on that point becomes difficult terrain, and each 5-foot portion requires a minute to clear by hand. Each creature in the cube's area must make a Dexterity save. It takes 3d12 bludgeoning damage on a failure, or half damage on a success.\n\nFor every level beyond the 3rd, the damage increases by 1d12.",
 			"level": 3,
@@ -1547,7 +1521,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "3d12"
 			},
 			"vampirism": null,
@@ -1589,14 +1562,11 @@
 			"range_normal": 120,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
 		{
-			"id": "spell:vampirictouch modifier:spell:vampirictouch",
+			"id": "spell:vampirictouch",
 			"name": "Vampiric Touch",
 			"description": "Make a melee spell attack. On hit, the target takes 3d6 necrotic damage, and you regain hit points equal to half the necrotic damage dealt. Until the spell ends, you can use your action to make the attack again.\n\nFor every level beyond the 3rd, the damage increases by 1d6.",
 			"level": 3,
@@ -1614,7 +1584,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "",
 				"damage_type:necrotic": "3d6"
 			},
@@ -1655,14 +1624,11 @@
 			"range_normal": 0,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
 		{
-			"id": "spell:blight modifier:spell:blight",
+			"id": "spell:blight",
 			"name": "Blight",
 			"description": "A creature you can see must make a Constitution save. It takes damage on a failed save, or half as much on a success. This spell has no effect on undead or constructs.\n\nIf you target a plant creature or magical plant, it saves with disadvantage, and the spell deals maximum damage. If you target a non-magical plant that isn't a creature, it automatically dies.",
 			"level": 4,
@@ -1680,7 +1646,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "",
 				"damage_type:necrotic": "8d8"
 			},
@@ -1722,14 +1687,11 @@
 			"range_normal": 15,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
 		{
-			"id": "spell:blacktentacles damage:bludgeoning:3d6",
+			"id": "spell:blacktentacles",
 			"name": "Black Tentacles",
 			"description": "Squirming, ebony tentacles fill the area on the ground that you can see within range. For the duration, these tentacles turn the ground in the area into difficult terrain.\n\nWhen a creature enters the affected area for the first time on a turn or starts its turn there, the creature must succeed on a Dexterity saving throw or take damage and be restrained by the tentacles until the spell ends. A creature that starts its turn in the area and is already restrained by the tentacles takes damage. On a successful save, the creature takes no damage.\n\nA creature restrained by the tentacles can use its action to make a Strength or Dexterity check (its choice) against your spell save DC. On a success, it frees itself.",
 			"icon": "fab fa-affiliatetheme inverted rot315",
@@ -1796,7 +1758,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:cloudofdaggers modifier:spell:cloudofdaggers",
+			"id": "spell:cloudofdaggers",
 			"name": "Cloud of Daggers",
 			"description": "You fill a 5-foot cube with daggers. A creature takes 4d4 slashing damage when it enters the area for the first time on a turn or starts its turn there.\n\nFor every level above the 2nd, the daggers deal another 2d4 damage.",
 			"level": 2,
@@ -1814,9 +1776,7 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
 				"damage_type:bludgeoning": "",
-				"damage_type:necrotic": "",
 				"damage_type:slashing": "4d4"
 			},
 			"vampirism": null,
@@ -1857,14 +1817,11 @@
 			"range_normal": 60,
 			"spell_slots": null,
 			"resist": {
-				"piercing": "",
-				"slashing": "",
-				"crushing": "",
 				"bludgeoning": ""
 			}
 		},
 		{
-			"id": "spell:racial:acidbreath modifier:spell:racial:acidbreath",
+			"id": "spell:racial:acidbreath",
 			"name": "Acid Breath",
 			"description": "Breath a line of acid at your target, hitting all creatures up to 15 studs away.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fal fa-campfire",
@@ -1974,7 +1931,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:monster:psuedodragon:sting modifier:spell:monster:psuedodragon:sting",
+			"id": "spell:monster:psuedodragon:sting",
 			"name": "Sting",
 			"description": "Sting a target dealing poison damage.\n\nOn a saving throw of 5 or less, the target is rendered unconscious until it takes damage or is woken by someone.",
 			"icon": "fas fa-pen-nib",
@@ -2027,7 +1984,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:racial:lightningbreath modifier:spell:lightningbreath",
+			"id": "spell:racial:lightningbreath",
 			"name": "Lightning Breath ",
 			"description": "Breath a line of lightning at your target, hitting all creatures up to 15 studs away.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fal fa-thunderstorm",
@@ -2046,9 +2003,7 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
 				"damage_type:lightning": "2d6",
-				"damage_type:cold": "",
 				"damage_type:poison": ""
 			},
 			"vampirism": null,
@@ -2083,7 +2038,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:racial:breathacid modifier:spell:racial:acidbreath",
+			"id": "spell:racial:breathacid",
 			"name": "Breath Acid",
 			"description": "Breath a cone of acid in front of you, hitting everything within 6 studs of you that direction.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fal fa-campfire",
@@ -2139,7 +2094,7 @@
 			"spell_slots": null
 		},
 		{
-			"id": "spell:racial:flamebreath modifier:spell:flamebreath",
+			"id": "spell:racial:flamebreath",
 			"name": "Flame Breath ",
 			"description": "Breath a line of fire at your target, hitting all creatures up to 15 studs away.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fal fa-flame",
@@ -2193,7 +2148,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:racial:breathflame modifier:spell:flamebreath",
+			"id": "spell:racial:breathflame",
 			"name": "Breath Flame ",
 			"description": "Breath a cone of fire in front of you, hitting everything within 6 studs of you that direction.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fas fa-flame",
@@ -2247,7 +2202,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "spell:racial:breathfrost modifier:spell:frostbreath",
+			"id": "spell:racial:breathfrost",
 			"name": "Breath Frost ",
 			"description": "Breath a cone of frost in front of you, hitting everything within 6 studs of you that direction.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fal fa-snow-blowing",
@@ -2266,8 +2221,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
-				"damage_type:lightning": "",
 				"damage_type:cold": "2d6"
 			},
 			"vampirism": null,
@@ -2302,7 +2255,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "spell:racial:breathpoison modifier:spell:poisonbreath",
+			"id": "spell:racial:breathpoison",
 			"name": "Breath Poison ",
 			"description": "Breath a cone of poison in front of you, hitting everything within 6 studs of you that direction.\n\nThis can only be used 1 between rests. Either a short or a long rest will suffice.",
 			"icon": "fas fa-flask-poison",
@@ -2321,9 +2274,6 @@
 			"armor": null,
 			"acClass": null,
 			"damage": {
-				"damage_type:fire": "",
-				"damage_type:lightning": "",
-				"damage_type:cold": "",
 				"damage_type:poison": "2d6"
 			},
 			"vampirism": null,
@@ -2384,7 +2334,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:huntersmark damage:piercing:1d6",
+			"id": "spell:huntersmark",
 			"name": "Hunter's Mark",
 			"description": "You choose a creature you can see within range and mystically mark it as your quarry. Until the spell ends, you deal an extra 1d6 damage to the target whenever you hit it with a weapon attack, and you have advantage on any Wisdom (Perception) or Wisdom (Survival) check you make to find it. If the target drops to 0 hit points before this spell ends, you can use a bonus action on a subsequent turn of yours to mark a new creature.\n\nAt Higher Levels. When you cast this spell using a spell slot of 3rd or 4th level, you can maintain your concentration on the spell for up to 8 hours. When you use a spell slot of 5th level or higher, you can maintain your concentration on the spell for up to 24 hours.",
 			"icon": "",
@@ -2470,7 +2420,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:crusadersmantle damage:radiant:1d4",
+			"id": "spell:crusadersmantle",
 			"name": "Crusader's Mantle",
 			"description": "All non-hostile creatures within range of you deal an additional 1d4 radiant damage when attacking.",
 			"icon": "fal fa-draw-circle",
@@ -2500,7 +2450,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:spiritgaurdian:good modifier:resistance:radiant:3d8",
+			"id": "spell:spiritgaurdian:good",
 			"name": "Angelic Spirit Gaurdian",
 			"description": "Must be Good or Neutral (Not Evil)\n\nWhen casting, you may designate any number of creatures to be unaffected by the guardian.\n\nAffected creatures who enter or start within a 15 radius circle around you take 3d8 radiant damage.",
 			"icon": "fas fa-ghost",
@@ -2530,7 +2480,7 @@
 			}
 		},
 		{
-			"id": "spell:spiritgaurdian:evil modifier:resistance:necrotic:3d8",
+			"id": "spell:spiritgaurdian:evil",
 			"name": "Fiendish Spirit Gaurdian",
 			"description": "Must be Evil (Not Good or Neutral)\n\nWhen casting, you may designate any number of creatures to be unaffected by the guardian.\n\nAffected creatures who enter or start within a 15 radius circle around you take 3d8 necrotic damage.",
 			"icon": "fas fa-ghost",
@@ -2671,7 +2621,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:divinestrike damage:radiant:1d8",
+			"id": "spell:divinestrike",
 			"name": "Divine Strike",
 			"description": "Once per turn, you may empower your strikes with divine energy, dealing extra radiant damage.\n\nBefore level 14: 1d8 radiant\nAfter level 14: 2d8 radiant",
 			"icon": "far fa-hammer-war",
@@ -2781,7 +2731,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "spell\"wrathofthestorm damage:lightning:1d8 damage:thunder:1d8",
+			"id": "spell\"wrathofthestorm",
 			"name": "Wrath of the Storm",
 			"description": "If a creature successfully attacks you and is within 5 studs of you, you may use your reaction to rebuke the damage, dealing thunder damage back to the attacker.",
 			"icon": "fas fa-thunderstorm",
@@ -2812,7 +2762,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:wrathofthestorm damage:lightning:1d8 damage:thunder:1d8",
+			"id": "spell:wrathofthestorm",
 			"name": "Wrath of the Storm",
 			"description": "If a creature successfully attacks you and is within 5 studs of you, you may use your reaction to rebuke the damage, dealing thunder damage back to the attacker.",
 			"icon": "fas fa-thunderstorm",
@@ -2870,7 +2820,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:thunderwave damage:thunder:2d8",
+			"id": "spell:thunderwave",
 			"name": "Thunderwave",
 			"description": "On a failed save, creatures are pushed back 5 studs.\n\nOn a successful save, they take half damage.",
 			"icon": "fal fa-wifi",
@@ -2930,7 +2880,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:shatter damage:thunder:3d8",
+			"id": "spell:shatter",
 			"name": "Shatter",
 			"description": "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range. Each creature in a 5 stud radius sphere centered on that point must make a Constitution saving throw. A creature takes 3d8 thunder damage on a failed save, or half as much damage on a successful one. A creature made of inorganic material such as stone, crystal, or metal has disadvantage on this saving throw.\n\nA nonmagical object that isn't being worn or carried also takes the damage if it's in the spell's area.\n\nAt Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd.",
 			"icon": "fas fa-bell",
@@ -2961,7 +2911,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:calllightning damage:thunder:3d10",
+			"id": "spell:calllightning",
 			"name": "Call Lightning",
 			"description": "The spell fails if you can't see a point in the air where the storm cloud could appear (for example, if you are in a room that can't accommodate the cloud).\n\nWhen you cast the spell, choose a point you can see under the cloud. A bolt of lightning flashes down from the cloud to that point. Each creature within 3 studs of that point must make a Dexterity saving throw. A creature takes 3d10 lightning damage on a failed save, or half as much damage on a successful one. On each of your turns until the spell ends, you can use your action to call down lightning in this way again, targeting the same point or a different one. \nIf you are outdoors in stormy conditions when you cast this spell, the spell gives you control over the existing storm instead of creating a new one. Under such conditions, the spell's damage increases by 1d10.",
 			"icon": "far fa-bolt",
@@ -3022,7 +2972,7 @@
 			"range_normal": 80
 		},
 		{
-			"id": "spell:controlwater damage:bludgeoning:2d8",
+			"id": "spell:controlwater",
 			"name": "Control Water",
 			"description": "You gain control over all water in the 50 x 50 x 50 cube and may part, move, lift, and whirl the water.\n\nWhen whirling the water, a creature must pass an athletics check or be caught in the whirlpool and take 2d8 bludgeoning damage. On a success, they take half damage and are not trapped. Creatures who can not swim have a disadvantage.\n\nYou may optionally additionally \"punch\" creatures with the water to deal straight bludgeoning damage.\n\nMore Complete Technical details:\nUntil the spell ends, you control any freestanding water inside an area you choose that is a cube up to 50 stud on a side. You can choose from any of the following effects when you cast this spell. As an action on your turn, you can repeat the same effect or choose a different one.\n\nFlood. You cause the water level of all standing water in the area to rise by as much as 10 stud. If the area includes a shore, the flooding water spills over onto dry land.\n\nIf you choose an area in a large body of water, you instead create a 20-foot tall wave that travels from one side of the area to the other and then crashes down. Any Huge or smaller vehicles in the wave's path are carried with it to the other side. Any Huge or smaller vehicles struck by the wave have a 25 percent chance of capsizing.\n\nThe water level remains elevated until the spell ends or you choose a different effect. If this effect produced a wave, the wave repeats on the start of your next turn while the flood effect lasts.\n\nPart Water. You cause water in the area to move apart and create a trench. The trench extends across the spell's area, and the separated water forms a wall to either side. The trench remains until the spell ends or you choose a different effect. The water then slowly fills in the trench over the course of the next round until the normal water level is restored.\n\nRedirect Flow. You cause flowing water in the area to move in a direction you choose, even if the water has to flow over obstacles, up walls, or in other unlikely directions. The water in the area moves as you direct it, but once it moves beyond the spell's area, it resumes its flow based on the terrain conditions. The water continues to move in the direction you chose until the spell ends or you choose a different effect.\n\nWhirlpool. This effect requires a body of water at least 25 stud square and 12 stud deep. You cause a whirlpool to form in the center of the area. The whirlpool forms a vortex that is 2 stud wide at the base, up to 25 stud wide at the top, and 12 stud tall. Any creature or object in the water and within 12 stud of the vortex is pulled 5 stud toward it. A creature can swim away from the vortex by making a Strength (Athletics) check against your spell save DC.\n\nWhen a creature enters the vortex for the first time on a turn or starts its turn there, it must make a Strength saving throw. On a failed save, the creature takes 2d8 bludgeoning damage and is caught in the vortex until the spell ends. On a successful save, the creature takes half damage, and isn't caught in the vortex. A creature caught in the vortex can use its action to try to swim away from the vortex as described above, but has disadvantage on the Strength (Athletics) check to do so.\n\nThe first time each turn that an object enters the vortex, the object takes 2d8 bludgeoning damage; this damage occurs each round it remains in the vortex.",
 			"icon": "fal fa-water",
@@ -3052,7 +3002,7 @@
 			"range_normal": 160
 		},
 		{
-			"id": "spell:icestorm damage:bludgeoning:2d8 damage:cold:4d6",
+			"id": "spell:icestorm",
 			"name": "Ice Storm",
 			"description": "A hail of rock-hard ice pounds to the ground in a cylinder centered on a point within range. Each creature in the cylinder must make a Dexterity saving throw.\n\nHailstones turn the storm's area of effect into difficult terrain until the end of your next turn.",
 			"icon": "fal fa-cloud-hail-mixed",
@@ -3086,7 +3036,7 @@
 			"range_normal": 160
 		},
 		{
-			"id": "spell:destructivewave:evil damage:thunder:5d6 damage:necrotic:5d6",
+			"id": "spell:destructivewave:evil",
 			"name": "Fiendish Destructive Wave",
 			"description": "(Must be Neutral or Evil Alignment)\n\nChoose any number of creatures within range of you and you strike the ground dealing damage and knocking them prone.\n\nOn a successful save, the creatures take half damage and are not knocked prone.",
 			"icon": "fas fa-hand-holding-water",
@@ -3118,7 +3068,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:destructivewave:good damage:thunder:5d6 damage:radiant:5d6",
+			"id": "spell:destructivewave:good",
 			"name": "Radiant Destructive Wave",
 			"description": "(Must be Good or Neutral Alignment)\n\nChoose any number of creatures within range of you and you strike the ground dealing damage and knocking them prone.\n\nOn a successful save, the creatures take half damage and are not knocked prone.",
 			"icon": "fas fa-hand-holding-water",
@@ -3150,7 +3100,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:insectplague damage:piercing:4d10",
+			"id": "spell:insectplague",
 			"name": "Insect Plague",
 			"description": "Swarming, biting locusts fill the sphere centered on a point you choose within range. The sphere spreads around corners. The sphere remains for the duration, and its area is lightly obscured. The sphere's area is difficult terrain.\n\nWhen the area appears, each creature in it must make a Constitution saving throw. A creature takes 4d10 piercing damage on a failed save, or half as much damage on a successful one. A creature must also make this saving throw when it enters the spell's area for the first time on a turn or ends its turn there.",
 			"icon": "far fa-bug",
@@ -3297,7 +3247,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:sacredflame damage:radiant:d8:level:5",
+			"id": "spell:sacredflame",
 			"name": "Sacred Flame",
 			"description": "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take radiant damage. The target gains no benefit from cover for this saving throw..",
 			"icon": "fal fa-flame",
@@ -3476,7 +3426,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:curewounds healing:spell:curewounds",
+			"id": "spell:curewounds",
 			"name": "Cure Wounds",
 			"description": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier.\n\nThis spell has no effect constructs or undead.\n\nAt Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d8 for each slot level above 1st.",
 			"icon": "fal fa-hand-heart",
@@ -3561,7 +3511,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:guidingbolt damage:radiant:4d6",
+			"id": "spell:guidingbolt",
 			"name": "Guiding Bolt",
 			"description": "A flash of light streaks toward a creature of your choice within range. Make a ranged spell attack against the target. On a hit, the target takes radiant damage, and the next attack roll made against this target before the end of your next turn has advantage, thanks to the mystical dim light glittering on the target until then.",
 			"icon": "far fa-heart-rate",
@@ -3653,7 +3603,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "ability:poisonfang:golem damage:piercing:4d12 damage:poison:4d12",
+			"id": "ability:poisonfang:golem",
 			"name": "Ancient Golem Poison Fang",
 			"description": "Conjures a fang in the Golem's mouth and hurls it forth at target creature.",
 			"icon": "ra ra-broadhead-arrow rs-green",
@@ -3710,7 +3660,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:inflictwounds damage:necrotic:3d10",
+			"id": "spell:inflictwounds",
 			"name": "Inflict Wounds",
 			"description": "Make a melee spell attack against a creature you can reach.",
 			"icon": "far fa-hand-point-left",
@@ -4356,7 +4306,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:ensnaringstrike damage:piercing:1d6",
+			"id": "spell:ensnaringstrike",
 			"name": "Ensnaring Strike",
 			"description": "The next time you hit a creature, vines raise from the ground and ensnare the creature on a failed saving throw.\n\nAt the start of that creatures turn, they take damage and at the end of that creatures turn they can make another strength check to break free.\n\nAnother creature may make a strength check to attempt to free the ensnared creature as an action.\n\nTarget gains the \"Vine Ensnared\" effect.",
 			"icon": "fal fa-drum-steelpan",
@@ -4411,7 +4361,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:hailofthorns damage:piercing:1d10",
+			"id": "spell:hailofthorns",
 			"name": "Hail of Thorns",
 			"description": "The next time you successfully hit a creature before the spell ends (1 minute or losing concentration), all creatures within 4 studs of the striked creature take damage.\n\nHalf damage on a successful save.",
 			"icon": "fas fa-location-arrow",
@@ -4711,7 +4661,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:spikegrowth damage:piercing:2d4",
+			"id": "spell:spikegrowth",
 			"name": "Spike Growth",
 			"description": "The ground in a 10 stud radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 2 studs it travels.\n\nThe transformation of the ground is camouflaged to look natural. Any creature that can't see the area at the time the spell is cast must make a Perception check against your spell save DC to recognize the terrain as hazardous before entering it.",
 			"icon": "fal fa-spa",
@@ -4934,7 +4884,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:glyphofwarding damage:chromatic:5d8",
+			"id": "spell:glyphofwarding",
 			"name": "Glyph of Warding",
 			"description": "When you cast this spell, you inscribe a glyph that later unleashes a magical effect. You inscribe it either on a surface (such as a table or a section of floor or wall) or within an object that can be closed (such as a book, a scroll, or a treasure chest) to conceal the glyph. The glyph can cover an area no larger than 5 studs in diameter. If the surface or object is moved more than 5 studs from where you cast this spell, the glyph is broken, and the spell ends without being triggered.\n\nThe glyph is nearly invisible and requires a successful Investigation check against your spell save DC to be found.\n\nYou decide what triggers the glyph when you cast the spell. For glyphs inscribed on a surface, the most typical triggers include touching or standing on the glyph, removing another object covering the glyph, approaching within a certain distance of the glyph, or manipulating the object on which the glyph is inscribed. For glyphs inscribed within an object, the most common triggers include opening that object, approaching within a certain distance of the object, or seeing or reading the glyph. Once a glyph is triggered, this spell ends.\n\nYou can further refine the trigger so the spell activates only under certain circumstances or according to physical characteristics (such as height or weight), creature kind (for example, the ward could be set to affect aberrations or drow), or alignment. You can also set conditions for creatures that don’t trigger the glyph, such as those who say a certain password.\n\nWhen you inscribe the glyph, choose explosive runes or a spell glyph.\n\nExplosive Runes. When triggered, the glyph erupts with magical energy in a 10 stud radius sphere centered on the glyph. The sphere spreads around corners. Each creature in the area must make a Dexterity saving throw. A creature takes 5d8 acid, cold, fire, lightning, or thunder damage on a failed saving throw (your choice when you create the glyph), or half as much damage on a successful one.\n\nSpell Glyph. You can store a prepared spell of 3rd level or lower in the glyph by casting it as part of creating the glyph. The spell must target a single creature or an area. The spell being stored has no immediate effect when cast in this way. When the glyph is triggered, the stored spell is cast. If the spell has a target, it targets the creature that triggered the glyph. If the spell affects an area, the area is centered on that creature. If the spell summons hostile creatures or creates harmful objects or traps, they appear as close as possible to the intruder and attack it. If the spell requires concentration, it lasts until the end of its full duration.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the damage of an explosive runes glyph increases by 1d8 for each slot level above 3rd. If you create a spell glyph, you can store any spell of up to the same level as the slot you use for the glyph of warding.",
 			"icon": "fal fa-rupee-sign",
@@ -5178,7 +5128,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:pounce modifier:damage:pounce",
+			"id": "spell:pounce",
 			"name": "Pounce",
 			"description": "Pounce on target creature, grappling them on a failed DC.",
 			"note": "This is meant for creatures.",
@@ -5330,7 +5280,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:magicmissile modifier:spell:magicmissile",
+			"id": "spell:magicmissile",
 			"name": "Magic Missile",
 			"description": "You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4 + 1 force damage to its target. The darts all strike simultaneously, and you can direct them to hit one creature or several.\n\nAt Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the spell creates one more dart for each slot level above 1st.",
 			"icon": "fas fa-magic",
@@ -5385,7 +5335,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:prayerofhealing healing:spell:pryerofhealing",
+			"id": "spell:prayerofhealing",
 			"name": "Prayer of Healing",
 			"description": "Up to six creatures of your choice that you can see within range each regain hit points equal to 2d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs.\n\nAt Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the healing increases by 1d8 for each slot level above 2nd.",
 			"icon": "far fa-hands-heart",
@@ -5437,7 +5387,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:masshealingword healing:1d4:cast",
+			"id": "spell:masshealingword",
 			"name": "Mass Healing Word",
 			"description": "As you call out words of restoration, up to six creatures of your choice that you can see within range regain hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the healing increases by 1d4 for each slot level above 3rd.",
 			"icon": "fal fa-comment-plus",
@@ -5616,7 +5566,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "spell:produceflame damage:fire:d8:level:5",
+			"id": "spell:produceflame",
 			"name": "Produce Flame",
 			"description": "A flickering flame appears in your hand. The flame remains there for the duration and harms neither you nor your equipment. The flame sheds bright light in a 5 stud radius and dim light for an additional 5 stud. The spell ends if you dismiss it as an action or if you cast it again.\n\nYou can also attack with the flame, although doing so ends the spell. When you cast this spell, or as an action on a later turn, you can hurl the flame at a creature within 15 studs of you. Make a ranged spell attack. On a hit, the target takes 1d8 fire damage.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "fal fa-flame",
@@ -5747,7 +5697,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:charge modifier:damage:momentum",
+			"id": "spell:charge",
 			"name": "Charge",
 			"description": "Charge target creature, dealing damage and knocking them prone on a failed saving throw.",
 			"icon": "fas fa-running",
@@ -5936,7 +5886,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:healingword healing:1d4:cast",
+			"id": "spell:healingword",
 			"name": "Healing Word",
 			"description": "A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs.\n\nAt Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d4 for each slot level above 1st.",
 			"icon": "far fa-briefcase-medical",
@@ -5990,7 +5940,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:acidsplash damage:acid:d6:level:5",
+			"id": "spell:acidsplash",
 			"name": "Acid Splash",
 			"description": "You hurl a bubble of acid. Choose one or two creatures you can see within range. If you choose two, they must be within the spell's radius of each other. A target must succeed their saving throw or take damage.",
 			"icon": "ra ra-gloop rs-light-green",
@@ -6023,7 +5973,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:aganazzarsscorcher damage:fire:3d8",
+			"id": "spell:aganazzarsscorcher",
 			"name": "Erellia’s Scorcher",
 			"description": "A line of roaring flame emanates from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes fire damage on a failed save, or half as much damage on a successful one.",
 			"icon": "far fa-fire-smoke rot315",
@@ -6252,7 +6202,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:lightningbolt damage:lightning:8d6",
+			"id": "spell:lightningbolt",
 			"name": "Lightning Bolt",
 			"description": "A stroke of lightning forming a line blasts out from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes full lightning damage on a failed save, or half as much damage on a successful one.\n\nThe lightning ignites flammable objects in the area that aren't being worn or carried.",
 			"icon": "fas fa-bolt",
@@ -6280,7 +6230,7 @@
 			"range_normal": 50
 		},
 		{
-			"id": "spell:balllightning damage:lightning:5d6",
+			"id": "spell:balllightning",
 			"name": "Ball Lightning",
 			"description": "Hurl a large ball of lightning at a target and upon landing erupts in a ball of lightning.\n\nIf it hits a creature along the way it simply passes through if it isn't the target unless it is a solid wall that fully blocks the path.\n\nTargets that fail their saving throw that take more than ${26,orange}$ damage are considered paralyzed.",
 			"level": 3,
@@ -6486,7 +6436,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:minutemeteors damage:fire:2d6",
+			"id": "spell:minutemeteors",
 			"name": "Crane's Minute Meteors",
 			"description": "You create six tiny meteors in your space. They float in the air and orbit you for the spell’s duration. When you cast the spell — and as a bonus action on each of your turns thereafter — you can expend one or two of the meteors, sending them streaking toward a point or points you choose within 60 studs of you. Once a meteor reaches its destination or impacts against a solid surface, the meteor explodes. Each creature within 3 studs of the point where the meteor explodes must make a Dexterity saving throw. A creature takes damage on a failed save, or half as much damage on a successful one.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the number of meteors created increases by two for each slot level above 3rd.\n\nGain the effect \"Crane's Minute Meteors\" to track your meteors.",
 			"icon": "far fa-spinner rot135",
@@ -6640,7 +6590,7 @@
 			"range_normal": 45
 		},
 		{
-			"id": "spell:tidalwave damage:bludgeoning:4d8",
+			"id": "spell:tidalwave",
 			"name": "Tidal Wave",
 			"description": "You conjure up a wave of water that crashes down on an area within range filling as much of the area as you desire. Each creature in that area must make a Dexterity saving throw. On a failed save, a creature takes damage and is knocked prone. On a successful save, a creature takes half as much damage and isn’t knocked prone. The water then spreads out across the ground in all directions, extinguishing unprotected flames in its area and within 15 studs of it, and then it vanishes.",
 			"icon": "fas fa-water",
@@ -6737,7 +6687,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:windwall damage:bludgeoning:3d8",
+			"id": "spell:windwall",
 			"name": "Wind Wall",
 			"description": "A wall of strong wind rises from the ground at a point you choose within range. You can make the wall up to 25 studs long, 8 studs high, and 1 stud thick. You can shape the wall in any way you choose so long as it makes one continuous path along the ground. The wall lasts for the duration.\n\nWhen the wall appears, each creature within its area must make a Strength saving throw. A creature takes damage on a failed save, or half as much damage on a successful one.\n\nThe strong wind keeps fog, smoke, and other gases at bay. Small or smaller flying creatures or objects can't pass through the wall. Loose, lightweight materials brought into the wall fly upward. Arrows, bolts, and other ordinary projectiles launched at targets behind the wall are deflected upward and automatically miss. (Boulders hurled by giants or siege engines, and similar projectiles, are unaffected.) Creatures in gaseous form can't pass through it.",
 			"icon": "fas fa-wind",
@@ -7068,7 +7018,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:moonbeam damage:radiant:2d10",
+			"id": "spell:moonbeam",
 			"name": "Moonbeam",
 			"description": "A silvery beam of pale light shines down on a point within range. Until the spell ends, dim light fills the cylinder.\n\nWhen a creature enters the spell’s area for the first time on a turn or starts its turn there, it is engulfed in ghostly flames that cause searing pain, and it must make a Constitution saving throw. It takes full damage on a failed save, or half damage on a successful one.\n\nA shapechanger makes its saving throw with disadvantage. If it fails, it also instantly reverts to its original form and can’t assume a different form until it leaves the spell’s light.\n\nOn each of your turns after you cast this spell, you can use an action to move the beam 30 studs in any direction.",
 			"icon": "fas fa-grip-lines-vertical",
@@ -7147,7 +7097,7 @@
 			"range_normal": 10
 		},
 		{
-			"id": "spell:iceball damage:cold:8d6",
+			"id": "spell:iceball",
 			"name": "Iceball",
 			"description": "Hurl a large Ice Ball at a location.\n\nThe ball explodes on impact.\n\nIf hit with a failed saving throw, make a constitution saving throw or be slowed.",
 			"icon": "fas fa-meteor rot225",
@@ -7259,7 +7209,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "spell:viciousmockery damage:psychic:d4:level:5",
+			"id": "spell:viciousmockery",
 			"name": "Vicious Mockery",
 			"description": "You unleash a string of insults laced with subtle enchantments at a creature you can see within range. If the target can hear you (though it need not understand you), it must succeed on a Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn. \n\nGains an additional damage dice with every 5 levels.",
 			"note": null,
@@ -7372,7 +7322,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:chilltouch damage:necrotic:d8:level:5",
+			"id": "spell:chilltouch",
 			"name": "Chill Touch",
 			"description": "You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell Attack against the creature to assail it with the chill of the grave. On a hit, the target takes necrotic damage, and it can't regain Hit Points until the start of your next turn. Until then, the hand clings to the target.\n\nIf you hit an Undead target, it also has disadvantage on Attack rolls against you until the end of your next turn.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "fas fa-hand-holding-magic",
@@ -7453,7 +7403,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:heatmetal damage:fire:1d8",
+			"id": "spell:heatmetal",
 			"name": "Heat Metal",
 			"description": "Choose a manufactured metal object, such as a metal weapon or a suit of heavy or medium metal armor, that you can see within range. You cause the object to glow red-hot. Any creature in physical contact with the object takes damage when you cast the spell. Until the spell ends, you can use a Bonus Action on each of your subsequent turns to cause this damage again.\n\nIf a creature is holding or wearing the object and takes the damage from it, the creature must succeed on a Constitution saving throw or drop the object if it can. If it doesn't drop the object, it has disadvantage on Attack rolls and Ability Checks until the start of your next turn.",
 			"icon": "fal fa-temperature-high",
@@ -7589,7 +7539,7 @@
 			"range_normal": 200
 		},
 		{
-			"id": "ability:mob:wingattack modifier:resistance:bludgeoning:2d6",
+			"id": "ability:mob:wingattack",
 			"name": "Wing Attack",
 			"description": "You beat your wings, creating strong gusts.\n\nAll creatures within range of you must make a saving throw. On failure, they are knocked prone and take full damage. On a success, they only take half damage.",
 			"icon": "ra ra-dragon-wing",
@@ -7636,7 +7586,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "ability:dragon:black:claws damage:slashing:3d6",
+			"id": "ability:dragon:black:claws",
 			"name": "Black Dragon Claws",
 			"description": "You can attack with your claws.",
 			"icon": "ra ra-bird-claw",
@@ -7662,7 +7612,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "ability:dragon:black:bite damage:acid:1d8 damage:piercing:3d8",
+			"id": "ability:dragon:black:bite",
 			"name": "Black Dragon Bite",
 			"description": "You can attack with your bite.",
 			"icon": "ra ra-dragon",
@@ -7689,7 +7639,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "ability:dragon:black:tail damage:bludgeoning:3d8",
+			"id": "ability:dragon:black:tail",
 			"name": "Black Dragon Tail",
 			"description": "You can attack with your tail.",
 			"icon": "ra ra-thorny-vine",
@@ -7740,7 +7690,7 @@
 			"range_normal": 10
 		},
 		{
-			"id": "spell:necroticpulse damage:necrotic:3d8",
+			"id": "spell:necroticpulse",
 			"name": "Necrotic Pulse",
 			"description": "A pulse of dark energy erupts from your hands towards a target area.\n\nAny creature that fully resists the damage is instead healed.",
 			"icon": "ra ra-fire-symbol rot270 rs-purple",
@@ -7941,7 +7891,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:phantasmalkiller damage:psychic:4d10",
+			"id": "spell:phantasmalkiller",
 			"name": "Phantasmal Killer",
 			"description": "You tap into the nightmares of a creature you can see within range and create an illusory manifestation of its deepest fears, visible only to that creature. The target must make a ${\"content\":\"Wisdom\", \"class\":\"rs-orange\"}$ saving throw. On a failed save, the target becomes frightened for the duration. At the end of each of the target’s turns before the spell ends, the target must succeed on a ${\"content\":\"Wisdom\", \"class\":\"rs-orange\"}$ saving throw or take 4d10 ${\"content\":\"Psychic\", \"class\":\"rs-orange\"}$ damage. On a successful save, the spell ends.",
 			"icon": "ra ra-droplet-splash",
@@ -8089,7 +8039,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:cloudkill damage:poison:5d8",
+			"id": "spell:cloudkill",
 			"name": "Cloudkill",
 			"description": "You create a sphere of poisonous, yellow-green fog centered on a point you choose within range. The fog spreads around corners. It lasts for the duration or until strong wind disperses the fog, ending the spell. \n\nThe area is heavily obscured.\n\nWhen a creature enters the spell’s area for the first time on a turn or starts its turn there, that creature must make a ${\"content\":\"Constitution\", \"class\":\"rs-orange\"}$ saving throw. The creature takes 5d8 ${\"content\":\"Poison\", \"class\":\"rs-orange\"}$ damage on a failed save, or half as much damage on a successful one.\n\nCreatures are affected even if they hold their breath or don’t need to breathe. The fog moves ${5,orange}$ studs away from you at the start of each of your turns, rolling along the surface of the ground. The vapors, being heavier than air, sink to the lowest level of the land, even pouring down openings.",
 			"icon": "fad fa-clouds",
@@ -8206,7 +8156,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:walloffire damage:fire:5d8",
+			"id": "spell:walloffire",
 			"name": "Wall Of Fire",
 			"description": "You create a wall of fire on a solid surface within range. You can make the wall up to ${30,orange}$ studs long, ${10,orange}$ studs high, and ${1,orange}$ stud thick, or a ringed wall up to ${10,orange}$ studs in diameter, ${10,orange}$ studs high, and ${1,orange}$ stud thick.\n\nThe wall is opaque and lasts for the duration.\n\nWhen the wall appears, each creature within its area must make a ${\"content\":\"Dexterity\", \"class\":\"rs-orange\"}$ saving throw. On a failed save, a creature takes 5d8 ${\"content\":\"Fire\", \"class\":\"rs-orange\"}$ damage, or half as much damage on a successful save.\n\nOne side of the wall, selected by you when you cast this spell, deals damage to each creature that ends its turn within ${5,orange}$ studs of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn or ends its turn there. \n\nThe other side of the wall deals no damage.",
 			"icon": "ra ra-fire-ring",
@@ -8432,7 +8382,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:chainlightning damage:lightning:10d8",
+			"id": "spell:chainlightning",
 			"name": "Chain Lightning",
 			"description": "You create a bolt of lightning that arcs toward a target of your choice that you can see within range.\n\nThis bolt then jumps to up to three other creatures or objects. Each subsequent target must be within the spell's radius. Depending on line of sight from the last creature or object hit, you may choose the next creature or object.\n\nHowever, if an sufficiently grounded object is targeted, the chain will end there. For instance, if a point on the ground is chosen to go around a wall, then the ground will absorb all the remaining arcs.\n\nAny target may make a ${\"content\":\"Dexterity\",\"class\":\"rs-orange\"}$ saving throw against your Spell DC to attempt to take half damage.\n\n**At Higher Levels**: One additional leap from the first target to another target for each slot level above 6th.",
 			"note": null,
@@ -8525,7 +8475,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:improvedicebolt damage:cold:d10:level:5",
+			"id": "spell:improvedicebolt",
 			"name": "Improved Icebolt",
 			"description": "Throw an arcane shard of ice at a target that explodes on impact.\n\nIf the creature succeeds their saving throw, they take half damage.\n\nIf the shard explodes near the a surface, a ${wis,orange}$ radius (Based on your ${\"content\":\"Wisdom\",\"class\":\"rs-orange\"}$ Modifier) ice surface is created on the surface around the target. Any creatures that walk across into or off of that surface must pass a dexterity save against your DC or lose all their movement and fall prone.",
 			"icon": "fas fa-icicles",
@@ -8708,7 +8658,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:masscurewounds healing:base:3d8:cast",
+			"id": "spell:masscurewounds",
 			"name": "Mass Cure Wounds",
 			"description": "A wave of healing energy washes out from a point of your choice within range. Choose up to six creatures with-in the radius of the resulting sphere at that point.\n\nEach target in that area is healed. This spell has no effect on undead or constructs.",
 			"note": null,
@@ -8771,7 +8721,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "spell:heal modifier:spell:heal:base",
+			"id": "spell:heal",
 			"name": "Heal",
 			"description": "Choose a creature that you can see within range. A surge of positive energy washes through the creature, causing it to heal. This spell also ends <span class=\"rs-darkorange\">Blindness</span>, <span class=\"rs-darkorange\">Deafness</span>, and any <span class=\"rs-darkorange\">Diseases</span> affecting the target.\n\nThis spell has no effect on constructs or undead.",
 			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
@@ -8917,7 +8867,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:ability:slam damage:bludgeoning:2d8 damage:bludgeoning:str",
+			"id": "spell:ability:slam",
 			"name": "Slam",
 			"description": "You slam into an object or creature with part of your form.\n\nThis ability acts as an attack action.",
 			"note": null,
@@ -8978,7 +8928,7 @@
 			"range_normal": 10
 		},
 		{
-			"id": "spell:ability:touch damage:fire:3d6",
+			"id": "spell:ability:touch",
 			"name": "Touch",
 			"description": "If the target is a creature or a flammable object, it gains the <span class=\"rs-orange\">Ignited</span> Effect, resulting in fire damage over time.",
 			"icon": "fad fa-fire rs-secondary-orange rs-red",
@@ -9054,7 +9004,7 @@
 			"range_normal": 10
 		},
 		{
-			"id": "spell:ability:whirlwind damage:bludgeoning:dex damage:bludgeoning:3d8",
+			"id": "spell:ability:whirlwind",
 			"name": "Whirlwind",
 			"description": "Each creature in range (Typically in the same space as you) must make a <span class=\"rs-orange\">Strength</span> saving throw. \n\nOn a failure, an affected creature takes full damage and is flung up 10 studs away in a random direction and knocked prone. If that creature strikes an object, such as a wall or floor, the target takes 1d6 <span class=\"rs-orange\">Bludgeoning</span> damage for every ${5,orange}$ studs it was thrown. If the affected creature is thrown at another creature, that creature must succeed on a DC${13,orange}$ <span class=\"Rs-orange\">Dexterity</span> saving throw or take the same damage and be knocked prone.\n\nIf the saving throw is successful, an affected creature takes half damage and is not flung, nor knocked prone.",
 			"icon": "fad fa-tornado",
@@ -9084,7 +9034,7 @@
 			"recharges_at_long": 2
 		},
 		{
-			"id": "spell:ability:icelance damage:cold:6d8",
+			"id": "spell:ability:icelance",
 			"name": "Ice Lance",
 			"description": "Hurl a blistering cold chunk of ice from your body in any direction, dealing damage to all creatures and objects in its path.\n\nIf the lance hits any creature larger than you that fails its saving throw, then the lance stops, otherwise creatures that fail their saving throw take an additional 1d8 <span class=\"rs-orange\">Piercing</span> damage and make a <span class=\"rs-orange\">Constitution</span> saving throw or are <span class=\"rs-darkorange\">Chilled</span> for the next minute, reducing movement speed and dealing 1d4 <span class=\"rs-orange\">Cold</span>.\n\nThis save is repeated at the end of every round and the effect ends on a successful save.\n\nA single creature can only be attacked once by you with this ability per round. Though a single creature may be lanced by multiple creatures in one round.",
 			"icon": "ra ra-supersonic-arrow rot315 rs-lightblue",
@@ -9115,7 +9065,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "spell:ability:arclighting damage:lightning:6d6",
+			"id": "spell:ability:arclighting",
 			"name": "Arc Lightning",
 			"description": "An arc of lightning jumps off of you toward the target, damaging it.\n\nOn a successful save, the creature takes half damage and the arc ends.\n\nOn a failed save, the creature takes full damage and the arc jumps to another creature that is within ${10+2*int,orange}$ studs of the target and a single cast can not damage to a creature more than once.",
 			"icon": "ra ra-lightning-trio",
@@ -9145,7 +9095,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "spell:ability:thunderousburst damage:thunder:2d6",
+			"id": "spell:ability:thunderousburst",
 			"name": "Thunderous Burst",
 			"description": "You create a thunderous burst around you that damages all creatures adjacent to you.\n\nCreatures struck that fail their save are pushed back${5 + int,orange}$ studs and knocked prone.\n\nAfter, roll 1d20. On a ${20,orange}$ you may cast <span class=\"rs-darkorange\">Arc Lightning</span>.",
 			"icon": "fal fa-bullseye rotX60",
@@ -9175,7 +9125,7 @@
 			"recharges_at_long": 4
 		},
 		{
-			"id": "spell:ability:flameburst damage:fire:6d6",
+			"id": "spell:ability:flameburst",
 			"name": "Flameburst",
 			"description": "A wave of flame erupts from you damaging all creatures and objects within range of you.\n\nWhen cast, roll 1d6; on a ${6,orange}$ you regain a single spell slot of up to level ${3,orange}$.",
 			"icon": "ra ra-fire",
@@ -9202,7 +9152,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:ability:bite:shark:reef:noble damage:piercing:1d4 damage:piercing:dex",
+			"id": "spell:ability:bite:shark:reef:noble",
 			"name": "Bite",
 			"description": "Bite at a target creature or object.",
 			"note": null,
@@ -9259,7 +9209,7 @@
 			"instilled": null
 		},
 		{
-			"id": "spell:chaosbolt damage:chromatic:2d8 damage:chromatic:1d6",
+			"id": "spell:chaosbolt",
 			"name": "Chaos Bolt",
 			"description": "You hurl an undulating, warbling mass of chaotic energy at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 + 1d6 damage. Choose one of the d8s. The number rolled on that die determines the attacks damage type, as shown below.\n\nd8 Result to choose the <span class=\"rs-orange\">Chromatic</span> Damage Type:  \n+ 1: <span class=\"rs-orange\">Acid</span>\n+ 2: <span class=\"rs-orange\">Cold</span>\n+ 3: <span class=\"rs-orange\">Fire</span>\n+ 4: <span class=\"rs-orange\">Force</span>\n+ 5: <span class=\"rs-orange\">Lightning</span>\n+ 6: <span class=\"rs-orange\">Poison</span>\n+ 7: <span class=\"rs-orange\">Psychic</span>\n+ 8: <span class=\"rs-orange\">Thunder</span>\n\nIf you roll the same number on both d8s, the chaotic energy leaps from the target to a different creature of your choice within ${15,orange}$ studs of the struck creature. Make a new attack roll against the new target, and make a new damage roll, which could cause the chaotic energy to leap again. A creature can be targeted only once by each casting of this spell.\n\nThis spell continues leaping as long as you roll doubles with the d8s.",
 			"icon": "ra ra-focused-lightning",
@@ -9290,7 +9240,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:mindspike damage:psychic:3d8",
+			"id": "spell:mindspike",
 			"name": "Mind Spike",
 			"description": "You reach into the mind of one creature you can see within range. On a failed save the creature takes full damage, or half damage on a successful one.\n\nOn a failed save, you also know the target's location until the spell ends, but only while the two of you are on the same plane of existence. While you have this knowledge, the target can’t become hidden from you, and if it’s invisible, it gains no benefit from that condition against you.",
 			"icon": "fab fa-affiliatetheme rot90",
@@ -9435,7 +9385,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:dawn damage:radiant:4d10",
+			"id": "spell:dawn",
 			"name": "Dawn",
 			"description": "The light of dawn shines down on a location you specify within range. Until the spell ends, bright light glimmers in the area of the spell's target.\n\nThis light is sunlight.\n\nWhen the cylinder appears, each creature within it must make a <span class=\"rs-orange\">Constitution</span> saving throw, taking full damage on a failed save, or half as much damage on a successful one.\n\nA creature must also make this saving throw whenever it ends its turn in the cylinder. If you’re within ${30,orange}$ studs of the cylinder, you can move it up to ${30,orange}$ studs as a <span class=\"rs-orange\">Bonus Action</span> on your turn.\n\n",
 			"icon": "ra ra-fire-ring rs-yellow",
@@ -9609,7 +9559,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:ability:bonelance damage:piercing:3d8",
+			"id": "spell:ability:bonelance",
 			"name": "Bone Lance",
 			"description": "Lose 1d8 HP as part of casting this spell.\n\nLaunch a sliver of your form at a target, dealing piercing damage.",
 			"icon": "ra ra-broadhead-arrow",
@@ -9698,7 +9648,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:lance:bone damage:piercing:4d8 damage:necrotic:4d8",
+			"id": "spell:lance:bone",
 			"name": "Lance of Bone",
 			"description": "Conjure and hurl a lance made of bone.\n\nIf struck, the creature makes a <span class=\"rs-orange\">Constitution</span> save and on failure suffers a greatly weakened Constitution, loosing ${6,orange}$ points from the stat. This effect is considered a curse.\n\nIf the save is successful, no <span class=\"rs-orange\">Necrotic</span> damage is suffered.",
 			"icon": "ra ra-broadhead-arrow",
@@ -9728,7 +9678,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:bonfire damage:fire:d8:level:5",
+			"id": "spell:bonfire",
 			"name": "Bonfire",
 			"description": "You create a bonfire on ground that you can see within range.\n\nUntil the spell ends, the magic bonfire fills a 4 stud cube. Any creature in the bonfire’s space when you cast the spell must succeed on a <span class=\"rs-orange\">Dexterity</span> saving throw or take <span class=\"rs-orange\">Fire</span> damage. A creature must also make the saving throw when it moves into the bonfire’s space for the first time on a turn or ends its turn there.\n\nThe bonfire ignites flammable objects in its area that aren’t being worn or carried.",
 			"icon": "fad fa-campfire rs-secondary-light-orange",
@@ -9837,7 +9787,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:rayoffrost damage:cold:d8:level:5",
+			"id": "spell:rayoffrost",
 			"name": "Ray of Frost",
 			"description": "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged <span class=\"rs-orange\">Spell Attack</span> against the target. On a hit, it takes <span class=\"rs-orange\">Cold</span> damage, and its speed is reduced by ${5,orange}$ studs until the start of your next turn, gaining the effect <span class=\"rs-orange\">Chilled Movement</span>.\n\nGains an additional damage dice with every 5 levels.",
 			"icon": "fal fa-snowflake",
@@ -9870,7 +9820,7 @@
 			"range_normal": 60
 		},
 		{
-			"id": "spell:chainofcommand damage:necrotic:1d12",
+			"id": "spell:chainofcommand",
 			"name": "Chain of Command",
 			"description": "You attempt to compel a creature bound in your chains to perform a simple action, such as attack , move, or retrieve or drop a small item.\n\nOn a failed save, they follow the command as long as they are chained. At the end of each of that creature's turns, they make another save until the spell ends or they succeed their save.\n\nOptionally the skull on the end of the chain can be detonated for an additional 2d12 <span class=\"rs-orange\">Necrotic</span> damage.",
 			"icon": "far fa-link",
@@ -9900,7 +9850,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:feastofsouls damage:necrotic:8d8",
+			"id": "spell:feastofsouls",
 			"name": "Feast of Souls",
 			"description": "Drain the soul from a dead creature or an injured creature below ${50%,orange}$ life that you have <span class=\"rs-orange\">Restrained</span>.\n\nIf the creature is dead or unconscious, there is no save, but a living creature may resist, taking half damage on a successful save.\n\nOnce a dead creature has taken their maximum life in damage from this spell, their corpse rots instantly and their soul no longer exists within the planes of the universe.\n\nIf the caster is slain, an <span class=\"rs-darkorange\">Umoya Crystal</span> drops for each creature whose soul the wraith has consumed and has not yet digested. Once a soul is digested, it can no longer be revived through \"normal\" means.",
 			"icon": "ra  ra-fluffy-swirl inverted rs-light-purple",
@@ -10013,7 +9963,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:hellishrebuke damage:fire:2d10",
+			"id": "spell:hellishrebuke",
 			"name": "Hellish Rebuke",
 			"description": "You point your finger, and the creature that damaged you is momentarily surrounded by hellish flames. The creature must make a saving throw and takes half damage on success.",
 			"level": 1,
@@ -10068,7 +10018,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:arcfield damage:lightning:6d6",
+			"id": "spell:arcfield",
 			"name": "Rotraru's Arc Field",
 			"description": "A field appears on the ground, electrifying any creatures inside the area. This applies to any creatures, both friend and foe on the ground in the area. Creatures that succeed on their save take half damage.\n\nIn addition to taking damage, the field makes the area <span class=\"rs-orange\">Difficult Terrain</span>\n\nAny creature that takes more than ${30,orange}$ damage of <span class=\"rs-orange\">Lightning</span> after reductions becomes  <span class=\"rs-orange\">Paralyzed</span>.",
 			"icon": "fab fa-sith rs-light-blue",
@@ -10130,7 +10080,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "spell:plantlash damage:piercing:2d10 damage:acid:2d4",
+			"id": "spell:plantlash",
 			"name": "Plant Lash",
 			"description": "Can use a charge to erupt an <span class=\"rs-darkorange\">Acidic Burst</span> to cause a <span class=\"rs-orange\">Constitution</span> Save and on fail takes an additional ${dex,orange}$d10 <span class=\"rs-orange\">Acid</span>.",
 			"icon": "ra ra-vine-whip rs-green",
@@ -10210,7 +10160,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "spell:referri:summonvine damage:piercing:2d10",
+			"id": "spell:referri:summonvine",
 			"name": "Summon Referri Vine",
 			"description": "Summons a <span class=\"rs-darkorange\">Referri Vine</span> to target location.\n\nAny creature within range of the summoned vine must pass a saving throw or take damage. No damage is taken on a sucessful save.",
 			"icon": "ra ra-thorny-vine rs-green",
@@ -10240,7 +10190,7 @@
 			"range_normal": 100
 		},
 		{
-			"id": "spell:acidarrow damage:acid:4d4",
+			"id": "spell:acidarrow",
 			"name": "Acid Arrow",
 			"description": "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. Make a ranged spell attack against the target. On a hit, the target takes 4d4 <span class=\"rs-orange\">Acid</span> damage immediately and 2d4 <span class=\"rs-orange\">Acid</span> damage at the end of its next turn.\n\nOn a miss, the arrow splashes the target with <span class=\"rs-orange\">Acid</span> for half as much of the initial damage and no damage at the end of its next turn.\n\nWhen you cast this spell using a spell slot of <span class=\"rs-orange\">3</span><sup>rd</sup> level or higher, the damage (both initial and later) increases by 1d4 for each slot level above 2nd.",
 			"icon": "ra ra-chemical-arrow rs-green",
@@ -10299,7 +10249,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:encasement modifier:resistance:cold:2d6 modifier:vulnerability:fire:normal",
+			"id": "spell:encasement",
 			"name": "Encasement",
 			"description": "As an action, you can encase your self in a block of ice whose HP is <span class=\"rs-orange\">5 + 2 * Temporary HP</span> for up to ${wis,orange}$ turns.\n\nUntil the spell ends or until the ice block is broken, you heal for 1d8 at the end of each turn.\n\nYou are still conscious while encased in ice and can control or continue to concentrate on any spells already active. Damage to the ice does not induce a <span class=\"rs-orange\">Concentration</span> roll.\n\nWhile encased in ice, <span class=\"rs-orange\">Cold</span> damage received is reduced and <span class=\"rs-orange\">Fire</span> damage received is multiplied.",
 			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
@@ -10361,7 +10311,7 @@
 			}
 		},
 		{
-			"id": "spell:flamestrike damage:radiant:4d6 damage:fire:4d6",
+			"id": "spell:flamestrike",
 			"name": "Flame Strike",
 			"description": "Summon a column of divine flame, dealing fire damage to all caught within the 5 stud radius and 20 block high column.\n\nOn a successful save, targets take half damage.\n\nFor every level above the ${5,orange}$<sup>th</sup>, you may add 1d6 <span class=\"rs-orange\">Fire</span> or 1d6 <span class=\"rs-orange\">Radiant</span> damage.",
 			"icon": "fal fa-flame",
@@ -10394,7 +10344,7 @@
 			"range_normal": 30
 		},
 		{
-			"id": "ability:constrict:golem damage:crushing:2d12",
+			"id": "ability:constrict:golem",
 			"name": "Ancient Golem Constriction",
 			"description": "Bind a creature.\n\nThat creature takes 2d12 <span class=\"rs-orange\">Crushing</span> damage a round and is <span class=\"rs-orange\">Restrained</span> and <span class=\"rs-orange\">Silenced</span>.\n\nAny creature can attempt an <span class=\"rs-orange\">Athletics</span> check against the Golem's <span class=\"rs-orange\">Strength</span> save and on success can remove the restrained creature.\n\nAdditionally, this requires concentration and on a failed save, the restrained creature is released.",
 			"icon": "ra ra-player-teleport rs-gray",
@@ -10420,7 +10370,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "ability:acidcloud:golem damage:acid:2d12 damage:poison:2d12",
+			"id": "ability:acidcloud:golem",
 			"name": "Ancient Golem Acid Cloud",
 			"description": "Cover a small area in an acidic poisonous cloud.\n\nOn a successful save, a creature takes half damage.\n\nAt the end of every round, roll 1d6, on a 6 this ability regains a charge.",
 			"note": "Take a short rest to regain a charge.",
@@ -10453,7 +10403,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "ability:bite:shark:nobel damage:piercing:2d4 damage:piercing:dex",
+			"id": "ability:bite:shark:nobel",
 			"name": "Bite",
 			"description": "Bite target creature",
 			"note": null,
@@ -10511,7 +10461,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "ability:bite:wolf damage:piercing:2d4 damage:piercing:dex",
+			"id": "ability:bite:wolf",
 			"name": "Bite",
 			"description": "Bite target creature",
 			"note": null,
@@ -10569,7 +10519,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "ability:claw:wolf damage:slashing:2d6 damage:slashing:dex",
+			"id": "ability:claw:wolf",
 			"name": "Claw",
 			"description": "Claw target creature.",
 			"note": null,
@@ -10758,7 +10708,7 @@
 			"range_normal": 200
 		},
 		{
-			"id": "spell:regenerate healing:6d8:cast",
+			"id": "spell:regenerate",
 			"name": "Regenerate",
 			"description": "You touch a creature and stimulate its natural healing ability. The target regains hit points and for the duration of the spell regains an additional 1 hit point at the start of each of its turns after that (10 hit points each minute).\n\nThe target’s severed body members (fingers, legs, tails, and so on), if any, are restored after 2 minutes. If you have the severed part and hold it to the stump, the spell instantaneously causes the limb to knit to the stump.\n\nOnce cast, roll 1d6. On a 4 or lower, the Power Crystal is not consumed.",
 			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
@@ -10990,7 +10940,7 @@
 			"range_normal": 15
 		},
 		{
-			"id": "spell:necrotictouch damage:necrotic:14d12",
+			"id": "spell:necrotictouch",
 			"name": "Necrotic Touch",
 			"description": "You churn the once living flesh of a creature against it, rotting the adjacent living flesh.\n\nOn a successful save, the effected creature takes half as much damage as it would take otherwise.\n\nThe damage dealt by this spell can not exceed the <span class=\"rs-orange\">Missing HP</span> of the targeted creature.\n\nExample: ${60,orange}$ damage against a a creature that is at ${80,orange}$/${100,orange}$ HP could only cause ${20,orange}$ damage. Then if the creature succeeds their save, they instead take ${10,orange}$ damage.\n\nWhen cast at <span class=\"rs-orange\">Level 8</span>, the creature can take ${50,orange}$% more damage (30 per the above example, reduced to 15 on a successful save). At <span class=\"rs-orange\">Level 10</span> it can take twice its <span class=\"rs-orange\">Missing HP</span> (40 in the above example, reduced to 20 on a successful save).\n\nAfter casting, roll 1d6. The Power Crystal shatters on a 6. Otherwise it continues to be usable.",
 			"note": null,
@@ -11205,7 +11155,7 @@
 			"range_normal": 40
 		},
 		{
-			"id": "ability:necrosiscloud damage:necrotic:1d12 damage:acid:1d12",
+			"id": "ability:necrosiscloud",
 			"name": "Necrosis Cloud",
 			"description": "Release a cloud of Necrotic Acid that overwhelms a creature, slowly building damage while a creature remains inside the gas, increasing the damage by 1 die each time, building to 2d12 Necrotic & Acid, then 3d12.",
 			"icon": "fad fa-cloud rs-green",
@@ -11353,7 +11303,7 @@
 			"range_normal": 5
 		},
 		{
-			"id": "ability:crado:feat:strength damage:necrotic:3d10",
+			"id": "ability:crado:feat:strength",
 			"name": "Strength Surge",
 			"description": "Sinking your teeth into a creature,  you can move or throw that creature with ease but in your fury, you do harm the creature whether intended or not.",
 			"icon": "ra ra-muscle-up",
@@ -11499,7 +11449,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:counterspell modifier:spell:counterspell",
+			"id": "spell:counterspell",
 			"name": "Counterspell",
 			"description": "Interrupt another spell caster's spell. If that spell is cast at the level of your cast of <span class=\"rs-darkorange\">Counterspell</span> or lower, the spell is cancelled.\n\nIf the spell is higher than your cast level, make an <span class=\"rs-darkorange\">Intelligence</span> save against the casted spell.\n\nFor example, casting this at ${3,orange}$<sup>rd</sup> level vs a ${5,orange}$<sup>th</sup> level spell is a DC of \"${13,orange}$ + (${5,orange}$ - ${3,orange}$)\" for a DC of ${15,orange}$.\n\nFor another example, casting this at ${6,orange}$<sup>th</sup> level vs a ${7,orange}$<sup>th</sup> level spell is a DC of \"${13,orange}$ + (${7,orange}$ - ${6,orange}$)\" for a DC of ${14,orange}$.\n\nIn the case where multiple creatures may want to counter a spell, they _MUST_ declare that they are attempting to counter the spell and if someone succeeds before they roll to counter, they can make a <span class=\"rs-orange\">Wisdom</span> save DC15 to stop casting and save their <span class=\"rs-orange\">Reaction</span>, otherwise the <span class=\"rs-orange\">Spell Slot</span> and <span class=\"rs-orange\">Reaction</span> are consumed.",
 			"note": "\n\nPrevious Action Map:\n{\n    \"reactions\": [\n        {\n            \"title\": \"Counterspell\",\n            \"info\": \"You may use your reaction to cast this spell.\",\n            \"key\": \"spell_counterspell\"\n        }\n    ]\n}",
@@ -11622,7 +11572,7 @@
 			"range_normal": null
 		},
 		{
-			"id": "spell:eldritchblast damage:force:d10:level:5",
+			"id": "spell:eldritchblast",
 			"name": "Eldritch Blast",
 			"description": "A beam of crackling energy streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 force damage.\n\nThe spell creates more than one beam when you reach higher levels: two beams at 5th level, three beams at 11th level, and four beams at 17th level. You can direct the beams at the same target or at different ones. Make a separate attack roll for each beam.",
 			"icon": "ra ra-focused-lightning",
@@ -11679,7 +11629,7 @@
 			"range_normal": 0
 		},
 		{
-			"id": "spell:dissonantwhispers damage:psychic:3d6",
+			"id": "spell:dissonantwhispers",
 			"name": "Dissonant Whispers",
 			"description": "You whisper a discordant melody that only one creature of your choice within range can hear, wracking it with terrible pain. The target must make a Wisdom saving throw. On a failed save, it takes 3d6 psychic damage and must immediately use its reaction, if available, to move as far as its speed allows away from you. The creature doesn’t move into obviously dangerous ground, such as a fire or a pit. On a successful save, the target takes half as much damage and doesn’t have to move away. A deafened creature automatically succeeds on the save.",
 			"icon": "fab fa-teamspeak",

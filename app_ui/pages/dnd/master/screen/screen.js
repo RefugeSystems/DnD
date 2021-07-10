@@ -400,6 +400,16 @@ rsSystem.component("DNDMasterScreen", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+
+		this.$el.onclick = (event) => {
+			console.log("Event: ", event);
+			var follow = event.srcElement.attributes.getNamedItem("data-id");
+			if(follow && (follow = this.universe.getObject(follow.value))) {
+				console.log(" > Edit: " + follow.id);
+				event.stopPropagation();
+				event.preventDefault();
+			}
+		};
 		
 		// this.universe.$on("player-disconnected", this.playerDisconnected);
 		// this.universe.$on("player-connected", this.playerConnected);

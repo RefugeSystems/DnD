@@ -1,6 +1,6 @@
 <div class="system-component table-controls">
 	<div class="filtering" v-on:keyup.stop.prevent>
-		<input type="text" v-model="storage.filter" v-on:keydown.esc.stop="clearFilter()"/>
+		<input type="text" v-delayed:500.lower="storage.filter" v-on:keydown.esc.stop="clearFilter()"/>
 		<span class="search-icon fas fa-search"></span>
 	</div>
 	<div class="controls">

@@ -1,6 +1,6 @@
 <div class="system-component system-info rs-component" :class="open?'opened':'closed'">
 	<div class="main-bar">
-		<div class="titling" draggable="true" v-on:drag="processDrag(info)">
+		<div class="titling" draggable="true" v-on:drag="processDrag(info)" v-on:click.right.stop.prevent="editNoun(info)">
 			<span v-if="info && info.icon" class="icon" :class="info.icon"></span>
 			<span class="text nowrap">{{info?info.nickname || info.name:"Information"}}</span>
 		</div>

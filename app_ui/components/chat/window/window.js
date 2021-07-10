@@ -48,7 +48,7 @@ rsSystem.component("chatWindow", {
 		data.name.locale = "Locale";
 		for(i=0; i<this.universe.listing.player.length; i++) {
 			player = this.universe.listing.player[i];
-			if(player && !player.is_preview && !player.disabled && player.id !== this.player.id) {
+			if(player && !player.is_preview && !player.disabled && player.connections > 0 && player.id !== this.player.id) {
 				if(player.gm) {
 					data.groups.unshift(player.id);
 					data.name[player.id] = "Master";

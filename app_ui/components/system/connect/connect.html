@@ -80,7 +80,7 @@
 		</div>
 	</div>
 	<div class="connect-alternatives" v-if="alternatives.length">
-		<div class="divider" v-if="modules.local"></div>
+		<div class="divider" :class="configuration?configuration.divider:'white'" v-if="modules.local"></div>
 		<div class="alternatives">
 			<button v-for="module in alternatives" class="module-authentication" :class="module.id" v-on:click="loginModule(module)">
 				<span class="auth-icon" :class="module.icon"></span>

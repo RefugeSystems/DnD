@@ -124,12 +124,18 @@ rsSystem.component("rsTable", {
 				i;
 
 			for(i=0; i<this.source.length; i++) {
-				if(this.source[i]._search !== undefined && this.source[i]._search !== null) {
-					if(this.source[i]._search.indexOf(filter) !== -1) {
+				if(filter === ":selected") {
+					if(this.storage.selected[this.source[i].id]) {
 						filtered.push(this.source[i]);
 					}
-				} else if(this.source[i].name && this.source[i].name.toLowerCase().indexOf(filter) !== -1) {
-					filtered.push(this.source[i]);
+				} else {
+					if(this.source[i]._search !== undefined && this.source[i]._search !== null) {
+						if(this.source[i]._search.indexOf(filter) !== -1) {
+							filtered.push(this.source[i]);
+						}
+					} else if(this.source[i].name && this.source[i].name.toLowerCase().indexOf(filter) !== -1) {
+						filtered.push(this.source[i]);
+					}
 				}
 			}
 

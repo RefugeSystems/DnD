@@ -109,6 +109,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "disable_cache",
+					"label": "Disable Cache",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "disable_sounds",
 					"label": "Disable Sounds",
 					"base": this.profile,
@@ -281,6 +286,12 @@ rsSystem.component("systemOptionsDialog", {
 			});
 		}
 		if(this.player.gm) {
+			data.pages.profile.options.push({
+				"id": "edit_new_window",
+				"label": "Edit to New Window",
+				"base": this.profile,
+				"type": "toggle"
+			});
 			data.pages.profile.options.push({
 				"id": "collapse_system_alerts",
 				"label": "Collapse System Alerts",
@@ -486,6 +497,11 @@ rsSystem.component("systemOptionsDialog", {
  */
 /**
  * 
+ * @property disable_cache
+ * @type Boolean
+ */
+/**
+ * 
  * @property no_master
  * @type Boolean
  */
@@ -515,9 +531,14 @@ rsSystem.component("systemOptionsDialog", {
  * @property collapse_system_alerts
  * @type Boolean
  */
-
 /**
- * 
+ * Game Masters Only, ignores system alerts.
  * @property suppress_system_alerts
+ * @type Boolean
+ */
+/**
+ * Game Masters Only, the editNoun method in RSCore redirects to a new window named edit
+ * to support more involved editing.
+ * @property edit_new_window
  * @type Boolean
  */
