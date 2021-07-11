@@ -49,24 +49,41 @@ module.exports.initialize = function(universe) {
 			};
 			entity.subValues(update);
 			update = {
-				"history": {
+				"history": [{
 					"event": "give:items",
 					"time": universe.time,
 					"items": exchanging,
 					"to": target.id
-				}
+				}]
 			};
 			entity.addValues(update);
 			update = {
 				"inventory": exchanging,
-				"history": {
+				"history": [{
 					"event": "recv:items",
 					"time": universe.time,
 					"items": exchanging,
 					"from": entity.id
-				}
+				}]
 			};
 			target.addValues(update);
+			universe.chronicle.addOccurrence("entity:trade:items", {
+				"source": entity.id,
+				"target": target.id,
+				"items": exchanging
+			});
+			universe.emit("send", {
+				"type": "notice",
+				"recipient": event.player.id,
+				"message": "Gave " + exchanging.length + " items to " + target.name,
+				"timeout": 5000
+			});
+			universe.emit("send", {
+				"type": "notice",
+				"recipients": target.owned,
+				"message": target.name + " received " + exchanging.length + " items from " + entity.name,
+				"timeout": 5000
+			});
 		}
 	});
 
@@ -116,13 +133,23 @@ module.exports.initialize = function(universe) {
 			};
 			entity.subValues(update);
 			update = {
-				"history": {
+				"history": [{
 					"event": "drop:items",
 					"time": universe.time,
 					"items": exchanging
-				}
+				}]
 			};
 			entity.addValues(update);
+			universe.chronicle.addOccurrence("entity:drop:items", {
+				"source": entity.id,
+				"items": exchanging
+			});
+			universe.emit("send", {
+				"type": "notice",
+				"recipient": event.player.id,
+				"message": "Dropped " + exchanging.length + " items",
+				"timeout": 5000
+			});
 		}
 	});
 };

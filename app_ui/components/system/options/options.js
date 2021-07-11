@@ -109,8 +109,8 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
-					"id": "disable_cache",
-					"label": "Disable Cache",
+					"id": "enable_cache",
+					"label": "Enable Cache",
 					"base": this.profile,
 					"type": "toggle"
 				}, {
@@ -131,6 +131,11 @@ rsSystem.component("systemOptionsDialog", {
 				}, {
 					"id": "silence_messaging",
 					"label": "No Message Alerts",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "enable_diagnostics",
+					"label": "Enable Diagnostics",
 					"base": this.profile,
 					"type": "toggle"
 				}, {
@@ -497,7 +502,12 @@ rsSystem.component("systemOptionsDialog", {
  */
 /**
  * 
- * @property disable_cache
+ * @property enable_cache
+ * @type Boolean
+ */
+/**
+ * Enables diagnostic activity such as universe network logging.
+ * @property enable_diagnostics
  * @type Boolean
  */
 /**

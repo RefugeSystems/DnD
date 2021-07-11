@@ -16,13 +16,7 @@
 			"proficiency:language:common",
 			"proficiency:language:infernal"
 		],
-		"variants": [],
 		"size": 5,
-		"skill_advantage": {},
-		"skill_check": {},
-		"skill_proficiency": {},
-		"spell_slot_max": {},
-		"spells": [],
 		"threat": 1,
         "stat_charisma": 2,
         "stat_intelligence": 1,

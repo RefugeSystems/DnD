@@ -89,8 +89,8 @@ verify(configuration)
 	
 	return api.initialize(startup);
 }).then(function() {
-	console.log("...Load Complete");
 	configuration.server.startup_time = Date.now() - start;
+	console.log("...Load Complete: " + configuration.server.startup_time + "ms");
 	logging.entry(new Anomaly("app:startup:online","System Online", 30, configuration.server, null, componentID));
 }).catch(function(error) {
 	// console.log(startup, "System Start Error: ", error, "\nConfiguration: ", configuration);

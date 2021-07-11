@@ -1,7 +1,7 @@
 var fs = require("fs"),
 	RSObject = require("../../app/storage/rsobject"),
 	modifiers = require("./modifiers.json"),
-	merging = require("./source/locations.json").export,
+	merging = require("./source/locations.json"),
 	exporting = [],
 	modMap = {},
 	locked = {},

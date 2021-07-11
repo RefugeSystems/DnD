@@ -188,9 +188,6 @@
 			"name": "Ice Mage",
 			"description": "Your proficiency in ice gives you water resistence but fire vulnerability and access to special ice variants of water spells.",
 			"icon": "fal fa-snowflake",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"selectable": true
 		},
 		{
@@ -198,9 +195,6 @@
 			"name": "Fire Mage",
 			"description": "Your proficiency in fire gives you fire resistence but water vulnerability and access to special fire spells.",
 			"icon": "fal fa-fire",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"selectable": false
 		},
 		{
@@ -239,9 +233,6 @@
 			"name": "Athlete",
 			"description": "Additional training has imporved your strength and athletic ability",
 			"icon": "far fa-running",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"strength": 1,
 			"selectable": false,
 			"skill_check": {
@@ -263,9 +254,6 @@
 			"name": "Jack of All Trades",
 			"description": "Your travels have increased your prowess in all things life.\n\nYou can add half your proficiency modifier to any skill checks in which you are not already proficient.",
 			"icon": "fab fa-creative-commons-by",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"selectable": false
 		},
 		{
@@ -383,9 +371,6 @@
 			"name": "Aspect of the Wolf ",
 			"description": "You gain the senses of a wolf, increasing your balance and your sense of smell. ",
 			"icon": "fas fa-claw-marks",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": null,
 			"armor": "",
@@ -443,9 +428,6 @@
 			"name": "Aspect of the Bear ",
 			"description": "Your carrying capacity is twice it's limit and you have an advantage on strength checks. ",
 			"icon": "fas fa-paw",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": null,
 			"armor": "",
@@ -467,9 +449,6 @@
 			"name": "Aspect of the Eagle",
 			"description": "You can see clearly up to 1 mile away.\n\nAdditionally, dim lighting does not effect your perception.",
 			"icon": "fas fa-crow",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"selectable": false
 		},
 		{
@@ -612,9 +591,6 @@
 			"name": "Magic Resistance",
 			"description": "You have advantage on saving throws against magical effects.",
 			"icon": "fal fa-star-exclamation",
-			"effects": [
-				"modifier:feat:sneakattack"
-			],
 			"selectable": false
 		},
 		{
@@ -622,9 +598,6 @@
 			"name": "Limited Telepathy",
 			"description": "You can communicate basic ideas and imagery with any creature with whom you share a common language.",
 			"icon": "fab fa-mixcloud",
-			"effects": [
-				"modifier:feat:sneakattack"
-			],
 			"selectable": false
 		},
 		{
@@ -632,9 +605,6 @@
 			"name": "Pseudodragon",
 			"description": "This is a pseudodragon",
 			"icon": "fal fa-receipt",
-			"effects": [
-				"modifier:feat:sneakattack"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:common",
@@ -684,9 +654,6 @@
 			"name": "Blue Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": null,
 			"armor": "",
@@ -711,9 +678,6 @@
 			"name": "Speak Common",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:common"
@@ -734,9 +698,6 @@
 			"name": "Speak Abyssal",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:abyssal"
@@ -757,9 +718,6 @@
 			"name": "Speak Ancient",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:ancient"
@@ -780,9 +738,6 @@
 			"name": "Speak Celestial",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:celestrial"
@@ -803,9 +758,6 @@
 			"name": "Deep Speech",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:deepspeech"
@@ -826,9 +778,6 @@
 			"name": "Speak Draconic",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:draconic"
@@ -849,9 +798,6 @@
 			"name": "Speak Dwarvian",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:dwarven"
@@ -872,9 +818,6 @@
 			"name": "Speak Elvish",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:elvan"
@@ -895,9 +838,6 @@
 			"name": "Speak Giant",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:giant"
@@ -918,9 +858,6 @@
 			"name": "Speak Gnomish",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:gnome"
@@ -941,9 +878,6 @@
 			"name": "Speak Goblin",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:goblin"
@@ -964,9 +898,6 @@
 			"name": "Speak Infernal",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:infernal"
@@ -987,9 +918,6 @@
 			"name": "Speak Orc",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:orc"
@@ -1010,9 +938,6 @@
 			"name": "Speak Primordial",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:primordial"
@@ -1033,9 +958,6 @@
 			"name": "Speak Sylvan",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:sylvan"
@@ -1056,9 +978,6 @@
 			"name": "Speak Undercommon",
 			"description": "",
 			"icon": "fal fa-comment",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:undercommon"
@@ -1079,9 +998,6 @@
 			"name": "High Elf",
 			"description": "Your high elvan ancestry helps you to handle magic and language.\n\nYou may add a feat of one language.",
 			"icon": "fas fa-wand-magic",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -1110,9 +1026,6 @@
 			"name": "Superior Darkvision",
 			"description": "You can see in near pitch black darkness out to 60 studs.",
 			"icon": "fal fa-eye",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"selectable": true
 		},
 		{
@@ -1128,9 +1041,6 @@
 			"name": "Wood Elf",
 			"description": "Your keen senses and intuition serve you at every turn.",
 			"icon": "far fa-trees",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -1152,9 +1062,6 @@
 			"name": "Dark Elf",
 			"description": "Descended from an ancient and evil line of elves, darkness and magic serve you.",
 			"icon": "fas fa-moon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -1179,9 +1086,6 @@
 			"name": "Brass Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -1205,9 +1109,6 @@
 			"name": "Bronze Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -1231,9 +1132,6 @@
 			"name": "Copper Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -1258,9 +1156,6 @@
 			"name": "Gold Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -1284,9 +1179,6 @@
 			"name": "Silver Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -1310,9 +1202,6 @@
 			"name": "White Scales  ",
 			"description": "  ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": " ",
 			"strength": null,
@@ -1337,9 +1226,6 @@
 			"name": "Green Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -1363,9 +1249,6 @@
 			"name": "Red Scales ",
 			"description": " ",
 			"icon": "fas fa-dragon",
-			"effects": [
-				"modifier:feat:unarmoreddefense"
-			],
 			"race": null,
 			"armor": "",
 			"strength": null,
@@ -6401,6 +6284,12 @@
 			"known": null,
 			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"selectable": false
 		},
 		{
@@ -6745,6 +6634,12 @@
 				"frightened": true
 			},
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"selectable": false,
 			"skill_check": {
 				"skill:attack": "7"
@@ -6769,7 +6664,7 @@
 			"description": null,
 			"icon": "ra ra-crystals rs-green",
 			"effects": [],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: null, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -6792,6 +6687,12 @@
 				"petrified": true
 			},
 			"review": true,
+			"action_max": {
+				"main": 0,
+				"movement": 1,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"selectable": false,
 			"skill_check": {
 				"skill:attack": "7"
@@ -6846,6 +6747,12 @@
 				"feat:divine:resistance"
 			],
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"selectable": true,
 			"skill_check": {
 				"skill:attack": 8
@@ -7087,6 +6994,12 @@
 			],
 			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"selectable": false,
 			"spell_slots": {
 				"1": 2,

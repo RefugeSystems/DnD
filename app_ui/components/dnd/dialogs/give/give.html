@@ -1,3 +1,21 @@
 <div class="rs-component dnd-component dialog-give">
-
+	<div class="filter-container">
+		<span class="filter-indicator fas fa-spinner fa-pulse"></span>
+		<input type="text" v-delayed:500.lower="filter" />
+	</div>
+	<div class="entities flex v">
+		<div class="entity flex h" v-for="entity in entities" :class="getEntityClassing(entity)" v-if="isVisible(entity)">
+			<button class="general rounded quick action entity-select" v-on:click="giveTo(entity)">
+				<span :class="entity.icon || 'fas fa-user'"></span>
+			</button>
+			<div class="entity-details flex v">
+				<h1 class="entity-name">
+					<span :class="getRelationIcon(entity)"></span>
+					<span>{{entity.name}}</span>
+				</h1>
+				<dnd-health-bar :entity="entity"></dnd-health-bar>
+				<div class="entity-description" v-html="rsshowdown(entity.description, entity)"></div>
+			</div>
+		</div>
+	</div>
 </div>

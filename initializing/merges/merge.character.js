@@ -1,7 +1,7 @@
 var fs = require("fs"),
 	RSObject = require("../../app/storage/rsobject"),
 	modifiers = require("./modifiers.json"),
-	merging = require("./source/characters.json").export,
+	merging = require("./source/characters.json"),
 	exporting = [],
 	modMap = {},
 	addObjects,
@@ -175,11 +175,23 @@ for(i=0; i<merging.length; i++) {
 				if(mod) {
 					merged = addValues(merged, mod);
 				} else {
-					console.log("Missing Modifier: " + merged.modifiers[j]);
+					console.log(" > Missing Modifier: " + merged.modifiers[j]);
 				}
 			}
 		}
 
+		merged.stat_strength = merged.strength;
+		merged.stat_dexterity = merged.dexterity;
+		merged.stat_constitution = merged.constitution;
+		merged.stat_intelligence = merged.intelligence;
+		merged.stat_wisdom = merged.wisdom;
+		merged.stat_charisma = merged.charisma;
+		delete(merged.strength);
+		delete(merged.dexterity);
+		delete(merged.constitution);
+		delete(merged.intelligence);
+		delete(merged.wisdom);
+		delete(merged.charisma);
 		if(merged.type) {
 			merged.type = "type:" + merged.type;
 		}
@@ -312,10 +324,10 @@ for(i=0; i<merging.length; i++) {
 			merged.hp_max = parseInt(merged.maxHealth);
 		}
 		delete(merged.maxHealth);
-		if(merged.isShop) {
-			merged.is_shop = merged.isShop;
+		if(merged.isStore) {
+			merged.is_shop = merged.isStore;
 		}
-		delete(merged.isShop);
+		delete(merged.isStore);
 		if(merged.hitDice) {
 			merged.hit_dice = merged.hitDice;
 		}
@@ -572,7 +584,9 @@ for(i=0; i<merging.length; i++) {
 		}
 
 		merged.id = "entity:" + id.replace(cleanid, "").toLowerCase();
-		exporting.push(merged);
+		if(merged.name.indexOf("---") === -1) {
+			exporting.push(merged);
+		}
 		// if(merged.name && merged.name.indexOf("deprecated") === -1) {
 		// 	exporting.push(merged);
 		// }

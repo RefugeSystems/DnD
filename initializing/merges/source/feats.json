@@ -1,5 +1,4 @@
-{
-	"export": [
+[
 		{
 			"created": 1544404007700,
 			"creator": "585c68bfd5e06ab07fba8401",
@@ -11665,4 +11664,3 @@
 			"_search": "fury of cthulhufeat:furyofcthulhuyou have been blessed as an agent of chaos, sowing distrust and destruction.\n\nin combat, all of your foes must pass a <span class=\"rs-orange\">constitution</span> dc10 save. for each failed save, you condense an <span class=\"rs-darkorange\">orb of power</span> somewhere you can see within ${8,orange}$ studs of you. once spawned, roll 1d4 to determine the color to which the orb attunes:\n1. red\n2. orange\n3. green\n4. blue\n\nthese orbs behave according to the arcane spectrum to which they've attuned.\n\nadditionally, you gain additional <span class=\"rs-orange\">actions</span> and <span class=\"rs-orange\">reactions</span> based on your <span class=\"rs-orange\">constitution</span> modifier."
 		}
 	]
-}

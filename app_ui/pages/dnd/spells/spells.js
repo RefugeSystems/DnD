@@ -78,9 +78,9 @@ rsSystem.component("DNDSpells", {
 		data.formatter.icon = (value, record) => {
 			var classes = "";
 			if(record) {
-				if(this.prepared.indexOf(record.id) !== -1) {
+				if(this.spells.indexOf(record) !== -1) {
 					classes += "prepared-spell ";
-				} else if(this.spells.indexOf(record.id) !== -1) {
+				} else if(this.known.indexOf(record) === -1) {
 					classes += "inherited-spell ";
 				}
 			}

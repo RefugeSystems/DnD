@@ -1,3 +1,27 @@
 .dnd-component.dialog-give {
+	display: flex;
+	flex-direction: column;
 
+	.entity-select {
+		padding: 5px;
+		margin: 5px;
+	}
+
+	.entity-details {
+		.entity-name {
+			font-size: 22px;
+		}
+
+		.entity-description {
+			font-size: 16px;
+
+			ul, ol, p {
+				margin: 0px 0px 1em 0px;
+
+				&:last-child {
+					margin: 0px;
+				}
+			}
+		}
+	}
 }

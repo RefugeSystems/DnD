@@ -45,6 +45,9 @@
 					<span v-if="field.attribute.deprecated">
 						<span class="fas fa-sensor-alert rs-light-red" title="This field is deprecated"></span>
 					</span>
+					<span v-if="hasInheritance(field)">
+						<span class="fas fa-chart-network rs-light-yellow" title="This field has inherited data from children"></span>
+					</span>
 				</span>
 			</rs-field>
 		</div>

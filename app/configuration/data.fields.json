@@ -284,6 +284,12 @@
 			"displayed": false
 		}
 	}, {
+		"id": "info",
+		"name": "",
+		"description": "Currently used as a dynamic table field and not actually for object usage",
+		"type": "string",
+		"attribute": {}
+	}, {
 		"id": "killed",
 		"name": "Killed",
 		"description": "List of creatures killed in a skirmish",

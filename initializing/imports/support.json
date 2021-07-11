@@ -2,6 +2,7 @@
 	"import": [{
 		"id": "race:root:character",
 		"action_max": {
+			"movement": 1,
 			"main": 1,
 			"bonus": 1,
 			"reaction": 1

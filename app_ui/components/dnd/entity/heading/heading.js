@@ -31,6 +31,22 @@ rsSystem.component("dndEntityHeading", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"shop": function() {
+			if(this.player.attribute) {
+				var entity = this.universe.index.entity[this.player.attribute.playing_as];
+				if(entity) {
+					rsSystem.EventBus.$emit("dialog-open", {
+						"component": "dndDialogShop",
+						"entity": entity.id,
+						"shop": this.entity.id
+					});
+				} else {
+					console.warn("Player Character not found: " + this.player.attribute.playing_as);
+				}
+			} else {
+				console.warn("Player has no attribute property from which to read character: ", this.player);
+			}
+		}
 	},
 	"beforeDestroy": function() {
 		/*

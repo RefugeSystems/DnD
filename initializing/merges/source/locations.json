@@ -1,5 +1,4 @@
-{
-	"export": [
+[
 		{
 			"id": "location:continent:vatnunda",
 			"name": "Vatnunda",
@@ -10879,4 +10878,3 @@
 			"_search": "soutry's souffléslocation:soutryssoufflesshop"
 		}
 	]
-}

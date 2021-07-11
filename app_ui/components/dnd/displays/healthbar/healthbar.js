@@ -1,9 +1,10 @@
 /**
  *
  *
- * @class dndDisplayGeneral
+ * @class dndHealthBar
  * @constructor
  * @module Components
+ * @param {Object} entity
  */
 rsSystem.component("dndHealthBar", {
 	"props": {

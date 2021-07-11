@@ -249,10 +249,14 @@
 				}
 
 				if(this.$route.params.classification && this.$route.params.classification === this.storage.classification) {
-					if(this.$route.params.id && (source = this.universe.index[this.$route.params.classification][this.$route.params.id])) {
+					if(this.$route.params.id && (source = this.universe.index[this.$route.params.classification][this.$route.params.id]) && source._data) {
 						Vue.set(this.details, "id", source.id || null);
 						for(i=0; i<this.fields.length; i++) {
-							Vue.set(this.details, this.fields[i].id, source[this.fields[i].id] || null);
+							if(source._data[this.fields[i].id] !== null && typeof(source._data[this.fields[i].id]) === "object") {
+								Vue.set(this.details, this.fields[i].id, JSON.parse(JSON.stringify(source._data[this.fields[i].id])));
+							} else {
+								Vue.set(this.details, this.fields[i].id, source._data[this.fields[i].id] || null);
+							}
 						}
 					} else {
 						Vue.set(this.details, "id", null);
@@ -291,7 +295,7 @@
 				}
 			},
 			"setTimeToNow": function(field) {
-				Vue.set(this.object, field.id, this.universe.time);
+				Vue.set(this.details, field.id, this.universe.time);
 			},
 			"fileAttach": function(event) {
 				console.log("Drop: ", event);
@@ -374,6 +378,9 @@
 			"copyParent": function(field) {
 				// TODO
 			},
+			"hasInheritance": function(field) {
+				return field.inheritance && Object.keys(field.inheritance).length;
+			},
 			"toggleEditMode": function() {
 				if(this.storage.advanced_editor) {
 					// Parse Back to Details
@@ -437,6 +444,8 @@
 								saving[this.fields[i].id] = null;
 							} else if(Object.keys(this.details[this.fields[i].id]).length) {
 								saving[this.fields[i].id] = JSON.parse(JSON.stringify(this.details[this.fields[i].id]));
+							} else {
+								saving[this.fields[i].id] = null;
 							}
 							break;
 						default:

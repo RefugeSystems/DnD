@@ -1,5 +1,4 @@
-{
-	"export": [
+[
 		{
 			"id": "race:boat",
 			"name": "Boat",
@@ -1681,4 +1680,3 @@
 			"_search": "cthulhuian infiltratorrace:cthulhuianinfiltratoradaptive skin allow them to turn invisible seemingly at will and grant them a hardened immunity to many magics and weapons.\n\nhighly threatening by themselves, they are rarely known to have existed but when successfully they leave nothing but a mystery."
 		}
 	]
-}

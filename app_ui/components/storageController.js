@@ -60,6 +60,18 @@ rsSystem.component("StorageController", {
 				localStorage.setItem(this.storageKey, JSON.stringify(this.storage));
 			}
 		},
+		"copyText": function(text) {
+			navigator.clipboard.writeText(text);
+		},
+		"editNoun": function(record) {
+			if(this.player.gm) {
+				if(this.profile.edit_new_window) {
+					window.open("/#/control/" + record._class + "/" + record.id, "edit");
+				} else {
+					this.$router.push("/control/" + record._class + "/" + record.id);
+				}
+			}
+		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record

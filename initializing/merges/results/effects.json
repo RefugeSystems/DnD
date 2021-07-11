@@ -18,6 +18,12 @@
 			"wisdom": null,
 			"charisma": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_advantage": {
 				"skill:strength": -1,
 				"skill:slightofhand": 1
@@ -98,6 +104,12 @@
 			"charisma": null,
 			"spells": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"spell_slots": null,
 			"skill_advantage": {
 				"skill:strength": -1,
@@ -800,7 +812,13 @@
 			"intelligence": null,
 			"wisdom": null,
 			"charisma": null,
-			"review": true
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			}
 		},
 		{
 			"id": "effect:quickened",
@@ -816,7 +834,13 @@
 			"intelligence": null,
 			"wisdom": null,
 			"charisma": null,
-			"review": true
+			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			}
 		},
 		{
 			"id": "effect:catsvision",
@@ -1089,6 +1113,12 @@
 			"wisdom": null,
 			"charisma": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_advantage": {
 				"skill:strength": -1,
 				"skill:slightofhand": 1
@@ -1127,6 +1157,12 @@
 			"wisdom": null,
 			"charisma": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_advantage": {
 				"skill:strength": -1,
 				"skill:slightofhand": 1
@@ -1164,6 +1200,12 @@
 			"wisdom": null,
 			"charisma": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_advantage": {
 				"skill:strength": -1,
 				"skill:slightofhand": 1
@@ -1193,6 +1235,12 @@
 			"wisdom": null,
 			"charisma": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_advantage": {
 				"skill:strength": -1,
 				"skill:slightofhand": 1
@@ -1392,6 +1440,12 @@
 			"wisdom": null,
 			"charisma": null,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"movement_ground": 32,
 			"obscured": true,
 			"skill_advantage": {

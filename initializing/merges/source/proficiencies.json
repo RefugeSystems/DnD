@@ -1,5 +1,4 @@
-{
-	"export": [
+[
 		{
 			"id": "proficiency:language:common",
 			"name": "Speak: Common",
@@ -436,4 +435,3 @@
 			"_search": "speak: auranproficiency:language:auranauran was a breathy, relaxed language that has been described as a slow exhaling of air.\n\nit was considered a dialect of primordial, so that creatures who spoke one of the other elemental dialects such as aquan, ignan or terran could understand auran and vice-versa.\n\nas the language of the air, it also tends to be spoken by avian or air faring creatures in the material plane such as the <span class=\"rs-darkorange\">kenku</span>, sometimes called the bird people, or more intelligent <span class=\"rs-darkorange\">air elementals</span>."
 		}
 	]
-}

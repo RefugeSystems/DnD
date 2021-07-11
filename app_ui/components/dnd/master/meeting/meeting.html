@@ -89,7 +89,7 @@
 		</select>
 	</div>
 	<div class="flex v" v-if="entities.length">
-		<div class="entity" v-for="entity in entities">
+		<div class="entity" v-for="entity in entities" :data-id="entity.id">
 			<span class="etity-icon" :class="entity.icon"></span>
 			<span class="entity-name">{{entity.name}} - </span>
 			<span class="entity-player">{{universe.index.player[entity.played_by]?universe.index.player[entity.played_by].name:entity.played_by}}</span>

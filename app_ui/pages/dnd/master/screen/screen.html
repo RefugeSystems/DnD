@@ -1,4 +1,4 @@
-<div class="rs-page dnd-page master-screen">
+<div class="rs-page dnd-page master-screen" v-on:click.right.stop.prevent="checkToEditRecord($event)">
 	<div class="screen-panel">
 		<div class="screen-column small">
 			<dnd-master-meeting :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterMeeting"></dnd-master-meeting>

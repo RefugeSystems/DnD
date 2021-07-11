@@ -1,0 +1,14 @@
+<div class="rs-component dnd-component dialog-shop">
+	<rs-table :universe="universe" :source="inventory" :storage-container="table" :headings="tableHeadings" :formatter="formatter" :actions="actions" v-on:selected="update()" v-on:deselected="update()"/>
+	<div class="cart flex v">
+		<div class="cost flex h">
+			<span class="fas fa-coins"></span>
+			<span class="price" :class="canAfford?'rs-light-green':'rs-light-red'">{{displayedCost}}</span>
+		</div>
+		<!-- <button class="rounded general action" :disabled="!canAfford" v-on:click="checkout()"> -->
+		<button class="rounded general action checkout" v-on:click="checkout()">
+			<span class="fas fa-shopping-cart"></span>
+			<span>Checkout</span>
+		</button>
+	</div>
+</div>

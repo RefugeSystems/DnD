@@ -1,7 +1,7 @@
 var fs = require("fs"),
 	RSObject = require("../../app/storage/rsobject"),
 	modifiers = require("./modifiers.json"),
-	merging = require("./source/proficiencies.json").export,
+	merging = require("./source/proficiencies.json"),
 	exporting = [],
 	modMap = {},
 	addObjects,

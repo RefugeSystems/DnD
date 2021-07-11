@@ -1,5 +1,4 @@
-{
-	"export": [
+[
 		{
 			"id": "class:sorceress",
 			"name": "Sorceress",
@@ -540,4 +539,3 @@
 			"_search": "sorcererclass:sorcerermagic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nthe appearance of sorcerous powers is wildly unpredictable. some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. most of the time, the talents of sorcery appear as apparent flukes. some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. the touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. so too might the gift of a deity of magic, exposure to the elemental forces of the inner planes or the maddening chaos of limbo, or a glimpse into the inner workings of reality.\n\nsorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. by learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nas a note, at level ${3,orange}$, you will select ${2,orange}$ feats for <span class=\"rs-darkorange\">meta-magic</span>. then you select another <span class=\"rs-darkorange\">meta-magic</span> every ${7,orange}$ levels after level ${3,orange}$; ${10,orange}$, ${17,orange}$, and so on.\n\nadditionally, choose two proficiencies from the following:\n+ arcana\n+ deception\n+ insight\n+ intimidation\n+ persuasion\n+ religion"
 		}
 	]
-}

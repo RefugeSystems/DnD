@@ -32,10 +32,38 @@ class RSUniverse extends EventEmitter {
 		rsSystem.universe = this;
 
 		this.MAX_HISTORY_LENGTH = 400;
+		this.MOVING_AVERAGE = 50;
 		this.KEY = {};
 		this.KEY.CLASSPREFIX = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:objects";
 		this.KEY.DETAILS = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:details";
 		this.KEY.METRICS = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:metrics";
+		
+		this.history = [];
+		
+		this.buffer = [];
+		this.buffer_delta = [];
+		
+		this.connection = {};
+		
+		this.metrics = {};
+		this.metrics.dialation = 0;
+		this.metrics.latency = 0;
+		this.metrics.sync = 0;
+		this.metrics.last = 0;
+		this.metrics.delta_average = 0;
+		this.metrics.deltas = 0;
+		this.metrics.dps = 0;
+		this.metrics.dps_count = 0;
+		this.metrics.dps_last = 0;
+		this.metrics.dps_cap = 0;
+		this.state = {};
+		this.state.loaded = false;
+		this.state.initialized = false;
+		this.state.synchronizing = false;
+		this.state.initializing = true;
+		this.state.version_warning = false;
+		
+		this.version = "Unknown";
 		
 		try {
 			// Shared Workers aren't fully supported yet, especially on Mobile browsers
@@ -75,7 +103,7 @@ class RSUniverse extends EventEmitter {
 					"details": data,
 					"level": level
 				});
-			} else {
+			} else if(this.backlog.length < 20) {
 				this.backlog.push({
 					"message": msg,
 					"details": data,
@@ -83,28 +111,6 @@ class RSUniverse extends EventEmitter {
 				});
 			}
 		};
-		
-		this.history = [];
-		
-		this.buffer = [];
-		this.buffer_delta = [];
-		
-		this.connection = {};
-		
-		this.metrics = {};
-		this.metrics.dialation = 0;
-		this.metrics.latency = 0;
-		this.metrics.sync = 0;
-		this.metrics.last = 0;
-		
-		this.state = {};
-		this.state.loaded = false;
-		this.state.initialized = false;
-		this.state.synchronizing = false;
-		this.state.initializing = true;
-		this.state.version_warning = false;
-		
-		this.version = "Unknown";
 		
 		this._noBuffer = {};
 		this._noBuffer.ping = true;
@@ -388,7 +394,7 @@ class RSUniverse extends EventEmitter {
 		// TODO: Load Previous state, possibly caching universe state data to save sync time
 		// 		Note: this.metrics is sent for the sync, so restoring its "sync" time will
 		// 		offset data from the universe.
-		if(!this.profile || !this.profile.disable_cache) {
+		if(this.profile && this.profile.enable_cache) {
 			try {
 				var loadListing = localStorage.getItem(this.KEY.CLASSPREFIX),
 					loadMetrics = localStorage.getItem(this.KEY.METRICS),
@@ -414,6 +420,7 @@ class RSUniverse extends EventEmitter {
 						// console.log("Cached Action Max: ", _p(loadIndex.fields.action_max));
 						// console.log("Cached Size: ", _p(loadIndex.fields.size));
 						this.metrics = JSON.parse(loadMetrics);
+						this.metrics.delta_average = this.metrics.delta_average || 0;
 						this.listing = loadListing;
 						this.index = loadIndex;
 						this.named = loadNamed;
@@ -437,14 +444,14 @@ class RSUniverse extends EventEmitter {
 	 * 		Will likely open control methods to manipulate the Universe object in relevent ways then mirror
 	 * 		or move the profile under the universe for persistence.
 	 * @param {Object} profile 
-	 * @param {Boolean} [profile.disable_cache] When true, the current cache is deleted
+	 * @param {Boolean} [profile.enable_cache] When true, the current cache is deleted
 	 */
 	setProfile(profile) {
 		console.log("Set Profile: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
 		rsSystem.diagnostics.at.profile = Date.now();
 		if(profile) {
 			this.profile = profile;
-			if(profile.disable_cache) {
+			if(!profile.enable_cache) {
 				this.deleteCache();
 			}
 		}
@@ -456,7 +463,7 @@ class RSUniverse extends EventEmitter {
 	 */
 	cacheData() {
 		console.log("Cache Data");
-		if(!this.profile || !this.profile.disable_cache) {
+		if(this.profile && this.profile.enable_cache) {
 			localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 			localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
 		} else {
@@ -510,6 +517,7 @@ class RSUniverse extends EventEmitter {
 	receiveDelta(received, classification, id, delta) {
 		if(this.state.loaded) {
 			var keys = Object.keys(delta),
+				timing = Date.now(),
 				okeys,
 				k,
 				x;
@@ -564,6 +572,22 @@ class RSUniverse extends EventEmitter {
 			} else {
 				rsSystem.log.error("Unknown Classification[@" + id + "]: " + classification, delta);
 			}
+			this.metrics.deltas++;
+			// Calculate moving average for deltas per second
+			// if(this.metrics.dps_last + 1000) {
+
+			// } else {
+			// 	this.metrics.dps_last = timing % 1000;
+			// 	this.metrics.dps_cap = this.metrics.dps_last + 1000;
+			// }
+			// timing = Date.now() - timing;
+			if(this.metrics.deltas < this.MOVING_AVERAGE) {
+				this.metrics.delta_average -= this.metrics.delta_average/this.metrics.deltas;
+				this.metrics.delta_average += timing/this.metrics.deltas;
+			} else {
+				this.metrics.delta_average -= this.metrics.delta_average/this.MOVING_AVERAGE;
+				this.metrics.delta_average += timing/this.MOVING_AVERAGE;
+			}
 		} else {
 			this.buffer_delta.push({
 				received,
@@ -591,54 +615,57 @@ class RSUniverse extends EventEmitter {
 	 * 		such as mapping key field IDs like `"entity": entity.id`.
 	 */
 	addLogEvent(event, level, details) {
-		if(typeof(event) === "string") {
-			event = {
-				"message": event
-			};
-		}
-		if(level) {
-			event.level = level;
-		} else if(!event.level) {
-			if(typeof(event.status) === "number") {
-				if(event.status > 500) {
-					event.level = 60;
-				} else if(event.status > 400) {
-					event.level = 50;
-				} else if(event.status > 300) {
-					event.level = 40;
-				} else if(event.status > 200) {
-					event.level = 30;
-				}
-			} else if(typeof(event.code) === "number") {
-				if(event.code > 500) {
-					event.level = 60;
-				} else if(event.code > 400) {
-					event.level = 50;
-				} else if(event.code > 300) {
-					event.level = 40;
-				} else if(event.code > 200) {
-					event.level = 30;
+		if(!this.profile || this.profile.enable_diagnostics) {
+			// Fallback on logging if no profile is available as this may need logs and should be brief
+			if(typeof(event) === "string") {
+				event = {
+					"message": event
+				};
+			}
+			if(level) {
+				event.level = level;
+			} else if(!event.level) {
+				if(typeof(event.status) === "number") {
+					if(event.status > 500) {
+						event.level = 60;
+					} else if(event.status > 400) {
+						event.level = 50;
+					} else if(event.status > 300) {
+						event.level = 40;
+					} else if(event.status > 200) {
+						event.level = 30;
+					}
+				} else if(typeof(event.code) === "number") {
+					if(event.code > 500) {
+						event.level = 60;
+					} else if(event.code > 400) {
+						event.level = 50;
+					} else if(event.code > 300) {
+						event.level = 40;
+					} else if(event.code > 200) {
+						event.level = 30;
+					}
 				}
 			}
-		}
-		if(details) {
-			event.details = details;
-		}
-		if(!event.time) {
-			event.time = Date.now();
-		}
-		this.history.unshift(event);
-		if(this.history.length > this.MAX_HISTORY_LENGTH) {
-			this.history.pop();
-		}
-		if(event.level === 40) {
-			// rsSystem.log.warn(event);
-		}
-		if(event.level === 50) {
-			// rsSystem.log.error(event);
-		}
-		if(event.level === 60) {
-			// rsSystem.log.fatal(event);
+			if(details) {
+				event.details = details;
+			}
+			if(!event.time) {
+				event.time = Date.now();
+			}
+			this.history.unshift(event);
+			if(this.history.length > this.MAX_HISTORY_LENGTH) {
+				this.history.pop();
+			}
+			if(event.level === 40) {
+				// rsSystem.log.warn(event);
+			}
+			if(event.level === 50) {
+				// rsSystem.log.error(event);
+			}
+			if(event.level === 60) {
+				// rsSystem.log.fatal(event);
+			}
 		}
 	}
 
@@ -746,7 +773,7 @@ class RSUniverse extends EventEmitter {
 				} else {
 					setTimeout(() => {
 						this.reconnect();
-					}, rsSystem.reconnectTimeout);
+					}, rsSystem.settings.reconnectTimeout);
 				}
 			};
 

@@ -35,16 +35,30 @@ module.exports.initialize = function(universe) {
 					} else {
 						target.addValues({
 							"gold": amount,
-							"history": {
+							"history": [{
 								"event": "recv:gold",
 								"time": universe.time,
 								"amount": amount,
 								"from": null
-							}
+							}]
+						});
+						universe.emit("send", {
+							"type": "notice",
+							"recipients": target.owned,
+							"message": "Received " + amount + " gold",
+							"timeout": 5000
 						});
 					}
-					universe.chronicler.addOccurrence("entity:give:gold", {
-						"source": entity.id,
+					/**
+					 * 
+					 * @event entity:give:gold
+					 * @for Chronicle
+					 * @param {String} [source] 
+					 * @param {String} target
+					 * @param {amount} amount
+					 */
+					universe.chronicle.addOccurrence("entity:give:gold", {
+						"target": target.id,
 						"amount": amount
 					});
 				} else {
@@ -55,24 +69,36 @@ module.exports.initialize = function(universe) {
 					if(amount <= entity.gold) {
 						entity.addValues({
 							"gold": -1 * amount,
-							"history": {
+							"history": [{
 								"event": "give:gold",
 								"time": universe.time,
 								"to": target.id
-							}
+							}]
 						});
 						target.addValues({
 							"gold": amount,
-							"history": {
+							"history": [{
 								"event": "recv:gold",
 								"time": universe.time,
 								"from": entity.id
-							}
+							}]
 						});
-						universe.chronicler.addOccurrence("entity:give:gold", {
+						universe.chronicle.addOccurrence("entity:give:gold", {
 							"source": entity.id,
 							"target": target.id,
 							"amount": amount
+						});
+						universe.emit("send", {
+							"type": "notice",
+							"recipient": event.player.id,
+							"message": "Gave " + target.name + " " + amount.toFixed(2) + " gold",
+							"timeout": 5000
+						});
+						universe.emit("send", {
+							"type": "notice",
+							"recipients": target.owned,
+							"message": target.name + " received " + amount.toFixed(2) + " gold from " + entity.name,
+							"timeout": 5000
 						});
 					} else {
 						universe.emit("send", {

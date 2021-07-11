@@ -1,5 +1,4 @@
-{
-	"export": [
+[
 		{
 			"created": 1548905982210,
 			"creator": "585c68bfd5e06ab07fba8401",
@@ -2026,4 +2025,3 @@
 			"_search": "circle of the moonarchetype:druid:circle:moon"
 		}
 	]
-}

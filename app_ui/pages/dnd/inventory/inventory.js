@@ -59,7 +59,7 @@ rsSystem.component("DNDInventory", {
 				j;
 
 			Vue.set(this, "held_by", {});
-			if(this.entity.owned[this.player.id]) {
+			if(this.entity.owned[this.player.id] || this.player.gm) {
 				if(this.entity) {
 					for(i=0; i<this.entity.inventory.length; i++) {
 						item = this.universe.getObject(this.entity.inventory[i]);
@@ -263,6 +263,25 @@ rsSystem.component("DNDInventory", {
 						reference.universe.send("inventory:drop", {
 							"items": Object.keys(reference.storage.selected),
 							"entity": reference.entity.id
+						});
+					}
+				});
+				this.controls.push({
+					"title": "Give Items",
+					"icon": "fas fa-people-carry",
+					"process": function() {
+						rsSystem.EventBus.$emit("dialog-open", {
+							"component": "dndDialogGive",
+							"entity": reference.entity.id,
+							"finish": function(target) {
+								if(target && target.id) {
+									reference.universe.send("inventory:give", {
+										"items": Object.keys(reference.storage.selected),
+										"entity": reference.entity.id,
+										"target": target.id
+									});
+								}
+							}
 						});
 					}
 				});

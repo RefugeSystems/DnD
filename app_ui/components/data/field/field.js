@@ -436,7 +436,9 @@
 			},
 			"openReference": function(reference) {
 				if(reference) {
-					rsSystem.EventBus.$emit("display-info", reference);
+					rsSystem.EventBus.$emit("display-info", {
+						"info": reference
+					});
 				}
 			},
 			/**

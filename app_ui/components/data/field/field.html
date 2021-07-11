@@ -97,10 +97,10 @@
 	</div>
 
 	<div v-if="field.type === 'array'" class="multireference">
-		<div class="referenced" v-for="(reference, $index) in root[field.id]">
+		<div class="referenced" v-for="(reference, $index) in root[field.id]" :data-id="reference">
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 			<span class="reference-display">{{getReferenceName(reference)}}</span>
-			<button class="info fas fa-info-circle" v-if="reference && reference.id && !field.noinfo" v-on:click="openReference(reference)"></button>
+			<button class="info fas fa-info-circle" v-if="field.inheritable && !field.attribute.no_link" v-on:click="openReference(reference)"></button>
 		</div>
 		<div class="referenced">
 			<select v-model="reference_value" v-if="availableReferences.length" v-on:change="addReference(reference_value)">

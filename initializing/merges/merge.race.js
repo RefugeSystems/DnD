@@ -1,7 +1,7 @@
 var fs = require("fs"),
 	RSObject = require("../../app/storage/rsobject"),
 	modifiers = require("./modifiers.json"),
-	merging = require("./source/races.json").export,
+	merging = require("./source/races.json"),
 	exporting = [],
 	modMap = {},
 	addObjects,
@@ -200,6 +200,20 @@ for(i=0; i<merging.length; i++) {
 		if(merged.radius) {
 			merged.effect_radius = merged.radius;
 		}
+		if(merged.actions || merged.bonusActions || merged.reactions || merged.moves) {
+			merged.review = true;
+			merged.note = merged.note || "";
+			merged.note += "\n\nHad Action Costs - Main: " + merged.actions + ", Bonus: " + merged.bonusActions + ", Reaction: " + merged.reactions;
+			merged.action_max = {};
+			merged.action_max.main = parseInt(merged.actions) || 0;
+			merged.action_max.movement = parseInt(merged.moves) || 0;
+			merged.action_max.bonus = parseInt(merged.bonusActions) || 0;
+			merged.action_max.reaction = parseInt(merged.reactions) || 0;
+		}
+		delete(merged.actions);
+		delete(merged.bonusActions);
+		delete(merged.reactions);
+		delete(merged.moves);
 		delete(merged.radius);
 		if(merged.shape !== undefined) {
 			merged.effect_shape = merged.shape;
@@ -413,6 +427,7 @@ for(i=0; i<merging.length; i++) {
 		delete(merged.creator);
 		delete(merged.updater);
 		delete(merged.expansion);
+		delete(merged.actions);
 		delete(merged.manualCharges);
 		delete(merged._search);
 		delete(merged.alignment);

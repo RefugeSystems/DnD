@@ -180,4 +180,60 @@ module.exports.initialize = function(universe) {
 			});
 		}
 	});
+
+	/**
+	 * 
+	 * Requires GameMaster
+	 * @event player:spells:revoke
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} [event.message.data.source] Optional information for the source of the copy
+	 * @param {String} event.message.data.target To receive the object
+	 * @param {Array | String} event.message.data.spells IDs to be revoked. MUST be strings.
+	 * @param {String} event.message.data.field To which to add the copy, should essentially always be an Array type field
+	 */
+	universe.on("player:spells:revoke", function(event) {
+		var entities = event.message.data.entities,
+			spells = event.message.data.spells;
+
+		if(event.player.gm && entities && entities.length) {
+			entities.forEach(function(entity) {
+				if(typeof(entity) === "string") {
+					entity = universe.manager.entity.object[entity];
+				}
+				if(entity && entity.spells) {
+					var revoking = [],
+						removing = {},
+						spell,
+						i;
+
+					for(i=0; i<spells.length; i++) {
+						spell = spells[i];
+						if(typeof(spell) === "string") {
+							removing[spell] = true;
+						}
+					}
+					for(i=0; i<entity.spells.length; i++) {
+						spell = universe.manager.spell.object[entity.spells[i]];
+						if(spell && (removing[spell.id] || removing[spell.parent])) {
+							revoking.push(spell.id);
+						}
+					}
+					if(revoking.length) {
+						entity.subValues({
+							"spells": revoking
+						});
+					}
+				}
+			});
+		}
+	});
 };

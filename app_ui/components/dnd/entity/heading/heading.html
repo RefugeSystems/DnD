@@ -4,7 +4,11 @@
 			<button class="property" v-if="entity.is_locked === true" v-on:click="info('knowledge:locked')">
 				<span class="fas fa-lock-alt"></span>
 			</button>
-			<button class="property" v-if="entity.is_locked === false" v-on:click="info('knowledge:locked')">
+			<button class="property" v-else-if="entity.is_shop && !entity.is_locked" v-on:click="shop()">
+				<span v-if="entity.discount.all !== 1" class="fas fa-shopping-cart"></span>
+				<span v-if="entity.discount.all === 1" :class="entity.icon || 'fas fa-treasure-chest'"></span>
+			</button>
+			<button class="property" v-else-if="entity.is_locked === false" v-on:click="info('knowledge:locked')">
 				<span class="fas fa-unlock-alt"></span>
 			</button>
 			<button class="property" v-on:click="info(entity)">

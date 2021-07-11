@@ -29,13 +29,8 @@
 			"feat:dragonborn:white"
 		],
 		"size": 5,
-		"skill_advantage": {},
-		"skill_check": {},
-		"skill_proficiency": {},
-		"spell_slot_max": {},
 		"stat_strength": 2,
 		"stat_charisma": 1,
-		"spells": {},
 		"threat": 1,
 		"attribute": {
 			"recommended": {

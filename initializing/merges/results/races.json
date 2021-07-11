@@ -79,7 +79,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {
@@ -124,7 +123,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_check": {
@@ -165,7 +163,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"immunities": {
 				"blinded": true
@@ -204,7 +201,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"review": true,
@@ -239,7 +235,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"review": true,
@@ -272,7 +267,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:pounce"
@@ -328,7 +322,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:web",
@@ -370,7 +363,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:web",
@@ -410,7 +402,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"immunities": {
 				"acid": true
@@ -461,7 +452,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -503,7 +493,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:counterspell",
@@ -571,7 +560,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"immunities": {
 				"poisoned": true,
@@ -623,7 +611,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -645,7 +632,7 @@
 				"feat:intimidatingpresence",
 				"feat:legendary:resistance"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -655,10 +642,16 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_check": {
 				"skill:mainhand": "10",
 				"skill:offhand": "10",
@@ -668,7 +661,6 @@
 				"skill:attack": 5,
 				"skill:initiative": 4
 			},
-			"review": true,
 			"attribute": {
 				"young": 1,
 				"old": 10000,
@@ -718,7 +710,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"attribute": {
@@ -747,7 +738,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_check": {
@@ -782,7 +772,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -817,7 +806,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -854,7 +842,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:inkcloud"
@@ -893,7 +880,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"attribute": {
@@ -920,7 +906,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:mimicry"
@@ -956,7 +941,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_check": {
@@ -988,7 +972,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_check": {
@@ -1023,7 +1006,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:charge",
@@ -1074,7 +1056,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"immunities": {
 				"poisoned": true,
@@ -1117,7 +1098,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -1165,7 +1145,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"review": true,
 			"skill_check": {
@@ -1197,7 +1176,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:pounce"
@@ -1272,7 +1250,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -1305,7 +1282,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:firebolt",
@@ -1343,7 +1319,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:icebolt",
@@ -1358,83 +1333,6 @@
 				"old": 500,
 				"light": 20,
 				"heavy": 50
-			}
-		},
-		{
-			"id": "race:tiefling",
-			"name": "Tiefling",
-			"description": "Tieflings are derived from human bloodlines, and in the broadest possible sense, they still look human. However, their infernal heritage has left a clear imprint on their appearance. Tieflings have large horns that take any of a variety of shapes: some have curling horns like a ram, others have straight and tall horns like a gazelle’s, and some spiral upward like an antelopes’ horns. They have thick tails, four to five feet long, which lash or coil around their legs when they get upset or nervous. Their canine teeth are sharply pointed, and their eyes are solid colors—black, red, white, silver, or gold—with no visible sclera or pupil. Their skin tones cover the full range of human coloration, but also include various shades of red. Their hair, cascading down from behind their horns, is usually dark, from black or brown to dark red, blue, or purple.",
-			"playable": true,
-			"feats": [
-				"feat:darkvision",
-				"feat:infernallegacy",
-				"feat:darkvision"
-			],
-			"note": "Insult: Polite Demon\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"2 studs of movement yields 1 stud of swimming\",\n            \"key\": \"swim\"\n        },\n        {\n            \"title\": \"Crawl\",\n            \"info\": \"2 studs of movement yields 1 stud of crawling, but you can fit under things. If you end your turn crawling, you are considered prone.\",\n            \"key\": \"crawl\"\n        },\n        {\n            \"title\": \"Jump\",\n            \"info\": \"2 studs of movement yields 2 studs of jumping. Can not be combined with a dash to jump farther.\",\n            \"key\": \"jump\"\n        },\n        {\n            \"title\": \"Stand Up\",\n            \"info\": \"If you are prone, you can stand up to begin moving at normal speed again.\",\n            \"key\": \"standup\"\n        },\n        {\n            \"title\": \"Grappling\",\n            \"info\": \"2 studs of movement yields 1 stud of movement while moving a creature that is grappled due to struggling.\",\n            \"key\": \"grappling\"\n        },\n        {\n            \"title\": \"Improvised\",\n            \"info\": \"You may attempt any stunt, dance, taunt, etc. while moving with a 1:1 stud movement ratio pending any corresponding ability checks such as performance or intimidation.\",\n            \"key\": \"improvised\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Attack\",\n            \"info\": \"You can perform a single attack with a weapon in either hand.\",\n            \"key\": \"attack\"\n        },\n        {\n            \"title\": \"Dash\",\n            \"info\": \"You can use your action to do another movement action.\",\n            \"key\": \"dash\"\n        },\n        {\n            \"title\": \"Hide\",\n            \"info\": \"If you are fully obscured from all enemies, you may use your action to hide, performing a stealth check. Enemies have to pass a perception check to find you by using an action to Search.\",\n            \"key\": \"hide\"\n        },\n        {\n            \"title\": \"Use\",\n            \"info\": \"During your turn, you can use your action to use a an item or tool of some kind that you understand, such as open a door or fire a heavy weapon like a ballista.\",\n            \"key\": \"use\"\n        },\n        {\n            \"title\": \"Help\",\n            \"info\": \"You can assist another creature with a skill check to give them an advantage on that skill check, such as assisting with firing a ballista to give an advantage on the shot or assist with a summoning spell that calls for an ability check.\",\n            \"key\": \"help\"\n        },\n        {\n            \"title\": \"Disengage\",\n            \"info\": \"You target another creature who can reach you with their weapon and disengage, preventing them from having an attack of opportunity on you.\",\n            \"key\": \"disengage\"\n        },\n        {\n            \"title\": \"Change\",\n            \"info\": \"You can change your equipment.\",\n            \"key\": \"change\"\n        },\n        {\n            \"title\": \"Search\",\n            \"info\": \"You can spend your turn looking for something specific or taking a general look. This will likely involve a perception or investigation check.\",\n            \"key\": \"search\"\n        },\n        {\n            \"title\": \"Mount\",\n            \"info\": \"You get into or on a mount or vessel, such as into a boat or onto a horse.\",\n            \"key\": \"mount\"\n        },\n        {\n            \"title\": \"Dodge\",\n            \"info\": \"When you take the Dodge action, you focus entirely on avoiding attacks. Until the start of your next turn, any attack roll made against you has disadvantage if you can see the attacker, and you make Dexterity saving throws with advantage. You lose this benefit if you are incapacitated or if your speed drops to 0.\",\n            \"key\": \"dodgeaction\"\n        },\n        {\n            \"title\": \"Escape\",\n            \"info\": \"If you are bound, grappeded, or otherwise restrained, you may use an action to attempt to escape, likely involving a skill check of some kind to break the restraint or pick a lock as needed.\\nFor example if you are encased in webbing, you could\",\n            \"key\": \"escape\"\n        },\n        {\n            \"title\": \"Grapple\",\n            \"info\": \"Target a creature immediateyly next to you. A strength check proceeds to determine if you manage to grab the target creature.\",\n            \"key\": \"grapple\"\n        },\n        {\n            \"title\": \"Shove\",\n            \"info\": \"Target a creature immediateyly next to you. A strength check proceeds to determine if you manage to shove that creature, typically up to 10 studs but can vary depending on terrain, rolls, feats, creature size, etc.\",\n            \"key\": \"shove\"\n        },\n        {\n            \"title\": \"Use Potion\",\n            \"info\": \"You drink a potion and immediately gain its effect(s).\",\n            \"key\": \"potion\"\n        },\n        {\n            \"title\": \"Improvised\",\n            \"info\": \"You may attempt any stunt, dance, taunt, etc. while moving with a 1:1 stud movement ratio pending any corresponding ability checks such as performance or intimidation.\",\n            \"key\": \"improvised\"\n        }\n    ],\n    \"bonusActions\": [\n        {\n            \"title\": \"Light Off-Hand Attack\",\n            \"info\": \"If you attacked with your main action and you have a weapon in your off-hand that is smaller than 6 studs or weighs less than 10 blocks, you may attack with it using your bonus action\",\n            \"key\": \"lightoffhand\"\n        },\n        {\n            \"title\": \"Use Potion\",\n            \"info\": \"You drink a potion and immediately gain its effect(s).\",\n            \"key\": \"readiedpotion\"\n        }\n    ],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count.\",\n            \"key\": \"opportunity\"\n        }\n    ]\n}",
-			"proficiencies": [
-				"proficiency:language:common",
-				"proficiency:language:infernal"
-			],
-			"intelligence": 1,
-			"charisma": 2,
-			"spells_maximum": 0,
-			"skill_proficiency": {},
-			"race": null,
-			"armor": null,
-			"strength": null,
-			"dexterity": null,
-			"constitution": null,
-			"wisdom": null,
-			"view": null,
-			"actions": null,
-			"known": null,
-			"review": true,
-			"attribute": {
-				"young": 18,
-				"old": 100,
-				"light": 125,
-				"heavy": 250
-			},
-			"resist": {
-				"fire": "50%"
-			}
-		},
-		{
-			"id": "race:dwarf",
-			"name": "Dwarf ",
-			"description": "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller. Their courage and endurance are also easily a match for any of the larger folk.\n\nDwarven skin ranges from deep brown to a paler hue tinged with red, but the most common shades are light brown or deep tan, like certain tones of earth. Their hair, worn long but in simple styles, is usually black, gray, or brown, though paler dwarves often have red hair. Male dwarves value their beards highly and groom them carefully.",
-			"playable": true,
-			"feats": [
-				"feat:darkvision",
-				"feat:stonecunning"
-			],
-			"note": "Insult: Wooden Hammer\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"2 studs of movement yields 1 stud of swimming\",\n            \"key\": \"swim\"\n        },\n        {\n            \"title\": \"Crawl\",\n            \"info\": \"2 studs of movement yields 1 stud of crawling, but you can fit under things. If you end your turn crawling, you are considered prone.\",\n            \"key\": \"crawl\"\n        },\n        {\n            \"title\": \"Jump\",\n            \"info\": \"2 studs of movement yields 2 studs of jumping. Can not be combined with a dash to jump farther.\",\n            \"key\": \"jump\"\n        },\n        {\n            \"title\": \"Stand Up\",\n            \"info\": \"If you are prone, you can stand up to begin moving at normal speed again.\",\n            \"key\": \"standup\"\n        },\n        {\n            \"title\": \"Grappling\",\n            \"info\": \"2 studs of movement yields 1 stud of movement while moving a creature that is grappled due to struggling.\",\n            \"key\": \"grappling\"\n        },\n        {\n            \"title\": \"Improvised\",\n            \"info\": \"You may attempt any stunt, dance, taunt, etc. while moving with a 1:1 stud movement ratio pending any corresponding ability checks such as performance or intimidation.\",\n            \"key\": \"improvised\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Attack\",\n            \"info\": \"You can perform a single attack with a weapon in either hand.\",\n            \"key\": \"attack\"\n        },\n        {\n            \"title\": \"Dash\",\n            \"info\": \"You can use your action to do another movement action.\",\n            \"key\": \"dash\"\n        },\n        {\n            \"title\": \"Hide\",\n            \"info\": \"If you are fully obscured from all enemies, you may use your action to hide, performing a stealth check. Enemies have to pass a perception check to find you by using an action to Search.\",\n            \"key\": \"hide\"\n        },\n        {\n            \"title\": \"Use\",\n            \"info\": \"During your turn, you can use your action to use a an item or tool of some kind that you understand, such as open a door or fire a heavy weapon like a ballista.\",\n            \"key\": \"use\"\n        },\n        {\n            \"title\": \"Help\",\n            \"info\": \"You can assist another creature with a skill check to give them an advantage on that skill check, such as assisting with firing a ballista to give an advantage on the shot or assist with a summoning spell that calls for an ability check.\",\n            \"key\": \"help\"\n        },\n        {\n            \"title\": \"Disengage\",\n            \"info\": \"You target another creature who can reach you with their weapon and disengage, preventing them from having an attack of opportunity on you.\",\n            \"key\": \"disengage\"\n        },\n        {\n            \"title\": \"Change\",\n            \"info\": \"You can change your equipment.\",\n            \"key\": \"change\"\n        },\n        {\n            \"title\": \"Search\",\n            \"info\": \"You can spend your turn looking for something specific or taking a general look. This will likely involve a perception or investigation check.\",\n            \"key\": \"search\"\n        },\n        {\n            \"title\": \"Mount\",\n            \"info\": \"You get into or on a mount or vessel, such as into a boat or onto a horse.\",\n            \"key\": \"mount\"\n        },\n        {\n            \"title\": \"Dodge\",\n            \"info\": \"When you take the Dodge action, you focus entirely on avoiding attacks. Until the start of your next turn, any attack roll made against you has disadvantage if you can see the attacker, and you make Dexterity saving throws with advantage. You lose this benefit if you are incapacitated or if your speed drops to 0.\",\n            \"key\": \"dodgeaction\"\n        },\n        {\n            \"title\": \"Escape\",\n            \"info\": \"If you are bound, grappeded, or otherwise restrained, you may use an action to attempt to escape, likely involving a skill check of some kind to break the restraint or pick a lock as needed.\\nFor example if you are encased in webbing, you could\",\n            \"key\": \"escape\"\n        },\n        {\n            \"title\": \"Grapple\",\n            \"info\": \"Target a creature immediateyly next to you. A strength check proceeds to determine if you manage to grab the target creature.\",\n            \"key\": \"grapple\"\n        },\n        {\n            \"title\": \"Shove\",\n            \"info\": \"Target a creature immediateyly next to you. A strength check proceeds to determine if you manage to shove that creature, typically up to 10 studs but can vary depending on terrain, rolls, feats, creature size, etc.\",\n            \"key\": \"shove\"\n        },\n        {\n            \"title\": \"Use Potion\",\n            \"info\": \"You drink a potion and immediately gain its effect(s).\",\n            \"key\": \"potion\"\n        },\n        {\n            \"title\": \"Improvised\",\n            \"info\": \"You may attempt any stunt, dance, taunt, etc. while moving with a 1:1 stud movement ratio pending any corresponding ability checks such as performance or intimidation.\",\n            \"key\": \"improvised\"\n        }\n    ],\n    \"bonusActions\": [\n        {\n            \"title\": \"Light Off-Hand Attack\",\n            \"info\": \"If you attacked with your main action and you have a weapon in your off-hand that is smaller than 6 studs or weighs less than 10 blocks, you may attack with it using your bonus action\",\n            \"key\": \"lightoffhand\"\n        },\n        {\n            \"title\": \"Use Potion\",\n            \"info\": \"You drink a potion and immediately gain its effect(s).\",\n            \"key\": \"readiedpotion\"\n        }\n    ],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count.\",\n            \"key\": \"opportunity\"\n        }\n    ]\n}",
-			"race": null,
-			"proficiencies": [
-				"proficiency:language:common",
-				"proficiency:language:dwarven"
-			],
-			"armor": "",
-			"strength": null,
-			"dexterity": null,
-			"constitution": 2,
-			"intelligence": null,
-			"wisdom": null,
-			"charisma": null,
-			"view": null,
-			"actions": null,
-			"known": null,
-			"spells_maximum": 0,
-			"skill_proficiency": {},
-			"review": true,
-			"attribute": {
-				"young": 50,
-				"old": 350,
-				"light": 110,
-				"heavy": 190
-			},
-			"resist": {
-				"poison": "50%"
 			}
 		},
 		{
@@ -1456,7 +1354,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -1467,7 +1364,8 @@
 				"old": 500,
 				"light": 20,
 				"heavy": 60
-			}
+			},
+			"parent": "race:root:character"
 		},
 		{
 			"id": "race:elf",
@@ -1498,7 +1396,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": 3,
 			"spells_maximum": 0,
 			"skill_proficiency": {
@@ -1510,45 +1407,8 @@
 				"old": 700,
 				"light": 90,
 				"heavy": 150
-			}
-		},
-		{
-			"id": "race:dragonborn",
-			"name": "Dragonborn ",
-			"description": "Dragonborn look very much like dragons standing erect in humanoid form, though they lack wings or a tail. The first dragonborn had scales of vibrant hues matching the colors of their dragon kin, but generations of interbreeding have created a more uniform appearance. Their small, fine scales are usually brass or bronze in color, sometimes ranging to scarlet, rust, gold, or copper-green. They are tall and strongly built, often standing close to 6½ feet tall and weighing 300 pounds or more. Their hands and feet are strong, talonlike claws with three fingers and a thumb on each hand.\n\nThe blood of a particular type of dragon runs very strong through some dragonborn clans. These dragonborn often boast scales that more closely match those of their dragon ancestor—bright red, green, blue, or white, lustrous black, or gleaming metallic gold, silver, brass, copper, or bronze.",
-			"playable": true,
-			"feats": [
-				"feat:breathweapon"
-			],
-			"note": "Insult: Flaccid Scale\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"2 studs of movement yields 1 stud of swimming\",\n            \"key\": \"swim\"\n        },\n        {\n            \"title\": \"Crawl\",\n            \"info\": \"2 studs of movement yields 1 stud of crawling, but you can fit under things. If you end your turn crawling, you are considered prone.\",\n            \"key\": \"crawl\"\n        },\n        {\n            \"title\": \"Jump\",\n            \"info\": \"2 studs of movement yields 2 studs of jumping. Can not be combined with a dash to jump farther.\",\n            \"key\": \"jump\"\n        },\n        {\n            \"title\": \"Stand Up\",\n            \"info\": \"If you are prone, you can stand up to begin moving at normal speed again.\",\n            \"key\": \"standup\"\n        },\n        {\n            \"title\": \"Grappling\",\n            \"info\": \"2 studs of movement yields 1 stud of movement while moving a creature that is grappled due to struggling.\",\n            \"key\": \"grappling\"\n        },\n        {\n            \"title\": \"Improvised\",\n            \"info\": \"You may attempt any stunt, dance, taunt, etc. while moving with a 1:1 stud movement ratio pending any corresponding ability checks such as performance or intimidation.\",\n            \"key\": \"improvised\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Attack\",\n            \"info\": \"You can perform a single attack with a weapon in either hand.\",\n            \"key\": \"attack\"\n        },\n        {\n            \"title\": \"Dash\",\n            \"info\": \"You can use your action to do another movement action.\",\n            \"key\": \"dash\"\n        },\n        {\n            \"title\": \"Hide\",\n            \"info\": \"If you are fully obscured from all enemies, you may use your action to hide, performing a stealth check. Enemies have to pass a perception check to find you by using an action to Search.\",\n            \"key\": \"hide\"\n        },\n        {\n            \"title\": \"Use\",\n            \"info\": \"During your turn, you can use your action to use a an item or tool of some kind that you understand, such as open a door or fire a heavy weapon like a ballista.\",\n            \"key\": \"use\"\n        },\n        {\n            \"title\": \"Help\",\n            \"info\": \"You can assist another creature with a skill check to give them an advantage on that skill check, such as assisting with firing a ballista to give an advantage on the shot or assist with a summoning spell that calls for an ability check.\",\n            \"key\": \"help\"\n        },\n        {\n            \"title\": \"Disengage\",\n            \"info\": \"You target another creature who can reach you with their weapon and disengage, preventing them from having an attack of opportunity on you.\",\n            \"key\": \"disengage\"\n        },\n        {\n            \"title\": \"Change\",\n            \"info\": \"You can change your equipment.\",\n            \"key\": \"change\"\n        },\n        {\n            \"title\": \"Search\",\n            \"info\": \"You can spend your turn looking for something specific or taking a general look. This will likely involve a perception or investigation check.\",\n            \"key\": \"search\"\n        },\n        {\n            \"title\": \"Mount\",\n            \"info\": \"You get into or on a mount or vessel, such as into a boat or onto a horse.\",\n            \"key\": \"mount\"\n        },\n        {\n            \"title\": \"Dodge\",\n            \"info\": \"When you take the Dodge action, you focus entirely on avoiding attacks. Until the start of your next turn, any attack roll made against you has disadvantage if you can see the attacker, and you make Dexterity saving throws with advantage. You lose this benefit if you are incapacitated or if your speed drops to 0.\",\n            \"key\": \"dodgeaction\"\n        },\n        {\n            \"title\": \"Escape\",\n            \"info\": \"If you are bound, grappeded, or otherwise restrained, you may use an action to attempt to escape, likely involving a skill check of some kind to break the restraint or pick a lock as needed.\\nFor example if you are encased in webbing, you could\",\n            \"key\": \"escape\"\n        },\n        {\n            \"title\": \"Grapple\",\n            \"info\": \"Target a creature immediateyly next to you. A strength check proceeds to determine if you manage to grab the target creature.\",\n            \"key\": \"grapple\"\n        },\n        {\n            \"title\": \"Shove\",\n            \"info\": \"Target a creature immediateyly next to you. A strength check proceeds to determine if you manage to shove that creature, typically up to 10 studs but can vary depending on terrain, rolls, feats, creature size, etc.\",\n            \"key\": \"shove\"\n        },\n        {\n            \"title\": \"Use Potion\",\n            \"info\": \"You drink a potion and immediately gain its effect(s).\",\n            \"key\": \"potion\"\n        },\n        {\n            \"title\": \"Improvised\",\n            \"info\": \"You may attempt any stunt, dance, taunt, etc. while moving with a 1:1 stud movement ratio pending any corresponding ability checks such as performance or intimidation.\",\n            \"key\": \"improvised\"\n        }\n    ],\n    \"bonusActions\": [\n        {\n            \"title\": \"Light Off-Hand Attack\",\n            \"info\": \"If you attacked with your main action and you have a weapon in your off-hand that is smaller than 6 studs or weighs less than 10 blocks, you may attack with it using your bonus action\",\n            \"key\": \"lightoffhand\"\n        },\n        {\n            \"title\": \"Use Potion\",\n            \"info\": \"You drink a potion and immediately gain its effect(s).\",\n            \"key\": \"readiedpotion\"\n        }\n    ],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count.\",\n            \"key\": \"opportunity\"\n        }\n    ]\n}",
-			"race": null,
-			"proficiencies": [
-				"proficiency:language:common",
-				"proficiency:language:draconic",
-				"proficiency:language:abyssal"
-			],
-			"armor": "",
-			"strength": 2,
-			"dexterity": null,
-			"constitution": null,
-			"intelligence": null,
-			"wisdom": null,
-			"charisma": 1,
-			"view": null,
-			"actions": null,
-			"known": null,
-			"spells_maximum": 0,
-			"skill_proficiency": {},
-			"review": true,
-			"skill_advantage": {
-				"skill:wisdom": 1
 			},
-			"attribute": {
-				"young": 15,
-				"old": 90,
-				"light": 250,
-				"heavy": 400
-			}
+			"parent": "race:root:character"
 		},
 		{
 			"id": "race:halfelf",
@@ -1572,7 +1432,8 @@
 				"old": 200,
 				"light": 100,
 				"heavy": 200
-			}
+			},
+			"parent": "race:root:character"
 		},
 		{
 			"id": "race:halfling",
@@ -1600,7 +1461,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": 3,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -1610,7 +1470,8 @@
 				"old": 150,
 				"light": 30,
 				"heavy": 60
-			}
+			},
+			"parent": "race:root:character"
 		},
 		{
 			"id": "race:halforc",
@@ -1640,7 +1501,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"review": true,
 			"attribute": {
@@ -1648,7 +1508,8 @@
 				"old": 60,
 				"light": 180,
 				"heavy": 250
-			}
+			},
+			"parent": "race:root:character"
 		},
 		{
 			"id": "race:demon:oblit",
@@ -1659,7 +1520,7 @@
 				"feat:superiordarkvision",
 				"feat:truesight:superior"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": "2",
 			"strength": null,
@@ -1669,12 +1530,17 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
-			"movement_ground": 24,
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"movement_ground": 24,
 			"attribute": {
 				"young": 1000,
 				"old": 10000,
@@ -1705,12 +1571,11 @@
 				"feat:language:draconic",
 				"feat:language:common"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 2, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"armor": "9",
 			"damage": {
 				"damage_type:piercing": ""
 			},
-			"actions": 2,
 			"spells": [
 				"ability:dragon:black:tail",
 				"ability:dragon:black:bite",
@@ -1724,9 +1589,15 @@
 				"frightened": true,
 				"acid": true
 			},
+			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"spell_attack": "3 + dex",
 			"movement_ground": 32,
-			"review": true,
 			"skill_check": {
 				"skill:attack": 8,
 				"skill:stealth": 7,
@@ -1826,7 +1697,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"immunities": {
 				"blinded": true,
@@ -1865,7 +1735,7 @@
 				"feat:truesight:minor",
 				"feat:sneakattack"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"proficiencies": [
 				"proficiency:language:celestrial",
@@ -1879,7 +1749,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"spells": [
 				"spell:pounce",
@@ -1894,6 +1763,12 @@
 			"spells_maximum": 0,
 			"skill_proficiency": {},
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"attribute": {
 				"young": 5000,
 				"old": 100000,
@@ -1918,7 +1793,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -1947,7 +1821,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2057,7 +1930,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2081,7 +1953,7 @@
 			"feats": [
 				"feat:magicimmunity"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -2091,11 +1963,16 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_check": {
 				"skill:stealth": 8,
 				"skill:survival": 8,
@@ -2140,7 +2017,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2177,7 +2053,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"skill_check": {
 				"skill:stealth": 4,
@@ -2205,7 +2080,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2272,7 +2146,7 @@
 				"feat:whelm",
 				"feat:waterform"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
 			"immunities": {
 				"grappled": true,
 				"poisoned": true,
@@ -2289,14 +2163,19 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"skill_proficiency": {},
 			"spells": [
 				"spell:ability:slam"
 			],
-			"spell_attack": "7",
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"spell_attack": "7",
 			"attribute": {
 				"light": 100,
 				"heavy": 900
@@ -2313,7 +2192,7 @@
 				"feat:fireform",
 				"feat:watersusceptibility"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
 			"immunities": {
 				"fire": true,
 				"poisoned": true
@@ -2328,15 +2207,20 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"skill_proficiency": {},
 			"spells": [
 				"spell:ability:touch"
 			],
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"spell_attack": "3",
 			"spell_dc": "3",
-			"review": true,
 			"attribute": {
 				"young": 1,
 				"old": 10,
@@ -2359,7 +2243,7 @@
 			"feats": [
 				"feat:earthglide"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ],\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ],\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -2369,7 +2253,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2382,6 +2265,12 @@
 				"spell:ability:slam"
 			],
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"attribute": {
 				"young": 1,
 				"old": 50,
@@ -2405,7 +2294,7 @@
 				"feat:darkvision",
 				"feat:airform"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
 			"immunities": {
 				"poisoned": true,
 				"grappled": true,
@@ -2423,7 +2312,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"skill_proficiency": {},
 			"spells": [
@@ -2431,6 +2319,12 @@
 				"spell:ability:slam"
 			],
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"attribute": {
 				"young": 1,
 				"old": 50,
@@ -2454,7 +2348,7 @@
 			"feats": [
 				"feat:iceform"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": [],\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -2464,7 +2358,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2476,6 +2369,12 @@
 				"poisoned": true
 			},
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"attribute": {
 				"young": 1,
 				"old": 10,
@@ -2502,7 +2401,7 @@
 			"feats": [
 				"feat:airform"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"moves\": [\n        {\n            \"title\": \"Move\",\n            \"info\": \"2 studs of movement yields 2 studs of movement\",\n            \"key\": \"move\"\n        },\n        {\n            \"title\": \"Climb\",\n            \"info\": \"2 studs of movement yields 1 stud of climbing\",\n            \"key\": \"climb\"\n        },\n        {\n            \"title\": \"Swim\",\n            \"info\": \"Generally 2 studs of movement yields 1 stud of swimming, see your swim movement listing under actions\",\n            \"key\": \"swim\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"title\": \"Elemental Ability\",\n            \"info\": \"Perform an Ability or Cantrip\",\n            \"key\": \"elemental_ability\"\n        }\n    ],\n    \"bonusActions\": [],\n    \"reactions\": [\n        {\n            \"title\": \"Attack of Opportunity\",\n            \"info\": \"If you can reach a creature and it attempts to move out of your reach without disengaging (Or an equivilent), then you may use a reaction to attack that creature. Note that moving around you without moving out of your reach does not count. Your attack may be one of your spells or abilities\",\n            \"key\": \"elemental_opportunity\"\n        }\n    ]\n}",
 			"immunities": {
 				"acid": true,
 				"grappled": true,
@@ -2521,10 +2420,15 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"skill_proficiency": {},
 			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"attribute": {
 				"young": 1,
 				"old": 50,
@@ -2652,7 +2556,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2723,7 +2626,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells": [
 				"spell:flamingbreath"
@@ -2766,7 +2668,6 @@
 			"wisdom": "-1",
 			"charisma": null,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {
@@ -2845,7 +2746,6 @@
 			"wisdom": "1",
 			"charisma": "",
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2868,7 +2768,7 @@
 			"feats": [
 				"feat:keensmell"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 2, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": null,
 			"strength": null,
@@ -2878,12 +2778,17 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 2,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
-			"spell_attack": "5",
 			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"spell_attack": "5",
 			"skill_check": {
 				"skill:perception": 3
 			},
@@ -2913,7 +2818,6 @@
 			"wisdom": 1,
 			"charisma": 1,
 			"view": null,
-			"actions": null,
 			"known": null,
 			"spells_maximum": 0,
 			"skill_proficiency": {},
@@ -2923,7 +2827,8 @@
 				"old": 75,
 				"light": 125,
 				"heavy": 250
-			}
+			},
+			"parent": "race:root:character"
 		},
 		{
 			"id": "race:craghound",
@@ -2931,7 +2836,7 @@
 			"icon": "fas fa-dog",
 			"description": "Native to the arid stone lands of Lurus, these creatures are capable of great feats of strength and dexterity and fiercely loyal and quite teritorial.\n\nIn mountainous areas they can be practically invisible as long as they hold still, making them dangerous in the wilderness where it can be easy to stumble across a sleeping pack.",
 			"feats": [],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"race": null,
 			"armor": "10",
 			"strength": "3",
@@ -2941,7 +2846,6 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 1,
 			"known": null,
 			"immunities": {
 				"fire": true,
@@ -2949,6 +2853,13 @@
 			},
 			"spells_maximum": 0,
 			"skill_proficiency": {},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"skill_check": {
 				"skill:mainhand": "2",
 				"skill:offhand": "7",
@@ -2958,7 +2869,6 @@
 				"skill:initiative": 3,
 				"skill:perception": 4
 			},
-			"review": true,
 			"attribute": {
 				"young": 1,
 				"old": 30,
@@ -3009,7 +2919,7 @@
 				"feat:pocketdimensionpack",
 				"feat:fasthands"
 			],
-			"note": "\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
+			"note": "\n\nHad Action Costs - Main: 2, Bonus: undefined, Reaction: undefined\n\nPrevious Action Map:\n{\n    \"action\": [],\n    \"bonusAction\": [],\n    \"reaction\": []\n}",
 			"spells_maximum": 0,
 			"race": null,
 			"armor": null,
@@ -3020,10 +2930,15 @@
 			"wisdom": null,
 			"charisma": null,
 			"view": null,
-			"actions": 2,
 			"known": null,
 			"skill_proficiency": {},
 			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
 			"attribute": {
 				"young": 1,
 				"old": 100000,

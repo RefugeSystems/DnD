@@ -247,7 +247,7 @@
             "section": "Skill Checks"
         }, {
             "id": "skill:kit:thieves",
-            "name": "Forgery Kit",
+            "name": "Thieves' Kit",
             "description": "Attempt to pick a lock",
             "icon": "game-icon game-icon-lockpicks",
             "stat": "dexterity",
@@ -255,7 +255,7 @@
             "section": "Skill Checks"
         }, {
             "id": "skill:kit:healers",
-            "name": "Forgery Kit",
+            "name": "Healer's Kit",
             "description": "Attempt to stabilize an unconscious creature at 0HP",
             "icon": "fas fa-medkit",
             "stat": "wisdom",
@@ -279,7 +279,7 @@
             "section": "Skill Checks"
         }, {
             "id": "skill:kit:cartographers",
-            "name": "Alchemy Kit",
+            "name": "Cartographer's Kit",
             "description": "Attempt to create or update a map",
             "icon": "game-icon game-icon-treasure-map",
             "stat": "intelligence",

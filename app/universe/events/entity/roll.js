@@ -33,6 +33,7 @@ module.exports.initialize = function(universe) {
 				"action": event.message.data.action,
 				"name": event.message.data.name,
 				"dice": event.message.data.dice,
+				"time": universe.time,
 				"critical": event.message.data.critical,
 				"failure": event.message.data.failure,
 				"recipients": universe.getMasters()

@@ -401,16 +401,6 @@ rsSystem.component("DNDMasterScreen", {
 	"mounted": function() {
 		rsSystem.register(this);
 
-		this.$el.onclick = (event) => {
-			console.log("Event: ", event);
-			var follow = event.srcElement.attributes.getNamedItem("data-id");
-			if(follow && (follow = this.universe.getObject(follow.value))) {
-				console.log(" > Edit: " + follow.id);
-				event.stopPropagation();
-				event.preventDefault();
-			}
-		};
-		
 		// this.universe.$on("player-disconnected", this.playerDisconnected);
 		// this.universe.$on("player-connected", this.playerConnected);
 		this.universe.$on("entity:roll", this.entityRolled);
@@ -424,17 +414,48 @@ rsSystem.component("DNDMasterScreen", {
 		if(this.storage && !this.storage.entityTable) {
 			Vue.set(this.storage, "entityTable", {});
 		}
+		if(!this.storage.entityTable.label) {
+			this.storage.entityTable.label = "Entity";
+		}
 		if(this.storage && !this.storage.itemTable) {
 			Vue.set(this.storage, "itemTable", {});
+		}
+		if(!this.storage.itemTable.label) {
+			this.storage.itemTable.label = "Items";
 		}
 		if(this.storage && !this.storage.spellTable) {
 			Vue.set(this.storage, "spellTable", {});
 		}
+		if(!this.storage.spellTable.label) {
+			this.storage.spellTable.label = "Spells";
+		}
 		if(this.storage && !this.storage.knowledgeTable) {
 			Vue.set(this.storage, "knowledgeTable", {});
 		}
+		if(!this.storage.knowledgeTable.label) {
+			this.storage.knowledgeTable.label = "Knowledge";
+		}
 	},
 	"methods": {
+		"checkToEditRecord": function(event) {
+			var follow,
+				i;
+				
+			for(i=0; i<event.path.length; i++) {
+				if(event.path[i] && event.path[i] && event.path[i].attributes && (follow = event.path[i].getAttribute("data-id"))) {
+					if(event.ctrlKey) {
+						console.log("Copy...", follow);
+						navigator.clipboard.writeText(follow);
+					} else if(follow = this.universe.getObject(follow)) {
+						console.log("Edit...", follow);
+						this.editNoun(follow);
+					}
+					event.stopPropagation();
+					event.preventDefault();
+					break;
+				}
+			}
+		},
 		"getMeeting": function() {
 			var meeting,
 				i;

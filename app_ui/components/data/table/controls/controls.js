@@ -49,6 +49,9 @@ rsSystem.component("rsTableControls", {
 				return Object.keys(this.storage.selected).length;
 			}
 			return 0;
+		},
+		"placeholder": function() {
+			return "Filter " + (this.storage.label || "Table Data") + "...";
 		}
 	},
 	"watch": {

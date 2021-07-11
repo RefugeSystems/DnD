@@ -171,17 +171,11 @@ for(i=0; i<merging.length; i++) {
 				}
 			}
 		}
-		switch(merged.type) {
-			case "cast":
-				delete(merged.type);
-				break;
-			case "attack":
-				merged.cast_attack = true;
-				delete(merged.type);
-				break;
-			default:
-				merged.type = "type:" + merged.type;
+		
+		if(merged.type) {
+			merged.types = ["type:" + merged.type];
 		}
+		delete(merged.type);
 		if(merged.radius) {
 			merged.effect_radius = merged.radius;
 		}
@@ -258,9 +252,10 @@ for(i=0; i<merging.length; i++) {
 			merged.attuned = merged.attunedTo;
 		}
 		delete(merged.attunedTo);
-		if(merged.damage_type) {
+		if(merged.damageType) {
 			merged.damage_type = "damage_type:" + merged.damageType;
 		}
+		delete(merged.damageType);
 		if(merged.duration) {
 			merged.duration = parseInt(merged.duration);
 		}

@@ -318,7 +318,7 @@ class RSObject {
 				var ifield,
 					debugA,
 					debugB;
-				if(source) {
+				if(source && source._calculated) {
 					// this._universe.objectHandler.trackInheritance(source, field.inheritanceFields);
 					inheriting.push(source.id);
 					for(i=0; i<field.inheritanceFields.length; i++) {

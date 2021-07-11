@@ -1,6 +1,6 @@
 /**
  * 
- * @event player:create:object
+ * @event player:calculate:object
  * @for Universe
  * @param {Object} event With data from the system
  * @param {String} event.type The event name being fired, should match this event's name

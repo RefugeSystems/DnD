@@ -1,7 +1,7 @@
 var fs = require("fs"),
 	RSObject = require("../../app/storage/rsobject"),
 	modifiers = require("./modifiers.json"),
-	merging = require("./source/archetypes.json").export,
+	merging = require("./source/archetypes.json"),
 	exporting = [],
 	modMap = {},
 	addObjects,
