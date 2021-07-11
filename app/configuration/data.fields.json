@@ -255,6 +255,7 @@
 		"description": "A quick reference array of recent actions taken. This is meant to aid players with reviewing recent activity and not meant to serve as the entirety of their history as that is handled by the universe chronicle",
 		"type": "array",
 		"attribute": {
+			"display_size": 110,
 			"limit": 50
 		}
 	}, {

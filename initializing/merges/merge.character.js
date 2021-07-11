@@ -193,8 +193,9 @@ for(i=0; i<merging.length; i++) {
 		delete(merged.wisdom);
 		delete(merged.charisma);
 		if(merged.type) {
-			merged.type = "type:" + merged.type;
+			merged.types = ["type:" + merged.type];
 		}
+		delete(merged.type);
 		if(merged.health) {
 			merged.hp = merged.health;
 		}
