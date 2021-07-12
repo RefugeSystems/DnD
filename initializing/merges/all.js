@@ -1,0 +1,11 @@
+require("./merge.archetypes.js");
+require("./merge.character.js");
+require("./merge.classes.js");
+require("./merge.effects.js");
+require("./merge.feats.js");
+require("./merge.gods.js");
+require("./merge.item.js");
+require("./merge.locations.js");
+require("./merge.proficiencies.js");
+require("./merge.race.js");
+require("./merge.spells.js");

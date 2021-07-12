@@ -1,7 +1,7 @@
 {
 	"name": "rs-dnd",
 	"title": "The World of Somnicael",
-	"version": "0.8.21",
+	"version": "0.9.0",
 	"description": "A Dungeons and Dragons Adventure",
 	"core_version": "0.1.0",
 	"main": "app/index.js",

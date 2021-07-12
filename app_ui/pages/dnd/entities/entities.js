@@ -75,6 +75,7 @@ rsSystem.component("DNDEntities", {
 		},
 		"entities": function() {
 			var entities = [],
+				played = [],
 				entity,
 				x;
 				
@@ -90,13 +91,17 @@ rsSystem.component("DNDEntities", {
 			} else {
 				for(x=0; x<this.universe.listing.entity.length; x++) {
 					entity = this.universe.listing.entity[x];
-					if(entity && entity.played_by === this.player.id && !entity.disabled && entity.state !== "deceased" && !entity.is_preview && !entity.obscured && !entity.is_minion && entity.id !== this.player.attribute.playing_as) {
-						entities.uniquely(entity);
+					if(entity && !entity.disabled && entity.state !== "deceased" && !entity.is_preview && !entity.obscured && !entity.is_minion && entity.id !== this.player.attribute.playing_as) {
+						if(entity.played_by === this.player.id) {
+							played.push(entity);
+						} else if(entity.owned && entity.owned[this.player.id]) {
+							entities.push(entity);
+						}
 					}
 				}
 			}
 			
-			return entities;
+			return played.concat(entities);
 		},
 		"nearby": function() {
 			var entities = [],
@@ -358,7 +363,7 @@ rsSystem.component("DNDEntities", {
 			}
 		},
 		"isShownEntity": function(entity) {
-			if(entity && !entity.is_preview && !entity.disabled && !entity.obscured) {
+			if(entity && !entity.is_preview && !entity.disabled && !entity.obscured && this.storage.ctrl) {
 				if(this.main && entity.id === this.main.id && this.storage.ctrl.list.self) {
 					return true;
 				}

@@ -2001,6 +2001,18 @@
 		"type": "calculated",
 		"attribute": {}
 	}, {
+		"id": "recharges_amount_short",
+		"name": "Short Rest Recharge",
+		"description": "Number of charges gained after the required short rests.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
+		"id": "recharges_amount_long",
+		"name": "Long Rest Recharge",
+		"description": "Number of charges gained after the required long rests.",
+		"type": "calculated",
+		"attribute": {}
+	}, {
 		"id": "recharges_after",
 		"name": "Recharges After",
 		"description": "Amount of raw time for a charge to be gained",
