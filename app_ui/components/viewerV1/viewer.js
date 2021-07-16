@@ -1849,20 +1849,22 @@
 				if(this.localeInfo.shown) {
 					console.log("Locale: ", _p(this.localeInfo));
 					this.actions.options.push(this.localeInfo);
-					if(this.storage.hide[this.localeInfo.id]) {
-						this.actions.options.push({
-							"icon": "fas fa-eye",
-							"event": "set-hidden",
-							"text": "Reveal Object",
-							"object": this.localeInfo.id
-						});
-					} else {
-						this.actions.options.push({
-							"icon": "fas fa-eye-slash",
-							"event": "set-hidden",
-							"text": "Hide Object",
-							"object": this.localeInfo.id
-						});
+					if(this.player.gm) {
+						if(this.storage.hide[this.localeInfo.id]) {
+							this.actions.options.push({
+								"icon": "fas fa-eye",
+								"event": "set-hidden",
+								"text": "Reveal Object",
+								"object": this.localeInfo.id
+							});
+						} else {
+							this.actions.options.push({
+								"icon": "fas fa-eye-slash",
+								"event": "set-hidden",
+								"text": "Hide Object",
+								"object": this.localeInfo.id
+							});
+						}
 					}
 				}
 

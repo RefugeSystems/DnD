@@ -779,6 +779,7 @@ class Universe extends EventEmitter {
 		
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
+			master_fields = [];
 			if(!omittedFromSync[managers[m]] && (!managers[m].attribute || !managers[m].attribute.server_only)) {
 				state.classes.push(manager.toJSON());
 				state[manager.id] = [];
@@ -795,7 +796,7 @@ class Universe extends EventEmitter {
 					if(sync) { // Skip unloaded data
 						sync = sync.toJSON(); // Convert to sync format and separate object
 						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm) && !sync.attribute.no_sync) {
-							if(!player.gm && master_fields.length) {
+							if(!player.gm) {
 								delete(sync._data);
 								for(f=0; f<master_fields.length; f++) {
 									if(sync[master_fields[f]] !== undefined) {
