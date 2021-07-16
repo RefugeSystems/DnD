@@ -476,7 +476,7 @@
 		"description": "Array of coordinates to render on an image for thigns such as a map.",
 		"type": "array",
 		"attribute": {
-			"displayed": false,
+			"display_size": 150,
 			"inert": true
 		}
 	}, {
@@ -627,8 +627,8 @@
 		"name": "Barbarian",
 		"description": "Current Barbarian level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "bard",
@@ -636,8 +636,8 @@
 		"name": "Bard",
 		"description": "Current Bard level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "cleric",
@@ -645,8 +645,8 @@
 		"name": "Cleric",
 		"description": "Current Cleric level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "druid",
@@ -654,8 +654,8 @@
 		"name": "Druid",
 		"description": "Current Druid level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "fighter",
@@ -663,8 +663,8 @@
 		"name": "Fighter",
 		"description": "Current Fighter level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "monk",
@@ -672,8 +672,8 @@
 		"name": "Monk",
 		"description": "Current Monk level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "paladin",
@@ -681,8 +681,8 @@
 		"name": "Paladin",
 		"description": "Current Paladin level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "ranger",
@@ -690,8 +690,8 @@
 		"name": "Ranger",
 		"description": "Current Ranger level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "rogue",
@@ -699,8 +699,8 @@
 		"name": "Rogue",
 		"description": "Current Rogue level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "sorcerer",
@@ -708,8 +708,8 @@
 		"name": "Sorcerer",
 		"description": "Current Sorcerer level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "warlock",
@@ -717,8 +717,8 @@
 		"name": "Warlock",
 		"description": "Current Warlock level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "wizard",
@@ -726,8 +726,8 @@
 		"name": "Wizard",
 		"description": "Current Wizard level",
 		"type": "integer",
+		"ordering": 200,
 		"attribute": {
-			"displayed": false
 		}
 	}, {
 		"id": "initiative",
@@ -2745,6 +2745,7 @@
 		"description": "Caps the icon indicator sizing in maps",
 		"type": "integer",
 		"attribute": {
+			"display_size": 150,
 			"hide_when_not_set": true
 		}
 	}, {
@@ -2753,6 +2754,7 @@
 		"description": "Starting font size for markers",
 		"type": "integer",
 		"attribute": {
+			"display_size": 150,
 			"hide_when_not_set": true,
 			"default": 10
 		}
