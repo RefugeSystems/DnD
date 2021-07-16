@@ -364,7 +364,7 @@
 				if(root.second < 10) {
 					string.push("0");
 				}
-				string.push(root.second + ":");
+				string.push(root.second);
 			}
 			
 			return string.join("");

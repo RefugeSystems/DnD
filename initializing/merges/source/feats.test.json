@@ -1,0 +1,25 @@
+[
+		{
+			"created": 1544404007700,
+			"creator": "585c68bfd5e06ab07fba8401",
+			"updated": 1554670242056,
+			"updater": "585c68bfd5e06ab07fba8401",
+			"id": "feat:illusioner",
+			"name": "Illusionist",
+			"description": "",
+			"icon": "fas fa-ghost",
+			"requirement": {},
+			"natural": true,
+			"hidden": null,
+			"archetypeName": null,
+			"archetypeClass": null,
+			"archetypeLevel": null,
+			"usable": false,
+			"dispersible": true,
+			"modifiers": [
+				"modifier:school:illusionist:0"
+			],
+			"effects": [],
+			"_search": "illusionistfeat:illusioner"
+		}
+	]

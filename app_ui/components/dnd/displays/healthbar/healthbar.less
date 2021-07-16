@@ -10,12 +10,25 @@
 	font-size: 6px;
 	text-align: center;
 	line-height: 6px;
+    overflow: hidden;
 
 	.bar {
 		display: block;
 		height: 6px;
 		transition: width .5s, background-color .5s;
 		background-color: @rsGreen;
+	}
+
+	.hp {
+		z-index: 1;
+	}
+
+	.thp {
+		position: absolute;
+		background-color: @rsBlue;
+		z-index: 2;
+		left: 0px;
+		top: 0px;
 	}
 
 	&.okay {

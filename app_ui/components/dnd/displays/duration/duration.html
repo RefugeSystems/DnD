@@ -1,0 +1,10 @@
+<button class="flat action rs-component dnd-component object-duration flex h" v-if="hasDuration()" v-on:click="revoke()">
+	<span v-if="object.expiration" title="Time remaining for this object">
+		<span class="fas fa-hourglass-half"></span>
+		<span>{{remaining()}}</span>
+	</span>
+	<span v-else title="Total duraiton over which this lasts">
+		<span class="fas fa-clock"></span>
+		<span>{{duration()}}</span>
+	</span>
+</button>

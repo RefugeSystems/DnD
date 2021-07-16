@@ -13,35 +13,13 @@ for(i=0; i<merging.length; i++) {
 	id = merged.id;
 	try {
 		// console.log("Merging: " + merged.name);
-		utility.loadModifiers(merged);
-		if(merged.radius) {
-			merged.effect_radius = merged.radius;
-		}
-		delete(merged.radius);
-		if(merged.shape !== undefined) {
-			merged.effect_shape = merged.shape;
-		}
-		delete(merged.shape);
-		if(merged.save) {
-			merged.cast_save = "skill:" + merged.save;
-		}
-		delete(merged.save);
-		if(merged.castWith) {
-			merged.cast_with = "skill:" + merged.castWith;
-		}
-		delete(merged.castWith);
+		merged = utility.loadModifiers(merged);
 		if(merged.instanceOf) {
 			merged.parent = merged.instanceOf;
 		}
 		delete(merged.instanceOf);
 		if(merged.damage_type) {
 			merged.damage_type = "damage_type:" + merged.damageType;
-		}
-		if(merged.duration) {
-			merged.duration = parseInt(merged.duration);
-		}
-		if(merged.duration < 0) {
-			delete(merged.duration);
 		}
 		if(merged.granted) {
 			merged.obscured = merged.granted;
@@ -53,6 +31,10 @@ for(i=0; i<merging.length; i++) {
 			delete(merged.armor);
 		}
 
+		if(!id.startsWith("effect:")) {
+			console.log("Update effect: " + id);
+			id = "effect:" + id;
+		}
 		merged.id = id;
 		utility.finalize(merged);
 
@@ -123,3 +105,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_effects.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

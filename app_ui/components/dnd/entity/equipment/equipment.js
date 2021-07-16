@@ -82,8 +82,11 @@ rsSystem.component("dndEntityEquipment", {
 				this.open(item);
 			}
 		},
+		"showCharges": function(object) {
+			return typeof(object.charges_max) === "number" || typeof(object.charges_max) === "string";
+		},
 		"open": function(item) {
-			rsSystem.EventBus.$emit("dialog-open", {
+			var details = {
 				"component": "dndCard",
 				"entity": this.entity.id,
 				"object": item,
@@ -111,13 +114,13 @@ rsSystem.component("dndEntityEquipment", {
 					"damage",
 					"resistance",
 					"advantage",
-					"disadvantage",
-					"enchantments",
-					"inventory"],
-				"fieldComponent": {
-					"charges": "dndObjectCharges"
-				}
-			});
+					"disadvantage"],
+				"fieldComponent": {}
+			};
+			if(this.showCharges(item)) {
+				details.fieldComponent.charges = "dndObjectCharges";
+			}
+			rsSystem.EventBus.$emit("dialog-open", details);
 		}
 	},
 	"beforeDestroy": function() {

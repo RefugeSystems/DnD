@@ -1,7 +1,7 @@
 <div class="rs-page dnd-page dnd-knowledge">
 	<div class="flex v" v-if="entity">
 		<h1 class="today">Today: {{today}}</h1>
-		<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :headings="headings" :actions="actions" :formatter="formatter" />
+		<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :selections="selections" label="Knowledge" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" />
 	</div>
 	<div class="general-warning" v-else>
 		<span class="rs-lightyellow fas fa-exclamation-triangle"></span>

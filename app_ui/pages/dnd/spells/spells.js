@@ -48,9 +48,27 @@ rsSystem.component("DNDSpells", {
 		},
 		"prepared": function() {
 			if(this.entity && this.entity.spells_prepared) {
-				return this.universe.transcribeInto(this.entity.spells_prepared, [], "spell");
+				var prepared = this.universe.transcribeInto(this.entity.spells_prepared, [], "spell"),
+					map = {},
+					spell,
+					i;
+
+				if(this.prepared_spells && this.prepared_cantrips) {
+					this.prepared_cantrips.splice(0);
+					this.prepared_spells.splice(0);
+					for(i=0; i<prepared.length; i++) {
+						spell = prepared[i];
+						map[spell.id] = true;
+						if(spell.level === 0) {
+							this.prepared_cantrips.push(spell);
+						} else if(spell.level > 0) {
+							this.prepared_spells.push(spell);
+						}
+					}
+					return map;
+				}
 			}
-			return [];
+			return {};
 		},
 		"known": function() {
 			if(this.entity && this.entity.spells_known) {
@@ -62,11 +80,18 @@ rsSystem.component("DNDSpells", {
 	"data": function() {
 		var data = {};
 
+		data.prepared_cantrips = [];
+		data.prepared_spells = [];
+
 		data.categories = [];
-		data.headings = ["icon", "name", "damage", "acquired"];
+		data.headings = ["icon", "name", "level", "damage", "acquired", "info"];
+		data.additionalHeaders = ["info"];
 		data.controls = [];
 		data.held_by = {};
 		data.actions = {};
+		data.actions.info = (record) => {
+			this.info(record);
+		};
 
 		data.formatter = {};
 		data.formatter.acquired = (value, record, header) => {
@@ -74,6 +99,34 @@ rsSystem.component("DNDSpells", {
 				return this.universe.calendar.toDisplay(value, false, false);
 			}
 			return value;
+		};
+		data.formatter.level = (value, record, header) => {
+			if(typeof(value) === "number") {
+				if(value === 0) {
+					return "Cantrip";
+				}
+				return value;
+			}
+			return 0;
+		};
+		data.formatter.damage = (value, record, header) => {
+			if(typeof(value) === "object") {
+				var keys = Object.keys(value),
+					html = [],
+					damage,
+					roll,
+					i;
+
+				for(i=0; i<keys.length; i++) {
+					if(value[keys[i]] && (damage = this.universe.index.damage_type[keys[i]])) {
+						roll = rsSystem.dnd.reducedDiceRoll(value[keys[i]], record);
+						html.push("<span class=\"" + damage.icon + "\"></span> " + roll);
+					}
+				}
+				
+				return html.join("</br>");
+			}
+			return 0;
 		};
 		data.formatter.icon = (value, record) => {
 			var classes = "";
@@ -86,6 +139,9 @@ rsSystem.component("DNDSpells", {
 			}
 			return "<span class=\"" + classes + (value || "") + "\"></span>";
 		};
+		data.formatter.info = () => {
+			return "<span class=\"fas fa-info-circle\"></span>";
+		};
 		data.formatter.category = (value) => {
 			if(value && (value = this.universe.getObject(value))) {
 				return value.name;
@@ -94,7 +150,36 @@ rsSystem.component("DNDSpells", {
 		};
 
 		data.sorts = {};
-		data.sorts.held_by = (a, b) => {
+		data.sorts.damage = (a, b) => {
+			var va = "",
+				vb = "",
+				keys,
+				i;
+
+			if(a) {
+				keys = Object.keys(a);
+				for(i=0; i<keys.length; i++) {
+					if(a[keys[i]]) {
+						va += keys[i] + ": " + a[keys[i]] + " ";
+					}
+				}
+			}
+			if(b) {
+				keys = Object.keys(b);
+				for(i=0; i<keys.length; i++) {
+					if(b[keys[i]]) {
+						vb += keys[i] + ": " + b[keys[i]] + " ";
+					}
+				}
+			}
+			if(va < vb) {
+				return -1;
+			} else if(va > vb) {
+				return 1;
+			}
+			return 0;
+		};
+		data.sorts.prepared_by = (a, b) => {
 			a = this.universe.getObject(a) || {};
 			b = this.universe.getObject(b) || {};
 			if(a.name < b.name) {
@@ -114,6 +199,7 @@ rsSystem.component("DNDSpells", {
 	"methods": {
 		"buildControls": function() {
 			var selected = Object.keys(this.storage.selected),
+				prepared = this.prepared,
 				reference = this,
 				forgettable = [],
 				preparable = [],
@@ -128,10 +214,10 @@ rsSystem.component("DNDSpells", {
 				buffer = this.universe.index.spell[selected[i]];
 				if(buffer && !buffer.disabled && !buffer.is_preview && buffer.caster === this.entity.id) {
 					if(this.entity.spells_known.indexOf(buffer.id) !== -1) {
-						if(this.entity.spells.indexOf(buffer.id) === -1) {
-							preparable.push(buffer.id);
-						} else {
+						if(this.prepared[buffer.id]) {
 							forgettable.push(buffer.id);
+						} else {
+							preparable.push(buffer.id);
 						}
 					}
 				}

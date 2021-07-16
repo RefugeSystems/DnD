@@ -1,0 +1,48 @@
+<div class="system-component table-configure">
+	<div class="headings">
+		<div class="heading flex h add">
+			<select class="grow-1" v-model="newHeader" v-on:change="addHeader(newHeader)">
+				<option value="">Add Header...</option>
+				<option v-for="field in headers" :value="field.id" v-if="!present[field.id]">{{field.name}}</option>
+			</select>
+			<button class="general rounded quick action" v-on:click="resetHeaders()" title="Reset to Default Headers">
+				<span class="fas fa-sync"></span>
+			</button>
+		</div>
+		<div class="heading mod general-warning" v-if="!storage.headings || storage.headings.length === 0">
+			<span class="fas fa-info-circle rs-light-yellow"></span>
+			<span>Defaulted to Default Fields</span>
+		</div>
+		<div class="heading flex h mod" v-for="(field, $index) in storage.headings" :key="field">
+			<button class="rounded general quick action" v-on:click="remove($index)">
+				<span class="fas fa-times rs-light-red"></span>
+			</button>
+			<button class="rounded general quick action" v-on:click="info(field)">
+				<span class="fas fa-info-circle"></span>
+			</button>
+			<select class="header-order" v-model.number="ordering[field]" v-on:change="reorder(field, $index, ordering[field])">
+				<option :value="0">0</option>
+				<option v-for="i in storage.headings.length" :value="i">{{i}}</option>
+			</select>
+			<div class="header-name grow-1 flex v">
+				<span class="">{{getFieldName(field)}}</span>
+			</div>
+		</div>
+	</div>
+	<div class="options flex v">
+		<div class="option flex h">
+			<span>Rows per Page:</span>
+			<select v-model.number="storage.rows" title="Rows per page">
+				<option v-for="i in 100" :value="i">{{i}}</option>
+			</select>
+		</div>
+		<div class="option flex h">
+			<span>Sorting Column</span>
+			<span>{{getFieldName(storage.key) || "No Active Sort"}}</span>
+		</div>
+		<div class="option flex h">
+			<span>Sorting Direction</span>
+			<span>{{storage.reverse === 1?"Forward":"Backward"}}</span>
+		</div>
+	</div>
+</div>

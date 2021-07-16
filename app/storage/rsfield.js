@@ -20,13 +20,13 @@ class RSField extends EventEmitter {
 	constructor(specification) {
 		super();
 		if(!valid.test(specification.id)) {
-			throw new Error("Invalid ID for Field: " + specification.id);
+			throw new Anomaly("storage:field", "Invalid ID for Field", 60, specification);
 		}
 		if(specification.type && !validTypeValue.test(specification.type)) {
-			throw new Error("Invalid type (" + specification.type + ") value for Field (" + specification.id + ")");
+			throw new Anomaly("storage:field", "Invalid type value for Field: " + specification.id, 60, specification);
 		}
 		if(!specification.name) {
-			throw new Error("storage:field", this, "RSField specification requires a name", 50);
+			throw new Anomaly("storage:field", "RSField specification requires a name: " + specification.id, 60, specification);
 		}
 		
 		/**

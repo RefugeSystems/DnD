@@ -63,8 +63,8 @@ module.exports.initialize = function(universe) {
 					has = (item.recharges_long || 0) + 1;
 					if(item.recharges_at_long <= has) {
 						item.addValues({
-							"recharges_long": -1 * has,
-							"charges": 1
+							"recharges_long": -1 * item.recharges_long,
+							"charges": item.recharges_amount_long
 						});
 					} else {
 						item.addValues({
@@ -82,7 +82,7 @@ module.exports.initialize = function(universe) {
 					if(feat.recharges_at_long <= has) {
 						feat.addValues({
 							"recharges_long": -1 * has,
-							"charges": 1
+							"charges": feat.recharges_amount_long
 						});
 					} else {
 						feat.addValues({
@@ -153,7 +153,7 @@ module.exports.initialize = function(universe) {
 					if(item.recharges_at_short <= has) {
 						item.addValues({
 							"recharges_short": -1 * has,
-							"charges": 1
+							"charges": item.recharges_amount_short
 						});
 					} else {
 						item.addValues({
@@ -171,7 +171,7 @@ module.exports.initialize = function(universe) {
 					if(feat.recharges_at_short <= has) {
 						feat.addValues({
 							"recharges_short": -1 * has,
-							"charges": 1
+							"charges": feat.recharges_amount_short
 						});
 					} else {
 						feat.addValues({

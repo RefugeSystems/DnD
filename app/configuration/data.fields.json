@@ -286,10 +286,12 @@
 		}
 	}, {
 		"id": "info",
-		"name": "",
+		"name": "i",
 		"description": "Currently used as a dynamic table field and not actually for object usage",
 		"type": "string",
-		"attribute": {}
+		"attribute": {
+			"no_sort": true
+		}
 	}, {
 		"id": "killed",
 		"name": "Killed",
@@ -474,7 +476,8 @@
 		"description": "Array of coordinates to render on an image for thigns such as a map.",
 		"type": "array",
 		"attribute": {
-			"displayed": false
+			"displayed": false,
+			"inert": true
 		}
 	}, {
 		"id": "rendering_has_path",
@@ -564,6 +567,14 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "acquired_at",
+		"name": "Acquired At",
+		"description": "Maps IDs to the game time at which they were found",
+		"type": "object",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "learned_from",
 		"name": "From",
 		"description": "This was learned from this creature",
@@ -610,6 +621,114 @@
 		"description": "The general cost of this object",
 		"type": "integer",
 		"attribute": {}
+	}, {
+		"id": "barbarian",
+		"icon": "fas fa-raised-fist",
+		"name": "Barbarian",
+		"description": "Current Barbarian level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "bard",
+		"icon": "fas fa-mandolin",
+		"name": "Bard",
+		"description": "Current Bard level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "cleric",
+		"icon": "fas fa-hammer-war",
+		"name": "Cleric",
+		"description": "Current Cleric level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "druid",
+		"icon": "fas fa-tree-alt",
+		"name": "Druid",
+		"description": "Current Druid level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "fighter",
+		"icon": "fas rot315 fa-sword",
+		"name": "Fighter",
+		"description": "Current Fighter level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "monk",
+		"icon": "fas rot270 fa-fist-raised",
+		"name": "Monk",
+		"description": "Current Monk level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "paladin",
+		"icon": "fas fa-shield-cross",
+		"name": "Paladin",
+		"description": "Current Paladin level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "ranger",
+		"icon": "fas fa-bow-arrow",
+		"name": "Ranger",
+		"description": "Current Ranger level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "rogue",
+		"icon": "fas fa-dagger",
+		"name": "Rogue",
+		"description": "Current Rogue level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "sorcerer",
+		"icon": "fas fa-hand-holding-magic",
+		"name": "Sorcerer",
+		"description": "Current Sorcerer level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "warlock",
+		"icon": "game-icon game-icon-magic-shield",
+		"name": "Warlock",
+		"description": "Current Warlock level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "wizard",
+		"icon": "fas fa-hat-wizard",
+		"name": "Wizard",
+		"description": "Current Wizard level",
+		"type": "integer",
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "initiative",
 		"icon": "fas fa-swords",
@@ -942,7 +1061,7 @@
 		"id": "damage",
 		"name": "Damage",
 		"description": "Maps a Damage Type ID to a formula for the amount done by this object",
-		"type": "object",
+		"type": "object:dice",
 		"inheritable": [
 			"damage_type"
 		],
@@ -1549,6 +1668,18 @@
 			"feats": "+",
 			"score": "+",
 			"threat": "+",
+			"barbarian": "+",
+			"bard": "+",
+			"cleric": "+",
+			"druid": "+",
+			"fighter": "+",
+			"monk": "+",
+			"paladin": "+",
+			"ranger": "+",
+			"rogue": "+",
+			"sorcerer": "+",
+			"warlock": "+",
+			"wizard": "+",
 			"movement_ground": "+",
 			"movement_swim": "+",
 			"movement_fly": "+",
@@ -1559,6 +1690,8 @@
 			"spell_attack": "+",
 			"spell_dc": "+",
 			"effects": "+",
+			"cantrips_maximum": "+",
+			"spells_maximum": "+",
 			"encumberance_max": "+",
 			"weight_max": "+",
 			"hit_dice_max": "+",
@@ -1840,6 +1973,18 @@
 			"stat_intelligence": "+",
 			"stat_wisdom": "+",
 			"stat_charisma": "+",
+			"barbarian": "+",
+			"bard": "+",
+			"cleric": "+",
+			"druid": "+",
+			"fighter": "+",
+			"monk": "+",
+			"paladin": "+",
+			"ranger": "+",
+			"rogue": "+",
+			"sorcerer": "+",
+			"warlock": "+",
+			"wizard": "+",
 			"encumberance_max": "+",
 			"response": "+",
 			"weight_max": "+",
@@ -1914,6 +2059,24 @@
 		},
 		"inheritable": [
 			"item"
+		],
+		"attribute": {}
+	}, {
+		"id": "creature",
+		"name": "Creature",
+		"description": "The creature that possesses this. This is generally a reference field for calculating values",
+		"type": "string",
+		"inheritable": [
+			"entity"
+		],
+		"attribute": {}
+	}, {
+		"id": "character",
+		"name": "Character",
+		"description": "The character that possesses this. This is generally a reference field for calculating values",
+		"type": "string",
+		"inheritable": [
+			"entity"
 		],
 		"attribute": {}
 	}, {
@@ -2859,14 +3022,6 @@
 		"ordering": 305,
 		"attribute": {
 			"display_size": 90
-		}
-	}, {
-		"id": "concealed",
-		"name": "Concealed",
-		"description": "Flag to prevent display of this object ot players",
-		"type": "boolean",
-		"attribute": {
-			"display": false
 		}
 	}, {
 		"id": "tracked_timing",

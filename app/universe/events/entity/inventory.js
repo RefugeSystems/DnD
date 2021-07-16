@@ -23,7 +23,7 @@ module.exports.initialize = function(universe) {
 			items = event.message.data.items,
 			i;
 	
-		if(entity.owned[event.player.id] || entity.played_by === event.player.id) {
+		if(event.player.gm || entity.owned[event.player.id] || entity.played_by === event.player.id) {
 			for(i=0; i<items.length; i++) {
 				map[items[i]] = true;
 			}
@@ -58,7 +58,7 @@ module.exports.initialize = function(universe) {
 			i;
 	
 	
-		if(entity.owned[event.player.id] || entity.played_by === event.player.id) {
+		if(event.player.gm || entity.owned[event.player.id] || entity.played_by === event.player.id) {
 			for(i=0; i<items.length; i++) {
 				map[items[i]] = false;
 			}
@@ -91,7 +91,7 @@ module.exports.initialize = function(universe) {
 			state = event.message.data.state,
 			i;
 	
-		if(entity.owned[event.player.id] || entity.played_by === event.player.id) {
+		if(event.player.gm || entity.owned[event.player.id] || entity.played_by === event.player.id) {
 			entity.setValues({
 				"inventory_share": state
 			});

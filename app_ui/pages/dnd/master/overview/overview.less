@@ -1,0 +1,18 @@
+.dnd-page.dnd-master-overview {
+	position: relative;
+	height: 100%;
+	width: 100%;
+
+	.player-select {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		max-height: 0px;
+		overflow: hidden;
+		transition: max-height .5s;
+
+		&.open {
+			max-height: 300px;
+		}
+	}
+}

@@ -1,10 +1,19 @@
 var fs = require("fs"),
 	merging = require("./source/characters.json"),
 	utility = require("./utility.js"),
+	Random = require("rs-random"),
 	exporting = [],
+	generated = [],
+	anchored = {},
+	generateObjectByParent,
+	getAcquiredDate,
+	equipped,
+	spells,
 	merged,
+	known,
 	keys,
 	inv,
+	gen,
 	mod,
 	id,
 	i,
@@ -12,13 +21,49 @@ var fs = require("fs"),
 	r,
 	x;
 
+getAcquiredDate = function(merged, id) {
+	if(merged.acquired && merged.acquired[id]) {
+		return merged.acquired[id].split(".")[1];
+	}
+	return undefined;
+};
+
+generateObjectByParent = function(merged, type, parent) {
+	var generating = {},
+		genParent;
+	generating.id = Random.identifier(type, 10, 32).toLowerCase();
+	generating.is_template = false;
+	generating.is_copy = true;
+	generating.acquired = getAcquiredDate(merged, parent);
+	if(parent.startsWith(type)) {
+		generating.parent = parent;
+	} else {
+		if(anchored[parent]) {
+			generating.parent = anchored[parent];
+		} else {
+			genParent = {};
+			genParent.id = Random.identifier(type, 10, 32).toLowerCase();
+			genParent.description = "Temporary Object for Malformed Parent: " + parent;
+			genParent.review = true;
+			anchored[parent] = genParent.id;
+			generated.push(genParent);
+			generating.parent = genParent.id;
+		}
+	}
+	generated.push(generating);
+	return generating;
+};
+
 for(i=0; i<merging.length; i++) {
 	merged = merging[i];
 	mod = null;
 	id = merged.id;
 	try {
 		// console.log("Merging: " + merged.name);
-		utility.loadModifiers(merged);
+		merged = utility.loadModifiers(merged);
+		merged.id = id;
+		equipped = {};
+		spells = {};
 
 		if(merged.type) {
 			merged.types = ["type:" + merged.type];
@@ -99,7 +144,10 @@ for(i=0; i<merging.length; i++) {
 		}
 		delete(merged.instanceOf);
 		if(merged.memorized) {
-			merged.spells = merged.memorized;
+			merged.spells = [];
+			for(j=0; j<merged.memorized.length; j++) {
+				spells[merged.memorized[j]] = true;
+			}
 		}
 		delete(merged.memorized);
 		if(merged.isStore) {
@@ -124,12 +172,36 @@ for(i=0; i<merging.length; i++) {
 		if(merged.gender) {
 			merged.gender = "gender:" + merged.gender;
 		}
-		if(merged.feat) {
-			merged.review = true;
-			merged.note = merged.note || "";
-			merged.note += "\n\nPreviously tied to a Feat: " + merged.feat;
+		if(merged.feats) {
+			inv = [];
+			for(k=0; k<merged.feats.length; k++) {
+				sk = merged.feats[k];
+				if(!sk.startsWith("feat:")) {
+					sk = "feat:" + sk;
+				}
+				if(merged.owned && Object.keys(merged.owned).length) {
+					gen = generateObjectByParent(merged, "feat", sk);
+					gen.user = merged.id;
+					inv.push(gen.id);
+				} else {
+					inv.push(sk[k]);
+				}
+			}
+			merged.feats = inv;
 		}
-		delete(merged.feat);
+		delete(merged.feats);
+		if(merged.user) {
+			merged.review = true;
+			merged.owned = merged.owned || {};
+			merged.owned[merged.user] = "review";
+		}
+		delete(merged.user);
+		if(merged.owner && !merged.owner.startsWith("npc") && !merged.owner.startsWith("unde") && merged.owner !== "undefined") {
+			merged.review = true;
+			merged.owned = merged.owned || {};
+			merged.owned[merged.owner] = "review";
+		}
+		delete(merged.owner);
 		if(merged.weight) {
 			merged.weight = parseInt(merged.weight);
 		}
@@ -141,28 +213,45 @@ for(i=0; i<merging.length; i++) {
 		}
 
 		if(merged.knowledge) {
+			merged.spells_known = [];
 			sk = Object.keys(merged.knowledge);
+			known = {};
 			inv = [];
-			r = {};
 			for(k=0; k<sk.length; k++) {
-				if(merged.knowledge[sk[k]]) {
+				if(merged.knowledge[sk[k]] && merged.knowledge[sk[k]].length) {
 					for(x=0; x<merged.knowledge[sk[k]].length; x++) {
-						if(!r[merged.knowledge[sk[k]][x]]) {
-							r[merged.knowledge[sk[k]][x]] = true;
-							if(typeof(merged.knowledge[sk[k]][x]) === "string") {
-								if(merged.knowledge[sk[k]][x].startsWith("knowledge")) {
-									inv.push(merged.knowledge[sk[k]][x]);
-								} else {
-									console.log(" > Invalid Knowledge Reference: " + merged.knowledge[sk[k]][x]);
-								}
+						if(typeof(merged.knowledge[sk[k]][x]) === "string" && !known[merged.knowledge[sk[k]][x]]) {
+							known[merged.knowledge[sk[k]][x]] = true;
+							// inv.push(generateObjectByParent(merged, "knowledge", merged.knowledge[sk[k]][x]));
+							if(merged.knowledge[sk[k]][x].startsWith("knowledge:")) {
+								r = merged.knowledge[sk[k]][x];
+							} else {
+								r = "knowledge:" + merged.knowledge[sk[k]][x];
 							}
+							inv.push(r);
 						}
 					}
 				}
+				if(sk[k].startsWith("spell:")) {
+					if(merged.owned && Object.keys(merged.owned).length) {
+						gen = generateObjectByParent(merged, "spell", sk[k]);
+						gen.character = merged.id;
+						gen.caster = merged.id;
+						gen.user = merged.id;
+						merged.spells_known.push(gen.id);
+						if(merged.spells && spells[sk[k]]) {
+							merged.spells.push(gen.id);
+						}
+					} else {
+						merged.spells.push(sk[k]);
+					}
+				}
 			}
+			inv.sort();
 			merged.knowledges = inv;
 		}
 		delete(merged.knowledge);
+
 		if(typeof(merged.spellSlots) === "object") {
 			keys = Object.keys(merged.spellSlots);
 			inv = {};
@@ -187,15 +276,54 @@ for(i=0; i<merging.length; i++) {
 			merged.equipped = [];
 			inv = Object.keys(merged.equipment);
 			for(k=0; k<inv.length; k++) {
-				merged.equipped.push(merged.equipment[inv[k]]);
+				if(!merged.equipment[inv[k]].startsWith("item:")) {
+					r = "item:" + merged.equipment[inv[k]];
+				} else {
+					r = merged.equipment[inv[k]];
+				}
+				if(equipped[r]) {
+					equipped[r]++;
+				} else {
+					equipped[r] = 1;
+				}
+				// merged.equipped.push();
 			}
 		}
+		delete(merged.equipment);
 		if(merged.inventory) {
 			sk = Object.keys(merged.inventory);
 			inv = [];
 			for(k=0; k<sk.length; k++) {
-				for(x=0; x<merged.inventory[sk[x]]; x++) {
-					inv.push(sk[k]);
+				if(!sk[k].startsWith("item:")) {
+					r = "item:" + sk[k];
+				} else {
+					r = sk[k];
+				}
+				if(merged.owned && Object.keys(merged.owned).length) {
+					for(x=0; x<merged.inventory[sk[k]]; x++) {
+						gen = generateObjectByParent(merged, "item", r);
+						// console.log(" + " + r + " -> " + gen);
+						if(equipped[r]) {
+							merged.equipped.push(gen.id);
+							equipped[r]--;
+						}
+						if(merged.charges && merged.charges[sk[k]]) {
+							gen.charges = parseInt(merged.charges[sk[k]]);
+						}
+						if(merged.recharging && merged.recharging[sk[k]]) {
+							gen.recharges_long = parseInt(merged.recharging[sk[k]]);
+						}
+						inv.push(gen.id);
+					}
+				} else {
+					inv.push(r);
+				}
+			}
+			sk = Object.keys(equipped);
+			for(k=0; k<sk.length; k++) {
+				if(equipped[sk[k]] !== 0) {
+					merged.description = merged.description || "";
+					merged.description += "  \nEquipment Missing: " + sk[k] + " -> " + equipped[sk[k]];
 				}
 			}
 			merged.inventory = inv;
@@ -204,11 +332,14 @@ for(i=0; i<merging.length; i++) {
 			merged.is_npc = true;
 		}
 
-		merged.id = "entity:" + id;
+		if(!id.startsWith("entity:")) {
+			console.log("Update entity: " + id);
+			id = "entity:" + id;
+		}
 		utility.finalize(merged);
 
 		delete(merged.equipment);
-		delete(merged.actions);
+		delete(merged.action_max);
 		delete(merged.bonusActions);
 		delete(merged.reactions);
 		delete(merged.advantages);
@@ -223,9 +354,9 @@ for(i=0; i<merging.length; i++) {
 		delete(merged.marking);
 		delete(merged.classes);
 		delete(merged.armor);
-		delete(merged.mvoement_ground);
-		delete(merged.mvoement_fly);
-		delete(merged.mvoement_swim);
+		delete(merged.movement_ground);
+		delete(merged.movement_fly);
+		delete(merged.movement_swim);
 		delete(merged.locked);
 		delete(merged.requirement);
 		delete(merged.created);
@@ -236,6 +367,7 @@ for(i=0; i<merging.length; i++) {
 		delete(merged.manualCharges);
 		delete(merged._search);
 		delete(merged.charges);
+		delete(merged.acquired);
 		delete(merged.overviewMaxHistory);
 		delete(merged.overviewVersion);
 		delete(merged.statePuzzle);
@@ -268,4 +400,6 @@ for(i=0; i<merging.length; i++) {
 	}
 }
 
+exporting = generated.concat(exporting);
 fs.writeFile("_characters.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+module.exports.data = exporting;

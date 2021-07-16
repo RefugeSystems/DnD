@@ -541,8 +541,10 @@ class RSObject {
 	/**
 	 * Calculate and set the `_calculated` property values for this object.
 	 * @method updateFieldValues
+	 * @param {Boolean} suppress The updated event, typically in lieu of a smaller
+	 * 		update such as a delta.
 	 */
-	updateFieldValues(origins) {
+	updateFieldValues(suppress) {
 		// console.trace(" > Update: " + this._data.id);
 		if(typeof(this.preFieldUpdate) === "function") {
 			this.preFieldUpdate();
@@ -560,9 +562,6 @@ class RSObject {
 			x;
 
 		this._search = "";
-		if(this.name) {
-			this._search += this.name.toLowerCase();
-		}
 		
 		// Establish Base Values
 		for(x=0; x<fields.length; x++) {
@@ -790,21 +789,12 @@ class RSObject {
 		}
 
 		// TODO: Implement field attribute specification for concealment, needs additional UI consideration for controlled visibility (See: Game Masters)
-		if(this.concealed) {
-			if(!this.attribute) {
-				this.attribute = {};
-			}
-			if(typeof(this.attribute.concealed) === "object") {
-				keys = Object.keys(this.attribute.concealed);
+		if(this.is_concealed) {
+			if(this.concealment) {
+				keys = Object.keys(this.concealment);
 				for(i=0; i<keys.length; i++) {
 					if(keys[i][0] !== "_" && keys[i] !== "id") {
-						this[keys[i]] = this.attribute.concealed[keys[i]];
-					}
-				}
-			} if(this.attribute.concealed instanceof Array) {
-				for(i=0; i<this.attribute.concealed.length; i++) {
-					if(this.attribute.concealed[i][0] !== "_" && this.attribute.concealed[i] !== "id") {
-						this[this.attribute.concealedeys[i]] = "Unknown";
+						this[keys[i]] = this.concealment[keys[i]];
 					}
 				}
 			} else {
@@ -847,7 +837,9 @@ class RSObject {
 		// console.log("Updated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushUpdated(this.id);
 
-		this._universe.emit("object-updated", this.toJSON());
+		if(!suppress) {
+			this._universe.emit("object-updated", this.toJSON());
+		}
 	}
 
 	/**
@@ -930,7 +922,7 @@ class RSObject {
 		
 		var details,
 			follow;
-		
+
 		// console.log(" [@] Compute[" + this.id + "]: ", name[index], " -> ", this[name[index]], referenced);
 		if(name[index] === "this") {
 			// console.log(" [=<] > " + this[name[index]]);
@@ -1093,7 +1085,7 @@ class RSObject {
 		this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
-			this.updateFieldValues();
+			this.updateFieldValues(true);
 			this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
@@ -1139,7 +1131,7 @@ class RSObject {
 		this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
-			this.updateFieldValues();
+			this.updateFieldValues(true);
 			this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
@@ -1194,7 +1186,7 @@ class RSObject {
 		this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
-			this.updateFieldValues();
+			this.updateFieldValues(true);
 			this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
@@ -1408,6 +1400,7 @@ class RSObject {
 		
 		delta.id = this.id;
 		delta._class = this._class;
+		delta._invloved = this._invloved;
 		return delta;
 	}
 	
@@ -1458,6 +1451,11 @@ class RSObject {
 			}
 		}
 		
+		// Name added last for inheritted names
+		if(this.name) {
+			this._search += this.name.toLowerCase();
+		}
+
 		json.id = this.id;
 		json._class = this._class;
 		json._involved = this._involved;
@@ -1668,6 +1666,11 @@ RSObject.subObjects = function(a, b, type) {
  * @return {[type]}      [description]
  */
 RSObject.subValues = function(a, b, type) {
+	var buffer,
+		lookup,
+		index,
+		i;
+
 	// Level set for string differences; Affects object mapped values from the editor, need to add better tracking for object subvalues to keep them settled correctly
 	if(parseInt(a) == a && parseInt(b) == b) {
 		type = "number";
@@ -1730,7 +1733,19 @@ RSObject.subValues = function(a, b, type) {
 					return a + " - (" + b + ")";
 				}
 			case "array":
-				return a.difference(b);
+				lookup = {};
+				for(i=0; i<b.length; i++) {
+					if(b[i]) {
+						lookup[b[i].id || b[i]] = true;
+					}
+				}
+				buffer = [].concat(a);
+				for(i=buffer.length - 1; 0<=i; i--) {
+					if(buffer[i] && lookup[buffer[i].id || buffer[i].id]) {
+						buffer.splice(i, 1);
+					}
+				}
+				return buffer;
 			case "boolean":
 				return a && !b;
 			case "object":

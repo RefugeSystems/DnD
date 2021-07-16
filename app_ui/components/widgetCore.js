@@ -84,6 +84,9 @@ rsSystem.component("DNDWidgetCore", {
 		}
 	},
 	"methods": {
+		"showCharges": function(object) {
+			return typeof(object.charges_max) === "number" || typeof(object.charges_max) === "string";
+		},
 		"formatNumber": function(number) {
 			if(number && typeof(number.toFixed) === "function") {
 				return number.toFixed(2);

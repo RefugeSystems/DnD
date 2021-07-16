@@ -13,7 +13,7 @@ for(i=0; i<merging.length; i++) {
 	id = merged.id;
 	try {
 		// console.log("Merging: " + merged.name);
-		utility.loadModifiers(merged);
+		merged = utility.loadModifiers(merged);
 		if(merged.nation) {
 			merged.nation = "nation:" + merged.nation;
 		}
@@ -72,3 +72,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_races.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

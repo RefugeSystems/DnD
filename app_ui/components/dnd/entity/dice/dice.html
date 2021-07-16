@@ -1,6 +1,6 @@
-<div class="rs-component dnd-component entity-dice">
+<div class="rs-component dnd-component entity-dice" v-if="storage">
 	<div class="divider"></div>
-	<div class="available flex h centered">
+	<div class="available flex h centered" v-if="storage.count">
 		<button class="general rounded quick action" v-on:click="clear()">
 			<span>{{storage.sum}}</span>
 		</button>
@@ -10,7 +10,7 @@
 		</button>
 	</div>
 	<div class="mini-divider"></div>
-	<div class="history flex h">
+	<div class="history flex h" v-if="storage.results">
 		<button class="result general rounded action nowrap" v-for="(result, $index) in storage.results" v-on:click="noOp($index)" v-on:click.right.stop.prevent="dismiss($index, result)" :title="result.date">
 			<span class="dice" :class="result.dice"></span>
 			<span>{{result.value}}</span>

@@ -19,6 +19,7 @@ rsSystem.component("dndEntityHealthbar", {
 	"data": function() {
 		var data = {};
 		data.health = 0;
+		data.temphp = 0;
 		return data;
 	},
 	"mounted": function() {
@@ -31,6 +32,7 @@ rsSystem.component("dndEntityHealthbar", {
 	"methods": {
 		"updateBar": function() {
 			Vue.set(this, "health", Math.floor(100*(this.entity.hp || 0)/(this.entity.hp_max || 1)));
+			Vue.set(this, "temphp", Math.floor(100*(this.entity.hp_temp || 0)/(this.entity.hp_max || 1)));
 			if(this.$el && this.$el.classList) {
 				this.$el.classList.remove("okay");
 				this.$el.classList.remove("warn");
@@ -45,10 +47,12 @@ rsSystem.component("dndEntityHealthbar", {
 			}
 
 			// Set width and mange that "bar" may not have instantiated yet
-			var bar = $(this.$el).find(".bar");
+			var bar = $(this.$el).find(".hp.bar"),
+				tmp = $(this.$el).find(".thp.bar");
 			if(this.health) {
 				if(bar.length) {
 					bar.css({"width": this.health + "%"});
+					tmp.css({"width": this.temphp + "%"});
 				} else {
 					setTimeout(() => {this.updateBar();}, 10);
 				}

@@ -57,3 +57,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_proficiencies.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

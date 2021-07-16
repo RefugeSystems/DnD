@@ -40,6 +40,10 @@ for(i=0; i<merging.length; i++) {
 		delete(merged.container);
 		merged.label = merged.name;
 
+		if(!id.startsWith("location")) {
+			console.log("Update location: " + id);
+			id = "location:" + id;
+		}
 		merged.id = id;
 		utility.finalize(merged);
 
@@ -75,3 +79,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_locations.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

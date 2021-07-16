@@ -9,6 +9,7 @@ var fs = require("fs"),
 	classing,
 	merged,
 	keys,
+	root,
 	mod,
 	id,
 	i,
@@ -115,7 +116,8 @@ addValues = function(a, b, type, op) {
 for(i=0; i<merging.length; i++) {
 	merged = merging[i];
 	mod = null;
-	id = merged.id.replace("class", "archetype");
+	root = merged.id.replace("class:", "");
+	id = "archetype:" + root;
 	try {
 		utility.loadModifiers(merged);
 
@@ -150,9 +152,13 @@ for(i=0; i<merging.length; i++) {
 				// console.log(" [√] Merging: " + merged.name);
 				classing = addValues(classing, mod);
 				classing.id = id + ":" + keys[j];
+				classing[root] = 1;
 				utility.finalize(classing);
 				if(keys[j] != 1) {
 					classing.name += " (" + keys[j] + ")";
+					classing.obscured = true;
+				} else {
+					classing.root = true;
 				}
 				exporting.push(classing);
 			} else {
@@ -165,3 +171,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_classes.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

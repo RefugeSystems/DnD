@@ -59,31 +59,31 @@ rsSystem.component("DNDInventory", {
 				j;
 
 			Vue.set(this, "held_by", {});
-			if(this.entity.owned[this.player.id] || this.player.gm) {
-				if(this.entity) {
-					for(i=0; i<this.entity.inventory.length; i++) {
-						item = this.universe.getObject(this.entity.inventory[i]);
-						if(item) {
-							Vue.set(this.held_by, item.id, this.entity.nickname || this.entity.name);
-							inventory.push(item);
-						} else {
-							console.warn("Item Missing: " + this.entity.inventory[i]);
-						}
+			if(this.entity && this.entity.owned[this.player.id] || this.player.gm) {
+				for(i=0; i<this.entity.inventory.length; i++) {
+					item = this.universe.getObject(this.entity.inventory[i]);
+					if(item) {
+						Vue.set(this.held_by, item.id, this.entity.nickname || this.entity.name);
+						inventory.push(item);
+					} else {
+						console.warn("Item Missing: " + this.entity.inventory[i]);
 					}
 				}
-				if(this.meeting && this.meeting.entities) {
-					for(j=0; j<this.meeting.entities.length; j++) {
-						if(!this.entity || this.meeting.entities[j] !== this.entity.id) {
-							entity = this.universe.getObject(this.meeting.entities[j]);
-							if(entity.inventory_share) {
-								for(i=0; i<entity.inventory.length; i++) {
-									if(!entity.inventory_hidden || !entity.inventory_hidden[entity.inventory[i]]) {
-										item = this.universe.getObject(entity.inventory[i]);
-										if(item) {
-											Vue.set(this.held_by, item.id, entity.nickname || entity.name);
-											inventory.push(item);
-										} else {
-											console.warn("Item Missing: " + entity.inventory[i]);
+				if(!this.$route.params.entity) {
+					if(this.meeting && this.meeting.entities) {
+						for(j=0; j<this.meeting.entities.length; j++) {
+							if(!this.entity || this.meeting.entities[j] !== this.entity.id) {
+								entity = this.universe.getObject(this.meeting.entities[j]);
+								if(entity.inventory_share) {
+									for(i=0; i<entity.inventory.length; i++) {
+										if(!entity.inventory_hidden || !entity.inventory_hidden[entity.inventory[i]]) {
+											item = this.universe.getObject(entity.inventory[i]);
+											if(item) {
+												Vue.set(this.held_by, item.id, entity.nickname || entity.name);
+												inventory.push(item);
+											} else {
+												console.warn("Item Missing: " + entity.inventory[i]);
+											}
 										}
 									}
 								}
@@ -100,9 +100,9 @@ rsSystem.component("DNDInventory", {
 		"entity.inventory_share": function(set) {
 			if(this.share) {
 				if(set) {
-					Vue.set(this.share, "icon", "fas fa-users-slash");
-				} else {
 					Vue.set(this.share, "icon", "fas fa-users");
+				} else {
+					Vue.set(this.share, "icon", "fas fa-users-slash");
 				}
 			}
 		},
@@ -115,11 +115,15 @@ rsSystem.component("DNDInventory", {
 			data = {};
 
 		data.categories = [];
-		data.headings = ["icon", "name", "types", "held_by", "acquired", "age"];
+		data.headings = ["icon", "name", "types", "held_by", "acquired", "age", "info"];
+		data.additionalHeaders = ["held_by", "info"];
 		data.held_by = {};
 		data.actions = {};
 		data.actions.held_by = (record) => {
 			this.info(this.universe.named[this.held_by[record.id]]);
+		};
+		data.actions.info = (record) => {
+			this.info(record);
 		};
 		data.formatter = {};
 		data.formatter.held_by = (value, record, header) => {
@@ -156,6 +160,30 @@ rsSystem.component("DNDInventory", {
 			}
 			return "<span class=\"" + classes + (value || "") + "\"></span>";
 		};
+		data.formatter.info = () => {
+			return "<span class=\"fas fa-info-circle\"></span>";
+		};
+		data.formatter.damage = (value, record, header) => {
+			if(typeof(value) === "object") {
+				var keys = Object.keys(value),
+					html = [],
+					damage,
+					roll,
+					i;
+
+				if(record) {
+					for(i=0; i<keys.length; i++) {
+						if(value[keys[i]] && (damage = this.universe.index.damage_type[keys[i]])) {
+							roll = rsSystem.dnd.reducedDiceRoll(value[keys[i]], record);
+							html.push("<span class=\"" + damage.icon + "\" title=\"" + keys[i] + "\"></span> " + roll);
+						}
+					}
+				}
+				
+				return html.join("</br>");
+			}
+			return 0;
+		};
 		data.formatter.category = (value) => {
 			if(value && (value = this.universe.getObject(value))) {
 				return value.name;
@@ -164,6 +192,35 @@ rsSystem.component("DNDInventory", {
 		};
 
 		data.sorts = {};
+		data.sorts.damage = (a, b) => {
+			var va = "",
+				vb = "",
+				keys,
+				i;
+
+			if(a) {
+				keys = Object.keys(a);
+				for(i=0; i<keys.length; i++) {
+					if(a[keys[i]]) {
+						va += keys[i] + ": " + a[keys[i]] + " ";
+					}
+				}
+			}
+			if(b) {
+				keys = Object.keys(b);
+				for(i=0; i<keys.length; i++) {
+					if(b[keys[i]]) {
+						vb += keys[i] + ": " + b[keys[i]] + " ";
+					}
+				}
+			}
+			if(va < vb) {
+				return -1;
+			} else if(va > vb) {
+				return 1;
+			}
+			return 0;
+		};
 		data.sorts.held_by = (a, b) => {
 			a = this.universe.getObject(a) || {};
 			b = this.universe.getObject(b) || {};
@@ -217,8 +274,8 @@ rsSystem.component("DNDInventory", {
 				buffer,
 				i;
 
-			this.attunable.splice(0);
 			this.unattunable.splice(0);
+			this.attunable.splice(0);
 			this.controls.splice(0);
 			if(this.entity && this.share) {
 				this.controls.push(this.share);
@@ -226,7 +283,7 @@ rsSystem.component("DNDInventory", {
 
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.item[selected[i]];
-				if(buffer && !buffer.disabled && !buffer.is_preview && this.entity.owned[this.player.id] && this.entity.inventory.indexOf(buffer.id) !== -1) {
+				if(buffer && !buffer.disabled && !buffer.is_preview && (this.entity.owned[this.player.id] || this.player.gm) && this.entity.inventory.indexOf(buffer.id) !== -1) {
 					if(this.entity.inventory_hidden && this.entity.inventory_hidden[buffer.id]) {
 						show = true;
 					} else {

@@ -104,7 +104,11 @@
 			if(referenced) {
 				referenced.push(object.id);
 			}
-			return object[name[index]][name[index + 1]];
+			if(object[name[index]]) {
+				return object[name[index]][name[index + 1]];
+			} else {
+				return 0;
+			}
 		} else if(object[name[index]]) {
 			// TODO: Refactor to be cleaner or move into a new class where universe is tracked
 			follow = rsSystem.universe.getObject(object[name[index]]);

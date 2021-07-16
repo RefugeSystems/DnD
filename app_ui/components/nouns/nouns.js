@@ -265,7 +265,7 @@
 						}
 					}
 				} else {
-					Vue.set(this.details, "id", this.storage.swap.id || null);
+					Vue.set(this.details, "id", this.storage.swap[this.storage.classification].id || null);
 					for(i=0; i<this.fields.length; i++) {
 						Vue.set(this.details, this.fields[i].id, this.storage.swap[this.storage.classification][this.fields[i].id] || null);
 					}

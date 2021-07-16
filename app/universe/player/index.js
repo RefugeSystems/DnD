@@ -248,6 +248,9 @@ class PlayerConnection extends EventEmitter {
 				if(change._search) {
 					send._search = change._search;
 				}
+				if(change._involved) {
+					send._involved = change._involved;
+				}
 				if(change._data) {
 					send._data = change._data;
 				}

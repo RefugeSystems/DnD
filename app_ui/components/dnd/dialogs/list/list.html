@@ -34,7 +34,10 @@
 						<span :class="entry.icon || 'fas fa-cube'"></span>
 					</button>
 					<div class="list-data-details">
-						<h3>{{entry.name}}</h3>
+						<h3>
+							<span>{{entry.name}}</span>
+							<button class="flat action fas fa-info-circle rs-light-blue" v-on:click="info(entry)"></button>
+						</h3>
 						<div v-if="details.note" v-html="details.note(section, entry)"></div>
 						<div class="list-data-description" v-if="entry.description" v-html="rsshowdown(entry.description, entry)"></div>
 						<div class="controls" v-if="controls && controls[section]">

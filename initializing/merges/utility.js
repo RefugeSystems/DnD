@@ -1,4 +1,5 @@
 var utility = module.exports,
+	RSObject = require("../../app/storage/rsobject.js"),
 	modifiers = require("./modifiers.json"),
 	modMap = {},
 	rename = {
@@ -22,8 +23,15 @@ var utility = module.exports,
 		"sonic": "damage_type:sonic"
 	},
 	
+	
+	html = new RegExp("<span class=\"rs-(darkorange|orange)\">([^<]+)</span>", "g"),
+	date = new RegExp("<span class=\"rs-lightblue\">([^<]+)</span>", "g"),
+	tags = /\$\{([^\},]+)(,[^\},]+)?(,[^\},]+)?\}\$/g,
+	hunt = /\$\{"content":[^"]*?"([^\\,"]+).*\}\$/g,
 	cleanid = new RegExp("[^a-zA-Z0-9_:]+", "g"),
 	clean = new RegExp("[A-Z]"),
+
+	rebuildDescription,
 	addObjects,
 	addValues,
 	remap,
@@ -61,6 +69,9 @@ utility.finalize = function(merged) {
 	 */
 	if(merged.alignment) {
 		merged.alignment = "alignment:" + merged.alignment;
+	}
+	if(merged.description) {
+		merged.description = rebuildDescription(merged.description);
 	}
 	switch(merged.size) {
 		case "itsy":
@@ -252,13 +263,19 @@ utility.finalize = function(merged) {
 		merged.movement_ground = parseInt(merged.movement) * 8/5;
 	}
 	delete(merged.movement);
-	if(typeof(merged.spellSlots) === "object") {
+	if(merged.duration) {
+		merged.duration = parseInt(merged.duration) * 6;
+	}
+	if(merged.duration <= 0) {
+		delete(merged.duration);
+	}
+	if(merged.spellSlots !== null && typeof(merged.spellSlots) === "object") {
 		k = Object.keys(merged.spellSlots);
 		x = {};
 		for(i=0; i<k.length; i++) {
 			x[k[i]] = merged.spellSlots[k[i]];
 		}
-		merged.spell_slots_max = x;
+		merged.spell_slot_max = x;
 	}
 	delete(merged.spellSlots);
 
@@ -347,6 +364,7 @@ utility.finalize = function(merged) {
 	}
 
 	merged.id = merged.id.replace(cleanid,"").toLowerCase();
+	delete(merged.modifiers);
 };
 
 utility.loadModifiers = function(merged) {
@@ -354,12 +372,17 @@ utility.loadModifiers = function(merged) {
 		for(j=0; j<merged.modifiers.length; j++) {
 			mod = modMap[merged.modifiers[j]];
 			if(mod) {
-				merged = addValues(merged, mod);
+				// console.log("Loading: ", merged, mod);
+				merged = RSObject.addValues(merged, mod);
+				// console.log("Result: ", merged);
 			} else {
 				console.log("Missing Modifier: " + merged.modifiers[j]);
 			}
 		}
 	}
+	// Needed in Classes, Deleted in Finalize
+	// delete(merged.modifiers);
+	return merged;
 };
 
 addObjects = utility.addObjects = function(a, b, type) {
@@ -469,10 +492,49 @@ remap = utility.remap = function(object) {
 
 		for(i=0; i<keys.length; i++) {
 			if(rename[keys[i]]) {
-				object[rename[keys[i]]] = object[keys[i]];
+				if(object[keys[i]]) {
+					object[rename[keys[i]]] = object[keys[i]];
+				}
 				delete(object[keys[i]]);
 			}
 		}
 	}
 };
 
+rebuildDescription = utility.rebuildDescription = function(changing) {
+	var description = changing,
+		replace,
+		match;
+	while(match = hunt.exec(changing)) {
+		if(match[0].length < 3) {
+			description = description.replace(match[0], match[1]);
+		} else if(isNaN(match[0])) {
+			description = description.replace(match[0], "${" + match[1] + "}$");
+		} else {
+			description = description.replace(match[0], "${@" + match[1] + "}$");
+		}
+	}
+	// console.log(" [√] Tags");
+	while(match = html.exec(changing)) {
+		description = description.replace(match[0], "${" + match[2] + "}$");
+	}
+	// console.log(" [√] HTML");
+	while(match = date.exec(changing)) {
+		description = description.replace(match[0], "${@" + match[1] + "}$");
+	}
+	// console.log(" [√] Dates");
+	while(match = tags.exec(changing)) {
+		replace = match[1];
+		if(match[2]) {
+			if(match[3]) {
+				replace += match[3];
+			} else {
+				replace += ",";
+			}
+			replace += match[2];
+		}
+		description = description.replace(match[0], "${" + replace + "}$");
+	}
+	// console.log(" [√] Refactor");
+	return description;
+};

@@ -178,6 +178,33 @@ fields.push({
 	"attribute": {}
 });
 fields.push({
+	"id": "concealment",
+	"name": "Concealment",
+	"description": "Maps the covering for fields when `is_concealed` is true. These manifest as full changes, so changes to stats such as `strength` will behave accordingly.",
+	"type": "object",
+	"attribute": {
+		"display": false
+	}
+});
+fields.push({
+	"id": "concealed_ui",
+	"name": "Covered",
+	"description": "Maps fields for covering on UI displays meant to not change the behavior of the object.",
+	"type": "object",
+	"attribute": {
+		"display": false
+	}
+});
+fields.push({
+	"id": "is_concealed",
+	"name": "Concealed",
+	"description": "Flag to prevent display of this object ot players",
+	"type": "boolean",
+	"attribute": {
+		"display": false
+	}
+});
+fields.push({
 	"id": "expires_from",
 	"name": "Expires From",
 	"description": "Indicates that object values should be pulled to this object on expiration, this value identifying the object to use. If a template is specified, values are generated and pushed into this object.",

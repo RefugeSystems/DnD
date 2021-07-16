@@ -39,20 +39,20 @@ module.exports.initialize = function(universe) {
 			}
 
 			if(prepared.length) {
-				entity.addValues({"spells": prepared}, function(err) {
+				entity.addValues({"spells": prepared, "spells_prepared": prepared}, function(err) {
 					if(err) {
 						// TODO: Better logging
 						universe.handleError("equipment:equip", err);
 						console.error(err);
 					} else {
-						if(entity._data.spells && typeof(entity.spells_maximum) === "number" && entity._data.spells.length > entity.spells_maximum) {
+						if(entity._data.spells && typeof(entity.spells_maximum) === "number" && entity._data.spells_prepared.length > entity.spells_maximum) {
 							notify = Object.assign({}, universe.getMasters());
 							notify[event.player.id] = true;
 							universe.emit("send", {
 								"type": "notice",
 								"icon": "fas fa-exclamation-triangle rs-lightred",
 								"recipients": notify,
-								"message": entity.name + " knows " + entity._data.spells.length + " Spells and has a maximum memorization of " + entity.spells_maximum,
+								"message": entity.name + " has prepared " + entity._data.spells_prepared.length + " Spells and has a maximum preparation of " + entity.spells_maximum,
 								"data": event.message.data,
 								"anchored": true
 							});
@@ -100,7 +100,7 @@ module.exports.initialize = function(universe) {
 			}
 
 			if(prepared.length) {
-				entity.subValues({"spells": prepared});
+				entity.subValues({"spells": prepared, "spells_prepared": prepared});
 			}
 		}
 	});

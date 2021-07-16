@@ -9,11 +9,13 @@
 				<span :class="entity.icon || 'fas fa-user'"></span>
 			</button>
 			<div class="entity-details flex v">
-				<h1 class="entity-name">
-					<span :class="getRelationIcon(entity)"></span>
-					<span>{{entity.name}}</span>
-				</h1>
-				<dnd-health-bar :entity="entity"></dnd-health-bar>
+				<div class="entity-name">
+					<h1>
+						<span :class="getRelationIcon(entity)"></span>
+						<span>{{entity.name}}</span>
+					</h1>
+					<dnd-health-bar :entity="entity" :classing="relative"></dnd-health-bar>
+				</div>
 				<div class="entity-description" v-html="rsshowdown(entity.description, entity)"></div>
 			</div>
 		</div>

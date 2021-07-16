@@ -1,4 +1,5 @@
 <div class="dnd-component entity-healthbar" :class="widget?widget.attribute.classing:''">
-	<div class="bar" v-if="health">{{health}}%</div>
+	<div class="hp bar" v-if="health">{{health}}% HP</div>
+	<div class="thp bar" v-if="temphp">{{temphp}}% Temp HP</div>
 	<span v-if="!health" class="dead fas fa-skull-crossbones rs-white"></span>
 </div>

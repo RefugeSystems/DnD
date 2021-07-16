@@ -40,6 +40,11 @@ module.exports.initialize = function(universe) {
 				target.addValues(values);
 			} else {
 				values.acquired = universe.time;
+				if(target._class === "entity") {
+					values.character = target.id;
+					values.creature = target.id;
+					values.user = target.id;
+				}
 
 				if(object.duration) {
 					values.expiration = universe.time + (parseInt(object.duration) || 0);

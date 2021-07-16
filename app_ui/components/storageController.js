@@ -45,6 +45,9 @@ rsSystem.component("StorageController", {
 		// console.log("Mounted Controller[" + this.storageKey + "]: ", this.storage);
 	},
 	"methods": {
+		"showCharges": function(object) {
+			return typeof(object.charges_max) === "number" || typeof(object.charges_max) === "string";
+		},
 		"loadStorage": function(defaults) {
 			if(this.storageKey && !this.storageContainer) {
 				var data = localStorage.getItem(this.storageKey);
@@ -63,13 +66,48 @@ rsSystem.component("StorageController", {
 		"copyText": function(text) {
 			navigator.clipboard.writeText(text);
 		},
-		"editNoun": function(record) {
-			if(this.player.gm) {
-				if(this.profile.edit_new_window) {
-					window.open("/#/control/" + record._class + "/" + record.id, "edit");
-				} else {
-					this.$router.push("/control/" + record._class + "/" + record.id);
+		"editNoun": function(event, record) {
+			var player = this.player;
+
+			if(event instanceof MouseEvent) {
+				if(!record) {
+					for(var i=0; i<event.path.length; i++) {
+						if(event.path[i] && event.path[i] && event.path[i].attributes && (record = event.path[i].getAttribute("data-id"))) {
+							record = this.universe.getObject(record);
+							if(record) {
+								event.stopPropagation();
+								event.preventDefault();
+								break;
+							}
+						}
+					}
 				}
+				if(record) {
+					if(!player) {
+						player = this.universe.index.player[this.universe.connection.session.player];
+					}
+					if(player) {
+						if(event.altKey) {
+							this.info(record);
+						} else if(player.gm) {
+							if(event.ctrlKey) {
+								navigator.clipboard.writeText(record.id);
+							} else {
+								if(this.profile && this.profile.edit_new_window) {
+									window.open(location.pathname + "#/control/" + record._class + "/" + record.id, "edit");
+								} else {
+									this.$router.push("/control/" + record._class + "/" + record.id);
+								}
+							}
+						}
+					} else {
+						console.warn("Edit Noun Failed: Player not found");
+					}
+				} else {
+					console.warn("Edit Noun Failed: No Record Found: ", event, record);
+				}
+			} else {
+				console.warn("Edit Noun Failed: Requires MouseEvent as first parameter");
 			}
 		},
 		"info": function(record) {

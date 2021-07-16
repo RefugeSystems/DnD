@@ -22,7 +22,7 @@ for(i=0; i<merging.length; i++) {
 			merged.range_normal = merged.range;
 		}
 		delete(merged.range);
-		utility.loadModifiers(merged);
+		merged = utility.loadModifiers(merged);
 		switch(merged.type) {
 			case "cast":
 				delete(merged.type);
@@ -123,8 +123,12 @@ for(i=0; i<merging.length; i++) {
 		if(merged.attribute) {
 			merged.stat = merged.attribute;
 		}
-		delete(merged.attribute)
+		delete(merged.attribute);
 		
+		if(!id.startsWith("spell:")) {
+			console.log("Update spell: " + id);
+			id = "spell:" + id;
+		}
 		merged.id = id;
 		utility.finalize(merged);
 
@@ -154,3 +158,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_spells.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

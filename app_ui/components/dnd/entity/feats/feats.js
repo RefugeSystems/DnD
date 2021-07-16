@@ -65,7 +65,7 @@ rsSystem.component("dndEntityFeats", {
 			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
 		},
 		"open": function(feat) {
-			rsSystem.EventBus.$emit("dialog-open", {
+			var details = {
 				"component": "dndCard",
 				"entity": this.entity.id,
 				"object": feat,
@@ -94,10 +94,12 @@ rsSystem.component("dndEntityFeats", {
 					"resistance",
 					"advantage",
 					"disadvantage"],
-				"fieldComponent": {
-					"charges": "dndObjectCharges"
-				}
-			});
+				"fieldComponent": {}
+			};
+			if(this.showCharges(feat)) {
+				details.fieldComponent.charges = "dndObjectCharges";
+			}
+			rsSystem.EventBus.$emit("dialog-open", details);
 		}
 	},
 	"beforeDestroy": function() {

@@ -284,47 +284,47 @@ module.exports.initialize = function(universe) {
 	 */
 	sendDamage = function(activity, source, target, channel, damage) {
 		var notify = function() {
-			var type = Object.keys(damage),
-				recipients,
-				icon;
-			if(type.length === 1 && type[0] === "damage_type:heal") {
-				type = (target.nickname || target.name) + " receiving healing";
-				icon = "fad fa-heartbeat rs-white rs-secondary-solid rs-secondary-green";
-			} else {
-				type = (target.nickname || target.name) + " taking damage";
-				icon = "game-icon game-icon-crossed-slashes rs-lightred";
-			}
-
-			if(target.owned && Object.keys(target.owned).length) {
-				recipients = target.owned;
-			} else {
-				recipients = universe.getMasters();
-			}
-
-			universe.emit("send", {
-				"type": "notice",
-				"mid": activityPrefix + activity,
-				"message": type + (source?" from " + (source.nickname || source.name):""),
-				"icon": icon,
-				"anchored": true,
-				"recipients": recipients,
-				"emission": {
-					"type": "dialog-open",
-					"component": "dndDialogRoll",
-					"storageKey": "store:roll:" + target,
-					"action": "action:damage:recv",
-					"activity": activity,
-					"source": source?source.id:null,
-					"entity": target.id,
-					"channel": channel,
-					"damage": damage,
-					"fill_damage": true,
-					"closeAfterAction": true
-				}
-			});
-
-			// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
 			if(tracking[activity]) {
+				var type = Object.keys(damage),
+					recipients,
+					icon;
+				if(type.length === 1 && type[0] === "damage_type:heal") {
+					type = (target.nickname || target.name) + " receiving healing";
+					icon = "fad fa-heartbeat rs-white rs-secondary-solid rs-secondary-green";
+				} else {
+					type = (target.nickname || target.name) + " taking damage";
+					icon = "game-icon game-icon-crossed-slashes rs-lightred";
+				}
+
+				if(target.owned && Object.keys(target.owned).length) {
+					recipients = target.owned;
+				} else {
+					recipients = universe.getMasters();
+				}
+
+				universe.emit("send", {
+					"type": "notice",
+					"mid": activityPrefix + activity,
+					"message": type + (source?" from " + (source.nickname || source.name):""),
+					"icon": icon,
+					"anchored": true,
+					"recipients": recipients,
+					"emission": {
+						"type": "dialog-open",
+						"component": "dndDialogRoll",
+						"storageKey": "store:roll:" + target,
+						"action": "action:damage:recv",
+						"activity": activity,
+						"source": source?source.id:null,
+						"entity": target.id,
+						"channel": channel,
+						"damage": damage,
+						"fill_damage": true,
+						"closeAfterAction": true
+					}
+				});
+
+				// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
 				alarms[activity] = setTimeout(notify, 5000);
 			}
 		};

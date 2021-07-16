@@ -9,17 +9,25 @@
 				<span :class="control.icon"></span>
 				<span>{{control.name}}</span>
 			</button>
+			<select class="ctrl selections info" v-for="control in selections" v-if="control.id && control.options" v-model="storage[control.id]" v-on:change="control.process(storage[control.id])" :title="control.title">
+				<option v-if="control.null_option && control.null_option.id" :value="control.null_option.id">{{control.null_option.name}}</option>
+				<option v-if="control.null_option && !control.null_option.id" value>{{control.null_option.name || control.null_option}}</option>
+				<option v-for="option in control.options" :value="option.id">{{option.name}}</option>
+			</select>
 		</div>
-		<button class="ctrl selections clear" v-if="selected" v-on:click="clearSelection()">
+		<button class="ctrl selections clear" v-if="selected" v-on:click="clearSelection()" title="Unselect all selected rows, regardless of visibility">
 			<span class="far fa-ban"></span>
 		</button>
-		<button class="ctrl selections all" v-if="selected !== corpus.length" v-on:click="allSelection()">
+		<button class="ctrl selections all" v-if="selected !== source.length" v-on:click="allSelection()" title="Select all visible rows">
 			<span class="far fa-check-square"></span>
 		</button>
-		<button class="ctrl selections info" v-if="selected" v-on:click="infoSelection()">
+		<button class="ctrl" :class="selectedClasses" v-if="selected" v-on:click="toggleSelected()">
+			<span>{{selected}}/{{source.length}}</span>
+		</button>
+		<button class="ctrl selections info" v-if="selected" v-on:click="infoSelection()" title="Show information for the first selected row">
 			<span class="far fa-info-circle"></span>
 		</button>
-		<select class="ctrl paging" v-model.number="storage.rows">
+		<select class="ctrl paging" v-model.number="storage.rows" title="Rows per page of the table">
 			<option :value="storage.rows">{{storage.rows}}</option>
 			<option :value="5">5</option>
 			<option :value="10">10</option>
@@ -30,5 +38,8 @@
 			<option :value="40">40</option>
 			<option :value="50">50</option>
 		</select>
+		<button class="ctrl selections configure" v-on:click="configureTable()" title="Configure this tables columns and rows">
+			<span class="far fa-cog"></span>
+		</button>
 	</div>
 </div>

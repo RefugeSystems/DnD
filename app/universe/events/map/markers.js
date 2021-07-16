@@ -55,6 +55,8 @@ module.exports.initialize = function(universe) {
 	 * @param {String} event.message.data.color For the display color and other grouping
 	 * @param {Boolean} event.message.data.standalone When true, no crosshair is displayed with the point
 	 * @param {Boolean} event.message.data.pathed When true, a path connects like colored points
+	 * @param {Number} [event.message.data.radial] When set, uses the location map_distance to render a circle around the point
+	 * @param {String} [event.message.data.object] Maps the point to a specific object, but only in the case of radials.
 	 * @param {Number} event.message.data.x
 	 * @param {Number} event.message.data.y
 	 */
@@ -69,7 +71,9 @@ module.exports.initialize = function(universe) {
 				"id": event.message.data.id || Random.identifier("coordinate", 10),
 				"color": event.message.data.color,
 				"standalone": event.message.data.standalone,
+				"object": event.message.data.object,
 				"pathed": event.message.data.pathed,
+				"radial": event.message.data.radial,
 				"x": event.message.data.x,
 				"y": event.message.data.y
 			};

@@ -1,5 +1,5 @@
-<div class="rs-table system-component table-index">
-	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :corpus="corpus" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
+<div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editNoun($event)">
+	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
 	<div class="table-container" v-if="storage">
 		<table class="table-element" :class="storage.classes">
 			<thead>
@@ -42,7 +42,7 @@
 										<li v-for="item in record[header.id]">{{getValue(header, item.name || item)}}</li>
 									</ul>
 								</div>
-								<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'object' || header.type === 'object:dice'">
+								<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'object' || header.type === 'object:dice' || header.type === 'object:calculated'">
 									<div v-html="formatObjectHeader(record[header.id])">
 									</div>
 								</div>

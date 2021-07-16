@@ -65,9 +65,17 @@ rsSystem.component("rsTable", {
 				return {};
 			}
 		},
-		"controls": {
-			"required": false,
+		"additionalHeaders": {
 			"type": Array
+		},
+		"controls": {
+			"type": Array
+		},
+		"selections": {
+			"type": Array
+		},
+		"label": {
+			"type": String
 		},
 		"size": {
 			"type": Number
@@ -120,8 +128,20 @@ rsSystem.component("rsTable", {
 		},
 		"filtered": function() {
 			var filtered = [],
-				filter = (this.storage.filter || "").toLowerCase(),
+				filter,
 				i;
+
+			if(this.storage && this.storage.filter) {
+				filter = this.storage.filter.toLowerCase();
+			} else {
+				filter = "";
+			}
+
+			if(!filter) {
+				// Return quickly in the case of large datasets
+				this.source.sort(this.sortRows);
+				return this.source;
+			}
 
 			for(i=0; i<this.source.length; i++) {
 				if(filter === ":selected") {
@@ -186,6 +206,7 @@ rsSystem.component("rsTable", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		Vue.set(this.storage, "defaultHeaders", this.headings);
 		if(typeof(this.storage.page) !== "number") {
 			Vue.set(this.storage, "page", 0);
 		}
@@ -202,6 +223,9 @@ rsSystem.component("rsTable", {
 		if(this.storage.page >= Math.floor(this.corpus.length/this.storage.rows)) {
 			Vue.set(this.storage, "page", 0);
 		}
+		if(!this.storage.headings) {
+			Vue.set(this.storage, "headings", this.headings);
+		}
 	},
 	"methods": {
 		"sortRows": function(a, b) {
@@ -209,9 +233,9 @@ rsSystem.component("rsTable", {
 				vb = b[this.storage.key || "id"];
 
 			if(this.sorts[this.storage.key]) {
-				if(this.sorts[this.storage.key](va, vb) < -1) {
+				if(this.sorts[this.storage.key](va, vb) < 0) {
 					return this.storage.reverse;
-				} else if(this.sorts[this.storage.key](va, vb) > 1) {
+				} else if(this.sorts[this.storage.key](va, vb) > 0) {
 					return this.storage.order;
 				}
 				return 0;

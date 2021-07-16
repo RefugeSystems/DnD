@@ -1,0 +1,4246 @@
+[
+		{
+			"acquired": {
+				"knowledge:time:general": "13.5491958400.1558984164089",
+				"knowledge:quest:crate:ortes": "13.5491958400.1558984164089",
+				"knowledge:location:city:leoterra:terdorolu": "13.5491958400.1558984164089",
+				"knowledge:location:tebit": "13.5491958400.1558984164089",
+				"knowledge:ais:shinda": "13.5493016800.1558985962087",
+				"knowledge:damage": "13.5493085200.1559000623495",
+				"knowledge:viassmithery": "13.5493099600.1559004284470",
+				"knowledge:character:vialantent": "13.5493099600.1559004284470",
+				"item:whip:sonic": "13.5493175200.1559007377856.Snow",
+				"item:dagger:fire:enchantedone": "13.5493175200.1559007377856.Snow",
+				"item:dagger:frost": "13.5493175200.1559007377856.Snow",
+				"item:crystal:blue": "21.5501067540.1570929091817.Clear",
+				"item:elementalcore": "13.5494528980.1559019500617.Cloudy",
+				"knowledge:location:terdorolu": "16.5496033600.1563691964112",
+				"knowledge:plane:ethereal": "14.5494553100.1560111129948",
+				"knowledge:worms:excrement:beans": "14.5494563900.1560113147561",
+				"item:shovel:2": "14.5494721400.1560124166544.Clear",
+				"knowledge:backgrounds": "15.5492163600.1560998304402",
+				"knowledge:languages:common": "18.5492938080.1567814116268",
+				"knowledge:wyrm:istond:location": "16.5492267724.1563590738046",
+				"knowledge:thefallofterdorolu": "16.5496033600.1563691964112",
+				"knowledge:character:isiohailarika": "16.5496033600.1563691964112",
+				"knowledge:character:robrustaein": "16.5496033600.1563691964112",
+				"item:ring:osmot": "22.5502279600.1571601010462.Clear",
+				"item:craft:soundbomb": "17.5496309060.1565559633682.Clear",
+				"item:bean:verd": "18.5496597858.1566147023397.Clear",
+				"item:trinket:nightdice": "41.5520049200.1590960595002.Enchantment",
+				"item:herbs:sana": "51.5525337600.1604872957693.Clear",
+				"item:flask:sana": "18.5497311600.1566165870264.Clear",
+				"item:potion:empty": "28.5504684400.1579481152355",
+				"knowledge:spell:controlwater": "19.5510218020.1567812176387",
+				"knowledge:quest:raven:session20": "20.5525337600.1604812306350",
+				"story:crystals:nature": "21.5501047740.1570921815127",
+				"item:crystal:red": "21.5501067540.1570929091817.Clear",
+				"knowledge:quest:raven:session21": "21.5501076540.1570931573131",
+				"knowledge:quest:cererbsdive": "21.5501076540.1570931573131",
+				"item:clothing:worker:pants": "21.5501076540.1570931573131.Clear",
+				"item:clothing:worker:shirt": "21.5501076540.1570931573131.Clear",
+				"knowledge:npcs:illivanmedenia": "21.5501078340.1571593699970",
+				"knowledge:npcs:ereniaambulo": "21.5501078340.1571593699970",
+				"knowledge:npcs:adarainyoka": "21.5501078340.1571593699970",
+				"item:crown:arcar": "21.5501898000.1571596799168.Clear",
+				"item:alchemyingredients": "52.5525344800.1606077014576",
+				"item:head:kintari": "21.5501901600.1571598119471.Clear",
+				"potion:waterbreathing:normal": "34.5509692000.1584916855890",
+				"item:earings:nightvision": "22.5502279600.1571601010462.Clear",
+				"knowledge:quest:raven:session22": "22.5484531612.1572717278830",
+				"knowledge:quest:forrieal": "22.5484531612.1572717278830",
+				"knowledge:guildassassin:dranous:basics": "22.5484531612.1572717278830",
+				"knowledge:location:dranous": "37.5498564400.1587320047266",
+				"knowledge:items:blacksmithing:enchanting": "23.5484623400.1572821641526",
+				"knowledge:quest:raven:session23": "23.5484648300.1572833322448",
+				"knowledge:quest:lemulisstones": "23.5501931900.1576414694542",
+				"knowledge:quest:raven:session24": "24.5501931900.1576414264979",
+				"item:dagger": "48.5510210400.1602905988828.Clear",
+				"knowledge:quest:raven:session25": "25.5502747600.1576464367110",
+				"knowledge:claruthano:spiderfielddesert": "25.5502747600.1576464367110",
+				"knowledge:cthulhu:temple:claruthano:1": "25.5502747600.1576464367110",
+				"knowledge:alchemy:flashbomb": "28.5504662800.1579483936776",
+				"knowledge:alchemy:smokebomb": "28.5504662800.1579483936776",
+				"knowledge:alchemy:antivenom": "28.5504662800.1579483936776",
+				"knowledge:alchemy:brewing:tea:exuberous": "28.5504662800.1579483936776",
+				"item:pendent:cthulhu": "26.5502861000.1577580957950.Clear",
+				"item:potion:cure:poison": "46.5525547000.1599350408695.Clear",
+				"item:rations": "26.5502861000.1577580957950.Clear",
+				"item:potion:healing:normal": "49.5525337600.1604812436523.Clear",
+				"knowledge:quest:raven:session26": "26.5502863700.1578502263172",
+				"knowledge:servantresurrection": "26.5502863700.1578502263172",
+				"item:potion:poison": "26.5502871500.1578782421094.Clear",
+				"knowledge:connectsendingstone": "26.5502871800.1578782553212",
+				"item:stone:sending:sendingstone:1578783786361": "26.5502875400.1578783634707.Clear",
+				"item:vial:blackliquid:1": "26.5502875400.1578783634707.Clear",
+				"knowledge:quest:mirrorroom:claruthano:green": "27.5502875406.1578784705000",
+				"knowledge:quest:mirrorroom:claruthano:red": "27.5502875406.1578784705000",
+				"knowledge:quest:mirrorroom:claruthano:blue": "27.5502875406.1578784705000",
+				"item:candle:silent": "27.5502925806.1578786706074.Clear",
+				"item:sword": "27.5502931206.1578792145764.Clear",
+				"shield:dagger:holds": "27.5502940206.1578794143426.Clear",
+				"knowledge:quest:cthulhu:vault": "27.5503190400.1578796422334",
+				"knowledge:quest:cthulhu:alter": "27.5503190400.1578796422334",
+				"knowledge:quest:raven:session27": "27.5503190400.1578796422334",
+				"knowledge:quest:claruthano:desecrated": "27.5503190400.1578796422334",
+				"item:herbs:alupho": "28.5504684400.1579481152355",
+				"item:alchemy:advancedcondenser": "28.5504684400.1579481152355",
+				"knowledge:spell:dimensiondoor": "28.5504662800.1579483936776",
+				"knowledge:alchemy:poisonremedy": "28.5504662800.1579483936776",
+				"item:vial:elemental:cold": "28.5504662800.1579483936776",
+				"item:grapplinghook": "28.5504662800.1579483936776",
+				"item:plant:poisonous": "28.5504662800.1579483936776",
+				"item:vial": "28.5504662800.1579483936776",
+				"item:herbs:autus": "36.5511679200.1586120240757",
+				"knowledge:sale:rieal:carriage": "28.5504688000.1580603072813",
+				"knowledge:quest:raven:session28": "28.5504688000.1580603072813",
+				"knowledge:alchemy:leaves": "28.5504688000.1580603072813",
+				"knowledge:games:dominionbattle": "29.5505966000.1580677636177",
+				"knowledge:events:fornto": "29.5505966000.1580677636177",
+				"item:kunai:silvered": "40.5519260800.1589754966022.Clear",
+				"item:armor:leather:studded:custom:xylaris": "29.5505966000.1580677636177.Clear",
+				"item:dagger:frost:returning": "29.5505966000.1580677636177.Clear",
+				"item:kunai:silvered:returning": "40.5519260800.1589754966022.Clear",
+				"knowledge:quest:arcanesociety:secretsociety": "20.5506002000.1581802789722",
+				"knowledge:quest:raven:session29": "29.5506002000.1581802821923",
+				"item:gloves:arcanous": "29.5506063200.1581895276565.Cloudy",
+				"knowledge:quest:raven:session30": "30.5506480800.1582493291367",
+				"knowledge:contract:lurusdeliver:neset": "30.5506380000.1582254874126",
+				"knowledge:contract:sulendiridadeliver": "30.5506380000.1582254874126",
+				"knowledge:contract:diplomatassassin": "30.5506380000.1582254874126",
+				"knowledge:contract:indiummachine": "30.5506380000.1582254874126",
+				"item:amulet:cervell": "29.5496058800.1582348292136.Cloudy",
+				"item:vial:elemental:thunder": "30.5506540500.1582497104900.Cloudy",
+				"item:pickaxe": "31.5506740000.1582511513464.Clear",
+				"knowledge:quest:raven:session31": "31.5506761600.1583036108354",
+				"knowledge:granted:stormravager": "32.5507060400.1583116494920",
+				"knowledge:temple:whaitiri:druteta": "31.5506972200.1583105496010",
+				"knowledge:quest:raven:session32": "33.5507060400.1584303710409",
+				"knowledge:blessedknowledge:investigation:attack": "32.5507060400.1584217638786",
+				"knowledge:quest:cardinal:session30": "33.5507060400.1584303710409",
+				"knowledge:gods:symbols": "33.5507060400.1584303710409",
+				"item:organ:venomsac": "33.5507175600.1584313923483.Cloudy",
+				"item:flask:antivenom:blackspider": "33.5507395200.1584316132954.Cloudy",
+				"knowledge:quest:raven:session33": "33.5507589600.1584323604905",
+				"knowledge:blessedknowledge:xylaris": "33.5507589600.1584323604905",
+				"knowledge:blessedknowledge:huntress": "34.5508698400.1584905765282",
+				"item:blend:reefer": "34.5508741600.1584909660011",
+				"item:craft:firebomb": "34.5508741600.1584909660011",
+				"item:craft:lumenbomb": "34.5508741600.1584909660011",
+				"item:pillowandblanket": "34.5508741600.1584909660011",
+				"item:plant:beauty": "34.5508741600.1584909660011",
+				"item:handmirror": "34.5508741600.1584909660011",
+				"knowledge:quest:raven:session34:activities": "34.5508741600.1584909660011",
+				"location:dungeon:stationidoru": "34.5508741600.1584909660011",
+				"item:clothes:dress": "34.5508741600.1584909660011",
+				"item:chalk": "34.5508810000.1584914490609",
+				"item:misc:tinymechanicalspider": "34.5509692000.1584916855890",
+				"item:kit:climber": "34.5509692000.1584916855890.Clear",
+				"item:craftingredients:lite": "34.5509692000.1584916855890",
+				"knowledge:quest:raven:session34": "34.5510458800.1585431004004",
+				"knowledge:sorafin:ranks": "34.5510458800.1585431004004",
+				"knowledge:kintari:equipment": "34.5510458800.1585431004004",
+				"item:warhammer:castupravus": "35.5510480400.1585513352547.Cloudy",
+				"knowledge:quest:raven:session35": "35.5510808000.1586104921938",
+				"knowledge:crystals:raven:arcaneorbitalcircle": "35.5510548800.1586111089227",
+				"knowledge:alchemy:minorhealingpotion": "36.5511679200.1586120240757",
+				"item:warmcoat": "36.5511679200.1586120240757.Clear",
+				"item:potion:healing:minor": "44.5522805000.1595792493128.Clear",
+				"item:herbs:umusi": "36.5512240800.1586124728261.Clear",
+				"knowledge:people:memorywizards:indium": "36.5513583600.1586137079047",
+				"knowledge:quest:raven:session36": "36.5513583600.1586137079047",
+				"knowledge:ancient:lab:accuio": "37.5513583600.1586673080561",
+				"story:crystals:powerspectrum": "37.5513583600.1586673080561",
+				"item:herbs:aigua": "37.5513617800.1586728596323.Snow",
+				"knowledge:artifact:3:location:nautrengo": "37.5513963400.1586730009107",
+				"knowledge:improvedcritical": "37.5513963400.1586730009107",
+				"knowledge:event:samakusea:whirlpool": "37.5516780400.1586741774152",
+				"knowledge:locations:world:general": "34.5501934000.1587183161896",
+				"knowledge:quest:raven:session37": "37.5498564400.1587320007137",
+				"knowledge:quest:quasilverborn": "37.5498564400.1587320047266",
+				"knowledge:location:diforgedvault": "37.5498564400.1587320047266",
+				"knowledge:location:racual": "37.5498564400.1587320047266",
+				"knowledge:city:intis": "37.5498564400.1587320047266",
+				"knowledge:location:city:intis": "37.5498564400.1587320047266",
+				"knowledge:location:montis": "37.5498564400.1587320047266",
+				"knowledge:event:gala:imperial": "22.5484654000.1587741110489",
+				"knowledge:wild:spider": "1.5501934000.1587741129935",
+				"knowledge:wild:snake": "1.5501934000.1587741129935",
+				"knowledge:wild:raven": "1.5501934000.1587741129935",
+				"knowledge:wild:rat": "1.5501934000.1587741129935",
+				"knowledge:arcanesociety:library": "18.5501934000.1587742095012",
+				"knowledge:nation:coneixager": "1.5467248000.1588446826330",
+				"knowledge:nation:draconia": "1.5467248000.1588446826330",
+				"knowledge:nation:nautregno": "1.5467248000.1588446826330",
+				"knowledge:nation:leoterra": "1.5467248000.1588446826330",
+				"knowledge:war:nautregno:leoterra": "37.5519088000.1588446867246",
+				"knowledge:quest:raven:session38": "38.5519088000.1588463769557",
+				"item:book:alchemtreference": "38.5519088000.1588463769557",
+				"knowledge:alchemy:spellink": "39.5519091600.1588535687019",
+				"knowledge:character:builteir": "38.5519091600.1588536667208",
+				"knowledge:quest:deliverybooks": "38.5519091600.1588536667208",
+				"knowledge:quest:recover:blade": "38.5519091600.1588536667208",
+				"knowledge:quest:ancient:learning:raven:1": "38.5519091600.1588536667208",
+				"item:craft:smokebomb": "38.5519091600.1588536667208.Clear",
+				"knowledge:alchemy:waterbreathing": "38.5519091600.1588536667208",
+				"knowledge:guild:lostpowercrystals": "38.5519115000.1588546314582",
+				"knowledge:supplemental:0": "36.5504619600.1588997380262",
+				"knowledge:quest:raven:session39": "39.5519178000.1589663195514",
+				"knowledge:flanking": "39.5519178000.1589735497543",
+				"knowledge:location:villageofcassandra": "1.5519178000.1589735470550",
+				"knowledge:quest:timescrollorphans": "39.5519178000.1589735497543",
+				"knowledge:conflict:nautregnoleoterra": "39.5519178000.1589735497543",
+				"knowledge:craft:alchemy": "36.5504619600.1590121437544",
+				"item:belt:strapping": "40.5519181600.1589747450429",
+				"item:pants:war": "40.5519181600.1589747450429",
+				"item:herbs:takn": "51.5525337600.1604872957693.Clear",
+				"item:herbs:lumen": "40.5519181600.1589747450429",
+				"item:dagger:swiftsilvered": "40.5519260800.1589754966022.Clear",
+				"knowledge:spirittradeinreykurax": "40.5519278800.1590866365569",
+				"knowledge:quest:northernancientprisons": "40.5519278800.1590866365569",
+				"knowledge:quest:pillagegaldur": "40.5519278800.1590866365569",
+				"knowledge:quest:specialization:alchemy": "40.5519278800.1590866365569",
+				"knowledge:alchemy:brewing:rushed": "40.5519278800.1590866365569",
+				"knowledge:quest:raven:session40": "40.5519329200.1590900171247",
+				"item:spyglass": "40.5519329200.1590900171247.Enchantment",
+				"knowledge:violentspirit:geist": "40.5519329200.1590900171247",
+				"knowledge:violentspirit:chainedgeist": "41.5519336400.1590956631529",
+				"item:gem:soul": "51.5525337600.1604872957693.Clear",
+				"knowledge:quest:raven:session41": "41.5520988806.1592085918113",
+				"knowledge:theplainsofreflection": "41.5520988806.1592085918113",
+				"knowledge:draconiancitixen": "41.5520988806.1592085918113",
+				"item:book:lost:digger": "42.5520990606.1592165769267.Clear",
+				"knowledge:wraiths": "42.5521221006.1592166175528",
+				"knowledge:violentspirit:geist:charged": "42.5522491806.1592183984305",
+				"knowledge:quest:raven:session42": "42.5505420000.1594870528068",
+				"item:flower:dauoa": "43.5522805000.1595184239846.Clear",
+				"knowledge:violentspirit:angryspirit": "43.5522805000.1595184239846",
+				"knowledge:quest:raven:session43": "43.5522805000.1595184239846",
+				"knowledge:reykurax:ghosts": "43.5522805000.1595184239846",
+				"knowledge:alchemy:arcanerecovery": "44.5525547000.1599350069967",
+				"knowledge:quest:raven:session44": "44.5520877200.1596965241547",
+				"knowledge:alchemy:healingpotion": "45.5519264400.1597008795133",
+				"knowledge:quest:raven:session45": "45.5508237600.1598166597527",
+				"knowledge:cryptriddle:reykurax:0:1": "46.5525517600.1598207599934",
+				"knowledge:quest:raven:session46": "46.5525547000.1599350408695",
+				"knowledge:cryptwraiths": "46.5525547000.1599350408695",
+				"knowledge:crypt:riddle:reykurax:0:1": "46.5525547000.1599350408695",
+				"knowledge:quest:raven:session47": "47.5509177200.1601181404771",
+				"knowledge:caveofdesign": "48.5509177200.1601226538667",
+				"knowledge:aliscos:chest": "48.5509177200.1601226538667",
+				"knowledge:reykurax:caveoftheforgotten:alisco": "48.5509177200.1601226538667",
+				"knowledge:reykurax:citadels:alisco": "48.5509177200.1601226538667",
+				"knowledge:quest:raven:session48": "48.5526615600.1601739572539",
+				"knowledge:clerics:ancient": "48.5526615600.1601739572539",
+				"knowledge:class:fighter:feats": "49.5526615600.1601777862601",
+				"item:ingredient:necrasoil": "49.5526615600.1601777862601.Clear",
+				"knowledge:legend:thegoddurong": "50.5525337600.1604812102594",
+				"knowledge:quest:raven:session49": "49.5525337600.1604812436523",
+				"knowledge:quest:raven:session50": "49.5525337600.1604812436523",
+				"knowledge:legend:theacheron": "49.5525337600.1604812436523",
+				"knowledge:reykurax:pathofascension": "51.5525337600.1604872957693",
+				"item:herbs:iludis": "51.5525337600.1604872957693.Clear",
+				"item:potion:cure:petrification": "51.5525337600.1604872957693.Clear",
+				"item:coin:fleet:5th": "51.5525337600.1604872957693.Clear",
+				"item:armor:leather:studded:resist:acid:fire": "51.5525337600.1604872957693.Clear",
+				"item:armor:leather:studded:resist:cold:lightning": "51.5525337600.1604872957693.Clear",
+				"item:armor:leather:studded:resist:physical": "51.5525337600.1604872957693.Clear",
+				"item:cloneblade": "51.5525337600.1604872957693.Clear",
+				"item:chain:critprotection:intricatechainweave:1604880632438": "51.5525337600.1604872957693.Clear",
+				"item:herbs:time": "51.5525337600.1604872957693.Clear",
+				"knowledge:quest:raven:session51": "51.5525344800.1606032114625",
+				"knowledge:violentspirit:crystallineskull": "52.5525344800.1606077014576",
+				"item:gem:normal": "52.5525344800.1606077014576",
+				"knowledge:quest:raven:session52": "52.5525434800.1607204636142",
+				"knowledge:legend:alisco": "52.5525434800.1607204636142",
+				"knowledge:sorrowsgrace": "52.5525434800.1607204636142",
+				"knowledge:quest:raven:session53": "53.5508223200.1608394726108",
+				"knowledge:sorrowsgrace:blank": "54.5508223200.1608394753351",
+				"knowledge:quest:raven:session54": "54.5526885600.1610262483952",
+				"knowledge:quest:raven:session55": "55.5528462400.1612649991075",
+				"knowledge:quest:raven:session56": "56.5512042800.1613793179422",
+				"knowledge:creature:mimic": "56.5512042800.1613793179422",
+				"knowledge:mimic:weird:reykuyrax": "56.5512042800.1613793179422",
+				"item:necklace": "57.5512042800.1613950067272.Clear",
+				"knowledge:quest:raven:session57": "57.5519264400.1615106274590",
+				"knowledge:blesseddeeds:xylaris": "57.5519264400.1615106274590",
+				"knowledge:quest:raven:session58": "58.5519273400.1615166744258",
+				"knowledge:quest:raven:session59": "59.5519280600.1616950622892",
+				"knowledge:quest:raven:session60": "60.5519289600.1618177887044",
+				"item:stone:sending:sendingstone": "60.5519289600.1618177887044.Clear",
+				"knowledge:quest:raven:session61": "61.5519372400.1618780546339",
+				"item:book:spellbook:kintari:offensive": "61.5519376000.1618787484627.Clear",
+				"knowledge:kintari:pool": "62.5519422800.1619385299531",
+				"knowledge:quest:raven:session62": "62.5519422800.1619385299531",
+				"knowledge:kintari:warrior": "63.5519422800.1619996461604",
+				"item:flask:blood:tainted": "60.5519422800.1619988694007.Clear",
+				"knowledge:kintari:priest": "63.5519435400.1620001226207",
+				"knowledge:kintari:servant:flame": "63.5519435400.1620001226207",
+				"knowledge:quest:raven:session63": "63.5519448000.1620003816537",
+				"item:dagger:gimsteinn": "63.5519487600.1620597951512.Clear",
+				"knowledge:quest:raven:session64": "64.5519602800.1621188236346",
+				"knowledge:quest:raven:session65": "65.5513950800.1624678675316"
+			},
+			"actions": 1,
+			"age": 27,
+			"advantages": {},
+			"archetypes": [
+				"archetype:rogue:assassin"
+			],
+			"bonusActions": 1,
+			"collections": {
+				"collection:bbNfyGfPZl1559012947330x70tgSeFlV": {
+					"name": "Weapons",
+					"items": [
+						"item:dagger",
+						"item:dagger:swift",
+						"item:dagger:kunai",
+						"item:dagger:frost",
+						"item:dagger:fire",
+						"item:dagger:fire:enchantedone",
+						"item:kunai:silvered",
+						"item:dagger:frost:returning",
+						"item:kunai:silvered:returning",
+						"item:dagger:swiftsilvered",
+						"item:sword",
+						"item:whip:sonic",
+						"item:shield",
+						"shield:dagger:holds",
+						"item:ring:osmot",
+						"item:craft:soundbomb",
+						"item:craft:firebomb",
+						"item:craft:lumenbomb",
+						"item:craft:smokebomb"
+					],
+					"key": "collection:bbNfyGfPZl1559012947330x70tgSeFlV",
+					"rummageType": "misc",
+					"rummaging": false,
+					"amount": {
+						"item:dagger": 8,
+						"item:dagger:fire": 1,
+						"item:dagger:swift": 1,
+						"item:dagger:kunai": 2,
+						"item:dagger:fire:enchantedone": 1,
+						"item:dagger:frost": 1,
+						"item:kunai:silvered": 2,
+						"item:dagger:frost:returning": 1,
+						"item:kunai:silvered:returning": 2,
+						"item:dagger:swiftsilvered": 1,
+						"item:sword": 1,
+						"item:whip:sonic": 1,
+						"item:shield": 1,
+						"shield:dagger:holds": 1,
+						"item:ring:osmot": 1,
+						"item:craft:soundbomb": 1,
+						"item:craft:firebomb": 1,
+						"item:craft:lumenbomb": 0,
+						"item:craft:smokebomb": 1
+					},
+					"rummageText": "caltrops"
+				},
+				"collection:getyzrGTrH1586122665188": {
+					"name": "Ingredients",
+					"items": [
+						"item:craftingredients:lite",
+						"item:teapot",
+						"item:herbs:sana",
+						"item:herbs:alupho",
+						"item:blend:reefer",
+						"item:herbs:umusi",
+						"item:herbs:aigua",
+						"item:herbs:takn",
+						"item:herbs:lumen",
+						"item:plant:poisonous",
+						"item:plant:beauty",
+						"item:kit:thieves",
+						"item:kit:travelers",
+						"item:kit:poison",
+						"item:kit:alchemist",
+						"item:kit:climber"
+					],
+					"amount": {
+						"item:craftingredients:lite": 1,
+						"item:teapot": 1,
+						"item:herbs:sana": 2,
+						"item:herbs:alupho": 2,
+						"item:blend:reefer": 1,
+						"item:herbs:umusi": 1,
+						"item:herbs:aigua": 1,
+						"item:herbs:takn": 1,
+						"item:herbs:lumen": 1,
+						"item:plant:poisonous": 6,
+						"item:plant:beauty": 1,
+						"item:kit:thieves": 1,
+						"item:kit:travelers": 1,
+						"item:kit:poison": 2,
+						"item:kit:disguise": 0,
+						"item:kit:alchemist": 1,
+						"item:kit:climber": 1
+					},
+					"rummageText": "",
+					"rummageType": "kit",
+					"key": "collection:getyzrGTrH1586122665188",
+					"rummaging": false
+				},
+				"collection:99llErtrfy1592167761537": {
+					"name": "Potions",
+					"items": [
+						"item:potion:poison",
+						"item:potion:empty",
+						"item:flask:sana",
+						"item:potion:cure:poison",
+						"item:flask:antivenom:blackspider",
+						"item:potion:healing:minor"
+					],
+					"amount": {
+						"item:potion:poison": 7,
+						"item:potion:empty": 15,
+						"item:flask:sana": 2,
+						"item:potion:cure:poison": 3,
+						"item:flask:antivenom:blackspider": 2,
+						"item:potion:healing:minor": 3
+					},
+					"rummageText": "",
+					"rummageType": "potion",
+					"key": "collection:99llErtrfy1592167761537",
+					"rummaging": false
+				},
+				"collection:DCIuf5PKqy1592170849532": {
+					"name": "Crystals/Gems/Stones",
+					"items": [
+						"item:crystal:green",
+						"item:stone:sending:sendingstone:1578783786361",
+						"item:gem:soul"
+					],
+					"amount": {
+						"item:crystal:green": 1,
+						"item:gem:soul": 2,
+						"item:stone:sending:sendingstone:1578783786361": 1,
+						"item:amulet:cervell": 0
+					},
+					"rummageText": "crystal",
+					"rummageType": "undefined",
+					"key": "collection:DCIuf5PKqy1592170849532",
+					"rummaging": false
+				},
+				"collection:qX01VyFMTp1592174329403": {
+					"name": "Charges",
+					"items": [
+						"item:pillowandblanket",
+						"item:amulet:cervell",
+						"item:gloves:arcanous"
+					],
+					"amount": {
+						"item:misc:tinymechanicalspider": 0,
+						"item:pillowandblanket": 1,
+						"item:amulet:cervell": 1,
+						"item:pants:war": 0,
+						"item:gloves:arcanous": 1
+					},
+					"rummageText": "",
+					"rummageType": "gloves",
+					"key": "collection:qX01VyFMTp1592174329403",
+					"rummaging": false
+				}
+			},
+			"conditions": {},
+			"disadvantages": {},
+			"saveAdvantages": {},
+			"saveDisadvantages": {},
+			"alignment": "chaotic:neutral",
+			"armor": 15,
+			"charges": {
+				"item:skull:flamewalker": 3,
+				"item:trinket:nightdice": 5,
+				"shield:dagger:holds": 0,
+				"item:alchemy:advancedcondenser": 5,
+				"item:gloves:arcanous": 2,
+				"item:alchemy:simplecondenser": 1,
+				"feat:breathweapon": 1,
+				"feat:storms:grace": 3,
+				"item:amulet:cervell": 1,
+				"feat:huntress": 0,
+				"item:pillowandblanket": 3,
+				"feat:criticalrangecontrol": 6,
+				"item:pants:war": 3,
+				"item:chain:critprotection:intricatechainweave:1595792472377": 3,
+				"feat:secondwind": 1,
+				"item:cloneblade": 2,
+				"item:temporalknot": 1
+			},
+			"charisma": 9,
+			"castWith": "intelligence",
+			"coin": 5975,
+			"constitution": 14,
+			"description": "",
+			"dexterity": 16,
+			"discount": 0,
+			"discounts": {},
+			"discountGeneral": 0,
+			"effects": [],
+			"equipmentNotes": {},
+			"effectNotes": {
+				"effect:stealth": "Rolled: 19",
+				"effect:investigation": "Rolled: 12",
+				"effect:perception": "Rolled: 12",
+				"effect:spell:protection:goodandevil": "Undead",
+				"effect:poisoned:1d6": "2d6"
+			},
+			"experience": 0,
+			"featPool": 0,
+			"feats": [
+				"feat:racial:dragonborn:black",
+				"feat:expertise:perception",
+				"feat:expertise:persuasion",
+				"feat:expertise:insight",
+				"feat:storms:grace",
+				"feat:huntress",
+				"feat:background:hermit",
+				"feat:archery"
+			],
+			"gender": "female",
+			"god": "",
+			"history": [],
+			"hitDice": {
+				"d8": 9,
+				"d10": 1
+			},
+			"health": 52,
+			"height": 4,
+			"id": "character:5c0c46a8449590597e991cac",
+			"immunities": {},
+			"initiative": 27,
+			"intelligence": 10,
+			"known": [],
+			"knowledge": {
+				"knowledge:location:alirans": true,
+				"location:city:draconia:alirans": [
+					"knowledge:location:alirans",
+					"knowledge:location:aliruns",
+					"knowledge:location:city\"neulusre"
+				],
+				"knowledge:location:aliruns": true,
+				"knowledge:languages:common": true,
+				"proficiency:language:common": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:dwarven": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:elvan": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:gnome": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:goblin": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:draconic": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:orc": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:giant": [
+					"knowledge:languages:common"
+				],
+				"feat:language:common": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:undercommon": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:abyssal": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:infernal": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:primordial": [
+					"knowledge:languages:common"
+				],
+				"feat:language:abyssal": [
+					"knowledge:languages:common"
+				],
+				"knowledge:ancestry:dragonborn": true,
+				"feat:racial:dragonborn:black": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:blue": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:brass": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:bronze": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:copper": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:gold": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:silver": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:white": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:green": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"feat:racial:dragonborn:red": [
+					"knowledge:ancestry:dragonborn"
+				],
+				"knowledge:location:stationidoru": true,
+				"location:dungeon:stationidoru": [
+					"knowledge:location:stationidoru",
+					"knowledge:quest:raven:session62"
+				],
+				"knowledge:mountains:vatase": true,
+				"knowledge:location:dranous": true,
+				"location:city:draconia:dranous": [
+					"knowledge:quest:raven:session22",
+					"knowledge:quest:raven:session24",
+					"knowledge:contract:lurusdeliver:neset",
+					"knowledge:contract:sulendiridadeliver",
+					"knowledge:contract:diplomatassassin",
+					"knowledge:location:dranous",
+					"knowledge:event:gala:imperial",
+					"knowledge:nation:draconia",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:timescrollorphans",
+					"knowledge:quest:raven:session20"
+				],
+				"knowledge:cismexel": true,
+				"npc:civilian:male:human:model1:cismexel": [
+					"knowledge:cismexel"
+				],
+				"item:food:strawberry": [
+					"knowledge:cismexel"
+				],
+				"knowledge:rogue:expertise": true,
+				"feat:expertise:acrobatics": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:animalhandling": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:arcana": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:atheletics": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:concentration": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:deception": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:history": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:insight": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:intimidation": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:investigation": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:medicine": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:nature": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:perception": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:performance": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:persuasion": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:religion": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:slightofhand": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:stealth": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:survival": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:artisankit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:alchemistkit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:climberskit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:cartographykit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:divinationkit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:disguisekit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:forgerykit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:enchanterskit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:healerskit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:travelerskit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:poisonkit": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"feat:expertise:thievestool": [
+					"knowledge:rogue:expertise",
+					"knowledge:gods"
+				],
+				"knowledge:gods": true,
+				"god:zeus": [
+					"knowledge:gods",
+					"knowledge:gods:symbols"
+				],
+				"god:daminoth": [
+					"knowledge:gods",
+					"knowledge:gods:symbols",
+					"knowledge:quest:raven:session50"
+				],
+				"god:athena": [
+					"knowledge:gods",
+					"knowledge:gods:symbols"
+				],
+				"god:lucian": [
+					"knowledge:gods",
+					"knowledge:gods:symbols"
+				],
+				"god:cthulu": [
+					"knowledge:gods",
+					"knowledge:quest:raven:session25",
+					"knowledge:quest:raven:session26",
+					"knowledge:servantresurrection",
+					"knowledge:quest:cthulhu:vault",
+					"knowledge:quest:cthulhu:alter",
+					"knowledge:quest:raven:session27",
+					"knowledge:quest:claruthano:desecrated",
+					"knowledge:gods:symbols"
+				],
+				"god:serinal": [
+					"knowledge:gods",
+					"knowledge:gods:symbols"
+				],
+				"god:dionysus": [
+					"knowledge:gods",
+					"knowledge:gods:symbols"
+				],
+				"knowledge:character:galvinbroadshore": true,
+				"location:continent:colligus": [
+					"knowledge:character:galvinbroadshore"
+				],
+				"knowledge:world:creaturetypes": true,
+				"knowledge:world:terraintypes": true,
+				"knowledge:freight": true,
+				"location:city:obhele": [
+					"knowledge:freight"
+				],
+				"knowledge:gisengard": true,
+				"race:gisengard": [
+					"knowledge:gisengard",
+					"knowledge:quest:forrieal"
+				],
+				"knowledge:location:city\"neulusre": true,
+				"knowledge:crystals:colorwheel": true,
+				"knowledge:playershandbook": true,
+				"feat:ancestry:highelf": [
+					"knowledge:playershandbook"
+				],
+				"feat:ancestry:darkelf": [
+					"knowledge:playershandbook"
+				],
+				"feat:ancestry:woodelf": [
+					"knowledge:playershandbook"
+				],
+				"knowledge:building:ravensnest": true,
+				"knowledge:players:raven": true,
+				"knowledge:location:city:simer": true,
+				"knowledge:time:general": true,
+				"location:city:leoterra:tebit": [
+					"knowledge:time:general",
+					"knowledge:location:tebit",
+					"knowledge:ais:shinda",
+					"knowledge:quest:raven:session29",
+					"knowledge:quest:raven:session30",
+					"knowledge:arcanesociety:library"
+				],
+				"knowledge:quest:crate:ortes": true,
+				"knowledge:location:city:leoterra:terdorolu": true,
+				"knowledge:location:tebit": [
+					"knowledge:quest:raven:session20"
+				],
+				"knowledge:ais:shinda": true,
+				"knowledge:damage": true,
+				"knowledge:viassmithery": true,
+				"knowledge:character:vialantent": false,
+				"knowledge:location:terdorolu": true,
+				"knowledge:plane:ethereal": true,
+				"knowledge:worms:excrement:beans": true,
+				"item:bean:spiritual": [
+					"knowledge:worms:excrement:beans"
+				],
+				"item:bean:verd": [
+					"knowledge:worms:excrement:beans"
+				],
+				"item:bean:ambula": [
+					"knowledge:worms:excrement:beans"
+				],
+				"item:bean:spectral": [
+					"knowledge:worms:excrement:beans"
+				],
+				"knowledge:backgrounds": true,
+				"feat:background:urchin": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:soldier": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:sailor": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:sage": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:outlander": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:noble": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:hermit": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:guildartisan": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:folkhero": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:entertainer": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:charlatan": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:criminal": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:barkeep": [
+					"knowledge:backgrounds"
+				],
+				"feat:background:acolyte": [
+					"knowledge:backgrounds"
+				],
+				"proficiency:language:deepspeech": [
+					"knowledge:languages:common"
+				],
+				"proficiency:language:celestrial": [
+					"knowledge:languages:common"
+				],
+				"knowledge:wyrm:istond:location": true,
+				"knowledge:thefallofterdorolu": true,
+				"location:city:leoterra:terdorolu": [
+					"knowledge:thefallofterdorolu",
+					"knowledge:character:isiohailarika",
+					"knowledge:character:robrustaein",
+					"knowledge:languages:common"
+				],
+				"knowledge:character:isiohailarika": true,
+				"npc:civilian:female:human:model1:ngacorailelop:isiphailarika": [
+					"knowledge:character:isiohailarika",
+					"knowledge:character:robrustaein",
+					"knowledge:languages:common"
+				],
+				"npc:robrustaein": [
+					"knowledge:character:isiohailarika",
+					"knowledge:character:robrustaein",
+					"knowledge:languages:common"
+				],
+				"knowledge:character:robrustaein": true,
+				"knowledge:spell:controlwater": true,
+				"spell:controlwater": [
+					"knowledge:spell:controlwater"
+				],
+				"knowledge:language:ancient": false,
+				"knowledge:quest:bookofhwand": false,
+				"location:city:hwand": [],
+				"item:ring:wizardary": [],
+				"npc:male:mage": [
+					"knowledge:quest:lemulisstones",
+					"knowledge:quest:raven:session24",
+					"knowledge:quest:raven:session25",
+					"knowledge:quest:raven:session28",
+					"knowledge:location:dranous",
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:timescrollorphans",
+					"knowledge:quest:raven:session40"
+				],
+				"knowledge:quest:raven:session20": true,
+				"story:crystals:nature": [
+					"knowledge:quest:raven:session47"
+				],
+				"item:crystal:red": [
+					"story:crystals:nature",
+					"knowledge:quest:raven:session33",
+					"knowledge:quest:raven:session34",
+					"knowledge:crystals:raven:arcaneorbitalcircle",
+					"knowledge:quest:raven:session36",
+					"story:crystals:powerspectrum",
+					"knowledge:quest:raven:session39",
+					"knowledge:alchemy:arcanerecovery",
+					"knowledge:quest:raven:session46",
+					"knowledge:cryptwraiths",
+					"knowledge:kintari:pool"
+				],
+				"item:crystal:blue": [
+					"story:crystals:nature",
+					"knowledge:quest:raven:session31",
+					"knowledge:quest:raven:session33",
+					"knowledge:crystals:raven:arcaneorbitalcircle",
+					"knowledge:quest:raven:session36",
+					"story:crystals:powerspectrum",
+					"knowledge:quest:raven:session39",
+					"knowledge:alchemy:arcanerecovery",
+					"knowledge:quest:raven:session46",
+					"knowledge:cryptwraiths",
+					"knowledge:kintari:pool"
+				],
+				"item:crystal:green": [
+					"story:crystals:nature",
+					"knowledge:quest:raven:session33",
+					"knowledge:crystals:raven:arcaneorbitalcircle",
+					"knowledge:quest:raven:session36",
+					"story:crystals:powerspectrum",
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session46",
+					"knowledge:cryptwraiths",
+					"knowledge:kintari:pool"
+				],
+				"item:crystal:orange": [
+					"story:crystals:nature",
+					"knowledge:quest:raven:session33",
+					"knowledge:quest:raven:session34",
+					"knowledge:crystals:raven:arcaneorbitalcircle",
+					"story:crystals:powerspectrum"
+				],
+				"item:crystal:lime": [
+					"story:crystals:nature",
+					"knowledge:quest:raven:session33",
+					"knowledge:crystals:raven:arcaneorbitalcircle",
+					"story:crystals:powerspectrum"
+				],
+				"knowledge:quest:raven:session21": true,
+				"knowledge:quest:cererbsdive": true,
+				"location:city:draconia:sabrac": [
+					"knowledge:quest:cererbsdive",
+					"knowledge:quest:raven:session21",
+					"knowledge:quest:raven:session65"
+				],
+				"knowledge:npcs:illivanmedenia": [
+					"knowledge:quest:raven:session61"
+				],
+				"knowledge:npcs:ereniaambulo": true,
+				"knowledge:npcs:adarainyoka": true,
+				"knowledge:quest:raven:session22": true,
+				"location:continent:sulendirida": [
+					"knowledge:quest:raven:session22",
+					"knowledge:quest:raven:session35",
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:recover:blade"
+				],
+				"knowledge:artifact:mistsedge:blade": [
+					"knowledge:quest:raven:session22"
+				],
+				"item:scroll:spell:arcaneportcullis": [
+					"knowledge:quest:raven:session22"
+				],
+				"item:scale:gisengard:arcane": [
+					"knowledge:quest:raven:session22",
+					"knowledge:quest:forrieal"
+				],
+				"npc:civilian:male:human:model1:erphisagelusalant:1572717097127": [
+					"knowledge:quest:raven:session22",
+					"knowledge:quest:forrieal",
+					"knowledge:sale:rieal:carriage",
+					"knowledge:location:dranous"
+				],
+				"npc:draconian:ereniaambulo": [
+					"knowledge:quest:raven:session22"
+				],
+				"npc:draconian:adarainyoka": [
+					"knowledge:quest:raven:session22"
+				],
+				"npc:draconian:illivanmedenia": [
+					"knowledge:quest:raven:session22"
+				],
+				"knowledge:quest:forrieal": true,
+				"monster:gisengard": [
+					"knowledge:quest:forrieal"
+				],
+				"knowledge:guildassassin:dranous:basics": true,
+				"feat:gisengard:arcane": [
+					"knowledge:quest:forrieal"
+				],
+				"knowledge:items:blacksmithing:enchanting": true,
+				"knowledge:quest:raven:session23": true,
+				"npc:civilian:female:human:model1:amuhaeuranitum:1572804194444": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:female:human:model1:celleaminova": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:female:human:model1:ithinsisture": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:male:human:model1:gamukuasomumer:horuscatreor": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:male:human:model1:gamukuasomumer:ertanthimbos": [
+					"knowledge:quest:raven:session23",
+					"knowledge:quest:raven:session24"
+				],
+				"npc:civilian:male:human:model1:gamukuasomumer:macusinape": [
+					"knowledge:quest:raven:session23",
+					"knowledge:quest:raven:session24",
+					"knowledge:quest:raven:session39"
+				],
+				"npc:civilian:male:human:model1:umpisicokumgu:storviuriticr": [
+					"knowledge:quest:raven:session23",
+					"knowledge:quest:raven:session39"
+				],
+				"npc:civilian:female:elf:model1:umpisicokumgu:teikusireaulos": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:dragonborn:model1:llublitcthima:sisalalereba": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:dragonborn:model1:llublitcthima:imqhisaomumant": [
+					"knowledge:quest:raven:session23"
+				],
+				"npc:civilian:male:human:model1:larontat": [
+					"knowledge:quest:raven:session23",
+					"knowledge:quest:raven:session24",
+					"knowledge:location:dranous",
+					"knowledge:quest:raven:session38"
+				],
+				"location:dranous:imperiallibrary": [
+					"knowledge:quest:raven:session23",
+					"knowledge:location:dranous",
+					"knowledge:quest:raven:session39"
+				],
+				"knowledge:quest:lemulisstones": true,
+				"location:continent:claruthano": [
+					"knowledge:quest:lemulisstones",
+					"knowledge:quest:raven:session24",
+					"knowledge:quest:raven:session25",
+					"knowledge:quest:claruthano:desecrated"
+				],
+				"knowledge:quest:raven:session24": true,
+				"item:via:crossbow:harbinger": [
+					"knowledge:quest:raven:session24",
+					"knowledge:quest:raven:session29"
+				],
+				"item:via:crossbow:lucera": [
+					"knowledge:quest:raven:session24",
+					"knowledge:quest:raven:session29",
+					"knowledge:quest:raven:session37"
+				],
+				"knowledge:quest:raven:session25": true,
+				"knowledge:alchemy:antivenom": true,
+				"race:spider": [
+					"knowledge:quest:raven:session25"
+				],
+				"knowledge:claruthano:spiderfielddesert": true,
+				"knowledge:cthulhu:temple:claruthano:1": true,
+				"knowledge:alchemy:flashbomb": true,
+				"item:craft:lumenbomb": [
+					"knowledge:alchemy:flashbomb",
+					"knowledge:quest:raven:session51"
+				],
+				"knowledge:alchemy:smokebomb": true,
+				"item:craft:smokebomb": [
+					"knowledge:alchemy:smokebomb"
+				],
+				"knowledge:alchemy:brewing:tea:exuberous": true,
+				"item:teapot": [
+					"knowledge:alchemy:brewing:tea:exuberous"
+				],
+				"knowledge:quest:raven:session26": true,
+				"location:temple:cthulhu:claruthano:1": [
+					"knowledge:quest:raven:session26",
+					"knowledge:quest:mirrorroom:claruthano:green",
+					"knowledge:quest:mirrorroom:claruthano:red",
+					"knowledge:quest:mirrorroom:claruthano:blue",
+					"knowledge:quest:cthulhu:vault",
+					"knowledge:quest:cthulhu:alter",
+					"knowledge:quest:raven:session27",
+					"knowledge:quest:claruthano:desecrated"
+				],
+				"knowledge:servantresurrection": true,
+				"item:pendent:cthulhu": [
+					"knowledge:servantresurrection",
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:connectsendingstone": true,
+				"knowledge:quest:mirrorroom:claruthano:green": true,
+				"knowledge:quest:mirrorroom:claruthano:red": true,
+				"knowledge:quest:mirrorroom:claruthano:blue": true,
+				"knowledge:quest:cthulhu:vault": true,
+				"item:vial:blacktar": [
+					"knowledge:quest:cthulhu:vault",
+					"knowledge:quest:raven:session27"
+				],
+				"location:temple:cthulhu:claruthano:vault": [
+					"knowledge:quest:cthulhu:vault"
+				],
+				"knowledge:quest:cthulhu:alter": true,
+				"knowledge:quest:raven:session27": true,
+				"location:temple:cthulhu:claruthano:alter": [
+					"knowledge:quest:raven:session27"
+				],
+				"item:vial:blackliquid:1": [
+					"knowledge:quest:raven:session27"
+				],
+				"knowledge:quest:claruthano:desecrated": true,
+				"knowledge:spell:dimensiondoor": true,
+				"spell:icebolt": [
+					"knowledge:spell:dimensiondoor"
+				],
+				"spell:dimensiondoor": [
+					"knowledge:spell:dimensiondoor"
+				],
+				"knowledge:alchemy:poisonremedy": true,
+				"item:potion:cure:poison": [
+					"knowledge:alchemy:poisonremedy"
+				],
+				"knowledge:sale:rieal:carriage": true,
+				"knowledge:quest:raven:session28": true,
+				"item:elementalcore:template": [
+					"knowledge:quest:raven:session28"
+				],
+				"item:helm:waterscaling": [
+					"knowledge:quest:raven:session28"
+				],
+				"item:shield:bellescut": [
+					"knowledge:quest:raven:session28"
+				],
+				"item:amulet:cervell": [
+					"knowledge:quest:raven:session28"
+				],
+				"item:book:shorarg": [
+					"knowledge:quest:raven:session28",
+					"knowledge:quest:raven:session46",
+					"knowledge:quest:raven:session60"
+				],
+				"npc:civilian:male:human:model1:rielimeri": [
+					"knowledge:quest:raven:session28"
+				],
+				"npc:citizen:draconian:braixatias": [
+					"knowledge:quest:raven:session28",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:raven:session40"
+				],
+				"knowledge:alchemy:leaves": true,
+				"item:herbs:autus": [
+					"knowledge:alchemy:leaves"
+				],
+				"item:herbs:takn": [
+					"knowledge:alchemy:leaves",
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"item:herbs:sana": [
+					"knowledge:alchemy:leaves",
+					"knowledge:alchemy:healingpotion"
+				],
+				"item:herbs:alupho": [
+					"knowledge:alchemy:leaves"
+				],
+				"item:herbs:aigua": [
+					"knowledge:alchemy:leaves",
+					"knowledge:alchemy:waterbreathing"
+				],
+				"item:herbs:lumen": [
+					"knowledge:alchemy:leaves"
+				],
+				"item:herbs:umusi": [
+					"knowledge:alchemy:leaves"
+				],
+				"item:herbs:iludis": [
+					"knowledge:alchemy:leaves"
+				],
+				"knowledge:games:dominionbattle": [
+					"knowledge:events:fornto",
+					"knowledge:quest:raven:session29"
+				],
+				"knowledge:events:fornto": [
+					"knowledge:quest:raven:session29"
+				],
+				"knowledge:artifact:mistsedge:myth": [
+					"knowledge:events:fornto"
+				],
+				"knowledge:quest:arcanesociety:secretsociety": true,
+				"knowledge:arcanesociety": [
+					"knowledge:quest:arcanesociety:secretsociety",
+					"knowledge:quest:raven:session29",
+					"knowledge:quest:raven:session30"
+				],
+				"npc:civilian:female:human:model1:arianyaiprel": [
+					"knowledge:quest:arcanesociety:secretsociety",
+					"knowledge:quest:raven:session29"
+				],
+				"knowledge:quest:raven:session29": true,
+				"item:via:crossbow:lucera:bolt:dragon": [
+					"knowledge:quest:raven:session29"
+				],
+				"effect:harbingerscurse": [
+					"knowledge:quest:raven:session29"
+				],
+				"item:via:crossbow:harbinger:bolt:assassin": [
+					"knowledge:quest:raven:session29"
+				],
+				"item:via:crossbow:harbinger:bolt:dragon": [
+					"knowledge:quest:raven:session29"
+				],
+				"item:via:crossbow:harbinger:bolt:poison": [
+					"knowledge:quest:raven:session29"
+				],
+				"item:via:crossbow:harbinger:bolt:forlorn": [
+					"knowledge:quest:raven:session29"
+				],
+				"npc:civilian:female:human:model1:vialantent": [
+					"knowledge:quest:raven:session29",
+					"knowledge:quest:raven:session49"
+				],
+				"shop:tebit:viassmith": [
+					"knowledge:quest:raven:session29"
+				],
+				"item:gloves:arcanous": [
+					"knowledge:quest:raven:session29"
+				],
+				"npc:civilian:female:human:model1:ciniapetae": [
+					"knowledge:quest:raven:session29"
+				],
+				"knowledge:quest:raven:session30": true,
+				"location:arcanesociety:library": [
+					"knowledge:quest:raven:session30",
+					"knowledge:arcanesociety:library"
+				],
+				"npc:civilian:male:human:model1:ucacomamelu:1581831588005": [
+					"knowledge:quest:raven:session30"
+				],
+				"npc:civilian:female:dragonborn:model1:peneaentell": [
+					"knowledge:quest:raven:session30",
+					"knowledge:arcanesociety:library",
+					"knowledge:quest:raven:session38"
+				],
+				"location:continent:druteta": [
+					"knowledge:quest:raven:session30",
+					"knowledge:quest:raven:session31",
+					"knowledge:conflict:nautregnoleoterra",
+					"knowledge:quest:raven:session60",
+					"knowledge:quest:raven:session61",
+					"knowledge:kintari:pool",
+					"knowledge:quest:raven:session62",
+					"knowledge:quest:raven:session63"
+				],
+				"npc:boat:draconian:boat:sorafin": [
+					"knowledge:quest:raven:session30",
+					"knowledge:quest:raven:session31",
+					"knowledge:sorafin:ranks",
+					"knowledge:quest:raven:session37"
+				],
+				"knowledge:contract:lurusdeliver:neset": true,
+				"knowledge:contract:sulendiridadeliver": true,
+				"knowledge:contract:diplomatassassin": true,
+				"knowledge:contract:indiummachine": true,
+				"location:city:leoterra:dens": [
+					"knowledge:contract:indiummachine"
+				],
+				"location:city:coneixager:indium": [
+					"knowledge:contract:indiummachine",
+					"knowledge:people:memorywizards:indium",
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session37",
+					"knowledge:nation:coneixager",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:deliverybooks"
+				],
+				"spell:hammock": [
+					"knowledge:quest:raven:session30"
+				],
+				"knowledge:quest:raven:session31": true,
+				"item:axe:felling": [
+					"knowledge:quest:raven:session31"
+				],
+				"item:alchemy:advancedcondenser": [
+					"knowledge:quest:raven:session31"
+				],
+				"race:spider:crystal:blue": [
+					"knowledge:quest:raven:session31"
+				],
+				"npc:boat:row:rowone": [
+					"knowledge:quest:raven:session31",
+					"knowledge:quest:raven:session33"
+				],
+				"npc:boat:row:rowtwo": [
+					"knowledge:quest:raven:session31",
+					"knowledge:quest:raven:session33",
+					"knowledge:quest:raven:session35"
+				],
+				"npc:cart:raven'shandcart": [
+					"knowledge:quest:raven:session31"
+				],
+				"knowledge:granted:stormravager": [
+					"knowledge:quest:raven:session32"
+				],
+				"feat:storms:knowledge": [
+					"knowledge:granted:stormravager"
+				],
+				"feat:storms:fortitude": [
+					"knowledge:granted:stormravager"
+				],
+				"feat:storms:grace": [
+					"knowledge:granted:stormravager"
+				],
+				"feat:lighting": [
+					"knowledge:granted:stormravager"
+				],
+				"feat:warriorsblood": [
+					"knowledge:granted:stormravager"
+				],
+				"feat:stormravager": [
+					"knowledge:granted:stormravager"
+				],
+				"location:temple:whaitiri": [
+					"knowledge:granted:stormravager",
+					"knowledge:quest:raven:session32",
+					"knowledge:quest:raven:session57",
+					"knowledge:quest:raven:session58",
+					"knowledge:quest:raven:session59",
+					"knowledge:kintari:pool",
+					"knowledge:quest:raven:session65"
+				],
+				"god:whaitiri": [
+					"knowledge:granted:stormravager",
+					"knowledge:quest:raven:session32",
+					"knowledge:gods:symbols",
+					"knowledge:blessedknowledge:xylaris",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:raven:session51",
+					"knowledge:quest:raven:session57"
+				],
+				"knowledge:temple:whaitiri:druteta": true,
+				"knowledge:quest:raven:session32": true,
+				"feat:stepsoftly": [
+					"knowledge:quest:raven:session32"
+				],
+				"feat:criticalrangecontrol": [
+					"knowledge:quest:raven:session32",
+					"knowledge:improvedcritical"
+				],
+				"feat:divineattunement": [
+					"knowledge:quest:raven:session32"
+				],
+				"feat:improvedfamiliar": [
+					"knowledge:quest:raven:session32"
+				],
+				"knowledge:blessedknowledge:investigation:attack": false,
+				"knowledge:quest:cardinal:session30": false,
+				"location:city:curell": [
+					"knowledge:quest:raven:session62"
+				],
+				"item:book:okubi": [],
+				"npc:civilian:male:human:model1:berenlinja": [],
+				"item:crystal:blue:corrupted:divine": [],
+				"npc:civilian:female:gnome:model1:pentorecosfu:surangisthi": [],
+				"icypresence:icypresence": [],
+				"npc:civilian:male:orc:model1:jenkinshicrin": [],
+				"npc:civilian:male:dragonborn:model1:volumisinyduk:1582953101689": [],
+				"knowledge:gods:symbols": true,
+				"knowledge:quest:raven:session33": true,
+				"location:druteta:cave:1": [
+					"knowledge:quest:raven:session33"
+				],
+				"item:block:wood": [
+					"knowledge:quest:raven:session33"
+				],
+				"location:boat:sorafin": [
+					"knowledge:quest:raven:session33",
+					"knowledge:quest:raven:session38"
+				],
+				"race:scorpion:metallic": [
+					"knowledge:quest:raven:session33"
+				],
+				"knowledge:blessedknowledge:xylaris": [
+					"knowledge:blesseddeeds:xylaris"
+				],
+				"character:5c0c46a8449590597e991cac": [
+					"knowledge:blessedknowledge:xylaris",
+					"knowledge:sorafin:ranks"
+				],
+				"knowledge:blessedknowledge:huntress": true,
+				"feat:huntress": [
+					"knowledge:blessedknowledge:huntress",
+					"knowledge:quest:raven:session34"
+				],
+				"knowledge:quest:raven:session34:activities": true,
+				"knowledge:quest:raven:session34": true,
+				"item:contract:guildcontract:1585429119419": [
+					"knowledge:quest:raven:session34"
+				],
+				"item:contract:guildcontract:1585428689576": [
+					"knowledge:quest:raven:session34"
+				],
+				"item:contract:guildcontract:deliveryfromsulendirida:2": [
+					"knowledge:quest:raven:session34"
+				],
+				"item:contract:guildcontract:deliveryfromsulendirida:1": [
+					"knowledge:quest:raven:session34"
+				],
+				"item:contract:guildcontract:1585431013159": [
+					"knowledge:quest:raven:session34"
+				],
+				"item:book:enchanting:help": [
+					"knowledge:quest:raven:session34"
+				],
+				"npc:engramangorum": [
+					"knowledge:quest:raven:session34",
+					"knowledge:sorafin:ranks",
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:raven:session38"
+				],
+				"npc:vorohimmerlock": [
+					"knowledge:quest:raven:session34",
+					"knowledge:sorafin:ranks",
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:raven:session38"
+				],
+				"npc:aranzaliniq": [
+					"knowledge:quest:raven:session34",
+					"knowledge:sorafin:ranks",
+					"knowledge:quest:raven:session37"
+				],
+				"proficiency:task:captain:sailboat": [
+					"knowledge:quest:raven:session34"
+				],
+				"proficiency:task:navigation:nautical": [
+					"knowledge:quest:raven:session34"
+				],
+				"race:kintari": [
+					"knowledge:quest:raven:session34",
+					"knowledge:kintari:equipment",
+					"knowledge:quest:raven:session35",
+					"knowledge:quest:raven:session49",
+					"knowledge:quest:raven:session58",
+					"knowledge:quest:raven:session59"
+				],
+				"location:treasure:arcar ": [
+					"knowledge:quest:raven:session34",
+					"knowledge:quest:raven:session35",
+					"knowledge:quest:recover:blade"
+				],
+				"location:bar:themoritorium": [
+					"knowledge:quest:raven:session34",
+					"knowledge:location:montis"
+				],
+				"knowledge:sorafin:ranks": true,
+				"character:5c55f89943fb524d44f08d4f": [
+					"knowledge:sorafin:ranks"
+				],
+				"character:586d3bd1f81afb661e843908": [
+					"knowledge:sorafin:ranks"
+				],
+				"character:5ca94d55b6bf0d41cd2a8176": [
+					"knowledge:sorafin:ranks"
+				],
+				"character:5c0c4409449590597e991ca6": [
+					"knowledge:sorafin:ranks"
+				],
+				"knowledge:kintari:equipment": true,
+				"item:spear:kintarian": [
+					"knowledge:kintari:equipment",
+					"knowledge:quest:raven:session60"
+				],
+				"item:armor:kintari": [
+					"knowledge:kintari:equipment",
+					"knowledge:kintari:warrior"
+				],
+				"knowledge:quest:cardinal:session20": false,
+				"knowledge:quest:cardinal:session21": false,
+				"npc:civilian:female:orc:model1:sayrourviphe:1572569793713": [],
+				"location:isomerebog": [],
+				"npc:civilian:male:human:model1:engukcitre:1572570287922": [],
+				"npc:civilian:female:human:model1:isatususcuelos:1572570144837": [],
+				"knowledge:location:esclaucommune": [],
+				"knowledge:people:carivanofsouls": [],
+				"npc:civilian:female:halfelf:87987987": [],
+				"knowledge:quest:cardinal:session22": false,
+				"knowledge:location:isomerebog": [],
+				"npc:civilian:male:human:eursloc": [],
+				"knowledge:quest:cardinal:session23": false,
+				"npc:civilian:male:human:model1:iqisttanyan": [],
+				"knowledge:quest:cardinal:session24": false,
+				"npc:civilian:female:orc:model1:curavinan:1575777011888": [],
+				"npc:civilian:female:halfelf:nfondrintisitamar": [],
+				"npc:civilian:male:human:model1:uregocophelangqu:dumpentuunacrd": [],
+				"race:spider:rock": [],
+				"knowledge:quest:cardinal:session25": false,
+				"monster:rockspider:unique:cornoset": [],
+				"knowledge:quest:cardinal:session26": false,
+				"item:ore:unrefined:gold:tiny": [],
+				"np:shop:holers": [],
+				"npc:civilian:male:quasilverborn": [
+					"knowledge:people:memorywizards:indium",
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:quasilverborn",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:raven:session51"
+				],
+				"knowledge:quest:cardinal:session27": false,
+				"npc:civilian:male:human:model1:couinholer": [],
+				"location:store:holers": [],
+				"npc:civilian:male:dragonborn:model1:obenierumipha": [],
+				"race:wolf": [],
+				"item:journal:ilerar": [],
+				"npc:civilian:female:human:model1:itenysasaene": [],
+				"knowledge:quest:cardinal:session28": false,
+				"npc:civilian:male:human:model1:ilerarforit": [],
+				"npc:boat:sepultura": [],
+				"item:clothes:pantsuit:fanciful": [],
+				"location:city:leoterra:cancris": [],
+				"location:city:leoterra:ricanix": [],
+				"item:blend:reefer": [],
+				"knowledge:quest:cardinal:session29": false,
+				"npc:civilian:male:human:model1:sotelumikumbele:1582332877541": [],
+				"item:hair:inrena": [],
+				"npc:civilian:male:orc:model1:mheukuphoreba:1582852410905": [],
+				"location:curell:as:floor:1": [],
+				"npc:civilian:male:human:model1:untuselisphileitu:1581123873006": [],
+				"npc:civilian:male:human:model1:uscacaheceu:1581123996947": [],
+				"knowledge:quest:cardinal:session31": false,
+				"npc:onfupleimitob": [],
+				"item:clue:loosethreadsatheniancave": [],
+				"race:panther:dreadgeon": [],
+				"item:flute": [],
+				"effect:weather:rain:acid": [],
+				"monster:mummy:normal": [],
+				"race:mimic:normal": [],
+				"location:suspectedtemple:c": [],
+				"location:suspectedtemple:b": [],
+				"location:temple:athena:tebit": [],
+				"location:tebit:store": [],
+				"item:bag:holding:simple": [],
+				"item:blessing:dionysus": [],
+				"item:blessing:athena": [],
+				"location:city:leoterra:cotens": [],
+				"knowledge:event:sinda:tebit": [],
+				"npc:guard:baydelsajie": [],
+				"knowledge:quest:cardinal:session32": false,
+				"item:coat:torn": [],
+				"location:continent:mikillabellera": [
+					"knowledge:nation:leoterra",
+					"knowledge:quest:northernancientprisons"
+				],
+				"knowledge:quest:raven:session35": true,
+				"race:kintari:priest": [
+					"knowledge:quest:raven:session35",
+					"knowledge:crystals:raven:arcaneorbitalcircle"
+				],
+				"race:kintari:warrior": [
+					"knowledge:quest:raven:session35"
+				],
+				"item:banner:kintari:crimsonblood": [
+					"knowledge:quest:raven:session35",
+					"knowledge:quest:raven:session58"
+				],
+				"item:artifact:mistsedge:blade": [
+					"knowledge:quest:raven:session35",
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:recover:blade",
+					"knowledge:quest:raven:session61"
+				],
+				"item:boots:leather:water": [
+					"knowledge:quest:raven:session35"
+				],
+				"spell:majorimage": [
+					"knowledge:quest:raven:session35"
+				],
+				"spell:fly": [
+					"knowledge:quest:raven:session35",
+					"knowledge:quest:raven:session36"
+				],
+				"knowledge:crystals:raven:arcaneorbitalcircle": true,
+				"knowledge:alchemy:minorhealingpotion": [
+					"knowledge:quest:raven:session36"
+				],
+				"item:alchemyingredients": [
+					"knowledge:alchemy:minorhealingpotion",
+					"knowledge:alchemy:waterbreathing",
+					"knowledge:alchemy:healingpotion",
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"item:potion:healing:minor": [
+					"knowledge:alchemy:minorhealingpotion",
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session41"
+				],
+				"knowledge:people:memorywizards:indium": [
+					"knowledge:quest:raven:session36"
+				],
+				"knowledge:quest:raven:session36": true,
+				"location:ancient:lab:vatnunda": [
+					"knowledge:quest:raven:session36"
+				],
+				"location:city:coneixager:racual": [
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session37",
+					"knowledge:location:racual"
+				],
+				"location:continent:vatnunda": [
+					"knowledge:quest:raven:session36"
+				],
+				"item:warhammer:castupravus": [
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session49"
+				],
+				"item:compassofambition": [
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:recover:blade",
+					"knowledge:quest:raven:session61"
+				],
+				"location:continent:turrija": [
+					"knowledge:quest:raven:session36",
+					"knowledge:nation:coneixager"
+				],
+				"location:continent:lurus": [
+					"knowledge:quest:raven:session36",
+					"knowledge:nation:nautregno"
+				],
+				"item:warmcoat": [
+					"knowledge:quest:raven:session36"
+				],
+				"item:mandolin:pax": [
+					"knowledge:quest:raven:session36"
+				],
+				"npc:familiar:orlajrjr": [
+					"knowledge:quest:raven:session36"
+				],
+				"item:staff:power:arcanic": [
+					"knowledge:quest:raven:session36"
+				],
+				"item:kit:climber": [
+					"knowledge:quest:raven:session36",
+					"knowledge:quest:raven:session44"
+				],
+				"spell:featherfall": [
+					"knowledge:quest:raven:session36"
+				],
+				"spell:dispellmagic": [
+					"knowledge:quest:raven:session36"
+				],
+				"location:rowboat:norwindsfolly": [
+					"knowledge:quest:raven:session36"
+				],
+				"location:rowboat:summitofthesea": [
+					"knowledge:quest:raven:session36"
+				],
+				"location:city:nautregno:breid": [
+					"knowledge:quest:raven:session36"
+				],
+				"knowledge:ancient:lab:accuio": true,
+				"item:ring:guided": [
+					"knowledge:ancient:lab:accuio"
+				],
+				"story:crystals:powerspectrum": [
+					"knowledge:quest:raven:session47"
+				],
+				"knowledge:artifact:3:location:nautrengo": true,
+				"knowledge:improvedcritical": true,
+				"knowledge:event:samakusea:whirlpool": true,
+				"knowledge:locations:world:general": true,
+				"knowledge:quest:raven:session37": true,
+				"item:dagger:fire:enchantedone": [
+					"knowledge:quest:raven:session37"
+				],
+				"npc:guardian:guarvello": [
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:ancient:learning:raven:1"
+				],
+				"location:reykurax": [
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:ancient:learning:raven:1",
+					"knowledge:spirittradeinreykurax",
+					"knowledge:reykurax:ghosts",
+					"knowledge:quest:raven:session45",
+					"knowledge:quest:raven:session46",
+					"knowledge:quest:raven:session47",
+					"knowledge:quest:raven:session48",
+					"knowledge:clerics:ancient",
+					"knowledge:quest:raven:session49",
+					"knowledge:quest:raven:session50",
+					"knowledge:quest:raven:session55",
+					"knowledge:quest:raven:session56"
+				],
+				"npc:pet:cat:cianyanantyamu": [
+					"knowledge:quest:raven:session37"
+				],
+				"location:city:leoterra:intis": [
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:quasilverborn",
+					"knowledge:city:intis",
+					"knowledge:location:city:intis"
+				],
+				"location:dimensionalpool:sumaku": [
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:raven:session38"
+				],
+				"item:kit:cartography": [
+					"knowledge:quest:raven:session37"
+				],
+				"npc:shop:finyelelainn": [
+					"knowledge:quest:raven:session37",
+					"knowledge:city:intis",
+					"knowledge:location:city:intis"
+				],
+				"npc:innkeeper:1586742486841": [
+					"knowledge:quest:raven:session37",
+					"knowledge:quest:raven:session38"
+				],
+				"npc:civilian:male:orc:model1:umoriorim:1586740097474": [
+					"knowledge:quest:raven:session37"
+				],
+				"npc:builteirveuri": [
+					"knowledge:quest:raven:session37",
+					"knowledge:character:builteir"
+				],
+				"item:hat:blacktophat": [
+					"knowledge:quest:raven:session37"
+				],
+				"location:continent:lunderipio": [
+					"knowledge:quest:raven:session37",
+					"knowledge:nation:leoterra",
+					"knowledge:conflict:nautregnoleoterra",
+					"knowledge:quest:northernancientprisons"
+				],
+				"monster:dragon:black:tindium": [
+					"knowledge:quest:raven:session37"
+				],
+				"location:finyelelainn": [
+					"knowledge:quest:raven:session37",
+					"knowledge:location:city:intis"
+				],
+				"knowledge:quest:quasilverborn": true,
+				"knowledge:location:diforgedvault": true,
+				"location:ancientvault:evasar": [
+					"knowledge:location:diforgedvault"
+				],
+				"item:dagger:evasar": [
+					"knowledge:location:diforgedvault",
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"knowledge:location:racual": true,
+				"npc:shop:itemsofinya": [
+					"knowledge:location:racual"
+				],
+				"knowledge:city:intis": true,
+				"npc:shop:generalgoodsofintis": [
+					"knowledge:city:intis"
+				],
+				"knowledge:location:city:intis": true,
+				"location:generalgoodsofintis": [
+					"knowledge:location:city:intis"
+				],
+				"npc:civilian:female:dragonborn:model1:ixasaela": [
+					"knowledge:location:dranous"
+				],
+				"npc:draconian:cranevox": [
+					"knowledge:location:dranous"
+				],
+				"npc:shop:magic:lemulicerphan": [
+					"knowledge:location:dranous"
+				],
+				"location:shop:blacksmith:braix": [
+					"knowledge:location:dranous",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:draconian:cravousnilous": [
+					"knowledge:location:dranous"
+				],
+				"shop:galleriaofgoods": [
+					"knowledge:location:dranous"
+				],
+				"npc:building:shop:pub:ixa": [
+					"knowledge:location:dranous"
+				],
+				"npc:building:shop:apothecary": [
+					"knowledge:location:dranous",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:building:shop:forge:braix": [
+					"knowledge:location:dranous"
+				],
+				"location:sintaressinery:dranous": [
+					"knowledge:location:dranous"
+				],
+				"location:dranous:publiclibrary": [
+					"knowledge:location:dranous"
+				],
+				"location:constabulary:dranous:head": [
+					"knowledge:location:dranous"
+				],
+				"knowledge:location:montis": true,
+				"npc:stabbypete": [
+					"knowledge:location:montis"
+				],
+				"npc:building:enchanter:montis": [
+					"knowledge:location:montis"
+				],
+				"npc:building:shop:apothecary:montis": [
+					"knowledge:location:montis"
+				],
+				"location:city:leoterra:montis": [
+					"knowledge:location:montis",
+					"knowledge:nation:leoterra",
+					"knowledge:quest:raven:session38"
+				],
+				"location:government:main:montis": [
+					"knowledge:location:montis"
+				],
+				"location:hospitol:montis": [
+					"knowledge:location:montis"
+				],
+				"location:inn:montis:flagrantvagrant": [
+					"knowledge:location:montis"
+				],
+				"location:shop:apothecary:montis": [
+					"knowledge:location:montis"
+				],
+				"npc:building:forge:montis": [
+					"knowledge:location:montis"
+				],
+				"location:generalgoods:montis": [
+					"knowledge:location:montis"
+				],
+				"npc:building:shop:generalgoods:montis": [
+					"knowledge:location:montis"
+				],
+				"location:forge:montis": [
+					"knowledge:location:montis"
+				],
+				"location:enchanter:montis": [
+					"knowledge:location:montis"
+				],
+				"location:inn:montis:vaknavuka": [
+					"knowledge:location:montis"
+				],
+				"knowledge:event:gala:imperial": [
+					"knowledge:quest:raven:session39"
+				],
+				"knowledge:wild:spider": true,
+				"npc:wildlife:spider": [
+					"knowledge:wild:spider"
+				],
+				"knowledge:wild:snake": true,
+				"npc:wildlife:snake": [
+					"knowledge:wild:snake"
+				],
+				"knowledge:wild:raven": true,
+				"npc:wildlife:raven": [
+					"knowledge:wild:raven"
+				],
+				"knowledge:wild:rat": true,
+				"npc:wildlife:rat": [
+					"knowledge:wild:rat"
+				],
+				"knowledge:arcanesociety:library": true,
+				"knowledge:nation:coneixager": true,
+				"knowledge:nation:draconia": true,
+				"location:continent:calokula": [
+					"knowledge:nation:draconia"
+				],
+				"knowledge:nation:nautregno": [
+					"knowledge:conflict:nautregnoleoterra"
+				],
+				"knowledge:nation:leoterra": [
+					"knowledge:conflict:nautregnoleoterra"
+				],
+				"knowledge:war:nautregno:leoterra": true,
+				"knowledge:quest:raven:session38": true,
+				"npc:velinqu": [
+					"knowledge:quest:raven:session38"
+				],
+				"npc:orvern": [
+					"knowledge:quest:raven:session38"
+				],
+				"item:hand:quashand": [
+					"knowledge:quest:raven:session38"
+				],
+				"item:book:story:0": [
+					"knowledge:quest:raven:session38"
+				],
+				"npc:civilian:mgaratubumercitiphi": [
+					"knowledge:quest:raven:session38"
+				],
+				"npc:civilian:male:orc:model1:calandomesukare:orenlacayat": [
+					"knowledge:quest:raven:session38"
+				],
+				"npc:civilian:male:human:model1:nintutorakaz:1586123833406": [
+					"knowledge:quest:raven:session38"
+				],
+				"item:cannon:reinforced": [
+					"knowledge:quest:raven:session38"
+				],
+				"item:cannonball": [
+					"knowledge:quest:raven:session38"
+				],
+				"npc:summon:skeleton:torinn:zulegen:1587332097772": [
+					"knowledge:quest:raven:session38"
+				],
+				"item:pouch:dustofgate": [
+					"knowledge:quest:raven:session38"
+				],
+				"location:library:indium:cortex": [
+					"knowledge:quest:raven:session38"
+				],
+				"item:crate:books:draconia:quest": [
+					"knowledge:quest:raven:session38",
+					"knowledge:quest:deliverybooks"
+				],
+				"location:squid:merpo": [
+					"knowledge:quest:raven:session38"
+				],
+				"location:squid:vonaris": [
+					"knowledge:quest:raven:session38"
+				],
+				"knowledge:alchemy:spellink": true,
+				"knowledge:character:builteir": true,
+				"knowledge:quest:deliverybooks": true,
+				"knowledge:quest:recover:blade": true,
+				"knowledge:sailing:navigating:anna": [
+					"knowledge:quest:recover:blade"
+				],
+				"knowledge:quest:ancient:learning:raven:1": true,
+				"knowledge:alchemy:waterbreathing": true,
+				"item:flask": [
+					"knowledge:alchemy:waterbreathing"
+				],
+				"potion:waterbreathing:normal": [
+					"knowledge:alchemy:waterbreathing"
+				],
+				"knowledge:guild:lostpowercrystals": true,
+				"location:sewer:0": [
+					"knowledge:guild:lostpowercrystals"
+				],
+				"location:sewer:1": [
+					"knowledge:guild:lostpowercrystals"
+				],
+				"location:sewer:2": [
+					"knowledge:guild:lostpowercrystals"
+				],
+				"location:sewer:5": [
+					"knowledge:guild:lostpowercrystals"
+				],
+				"location:sewer:4": [
+					"knowledge:guild:lostpowercrystals"
+				],
+				"location:hustestoys": [
+					"knowledge:guild:lostpowercrystals",
+					"knowledge:quest:raven:session39"
+				],
+				"location:cafeintrinsa": [
+					"knowledge:guild:lostpowercrystals",
+					"knowledge:quest:raven:session39"
+				],
+				"location:mezzanineartisia": [
+					"knowledge:guild:lostpowercrystals",
+					"knowledge:quest:raven:session39"
+				],
+				"location:orphanage": [
+					"knowledge:guild:lostpowercrystals",
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:timescrollorphans",
+					"knowledge:quest:raven:session40"
+				],
+				"location:charity": [
+					"knowledge:guild:lostpowercrystals",
+					"knowledge:quest:raven:session39"
+				],
+				"knowledge:supplemental:0": true,
+				"location:basel:outpost:northernabandonedmining": [
+					"knowledge:supplemental:0"
+				],
+				"knowledge:quest:raven:session39": true,
+				"npc:ephliocenyo": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:baskvilolin": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:egoosibichiwor": [
+					"knowledge:quest:raven:session39"
+				],
+				"npc:ungulophen": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:onominaelayko": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:buskvilolin": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:linitphell": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:elordlefestus": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:half-elf:template:enasilthisinys:tumamhikoriu": [
+					"knowledge:quest:raven:session39"
+				],
+				"npc:smalltemplate:usimbumuustentumuk:badovntomang": [
+					"knowledge:quest:raven:session39",
+					"knowledge:quest:raven:session40"
+				],
+				"npc:remelalumiqso": [
+					"knowledge:quest:raven:session39"
+				],
+				"item:spellcopying": [
+					"knowledge:quest:raven:session39"
+				],
+				"npc:saranacandor": [
+					"knowledge:quest:raven:session39"
+				],
+				"location:guild:cache:dranous:0": [
+					"knowledge:quest:raven:session39"
+				],
+				"location:bottomsup": [
+					"knowledge:quest:raven:session39"
+				],
+				"npc:olanghuste": [
+					"knowledge:quest:raven:session39"
+				],
+				"item:magicwand": [
+					"knowledge:quest:raven:session39"
+				],
+				"item:cape:invisibility": [
+					"knowledge:quest:raven:session39"
+				],
+				"npc:blaja": [
+					"knowledge:quest:raven:session39"
+				],
+				"npc:crov": [
+					"knowledge:quest:raven:session39"
+				],
+				"item:crystalball": [
+					"knowledge:quest:raven:session39"
+				],
+				"knowledge:flanking": true,
+				"race:ogre:twoheaded": [
+					"knowledge:flanking"
+				],
+				"knowledge:location:villageofcassandra": true,
+				"location:villageofcassandra": [
+					"knowledge:location:villageofcassandra"
+				],
+				"knowledge:quest:timescrollorphans": true,
+				"knowledge:conflict:nautregnoleoterra": true,
+				"location:continent:basel": [
+					"knowledge:conflict:nautregnoleoterra"
+				],
+				"knowledge:craft:alchemy": true,
+				"feat:craft:alchemist": [
+					"knowledge:craft:alchemy"
+				],
+				"knowledge:spirittradeinreykurax": true,
+				"location:city:stjornu": [
+					"knowledge:spirittradeinreykurax",
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session44",
+					"knowledge:quest:raven:session48",
+					"knowledge:quest:raven:session50",
+					"knowledge:quest:raven:session52"
+				],
+				"knowledge:quest:northernancientprisons": true,
+				"knowledge:quest:pillagegaldur": true,
+				"location:continent:galdur": [
+					"knowledge:quest:pillagegaldur"
+				],
+				"knowledge:quest:specialization:alchemy": true,
+				"knowledge:alchemy:brewing:rushed": true,
+				"item:cauldron": [
+					"knowledge:alchemy:brewing:rushed",
+					"knowledge:alchemy:healingpotion"
+				],
+				"item:cauldron:selfheating": [
+					"knowledge:alchemy:brewing:rushed"
+				],
+				"knowledge:quest:raven:session40": true,
+				"npc:human:template:stuspumqus:1589759743509": [
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session43",
+					"knowledge:quest:raven:session44",
+					"knowledge:quest:raven:session51",
+					"knowledge:quest:raven:session52"
+				],
+				"knowledge:realm:dead:reykurax": [
+					"knowledge:quest:raven:session40"
+				],
+				"knowledge:location:city:stjornu": [
+					"knowledge:quest:raven:session40"
+				],
+				"location:stjornu:temple": [
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session50",
+					"knowledge:legend:theacheron"
+				],
+				"location:stjornu:inn": [
+					"knowledge:quest:raven:session40"
+				],
+				"npc:shop:lemsimmortabin": [
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session41",
+					"knowledge:quest:raven:session44"
+				],
+				"location:stjornu:store": [
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session49"
+				],
+				"monster:geist:chained": [
+					"knowledge:quest:raven:session40",
+					"knowledge:violentspirit:chainedgeist",
+					"knowledge:quest:raven:session41"
+				],
+				"item:scroll:aeviumorbis": [
+					"knowledge:quest:raven:session40"
+				],
+				"knowledge:group:timekeepers": [
+					"knowledge:quest:raven:session40"
+				],
+				"location:foothills:pain": [
+					"knowledge:quest:raven:session40"
+				],
+				"location:foothills:grief": [
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session42",
+					"knowledge:quest:raven:session43"
+				],
+				"location:foothills:anger": [
+					"knowledge:quest:raven:session40",
+					"knowledge:quest:raven:session44"
+				],
+				"race:elemental:earth": [
+					"knowledge:quest:raven:session40"
+				],
+				"npc:civilian:male:duloleiitum": [
+					"knowledge:quest:raven:session40"
+				],
+				"location:shop:apothecary": [
+					"knowledge:quest:raven:session40"
+				],
+				"npc:simhimly": [
+					"knowledge:quest:raven:session40"
+				],
+				"knowledge:violentspirit:geist": false,
+				"monster:geist:normal": [],
+				"knowledge:violentspirit:chainedgeist": true,
+				"knowledge:quest:raven:session41": true,
+				"item:gem:soul": [
+					"knowledge:quest:raven:session41",
+					"knowledge:quest:raven:session49",
+					"knowledge:quest:raven:session51"
+				],
+				"feat:wraithclaws": [
+					"knowledge:quest:raven:session41"
+				],
+				"location:note:explosion:0": [
+					"knowledge:quest:raven:session41",
+					"knowledge:quest:raven:session44"
+				],
+				"item:book:ancient": [
+					"knowledge:quest:raven:session41",
+					"knowledge:quest:raven:session42",
+					"knowledge:quest:raven:session43"
+				],
+				"npc:volinungat": [
+					"knowledge:quest:raven:session41",
+					"knowledge:theplainsofreflection"
+				],
+				"location:plains:reflection": [
+					"knowledge:quest:raven:session41",
+					"knowledge:theplainsofreflection"
+				],
+				"knowledge:theplainsofreflection": [
+					"knowledge:quest:raven:session42"
+				],
+				"knowledge:draconiancitixen": true,
+				"knowledge:wraiths": true,
+				"race:wraith": [
+					"knowledge:wraiths"
+				],
+				"knowledge:violentspirit:geist:charged": true,
+				"monster:geist:charged": [
+					"knowledge:violentspirit:geist:charged",
+					"knowledge:quest:raven:session42"
+				],
+				"knowledge:quest:raven:session42": true,
+				"npc:spirit:skull:flaming": [
+					"knowledge:quest:raven:session42"
+				],
+				"npc:spirit:skull:oozing": [
+					"knowledge:quest:raven:session42"
+				],
+				"npc:spirit:skull:crystalline": [
+					"knowledge:quest:raven:session42",
+					"knowledge:violentspirit:crystallineskull"
+				],
+				"item:book:lost:digger": [
+					"knowledge:quest:raven:session42",
+					"knowledge:quest:raven:session43",
+					"knowledge:quest:raven:session44",
+					"knowledge:quest:raven:session45"
+				],
+				"item:blessing:durong": [
+					"knowledge:quest:raven:session42",
+					"knowledge:quest:raven:session45",
+					"knowledge:legend:thegoddurong"
+				],
+				"knowledge:violentspirit:angryspirit": true,
+				"monster:angryspirit": [
+					"knowledge:violentspirit:angryspirit"
+				],
+				"item:hand:angryspirit": [
+					"knowledge:violentspirit:angryspirit"
+				],
+				"knowledge:quest:raven:session43": true,
+				"knowledge:location:stjornu": [
+					"knowledge:quest:raven:session43"
+				],
+				"npc:mob:snacks:1588475647627": [
+					"knowledge:quest:raven:session43"
+				],
+				"npc:mob:commf:1589694685528": [
+					"knowledge:quest:raven:session43"
+				],
+				"npc:mob:scritches:1589694562185": [
+					"knowledge:quest:raven:session43"
+				],
+				"npc:shop:thecrematorium": [
+					"knowledge:quest:raven:session43"
+				],
+				"npc:thiyalanku": [
+					"knowledge:quest:raven:session43",
+					"knowledge:quest:raven:session51"
+				],
+				"item:trinket:nightdice": [
+					"knowledge:quest:raven:session43",
+					"knowledge:quest:raven:session45",
+					"knowledge:quest:raven:session52",
+					"knowledge:quest:raven:session56"
+				],
+				"item:flower:dauoa": [
+					"knowledge:quest:raven:session43"
+				],
+				"location:pathofvengence": [
+					"knowledge:quest:raven:session43"
+				],
+				"item:potion:grimace": [
+					"knowledge:quest:raven:session43"
+				],
+				"item:necklace:deadspeech": [
+					"knowledge:quest:raven:session43",
+					"knowledge:quest:raven:session47",
+					"knowledge:quest:raven:session54"
+				],
+				"location:hintobin": [
+					"knowledge:quest:raven:session43"
+				],
+				"npc:griffinfellborn": [
+					"knowledge:quest:raven:session43"
+				],
+				"knowledge:reykurax:ghosts": true,
+				"knowledge:alchemy:arcanerecovery": true,
+				"item:potions:spellslot:minor": [
+					"knowledge:quest:raven:session44",
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"item:potions:spellslot": [
+					"knowledge:quest:raven:session44",
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"item:potions:spellslot:major": [
+					"knowledge:quest:raven:session44",
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"knowledge:quest:raven:session44": true,
+				"item:ornimentor": [
+					"knowledge:quest:raven:session44"
+				],
+				"item:wand:animous": [
+					"knowledge:quest:raven:session44"
+				],
+				"item:spiritsvow:meowsaton": [
+					"knowledge:quest:raven:session44"
+				],
+				"item:book:lost:alchemist": [
+					"knowledge:quest:raven:session44"
+				],
+				"item:craft:soundbomb": [
+					"knowledge:quest:raven:session44"
+				],
+				"knowledge:alchemy:healingpotion": true,
+				"item:potion:healing:normal": [
+					"knowledge:alchemy:healingpotion"
+				],
+				"knowledge:quest:raven:session45": true,
+				"item:ingredient:necrasoil": [
+					"knowledge:quest:raven:session45",
+					"knowledge:quest:raven:session49"
+				],
+				"location:footprints:raven:1": [
+					"knowledge:quest:raven:session45"
+				],
+				"location:tomb:ancient:0": [
+					"knowledge:quest:raven:session45",
+					"knowledge:cryptwraiths",
+					"knowledge:crypt:riddle:reykurax:0:1",
+					"knowledge:quest:raven:session48"
+				],
+				"knowledge:cryptriddle:reykurax:0:1": false,
+				"item:potions:spellslot:1": [
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"item:potions:spellslot:3": [
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"item:potions:spellslot:2": [
+					"knowledge:alchemy:arcanerecovery"
+				],
+				"knowledge:quest:raven:session46": true,
+				"knowledge:cryptwraiths": true,
+				"knowledge:magic:abjuration": [
+					"knowledge:quest:raven:session46"
+				],
+				"knowledge:magic:transmutation": [
+					"knowledge:quest:raven:session46"
+				],
+				"knowledge:magic:conjuration": [
+					"knowledge:quest:raven:session46"
+				],
+				"monster:wraith:crypt": [
+					"knowledge:cryptwraiths"
+				],
+				"knowledge:crypt:riddle:reykurax:0:1": true,
+				"knowledge:quest:raven:session47": true,
+				"item:ring:osmot": [
+					"knowledge:quest:raven:session47",
+					"knowledge:quest:raven:session51"
+				],
+				"knowledge:caveofdesign": [
+					"knowledge:quest:raven:session48",
+					"knowledge:quest:raven:session50"
+				],
+				"location:caveofdesign": [
+					"knowledge:caveofdesign",
+					"knowledge:quest:raven:session49",
+					"knowledge:quest:raven:session54"
+				],
+				"item:book:inscriptions": [
+					"knowledge:caveofdesign",
+					"knowledge:quest:raven:session50",
+					"knowledge:quest:raven:session51"
+				],
+				"knowledge:aliscos:chest": [
+					"knowledge:quest:raven:session48"
+				],
+				"item:aliscosguitar": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48"
+				],
+				"item:chainmail:aliscoschains": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48"
+				],
+				"item:belt:corverve": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48"
+				],
+				"item:ring:symphony:ringofsymphony:1601185269527": [
+					"knowledge:aliscos:chest"
+				],
+				"item:shatteredpower": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48"
+				],
+				"item:pill:speak:upper": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48"
+				],
+				"item:cloak:kingsguard": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48",
+					"knowledge:quest:raven:session50"
+				],
+				"knowledge:reykurax:caveoftheforgotten:alisco": [
+					"knowledge:quest:raven:session48"
+				],
+				"npc:aliscosachen": [
+					"knowledge:reykurax:caveoftheforgotten:alisco",
+					"knowledge:reykurax:citadels:alisco",
+					"knowledge:quest:raven:session48",
+					"knowledge:quest:raven:session51",
+					"knowledge:legend:alisco",
+					"knowledge:quest:raven:session57"
+				],
+				"location:caveoftheforgotten": [
+					"knowledge:reykurax:caveoftheforgotten:alisco",
+					"knowledge:quest:raven:session49",
+					"knowledge:quest:raven:session51",
+					"knowledge:quest:raven:session52",
+					"knowledge:quest:raven:session53"
+				],
+				"knowledge:reykurax:citadels:alisco": [
+					"knowledge:quest:raven:session48"
+				],
+				"item:book:aliscossongsbook": [
+					"knowledge:aliscos:chest",
+					"knowledge:quest:raven:session48"
+				],
+				"knowledge:quest:raven:session48": true,
+				"location:citadel:citizen": [
+					"knowledge:quest:raven:session48",
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:reykurax:pathofascension": [
+					"knowledge:quest:raven:session55",
+					"knowledge:quest:raven:session57"
+				],
+				"item:ring:symphony": [
+					"knowledge:quest:raven:session48"
+				],
+				"knowledge:clerics:ancient": true,
+				"location:pathofascension": [
+					"knowledge:clerics:ancient",
+					"knowledge:reykurax:pathofascension",
+					"knowledge:quest:raven:session52",
+					"knowledge:quest:raven:session56",
+					"knowledge:quest:raven:session58"
+				],
+				"knowledge:class:fighter:feats": true,
+				"feat:twohanded": [
+					"knowledge:class:fighter:feats"
+				],
+				"feat:archery": [
+					"knowledge:class:fighter:feats"
+				],
+				"feat:greatweaponmaster": [
+					"knowledge:class:fighter:feats"
+				],
+				"feat:dueling": [
+					"knowledge:class:fighter:feats"
+				],
+				"feat:defense": [
+					"knowledge:class:fighter:feats"
+				],
+				"feat:protection": [
+					"knowledge:class:fighter:feats"
+				],
+				"knowledge:legend:thegoddurong": true,
+				"god:durong": [
+					"knowledge:legend:thegoddurong",
+					"knowledge:quest:raven:session50"
+				],
+				"effect:aspectofdurong": [
+					"knowledge:legend:thegoddurong"
+				],
+				"knowledge:quest:raven:session49": true,
+				"item:coin:stix": [
+					"knowledge:quest:raven:session49",
+					"knowledge:quest:raven:session54"
+				],
+				"location:citadel:greed": [
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:legend:caveofdesign": [
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:legend:caveofforgotten": [
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:legend:citadelofgreed": [
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:legend:citadelofthecitizen": [
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:legend:castupravus": [
+					"knowledge:quest:raven:session49"
+				],
+				"knowledge:quest:raven:session50": true,
+				"knowledge:legend:theacheron": true,
+				"knowledge:quest:raven:session51": true,
+				"item:stone:sending:sendingstone": [
+					"knowledge:quest:raven:session51"
+				],
+				"item:coin:fleet:5th": [
+					"knowledge:quest:raven:session51",
+					"knowledge:quest:raven:session52"
+				],
+				"item:kit:alchemist": [
+					"knowledge:quest:raven:session51"
+				],
+				"knowledge:violentspirit:crystallineskull": true,
+				"knowledge:quest:raven:session52": true,
+				"item:bow:serenity:present": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:quiver:calamity:present": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:armor:liberatus": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:herbs:time": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:armor:leather:studded:resist:physical": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:armor:leather:studded:resist:cold:lightning": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:armor:leather:studded:resist:acid:fire": [
+					"knowledge:quest:raven:session52"
+				],
+				"item:potion:strength": [
+					"knowledge:quest:raven:session52"
+				],
+				"knowledge:legend:alisco": true,
+				"knowledge:sorrowsgrace": [
+					"knowledge:quest:raven:session53",
+					"knowledge:quest:raven:session54",
+					"knowledge:quest:raven:session56",
+					"knowledge:quest:raven:session62"
+				],
+				"npc:serrenussitu": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank",
+					"knowledge:quest:raven:session54"
+				],
+				"npc:pomburecao": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank",
+					"knowledge:quest:raven:session54"
+				],
+				"npc:orataruirris": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank",
+					"knowledge:quest:raven:session54"
+				],
+				"npc:erellesalisuk": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank",
+					"knowledge:quest:raven:session54"
+				],
+				"npc:citoliyzesur": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank",
+					"knowledge:quest:raven:session54"
+				],
+				"item:bow:serenity": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:quiver:calamity": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:amulet:arcanedivinity": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:citolsvitrol": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:bandofresonance": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:dagger:andiziyo:pombu": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:wand:vonderous": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:pouch:dustofwandering": [
+					"knowledge:sorrowsgrace",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:swords:onslaught": [
+					"knowledge:sorrowsgrace",
+					"knowledge:quest:raven:session53",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:helm:vision": [
+					"knowledge:sorrowsgrace",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"item:shield:reckoning": [
+					"knowledge:sorrowsgrace",
+					"knowledge:sorrowsgrace:blank"
+				],
+				"knowledge:quest:raven:session53": true,
+				"item:gloves:fletchers": [
+					"knowledge:quest:raven:session53"
+				],
+				"effect:onslaughtsembrace": [
+					"knowledge:quest:raven:session53"
+				],
+				"knowledge:sorrowsgrace:blank": true,
+				"ring:shield:mind:legend": [
+					"knowledge:sorrowsgrace:blank"
+				],
+				"ring:magical:healing:legendary": [
+					"knowledge:sorrowsgrace:blank"
+				],
+				"knowledge:quest:raven:session54": true,
+				"knowledge:quest:raven:session55": true,
+				"item:dollofipse": [
+					"knowledge:quest:raven:session55",
+					"knowledge:quest:raven:session56"
+				],
+				"race:tiefling": [
+					"knowledge:quest:raven:session55"
+				],
+				"knowledge:quest:raven:session56": true,
+				"monster:wraith": [
+					"knowledge:quest:raven:session56"
+				],
+				"item:stone:sending:sendingstone:1578783786361": [
+					"knowledge:quest:raven:session56"
+				],
+				"effect:petrification": [
+					"knowledge:quest:raven:session56"
+				],
+				"knowledge:magic:divination": [
+					"knowledge:quest:raven:session56"
+				],
+				"knowledge:creature:mimic": true,
+				"monster:mimic": [
+					"knowledge:creature:mimic"
+				],
+				"knowledge:mimic:weird:reykuyrax": true,
+				"monster:mimic:mimicgen:1613945764617": [
+					"knowledge:mimic:weird:reykuyrax"
+				],
+				"knowledge:quest:raven:session57": true,
+				"item:candle:silent": [
+					"knowledge:quest:raven:session57",
+					"knowledge:quest:raven:session61"
+				],
+				"knowledge:blesseddeeds:xylaris": true,
+				"knowledge:quest:raven:session58": true,
+				"knowledge:quest:raven:session59": true,
+				"knowledge:quest:raven:session60": true,
+				"monster:kintari:savant": [
+					"knowledge:quest:raven:session60",
+					"knowledge:kintari:pool"
+				],
+				"item:spear:kintarian:high": [
+					"knowledge:quest:raven:session60"
+				],
+				"item:shield:tower:kintari": [
+					"knowledge:quest:raven:session60"
+				],
+				"monster:kintari:priest": [
+					"knowledge:quest:raven:session60",
+					"knowledge:kintari:priest",
+					"knowledge:quest:raven:session63"
+				],
+				"monster:kintari:warrior": [
+					"knowledge:quest:raven:session60",
+					"knowledge:quest:raven:session61",
+					"knowledge:quest:raven:session62",
+					"knowledge:kintari:warrior",
+					"knowledge:quest:raven:session63",
+					"knowledge:quest:raven:session65"
+				],
+				"knowledge:quest:raven:session61": true,
+				"knowledge:kintari:pool": [
+					"knowledge:quest:raven:session62",
+					"knowledge:quest:raven:session63"
+				],
+				"item:crystal:silver": [
+					"knowledge:kintari:pool"
+				],
+				"knowledge:quest:raven:session62": true,
+				"item:book:spellbook:kintari:offensive": [
+					"knowledge:quest:raven:session62"
+				],
+				"npc:rustintjulan": [
+					"knowledge:quest:raven:session62",
+					"knowledge:quest:raven:session63",
+					"knowledge:quest:raven:session65"
+				],
+				"knowledge:kintari:warrior": true,
+				"item:knowledge:spear:kintarian": [
+					"knowledge:kintari:warrior"
+				],
+				"knowledge:kintari:priest": true,
+				"knowledge:kintari:servant:flame": true,
+				"monster:kintari:servant:fire": [
+					"knowledge:kintari:servant:flame",
+					"knowledge:quest:raven:session63"
+				],
+				"knowledge:quest:raven:session63": true,
+				"location:kintariancave:druteta": [
+					"knowledge:quest:raven:session63",
+					"knowledge:quest:raven:session65"
+				],
+				"knowledge:quest:raven:session64": true,
+				"item:raspingblade:raspingblade:1620602084671": [
+					"knowledge:quest:raven:session64"
+				],
+				"item:dagger:gimsteinn": [
+					"knowledge:quest:raven:session64"
+				],
+				"location:druteta:kintaricave:blindspot": [
+					"knowledge:quest:raven:session64"
+				],
+				"location:druteta:kintaricave:watcharea": [
+					"knowledge:quest:raven:session64"
+				],
+				"knowledge:quest:raven:session65": true
+			},
+			"location": "location:city:stjornu",
+			"maxHealth": 48,
+			"memorized": [],
+			"messages": [],
+			"modified": {
+				"constitution": 0
+			},
+			"modifiers": [],
+			"movement": 15,
+			"swim": 7,
+			"fly": 15,
+			"moves": 1,
+			"name": "Xylaris",
+			"naturalArmor": 10,
+			"note": "Black, Acid\n\n*Starts 3rd level:\nAdvantage on attack rolls against creature that has't taken a turn in combat yet. Any hit scored against creature that is surprised is a critical hit.\n\nBonus proficiency with disguise kit and poisoners kit\n\n*Starts 9th Level: Infiltration\nUnfailingly create false identities for self (not an identity that belongs to someone else).\n\n*13th Level: Imposter \n\nSkull Word: Ignus\n\nEvasion level 7\nBeginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as an ancient red dragon’s fiery breath or an ice storm spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.\n\nBreath Weapon\nWhen you use your breath weapon, target must make a saving throw: DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\nAfter you use your breath weapon, you can’t use it again until you complete a short or long rest.\n\nhttps://dmdave.com/how-to-create-a-roguish-archetype-resource-for-fifth-edition-dms/\n\nQuestions:\nHow can I get the Alert feat?\n\n\nGoals:\n-Brew antidote, healing, poison, sleeping, poison remedy, aracane recovery, water breathing\n\n-Make molotov cocktails\n\n-ID/find Sana Leaf\nID/find Alufo leaf\nPoison leaves/plants\n\n\n-Returning for daggars\n\n\nTakn leaf: heavy purple leaf, $500/leaf to sell. It's somewhere by crystals and something will try to eat you. Key ingredient in high level alchemy spells.\n\nSana leaf - combine w/ takn for more than just healing.\n\nAlufo - dreaming, prophecies, sleeping potion\n\nLumin - potion to throw and cast light on. Flash bombs to blind ppl in radius\n\nAutus - hair growth, smokey flavor for cooking\n\nUmusi - smomkey flavor for cooking\n\nAigua - deep blue, water properties like water breathing, cold damage\n\nPoison plants - inhabited continents are harder to find. Find in while continents around rivers\n\n\n*Crystals\nred 2\nblue 3\norange 0\nyellow 0\ngreen 3\n\norange rare\nlime green v rare\nsilverea",
+			"notes": {
+				"item:skull:flamewalker": "3",
+				"item:dagger:kunai": ""
+			},
+			"statePuzzle": {},
+			"historyPuzzle": [],
+			"overviewElements": {
+				"currentPage": 2,
+				"pages": [
+					"home",
+					"Town",
+					"Combat",
+					"Travel",
+					"Queenie's"
+				],
+				"page": {
+					"home": {
+						"id": "homepage",
+						"type": "row",
+						"enabled": true,
+						"content": [],
+						"children": [
+							{
+								"id": "element:BTPv3te5dF1567147401308QZsPaOyAmf",
+								"type": "column",
+								"enabled": true,
+								"children": [],
+								"content": [
+									{
+										"id": "widget:aKuZb1C4o81567147406948M3NQYBg2St",
+										"type": "view",
+										"enabled": true,
+										"order": 0
+									},
+									{
+										"enabled": true,
+										"id": "widget:alzxGraHIj1592189989789",
+										"type": "collection"
+									}
+								],
+								"order": 0
+							},
+							{
+								"id": "element:Q3CqhbVo5p1567147756661Vn9taK84oM",
+								"type": "column",
+								"enabled": true,
+								"order": 1,
+								"content": [
+									{
+										"id": "widget:JnYEPZ1qIm1567147769366ZScgbv5GRg",
+										"type": "checks",
+										"enabled": true,
+										"order": 0,
+										"configuration": {
+											"width": "columns2"
+										}
+									},
+									{
+										"id": "widget:RoqBHX2c5G1567147770427LTefZnKcvA",
+										"type": "dice-bin",
+										"enabled": true,
+										"order": 1
+									},
+									{
+										"id": "widget:qSa7gXM60082871467911558J1fmuS8Uu",
+										"type": "collection",
+										"enabled": true,
+										"order": 2
+									},
+									{
+										"id": "widget:2hhhxYJEaK1567147898502XewuoGAv45",
+										"type": "collection",
+										"enabled": true,
+										"order": 3
+									}
+								]
+							},
+							{
+								"id": "element:vTRyPLfuEt1567147414900fbH8w4BYb3",
+								"enabled": true,
+								"type": "column",
+								"children": [
+									{
+										"id": "element:CYhLVPlLXz1567147429172fR0hoJLVg0",
+										"type": "row",
+										"enabled": true,
+										"children": [
+											{
+												"id": "element:LlMjFolwz81567147456427zAseG9yeVp",
+												"children": [],
+												"type": "column",
+												"enabled": true,
+												"content": [
+													{
+														"id": "widget:qwX0KP5NIq1567147476020oyvJv3vPqI",
+														"type": "feats",
+														"enabled": true,
+														"order": 0
+													},
+													{
+														"id": "widget:2wrtkr7ucR1567147477456VOdGRRHZGd",
+														"type": "equipment",
+														"enabled": true,
+														"order": 1
+													}
+												],
+												"order": 0
+											},
+											{
+												"id": "element:nPJy4Kz94W1567147468488q2FgJ4lRtW",
+												"type": "column",
+												"enabled": true,
+												"content": [
+													{
+														"id": "widget:P6tAGADOXw1567147476592HNQ2vSJ9Sm",
+														"type": "spells",
+														"enabled": true,
+														"order": 0
+													},
+													{
+														"id": "widget:ILBp1i1v9H1567147477009T54nWF0UFO",
+														"type": "collection",
+														"enabled": true,
+														"order": 1
+													}
+												],
+												"order": 0
+											},
+											{
+												"id": "element:ADhehi3gAd1567147589705ZaIEYri8NJ",
+												"enabled": true,
+												"content": [
+													{
+														"id": "widget:p4OhDb3svN1567147595104AcJsGEDewO",
+														"type": "calendardate",
+														"enabled": true,
+														"order": 0
+													},
+													{
+														"id": "widget:WJTuZRqDnp1567147595960JBEwFK7gmu",
+														"type": "nearby",
+														"enabled": true,
+														"order": 1
+													},
+													{
+														"id": "widget:IxY3JgzpCH1567147596296hv6M6fe4UQ",
+														"type": "effects",
+														"enabled": true,
+														"order": 2
+													},
+													{
+														"id": "widget:s7Z3cKx3GU1567147633036fa6riribdL",
+														"type": "attributes",
+														"enabled": true,
+														"order": 3
+													},
+													{
+														"id": "widget:yfQmTJ8NCQ1567147848448xKWnqDsQqf",
+														"type": "counter",
+														"enabled": true,
+														"order": 4
+													}
+												],
+												"type": "column",
+												"order": 0
+											}
+										],
+										"order": 0
+									},
+									{
+										"id": "element:B0jnBSMHkY1567147429875N6YQhIo6Kq",
+										"enabled": true,
+										"type": "column",
+										"children": [],
+										"content": [
+											{
+												"id": "widget:eyqp5iXxgi1567147554106wwXO2kIcNv",
+												"type": "note",
+												"enabled": true,
+												"order": 0
+											},
+											{
+												"id": "widget:e3zlmbCCZ21567147566211vxSm2nlogn",
+												"enabled": true,
+												"type": "quick-info",
+												"order": 1
+											}
+										],
+										"order": 1
+									},
+									{
+										"id": "element:B0JKBSMHkY1567147429875N6YQhIo6Kq",
+										"enabled": true,
+										"type": "column",
+										"children": [],
+										"content": [
+											{
+												"id": "widget:qSa7gXM6bp82871467911558J1fmuS8Uu",
+												"type": "collection",
+												"enabled": true,
+												"order": 0
+											}
+										],
+										"order": 2
+									}
+								],
+								"order": 2
+							}
+						]
+					},
+					"Town": {
+						"id": "Town",
+						"type": "row",
+						"enabled": true,
+						"children": [
+							{
+								"id": "element:un6iGg0ORI1565488274865bdMsHCf6Kt",
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:Tm04A20HKC1565540629709kfLA5DyMTU",
+										"order": 2,
+										"enabled": true,
+										"type": "view"
+									}
+								],
+								"enabled": true,
+								"order": 0
+							},
+							{
+								"id": "element:2YsS4gdet81565488277666cEVKpQ1iBP",
+								"type": "column",
+								"enabled": true,
+								"content": [
+									{
+										"id": "widget:TQMwWBRsSR15654883346184GrS1VzNBu",
+										"enabled": true,
+										"type": "checks",
+										"order": 0,
+										"configuration": {
+											"width": "columns2"
+										}
+									},
+									{
+										"id": "widget:GGBnk4xUnh1565488335378s9TqXTgFSK",
+										"enabled": true,
+										"type": "dice-bin",
+										"order": 1
+									},
+									{
+										"id": "widget:qSa7gXM6bp82871467911558J1fmuS8Uu",
+										"type": "collection",
+										"enabled": true,
+										"order": 2
+									},
+									{
+										"id": "widget:qEcjKGcfkm15671468929027gjjl7Nslg",
+										"enabled": true,
+										"type": "feats",
+										"order": 3
+									}
+								],
+								"order": 2
+							},
+							{
+								"id": "element:4YscTUkDJe15671461072323UAjzxjYXi",
+								"order": 3,
+								"enabled": true,
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:t505WhHp2i1567146131236p7103lIeti",
+										"type": "calendardate",
+										"enabled": true,
+										"order": 0
+									},
+									{
+										"id": "widget:xNlVDOp46J1567146131530HztkUObCUH",
+										"type": "nearby",
+										"enabled": true,
+										"order": 1
+									},
+									{
+										"id": "widget:UjHBRVjTip15671461321660JuyPHaOMn",
+										"type": "effects",
+										"enabled": true,
+										"order": 2
+									},
+									{
+										"id": "widget:eacxGNiVYF1567146938217juWNZMskJg",
+										"enabled": true,
+										"type": "proficiencies",
+										"order": 3
+									}
+								]
+							},
+							{
+								"id": "element:HyWGxKY8xn15655393170215nl7yZXAbp",
+								"type": "column",
+								"enabled": true,
+								"order": 4,
+								"content": [
+									{
+										"id": "widget:8DxHMZNwL11565539335496JUOhWDjgOp",
+										"enabled": true,
+										"type": "note",
+										"order": 0
+									},
+									{
+										"id": "widget:eMI4eDKhmp15655394461096xMosAfDK6",
+										"enabled": true,
+										"type": "quick-info",
+										"order": 1
+									}
+								]
+							}
+						],
+						"content": []
+					},
+					"Combat": {
+						"type": "row",
+						"enabled": true,
+						"children": [
+							{
+								"id": "element:oeU6nOthqc1565539475709osWHBKIphu",
+								"type": "column",
+								"enabled": true,
+								"content": [
+									{
+										"id": "widget:8skqbslCDB156553948234378aLvp48fT",
+										"enabled": true,
+										"type": "view",
+										"order": 0
+									}
+								],
+								"order": 0
+							},
+							{
+								"id": "element:cNzz0hI0NP1567145759933NiuTF8r5Sq",
+								"enabled": true,
+								"content": [
+									{
+										"id": "widget:loc10JdMa81567145771372kT8i44myyQ",
+										"enabled": true,
+										"type": "checks",
+										"order": 0,
+										"configuration": {
+											"width": "columns2"
+										}
+									},
+									{
+										"id": "widget:w5dZrc2RSR1567145772359Rc9tJpregZ",
+										"enabled": true,
+										"type": "dice-bin",
+										"order": 1
+									},
+									{
+										"id": "widget:MMLkA1wq27156714678285851eVFYutu3",
+										"type": "collection",
+										"enabled": true,
+										"order": 2
+									}
+								],
+								"type": "column",
+								"order": 0
+							},
+							{
+								"id": "element:ZE7ftbPAcy1567145799969CORu65qKCQ",
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:9RqfkRPNu01567145807228ne4hwt2dEG",
+										"type": "offensive",
+										"enabled": true,
+										"order": 0
+									},
+									{
+										"id": "widget:GBPjbk9X2I1567145807558W39E7c7wfd",
+										"type": "defensive",
+										"enabled": true,
+										"order": 1
+									},
+									{
+										"id": "widget:WwNDm4EAzC1567145941357tsg0O6aFdC",
+										"type": "effects",
+										"enabled": true,
+										"order": 2
+									},
+									{
+										"id": "widget:PVhDdzFX3k1567146327091g1wVcSDmVF",
+										"type": "nearby",
+										"enabled": true,
+										"order": 3
+									}
+								],
+								"enabled": true,
+								"order": 0
+							},
+							{
+								"id": "element:C50SxFVIrY1567145838829TL8Mf7nt1t",
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:AZHfrwB9HJ1567145845437JXi5pfwZjp",
+										"type": "spells",
+										"enabled": true,
+										"order": 0
+									},
+									{
+										"id": "widget:fdxWaGriQs156714584620252o4pzVQ0E",
+										"type": "feats",
+										"enabled": true,
+										"order": 1
+									},
+									{
+										"id": "widget:qSa7gXM2bp15671467911558J1riiS8Uu",
+										"type": "collection",
+										"enabled": true,
+										"order": 2
+									}
+								],
+								"enabled": true,
+								"order": 0
+							},
+							{
+								"id": "element:AnmDuiHnWP1567146767704FqUyuGaHOT",
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:W5fvravVMI1567146773885bciujqffLo",
+										"type": "equipment",
+										"enabled": true,
+										"order": 0
+									},
+									{
+										"id": "widget:MkPkA1wq27156714678285851eVFYutu3",
+										"type": "collection",
+										"enabled": true,
+										"order": 1
+									},
+									{
+										"id": "widget:qSa7gXM2bp15671467911558J1fmuS8Uu",
+										"type": "collection",
+										"enabled": true,
+										"order": 2
+									}
+								],
+								"enabled": true,
+								"order": 0
+							}
+						],
+						"content": [],
+						"id": "Combat"
+					},
+					"Travel": {
+						"type": "row",
+						"enabled": true,
+						"children": [
+							{
+								"id": "element:TrwHQQWR5x1565539859805TwB9Z5t4Fp",
+								"type": "column",
+								"enabled": true,
+								"content": [
+									{
+										"id": "widget:cV9Nyzjcok1565540025157lljaaQPXWd",
+										"enabled": true,
+										"type": "view",
+										"order": 0
+									}
+								],
+								"order": 0
+							},
+							{
+								"id": "element:Z6S1OFP9Eu1567146634856cqIirgUM5o",
+								"type": "column",
+								"enabled": true,
+								"content": [
+									{
+										"id": "widget:3nN5gKjBbE1567146639113h5sxiqM3B1",
+										"type": "checks",
+										"enabled": true,
+										"order": 0,
+										"configuration": {
+											"width": "columns2"
+										}
+									},
+									{
+										"id": "widget:VTCINjetXi15671466393498Aw7XP2zsF",
+										"type": "dice-bin",
+										"enabled": true,
+										"order": 1
+									},
+									{
+										"id": "widget:ZTpII46Ruo1567146685492PqQtqlhSUs",
+										"type": "feats",
+										"enabled": true,
+										"order": 2
+									},
+									{
+										"id": "widget:NOf5Ls5ZSZ15671466862761FXyB9LlSm",
+										"enabled": true,
+										"type": "spells",
+										"order": 3
+									}
+								],
+								"order": 0
+							},
+							{
+								"id": "element:3h2zeYoFiY1567146713804f3jf9ci5sq",
+								"enabled": true,
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:AAT7yZztKX1567146719634uOYcXK6uaK",
+										"enabled": true,
+										"type": "note",
+										"order": 0
+									},
+									{
+										"id": "widget:Z3nHsh410n1567146724338tVcfGtTxS1",
+										"enabled": true,
+										"type": "quick-info",
+										"order": 1
+									}
+								],
+								"order": 0
+							},
+							{
+								"id": "element:qpYbayEsDn1567146964228ZNAaPBOZsg",
+								"enabled": true,
+								"type": "column",
+								"content": [
+									{
+										"id": "widget:NEqq2Qhnpi1567146969432YGlRmjmU1X",
+										"enabled": true,
+										"type": "calendardate",
+										"order": 0
+									},
+									{
+										"id": "widget:4SIZds9Uxu1567146970083klREb5ALRn",
+										"enabled": true,
+										"type": "proficiencies",
+										"order": 1
+									},
+									{
+										"id": "widget:cA0mwNnVnD1567146970315MPTloZtZcr",
+										"enabled": true,
+										"type": "effects",
+										"order": 2
+									}
+								],
+								"order": 0
+							}
+						],
+						"content": [],
+						"id": "Travel",
+						"order": 0
+					},
+					"Queenie's": {
+						"type": "wrapped",
+						"enabled": true,
+						"children": [
+							{
+								"enabled": true,
+								"id": "element:hkgeQzy40D1592189854202",
+								"type": "column",
+								"children": [],
+								"content": [
+									{
+										"enabled": true,
+										"id": "widget:MRgc2ni4j91592189867188",
+										"type": "view"
+									}
+								]
+							},
+							{
+								"enabled": true,
+								"id": "element:WXiUHt7rJf1592189874637",
+								"type": "column",
+								"content": [
+									{
+										"enabled": true,
+										"id": "widget:Z7VnF5OZvw1592189882287",
+										"type": "dice-bin"
+									}
+								]
+							}
+						],
+						"content": [],
+						"id": "Queenie's"
+					}
+				}
+			},
+			"overviewMaxHistory": 8,
+			"overviewVersion": "character",
+			"overviewWidgetBorderColor": "orange",
+			"effectLocked": {},
+			"effectAcquired": {
+				"effect:shieldoffaith": 5496338640,
+				"effect:poisoned:1d6": -1,
+				"effect:dreamrose": -1,
+				"effect:drunk": -1,
+				"effect:bundledup": -1,
+				"effect:mandolin:long:atheletics": 5512240800,
+				"effect:unabletospeak": -1,
+				"effect:grappled": -1,
+				"effect:giest:chained": -1,
+				"effect:surprising": -1,
+				"effect:spell:protection:goodandevil": -1,
+				"effect:mandolin:long:fire": -1,
+				"effect:prone": -1,
+				"effect:exhaustion:movement:15": -1,
+				"effect:dodging": -1,
+				"effect:fly": -1,
+				"effect:spell:enhanceability:intelligence": -1
+			},
+			"itemUnattune": {},
+			"proficiencies": [
+				"proficiency:language:infernal"
+			],
+			"quickInformation": "",
+			"race": "race:dragonborn",
+			"reactions": 1,
+			"recharging": {
+				"item:skull:flamewalker": 1,
+				"item:trinket:nightdice": 1,
+				"item:alchemy:simplecondenser": 1,
+				"item:gloves:arcanous": 1,
+				"item:amulet:cervell": 39,
+				"item:pillowandblanket": 1,
+				"item:pants:war": 1,
+				"item:chain:critprotection:intricatechainweave:1595792472377": 1,
+				"item:temporalknot": 1
+			},
+			"recordStates": {},
+			"recordIgnored": {},
+			"recordFavorites": {
+				"story:crystals:powerspectrum": true
+			},
+			"rolls": {
+				"dexterity": 8,
+				"constitution": 6
+			},
+			"spellDC": 8,
+			"spellLimits": {},
+			"spells": [],
+			"spellSlots": {},
+			"state": 2,
+			"statPool": 0,
+			"strength": 13,
+			"tempHealth": 0,
+			"throwProficiency": {
+				"dexterity": true,
+				"atheletics": false,
+				"intelligence": true,
+				"insight": true,
+				"investigation": true,
+				"deception": true,
+				"perception": true,
+				"intimidation": false,
+				"alchemistkit": true,
+				"persuasion": true,
+				"performance": false,
+				"initiative": true
+			},
+			"user": "5c0c46a8449590597e991cac",
+			"template": false,
+			"viewRange": 30,
+			"weight": 300,
+			"wisdom": 15,
+			"manualCharges": {},
+			"spellNotes": {},
+			"featNotes": {},
+			"equipment": {
+				"mainhand": "item:dagger:swiftsilvered",
+				"offhand": "item:dagger:frost",
+				"helmet": "item:earings:nightvision",
+				"neck": "item:amulet:cervell",
+				"cape": "item:cloakofshadows",
+				"chest": "item:armor:leather:studded:resist:acid:fire",
+				"belt": "item:belt:strapping",
+				"mainring": "item:ring:osmot",
+				"charm": "item:skull:flamewalker",
+				"pouch": "item:trinket:nightdice",
+				"pants": "item:pants:war",
+				"boots": "item:boots:leather"
+			},
+			"inventory": {
+				"item:dagger": 9,
+				"item:armor:leather": 1,
+				"item:dagger:fire": 1,
+				"item:cloakofshadows": 1,
+				"item:kit:thieves": 1,
+				"item:kit:travelers": 1,
+				"item:crystal:red": 0,
+				"item:potion:healing:normal": 0,
+				"item:handmirror": 2,
+				"item:bellandstring": 5,
+				"item:kit:poison": 2,
+				"item:kit:disguise": 2,
+				"item:chalk": 2,
+				"item:peacepipe": 2,
+				"item:mellowblend": 40,
+				"item:armor:leather:studded": 0,
+				"item:pouch:draconicgold:xylaris": 1,
+				"item:potion:poison": null,
+				"item:kit:alchemist": 1,
+				"item:potion:empty": 22,
+				"item:armor:belt:basic": 2,
+				"item:crystal:blue": 0,
+				"item:skull:flamewalker": 1,
+				"item:flask": 5,
+				"item:plant:poisonous": 4,
+				"item:dagger:swift": 0,
+				"item:dagger:kunai": 0,
+				"item:boots:leather": 2,
+				"item:alchemy:simplecondenser": 0,
+				"item:scarf:decorative": 1,
+				"item:teapot": 1,
+				"potion:waterbreathing:normal": 0,
+				"item:caltrops": 3,
+				"item:net": 1,
+				"item:misc:tinymechanicalspider": 5,
+				"item:whip:sonic": 1,
+				"item:dagger:fire:enchantedone": 1,
+				"item:dagger:frost": 0,
+				"item:elementalcore": 1,
+				"item:shovel:2": 0,
+				"item:ring:osmot": 1,
+				"item:warhammer": null,
+				"item:bag:holding:simple": 1,
+				"item:scroll:identify": 0,
+				"item:craft:soundbomb": 1,
+				"item:bean:verd": 0,
+				"item:trinket:nightdice": 1,
+				"item:herbs:sana": 0,
+				"item:flask:sana": 2,
+				"item:shield": 1,
+				"item:clothing:worker:pants": 0,
+				"item:clothing:worker:shirt": 0,
+				"item:crown:arcar": 0,
+				"item:alchemyingredients": 9,
+				"item:head:kintari": 0,
+				"item:earings:nightvision": 1,
+				"item:rations": 28,
+				"item:pendent:cthulhu": 2,
+				"item:potion:cure:poison": 1,
+				"item:stone:sending:sendingstone:1578783786361": 0,
+				"item:vial:blackliquid:1": 0,
+				"item:candle:silent": 1,
+				"item:sword": 1,
+				"shield:dagger:holds": 1,
+				"item:herbs:alupho": 1,
+				"item:alchemy:advancedcondenser": null,
+				"item:vial:elemental:cold": 1,
+				"item:grapplinghook": 1,
+				"item:vial": 2,
+				"item:herbs:autus": null,
+				"item:kunai:silvered": 2,
+				"item:armor:leather:studded:custom:xylaris": 0,
+				"item:dagger:frost:returning": 1,
+				"item:kunai:silvered:returning": 3,
+				"item:gloves:arcanous": 0,
+				"item:amulet:cervell": 1,
+				"item:vial:elemental:thunder": 0,
+				"item:pickaxe": 0,
+				"item:cloakofprotection": 0,
+				"item:organ:venomsac": 0,
+				"item:flask:antivenom:blackspider": 1,
+				"item:blend:reefer": 1,
+				"item:craft:firebomb": 0,
+				"item:craft:lumenbomb": 0,
+				"item:pillowandblanket": 1,
+				"item:plant:beauty": 1,
+				"item:clothes:dress": 1,
+				"item:kit:climber": 1,
+				"item:craftingredients:lite": 1,
+				"item:warhammer:castupravus": 0,
+				"item:warmcoat": 1,
+				"item:potion:healing:minor": 0,
+				"item:herbs:umusi": 1,
+				"item:crystal:green": 1,
+				"item:herbs:aigua": 1,
+				"item:book:alchemtreference": 1,
+				"item:craft:smokebomb": 0,
+				"item:belt:strapping": 1,
+				"item:pants:war": 1,
+				"item:herbs:takn": 2,
+				"item:herbs:lumen": 1,
+				"item:dagger:swiftsilvered": 1,
+				"item:spyglass": 1,
+				"item:gem:soul": 0,
+				"item:book:lost:digger": 0,
+				"item:flower:dauoa": 1,
+				"item:chain:critprotection:intricatechainweave:1595792472377": 1,
+				"item:ingredient:necrasoil": 1,
+				"item:book:inscriptions": 0,
+				"item:herbs:iludis": 0,
+				"item:potion:cure:petrification": 0,
+				"item:coin:fleet:5th": 1,
+				"item:armor:leather:studded:resist:acid:fire": 3,
+				"item:armor:leather:studded:resist:cold:lightning": 2,
+				"item:armor:leather:studded:resist:physical": 0,
+				"item:cloneblade": 0,
+				"item:chain:critprotection:intricatechainweave:1604880632438": 0,
+				"item:herbs:time": 2,
+				"item:book:lost:explorer": 1,
+				"item:book:aliscossongsbook": 1,
+				"item:cape:invisibility:capeofinvisibility:1586038160434": 0,
+				"item:temporalknot": 1,
+				"item:gem:normal": 1,
+				"item:necklace": 1,
+				"item:stone:sending:sendingstone": 1,
+				"item:book:spellbook:kintari:offensive": 0,
+				"item:flask:blood:tainted": 5,
+				"item:dagger:gimsteinn": 0
+			},
+			"level": {
+				"self": 10,
+				"class:rogue": 9,
+				"class:monk": 0,
+				"class:fighter": 1
+			},
+			"assessment": {},
+			"concentrating": []
+		},
+		{
+			"acquired": {},
+			"actions": 0,
+			"age": "2+1d4",
+			"advantages": {},
+			"archetypes": [],
+			"bonusActions": 0,
+			"collections": {},
+			"conditions": {},
+			"disadvantages": {},
+			"saveAdvantages": {},
+			"saveDisadvantages": {},
+			"showStatFormulas": null,
+			"alignment": null,
+			"armor": "12",
+			"backstory": null,
+			"charges": {},
+			"charisma": "5 + 1d4",
+			"castWith": "dexterity",
+			"coin": 0,
+			"color": null,
+			"constitution": "14 + 1d4",
+			"description": "",
+			"dexterity": "15 + 1d4",
+			"discount": 0,
+			"discounts": {},
+			"discountGeneral": 0,
+			"effects": [],
+			"equipmentNotes": {},
+			"effectNotes": {},
+			"experience": 0,
+			"isStore": null,
+			"featPool": 0,
+			"feats": [],
+			"gender": null,
+			"god": null,
+			"history": [],
+			"hitDice": {},
+			"health": 0,
+			"height": 4,
+			"id": "monster:elemental:fire:major",
+			"immunities": {},
+			"initiative": 0,
+			"intelligence": "4 + 1d4",
+			"known": [],
+			"knowledge": {},
+			"location": null,
+			"maxHealth": "60 + 10d10",
+			"memorized": [],
+			"messages": [],
+			"modified": {},
+			"modifiers": [
+				"modifier:attack:dc:2",
+				"modifier:spellattack:2",
+				"modifier:grant:spell:fireball",
+				"modifier:spell:slot:3x2",
+				"modifier:spell:slot:3",
+				"modifier:grant:ability:flameburst"
+			],
+			"movement": 25,
+			"swim": 0,
+			"fly": 0,
+			"moves": 0,
+			"mob": true,
+			"name": "Major Fire Elemental",
+			"naturalArmor": 12,
+			"note": "",
+			"notes": {},
+			"obscured": false,
+			"owner": null,
+			"size": "medium",
+			"type": "elemental",
+			"subtype": "fire",
+			"statePuzzle": {},
+			"historyPuzzle": [],
+			"overviewElements": {
+				"currentPage": 0,
+				"pages": [
+					"home"
+				],
+				"page": {
+					"home": {
+						"id": "homepage",
+						"content": [
+							{
+								"enabled": true,
+								"id": "widget:defaultview",
+								"order": 0,
+								"type": "view"
+							}
+						]
+					}
+				}
+			},
+			"overviewMaxHistory": 8,
+			"overviewStickyName": null,
+			"overviewVersion": "device",
+			"overviewWidgetBorderColor": null,
+			"effectLocked": {},
+			"effectAcquired": {},
+			"itemUnattune": {},
+			"proficiencies": [],
+			"quickInformation": "",
+			"race": "race:elemental:fire",
+			"reactions": 0,
+			"recharging": {},
+			"recordStates": {},
+			"recordIgnored": {},
+			"recordFavorites": {},
+			"rolls": {},
+			"spellDC": 0,
+			"spellLimits": {},
+			"spells": [],
+			"spellSlots": [],
+			"state": 2,
+			"statPool": 0,
+			"strength": "8 + 1d4",
+			"tempHealth": 0,
+			"threat": 11,
+			"throwProficiency": {},
+			"user": null,
+			"template": true,
+			"viewRange": 120,
+			"weight": "30 + 4d4",
+			"wisdom": "8 + 1d4",
+			"manualCharges": {},
+			"spellNotes": {},
+			"featNotes": {},
+			"equipment": {},
+			"inventory": {},
+			"level": {},
+			"assessment": {},
+			"concentrating": []
+		},
+		{
+			"acquired": {},
+			"actions": 1,
+			"age": 42,
+			"advantages": {},
+			"archetypes": [],
+			"bonusActions": 1,
+			"collections": {},
+			"conditions": {},
+			"disadvantages": {},
+			"saveAdvantages": {},
+			"saveDisadvantages": {},
+			"alignment": "neutral:evil",
+			"armor": 10,
+			"charges": {},
+			"charisma": 16,
+			"coin": 0,
+			"color": null,
+			"constitution": 18,
+			"description": "An unusually clever orc, makes his living running contracts for the <span class=\"rs-darkorange\">Thieves Guild</span>.",
+			"dexterity": 11,
+			"discount": 0,
+			"discounts": {},
+			"discountGeneral": 0,
+			"effects": [],
+			"equipmentNotes": {},
+			"effectNotes": {},
+			"experience": 0,
+			"featPool": 0,
+			"feats": [],
+			"gender": "male",
+			"god": null,
+			"history": [],
+			"hitDice": {},
+			"health": 33,
+			"height": 4,
+			"id": "npc:preporaranumsin:1582849416748",
+			"immunities": {},
+			"initiative": 0,
+			"intelligence": 15,
+			"known": [],
+			"knowledge": {},
+			"location": "location:city:nautregno:neslops",
+			"maxHealth": 33,
+			"memorized": [],
+			"messages": [],
+			"modified": {},
+			"modifiers": [],
+			"movement": 15,
+			"swim": 0,
+			"fly": 0,
+			"moves": 1,
+			"name": "Preporar Anumsin",
+			"naturalArmor": 10,
+			"note": "",
+			"notes": {},
+			"obscuredStats": true,
+			"obscured": false,
+			"owner": null,
+			"size": "medium",
+			"type": "humanoid",
+			"statePuzzle": {},
+			"historyPuzzle": [],
+			"overviewElements": {
+				"currentPage": 0,
+				"pages": [
+					"home"
+				],
+				"page": {
+					"home": {
+						"id": "homepage",
+						"content": [
+							{
+								"enabled": true,
+								"id": "widget:defaultview",
+								"order": 0,
+								"type": "view"
+							}
+						]
+					}
+				}
+			},
+			"overviewMaxHistory": 8,
+			"overviewVersion": "device",
+			"effectLocked": {},
+			"effectAcquired": {},
+			"itemUnattune": {},
+			"proficiencies": [],
+			"quickInformation": "",
+			"race": "race:orc",
+			"reactions": 1,
+			"recharging": {},
+			"recordStates": {},
+			"recordIgnored": {},
+			"recordFavorites": {},
+			"rolls": {},
+			"spellDC": 0,
+			"spellLimits": {},
+			"spells": [],
+			"spellSlots": [],
+			"state": 2,
+			"statPool": 0,
+			"strength": 15,
+			"tempHealth": 0,
+			"throwProficiency": {},
+			"user": null,
+			"template": false,
+			"viewRange": 0,
+			"wisdom": 10,
+			"manualCharges": {},
+			"spellNotes": {},
+			"featNotes": {},
+			"equipment": {},
+			"inventory": {},
+			"level": {},
+			"assessment": {},
+			"concentrating": []
+		},
+		{
+			"acquired": {},
+			"actions": 1,
+			"age": "48",
+			"advantages": {},
+			"archetypes": [],
+			"bonusActions": 1,
+			"collections": {},
+			"conditions": {},
+			"disadvantages": {},
+			"saveAdvantages": {},
+			"saveDisadvantages": {},
+			"alignment": "chaotic:neutral",
+			"armor": 9,
+			"charges": {},
+			"charisma": 8,
+			"coin": 0,
+			"color": null,
+			"constitution": 18,
+			"description": "A mid-level operator in the <span class=\"rs-darkorange\">Thieves Guild</span>, she has other responsibilities that she usually turns to for money, but enjoys the occasional rush of doing work for the guild or making sure contracts or their targets get to the appropriate hands.\n\nKnown to have a pension for getting information out of people in a sexual manner.",
+			"dexterity": 8,
+			"discount": 0,
+			"discounts": {},
+			"discountGeneral": 0,
+			"effects": [],
+			"equipmentNotes": {},
+			"effectNotes": {},
+			"experience": 0,
+			"featPool": 0,
+			"feats": [],
+			"gender": "female",
+			"god": null,
+			"history": [],
+			"hitDice": {},
+			"health": 32,
+			"height": 4,
+			"id": "npc:sadrannturerisabum:1582849416746",
+			"immunities": {},
+			"initiative": 0,
+			"intelligence": 17,
+			"known": [],
+			"knowledge": {},
+			"location": "location:mrsclemaresshowing",
+			"maxHealth": 32,
+			"memorized": [],
+			"messages": [],
+			"modified": {},
+			"modifiers": [],
+			"movement": 15,
+			"swim": 0,
+			"fly": 0,
+			"moves": 1,
+			"name": "Sadrannturer Isabum",
+			"naturalArmor": 10,
+			"note": "Draconia Theives Guild contact, knows of ${\"content\":\"Crane\",\"class\":\"rs-darkorange\"}$ but not that he too has the Rites  ",
+			"notes": {},
+			"obscuredStats": true,
+			"obscured": false,
+			"owner": null,
+			"size": "medium",
+			"type": "humanoid",
+			"statePuzzle": {},
+			"historyPuzzle": [],
+			"overviewElements": {
+				"currentPage": 0,
+				"pages": [
+					"home"
+				],
+				"page": {
+					"home": {
+						"id": "homepage",
+						"content": [
+							{
+								"enabled": true,
+								"id": "widget:defaultview",
+								"order": 0,
+								"type": "view"
+							}
+						]
+					}
+				}
+			},
+			"overviewMaxHistory": 8,
+			"overviewVersion": "device",
+			"effectLocked": {},
+			"effectAcquired": {},
+			"itemUnattune": {},
+			"proficiencies": [],
+			"quickInformation": "",
+			"race": "race:dragonborn",
+			"reactions": 1,
+			"recharging": {},
+			"recordStates": {},
+			"recordIgnored": {},
+			"recordFavorites": {},
+			"rolls": {},
+			"spellDC": 0,
+			"spellLimits": {},
+			"spells": [],
+			"spellSlots": [],
+			"state": 2,
+			"statPool": 0,
+			"strength": 16,
+			"tempHealth": 0,
+			"throwProficiency": {},
+			"user": null,
+			"template": false,
+			"viewRange": 0,
+			"weight": "220",
+			"wisdom": 13,
+			"manualCharges": {},
+			"spellNotes": {},
+			"featNotes": {},
+			"equipment": {},
+			"inventory": {},
+			"level": {},
+			"assessment": {},
+			"concentrating": []
+		},
+		{
+			"acquired": {},
+			"actions": 1,
+			"age": "74",
+			"advantages": {},
+			"archetypes": [],
+			"bonusActions": 1,
+			"collections": {},
+			"conditions": {},
+			"disadvantages": {},
+			"saveAdvantages": {},
+			"saveDisadvantages": {},
+			"alignment": "lawful:good",
+			"armor": 10,
+			"charges": {},
+			"charisma": 10,
+			"coin": 0,
+			"color": null,
+			"constitution": 10,
+			"description": "Primary contact for the <span class=\"rs-darkorange\">Thieves Guild</span> within <span class=\"rs-darkorange\">Conexiager</span>. He notably has a distaste for most of the usual \"work\" that would appear but helps when the work can be justified for the greater good.\n\nGuild work on <span class=\"rs-darkorange\">Conexiager</span> being rare due to the high levels of security and watchfulness.",
+			"dexterity": 8,
+			"discount": 0,
+			"discounts": {},
+			"discountGeneral": 0,
+			"effects": [],
+			"equipmentNotes": {},
+			"effectNotes": {},
+			"experience": 0,
+			"featPool": 0,
+			"feats": [],
+			"gender": "male",
+			"god": null,
+			"history": [],
+			"hitDice": {},
+			"health": 32,
+			"height": 4,
+			"id": "npc:usolotoisithe:1582849416747",
+			"immunities": {},
+			"initiative": 0,
+			"intelligence": 9,
+			"known": [],
+			"knowledge": {},
+			"maxHealth": 32,
+			"memorized": [],
+			"messages": [],
+			"modified": {},
+			"modifiers": [],
+			"movement": 15,
+			"swim": 0,
+			"fly": 0,
+			"moves": 1,
+			"name": "Usoloto Isithe",
+			"naturalArmor": 10,
+			"note": "",
+			"notes": {},
+			"obscuredStats": true,
+			"obscured": false,
+			"owner": null,
+			"size": "medium",
+			"type": "humanoid",
+			"statePuzzle": {},
+			"historyPuzzle": [],
+			"overviewElements": {
+				"currentPage": 0,
+				"pages": [
+					"home"
+				],
+				"page": {
+					"home": {
+						"id": "homepage",
+						"content": [
+							{
+								"enabled": true,
+								"id": "widget:defaultview",
+								"order": 0,
+								"type": "view"
+							}
+						]
+					}
+				}
+			},
+			"overviewMaxHistory": 8,
+			"overviewVersion": "device",
+			"effectLocked": {},
+			"effectAcquired": {},
+			"itemUnattune": {},
+			"proficiencies": [],
+			"quickInformation": "",
+			"race": "race:elf",
+			"reactions": 1,
+			"recharging": {},
+			"recordStates": {},
+			"recordIgnored": {},
+			"recordFavorites": {},
+			"rolls": {},
+			"spellDC": 0,
+			"spellLimits": {},
+			"spells": [],
+			"spellSlots": [],
+			"state": 2,
+			"statPool": 0,
+			"strength": 17,
+			"tempHealth": 0,
+			"throwProficiency": {},
+			"user": null,
+			"template": false,
+			"viewRange": 0,
+			"wisdom": 9,
+			"manualCharges": {},
+			"spellNotes": {},
+			"featNotes": {},
+			"equipment": {},
+			"inventory": {},
+			"level": {},
+			"assessment": {},
+			"concentrating": []
+		},
+		{
+			"acquired": {},
+			"actions": 1,
+			"age": 45,
+			"advantages": {},
+			"archetypes": [],
+			"bonusActions": 1,
+			"collections": {},
+			"conditions": {},
+			"disadvantages": {},
+			"saveAdvantages": {},
+			"saveDisadvantages": {},
+			"alignment": "chaotic:evil",
+			"armor": 9,
+			"charges": {},
+			"charisma": 16,
+			"coin": 0,
+			"color": null,
+			"constitution": 13,
+			"description": "An active member of the \n<span class=\"rs-darkorange\">Thieves Guild</span> he is known for being a bit of a loose cannon and doing things that may not quite be in the interest of his country or the guild if they seem to satiate his own desires, however this tends to amount to no more than abandoning his post. However, His combat skills seem to have earned him a pass on past incidents.",
+			"dexterity": 9,
+			"discount": 0,
+			"discounts": {},
+			"discountGeneral": 0,
+			"effects": [],
+			"equipmentNotes": {},
+			"effectNotes": {},
+			"experience": 0,
+			"featPool": 0,
+			"feats": [],
+			"gender": "male",
+			"god": null,
+			"history": [],
+			"hitDice": {},
+			"health": 26,
+			"height": 4,
+			"id": "npc:camtumscrium:1582849416748",
+			"immunities": {},
+			"initiative": 0,
+			"intelligence": 7,
+			"known": [],
+			"knowledge": {},
+			"maxHealth": 26,
+			"memorized": [],
+			"messages": [],
+			"modified": {},
+			"modifiers": [],
+			"movement": 15,
+			"swim": 0,
+			"fly": 0,
+			"moves": 1,
+			"name": "Camtum Scrium",
+			"naturalArmor": 10,
+			"note": "Profession: ThievesGuild",
+			"notes": {},
+			"obscuredStats": true,
+			"obscured": false,
+			"owner": null,
+			"size": "medium",
+			"type": "humanoid",
+			"statePuzzle": {},
+			"historyPuzzle": [],
+			"overviewElements": {
+				"currentPage": 0,
+				"pages": [
+					"home"
+				],
+				"page": {
+					"home": {
+						"id": "homepage",
+						"content": [
+							{
+								"enabled": true,
+								"id": "widget:defaultview",
+								"order": 0,
+								"type": "view"
+							}
+						]
+					}
+				}
+			},
+			"overviewMaxHistory": 8,
+			"overviewVersion": "device",
+			"effectLocked": {},
+			"effectAcquired": {},
+			"itemUnattune": {},
+			"proficiencies": [],
+			"quickInformation": "",
+			"race": "race:orc",
+			"reactions": 1,
+			"recharging": {},
+			"recordStates": {},
+			"recordIgnored": {},
+			"recordFavorites": {},
+			"rolls": {},
+			"spellDC": 0,
+			"spellLimits": {},
+			"spells": [],
+			"spellSlots": [],
+			"state": 2,
+			"statPool": 0,
+			"strength": 11,
+			"tempHealth": 0,
+			"throwProficiency": {},
+			"user": null,
+			"template": false,
+			"viewRange": 0,
+			"wisdom": 16,
+			"manualCharges": {},
+			"spellNotes": {},
+			"featNotes": {},
+			"equipment": {},
+			"inventory": {},
+			"level": {},
+			"assessment": {},
+			"concentrating": []
+		}
+	]

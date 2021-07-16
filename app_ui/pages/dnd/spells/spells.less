@@ -27,5 +27,38 @@
 				box-shadow: 0px 0px 7px @rsYellow;
 			}
 		}
+
+		.damage {
+			text-align: left;
+		}
+	}
+
+	.entity-spells-details {
+		float: right;
+		border: 1px solid @rsWhite;
+		box-shadow: 0px 0px 7px @rsWhite;
+		padding: 10px;
+		margin: 10px;
+		border-radius: 5px;
+
+		.entity-name {
+			font-size: 20px;
+			border-bottom: 2px solid @rsWhite;
+			transition: border-color .5s;
+			margin: 0 0 10px 0;
+		}
+
+		.section {
+			border-bottom: 2px solid @rsWhite;
+			transition: border-color .5s;
+		}
+
+		ul {
+			margin: 0 0 10px 0;
+		}
+		
+		.error {
+			border-color: @rsLightRed;
+		}
 	}
 }

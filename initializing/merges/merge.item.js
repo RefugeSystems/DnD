@@ -13,7 +13,7 @@ for(i=0; i<merging.length; i++) {
 	id = merged.id;
 	try {
 		// console.log("Merging: " + merged.name);
-		utility.loadModifiers(merged);
+		merged = utility.loadModifiers(merged);
 		
 		if(merged.type) {
 			merged.types = ["type:" + merged.type];
@@ -35,8 +35,10 @@ for(i=0; i<merging.length; i++) {
 			merged.attunes = merged.attuned;
 		}
 		delete(merged.attuned);
-		if(merged.attunedTo !== undefined) {
-			merged.attuned = merged.attunedTo;
+		if(typeof(merged.attunedTo) === "string") {
+			merged.character = "entity:" + merged.attunedTo;
+			merged.attuned = "entity:" + merged.attunedTo;
+			merged.user = "entity:" + merged.attunedTo;
 		}
 		delete(merged.attunedTo);
 		if(merged.duration) {
@@ -62,6 +64,10 @@ for(i=0; i<merging.length; i++) {
 		}
 		delete(merged.attribute)
 
+		if(!id.startsWith("item:")) {
+			console.log("Update item: " + id);
+			id = "item:" + id;
+		}
 		merged.id = id;
 		utility.finalize(merged);
 
@@ -91,3 +97,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_items.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

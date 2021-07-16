@@ -84,7 +84,10 @@ module.exports.initialize = function(universe) {
 				item.setValues({
 					"attuned_on": universe.time,
 					"attuned_to": entity.id, // Potential future proofing
-					"attuned": entity.id
+					"attuned": entity.id,
+					"character": entity.id,
+					"creature": entity.id,
+					"user": entity.id
 				});
 				entity.addValues({
 					"attunements": [item.id]
@@ -93,10 +96,10 @@ module.exports.initialize = function(universe) {
 			universe.notifyMasters(entity.name + " attuned to " + item.name);
 		} else {
 			universe.warnMasters("Attunement Failed", {
-				"entity": entity.id,
-				"item": item.id,
-				"inventory": entity.inventory,
-				"has?": entity.inventory?entity.inventory.indexOf(item.id) !== -1:"No Inventory"
+				"entity": entity?entity.id:"Unknown",
+				"item": item?item.id:"Unknown",
+				"inventory": entity?entity.inventory:null,
+				"has?": entity && item && entity.inventory?entity.inventory.indexOf(item.id) !== -1:"No Inventory or Item"
 			});
 		}
 	});
@@ -107,6 +110,7 @@ module.exports.initialize = function(universe) {
 	 * @for Universe
 	 * @param {Object} event With data from the system
 	 * @param {String} event.entity The event name being fired, should match this event's name
+	 * @param {String} event.item The event item being unattuned
 	 */
 	 universe.on("action:item:unattune", function(event) {
 		var entity = event.entity || event.source,
@@ -124,19 +128,22 @@ module.exports.initialize = function(universe) {
 				item.setValues({
 					"attuned_on": null,
 					"attuned_to": null, // Potential future proofing
-					"attuned": null
+					"attuned": null,
+					"character": null,
+					"creature": null,
+					"user": null
 				});
 				entity.subValues({
 					"attunements": [item.id]
 				});
+				universe.notifyMasters(entity.name + " Unattuned from " + item.name);
 			}
-			universe.notifyMasters(entity.name + " Unattuned from " + item.name);
 		} else {
 			universe.warnMasters("Unattunement Failed", {
-				"entity": entity.id,
-				"item": item.id,
-				"inventory": entity.inventory,
-				"has?": entity.inventory?entity.inventory.indexOf(item.id) !== -1:"No Inventory"
+				"entity": entity?entity.id:"Unknown",
+				"item": item?item.id:"Unknown",
+				"inventory": entity?entity.inventory:null,
+				"has?": entity && item && entity.inventory?entity.inventory.indexOf(item.id) !== -1:"No Inventory or Item"
 			});
 		}
 	});

@@ -35,4 +35,6 @@ for(i=0; i<merging.length; i++) {
 	}
 }
 
-fs.writeFile("gods.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+fs.writeFile("_gods.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

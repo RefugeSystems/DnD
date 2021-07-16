@@ -22,24 +22,25 @@ rsSystem.component("rsTableControls", {
 	"mixins": [
 	],
 	"props": {
+		"additionalHeaders": {
+			"type": Array
+		},
 		"source": {
-			"required": false,
 			"type": Array
 		},
 		"filtered": {
-			"required": false,
 			"type": Array
 		},
 		"corpus": {
-			"required": false,
 			"type": Array
 		},
 		"controls": {
-			"required": false,
+			"type": Array
+		},
+		"selections": {
 			"type": Array
 		},
 		"storage": {
-			"required": true,
 			"type": Object
 		}
 	},
@@ -51,7 +52,13 @@ rsSystem.component("rsTableControls", {
 			return 0;
 		},
 		"placeholder": function() {
-			return "Filter " + (this.storage.label || "Table Data") + "...";
+			return "Filter " + (this.label || this.storage.label || "Table Data") + "...";
+		},
+		"selectedClasses": function() {
+			if(this.storage && this.storage.filter === ":selected") {
+				return "active";
+			}
+			return "";
 		}
 	},
 	"watch": {
@@ -59,7 +66,7 @@ rsSystem.component("rsTableControls", {
 	},
 	"data": function() {
 		var data = {};
-		
+		data.flip = null;
 		return data;
 	},
 	"mounted": function() {
@@ -72,6 +79,22 @@ rsSystem.component("rsTableControls", {
 		}
 	},
 	"methods": {
+		"configureTable": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "rsTableConfigure",
+				"additional": this.additionalHeaders,
+				"storage": this.storage,
+				"source": this.source
+			});
+		},
+		"toggleSelected": function() {
+			if(this.storage.filter === ":selected") {
+				Vue.set(this.storage, "filter", this.flip || "");
+			} else {
+				Vue.set(this, "flip", this.storage.filter);
+				Vue.set(this.storage, "filter", ":selected");
+			}
+		},
 		"clearSelection": function() {
 			var keys = Object.keys(this.storage.selected),
 				i;

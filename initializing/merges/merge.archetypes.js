@@ -60,3 +60,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_archetypes.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

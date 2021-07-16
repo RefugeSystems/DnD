@@ -246,6 +246,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": data.report_mirror,
 					"type": "text"
 				}, {
+					"id": "link",
+					"label": "For bugs and features, also see",
+					"link": "https://trello.com/b/dO2fHEfu/rsdnd",
+					"type": "link"
+				}, {
 					"id": "description",
 					"label": "Description",
 					"base": data.report_mirror,

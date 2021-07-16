@@ -812,6 +812,7 @@ class ClassManager extends EventEmitter {
 			var loading,
 				x;
 				
+			reference.inheritableFields.push("parent");
 			for(x=0; x<reference.fieldIDs.length; x++) {
 				loading = reference.database.field[reference.fieldIDs[x]];
 				if(loading) {
@@ -1261,9 +1262,6 @@ class ClassManager extends EventEmitter {
 				// console.log("insert: " + statement, write);
 				object.updated = write.$updated;
 				object.created = write.$created;
-			}
-			if(write.$id && write.$id.indexOf("svyi") !== -1) {
-				console.log("Sriting: " + statement, write);
 			}
 			this.database.connection.run(statement, write, callback);
 		}

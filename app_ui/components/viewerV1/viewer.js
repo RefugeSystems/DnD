@@ -1,4 +1,3 @@
-
 /**
  * First pass version at a basic image wrapping component to support advanced mark-up
  * and stat tracking.
@@ -22,6 +21,12 @@
 	var storageKey = "_rs_viewerComponentKey";
 
 	var issuing = 0;
+
+	var ZOOMBOUNDS = {};
+	ZOOMBOUNDS.min = -50;
+	ZOOMBOUNDS.max = 50;
+
+	var UPDATESTEP = 1000;
 
 	var generateLocationClassingMap = {
 		"star_system": "far fa-solar-system rotX60",
@@ -59,6 +64,11 @@
 			"text": "Mark: Blue",
 			"color": "blue"
 		}, {
+			"icon": "fad fa-map-marker-alt rs-cyan rs-secondary-solid rs-secondary-cyan",
+			"event": "set-crosshair",
+			"text": "Mark: Cyan",
+			"color": "cyan"
+		}, {
 			"icon": "fad fa-map-marker-alt rs-white rs-secondary-solid rs-secondary-purple",
 			"event": "set-crosshair",
 			"text": "Mark: Purple",
@@ -94,20 +104,25 @@
 			"text": "Mark: Orange",
 			"color": "orange"
 		}, {
-			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-green",
-			"event": "clear-crosshair",
-			"text": "Mark: Green",
-			"color": "green"
-		}, {
 			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-yellow",
 			"event": "clear-crosshair",
 			"text": "Mark: Yellow",
 			"color": "yellow"
 		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-green",
+			"event": "clear-crosshair",
+			"text": "Mark: Green",
+			"color": "green"
+		}, {
 			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-blue",
 			"event": "clear-crosshair",
 			"text": "Mark: Blue",
 			"color": "blue"
+		}, {
+			"icon": "fad fa-map-marker-alt-slash rs-cyan rs-secondary-solid rs-secondary-cyan",
+			"event": "clear-crosshair",
+			"text": "Mark: Cyan",
+			"color": "cyan"
 		}, {
 			"icon": "fad fa-map-marker-alt-slash rs-white rs-secondary-solid rs-secondary-purple",
 			"event": "clear-crosshair",
@@ -125,6 +140,59 @@
 			"color": "white"
 		},
 		clearAll]
+	};
+
+	var radialAction = {
+		"options": [{
+			"icon": "fad fa-scrubber rs-white rs-secondary-red rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Red",
+			"color": "red"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-orange rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Orange",
+			"color": "orange"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-yellow rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Yellow",
+			"color": "yellow"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-green rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Green",
+			"color": "green"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-blue rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Blue",
+			"color": "blue"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-cyan rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Cyan",
+			"color": "cyan"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-purple rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Purple",
+			"color": "purple"
+		}, {
+			"icon": "fad fa-scrubber rs-white rs-secondary-black rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: Black",
+			"color": "black"
+		}, {
+			"icon": "fad fa-scrubber rs-black rs-secondary-white rs-secondary-solid",
+			"event": "set-radial",
+			"text": "Radial: White",
+			"color": "white"
+		}, {
+			"icon": "fas fa-ruler rs-black",
+			"storage": "radial_radius",
+			"type": "number"
+		}]
 	};
 
 	rsSystem.component("rsViewerV1", {
@@ -196,6 +264,8 @@
 			data.locales = [];
 			data.pins = true;
 			data.alter = "";
+			data.delayed = null;
+			data.last = 0;
 
 			data.legendDisplayed = true;
 			data.legendOpen = false;
@@ -287,6 +357,7 @@
 		"watch": {
 			"location": {
 				"handler": function(newValue, oldValue) {
+					Vue.set(this, "measurementCanvas", null);
 					this.update();
 					setTimeout(() => {
 						this.resetViewport();
@@ -362,6 +433,9 @@
 			if(this.storage.measuring === undefined || this.storage.measuring instanceof Array) {
 				Vue.set(this.storage, "measuring", {});
 			}
+			if(this.storage.hide === undefined) {
+				Vue.set(this.storage, "hide", {});
+			}
 
 			if(this.storage.search) {
 				Vue.set(this, "search_criteria", this.storage.search.toLowerCase().split(" "));
@@ -391,6 +465,7 @@
 				this.redrawPaths();
 			}, 10);
 			this.update();
+			this.resetViewport();
 		},
 		"methods": {
 			"getMarkerSize": function() {
@@ -666,11 +741,16 @@
 
 					Vue.set(this.actions, "x", xc);
 					Vue.set(this.actions, "y", yc);
+					Vue.set(this.actions, "px", xc/this.image.width);
+					Vue.set(this.actions, "py", yc/this.image.height);
 					Vue.set(this.actions, "open", true);
 					Vue.set(this, "action", null);
+					this.buildMenu();
 
 					setTimeout(() => {
-						$(this.$el).find("#viewgen").focus();
+						if((buffer = $(this.$el).find("#viewgen")) && buffer[0]) {
+							buffer[0].focus();
+						}
 					});
 				}
 			},
@@ -679,7 +759,7 @@
 				Vue.set(this, "action", null);
 			},
 			"getActionMenuStyle": function() {
-				return "left: " + this.actions.x + "px; top: " + this.actions.y + "px;";
+				return "left: " + (this.actions.px*100) + "%; top: " + (this.actions.py*100) + "%;";
 			},
 			"fire": function(option, event) {
 				var action = null,
@@ -720,6 +800,48 @@
 						this.universe.send("map:unmark", {
 							"location": this.location.id
 						});
+						break;
+					case "set-hidden":
+						console.log("Hide: ", option);
+						if(option.object) {
+							Vue.set(this.storage.hide, option.object, !this.storage.hide[option.object]);
+						}
+						break;
+					case "add-radial":
+						if(this.action == radialAction) {
+							Vue.set(this, "action", null);
+						} else {
+							Vue.set(this, "action", radialAction);
+						}
+						return null;
+						break;
+					case "set-radial":
+						if(this.storage.radial_radius) {
+							console.log("Add Radial: ", {
+								"location": this.location.id,
+								"id": "cross:" + (issuing++) + ":" + Date.now(),
+								"x": this.actions.px,
+								"y": this.actions.py,
+								"object": this.localeInfo.shown?this.localeInfo.id:null,
+								"radial": this.storage.radial_radius,
+								"color": option.color,
+								"standalone": true,
+								"pathed": false
+							});
+							// this.renderRadial(null, this.storage.radial_radius, this.actions.px * 100, this.actions.py * 100);
+							this.universe.send("map:mark", {
+								"location": this.location.id,
+								"id": "cross:" + (issuing++) + ":" + Date.now(),
+								"x": 100*this.actions.px,
+								"y": 100*this.actions.py,
+								"object": this.localeInfo.shown?this.localeInfo.id:null,
+								"radial": this.storage.radial_radius,
+								"color": option.color,
+								"standalone": true,
+								"pathed": false
+							});
+						}
+						
 						break;
 					case "toggle-crosshair":
 						if(this.storage.crosshairing.state) {
@@ -859,12 +981,20 @@
 						break;
 					case "edit-key":
 						// this.info(option.location);
+						// var path;
 						if(this.localeInfo.location && this.localeInfo.shown) {
-							this.$router.push("/control/" + (this.localeInfo.location._class || "location") + "/" + this.localeInfo.location.id);
+							this.editNoun(this.localeInfo.location);
+							// path = "/control/" + (this.localeInfo.location._class || "location") + "/" + this.localeInfo.location.id;
 						} else {
-							this.$router.push("/control/" + this.location._class + "/" + this.location.id);
+							this.editNoun(this.location);
+							// path = "/control/" + this.location._class + "/" + this.location.id;
 						}
-						break;
+						// if(this.profile.edit_new_window) {
+
+						// } else {
+						// 	this.$router.push(path);
+						// }
+						// break;
 				}
 
 				Vue.set(this, "action", null);
@@ -891,6 +1021,14 @@
 							"y": y
 						});
 					}
+				}
+			},
+			"getCoordinateStyle": function(coordinate) {
+				var object;
+				if(coordinate.object && (object = this.universe.getObject(coordinate.object))) {
+					return "width: " + (object.x || coordinate.x) + "%; height: " + (object.y || coordinate.y) + "%;" + (coordinate.color?"border-color: " + coordinate.color + ";":"");
+				} else {
+					return "width: " + coordinate.x + "%; height: " + coordinate.y + "%;" + (coordinate.color?"border-color: " + coordinate.color + ";":"");
 				}
 			},
 			"dismissCoordinate": function(coordinate) {
@@ -1001,7 +1139,7 @@
 				};
 			},
 			"zoom": function(level) {
-				if(50 > level && level > -50) {
+				if(ZOOMBOUNDS.min < level && level < ZOOMBOUNDS.max) {
 					var targetHeight = this.original.height * (1 + .1 * level),
 						targetWidth = this.original.width * (1 + .1 * level),
 						view = this.getViewport(),
@@ -1071,16 +1209,19 @@
 				}
 			},
 			"zoomOutOne": function() {
-//				console.log("Zoom -1");
-				this.zoom(this.image.zoom - 1);
+				// console.log("Zoom -1");
+				if(this.image.zoom > ZOOMBOUNDS.min) {
+					this.zoom(this.image.zoom - 1);
+				}
 			},
 			"zoomInOne": function() {
-//				console.log("Zoom +1");
-				this.zoom(this.image.zoom + 1);
+				// console.log("Zoom +1");
+				if(this.image.zoom < ZOOMBOUNDS.max) {
+					this.zoom(this.image.zoom + 1);
+				}
 			},
 			"apply": function(applying) {
-//				console.log("apply: ", applying, this.parchment);
-//				console.log("apply");
+				// console.log("Start Apply: ", _p(this.image), _p(applying), this.parchment);
 				if(this.parchment && this.parchment.length) {
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
@@ -1103,7 +1244,7 @@
 					if(applying.zoom === undefined && this.image.zoom === undefined) {
 						applying.zoom = 0;
 					}
-					if(10 > applying.zoom && applying.zoom > -10) {
+					if(ZOOMBOUNDS.min < applying.zoom && applying.zoom < ZOOMBOUNDS.max) {
 						this.image.height = this.original.height * (1 + .1 * applying.zoom);
 						this.image.width = this.original.width * (1 + .1 * applying.zoom);
 						Vue.set(this, "scaledSize", this.baseFontSize + applying.zoom);
@@ -1132,12 +1273,15 @@
 						Object.assign(this.image, applying);
 					}
 
+					// console.log(" > Apply: ", _p(this.image), _p(applying), this.parchment);
 					this.parchment.css({
 						"height": applying.height + "px",
 						"width": applying.width + "px",
 						"left": applying.left + "px",
 						"top": applying.top + "px"
 				    });
+
+					this.renderMeasurements();
 				}
 			},
 			"redrawPaths": function() {
@@ -1213,7 +1357,8 @@
 			},
 			"renderPath": function(canvas, path, points) {
 				// console.log("Render Path[" + path.id + "]: ", points, path);
-				var xc,
+				var canvas,
+					xc,
 					yc,
 					x;
 
@@ -1300,6 +1445,81 @@
 					}
 				}
 			},
+			"renderRadials": function() {
+				var object,
+					point,
+					i;
+				
+				for(i=0; i<this.location.coordinates.length; i++) {
+					point = this.location.coordinates[i];
+					if(point.radial) {
+						if(point.object) {
+							object = this.universe.getObject(point.object);
+						} else {
+							object = null;
+						}
+						this.renderRadial(object, point.radial, point.x, point.y, point.color);
+					}
+				}
+			},
+			"renderRadial": function(object, r, x, y, color) {
+				var zoom = 1 + .1 * this.storage.image.zoom,
+					canvas = $("#measuring"),
+					context;
+				if(canvas && (canvas = canvas[0]) && this.image) {
+					context = canvas.getContext("2d");
+
+					if(object) {
+						x = object.x;
+						y = object.y;
+					}
+
+					r = (r * zoom)/this.location.map_distance;
+					y = y/100 * this.image.height;
+					x = x/100 * this.image.width;
+					context.beginPath();
+					context.arc(x, y, r, 0, 2 * Math.PI);
+					switch(color) {
+						case "red":
+							context.strokeStyle = "#FF0000E0";
+							context.fillStyle = "#FF000030";
+							break;
+						case "orange":
+							context.strokeStyle = "#FFA500E0";
+							context.fillStyle = "#FFA50030";
+							break;
+						case "yellow":
+							context.strokeStyle = "#FFFF00E0";
+							context.fillStyle = "#FFFF0030";
+							break;
+						case "green":
+							context.strokeStyle = "#00FF00E0";
+							context.fillStyle = "#00FF0030";
+							break;
+						case "blue":
+							context.strokeStyle = "#0000FFE0";
+							context.fillStyle = "#0000FF30";
+							break;
+						case "cyan":
+							context.strokeStyle = "#00FFFFE0";
+							context.fillStyle = "#00FFFF30";
+							break;
+						case "purple":
+							context.strokeStyle = "#FF00FFE0";
+							context.fillStyle = "#FF00FF30";
+							break;
+						case "white":
+							context.strokeStyle = "#FFFFFFE0";
+							context.fillStyle = "#FFFFFF30";
+							break;
+						default: // Black
+							context.strokeStyle = "#000000E0";
+							context.fillStyle = "#00000030";
+					}
+					context.stroke();
+					context.fill();
+				}
+			},
 			"renderMeasurements": function() {
 				// console.warn("Measurements[" + this.storage.image.zoom + "]...");
 				var canvas,
@@ -1325,19 +1545,12 @@
 					i,
 					j;
 
-				if(!this.measurementCanvas) {
-					canvas = $("#measuring");
-					if(canvas && canvas[0]) {
-						Vue.set(this, "measurementCanvas", canvas[0]);
-					}
-				}
-
 				if(this.storage.view_party) {
 					party = this.universe.index.party[this.storage.view_party];
 				}
 
-				canvas = this.measurementCanvas;
-				if(canvas) {
+				canvas = $("#measuring");
+				if(canvas && (canvas = canvas[0])) {
 					canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
 					canvas.height = this.image.height;
 					canvas.width = this.image.width;
@@ -1370,7 +1583,7 @@
 
 							if(this.location.map_distance) {
 								path = rsSystem.math.distance.points2D(x1, y1, x2, y2) / zoom;
-								path = Math.floor(path + .5);
+								path = Math.ceil(path);
 								path = this.location.map_distance * path;
 								uS = Math.ceil(path%1000);
 								kS = Math.floor(path/1000);
@@ -1430,7 +1643,7 @@
 						}
 
 						if(total_length) {
-							console.log("Total Length: ", total_length);
+							// console.log("Total Length: ", total_length);
 							// Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["pc", "ly", "km"]));
 							// Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["km", "m"]));
 							uS = Math.ceil(total_length%1000);
@@ -1494,6 +1707,8 @@
 							canvas.stroke();
 						}
 					}
+
+					this.renderRadials();
 				}
 			},
 			"elementVisible": function(element, entity) {
@@ -1588,7 +1803,7 @@
 					return true;
 				}
 
-				if(link.hidden || (link.obscured && !this.player.gm)) {
+				if(link.hidden || this.storage.hide[link.id] || link.obscured) {
 					return false;
 				}
 
@@ -1632,7 +1847,23 @@
 			"buildMenu": function() {
 				this.actions.options.splice(0);
 				if(this.localeInfo.shown) {
+					console.log("Locale: ", _p(this.localeInfo));
 					this.actions.options.push(this.localeInfo);
+					if(this.storage.hide[this.localeInfo.id]) {
+						this.actions.options.push({
+							"icon": "fas fa-eye",
+							"event": "set-hidden",
+							"text": "Reveal Object",
+							"object": this.localeInfo.id
+						});
+					} else {
+						this.actions.options.push({
+							"icon": "fas fa-eye-slash",
+							"event": "set-hidden",
+							"text": "Hide Object",
+							"object": this.localeInfo.id
+						});
+					}
 				}
 
 				this.actions.options.push({
@@ -1650,6 +1881,13 @@
 
 				this.actions.options.push(this.storage.crosshairing);
 				this.actions.options.push(this.storage.pathing);
+				if(this.location.map_distance) {
+					this.actions.options.push({
+						"icon": "fad fa-scrubber",
+						"event": "add-radial",
+						"text": "Add Radial"
+					});
+				}
 				this.actions.options.push(this.takeMeasurements);
 				if(this.storage.measuring[this.location.id] && this.storage.measuring[this.location.id].length) {
 					this.actions.options.push({
@@ -1689,60 +1927,71 @@
 				}
 			},
 			"update": function(source) {
+				var now = Date.now();
 				if(this.location && !source || source.location === this.location.id) {
-					var buffer,
-						x;
-					
-					this.availablePOIs.splice(0);
-					this.locales.splice(0);
-					Vue.set(this, "baseFontSize", this.location.base_font_size || 10);
+					if((now - this.last) > UPDATESTEP) {
+						this.last = now;
+						var buffer,
+							x;
+						
+						this.availablePOIs.splice(0);
+						this.locales.splice(0);
+						Vue.set(this, "baseFontSize", this.location.base_font_size || 10);
 
-					for(x=0; x<this.universe.listing.location.length; x++) {
-						buffer = this.universe.listing.location[x];
-						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-							this.availablePOIs.push(buffer);
-							if(buffer.rendering_has_path && this.locales) {
-								this.locales.push(buffer);
+						for(x=0; x<this.universe.listing.location.length; x++) {
+							buffer = this.universe.listing.location[x];
+							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+								this.availablePOIs.push(buffer);
+								if(buffer.rendering_has_path && this.locales) {
+									this.locales.push(buffer);
+								}
 							}
 						}
-					}
 
-					for(x=0; x<this.universe.listing.entity.length; x++) {
-						buffer = this.universe.listing.entity[x];
-						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-							this.availablePOIs.push(buffer);
+						for(x=0; x<this.universe.listing.entity.length; x++) {
+							buffer = this.universe.listing.entity[x];
+							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+								this.availablePOIs.push(buffer);
+							}
+						}
+
+						for(x=0; x<this.universe.listing.party.length; x++) {
+							buffer = this.universe.listing.party[x];
+							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+								this.availablePOIs.push(buffer);
+							}
+						}
+
+						for(x=0; x<this.universe.listing.storm.length; x++) {
+							buffer = this.universe.listing.storm[x];
+							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+								this.availablePOIs.push(buffer);
+							}
+						}
+
+						if(this.location) {
+							Vue.set(this, "ready", false);
+							this.getDimensions(this.universe.getImagePath(this.location.map));
+						}
+
+						// if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
+							// Vue.set(this.storage, "viewed_at", this.location.shown_at);
+							// Object.assign(this.image, this.location.showing);
+							// this.apply(this.image);
+						// }
+
+						this.buildMenu();
+						this.determinePOIs();
+						this.redrawPaths();
+						this.renderMeasurements();
+					} else {
+						if(!this.delayed) {
+							this.delayed = setTimeout(() => {
+								this.delayed = null;
+								this.update();
+							}, UPDATESTEP);
 						}
 					}
-
-					for(x=0; x<this.universe.listing.party.length; x++) {
-						buffer = this.universe.listing.party[x];
-						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-							this.availablePOIs.push(buffer);
-						}
-					}
-
-					for(x=0; x<this.universe.listing.storm.length; x++) {
-						buffer = this.universe.listing.storm[x];
-						if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
-							this.availablePOIs.push(buffer);
-						}
-					}
-
-					if(this.location) {
-						Vue.set(this, "ready", false);
-						this.getDimensions(this.universe.getImagePath(this.location.map));
-					}
-
-					if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
-						Vue.set(this.storage, "viewed_at", this.location.shown_at);
-						Object.assign(this.image, this.location.showing);
-						this.apply(this.image);
-					}
-
-					this.buildMenu();
-					this.determinePOIs();
-					this.redrawPaths();
-					this.renderMeasurements();
 				}
 			}
 		},

@@ -1,0 +1,3046 @@
+{
+	"import": [
+		{
+			"id": "race:boat",
+			"name": "Boat",
+			"description": "More of an entity, but used to create characters for Ships for damage and storage",
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 1000000,
+				"heavy": 100000000
+			}
+		},
+		{
+			"id": "race:monster",
+			"name": "Monster",
+			"description": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 0,
+				"old": 5,
+				"light": 1,
+				"heavy": 500
+			}
+		},
+		{
+			"id": "race:animale",
+			"name": "Animal",
+			"description": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 0,
+				"old": 5,
+				"light": 1,
+				"heavy": 500
+			}
+		},
+		{
+			"id": "race:psuedodragon",
+			"name": "Pseudodragon",
+			"icon": "fas fa-dragon",
+			"description": "A large winged reptile. Known mainly for being confused for a dragon but it lacks the glands to form elemental breath attacks.",
+			"playable": null,
+			"feats": [
+				"feat:keensenses",
+				"feat:magicresistance",
+				"feat:darkvision",
+				"feat:limitedtelepathy",
+				"feat:blindsight",
+				"feat:mute",
+				"feat:pseudodragon:sting",
+				"feat:keensenses",
+				"feat:magicresistance",
+				"feat:darkvision",
+				"feat:limitedtelepathy",
+				"feat:blindsight",
+				"feat:mute",
+				"feat:pseudodragon:sting"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:draconic"
+			],
+			"armor": null,
+			"damage": {
+				"damage_type:poison": "",
+				"damage_type:piercing": "1d4 + 2"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 15,
+				"light": 2,
+				"heavy": 12
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"movement_ground": 16,
+			"movement_swim": 16,
+			"movement_fly": 48,
+			"skill_proficiency": {
+				"skill:perception": 1,
+				"skill:stealth": 1
+			},
+			"skill_check": {
+				"skill:stealth": "4",
+				"skill:perception": "3"
+			}
+		},
+		{
+			"id": "race:spider",
+			"name": "Spider",
+			"description": "Spiders are common across Somnicael.",
+			"playable": false,
+			"feats": [
+				"feat:webwalk",
+				"feat:websense",
+				"feat:insectclimb",
+				"feat:venomous",
+				"feat:minordarkvision"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 4,
+				"skill:stealth": 4
+			}
+		},
+		{
+			"id": "race:kintari",
+			"name": "Kintari",
+			"description": "",
+			"obscured": true,
+			"playable": false,
+			"feats": [
+				"feat:alert",
+				"feat:darkvision",
+				"feat:insectclimb"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"blinded\": true\n}",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:deepspeech",
+				"proficiency:weapon:spear"
+			],
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1d8"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 5,
+				"old": 30,
+				"light": 5,
+				"heavy": 25
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:bludgeoning": "1d4",
+				"damage_type:crushing": "1d4"
+			}
+		},
+		{
+			"id": "race:bear:black",
+			"name": "Black Bear",
+			"description": "",
+			"playable": null,
+			"feats": [
+				"feat:keensmell"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1d6 + 2",
+				"damage_type:slashing": "2d4 + 2"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 20,
+				"heavy": 50
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": "5"
+			}
+		},
+		{
+			"id": "race:bear:brown",
+			"name": "Brown Bear",
+			"description": "",
+			"playable": null,
+			"feats": [
+				"feat:keensmell"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1d8 + 4",
+				"damage_type:slashing": "2d6 + 4"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 20,
+				"heavy": 50
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 8
+			}
+		},
+		{
+			"id": "race:veldyr:tame",
+			"name": "Tame Veldýr",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:celestrial",
+				"proficiency:language:primordial"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:pounce"
+			],
+			"attribute": {
+				"young": 5000,
+				"old": 100000,
+				"light": 90,
+				"heavy": 130
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:wagon",
+			"name": "Wagon",
+			"icon": "far fa-wagon-covered",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 30,
+				"light": 100,
+				"heavy": 10000
+			}
+		},
+		{
+			"id": "race:spider:rock",
+			"name": "Rock Spider",
+			"icon": "far fa-spider",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:burrow:rock",
+				"feat:webwalk",
+				"feat:websense",
+				"feat:venomous",
+				"feat:blindsight",
+				"feat:dangersense"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": ""
+			},
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:web",
+				"spell:monster:ability:webwrap"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 300,
+				"light": 100,
+				"heavy": 10000
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:spider:rock:engorged",
+			"name": "Engorged Rock Spider",
+			"icon": "fad fa-spider",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:burrow:rock",
+				"feat:webwalk",
+				"feat:websense",
+				"feat:venomous",
+				"feat:blindsight",
+				"feat:dangersense"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": ""
+			},
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:web",
+				"spell:monster:ability:webwrap",
+				"spell:invisibility",
+				"spell:shield",
+				"spell:causefear",
+				"spell:fear"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 300,
+				"light": 100,
+				"heavy": 10000
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:scorpian:nested",
+			"name": "Nested Scorpion",
+			"icon": "ra ra-insect-jaws",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"note": "\n\nPrevious Immunities: {\n    \"acid\": true\n}",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:poison": "1d8",
+				"damage_type:piercing": "1d8"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 10,
+				"light": 3,
+				"heavy": 6
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_advantage": {
+				"skill:constitution": 1
+			},
+			"resist": {
+				"damage_type:bludgeoning": "3d8",
+				"damage_type:piercing": "1d8",
+				"damage_type:slashing": "2d8",
+				"damage_type:acid": "",
+				"damage_type:fire": "",
+				"damage_type:poison": "3d8"
+			}
+		},
+		{
+			"id": "race:wolf",
+			"name": "Moon Wolf",
+			"icon": "fab fa-wolf-pack-battalion",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:keensenses",
+				"feat:dangersense",
+				"feat:extraattack",
+				"feat:multiattack:biteslash",
+				"feat:strengthofthepack",
+				"feat:strengthofthemoon"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "2d8",
+				"damage_type:slashing": "4d6"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 30,
+				"light": 30,
+				"heavy": 300
+			},
+			"stat_strength": null,
+			"stat_dexterity": "",
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:cold": "2d6"
+			}
+		},
+		{
+			"id": "race:kintari:priest",
+			"name": "Kintari Priest",
+			"icon": "ra ra-spider-face",
+			"description": "",
+			"obscured": true,
+			"playable": false,
+			"feats": [
+				"feat:insectclimb",
+				"feat:superiordarkvision"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"blinded\": false,\n    \"acid\": false,\n    \"poisoned\": true,\n    \"charmed\": true,\n    \"frightened\": true,\n    \"petrified\": true\n}",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:deepspeech",
+				"proficiency:weapon:spear",
+				"proficiency:language:undercommon",
+				"proficiency:language:abyssal"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:counterspell",
+				"spell:raisedead",
+				"spell:tollthedead",
+				"spell:scorchingray",
+				"spell:crownofmadness",
+				"spell:blight",
+				"spell:spiritgaurdian:evil",
+				"spell:ritual:summon"
+			],
+			"attribute": {
+				"young": 40,
+				"old": 200,
+				"light": 10,
+				"heavy": 30
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"hp_max": "5",
+			"spell_dc": "5",
+			"spell_slot_max": {
+				"1": 5,
+				"2": 4,
+				"3": 3,
+				"4": 2,
+				"5": 1
+			},
+			"resist": {
+				"damage_type:bludgeoning": "",
+				"damage_type:crushing": "",
+				"damage_type:slashing": "",
+				"damage_type:force": "",
+				"damage_type:fire": "3d8",
+				"damage_type:necrotic": "100%",
+				"damage_type:lightning": "3d8",
+				"damage_type:thunder": "",
+				"damage_type:radiant": "-3d8",
+				"damage_type:holy": "",
+				"damage_type:acid": "",
+				"damage_type:poison": "100%"
+			}
+		},
+		{
+			"id": "race:scorpion:metallic",
+			"name": "Metallic Scorpion",
+			"icon": "ra ra-insect-jaws",
+			"description": null,
+			"obscured": true,
+			"playable": null,
+			"feats": [
+				"feat:wallwalk"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true,\n    \"blinded\": true,\n    \"deafened\": true,\n    \"paralyzed\": true\n}",
+			"race": null,
+			"magical": null,
+			"armor": "17",
+			"damage": {
+				"damage_type:lightning": "",
+				"damage_type:thunder": "",
+				"damage_type:cold": "",
+				"damage_type:acid": "",
+				"damage_type:poison": ""
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 500,
+				"light": 5,
+				"heavy": 5000
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"movement_ground": 32,
+			"movement_swim": 24,
+			"movement_fly": 0,
+			"skill_check": {
+				"skill:strength": "5",
+				"skill:atheletics": "5"
+			},
+			"skill_advantage": {
+				"skill:strength": 1,
+				"skill:atheletics": 1
+			},
+			"resist": {
+				"damage_type:acid": "2d12",
+				"damage_type:poison": "2d12",
+				"damage_type:lightning": "4d12",
+				"damage_type:thunder": "4d12"
+			}
+		},
+		{
+			"id": "race:mimic:normal",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": null,
+			"obscured": true,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 0,
+				"light": 5,
+				"heavy": 20
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:demonpet",
+			"name": "Demon Pet",
+			"icon": "ra ra-desert-skull",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:chaosorb",
+				"feat:intimidatingpresence",
+				"feat:legendary:resistance"
+			],
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 10000,
+				"light": 1,
+				"heavy": 1000
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:mainhand": "10",
+				"skill:offhand": "10",
+				"skill:strength": "5",
+				"skill:dexterity": "4",
+				"skill:constitution": "7",
+				"skill:attack": "5",
+				"skill:initiative": "4"
+			},
+			"resist": {
+				"damage_type:bludgeoning": "4d8",
+				"damage_type:crushing": "4d8",
+				"damage_type:fire": "8d8",
+				"damage_type:acid": "8d8",
+				"damage_type:necrotic": "8d8",
+				"damage_type:poison": "2d8"
+			}
+		},
+		{
+			"id": "race:location",
+			"name": "Location",
+			"description": "Used for tracking location contents as a character.\n\nIn cases of buildings or other structural objects, also tracks feasibly related traits",
+			"playable": false,
+			"note": null,
+			"attribute": {
+				"young": 0,
+				"old": 10000,
+				"light": 100,
+				"heavy": 100000
+			}
+		},
+		{
+			"id": "race:bat",
+			"name": "Bat",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:keenhearing",
+				"feat:echolocation"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:cat",
+			"name": "Cat",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:keensmell"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:slashing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:stealth": 4,
+				"skill:perception": 3
+			}
+		},
+		{
+			"id": "race:crab",
+			"name": "Crab",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:amphibious",
+				"feat:blindsight",
+				"feat:seafairing"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 5,
+				"skill:stealth": 5,
+				"skill:perception": 3
+			}
+		},
+		{
+			"id": "race:hawk",
+			"name": "Hawk",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:keensight"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:slashing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 5,
+				"skill:perception": 4
+			}
+		},
+		{
+			"id": "race:octopus",
+			"name": "Octopus",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:underwaterbreathing",
+				"feat:camouflage",
+				"feat:darkvision",
+				"feat:seafairing"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:bludgeoning": "1"
+			},
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:inkcloud"
+			],
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 4,
+				"skill:stealth": 4,
+				"skill:perception": 2
+			}
+		},
+		{
+			"id": "race:rat",
+			"name": "Rat",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:keensmell",
+				"feat:minordarkvision"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:raven",
+			"name": "Raven",
+			"description": null,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:mimicry"
+			],
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 4,
+				"skill:perception": 3
+			}
+		},
+		{
+			"id": "race:snake",
+			"name": "Snake",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:venomous"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 5
+			}
+		},
+		{
+			"id": "race:weasel",
+			"name": "Weasel",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:keenhearing"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:piercing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 5,
+				"skill:stealth": 5,
+				"skill:perception": 3
+			}
+		},
+		{
+			"id": "race:gisengard",
+			"name": "Gisengard",
+			"description": "A sturdy and magical crocodile.\n\n\n\n",
+			"playable": null,
+			"feats": [
+				"feat:criticaladvantage"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": "7",
+			"damage": {
+				"damage_type:bludgeoning": "",
+				"damage_type:slashing": ""
+			},
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:charge",
+				"spell:icebolt",
+				"spell:firebolt",
+				"spell:divinestrike"
+			],
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:bludgeoning": "(con/2)d4",
+				"damage_type:piercing": "(con/2)d4",
+				"damage_type:crushing": "(con/2)d4",
+				"damage_type:slashing": "(con/2)d4",
+				"damage_type:acid": "(con/2)d4",
+				"damage_type:cold": "(con/2)d4",
+				"damage_type:chromatic": "(con/2)d4",
+				"damage_type:fire": "(con/2)d4",
+				"damage_type:force": "(con/2)d4",
+				"damage_type:holy": "(con/2)d4",
+				"damage_type:lightning": "(con/2)d4",
+				"damage_type:necrotic": "(con/2)d4",
+				"damage_type:poison": "(con/2)d4",
+				"damage_type:radiant": "(con/2)d4",
+				"damage_type:sonic": "(con/2)d4",
+				"damage_type:thunder": "(con/2)d4",
+				"damage_type:heal": ""
+			}
+		},
+		{
+			"id": "race:undead",
+			"name": "Undead",
+			"description": "Undead creature.\n\nCertain perks to being essentially a lifeless being, but certain drawbacks as well.",
+			"playable": null,
+			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true,\n    \"frightened\": true,\n    \"charmed\": true,\n    \"fatigued\": true\n}",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 1000000,
+				"heavy": 100000000
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_advantage": {
+				"skill:strength": -1,
+				"skill:dexterity": -1,
+				"skill:wisdom": -1
+			}
+		},
+		{
+			"id": "race:wolf:bone",
+			"name": "Bone Wolf",
+			"description": "",
+			"playable": null,
+			"feats": [
+				"feat:multiattack:biteslash",
+				"feat:keensenses",
+				"feat:multiattack:biteslash",
+				"feat:keensenses"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 5,
+				"light": 10,
+				"heavy": 20
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:building",
+			"name": "Building",
+			"description": "",
+			"playable": false,
+			"note": null,
+			"attribute": {
+				"young": 0,
+				"old": 1000,
+				"light": 100,
+				"heavy": 100000
+			}
+		},
+		{
+			"id": "race:eagle",
+			"name": "Bird of Prey",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:keensight",
+				"feat:animal"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:auran"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 30,
+				"light": 1,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:perception": 4
+			}
+		},
+		{
+			"id": "race:largecat",
+			"name": "Large Cat",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:racial:stalking",
+				"feat:keensmell"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:pounce"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 30,
+				"light": 1,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:perception": 3
+			}
+		},
+		{
+			"id": "race:horse",
+			"name": "Horse",
+			"icon": "fas fa-horse",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:steady"
+			],
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 20,
+				"light": 10,
+				"heavy": 50
+			}
+		},
+		{
+			"id": "race:owl",
+			"name": "Owl",
+			"description": null,
+			"playable": null,
+			"feats": [
+				"feat:keenhearing",
+				"feat:keensight",
+				"feat:flyby",
+				"feat:superiordarkvision"
+			],
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 20,
+				"light": 10,
+				"heavy": 50
+			},
+			"skill_check": {
+				"skill:perception": 3,
+				"skill:stealth": 3
+			}
+		},
+		{
+			"id": "race:ogre",
+			"name": "Orge",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:athlete"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:bludgeoning": "(str)d8"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 20,
+				"light": 200,
+				"heavy": 1000
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:worm:greatfire",
+			"name": "Great Fire Worm",
+			"description": "Great Fire Worm",
+			"obscured": null,
+			"playable": false,
+			"feats": [
+				"feat:blindsense",
+				"feat:venomous",
+				"feat:blazing",
+				"feat:unarmoreddefense"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:firebolt",
+				"spell:fireball",
+				"spell:scorchingray"
+			],
+			"attribute": {
+				"young": 20,
+				"old": 500,
+				"light": 20,
+				"heavy": 50
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:worm:greatfrost",
+			"name": "Great Frost Worm",
+			"description": "Great Fire Worm",
+			"obscured": null,
+			"playable": false,
+			"feats": [
+				"feat:frosted",
+				"feat:venomous",
+				"feat:blindsense",
+				"feat:blindsight"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:icebolt",
+				"spell:icestorm",
+				"spell:iceball"
+			],
+			"attribute": {
+				"young": 20,
+				"old": 500,
+				"light": 20,
+				"heavy": 50
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:tiefling",
+			"name": "Tiefling",
+			"description": "Tieflings are derived from human bloodlines, and in the broadest possible sense, they still look human. However, their infernal heritage has left a clear imprint on their appearance. Tieflings have large horns that take any of a variety of shapes: some have curling horns like a ram, others have straight and tall horns like a gazelle’s, and some spiral upward like an antelopes’ horns. They have thick tails, four to five feet long, which lash or coil around their legs when they get upset or nervous. Their canine teeth are sharply pointed, and their eyes are solid colors—black, red, white, silver, or gold—with no visible sclera or pupil. Their skin tones cover the full range of human coloration, but also include various shades of red. Their hair, cascading down from behind their horns, is usually dark, from black or brown to dark red, blue, or purple.",
+			"playable": true,
+			"feats": [
+				"feat:darkvision",
+				"feat:infernallegacy",
+				"feat:darkvision"
+			],
+			"note": "Insult: Polite Demon",
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:infernal"
+			],
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 18,
+				"old": 100,
+				"light": 125,
+				"heavy": 250
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": 1,
+			"stat_wisdom": null,
+			"stat_charisma": 2,
+			"resist": {
+				"damage_type:fire": "50%"
+			},
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:dwarf",
+			"name": "Dwarf ",
+			"description": "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller. Their courage and endurance are also easily a match for any of the larger folk.\n\nDwarven skin ranges from deep brown to a paler hue tinged with red, but the most common shades are light brown or deep tan, like certain tones of earth. Their hair, worn long but in simple styles, is usually black, gray, or brown, though paler dwarves often have red hair. Male dwarves value their beards highly and groom them carefully.",
+			"playable": true,
+			"feats": [
+				"feat:darkvision",
+				"feat:stonecunning"
+			],
+			"note": "Insult: Wooden Hammer",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:dwarven"
+			],
+			"armor": "",
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 50,
+				"old": 350,
+				"light": 110,
+				"heavy": 190
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": 2,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:poison": "50%"
+			},
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:gnome",
+			"name": "Gnome",
+			"description": "A gnome’s energy and enthusiasm for living shines through every inch of his or her tiny body. Gnomes average slightly over 3 feet tall and weigh 40 to 45 pounds. Their tan or brown faces are usually adorned with broad smiles (beneath their prodigious noses), and their bright eyes shine with excitement. Their fair hair has a tendency to stick out in every direction, as if expressing the gnome’s insatiable interest in everything around.\n\nA gnome’s personality is writ large in his or her appearance. A male gnome’s beard, in contrast to his wild hair, is kept carefully trimmed but often styled into curious forks or neat points. A gnome’s clothing, though usually made in modest earth tones, is elaborately decorated with embroidery, embossing, or gleaming jewels.",
+			"playable": true,
+			"feats": [
+				"feat:darkvision",
+				"feat:gnomecunning"
+			],
+			"note": "Insult: abortive rune",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 20,
+				"old": 500,
+				"light": 20,
+				"heavy": 60
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": "2",
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"movement_ground": -4.8,
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:elf",
+			"name": "Elf ",
+			"description": "With their unearthly grace and fine features, elves appear hauntingly beautiful to humans and members of many other races. They are slightly shorter than humans on average, ranging from well under 5 feet tall to just over 6 feet. They are more slender than humans, weighing only 100 to 145 pounds. Males and females are about the same height, and males are only marginally heavier than females.\n\nElves’ coloration encompasses the normal human range and also includes skin in shades of copper, bronze, and almost bluish-white, hair of green or blue, and eyes like pools of liquid gold or silver. Elves have no facial and little body hair. They favor elegant clothing in bright colors, and they enjoy simple yet lovely jewelry. ",
+			"playable": true,
+			"feats": [
+				"feat:darkvision",
+				"feat:feyancestry",
+				"feat:trance",
+				"feat:darkvision",
+				"feat:keensenses"
+			],
+			"note": "Insult: The mysteries of the universe elude you don't they?",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:elvan",
+				"proficiency:language:common",
+				"proficiency:weapon:bow",
+				"proficiency:weapon:dagger",
+				"proficiency:weapon:staff"
+			],
+			"armor": "",
+			"view": null,
+			"known": 3,
+			"attribute": {
+				"young": 80,
+				"old": 700,
+				"light": 90,
+				"heavy": 150
+			},
+			"stat_strength": null,
+			"stat_dexterity": 2,
+			"stat_constitution": null,
+			"stat_intelligence": "",
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_proficiency": {
+				"skill:perception": 1
+			},
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:dragonborn",
+			"name": "Dragonborn ",
+			"description": "Dragonborn look very much like dragons standing erect in humanoid form, though they lack wings or a tail. The first dragonborn had scales of vibrant hues matching the colors of their dragon kin, but generations of interbreeding have created a more uniform appearance. Their small, fine scales are usually brass or bronze in color, sometimes ranging to scarlet, rust, gold, or copper-green. They are tall and strongly built, often standing close to 6½ feet tall and weighing 300 pounds or more. Their hands and feet are strong, talonlike claws with three fingers and a thumb on each hand.\n\nThe blood of a particular type of dragon runs very strong through some dragonborn clans. These dragonborn often boast scales that more closely match those of their dragon ancestor—bright red, green, blue, or white, lustrous black, or gleaming metallic gold, silver, brass, copper, or bronze.",
+			"obscured": null,
+			"playable": true,
+			"feats": [
+				"feat:breathweapon"
+			],
+			"note": "Insult: Flaccid Scale",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:draconic",
+				"proficiency:language:abyssal"
+			],
+			"armor": "",
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 15,
+				"old": 90,
+				"light": 250,
+				"heavy": 400
+			},
+			"stat_strength": 2,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": 1,
+			"skill_advantage": {
+				"skill:wisdom": 1
+			},
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:halfelf",
+			"name": "Half-elf",
+			"description": "To humans, half-elves look like elves, and to elves, they look human. In height, they’re on par with both parents, though they’re neither as slender as elves nor as broad as humans. They range from under 5 feet to about 6 feet tall, and from 100 to 180 pounds, with men only slightly taller and heavier than women. Half-elf men do have facial hair, and sometimes grow beards to mask their elven ancestry. Half-elven coloration and features lie somewhere between their human and elf parents, and thus show a variety even more pronounced than that found among either race. They tend to have the eyes of their elven parents.\n\nIn addition, you can increase 2 attributes by 1 point and you are proficient in 2 skills of your choice.\n\nYou may **not** increase 1 attribute by 2 points.",
+			"obscured": null,
+			"playable": true,
+			"feats": [
+				"feat:feyancestry",
+				"feat:darkvision"
+			],
+			"note": "Insult: Universal Turd",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 20,
+				"old": 200,
+				"light": 100,
+				"heavy": 200
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": 2,
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:halfling",
+			"name": "Halfling ",
+			"description": "The diminutive halflings survive in a world full of larger creatures by avoiding notice or, barring that, avoiding offense. Standing about 3 feet tall, they appear relatively harmless and so have managed to survive for centuries in the shadow of empires and on the edges of wars and political strife. They are inclined to be stout, weighing between 40 and 45 pounds.\n\nHalflings’ skin ranges from tan to pale with a ruddy cast, and their hair is usually brown or sandy brown and wavy. They have brown or hazel eyes. Halfling men often sport long sideburns, but beards are rare among them and mustaches even more so. They like to wear simple, comfortable, and practical clothes, favoring bright colors.\n\nHalfling practicality extends beyond their clothing. They’re concerned with basic needs and simple pleasures and have little use for ostentation. Even the wealthiest of halflings keep their treasures locked in a cellar rather than on display for all to see. They have a knack for finding the most straightforward solution to a problem, and have little patience for dithering. ",
+			"obscured": null,
+			"playable": true,
+			"feats": [
+				"feat:brave",
+				"feat:halflingnimbleness",
+				"feat:lucky",
+				"feat:lucky"
+			],
+			"note": "Insult: Daft dagger",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:gnome",
+				"proficiency:language:dwarven"
+			],
+			"armor": "",
+			"view": null,
+			"known": 3,
+			"attribute": {
+				"young": 20,
+				"old": 150,
+				"light": 30,
+				"heavy": 60
+			},
+			"stat_strength": null,
+			"stat_dexterity": 2,
+			"stat_constitution": null,
+			"stat_intelligence": "",
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:halforc",
+			"name": "Half-Orc",
+			"description": "Half-orcs’ grayish pigmentation, sloping foreheads, jutting jaws, prominent teeth, and towering builds make their orcish heritage plain for all to see. Half-orcs stand between 5 and 7 feet tall and usually weigh between 180 and 250 pounds.\n\nOrcs regard battle scars as tokens of pride and ornamental scars as things of beauty. Other scars, though, mark an orc or half-orc as a former slave or a disgraced exile. Any half-orc who has lived among or near orcs has scars, whether they are marks of humiliation or of pride, recounting their past exploits and injuries. Such a half-orc living among humans might display these scars proudly or hide them in shame.",
+			"playable": true,
+			"feats": [
+				"feat:relentlessendurance",
+				"feat:savageattacks",
+				"feat:relentlessendurance"
+			],
+			"note": "Insult: Unfertilized Garden Gnome",
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:orc"
+			],
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 14,
+				"old": 60,
+				"light": 180,
+				"heavy": 250
+			},
+			"stat_strength": 2,
+			"stat_dexterity": null,
+			"stat_constitution": 1,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_proficiency": {
+				"skill:intimidation": 1
+			},
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:demon:oblit",
+			"name": "Oblit Demon",
+			"icon": null,
+			"description": "Resembles a Tiefling but is a much more ancient and powerful creature.",
+			"obscured": false,
+			"playable": null,
+			"feats": [
+				"feat:superiordarkvision",
+				"feat:truesight:superior"
+			],
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": "2",
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1000,
+				"old": 10000,
+				"light": 100,
+				"heavy": 300
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"movement_ground": 24,
+			"resist": {
+				"damage_type:poison": "1d10",
+				"damage_type:force": "1d10",
+				"damage_type:fire": "2d12",
+				"damage_type:cold": "1d6",
+				"damage_type:radiant": "-1d10"
+			}
+		},
+		{
+			"id": "race:dragon:black",
+			"name": "Black Dragon",
+			"icon": "ra ra-dragon",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:blindsight",
+				"feat:superiordarkvision",
+				"feat:truesight:superior",
+				"feat:language:draconic",
+				"feat:language:common",
+				"feat:blindsight",
+				"feat:superiordarkvision",
+				"feat:truesight:superior",
+				"feat:language:draconic",
+				"feat:language:common"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"frightened\": true,\n    \"acid\": true\n}\n\nHad Action Costs - Main: 2, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": "9",
+			"damage": {
+				"damage_type:piercing": ""
+			},
+			"view": null,
+			"known": null,
+			"spells": [
+				"ability:dragon:black:tail",
+				"ability:dragon:black:bite",
+				"ability:dragon:black:claws",
+				"ability:frightfulpressence",
+				"ability:mob:wingattack"
+			],
+			"attribute": {
+				"young": 30,
+				"old": 10000,
+				"light": 800,
+				"heavy": 3000
+			},
+			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"spell_attack": "3 + dex",
+			"movement_ground": 32,
+			"skill_check": {
+				"skill:attack": "8 + dex",
+				"skill:stealth": "7",
+				"skill:perception": "11",
+				"skill:dexterity": "4",
+				"skill:constitution": "7",
+				"skill:wisdom": "4",
+				"skill:charisma": "6"
+			}
+		},
+		{
+			"id": "race:wraith",
+			"name": "Wraith",
+			"icon": "fas fa-ghost",
+			"description": "Sneaky and vicious spirits, Wraiths are nimble and dangerous.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:wraithclaws",
+				"feat:etherealsight",
+				"feat:etherealtravel",
+				"feat:apparition"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:feastofsouls"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 1000,
+				"light": 1,
+				"heavy": 4
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_proficiency": {
+				"skill:charisma": 1
+			},
+			"skill_advantage": {
+				"skill:charisma": 1
+			},
+			"resist": {
+				"damage_type:psychic": "50%",
+				"damage_type:acid": "50%",
+				"damage_type:cold": "50%",
+				"damage_type:poison": "50%",
+				"damage_type:bludgeoning": "100%",
+				"damage_type:piercing": "100%",
+				"damage_type:crushing": "100%",
+				"damage_type:slashing": "100%",
+				"damage_type:necrotic": "100%"
+			}
+		},
+		{
+			"id": "race:spider:crystal:blue",
+			"name": "Water Crystal Spider",
+			"icon": "fad fa-spider-black-widow",
+			"description": "The few reports of blue crystaline spiders that anyone is aware of are always along a shore. Their harmonics seem to be attuned with the sea and they are considered incredible rare. Their larger versions are also considered incredibly dangerous.",
+			"obscured": true,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 0,
+				"old": 500,
+				"light": 1,
+				"heavy": 1000
+			}
+		},
+		{
+			"id": "race:kintari:warrior",
+			"name": "Kintari Warrior",
+			"icon": "ra ra-spider-face",
+			"description": "",
+			"obscured": true,
+			"playable": false,
+			"feats": [
+				"feat:alert",
+				"feat:insectclimb",
+				"feat:superiordarkvision"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"blinded\": true,\n    \"deafened\": true,\n    \"stunned\": true\n}",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:deepspeech",
+				"proficiency:weapon:spear"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 40,
+				"old": 200,
+				"light": 10,
+				"heavy": 30
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"hp_max": "20",
+			"skill_check": {
+				"skill:mainhand": "8",
+				"skill:offhand": "3"
+			},
+			"resist": {
+				"damage_type:bludgeoning": "2d8",
+				"damage_type:crushing": "2d8",
+				"damage_type:slashing": "1d8",
+				"damage_type:force": "1d8",
+				"damage_type:necrotic": "100%"
+			}
+		},
+		{
+			"id": "race:veldyr:wild",
+			"name": "Wild Veldýr",
+			"description": "Has 2 legendary actions.\n\nCan have Lair Actions that let it misty to specific places or through things",
+			"obscured": true,
+			"playable": null,
+			"feats": [
+				"feat:animaltalk",
+				"feat:keensenses",
+				"feat:truesight:minor",
+				"feat:sneakattack"
+			],
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:celestrial",
+				"proficiency:language:primordial"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:pounce",
+				"spell:featherfall",
+				"spell:catnap",
+				"spell:inflictwounds",
+				"spell:jump",
+				"spell:barkskin",
+				"spell:mistystep",
+				"spell:invisibility"
+			],
+			"attribute": {
+				"young": 5000,
+				"old": 100000,
+				"light": 90,
+				"heavy": 130
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:mimic:major",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": null,
+			"obscured": true,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 0,
+				"light": 5,
+				"heavy": 20
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:mimic:morphic",
+			"name": "Mimic",
+			"icon": "fas fa-male",
+			"description": null,
+			"obscured": true,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 0,
+				"light": 5,
+				"heavy": 20
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:panther:black",
+			"name": "Black Panther",
+			"icon": "ra ra-cat",
+			"description": null,
+			"obscured": true,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 5,
+				"old": 50,
+				"light": 100,
+				"heavy": 400
+			}
+		},
+		{
+			"id": "race:ferret",
+			"name": "Ferret",
+			"icon": "fas fa-squirrel",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 12,
+				"light": null,
+				"heavy": null
+			}
+		},
+		{
+			"id": "race:plant",
+			"name": "Plant",
+			"icon": "ra ra-thorny-vine",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 20,
+				"light": 4,
+				"heavy": 16
+			}
+		},
+		{
+			"id": "race:spirit",
+			"name": "Spirit",
+			"icon": "fas fa-ghost",
+			"description": "",
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 1000,
+				"light": 1,
+				"heavy": 4
+			}
+		},
+		{
+			"id": "race:ancient",
+			"name": "Ancient",
+			"description": null,
+			"playable": null,
+			"note": "Insult: \"Flying Boltan\"\n\nSee: Legend of Boltan",
+			"attribute": {
+				"young": 100000,
+				"old": 1000000,
+				"light": 10,
+				"heavy": 10000
+			}
+		},
+		{
+			"id": "race:raccoon",
+			"name": "Raccoon",
+			"icon": null,
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:keensmell"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"damage": {
+				"damage_type:slashing": "1"
+			},
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 10,
+				"light": 0,
+				"heavy": 10
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:attack": 2,
+				"skill:perception": 4,
+				"skill:investigation": 3
+			}
+		},
+		{
+			"id": "race:deathfish",
+			"name": "Death Fish",
+			"icon": "ra ra-shark",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:magicimmunity"
+			],
+			"note": "\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 100,
+				"light": 2000,
+				"heavy": 6000
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:stealth": "8",
+				"skill:survival": "8",
+				"skill:perception": "16"
+			},
+			"resist": {
+				"damage_type:thunder": "8d8",
+				"damage_type:sonic": "8d8",
+				"damage_type:radiant": "8d8",
+				"damage_type:psychic": "8d8",
+				"damage_type:poison": "8d8",
+				"damage_type:necrotic": "8d8",
+				"damage_type:lightning": "8d8",
+				"damage_type:holy": "8d8",
+				"damage_type:force": "8d8",
+				"damage_type:fire": "8d8",
+				"damage_type:chromatic": "8d8",
+				"damage_type:cold": "8d8",
+				"damage_type:acid": "8d8"
+			}
+		},
+		{
+			"id": "race:mimic:minor",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": null,
+			"obscured": true,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 0,
+				"old": 0,
+				"light": 5,
+				"heavy": 20
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:panther:dreadgeon",
+			"name": "Dreagiddo Panther",
+			"icon": "ra ra-cat",
+			"description": "Similar in look to a ${Black Panther}$, these panthers hunt in small packs and are linked to one another, allowing them to share health, vision, and wisdom.\n\nTheir bodies are also imbued with magical essence that shines in their eyes.\n\nTravellers that live to tell about the encounters describe them as \"${The Stalking Death}$\". Many simply dying in their first attack, leaving few to tell the tale.",
+			"obscured": true,
+			"playable": null,
+			"feats": [
+				"feat:alert",
+				"feat:keensmell"
+			],
+			"note": "Derived from Armageddon, Hebrew: har megiddo where \"megiddo\" means crowd.",
+			"damage": {
+				"damage_type:piercing": "2d8",
+				"damage_type:slashing": "3d12"
+			},
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 5,
+				"old": 50,
+				"light": 100,
+				"heavy": 400
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:stealth": 4,
+				"skill:perception": 3
+			}
+		},
+		{
+			"id": "race:skeleton",
+			"name": "Skeleton",
+			"icon": null,
+			"description": "Certain perks to being essentially a lifeless being, but certain drawbacks as well.",
+			"obscured": null,
+			"playable": null,
+			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true,\n    \"frightened\": true,\n    \"charmed\": true,\n    \"fatigued\": true\n}",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 1000000,
+				"heavy": 100000000
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_advantage": {
+				"skill:constitution": 1,
+				"skill:concentration": -1,
+				"skill:strength": -1,
+				"skill:dexterity": -1,
+				"skill:wisdom": -1,
+				"skill:intelligence": -1,
+				"skill:charisma": -1,
+				"skill:atheletics": -1,
+				"skill:acrobatics": -1,
+				"skill:animalhandling": -1,
+				"skill:arcana": -1,
+				"skill:deception": -1,
+				"skill:history": -1,
+				"skill:insight": -1,
+				"skill:intimidation": -1,
+				"skill:investigation": -1,
+				"skill:medicine": -1,
+				"skill:nature": -1,
+				"skill:perception": -1,
+				"skill:performance": -1,
+				"skill:persuasion": -1,
+				"skill:religion": -1,
+				"skill:slightofhand": -1,
+				"skill:stealth": -1,
+				"skill:survival": -1,
+				"skill:artisankit": -1,
+				"skill:alchemistkit": -1,
+				"skill:cartographykit": -1,
+				"skill:climberskit": -1,
+				"skill:disguisekit": -1,
+				"skill:divinationkit": -1,
+				"skill:forgerykit": -1,
+				"skill:enchanterskit": -1,
+				"skill:healerskit": -1,
+				"skill:poisonkit": -1,
+				"skill:thievestool": -1,
+				"skill:travelerskit": -1
+			}
+		},
+		{
+			"id": "race:elemental:water",
+			"name": "Water Elemental",
+			"icon": "fas fa-tint",
+			"description": "Water Elementals have several properties:\n+ Can walk across water\n+ Can occupy the same space as another creature\n+ When grappling a creature, that creature is considered to be unable to breathe\n+ Parts of the elemental can be frozen",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:walkonwater",
+				"feat:whelm",
+				"feat:waterform"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"grappled\": true,\n    \"poisoned\": true,\n    \"restrained\": true,\n    \"acid\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:ability:slam"
+			],
+			"attribute": {
+				"young": null,
+				"old": null,
+				"light": 100,
+				"heavy": 900
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"spell_attack": "7"
+		},
+		{
+			"id": "race:elemental:fire",
+			"name": "Fire Elemental",
+			"icon": "ra ra-fire rs-orange",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:blazing",
+				"feat:illumination",
+				"feat:fireform",
+				"feat:watersusceptibility"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"fire\": true,\n    \"poisoned\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:ability:touch"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 10,
+				"light": 1,
+				"heavy": 100
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"spell_attack": "3",
+			"spell_dc": "3",
+			"resist": {
+				"damage_type:fire": "100%",
+				"damage_type:bludgeoning": "50%",
+				"damage_type:slashing": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:poison": "100%"
+			}
+		},
+		{
+			"id": "race:elemental:earth",
+			"name": "Earth Elemental",
+			"icon": "fad fa-cube rs-orange rs-secondary-darkorange",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:earthglide"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true,\n    \"paralyzed\": true,\n    \"petrified\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:ability:slam"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 100,
+				"heavy": 1000
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:poison": "100%",
+				"damage_type:piercing": "50%",
+				"damage_type:slashing": "50%",
+				"damage_type:bludgeoning": "50%",
+				"damage_type:thunder": "-50%"
+			}
+		},
+		{
+			"id": "race:elemental:air",
+			"name": "Air Elemental",
+			"icon": "fas fa-wind",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:darkvision",
+				"feat:airform"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true,\n    \"grappled\": true,\n    \"paralyzed\": true,\n    \"petrified\": true,\n    \"restrained\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:ability:whirlwind",
+				"spell:ability:slam"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 100,
+				"heavy": 1000
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:lightning": "50%",
+				"damage_type:thunder": "50%",
+				"damage_type:poison": "100%",
+				"damage_type:bludgeoning": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:slashing": "50%"
+			}
+		},
+		{
+			"id": "race:elemental:ice",
+			"name": "Ice Elemental",
+			"icon": "fas fa-icicles",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:iceform"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"frozen\": true,\n    \"poisoned\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:ability:icelance"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 10,
+				"light": 1,
+				"heavy": 100
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:acid": "50%",
+				"damage_type:lightning": "50%",
+				"damage_type:slashing": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:force": "-50%",
+				"damage_type:bludgeoning": "-50%",
+				"damage_type:crushing": "-50%",
+				"damage_type:sonic": "-50%",
+				"damage_type:fire": "-100%"
+			}
+		},
+		{
+			"id": "race:elemental:lightning",
+			"name": "Lightning Elemental",
+			"icon": "fas fa-thunderstorm",
+			"description": null,
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:airform"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"acid\": true,\n    \"grappled\": true,\n    \"paralyzed\": true,\n    \"petrified\": true,\n    \"poisoned\": true,\n    \"restrained\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 50,
+				"light": 100,
+				"heavy": 1000
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:radiant": "50%",
+				"damage_type:lightning": "100%",
+				"damage_type:crushing": "50%",
+				"damage_type:bludgeoning": "50%",
+				"damage_type:piercing": "100%",
+				"damage_type:slashing": "100%",
+				"damage_type:poison": "100%",
+				"damage_type:fire": "50%"
+			}
+		},
+		{
+			"id": "race:shark:reef:noble",
+			"name": "Noble Reef Shark",
+			"icon": "ra ra-shark rot90",
+			"description": "A large more powerful incarnation of the ${Reef Shark}$, these are faster and stronger.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:underwaterbreathing",
+				"feat:blindsight"
+			],
+			"note": null,
+			"attribute": {
+				"young": 1,
+				"old": 20,
+				"light": 200,
+				"heavy": 600
+			}
+		},
+		{
+			"id": "race:ogre:twoheaded",
+			"name": "Two Headed Ogre",
+			"icon": null,
+			"description": "Large and strong, these ogres feature a misgrown head. If they've lived long enough, the heads have learned to work together, making them extremely deadly if they have combat experience. But many die in the process due to the difficulty of such management.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:splitvision",
+				"feat:alert",
+				"feat:unarmoreddefense",
+				"feat:actionsurge",
+				"feat:athlete"
+			],
+			"note": null,
+			"attribute": {
+				"young": 12,
+				"old": 38,
+				"light": 500,
+				"heavy": 800
+			}
+		},
+		{
+			"id": "race:golem:bone",
+			"name": "Bone Golem",
+			"icon": "ra ra-desert-skull",
+			"description": "Imposing in stature, these creatures server well for protection. However, due to their large size they are noticeable slow.\n\nHowever their size restricts them from using any equipment and their varied structure makes creation of any armor or weapons difficult.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:golem:imposing"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true,\n    \"charmed\": true\n}",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:ability:bonecage",
+				"spell:ability:bonelance"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 1,
+				"light": 300,
+				"heavy": 400
+			},
+			"review": true,
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:necrotic": "50%",
+				"damage_type:piercing": "2d12",
+				"damage_type:slashing": "2d12",
+				"damage_type:bludgeoning": "1d12"
+			}
+		},
+		{
+			"id": "race:dybbuk",
+			"name": "Dybbuk",
+			"icon": "ra ra-skull",
+			"description": "Dybbuks are a type of loumara, disembodied, demonic spirits, that could possess and control dead bodies. Utterly depraved and completely immoral, they parasitically inhabited mortal corpses in order to partake in their vices and would murder others to steal their forms.\n\nTranslucent and undefined, a dybbuk's true form was rarely seen as they floated silently through the air. Even when unseen, their presence was followed by brief sensations, the reek of rotting lilies, a chilling breeze and sudden feelings of loss. Even when noticed, most could only make out a faint flicker of light trailed by tendrils of faded haze.\n\nWhen properly seen, dybbuks appeared as see-through jellyfish with the nebulous features of a humanoid face drifting across their bodies' surface. They wriggled through the air with smoky scores 3 stud long tendrils on their undersides that could intertwine to form a pair of arms if needed.",
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"attribute": {
+				"young": 40,
+				"old": 1000,
+				"light": 5,
+				"heavy": 15
+			}
+		},
+		{
+			"id": "race:geist",
+			"name": "Geist",
+			"icon": "fas fa-ghost",
+			"description": "Violent spirits seeking out to attack the living, these are among the most intelligent of ghostly apparitions.\n\nWhile in their native realm of ${Reykurax}$, these creatures receive +${5,,orange}$DC and Attack as well as an additional ${15,,orange}$ Movement.\n\nWhen killed outside of ${Reykurax}$, this creature disperses into a light gas, potentially dropping any odd material or items held, but eventually returning to ${Reykurax}$.\n\nWhen killed while in ${Reykurax}$, the creature crystallizes into an ${Umoya Crystal}$ in a flurry of dust.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:etherealtravel",
+				"feat:etherealsight",
+				"feat:apparition"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 1000,
+				"light": 1,
+				"heavy": 4
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null
+		},
+		{
+			"id": "race:ghost",
+			"name": "Spirit",
+			"icon": "fas fa-ghost",
+			"description": "Ghostly apparition of a passed soul.\n\nWhile not directly vulnerable to ${Radiant}$ damage, it is the type recommended for use when fighting one such creature.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:apparition"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 1000,
+				"light": 1,
+				"heavy": 4
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_proficiency": {
+				"skill:charisma": 1
+			},
+			"skill_advantage": {
+				"skill:charisma": 1
+			},
+			"resist": {
+				"damage_type:cold": "50%",
+				"damage_type:psychic": "50%",
+				"damage_type:bludgeoning": "100%",
+				"damage_type:piercing": "100%",
+				"damage_type:crushing": "100%",
+				"damage_type:slashing": "100%",
+				"damage_type:necrotic": "100%"
+			}
+		},
+		{
+			"id": "race:hellhound",
+			"name": "Hell Hound",
+			"icon": "ra ra-lion",
+			"description": "Fire-breathing fiends that take the form of powerful dogs, these hounds commonly serve evil creatures that use them as guard animals and companions.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:darkvision",
+				"feat:keensmell",
+				"feat:keenhearing",
+				"feat:flamingpaws",
+				"feat:packtactics"
+			],
+			"note": null,
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:infernal"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"spells": [
+				"spell:flamingbreath"
+			],
+			"attribute": {
+				"young": 1,
+				"old": 10000,
+				"light": 90,
+				"heavy": 200
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:perception": 5
+			},
+			"resist": {
+				"damage_type:fire": "100%"
+			}
+		},
+		{
+			"id": "race:orc",
+			"name": "Orc",
+			"description": "",
+			"playable": false,
+			"feats": [
+				"feat:relentlessendurance",
+				"feat:aggress"
+			],
+			"note": "Insult: Simple Radish",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:orc"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 14,
+				"old": 75,
+				"light": 100,
+				"heavy": 200
+			},
+			"stat_strength": "2",
+			"stat_dexterity": null,
+			"stat_constitution": "2",
+			"stat_intelligence": "",
+			"stat_wisdom": "-1",
+			"stat_charisma": null,
+			"skill_proficiency": {
+				"skill:intimidation": 1,
+				"skill:constitution": 1,
+				"skill:strength": 1
+			},
+			"skill_advantage": {
+				"skill:strength": 1
+			}
+		},
+		{
+			"id": "race:golem:ancient",
+			"name": "Ancient Golem",
+			"icon": "ra ra-sea-serpent",
+			"description": "A stone formed snake creature, animated by ancient runes inscribed on each stone.\n\nEternal in their nature, they are known to guard important ancient places.",
+			"obscured": null,
+			"playable": null,
+			"note": "Vary in size depending on the importance of their station.\n\nCan be unbound by a high arcana check with a White Prismatic Array.\n\nPrevious Immunities: {\n    \"blinded\": true,\n    \"charmed\": true,\n    \"deafened\": true,\n    \"fire\": true,\n    \"frightened\": true,\n    \"fatigued\": true,\n    \"muted\": true,\n    \"paralyzed\": true,\n    \"petrified\": true,\n    \"poisoned\": true,\n    \"stunned\": true\n}",
+			"attribute": {
+				"young": 1,
+				"old": 1,
+				"light": 1,
+				"heavy": 1
+			},
+			"review": true,
+			"resist": {
+				"damage_type:necrotic": "100%",
+				"damage_type:lightning": "100%",
+				"damage_type:psychic": "100%",
+				"damage_type:slashing": "100% 2d12",
+				"damage_type:crushing": "100%",
+				"damage_type:piercing": "100% 2d12",
+				"damage_type:bludgeoning": "100% 1d12",
+				"damage_type:radiant": "6d6",
+				"damage_type:poison": "2d8",
+				"damage_type:cold": "2d8"
+			}
+		},
+		{
+			"id": "race:aarakocra",
+			"name": "Aarakocra",
+			"icon": "fas fa-crow",
+			"description": "Sequestered in high mountains atop tall trees, the\nAarakocra, sometimes called birdfolk, evoke fear and\nwonder. Many Aarakocra aren’t even native to the\n${Material Plane}$. They hail from a world beyond, from\nthe boundless vistas of the ${Elemental Planes}$.\n\nThey are immigrants, refugees, scouts, and explorers,\ntheir outposts functioning as footholds in a world both\nstrange and alien.",
+			"obscured": null,
+			"playable": null,
+			"note": null,
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common",
+				"proficiency:language:auran"
+			],
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 3,
+				"old": 30,
+				"light": 30,
+				"heavy": 60
+			},
+			"stat_strength": null,
+			"stat_dexterity": "2",
+			"stat_constitution": null,
+			"stat_intelligence": "",
+			"stat_wisdom": "1",
+			"stat_charisma": "",
+			"movement_ground": 16,
+			"movement_swim": 8,
+			"movement_fly": 40
+		},
+		{
+			"id": "race:shark",
+			"name": "Shark",
+			"icon": "ra ra-shark",
+			"description": "An aggressive water creature.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:keensmell"
+			],
+			"note": "\n\nHad Action Costs - Main: 2, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 3,
+				"old": 36,
+				"light": 10,
+				"heavy": 1000
+			},
+			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"spell_attack": "5",
+			"skill_check": {
+				"skill:perception": "3"
+			}
+		},
+		{
+			"id": "race:human",
+			"name": "Human ",
+			"description": "With their penchant for migration and conquest, humans are more physically diverse than other common races. There is no typical human. An individual can stand from 5 feet to a little over 6 feet tall and weigh from 125 to 250 pounds. Human skin shades range from nearly black to very pale, and hair colors from black to blond (curly, kinky, or straight); males might sport facial hair that is sparse or thick. A lot of humans have a dash of nonhuman blood, revealing hints of elf, orc, or other lineages. Humans reach adulthood in their late teens and rarely live even a single century.\n\nAdditionally, choose 1 language proficiency.",
+			"playable": true,
+			"note": "Insult: Turd Slinging Monkey",
+			"race": null,
+			"magical": null,
+			"proficiencies": [
+				"proficiency:language:common"
+			],
+			"armor": "",
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 18,
+				"old": 75,
+				"light": 125,
+				"heavy": 250
+			},
+			"stat_strength": 1,
+			"stat_dexterity": 1,
+			"stat_constitution": 1,
+			"stat_intelligence": 1,
+			"stat_wisdom": 1,
+			"stat_charisma": 1,
+			"parent": "race:root:character"
+		},
+		{
+			"id": "race:craghound",
+			"name": "Crag Hound",
+			"icon": "fas fa-dog",
+			"description": "Native to the arid stone lands of Lurus, these creatures are capable of great feats of strength and dexterity and fiercely loyal and quite teritorial.\n\nIn mountainous areas they can be practically invisible as long as they hold still, making them dangerous in the wilderness where it can be easy to stumble across a sleeping pack.",
+			"obscured": null,
+			"playable": null,
+			"note": "\n\nPrevious Immunities: {\n    \"fire\": true,\n    \"petrified\": true\n}\n\nHad Action Costs - Main: 1, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": "10",
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 30,
+				"light": 400,
+				"heavy": 1000
+			},
+			"review": true,
+			"action_max": {
+				"main": 1,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": "3",
+			"stat_dexterity": null,
+			"stat_constitution": "3",
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"skill_check": {
+				"skill:mainhand": "2",
+				"skill:offhand": "7",
+				"skill:strength": "3",
+				"skill:dexterity": "1",
+				"skill:attack": "0",
+				"skill:initiative": "3",
+				"skill:perception": "4"
+			},
+			"resist": {
+				"damage_type:bludgeoning": "8d8",
+				"damage_type:piercing": "8d8",
+				"damage_type:crushing": "4d8",
+				"damage_type:slashing": "8d8",
+				"damage_type:fire": "8d8",
+				"damage_type:force": "8d8",
+				"damage_type:poison": "8d8"
+			}
+		},
+		{
+			"id": "race:mimic",
+			"name": "Mimic",
+			"icon": "fas fa-treasure-chest",
+			"description": "Known for taking the form of valuables and catching would be adventurer's off guard.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:darkvision",
+				"feat:shapechanger",
+				"feat:grappler:mimic",
+				"feat:falseappearance"
+			],
+			"note": "\n\nPrevious Immunities: {\n    \"acid\": true\n}",
+			"attribute": {
+				"young": 1,
+				"old": 30,
+				"light": 400,
+				"heavy": 1000
+			},
+			"review": true
+		},
+		{
+			"id": "race:cthulhuianinfiltrator",
+			"name": "Cthulhuian Infiltrator",
+			"icon": "ra ra-desert-skull",
+			"description": "Adaptive skin allow them to turn invisible seemingly at will and grant them a hardened immunity to many magics and weapons.\n\nHighly threatening by themselves, they are rarely known to have existed but when successfully they leave nothing but a mystery.",
+			"obscured": null,
+			"playable": null,
+			"feats": [
+				"feat:adaptivearmor",
+				"feat:adaptivescales",
+				"feat:adaptiveclaws",
+				"feat:pocketdimensionpack",
+				"feat:fasthands"
+			],
+			"note": "\n\nHad Action Costs - Main: 2, Bonus: undefined, Reaction: undefined",
+			"race": null,
+			"magical": null,
+			"armor": null,
+			"view": null,
+			"known": null,
+			"attribute": {
+				"young": 1,
+				"old": 100000,
+				"light": 70,
+				"heavy": 110
+			},
+			"review": true,
+			"action_max": {
+				"main": 2,
+				"movement": 0,
+				"bonus": 0,
+				"reaction": 0
+			},
+			"stat_strength": null,
+			"stat_dexterity": null,
+			"stat_constitution": null,
+			"stat_intelligence": null,
+			"stat_wisdom": null,
+			"stat_charisma": null,
+			"resist": {
+				"damage_type:bludgeoning": "2d8",
+				"damage_type:piercing": "4d8",
+				"damage_type:slashing": "4d8",
+				"damage_type:lightning": "4d8",
+				"damage_type:radiant": "4d8",
+				"damage_type:thunder": "4d8",
+				"damage_type:acid": "4d8",
+				"damage_type:fire": "8d8",
+				"damage_type:force": "2d8"
+			}
+		}
+	]
+}

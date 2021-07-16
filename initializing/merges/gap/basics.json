@@ -1,79 +1,104 @@
 {
 	"import": [{
 		"id": "archetype:self:1",
-		"name": "Level 1"
+		"name": "Level 1",
+		"obscured": true
 	}, {
 		"id": "archetype:self:2",
-		"name": "Level 2"
+		"name": "Level 2",
+		"obscured": true
 	}, {
 		"id": "archetype:self:3",
-		"name": "Level 3"
+		"name": "Level 3",
+		"obscured": true
 	}, {
 		"id": "archetype:self:4",
-		"name": "Level 4"
+		"name": "Level 4",
+		"obscured": true
 	}, {
 		"id": "archetype:self:5",
-		"name": "Level 5"
+		"name": "Level 5",
+		"obscured": true
 	}, {
 		"id": "archetype:self:6",
-		"name": "Level 6"
+		"name": "Level 6",
+		"obscured": true
 	}, {
 		"id": "archetype:self:7",
-		"name": "Level 7"
+		"name": "Level 7",
+		"obscured": true
 	}, {
 		"id": "archetype:self:8",
-		"name": "Level 8"
+		"name": "Level 8",
+		"obscured": true
 	}, {
 		"id": "archetype:self:9",
-		"name": "Level 9"
+		"name": "Level 9",
+		"obscured": true
 	}, {
 		"id": "archetype:self:10",
-		"name": "Level 10"
+		"name": "Level 10",
+		"obscured": true
 	}, {
 		"id": "archetype:self:11",
-		"name": "Level 11"
+		"name": "Level 11",
+		"obscured": true
 	}, {
 		"id": "archetype:self:12",
-		"name": "Level 12"
+		"name": "Level 12",
+		"obscured": true
 	}, {
 		"id": "archetype:self:13",
-		"name": "Level 13"
+		"name": "Level 13",
+		"obscured": true
 	}, {
 		"id": "archetype:self:14",
-		"name": "Level 14"
+		"name": "Level 14",
+		"obscured": true
 	}, {
 		"id": "archetype:self:15",
-		"name": "Level 15"
+		"name": "Level 15",
+		"obscured": true
 	}, {
 		"id": "archetype:self:16",
-		"name": "Level 16"
+		"name": "Level 16",
+		"obscured": true
 	}, {
 		"id": "archetype:self:17",
-		"name": "Level 17"
+		"name": "Level 17",
+		"obscured": true
 	}, {
 		"id": "archetype:self:18",
-		"name": "Level 18"
+		"name": "Level 18",
+		"obscured": true
 	}, {
 		"id": "archetype:self:19",
-		"name": "Level 19"
+		"name": "Level 19",
+		"obscured": true
 	}, {
 		"id": "archetype:self:20",
-		"name": "Level 20"
+		"name": "Level 20",
+		"obscured": true
 	}, {
 		"id": "archetype:self:21",
-		"name": "Level 21"
+		"name": "Level 21",
+		"obscured": true
 	}, {
 		"id": "archetype:self:22",
-		"name": "Level 22"
+		"name": "Level 22",
+		"obscured": true
 	}, {
 		"id": "archetype:self:23",
-		"name": "Level 23"
+		"name": "Level 23",
+		"obscured": true
 	}, {
 		"id": "archetype:self:24",
-		"name": "Level 24"
+		"name": "Level 24",
+		"obscured": true
 	}, {
 		"id": "archetype:self:25",
-		"name": "Level 25"
+		"name": "Level 25",
+		"obscured": true
 	}, {
 		"id": "archetype:archetype:battlemage:1",
 		"name": "Battlemage"

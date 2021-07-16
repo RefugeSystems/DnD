@@ -13,7 +13,8 @@ for(i=0; i<merging.length; i++) {
 	id = merged.id;
 	try {
 		// console.log("Merging: " + merged.name);
-		utility.loadModifiers(merged);
+		merged = utility.loadModifiers(merged);
+		// console.log("Modified: ", merged);
 		if(merged.radius) {
 			merged.effect_radius = merged.radius;
 		}
@@ -86,6 +87,10 @@ for(i=0; i<merging.length; i++) {
 		merged.selectable = !merged.natural;
 		delete(merged.natural);
 
+		if(!id.startsWith("feat:")) {
+			console.log("Update Feat: " + id);
+			id = "feat:" + id;
+		}
 		merged.id = id;
 		utility.finalize(merged);
 
@@ -153,3 +158,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 fs.writeFile("_feats.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+
+module.exports.data = exporting;

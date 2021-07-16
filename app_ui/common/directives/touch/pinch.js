@@ -8,7 +8,8 @@
 Vue.directive("pinch", {
 	"bind": function(el, binding) {
 		if (typeof binding.value === "function") {
-			var mc = new Hammer(el),
+			var mc = new Hammer.Manager(el),
+				pinch = new Hammer.Pinch(),
 				options = {};
 			
 			if(binding.modifiers.left) {
@@ -21,12 +22,31 @@ Vue.directive("pinch", {
 				options.direction = Hammer.DIRECTION_DOWN;
 			}
 			
-			mc.get("pinch").set(options);
+			// pinch.set(options);
+			mc.add([pinch]);
 			if(binding.modifiers.in) {
-				mc.on("pinchin", binding.value);
+				mc.on("pinchin", function(event) {
+					// event.stopPropagation();
+					// event.preventDefault();
+					if(binding.modifiers.prevent) {
+						event.preventDefault();
+					} else if(binding.modifiers.stop) {
+						event.stopPropagation();
+					}
+					binding.value(event);
+				});
 			}
 			if(binding.modifiers.out) {
-				mc.on("pinchout", binding.value);
+				mc.on("pinchout", function(event) {
+					// event.stopPropagation();
+					// event.preventDefault();
+					if(binding.modifiers.prevent) {
+						event.preventDefault();
+					} else if(binding.modifiers.stop) {
+						event.stopPropagation();
+					}
+					binding.value(event);
+				});
 			}
 		}
 	}

@@ -32,7 +32,9 @@ rsSystem.manipulateQuery = function(manipulate) {
 		string = rsSystem.Router.currentRoute.path;
 	}
 	
-	rsSystem.Router.push(string);
+	if(rsSystem.Router.currentRoute.fullPath !== string) {
+		rsSystem.Router.push(string);
+	}
 	return string;
 };
 

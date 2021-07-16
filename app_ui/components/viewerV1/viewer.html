@@ -1,7 +1,7 @@
 
 <div class="rs-component component-viewer" :class="renderState()">
 
-	<div class="map" v-if="location && location.map" :style="" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomOutOne">
+	<div class="map" v-if="location && location.map" :style="" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomInOne">
 		<div class="view" onexit="true" v-pan="pan">
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" :style="'font-size: ' + getMarkerSize() + 'px;'">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && storage.markers">
@@ -14,7 +14,7 @@
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in location.coordinates" v-if="!coordinate.standalone">
-					<span class="coordinate top left" :style="'width: ' + coordinate.x + '%; height: ' + coordinate.y + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
+					<span class="coordinate top left" :style="getCoordinateStyle(coordinate)"></span>
 					<span class="coordinate bottom right" :style="'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
 				</div>
 				<div class="coordinate-dots">
@@ -64,10 +64,18 @@
 					</div>
 					<div class="action-suboptions" :class="submenuClasses()">
 						<div class="grouped flex v" v-if="action && action.options">
-							<button class="option normal" v-for="option in action.options" v-on:click.stop.prevent="fire(option, $event)">
-								<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
-								<span>{{option.text}}</span>
-							</button>
+							<div class="option flex h" v-for="option in action.options">
+								<button class="option normal grow-1" v-if="!option.type || option.type === 'button'" v-on:click.stop.prevent="fire(option, $event)">
+									<span :class="option.icon || 'fas fa-chevron-square-right'"></span>
+									<span>{{option.text}}</span>
+								</button>
+								<div class="option-icon":class="option.icon" v-if="option.type && option.type !== 'button'"></div>
+								<select class="grow-1" v-if="option.type === 'selection'" v-model="storage[option.storage]">
+									<option v-for="selection in option.selections" :value="selection.id || selection">{{selection.name || selection}}</option>
+								</select>
+								<input class="grow-1" v-if="option.type === 'input'" type="text" v-model="storage[option.storage]">
+								<input class="grow-1" v-if="option.type === 'number'" type="number" v-model.number="storage[option.storage]">
+							</div>
 						</div>
 					</div>
 				</div>
