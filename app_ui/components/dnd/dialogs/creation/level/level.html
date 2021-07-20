@@ -1,0 +1,90 @@
+<div class="rs-component dnd-component character-level flex v">
+	<div class="grow-10 over-auto">
+		<!-- Progression Tabs -->
+		<div class="tabs flex h">
+			<button class="tab" v-for="section in sections" :class="getTabStyle(section)" v-on:click="changeSection(section)">
+				<span :class="getTabIcon(section)"></span>
+				<span>{{sectionInfo[section].name}}</span>
+			</button>
+			<button class="tab complete" :disabled="completed < sections.length" v-on:click="changeSection(null)">
+				<span class="fas fa-upload"></span>
+				<span>Finish</span>
+			</button>
+		</div>
+		
+		<!-- Finish Confirmation-->
+		<div class="section" v-if="section == null">
+			<p>Finish Leveling?</p>
+			<div class="level-health">
+				<span>HP Gain: {{sectionInfo.hp.amount}} + {{this.entity.constitution}} (Constitution Modifier)</span>
+			</div>
+			<div class="section-info" v-for="sec in sections">
+				<div class="option"  v-if="sectionInfo[sec].record" v-on:click="info(sectionInfo[sec].record)">
+					<span class="name">{{sectionInfo[sec].record.name}}</span>
+					<button class="flat action fas fa-info-circle"></button>
+				</div>
+			</div>
+			<div class="section-customizations">
+			</div>
+		</div>
+
+		<!-- Choose Next Class Level-->
+		<panel-select v-if="section === 'class'" class="selection panels" :class="" v-on:selected="info($event)" :flush="6" :corpus="availableClasses" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :descriptionless="true" :classing="panelClassing" :current="building" fmarking="fad fa-dot-circle rs-secondary-transparent">
+			<div slot="controls" slot-scope="{record}" class="align-right">
+				<button v-on:click.prevent.stop="chooseClass(record)" class="basic general action">
+					<span class="fas fa-check rs-green"></span>
+					<span>Select</span>
+				</button>
+				<button class="quick general action">
+					<span class="fas fa-info rs-lightblue"></span>
+				</button>
+			</div>
+		</panel-select>
+		<div class="notice" v-if="section === 'subclass' && availableClasses.length === 0">
+			<span class="fas fa-exclamation-triangle rs-yellow"></span>
+			<span>No Available Class Chioces</span>
+		</div>
+
+		<!-- Choose Next Subclass if Applicable Level-->
+		<panel-select v-if="section === 'subclass'" class="selection panels" :class="" v-on:selected="info($event)" :flush="6" :corpus="availableSubclasses" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :classing="panelClassing" :descriptionless="true" :current="building" fmarking="fad fa-dot-circle rs-secondary-transparent">
+			<div slot="controls" slot-scope="{record}" class="align-right">
+				<button v-on:click.prevent.stop="chooseSubclass(record)" class="basic general action">
+					<span class="fas fa-check rs-green"></span>
+					<span>Select</span>
+				</button>
+				<button class="quick general action">
+					<span class="fas fa-info rs-lightblue"></span>
+				</button>
+			</div>
+		</panel-select>
+		<div class="notice" v-if="section === 'subclass' && availableSubclasses.length === 0">
+			<span class="fas fa-exclamation-triangle rs-yellow"></span>
+			<span>No Available Subclass Chioces</span>
+		</div>
+
+		<!-- Roll HP Addition -->
+		<div v-if="section === 'hp'" class="section hp">
+			<!-- Get HP Roll -->
+			<div class="roll flex h centered">
+				<input type="number" class="rolled" v-model.number="sectionInfo.hp.amount" :placeholder="'1' + hitDie" v-on:keydown.enter="hpSet()" />
+				<button class="rounded general quick action" v-on:click="hpSet()">
+					<span class="game-icon game-icon-health-increase"></span>
+				</button>
+			</div>
+			<!-- List Acquiring Feats/Changes Due to Level (New Archetypes and Chosen Class)-->
+			<div class="notice" v-if="sectionInfo.hp.comment">
+				<span class="fas fa-exclamation-triangle rs-yellow"></span>
+				<span>{{sectionInfo.hp.comment}}</span>
+			</div>
+		</div>
+
+		<!-- Select Options for Class and Level -->
+		<div class="selection choices" v-if="section === 'customizations'">
+			<rs-selection-block class="choice-block" v-for="block in customizations" :universe="universe" :block="block" v-on:selected="blockSelected($event)" />
+			<div class="notice" v-if="!customizations || customizations.length === 0">
+				<span class="fas fa-exclamation-triangle rs-yellow"></span>
+				<span>No Customization Chioces</span>
+			</div>
+		</div>
+	</div>
+</div>

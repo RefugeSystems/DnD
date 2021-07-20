@@ -36,7 +36,11 @@ rsSystem.component("dndEntityName", {
 
 		},
 		"levelUp": function() {
-
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndCharacterLevelDialog",
+				"level": this.entity.level + 1,
+				"entity": this.entity.id
+			});
 		}
 	},
 	"beforeDestroy": function() {

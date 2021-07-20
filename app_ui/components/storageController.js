@@ -110,6 +110,9 @@ rsSystem.component("StorageController", {
 				console.warn("Edit Noun Failed: Requires MouseEvent as first parameter");
 			}
 		},
+		"closeDialog": function() {
+			rsSystem.EventBus.$emit("dialog-dismiss");
+		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record

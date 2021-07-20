@@ -443,13 +443,20 @@
 				Vue.set(this, "search_criteria", []);
 			}
 
-			if(this.storage.master_view !== "master") {
-				if(this.storage.master_view) {
+			if(this.player.gm) {
+				if(this.storage.master_view !== "master") {
 					Vue.set(this, "viewingEntity", this.universe.index.entity[this.storage.master_view]);
 				}
-				if(!this.viewingEntity) {
-					Vue.set(this, "viewingEntity", this.universe.index.entity[this.player.attribute.playing_as]);
+			} else {
+				if(this.$route.param.entity) {
+					Vue.set(this, "viewingEntity", this.universe.index.entity[this.$route.param.entity]);
+					if(this.viewingEntity && (!this.viewingEntity.owned || !this.viewingEntity.owned[this.player.id])) {
+						Vue.set(this, "viewingEntity", null);
+					}
 				}
+			}
+			if(!this.viewingEntity) {
+				Vue.set(this, "viewingEntity", this.universe.index.entity[this.player.attribute.playing_as]);
 			}
 
 			rsSystem.register(this);
@@ -614,6 +621,10 @@
 				}
 
 				this.determinePOIs();
+			},
+			"updateMasterView": function() {
+				Vue.set(this, "viewingEntity", this.universe.index.entity[this.storage.master_view]);
+				this.filterPOIs();
 			},
 			"testSearchCriteria": function(string, criteria) {
 				var x;
@@ -1783,8 +1794,12 @@
 					return false;
 				}
 
+				if(this.player.gm && this.storage.master_view === "master") {
+					return true;
+				}
+
 				//console.log("Link[" + link.id + " | " + link.must_know + "]: " + ( (!this.player.gm || this.storage.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) ), " | ", this.viewingEntity.knowsOf(link), "\n > ", this.viewingEntity);
-				if(link.must_know && ( (!this.player.gm || this.storage.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) )) {
+				if(!this.viewingEntity || !this.entityKnowsOf(this.viewingEntity, link)) {
 					return false;
 				}
 
@@ -1805,15 +1820,6 @@
 
 				if(link.hidden || this.storage.hide[link.id] || link.obscured) {
 					return false;
-				}
-
-				if(!link.required_knowledge) {
-					return true;
-				}
-
-				entity = this.universe.nouns.entity[this.player.entity];
-				if(entity && (entity = this.universe.nouns.knowledge[entity.knowledge])) {
-					return !!entity[link.knowledge];
 				}
 
 				return false;

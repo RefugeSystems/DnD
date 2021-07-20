@@ -11,6 +11,7 @@ for(i=0; i<merging.length; i++) {
 	merged = merging[i];
 	mod = null;
 	id = merged.id;
+	merged.needs = {};
 	try {
 		// console.log("Merging: " + merged.name);
 		utility.loadModifiers(merged);
@@ -21,7 +22,11 @@ for(i=0; i<merging.length; i++) {
 		}
 		delete(merged.classId);
 		if(merged.classLevel) {
-			merged.level = merged.classLevel;
+			if(merged.is_subclass) {
+				merged.needs[merged.subclassing.replace(1, merged.classLevel)] = 1;
+			} else {
+				merged.level_required = parseInt(merged.classLevel);
+			}
 		}
 		delete(merged.classLevel);
 		if(merged.archetypes) {
@@ -44,6 +49,7 @@ for(i=0; i<merging.length; i++) {
 
 		merged.id = id;
 		utility.finalize(merged);
+		merged.playable = true;
 
 		delete(merged.previous);
 		delete(merged._search);

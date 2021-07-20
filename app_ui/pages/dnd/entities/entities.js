@@ -30,7 +30,9 @@ rsSystem.component("DNDEntities", {
 	},
 	"computed": {
 		"main": function() {
-			if(this.player.attribute.playing_as && this.universe.index.entity[this.player.attribute.playing_as]) {
+			if(this.player.gm && this.$route.query.entity) {
+				return this.universe.index.entity[this.$route.query.entity];
+			} else if(this.player.attribute.playing_as && this.universe.index.entity[this.player.attribute.playing_as]) {
 				return this.universe.index.entity[this.player.attribute.playing_as];
 			}
 			return null;
@@ -139,18 +141,21 @@ rsSystem.component("DNDEntities", {
 
 			controls.push({
 				"icon": "fas fa-users",
+				"title": "Include all nearby creatures in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "all"
 			});
 			controls.push({
 				"icon": "fas fa-user-alt",
+				"title": "Include yourself in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "self"
 			});
 			controls.push({
 				"icon": "fas fa-sort-alpha-down",
+				"title": "Toggle Alphabetical vs Initiative sorting for the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "atoz"
@@ -165,6 +170,7 @@ rsSystem.component("DNDEntities", {
 			// }
 			controls.push({
 				"icon": "fas fa-swords",
+				"title": "Include hostile creatures in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "combat"
@@ -175,6 +181,7 @@ rsSystem.component("DNDEntities", {
 					if(load && !load.disabled && !load.obscured && !load.is_preview && load.is_chest) {
 						controls.push({
 							"icon": "fas fa-treasure-chest",
+							"title": "Include treasure chests and other piles of items in the list of creatures nearby",
 							"ctrl": "list",
 							"type": "flip",
 							"id": "treasure"
@@ -184,30 +191,35 @@ rsSystem.component("DNDEntities", {
 			}
 			controls.push({
 				"icon": "fas fa-street-view",
+				"title": "Include creatures at your location that may be slightly farther away but still, say, in the city in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "location"
 			});
 			controls.push({
 				"icon": "fas fa-users-crown",
+				"title": "Include creatures in your party in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "party"
 			});
 			controls.push({
 				"icon": "fas fa-users-cog",
+				"title": "Include near-by NPCs in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "npcs"
 			});
 			controls.push({
 				"icon": "far fa-crosshairs",
+				"title": "Include hostile creatures in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "hostile"
 			});
 			controls.push({
 				"icon": "fas fa-store",
+				"title": "Include stores in the list of creatures nearby",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "shop"

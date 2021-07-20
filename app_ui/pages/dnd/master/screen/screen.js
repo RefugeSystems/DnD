@@ -64,6 +64,13 @@ rsSystem.component("DNDMasterScreen", {
 			}
 			return available;
 		},
+		"viewedEntity": function() {
+			if(this.$route.query.entity) {
+				return this.universe.index.entity[this.$route.query.entity];
+			} else {
+				return null;
+			}
+		},
 		"activeEntities": function() {
 			var entities = {},
 				minions = [],
@@ -475,6 +482,16 @@ rsSystem.component("DNDMasterScreen", {
 			}
 
 			return classes;
+		},
+		"removeEntity": function(entity) {
+			var meeting = getMeeting();
+			console.log("Remove Entity: ", entity, meeting);
+			if(meeting) {
+				this.universe.send("meeting:remove:entities", {
+					"meeting": meeting.id,
+					"entities": [entity.id]
+				});
+			}
 		},
 		"witnessLimit": function(mod) {
 			Vue.set(this.storage, "witnessed_limit", this.storage.witnessed_limit + mod);

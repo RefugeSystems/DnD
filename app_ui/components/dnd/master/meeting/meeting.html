@@ -10,52 +10,52 @@
 			</div>
 		</div>
 		<div class="flex h wrap master-actions">
-			<button class="rounded general quick action" v-on:click="forwardTime(6)">
+			<button class="rounded general quick action" v-on:click="forwardTime(6)" title="1 Round (6 Seconds)">
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(60)">
+			<button class="rounded general quick action" v-on:click="forwardTime(60)" title="1 Minute">
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">10</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(600)">
+			<button class="rounded general quick action" v-on:click="forwardTime(600)" title="10 Minutes">
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">100</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(3600)">
+			<button class="rounded general quick action" v-on:click="forwardTime(3600)" title="1 Hour">
 				<span class="action-icon fal fa-hourglass-start"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(18000)">
+			<button class="rounded general quick action" v-on:click="forwardTime(18000)" title="5 Hours">
 				<span class="action-icon fal fa-hourglass-start"></span>
 				<span class="action-count">5</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(86400)">
+			<button class="rounded general quick action" v-on:click="forwardTime(86400)" title="1 Day">
 				<span class="action-icon fal fa-calendar-day"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(432000)">
+			<button class="rounded general quick action" v-on:click="forwardTime(432000)" title="1 Week">
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(2160000)">
+			<button class="rounded general quick action" v-on:click="forwardTime(2160000)" title="5 Weeks">
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">5</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(4320000)">
+			<button class="rounded general quick action" v-on:click="forwardTime(4320000)" title="10 Weeks">
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">10</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="toggleTimeLock()">
+			<button class="rounded general quick action" v-on:click="toggleTimeLock()" title="Toggle Time Locking">
 				<span class="action-icon fas" :class="storage.timeLocked?'fa-lock':'fa-unlock'"></span>
 			</button>
-			<button class="rounded general quick action" v-if="!skirmish" v-on:click="startSkirmish()">
+			<button class="rounded general quick action" v-if="!skirmish" v-on:click="startSkirmish()" title="Start Skirmish">
 				<span class="action-icon fas fa-swords"></span>
 			</button>
-			<button class="rounded general quick action" v-if="skirmish" v-on:click="finishSkirmish()">
+			<button class="rounded general quick action" v-if="skirmish" v-on:click="finishSkirmish()" title="Finish Skirmish">
 				<span class="action-icon fas fa-treasure-chest"></span>
 			</button>
-			<button class="rounded general quick action" v-if="skirmish" v-on:click="nextTurmSkirmish()">
+			<button class="rounded general quick action" v-if="skirmish" v-on:click="nextTurmSkirmish()" title="Next Turn in Skirmish">
 				<span class="action-icon fas fa-step-forward"></span>
 			</button>
 		</div>
@@ -78,6 +78,9 @@
 				<span>End</span>
 			</button>
 			<!-- TODO: Organize Players - Connected Taged as present, Unconnected moved to Absent - Meetings will be premade for notification purposes -->
+			<button class="rounded general quick action" v-on:click="levelUp(1)" v-on:click.right.stop.prevent="levelUp(-1)" title="Level up characters. Right click to level down.">
+				<span class="fas fa-user-plus"></span>
+			</button>
 		</div>
 	</div>
 	<div class="flex h wrap master-actions">

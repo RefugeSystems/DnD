@@ -32,7 +32,7 @@ module.exports = function(universe) {
 	
 	
 	var diceReductionRegEx = new RegExp("\\+?(-?[0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\. ]+?\\))(d[0-9]+|%)", "g"),
-		calculateSecurityRegEx = new RegExp("^([<>a-zA-Z0-9\\(\\)+-\\/\\* ]+|Math\\.[a-zA-Z]+)$"),
+		calculateSecurityRegEx = new RegExp("^(([<>'a-zA-Z0-9\\(\\)+-\\/\\* ]+|==)+|Math\\.[a-zA-Z]+)$"),
 		variableExpression = new RegExp("([a-z:_]+)(\\.?[a-z:_]+)*", "gi"),
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
 		spaces = new RegExp(" ", "g"),
@@ -60,7 +60,11 @@ module.exports = function(universe) {
 				if(debug) {
 					console.log(" > Result: ", parseInt(Math.floor(eval(expression))));
 				}
-				return parseInt(Math.floor(eval(expression)));
+				expression = Math.floor(eval(expression));
+				if(isNaN(expression)) {
+					return original;
+				}
+				return expression;
 			} catch(ignored) {
 				// console.log("Bad Expression: ", ignored);
 				return original;

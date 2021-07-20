@@ -7,6 +7,8 @@
  * @param {Object} details
  */
 
+const universe = require("../api/v1/universe");
+
 var valid = new RegExp("^[a-z][a-z0-9_]+:[a-z0-9:_]+$");
 
 /**
@@ -266,16 +268,16 @@ class RSObject {
 	 * Clear the _calc buffer and recalculate fields.
 	 * @method recalculateFieldValues
 	 */
-	recalculateFieldValues() {
+	recalculateFieldValues(debug) {
 		this._calcRef = {};
-		this.calculateFieldValues();
+		this.calculateFieldValues(null, debug);
 	}
 
 	/**
 	 * Calculate and set the `_calculated` property values for this object.
 	 * @method calculateFieldValues
 	 */
-	calculateFieldValues(origins) {
+	calculateFieldValues(origins, debug) {
 		// console.trace(" > Calculate: " + this._data.id);
 		if(typeof(this.preFieldCalculate) === "function") {
 			this.preFieldCalculate();
@@ -323,10 +325,14 @@ class RSObject {
 					inheriting.push(source.id);
 					for(i=0; i<field.inheritanceFields.length; i++) {
 						ifield = this._manager.database.field[field.inheritanceFields[i]];
-						debugA = JSON.stringify(this._calculated[field.inheritanceFields[i]]);
-						debugB = JSON.stringify(source._calculated[field.inheritanceFields[i]]);
+						if(debug) {
+							debugA = JSON.stringify(this._calculated[field.inheritanceFields[i]]);
+							debugB = JSON.stringify(source._calculated[field.inheritanceFields[i]]);
+						}
 						try {
-							// console.log("Inheriting Field[" + field.inheritanceFields[i] + "]: ", this._calculated[field.inheritanceFields[i]]);
+							if(field.inheritanceFields[i] === debug || debug === true) {
+								console.log("Inheriting Field[" + source.id + " -> " + field.inheritanceFields[i] + "]: ", source[field.inheritanceFields[i]], this._calculated[field.inheritanceFields[i]]);
+							}
 							switch(field.inheritance[field.inheritanceFields[i]]) {
 								case "+=":
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
@@ -378,9 +384,15 @@ class RSObject {
 										this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
 								}
 							}
-							// console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
+							if(field.inheritanceFields[i] === debug || debug === true) {
+								console.log(" > Result: ", this._calculated[field.inheritanceFields[i]]);
+							}
 						} catch (e) {
-							console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield?ifield.id:"") + "]", debugA, debugB, e);
+							if(debug) {
+								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield?ifield.id:"") + "]", debugA, debugB, e);
+							} else {
+								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield?ifield.id:"") + "]", e);
+							}
 						}
 					}
 				} else {
@@ -544,7 +556,7 @@ class RSObject {
 	 * @param {Boolean} suppress The updated event, typically in lieu of a smaller
 	 * 		update such as a delta.
 	 */
-	updateFieldValues(suppress) {
+	updateFieldValues(suppress, debug) {
 		// console.trace(" > Update: " + this._data.id);
 		if(typeof(this.preFieldUpdate) === "function") {
 			this.preFieldUpdate();
@@ -697,10 +709,10 @@ class RSObject {
 		if(this.conditionals) {
 			this._conditionals.splice(0);
 			for(x=0; x<this.conditionals.length; x++) {
-				loading = this._universe.objectHandler.retrieve(this.conditionals[x]);
+				loading = this._universe.manager.conditional.object[this.conditionals[x]];
 				if(loading) {
 					if(this.checkConditional(loading)) {
-						this._conditionals.push(this.fillConditional(loading));
+						this._conditionals.push(loading);
 					}
 				} else {
 					loading = {};
@@ -714,13 +726,13 @@ class RSObject {
 			
 			for(x=0; x<this._conditionals.length; x++) {
 				for(i=0; i<this._manager.fieldIDs.length; i++) {
-					field = this._manager.fieldIDs[x];
-					if(this._conditionals[x].adds && this._conditionals[x].adds[field]) {
-						this[field] = RSObject.addValue(this[field], this._conditionals[x].adds[field], field.type);
-					} else if(this._conditionals[x].subs && this._conditionals[x].subs[field]) {
-						this[field] = RSObject.subValue(this[field], this._conditionals[x].subs[field], field.type);
-					} else if(this._conditionals[x].sets && this._conditionals[x].sets[field]) {
-						this[field] = RSObject.setValue(this[field], this._conditionals[x].sets[field], field.type);
+					field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
+					if(this._conditionals[x].adds && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
+						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
+					} else if(this._conditionals[x].subs && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
+						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
+					} else if(this._conditionals[x].sets && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
+						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
 					}
 				}
 			}
@@ -763,6 +775,8 @@ class RSObject {
 					for(i=0; i<keys.length; i++) {
 						this[field.id][keys[i]] = parseInt(this[field.id][keys[i]]);
 					}
+				} else if(field.type === "calculated" && isNaN(this[field.id])) {
+					this[field.id] = this._universe.calculator.computedDiceRoll(this[field.id], this);
 				}
 				// Defaults (For null computations) & Bounds
 				if(this[field.id] === null || this[field.id] === undefined) {
@@ -840,6 +854,40 @@ class RSObject {
 		if(!suppress) {
 			this._universe.emit("object-updated", this.toJSON());
 		}
+	}
+
+	/**
+	 * 
+	 * @param {String | Object} field 
+	 * @param {String | Number | Object} object 
+	 */
+	computeValues(field, value) {
+		if(value === null || value === undefined) {
+			return null;
+		}
+
+		var filled,
+			keys,
+			i;
+
+		switch(field.type) {
+			case "object:calculated":
+			case "object:dice":
+			case "object":
+				keys = Object.keys(value);
+				filled = {};
+				for(i=0; i<keys.length; i++) {
+					filled[keys[i]] = this._universe.calculator.computedDiceRoll(value[keys[i]], this);
+				}
+				break;
+			case "calculated":
+				filled = this._universe.calculator.computedDiceRoll(value, this);
+				break;
+			default:
+				filled = 0;
+		}
+
+		return filled;
 	}
 
 	/**
@@ -1199,6 +1247,17 @@ class RSObject {
 		});
 	}
 
+	refresh() {
+		this.linkFieldValues()
+		.then(() => {
+			this.calculateFieldValues();
+			this.updateFieldValues();
+		})
+		.catch((err) => {
+			this._universe.warnMasters("Failed to refresh " + this.name + " [" + this.id + "]", {"id": this.id, "error": err});
+		});
+	}
+
 	
 	levelField(field, result) {
 		var keys,
@@ -1310,13 +1369,28 @@ class RSObject {
 	 * @return {Boolean}
 	 */
 	checkConditional(conditional) {
-		var field,
+		var result,
+			field,
+			value,
+			ref,
 			x;
 		
-		for(x=0; x<conditional._fields_condition.length; x++) {
-			field = conditional._fields_condition[x];
-			if(!RSObject.checkCondition(conditional.condition[field], conditional.ifop[field], this[field])) {
-				return false;
+		if(conditional.conditions) {
+			for(x=0; x<conditional.conditions.length; x++) {
+				ref = [];
+				result = this._universe.calculator.computedDiceRoll(conditional.conditions[x], this, ref);
+				if(typeof(result) !== "number" || result === 0) {
+					return false;
+				}
+			}
+		}
+		if(conditional.condition && conditional.ifop) {
+			for(x=0; x<conditional._fields_condition.length; x++) {
+				field = conditional._fields_condition[x];
+				value = this.getValue(field);
+				if(!RSObject.checkCondition(value, conditional.ifop[field], this[field])) {
+					return false;
+				}
 			}
 		}
 		
@@ -1463,6 +1537,7 @@ class RSObject {
 		json._data = data;
 		json._stackable = this._stackable;
 		if(include) {
+			json._conditionals = this._conditionals;
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
 			json._calculated = calculated;
@@ -1507,9 +1582,9 @@ RSObject.getClassFromID = function(id) {
  */
 RSObject.addObjects = function(a, b, type) {
 	if(a && !b) {
-		return b;
-	} else if(!a && b) {
 		return a;
+	} else if(!a && b) {
+		return b;
 	} else if(a && b) {
 		var akeys = Object.keys(a),
 			bkeys = Object.keys(b),
@@ -1610,7 +1685,7 @@ RSObject.addValues = function(a, b, type, op) {
  */
 RSObject.subObjects = function(a, b, type) {
 	if(a && !b) {
-		return b;
+		return a;
 	} else if(!a && b) {
 		return a;
 	} else if(a && b) {
@@ -1741,7 +1816,7 @@ RSObject.subValues = function(a, b, type) {
 				}
 				buffer = [].concat(a);
 				for(i=buffer.length - 1; 0<=i; i--) {
-					if(buffer[i] && lookup[buffer[i].id || buffer[i].id]) {
+					if(lookup[buffer[i]] || (buffer[i] && lookup[buffer[i].id || buffer[i]])) {
 						buffer.splice(i, 1);
 					}
 				}

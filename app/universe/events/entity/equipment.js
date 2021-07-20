@@ -29,13 +29,13 @@ module.exports.initialize = function(universe) {
 		if(typeof(entity) === "string") {
 			entity = universe.manager.entity.object[entity];
 		}
-		if(entity && entity.inventory && items && items.length) {
+		if(entity && entity.inventory && items && items.length && (entity.owned[event.player.id] || event.player.gm)) {
 			set = {
 				"user": entity.id
 			};
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
-				if(item && entity.inventory.indexOf(item.id) !== -1) {
+				if(item && entity.inventory.indexOf(item.id) !== -1 && entity.equipped.indexOf(item.id) === -1) {
 					item.setValues(set);
 					equip.push(item.id);
 				}
@@ -106,7 +106,7 @@ module.exports.initialize = function(universe) {
 		if(typeof(entity) === "string") {
 			entity = universe.manager.entity.object[entity];
 		}
-		if(entity && items && items.length) {
+		if(entity && items && items.length && (entity.owned[event.player.id] || event.player.gm)) {
 			set = {
 				"user": null
 			};
@@ -149,7 +149,7 @@ module.exports.initialize = function(universe) {
 		if(typeof(entity) === "string") {
 			entity = universe.manager.item.object[entity];
 		}
-		if(entity && entity.inventory && items && items.length) {
+		if(entity && entity.inventory && items && items.length && (entity.owned[event.player.id] || event.player.gm)) {
 			for(i=0; i<items.length; i++) {
 				item = universe.get(items[i]);
 				if(item && item.is_copy && entity.inventory.indexOf(item.id) !== -1 && item.versatile && item.versatility[1] && item.parent !== item.versatility[1]) {
@@ -187,7 +187,7 @@ module.exports.initialize = function(universe) {
 		if(typeof(entity) === "string") {
 			entity = universe.manager.item.object[entity];
 		}
-		if(entity && entity.inventory && items && items.length) {
+		if(entity && entity.inventory && items && items.length && (entity.owned[event.player.id] || event.player.gm)) {
 			for(i=0; i<items.length; i++) {
 				item = universe.get(items[i]);
 				if(item && item.is_copy && entity.inventory.indexOf(item.id) !== -1 && item.versatile && item.versatility[2] && item.parent !== item.versatility[2]) {
@@ -195,6 +195,74 @@ module.exports.initialize = function(universe) {
 						"parent": item.versatility[2]
 					});
 				}
+			}
+		}
+	});
+
+	/**
+	  * 
+	 * @event player:item:mainhand
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.entity
+	 * @param {String} event.message.data.item ID or null to clear hand
+	 */
+	universe.on("player:item:mainhand", function(event) {
+		var entity = event.message.data.entity,
+			item = event.message.data.item,
+			notify = {},
+			id;
+		
+		if(typeof(entity) === "string") {
+			entity = universe.manager.item.object[entity];
+		}
+		if(entity && (entity.owned[event.player.id] || event.player.gm)) {
+			if(item) {
+				if(typeof(item) === "string" && universe.manager.item.object[item]) {
+					item = universe.manager.item.object[item];
+					id = item.id;
+				} else if(typeof(item) === "object" && universe.manager.item.object[item.id]) {
+					id = item.id;
+				} else {
+					item = null;
+					id = null;
+				}
+			} else {
+				item = null;
+				id = null;
+			}
+			if(id && entity.equipped.indexOf(id) === -1) {
+				notify = Object.assign({}, universe.getMasters());
+				notify[event.player.id] = true;
+				universe.emit("send", {
+					"type": "notice",
+					"icon": "fas fa-exclamation-triangle rs-lightred",
+					"recipients": notify,
+					"message": entity.name + " can not equip " + item.name + " to their main hand unless they have that item equipped",
+					"data": event.message.data,
+					"anchored": true
+				});
+			} else {
+				entity.setValues({
+					"main_weapon": id
+				});
+				notify[event.player.id] = true;
+				universe.emit("send", {
+					"type": "notice",
+					"icon": "fas fa-check rs-lightgreen",
+					"recipients": notify,
+					"message": entity.name + " equip " + item.name + " to their main hand",
+					"data": event.message.data,
+					"anchored": true
+				});
 			}
 		}
 	});

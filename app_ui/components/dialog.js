@@ -10,7 +10,12 @@ rsSystem.component("DialogController", {
 	"mixins": [
 		rsSystem.components.RSCore
 	],
-	"props": {},
+	"props": {
+		"details": {
+			"requried": true,
+			"type": Object
+		}
+	},
 	"data": function() {
 		var data = {};
 

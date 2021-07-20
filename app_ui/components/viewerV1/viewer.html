@@ -133,7 +133,7 @@
 					<span class="text">{{menuItems.fullscreen.text}}</span>
 				</button>
 			</div>
-			<select class="control master" v-model="storage.master_view" v-if="player.gm" v-on:change="filterPOIs()">
+			<select class="control master" v-model="storage.master_view" v-if="player.gm" v-on:change="updateMasterView()">
 				<option value="">Player Character</option>
 				<option value="master">Master</option>
 				<option v-for="entity in universe.listing.entity" :value="entity.id">{{entity.name}}</option>

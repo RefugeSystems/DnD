@@ -12,7 +12,8 @@
 				<span class="fas fa-unlock-alt"></span>
 			</button>
 			<button class="property" v-on:click="info(entity)">
-				{{entity.nickname || entity.name}}
+				<span :class="entity.icon"></span>
+				<span>{{entity.nickname || entity.name}}</span>
 			</button>
 		</div>
 	</div>

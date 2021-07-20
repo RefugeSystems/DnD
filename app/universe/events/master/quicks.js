@@ -38,13 +38,22 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} event.message.data.object
+	 * @param {Boolean} event.message.data.obscured State
 	 */
 	universe.on("player:master:obscure", function(event) {
-		
+		var object = event.message.data.object;
+		if(typeof(object) === "string") {
+			object = universe.get(object);
+		}
+		if(object && event.player.gm) {
+			object.setValues({
+				"obscured": !!event.message.data.obscured
+			});
+		}
 	});
 	/**
 	 * 
-	 * @event player:master:unobscure
+	 * @event player:master:recolor
 	 * @for Universe
 	 * @param {Object} event With data from the system
 	 * @param {String} event.type The event name being fired, should match this event's name
@@ -56,8 +65,18 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} event.message.data.object
+	 * @param {Boolean} event.message.data.color
 	 */
-	universe.on("player:master:unobscure", function(event) {
-
+	universe.on("player:master:recolor", function(event) {
+		var object = event.message.data.object;
+		if(typeof(object) === "string") {
+			object = universe.get(object);
+		}
+		console.log("Recolor: ", event.message.data);
+		if(object && event.player.gm) {
+			object.setValues({
+				"color_flag": event.message.data.color
+			});
+		}
 	});
 };

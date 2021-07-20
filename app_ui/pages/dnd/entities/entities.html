@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div class="control-column sticky left">
-		<button class="general rounded quick action z9" v-on:click="toggleNotes()" v-on:click.right.stop.prevent="toggleNotes(true)">
+		<button class="general rounded quick action z9" v-on:click="toggleNotes()" v-on:click.right.stop.prevent="toggleNotes(true)" title="Toggle the note taking pane. Right click to switch orientations.">
 			<span :class="storage.notes?storage.notes.icon || 'fas fa-sticky-note':'fas fa-sticky-note'"></span>
 		</button>
 		<div class="note-area" :class="storage.notes?storage.notes.area:''">
@@ -27,7 +27,7 @@
 			<textarea v-if="page" id="player-note-page" v-delayed:300="notes" v-on:drop.stop.prevent="processDrop()" v-on:dragover.prevent="">
 			</textarea>
 		</div>
-		<button class="general rounded quick action" v-for="control in controls" v-on:click="fireControl(control)" :class="getControlClass(control)">
+		<button class="general rounded quick action" v-for="control in controls" v-on:click="fireControl(control)" :class="getControlClass(control)" :title="control.title">
 			<span :class="control.icon"></span>
 		</button>
 	</div>

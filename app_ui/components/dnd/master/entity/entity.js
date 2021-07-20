@@ -78,23 +78,44 @@ rsSystem.component("dndMasterEntity", {
 	},
 	"methods": {
 		"fireProperty": function(property) {
-			console.log("DFie: ", property);
+			// console.log("DFire: ", property);
 			var search,
 				i;
 
-			switch(property.id) {
-				case "initiative":
-					for(i=0; i<this.universe.listing.skirmish.length; i++) {
-						search = this.universe.listing.skirmish[i];
-						if(search.is_active && !search.disabled && !search.is_preview) {
-							this.universe.send("skimish:turn", {
-								"skirmish": search.id,
+			if(this.player.gm) {
+				switch(property.id) {
+					case "initiative":
+						for(i=0; i<this.universe.listing.skirmish.length; i++) {
+							search = this.universe.listing.skirmish[i];
+							if(search.is_active && !search.disabled && !search.is_preview) {
+								this.universe.send("skimish:turn", {
+									"skirmish": search.id,
+									"entity": this.entity.id
+								});
+								break;
+							}
+						}
+						break;
+					case "played_by":
+						if(this.$route.query.entity === this.entity.id) {
+							rsSystem.manipulateQuery({
+								"entity": null
+							});
+						} else {
+							rsSystem.manipulateQuery({
 								"entity": this.entity.id
 							});
-							break;
 						}
-					}
-					break;
+						break;
+					case "level":
+						this.universe.send("entity:points", {
+							"entity": this.entity.id,
+							"point_pool": {
+								"level": 1
+							}
+						});
+						break;
+				}
 			}
 		},
 		"getRollClass": function(roll) {
@@ -158,7 +179,10 @@ rsSystem.component("dndMasterEntity", {
 			});
 		},
 		"givePoints": function() {
-
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndGivePoints",
+				"entity": this.entity.id
+			});
 		},
 		"giveEffects": function() {
 			var details = {},
@@ -220,6 +244,9 @@ rsSystem.component("dndMasterEntity", {
 			}
 
 			rsSystem.EventBus.$emit("dialog-open", details);
+		},
+		"removeFromMeeting": function() {
+			this.$emit("removeentity", this.entity.id);
 		},
 		"openRoll": function(roll) {
 

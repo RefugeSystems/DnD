@@ -17,6 +17,7 @@ fields.push({
 	"name": "Name",
 	"description": "The display name for the object.",
 	"type": "string",
+	"ordering": 2,
 	"attribute": {
 		"obscures": ["name_hidden", "name_generic"],
 		"display_size": 110,
@@ -38,6 +39,7 @@ fields.push({
 	"description": "Parental object reference for base object properties. References any object.",
 	"type": "string",
 	"inheritable": [],
+	"ordering": 5,
 	"attribute": {
 		"displayed": false,
 		"display_size": 110
@@ -55,6 +57,16 @@ fields.push({
 	"name": "Condition",
 	"description": "Used by Conditional objects to determine the condition on which to apply.",
 	"type": "object",
+	"attribute": {
+		"deprecated": true
+	}
+});
+fields.push({
+	"id": "conditions",
+	"name": "Conditions",
+	"description": "Array of formulas to check against the object, and pass on a non-zero value and fail on a zero value.",
+	"type": "array",
+	"ordering": 200,
 	"attribute": {}
 });
 fields.push({
@@ -69,6 +81,7 @@ fields.push({
 	"name": "Adds",
 	"description": "Used by Conditional objects to determine the values to add when aplied.",
 	"type": "object",
+	"ordering": 205,
 	"attribute": {}
 });
 fields.push({
@@ -76,6 +89,7 @@ fields.push({
 	"name": "Subs",
 	"description": "Used by Conditional objects to determine the values to sub when aplied.",
 	"type": "object",
+	"ordering": 210,
 	"attribute": {}
 });
 fields.push({
@@ -83,6 +97,7 @@ fields.push({
 	"name": "Sets",
 	"description": "Used by Conditional objects to determine the values to set when aplied.",
 	"type": "object",
+	"ordering": 215,
 	"attribute": {}
 });
 fields.push({
@@ -143,6 +158,7 @@ fields.push({
 	"name": "Description",
 	"description": "The description of the object.",
 	"type": "markdown",
+	"ordering": 10,
 	"attribute": {
 		"display_size": 110,
 		"displayed": false,
@@ -462,7 +478,7 @@ classes.push({
 	"id": "conditional",
 	"name": "Conditional",
 	"description": "Represents a conditional addition to the object's properties.",
-	"fields": ["name", "description", "condition", "parent", "ifop", "adds", "subs", "sets", "is_preview", "attribute"]
+	"fields": ["name", "description", "conditions", "parent", "adds", "subs", "sets", "is_preview", "attribute"]
 });
 
 

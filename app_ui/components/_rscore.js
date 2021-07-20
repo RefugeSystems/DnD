@@ -54,6 +54,31 @@ rsSystem.component("RSCore", {
 		"closeDialog": function() {
 			rsSystem.EventBus.$emit("dialog-dismiss");
 		},
+		/**
+		 * A loose check to determine if an entity has "sufficient" knowledge of an object for general
+		 * display purposes.
+		 * @method entityKnowsOf
+		 * @param {Object} entity 
+		 * @param {Object} object 
+		 * @returns {Boolean}
+		 */
+		"entityKnowsOf": function(entity, object) {
+			if(object && object.must_know) {
+				if(entity && entity.knowledge_matrix && object && object.must_know && entity.knowledge_matrix[object.id]) {
+					if(typeof(object.must_know) === "string" && object.must_know.startsWith("knowledge:")) {
+						return entity.knowledge_matrix[object.id] && entity.knowledge_matrix[object.id].indexOf(object.must_know) !== -1;
+					} else if(isNaN(object.must_know)) {
+						return entity.knowledge_matrix[object.id].length !== 0;
+					} else {
+						return entity.knowledge_matrix[object.id].length >= parseInt(object.must_know);
+					}
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		},
 		"editNoun": function(event, record) {
 			var player = this.player;
 

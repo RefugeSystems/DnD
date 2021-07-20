@@ -79,17 +79,17 @@ module.exports = new (function() {
 				.catch(next);
 			});
 			
-			this.router.get("/object/:id/calculate", (req, res, next) => {
+			this.router.get("/object/:id/calculate/:debug?", (req, res, next) => {
 				res.result = {};
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
-				res.result.object.recalculateFieldValues();
+				res.result.object.recalculateFieldValues(req.params.debug || true);
 				next();
 			});
 			
 			this.router.get("/object/:id/update", (req, res, next) => {
 				res.result = {};
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
-				res.result.object.updateFieldValues();
+				res.result.object.updateFieldValues(null, true);
 				next();
 			});
 			

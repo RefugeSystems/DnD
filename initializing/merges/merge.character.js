@@ -58,6 +58,9 @@ for(i=0; i<merging.length; i++) {
 	merged = merging[i];
 	mod = null;
 	id = merged.id;
+	if(!id.startsWith("entity:")) {
+		id = "entity:" + id;
+	}
 	try {
 		// console.log("Merging: " + merged.name);
 		merged = utility.loadModifiers(merged);
@@ -76,14 +79,10 @@ for(i=0; i<merging.length; i++) {
 			merged.view = merged.viewRange;
 		}
 		delete(merged.viewRange);
-		if(merged.viewRange) {
-			merged.view = merged.viewRange;
+		if(merged.maxHealth) {
+			merged.hp_rolled = merged.maxHealth;
 		}
-		delete(merged.viewRange);
-		if(merged.viewRange) {
-			merged.view = merged.viewRange;
-		}
-		delete(merged.viewRange);
+		delete(merged.maxHealth);
 
 		if(merged.radius) {
 			merged.effect_radius = merged.radius;
@@ -172,24 +171,6 @@ for(i=0; i<merging.length; i++) {
 		if(merged.gender) {
 			merged.gender = "gender:" + merged.gender;
 		}
-		if(merged.feats) {
-			inv = [];
-			for(k=0; k<merged.feats.length; k++) {
-				sk = merged.feats[k];
-				if(!sk.startsWith("feat:")) {
-					sk = "feat:" + sk;
-				}
-				if(merged.owned && Object.keys(merged.owned).length) {
-					gen = generateObjectByParent(merged, "feat", sk);
-					gen.user = merged.id;
-					inv.push(gen.id);
-				} else {
-					inv.push(sk[k]);
-				}
-			}
-			merged.feats = inv;
-		}
-		delete(merged.feats);
 		if(merged.user) {
 			merged.review = true;
 			merged.owned = merged.owned || {};
@@ -202,6 +183,25 @@ for(i=0; i<merging.length; i++) {
 			merged.owned[merged.owner] = "review";
 		}
 		delete(merged.owner);
+		if(merged.feats) {
+			inv = [];
+			for(k=0; k<merged.feats.length; k++) {
+				sk = merged.feats[k];
+				if(!sk.startsWith("feat:")) {
+					sk = "feat:" + sk;
+				}
+				if(merged.owned && Object.keys(merged.owned).length) {
+					gen = generateObjectByParent(merged, "feat", sk);
+					gen.character = id;
+					gen.creature = id;
+					gen.user = id;
+					inv.push(gen.id);
+				} else {
+					inv.push(sk);
+				}
+			}
+			merged.feats = inv;
+		}
 		if(merged.weight) {
 			merged.weight = parseInt(merged.weight);
 		}
@@ -235,9 +235,9 @@ for(i=0; i<merging.length; i++) {
 				if(sk[k].startsWith("spell:")) {
 					if(merged.owned && Object.keys(merged.owned).length) {
 						gen = generateObjectByParent(merged, "spell", sk[k]);
-						gen.character = merged.id;
-						gen.caster = merged.id;
-						gen.user = merged.id;
+						gen.character = id;
+						gen.caster = id;
+						gen.user = id;
 						merged.spells_known.push(gen.id);
 						if(merged.spells && spells[sk[k]]) {
 							merged.spells.push(gen.id);
@@ -280,13 +280,13 @@ for(i=0; i<merging.length; i++) {
 					r = "item:" + merged.equipment[inv[k]];
 				} else {
 					r = merged.equipment[inv[k]];
-				}
-				if(equipped[r]) {
-					equipped[r]++;
-				} else {
-					equipped[r] = 1;
-				}
-				// merged.equipped.push();
+				} 
+				// if(equipped[r]) {
+				// 	equipped[r]++;
+				// } else {
+				// 	equipped[r] = 1;
+				// }
+				merged.equipped.push(r);
 			}
 		}
 		delete(merged.equipment);
@@ -299,25 +299,29 @@ for(i=0; i<merging.length; i++) {
 				} else {
 					r = sk[k];
 				}
-				if(merged.owned && Object.keys(merged.owned).length) {
-					for(x=0; x<merged.inventory[sk[k]]; x++) {
-						gen = generateObjectByParent(merged, "item", r);
-						// console.log(" + " + r + " -> " + gen);
-						if(equipped[r]) {
-							merged.equipped.push(gen.id);
-							equipped[r]--;
-						}
-						if(merged.charges && merged.charges[sk[k]]) {
-							gen.charges = parseInt(merged.charges[sk[k]]);
-						}
-						if(merged.recharging && merged.recharging[sk[k]]) {
-							gen.recharges_long = parseInt(merged.recharging[sk[k]]);
-						}
-						inv.push(gen.id);
-					}
-				} else {
-					inv.push(r);
-				}
+				inv.push(r);
+				// if(merged.owned && Object.keys(merged.owned).length) {
+				// 	for(x=0; x<merged.inventory[sk[k]]; x++) {
+				// 		// gen = generateObjectByParent(merged, "item", r);
+				// 		// console.log(" + " + r + " -> " + gen);
+				// 		if(equipped[r]) {
+				// 			merged.equipped.push(gen.id);
+				// 			equipped[r]--;
+				// 		}
+				// 		if(merged.charges && merged.charges[sk[k]]) {
+				// 			gen.charges = parseInt(merged.charges[sk[k]]);
+				// 		}
+				// 		if(merged.recharging && merged.recharging[sk[k]]) {
+				// 			gen.recharges_long = parseInt(merged.recharging[sk[k]]);
+				// 		}
+				// 		gen.character = id;
+				// 		gen.creature = id;
+				// 		gen.user = id;
+				// 		inv.push(gen.id);
+				// 	}
+				// } else {
+				// 	inv.push(r);
+				// }
 			}
 			sk = Object.keys(equipped);
 			for(k=0; k<sk.length; k++) {
@@ -332,10 +336,6 @@ for(i=0; i<merging.length; i++) {
 			merged.is_npc = true;
 		}
 
-		if(!id.startsWith("entity:")) {
-			console.log("Update entity: " + id);
-			id = "entity:" + id;
-		}
 		utility.finalize(merged);
 
 		delete(merged.equipment);

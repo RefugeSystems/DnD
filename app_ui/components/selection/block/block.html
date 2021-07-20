@@ -13,6 +13,8 @@
 				<span class="far" :class="getIcon(choice)"></span>
 				<span>{{choice.name || choice.id || choice}}</span>
 			</button>
+			<button class="flat action choice-info fas fa-info-circle rs-light-blue" v-if="choice.id" v-on:click="info(choice)">
+			</button>
 		</div>
 	</div>
 </div>

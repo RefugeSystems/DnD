@@ -43,6 +43,7 @@
 				"skill:wisdom": 1,
 				"skill:charisma": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -82,6 +83,9 @@
 			},
 			"spell_slot_max": {
 				"1": 1
+			},
+			"needs": {
+				"archetype:warlock:1": 1
 			},
 			"obscured": true
 		},
@@ -135,6 +139,7 @@
 				"skill:strength": 1,
 				"skill:constitution": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -173,6 +178,9 @@
 			"hit_dice_max": {
 				"d6": 1
 			},
+			"needs": {
+				"archetype:battlemage:1": 1
+			},
 			"obscured": true
 		},
 		{
@@ -181,7 +189,7 @@
 			"icon": "fas fa-shield-cross",
 			"description": "A mage who enjoys the frontline. Now is when your experience leads you down a divergent path.\nYou must choose a path to follow.",
 			"note": "",
-			"playable": false,
+			"playable": true,
 			"review": true,
 			"race": null,
 			"magical": false,
@@ -207,6 +215,9 @@
 			"hit_dice_max": {
 				"d6": 1
 			},
+			"needs": {
+				"archetype:battlemage:2": 1
+			},
 			"obscured": true
 		},
 		{
@@ -215,7 +226,7 @@
 			"icon": "fas fa-shield-cross",
 			"description": "A mage who enjoys the frontline. Add a total of 2 points to your attributes.\n\nFor example:\nStrength from 13 to 14 and Dexterity from 10 to 11.\nOr Intelligence from 8 to 10.",
 			"note": "",
-			"playable": false,
+			"playable": true,
 			"review": true,
 			"race": null,
 			"magical": false,
@@ -241,6 +252,9 @@
 			"hit_dice_max": {
 				"d6": 1
 			},
+			"needs": {
+				"archetype:battlemage:3": 1
+			},
 			"obscured": true
 		},
 		{
@@ -249,7 +263,7 @@
 			"icon": "fas fa-shield-cross",
 			"description": "A mage who enjoys the frontline. ",
 			"note": "",
-			"playable": false,
+			"playable": true,
 			"review": true,
 			"race": null,
 			"magical": false,
@@ -279,6 +293,9 @@
 			"hit_dice_max": {
 				"d6": 1
 			},
+			"needs": {
+				"archetype:battlemage:4": 1
+			},
 			"obscured": true
 		},
 		{
@@ -287,7 +304,7 @@
 			"icon": "fas fa-shield-cross",
 			"description": "A mage who enjoys the frontline. ",
 			"note": "",
-			"playable": false,
+			"playable": true,
 			"review": true,
 			"race": null,
 			"magical": false,
@@ -313,6 +330,9 @@
 			"hit_dice_max": {
 				"d6": 1
 			},
+			"needs": {
+				"archetype:battlemage:5": 1
+			},
 			"obscured": true
 		},
 		{
@@ -321,7 +341,7 @@
 			"icon": "fas fa-shield-cross",
 			"description": "A mage who enjoys the frontline.",
 			"note": "",
-			"playable": false,
+			"playable": true,
 			"review": true,
 			"race": null,
 			"magical": null,
@@ -351,6 +371,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d6": 1
+			},
+			"needs": {
+				"archetype:battlemage:6": 1
 			},
 			"obscured": true
 		},
@@ -406,6 +429,7 @@
 			"hit_dice_max": {
 				"d10": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -444,6 +468,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:fighter:1": 1
 			},
 			"obscured": true
 		},
@@ -499,6 +526,7 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -537,6 +565,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d8": 1
+			},
+			"needs": {
+				"archetype:monk:1": 1
 			},
 			"obscured": true
 		},
@@ -590,6 +621,7 @@
 				"skill:strength": 1,
 				"skill:constitution": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -628,6 +660,9 @@
 			"hit_dice_max": {
 				"d12": 1
 			},
+			"needs": {
+				"archetype:barbarian:1": 1
+			},
 			"obscured": true
 		},
 		{
@@ -662,6 +697,9 @@
 			"hit_dice_max": {
 				"d12": 1
 			},
+			"needs": {
+				"archetype:barbarian:2": 1
+			},
 			"obscured": true
 		},
 		{
@@ -695,6 +733,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d12": 1
+			},
+			"needs": {
+				"archetype:barbarian:3": 1
 			},
 			"obscured": true
 		},
@@ -734,6 +775,9 @@
 			"hit_dice_max": {
 				"d12": 1
 			},
+			"needs": {
+				"archetype:barbarian:4": 1
+			},
 			"obscured": true
 		},
 		{
@@ -767,6 +811,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d12": 1
+			},
+			"needs": {
+				"archetype:barbarian:5": 1
 			},
 			"obscured": true
 		},
@@ -807,6 +854,9 @@
 			"hit_dice_max": {
 				"d12": 1
 			},
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"obscured": true
 		},
 		{
@@ -842,6 +892,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d12": 1
+			},
+			"needs": {
+				"archetype:barbarian:7": 1
 			},
 			"obscured": true
 		},
@@ -882,6 +935,9 @@
 			"hit_dice_max": {
 				"d12": 1
 			},
+			"needs": {
+				"archetype:barbarian:8": 1
+			},
 			"obscured": true
 		},
 		{
@@ -917,6 +973,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d12": 1
+			},
+			"needs": {
+				"archetype:barbarian:9": 1
 			},
 			"obscured": true
 		},
@@ -969,6 +1028,7 @@
 				"skill:dexterity": 1,
 				"skill:charisma": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -1019,6 +1079,9 @@
 			},
 			"spell_slot_max": {
 				"1": 1
+			},
+			"needs": {
+				"archetype:bard:1": 1
 			},
 			"obscured": true
 		},
@@ -1072,6 +1135,7 @@
 				"skill:wisdom": 1,
 				"skill:charisma": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -1112,6 +1176,9 @@
 			"skill_advantage": {
 				"skill:wisdom": 1
 			},
+			"needs": {
+				"archetype:cleric:1": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1149,6 +1216,9 @@
 			"spell_slot_max": {
 				"1": 1,
 				"2": 2
+			},
+			"needs": {
+				"archetype:cleric:2": 1
 			},
 			"obscured": true
 		},
@@ -1188,6 +1258,9 @@
 			},
 			"spell_slot_max": {
 				"2": 1
+			},
+			"needs": {
+				"archetype:cleric:3": 1
 			},
 			"obscured": true
 		},
@@ -1229,6 +1302,9 @@
 			"spell_slot_max": {
 				"3": 2
 			},
+			"needs": {
+				"archetype:cleric:4": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1265,6 +1341,9 @@
 			},
 			"spell_slot_max": {
 				"3": 1
+			},
+			"needs": {
+				"archetype:cleric:5": 1
 			},
 			"obscured": true
 		},
@@ -1303,6 +1382,9 @@
 			"spell_slot_max": {
 				"4": 1
 			},
+			"needs": {
+				"archetype:cleric:6": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1339,6 +1421,9 @@
 			},
 			"spell_slot_max": {
 				"4": 1
+			},
+			"needs": {
+				"archetype:cleric:7": 1
 			},
 			"obscured": true
 		},
@@ -1377,6 +1462,9 @@
 			"spell_slot_max": {
 				"4": 1,
 				"5": 1
+			},
+			"needs": {
+				"archetype:cleric:8": 1
 			},
 			"obscured": true
 		},
@@ -1420,6 +1508,9 @@
 			"spell_slot_max": {
 				"5": 1
 			},
+			"needs": {
+				"archetype:cleric:9": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1458,6 +1549,9 @@
 			},
 			"spell_slot_max": {
 				"6": 1
+			},
+			"needs": {
+				"archetype:cleric:10": 1
 			},
 			"obscured": true
 		},
@@ -1514,6 +1608,7 @@
 				"skill:intelligence": 1,
 				"skill:wisdom": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -1556,6 +1651,9 @@
 			"spell_slot_max": {
 				"1": 1
 			},
+			"needs": {
+				"archetype:druid:1": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1595,6 +1693,9 @@
 			"spell_slot_max": {
 				"1": 1,
 				"2": 2
+			},
+			"needs": {
+				"archetype:druid:2": 1
 			},
 			"obscured": true
 		},
@@ -1649,6 +1750,7 @@
 				"skill:wisdom": 1,
 				"skill:charisma": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -1688,6 +1790,9 @@
 			},
 			"spell_slot_max": {
 				"1": 2
+			},
+			"needs": {
+				"archetype:paladin:1": 1
 			},
 			"obscured": true
 		},
@@ -1730,6 +1835,9 @@
 			"spell_slot_max": {
 				"1": 1
 			},
+			"needs": {
+				"archetype:paladin:2": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1763,6 +1871,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:paladin:3": 1
 			},
 			"obscured": true
 		},
@@ -1805,6 +1916,9 @@
 				"1": 1,
 				"2": 2
 			},
+			"needs": {
+				"archetype:paladin:4": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1841,6 +1955,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:paladin:5": 1
 			},
 			"obscured": true
 		},
@@ -1879,6 +1996,9 @@
 			"spell_slot_max": {
 				"2": 1
 			},
+			"needs": {
+				"archetype:paladin:6": 1
+			},
 			"obscured": true
 		},
 		{
@@ -1914,6 +2034,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:paladin:7": 1
 			},
 			"obscured": true
 		},
@@ -1953,6 +2076,9 @@
 			},
 			"spell_slot_max": {
 				"3": 2
+			},
+			"needs": {
+				"archetype:paladin:8": 1
 			},
 			"obscured": true
 		},
@@ -2008,6 +2134,7 @@
 				"skill:strength": 1,
 				"skill:dexterity": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -2045,6 +2172,9 @@
 			},
 			"spell_slot_max": {
 				"1": 2
+			},
+			"needs": {
+				"archetype:ranger:1": 1
 			},
 			"obscured": true
 		},
@@ -2087,6 +2217,9 @@
 			"spell_slot_max": {
 				"1": 1
 			},
+			"needs": {
+				"archetype:ranger:2": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2120,6 +2253,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:ranger:3": 1
 			},
 			"obscured": true
 		},
@@ -2163,6 +2299,9 @@
 				"1": 1,
 				"2": 2
 			},
+			"needs": {
+				"archetype:ranger:4": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2196,6 +2335,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:ranger:5": 1
 			},
 			"obscured": true
 		},
@@ -2237,6 +2379,9 @@
 			"spell_slot_max": {
 				"2": 1
 			},
+			"needs": {
+				"archetype:ranger:6": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2275,6 +2420,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d10": 1
+			},
+			"needs": {
+				"archetype:ranger:7": 1
 			},
 			"obscured": true
 		},
@@ -2315,6 +2463,9 @@
 			},
 			"spell_slot_max": {
 				"3": 2
+			},
+			"needs": {
+				"archetype:ranger:8": 1
 			},
 			"obscured": true
 		},
@@ -2363,6 +2514,7 @@
 				"skill:intelligence": 1,
 				"skill:dexterity": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -2400,6 +2552,9 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"needs": {
+				"archetype:rogue:1": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2434,6 +2589,9 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"needs": {
+				"archetype:rogue:2": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2467,6 +2625,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d8": 1
+			},
+			"needs": {
+				"archetype:rogue:3": 1
 			},
 			"obscured": true
 		},
@@ -2505,6 +2666,9 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"needs": {
+				"archetype:rogue:4": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2538,6 +2702,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d8": 1
+			},
+			"needs": {
+				"archetype:rogue:5": 1
 			},
 			"obscured": true
 		},
@@ -2578,6 +2745,9 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"needs": {
+				"archetype:rogue:6": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2613,6 +2783,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d8": 1
+			},
+			"needs": {
+				"archetype:rogue:7": 1
 			},
 			"obscured": true
 		},
@@ -2650,6 +2823,9 @@
 			"hit_dice_max": {
 				"d8": 1
 			},
+			"needs": {
+				"archetype:rogue:8": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2685,6 +2861,9 @@
 			"stat_charisma": null,
 			"hit_dice_max": {
 				"d8": 1
+			},
+			"needs": {
+				"archetype:rogue:9": 1
 			},
 			"obscured": true
 		},
@@ -2738,6 +2917,7 @@
 				"skill:intelligence": 1,
 				"skill:wisdom": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
@@ -2781,6 +2961,9 @@
 			},
 			"spell_slot_max": {
 				"1": 1
+			},
+			"needs": {
+				"archetype:wizard:1": 1
 			},
 			"obscured": true
 		},
@@ -2827,6 +3010,9 @@
 				"1": 1,
 				"2": 2
 			},
+			"needs": {
+				"archetype:wizard:2": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2872,6 +3058,9 @@
 			"spell_slot_max": {
 				"2": 1
 			},
+			"needs": {
+				"archetype:wizard:3": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2915,6 +3104,9 @@
 			},
 			"spell_slot_max": {
 				"3": 2
+			},
+			"needs": {
+				"archetype:wizard:4": 1
 			},
 			"obscured": true
 		},
@@ -2960,6 +3152,9 @@
 			"spell_slot_max": {
 				"3": 1
 			},
+			"needs": {
+				"archetype:wizard:5": 1
+			},
 			"obscured": true
 		},
 		{
@@ -2999,6 +3194,9 @@
 			"spell_slot_max": {
 				"4": 1
 			},
+			"needs": {
+				"archetype:wizard:6": 1
+			},
 			"obscured": true
 		},
 		{
@@ -3037,6 +3235,9 @@
 			},
 			"spell_slot_max": {
 				"4": 1
+			},
+			"needs": {
+				"archetype:wizard:7": 1
 			},
 			"obscured": true
 		},
@@ -3078,6 +3279,9 @@
 				"4": 1,
 				"5": 1
 			},
+			"needs": {
+				"archetype:wizard:8": 1
+			},
 			"obscured": true
 		},
 		{
@@ -3116,6 +3320,9 @@
 			},
 			"spell_slot_max": {
 				"5": 1
+			},
+			"needs": {
+				"archetype:wizard:9": 1
 			},
 			"obscured": true
 		},
@@ -3156,6 +3363,9 @@
 			"spell_slot_max": {
 				"6": 1
 			},
+			"needs": {
+				"archetype:wizard:10": 1
+			},
 			"obscured": true
 		},
 		{
@@ -3195,13 +3405,16 @@
 			"spell_slot_max": {
 				"7": 1
 			},
+			"needs": {
+				"archetype:wizard:12": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:1",
 			"name": "Sorcerer",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3244,13 +3457,14 @@
 				"skill:constitution": 1,
 				"skill:charisma": 1
 			},
+			"needs": {},
 			"root": true
 		},
 		{
 			"id": "archetype:sorcerer:2",
 			"name": "Sorcerer (2)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3291,13 +3505,16 @@
 				"skill:constitution": 1,
 				"skill:charisma": 1
 			},
+			"needs": {
+				"archetype:sorcerer:1": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:3",
 			"name": "Sorcerer (3)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3335,13 +3552,16 @@
 				"1": 1,
 				"2": 2
 			},
+			"needs": {
+				"archetype:sorcerer:2": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:4",
 			"name": "Sorcerer (4)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3376,13 +3596,16 @@
 			"spell_slot_max": {
 				"2": 1
 			},
+			"needs": {
+				"archetype:sorcerer:3": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:5",
 			"name": "Sorcerer (5)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3416,13 +3639,16 @@
 			"spell_slot_max": {
 				"3": 2
 			},
+			"needs": {
+				"archetype:sorcerer:4": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:6",
 			"name": "Sorcerer (6)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3456,13 +3682,16 @@
 			"spell_slot_max": {
 				"3": 1
 			},
+			"needs": {
+				"archetype:sorcerer:5": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:7",
 			"name": "Sorcerer (7)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3496,13 +3725,16 @@
 			"spell_slot_max": {
 				"4": 1
 			},
+			"needs": {
+				"archetype:sorcerer:6": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:8",
 			"name": "Sorcerer (8)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3536,13 +3768,16 @@
 			"spell_slot_max": {
 				"4": 1
 			},
+			"needs": {
+				"archetype:sorcerer:7": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:9",
 			"name": "Sorcerer (9)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3580,13 +3815,16 @@
 				"4": 1,
 				"5": 1
 			},
+			"needs": {
+				"archetype:sorcerer:8": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:10",
 			"name": "Sorcerer (10)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion Gain an additional Meta-Magic as well.",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion Gain an additional Meta-Magic as well.",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3621,13 +3859,16 @@
 			"spell_slot_max": {
 				"5": 1
 			},
+			"needs": {
+				"archetype:sorcerer:9": 1
+			},
 			"obscured": true
 		},
 		{
 			"id": "archetype:sorcerer:11",
 			"name": "Sorcerer (11)",
 			"icon": "fas fa-hand-holding-magic",
-			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level ${3,,orange}$, you will select ${2,,orange}$ feats for ${Meta-Magic}$. Then you select another ${Meta-Magic}$ every ${7,,orange}$ levels after level ${3,,orange}$; ${10,,orange}$, ${17,,orange}$, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
+			"description": "Magic is a part of every sorcerer, suffusing body, mind, and spirit with a latent power that waits to be tapped. Some sorcerers wield magic that springs from an ancient bloodline infused with the magic of dragons. Others carry a raw, uncontrolled magic within them, a chaotic storm that manifests in unexpected ways.\n\nThe appearance of sorcerous powers is wildly unpredictable. Some draconic bloodlines produce exactly one sorcerer in every generation, but in other lines of descent every individual is a sorcerer. Most of the time, the talents of sorcery appear as apparent flukes. Some sorcerers can’t name the origin of their power, while others trace it to strange events in their own lives. The touch of a demon, the blessing of a dryad at a baby’s birth, or a taste of the water from a mysterious spring might spark the gift of sorcery. So too might the gift of a deity of magic, exposure to the elemental forces of the Inner Planes or the maddening chaos of Limbo, or a glimpse into the inner workings of reality.\n\nSorcerers have no use for the spellbooks and ancient tomes of magic lore that wizards rely on, nor do they rely on a patron to grant their spells as warlocks do. By learning to harness and channel their own inborn magic, they can discover new and staggering ways to unleash that power.\n\nAs a note, at Level {{3,,orange}}, you will select {{2,,orange}} feats for {{Meta-Magic}}. Then you select another {{Meta-Magic}} every {{7,,orange}} levels after level {{3,,orange}}; {{10,,orange}}, {{17,,orange}}, and so on.\n\nAdditionally, choose two proficiencies from the following:\n+ Arcana\n+ Deception\n+ Insight\n+ Intimidation\n+ Persuasion\n+ Religion",
 			"note": "",
 			"playable": true,
 			"review": true,
@@ -3660,6 +3901,9 @@
 			},
 			"spell_slot_max": {
 				"6": 1
+			},
+			"needs": {
+				"archetype:sorcerer:10": 1
 			},
 			"obscured": true
 		}

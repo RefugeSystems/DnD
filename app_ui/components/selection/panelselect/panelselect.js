@@ -44,6 +44,9 @@
 			"profile": {
 				"type": Object
 			},
+			"classing": {
+				"type": Function
+			},
 			"limit": {
 				"type": Number
 			},
@@ -102,10 +105,14 @@
 		},
 		"methods": {
 			"panelClass": function(record) {
+				var classes = "";
 				if(this.isCurrent(record)) {
-					return "panel-current";
+					classes += "panel-current ";
 				}
-				return "";
+				if(this.classing) {
+					classes += this.classing(record).join(" ");
+				}
+				return classes;
 			},
 			"isCurrent": function(record) {
 				if(!this.current) {

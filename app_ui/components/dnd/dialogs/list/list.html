@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<div class="list-data flex h" v-for="entry in listing[section]" :class="details.classing?details.classing(section, entry):''">
-					<button class="general rounded quick action" v-on:click="activate(section, entry)">
+					<button class="general rounded quick action list-icon" v-on:click="activate(section, entry)">
 						<span :class="entry.icon || 'fas fa-cube'"></span>
 					</button>
 					<div class="list-data-details">

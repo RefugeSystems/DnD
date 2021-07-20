@@ -85,6 +85,7 @@
 			element,
 			target,
 			buffer,
+			title,
 			value,
 			index,
 			mark,
@@ -126,14 +127,23 @@
 				if(value[0] === "=") {
 					// Followed value
 					// value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
+					properties.classes = properties.classes || "";
 					value = value.substring(1);
+					title = value;
 					if(isNaN(value)) {
-						value = naiveObjectValue(universe, entity, value);
+						// value = naiveObjectValue(universe, entity, value);
+						properties.classes += " calculated-result ";
+						try {
+							value = rsSystem.dnd.compute(value, entity);
+						} catch(e) {
+							console.warn("Value Calculation Failed: {{=" + value + "}}");
+						}
 					} else {
+						properties.classes += " flat-result ";
 						value = parseFloat(value);
 					}
 
-					element = $("<span class=\"calculated-result rendered-value " + properties.classes + "\">" + value + "</span>");
+					element = $("<span class=\"rendered-value " + properties.classes + "\" title=\"" + title + "\">" + value + "</span>");
 				} else if(value[0] === "~") {
 					// Walked Reference
 					value = value.substring(1).split(".");

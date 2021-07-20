@@ -27,7 +27,7 @@ var utility = module.exports,
 	html = new RegExp("<span class=\"rs-(darkorange|orange)\">([^<]+)</span>", "g"),
 	date = new RegExp("<span class=\"rs-lightblue\">([^<]+)</span>", "g"),
 	tags = /\$\{([^\},]+)(,[^\},]+)?(,[^\},]+)?\}\$/g,
-	hunt = /\$\{"content":[^"]*?"([^\\,"]+).*\}\$/g,
+	hunt = /\$\{"content":[^"]*"([^\\,"]+?)".*?\}\$/g,
 	cleanid = new RegExp("[^a-zA-Z0-9_:]+", "g"),
 	clean = new RegExp("[A-Z]"),
 
@@ -509,18 +509,18 @@ rebuildDescription = utility.rebuildDescription = function(changing) {
 		if(match[0].length < 3) {
 			description = description.replace(match[0], match[1]);
 		} else if(isNaN(match[0])) {
-			description = description.replace(match[0], "${" + match[1] + "}$");
+			description = description.replace(match[0], "{{" + match[1] + "}}");
 		} else {
-			description = description.replace(match[0], "${@" + match[1] + "}$");
+			description = description.replace(match[0], "{{@" + match[1] + "}}");
 		}
 	}
 	// console.log(" [√] Tags");
 	while(match = html.exec(changing)) {
-		description = description.replace(match[0], "${" + match[2] + "}$");
+		description = description.replace(match[0], "{{" + match[2] + "}}");
 	}
 	// console.log(" [√] HTML");
 	while(match = date.exec(changing)) {
-		description = description.replace(match[0], "${@" + match[1] + "}$");
+		description = description.replace(match[0], "{{@" + match[1] + "}}");
 	}
 	// console.log(" [√] Dates");
 	while(match = tags.exec(changing)) {
@@ -533,7 +533,7 @@ rebuildDescription = utility.rebuildDescription = function(changing) {
 			}
 			replace += match[2];
 		}
-		description = description.replace(match[0], "${" + replace + "}$");
+		description = description.replace(match[0], "{{" + replace + "}}");
 	}
 	// console.log(" [√] Refactor");
 	return description;

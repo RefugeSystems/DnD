@@ -925,6 +925,24 @@
 			"displayed": false
 		}
 	}, {
+		"id": "concealed",
+		"name": "Concealed",
+		"description": "Flag to hide this from display to players",
+		"type": "boolean",
+		"attribute": {
+			"hide_when_not_set": true,
+			"displayed": false
+		}
+	}, {
+		"id": "entity",
+		"name": "Entity",
+		"description": "Entity",
+		"type": "string",
+		"attribute": {
+			"hide_when_not_set": true,
+			"displayed": false
+		}
+	}, {
 		"id": "spell_slots",
 		"name": "Spell Slots",
 		"description": "Maps a spell level to the number of spell slots left for that object",
@@ -1642,12 +1660,6 @@
 			"inherited_key": ["slot"]
 		}
 	}, {
-		"id": "conditions",
-		"name": "Conditions",
-		"description": "Lists the condition effects active on the entity, such as ${Blinded}$ or ${Deafened}$.",
-		"type": "object",
-		"attribute": {}
-	}, {
 		"id": "last_rest",
 		"name": "Last Rest",
 		"description": "The last time you took a long rest. Used for checking exhaustion and if another long rest can be done.",
@@ -1757,6 +1769,12 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "count",
+		"name": "Count",
+		"description": "Count of this object that is present.",
+		"type": "integer",
+		"attribute": {}
+	}, {
 		"id": "race",
 		"name": "Race",
 		"description": "Race of this entity",
@@ -1781,6 +1799,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 			"response": "+",
+			"hp_max": "+",
 			"view": "+",
 			"armor": "+",
 			"damage": "+=",
@@ -1796,7 +1815,7 @@
 			"spell_dc": "+",
 			"skills": "+",
 			"skill_check": "+=",
-			"skill_proficiency": "=",
+			"skill_proficiency": "+",
 			"types": "+",
 			"size": "+",
 			"proficiencies": "+",
@@ -1852,7 +1871,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 
-			"equip_slots": "-",
+			"equip_slots": "+",
 			"conditionals": "+"
 		},
 		"inheritable": [
@@ -2039,6 +2058,7 @@
 			"actions": "+",
 			"skills": "+",
 			"spells": "+",
+			"mobility": "+",
 			"feats": "+",
 			"weight": "+",
 			"encumberance_max": "+",
@@ -2047,12 +2067,14 @@
 			"encumberance": "+",
 			"resistance": "+=",
 			"skill_check": "+=",
+			"skill_advantage": "+",
+			"hp_max": "+",
 			"effects": "+",
 			"proficiencies": "+",
 			"knowledge_matrix": "+",
 			"knowledges": "+",
 			"spell_slot_max": "+",
-			"equip_slots": "-",
+			"equip_slots": "+",
 			"threat": "+",
 			"score": "+",
 			"conditionals": "+"
@@ -2078,7 +2100,9 @@
 		"inheritable": [
 			"entity"
 		],
-		"attribute": {}
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"id": "user",
 		"name": "User",
@@ -2209,6 +2233,12 @@
 		"id": "level",
 		"name": "Level",
 		"description": "The general level of this object.",
+		"type": "integer",
+		"attribute": {}
+	}, {
+		"id": "level_requried",
+		"name": "Required Level",
+		"description": "The level required for this.",
 		"type": "integer",
 		"attribute": {}
 	}, {
@@ -2835,7 +2865,7 @@
 	}, {
 		"id": "must_know",
 		"name": "Must Know",
-		"description": "When set, this object is hidden unless the viewing object has knowledge of this object or possess the specifically mention knowledge ID mentioned here.",
+		"description": "When set, this object is hidden unless the viewing object has knowledge of this object or possess the specifically mention knowledge ID mentioned here. If a number is specified, the entity must have that many knowledges refencing this entity before it is considered 'known'.",
 		"type": "string",
 		"attribute": {
 			"display_size": 110

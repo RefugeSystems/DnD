@@ -10,9 +10,12 @@
 			"note": null,
 			"root": false,
 			"next": null,
+			"needs": {
+				"archetype:barbarian:10": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 10
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -24,9 +27,12 @@
 			"note": null,
 			"root": false,
 			"next": "undefined",
+			"needs": {
+				"archetype:barbarian:10": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 10
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -43,16 +49,19 @@
 			"feats": [
 				"feat:mindlessrage"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -69,9 +78,12 @@
 			"feats": [
 				"feat:warpriest:3"
 			],
+			"needs": {
+				"archetype:cleric:3": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -88,9 +100,12 @@
 			"feats": [
 				"feat:warpriest:5"
 			],
+			"needs": {
+				"archetype:cleric:5": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 5
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -107,9 +122,12 @@
 			"feats": [
 				"feat:warpriest:7"
 			],
+			"needs": {
+				"archetype:cleric:7": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 7
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -126,9 +144,12 @@
 			"feats": [
 				"feat:divinestrike"
 			],
+			"needs": {
+				"archetype:cleric:8": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 8
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -145,9 +166,12 @@
 			"feats": [
 				"feat:warpriest:9"
 			],
+			"needs": {
+				"archetype:cleric:9": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 9
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -162,9 +186,12 @@
 			"feats": [
 				"feat:avatarofbattle"
 			],
+			"needs": {
+				"archetype:cleric:17": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 17
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -181,10 +208,13 @@
 			"feats": [
 				"feat:arcanetrickster:level8"
 			],
+			"needs": {
+				"archetype:rogue:8": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 8,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -201,10 +231,13 @@
 			"feats": [
 				"feat:arcanetrickster:level10"
 			],
+			"needs": {
+				"archetype:rogue:10": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 10,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -221,10 +254,13 @@
 			"feats": [
 				"feat:arcanetrickster:level11"
 			],
+			"needs": {
+				"archetype:rogue:10": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 10,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -241,10 +277,13 @@
 			"feats": [
 				"feat:magicalambush"
 			],
+			"needs": {
+				"archetype:rogue:9": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 9,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -262,10 +301,13 @@
 				"feat:arcanetrickster:level13",
 				"feat:versatiletrickster"
 			],
+			"needs": {
+				"archetype:rogue:13": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 13,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -279,14 +321,17 @@
 			"next": [
 				"archetype:barbarian:path:elemental:warrior:1"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:elemental:frost:1",
 				"archetype:barbarian:path:elemental:fire:1",
 				"archetype:barbarian:path:elemental:lightning:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -300,14 +345,17 @@
 			"next": [
 				"archetype:barbarian:path:elemental:warrior:1"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:elemental:frost:1",
 				"archetype:barbarian:path:elemental:lightning:1",
 				"archetype:barbarian:path:elemental:fire:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -321,14 +369,17 @@
 			"next": [
 				"archetype:barbarian:path:elemental:warrior:1"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:elemental:lightning:1",
 				"archetype:barbarian:path:elemental:frost:1",
 				"archetype:barbarian:path:elemental:fire:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -345,16 +396,19 @@
 			"feats": [
 				"feat:frenzy"
 			],
+			"needs": {
+				"archetype:barbarian:3": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -369,16 +423,19 @@
 			"feats": [
 				"feat:spirittofthebear"
 			],
+			"needs": {
+				"archetype:barbarian:3": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -390,9 +447,11 @@
 			"note": null,
 			"root": true,
 			"next": "undefined",
+			"needs": {
+				"archetype:barbarian:3": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
@@ -400,7 +459,8 @@
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
 			],
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -415,16 +475,19 @@
 			"feats": [
 				"feat:spirittoftheeagle"
 			],
+			"needs": {
+				"archetype:barbarian:3": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -439,16 +502,19 @@
 			"feats": [
 				"feat:spirittofthewolf"
 			],
+			"needs": {
+				"archetype:barbarian:3": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -463,15 +529,18 @@
 			"feats": [
 				"feat:aspectofthebear"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:totem:bear:2",
 				"archetype:barbarian:path:totem:eagle:2",
 				"archetype:barbarian:path:totem:wolf:2",
 				"archetype:barbarian:path:berserker:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -486,16 +555,19 @@
 			"feats": [
 				"feat:spiritwalker"
 			],
+			"needs": {
+				"archetype:barbarian:10": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 10,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -510,15 +582,18 @@
 			"feats": [
 				"feat:aspectoftheeagle"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:totem:bear:2",
 				"archetype:barbarian:path:totem:eagle:2",
 				"archetype:barbarian:path:totem:wolf:2"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -533,16 +608,19 @@
 			"feats": [
 				"feat:spiritwalker"
 			],
+			"needs": {
+				"archetype:barbarian:10": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 10,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -557,15 +635,18 @@
 			"feats": [
 				"feat:aspectofthewolf"
 			],
+			"needs": {
+				"archetype:barbarian:6": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 6,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:totem:bear:2",
 				"archetype:barbarian:path:totem:eagle:2",
 				"archetype:barbarian:path:totem:wolf:2"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -580,16 +661,19 @@
 			"feats": [
 				"feat:spiritwalker"
 			],
+			"needs": {
+				"archetype:barbarian:10": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 10,
 			"exclusives": [
 				"archetype:barbarian:path:berserker:1",
 				"archetype:barbarian:path:elemental:1",
 				"archetype:barbarian:path:totem:eagle:1",
 				"archetype:barbarian:path:totem:bear:1",
 				"archetype:barbarian:path:totem:wolf:1"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -604,9 +688,12 @@
 			"feats": [
 				"feat:intimidatingpresence"
 			],
+			"needs": {
+				"archetype:barbarian:10": 1
+			},
 			"subclassing": "archetype:barbarian:1",
 			"is_subclass": true,
-			"level": 10
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -623,10 +710,13 @@
 			"feats": [
 				"feat:arcanetrickster:level7"
 			],
+			"needs": {
+				"archetype:rogue:7": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 7,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -644,14 +734,17 @@
 				"feat:arcanetrickster",
 				"feat:magehandlegerdemain"
 			],
+			"needs": {
+				"archetype:rogue:3": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:rogue:assassin",
 				"archetype:rogue:thief",
 				"archetype:rogue:arcanetrickster"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1549118787363,
@@ -668,10 +761,13 @@
 			"feats": [
 				"feat:arcanetrickster:level4"
 			],
+			"needs": {
+				"archetype:rogue:4": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 4,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -689,14 +785,17 @@
 				"feat:assassinkits",
 				"feat:assassinate"
 			],
+			"needs": {
+				"archetype:rogue:3": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:rogue:assassin",
 				"archetype:rogue:thief",
 				"archetype:rogue:arcanetrickster"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -714,14 +813,17 @@
 				"feat:fasthands",
 				"feat:secondstorywork"
 			],
+			"needs": {
+				"archetype:rogue:3": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 3,
 			"exclusives": [
 				"archetype:rogue:assassin",
 				"archetype:rogue:thief",
 				"archetype:rogue:arcanetrickster"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -733,9 +835,12 @@
 			"note": null,
 			"root": true,
 			"next": null,
+			"needs": {
+				"archetype:ranger:3": 1
+			},
 			"subclassing": "archetype:ranger:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -750,9 +855,12 @@
 			"feats": [
 				"feat:hunterinitiate"
 			],
+			"needs": {
+				"archetype:ranger:3": 1
+			},
 			"subclassing": "archetype:ranger:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -769,9 +877,12 @@
 			"feats": [
 				"feat:warpriest:6"
 			],
+			"needs": {
+				"archetype:cleric:6": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -788,10 +899,13 @@
 			"feats": [
 				"feat:arcanetrickster:level14"
 			],
+			"needs": {
+				"archetype:rogue:14": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 14,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -808,10 +922,13 @@
 			"feats": [
 				"feat:arcanetrickster:level16"
 			],
+			"needs": {
+				"archetype:rogue:16": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 16,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -828,10 +945,13 @@
 			"feats": [
 				"feat:spellthief"
 			],
+			"needs": {
+				"archetype:rogue:17": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 17,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -848,10 +968,13 @@
 			"feats": [
 				"feat:arcanetrickster:level19"
 			],
+			"needs": {
+				"archetype:rogue:19": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 19,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -866,10 +989,13 @@
 			"feats": [
 				"feat:arcanetrickster:level20"
 			],
+			"needs": {
+				"archetype:rogue:20": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 20,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -886,9 +1012,12 @@
 			"feats": [
 				"feat:tempestpriest:3"
 			],
+			"needs": {
+				"archetype:cleric:3": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -905,9 +1034,12 @@
 			"feats": [
 				"feat:tempestpriest:5"
 			],
+			"needs": {
+				"archetype:cleric:5": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 5
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -924,9 +1056,12 @@
 			"feats": [
 				"feat:tempestpriest:7"
 			],
+			"needs": {
+				"archetype:cleric:7": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 7
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -943,9 +1078,12 @@
 			"feats": [
 				"feat:tempestpriest:9"
 			],
+			"needs": {
+				"archetype:cleric:9": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 9
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -962,9 +1100,12 @@
 			"feats": [
 				"feat:thunderboltstrike"
 			],
+			"needs": {
+				"archetype:cleric:6": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -981,9 +1122,12 @@
 			"feats": [
 				"feat:divinestrike"
 			],
+			"needs": {
+				"archetype:cleric:8": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 8
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -998,9 +1142,12 @@
 			"feats": [
 				"feat:stormborn"
 			],
+			"needs": {
+				"archetype:cleric:17": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 17
+			"playable": true
 		},
 		{
 			"created": 1550016977563,
@@ -1018,13 +1165,16 @@
 				"feat:warpriest",
 				"feat:channeldivinity"
 			],
+			"needs": {
+				"archetype:cleric:2": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 2,
 			"exclusives": [
 				"archetype:cleric:domain:war",
 				"archetype:cleric:tempest"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1041,9 +1191,12 @@
 			"feats": [
 				"feat:grimharvest"
 			],
+			"needs": {
+				"archetype:wizard:2": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 2
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1060,9 +1213,12 @@
 			"feats": [
 				"feat:conjurer:0"
 			],
+			"needs": {
+				"archetype:wizard:2": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 2
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1079,9 +1235,12 @@
 			"feats": [
 				"feat:conjurer:1"
 			],
+			"needs": {
+				"archetype:wizard:6": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1099,13 +1258,16 @@
 				"feat:tempestpriest",
 				"feat:channeldivinity"
 			],
+			"needs": {
+				"archetype:cleric:2": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 2,
 			"exclusives": [
 				"archetype:cleric:domain:war",
 				"archetype:cleric:tempest"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1120,9 +1282,12 @@
 			"feats": [
 				"feat:focusedconjuration"
 			],
+			"needs": {
+				"archetype:wizard:10": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 10
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1137,9 +1302,12 @@
 			"feats": [
 				"feat:inuredtoundeath"
 			],
+			"needs": {
+				"archetype:wizard:10": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 10
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1156,9 +1324,12 @@
 			"feats": [
 				"feat:undeadthralls"
 			],
+			"needs": {
+				"archetype:wizard:6": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1175,9 +1346,12 @@
 			"feats": [
 				"feat:minoralchemy"
 			],
+			"needs": {
+				"archetype:wizard:2": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 2
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1192,9 +1366,12 @@
 			"feats": [
 				"feat:transmutersstone"
 			],
+			"needs": {
+				"archetype:wizard:6": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1212,9 +1389,12 @@
 				"feat:knowledgepriest",
 				"feat:channeldivinity"
 			],
+			"needs": {
+				"archetype:cleric:1": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 1
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1231,9 +1411,12 @@
 			"feats": [
 				"feat:knowledgepriest (6)"
 			],
+			"needs": {
+				"archetype:cleric:6": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1250,9 +1433,12 @@
 			"feats": [
 				"feat:knowledgepriest (5)"
 			],
+			"needs": {
+				"archetype:cleric:5": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 5
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1269,9 +1455,12 @@
 			"feats": [
 				"feat:knowledgepriest (3)"
 			],
+			"needs": {
+				"archetype:cleric:3": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1288,9 +1477,12 @@
 			"feats": [
 				"feat:knowledgepriest (2)"
 			],
+			"needs": {
+				"archetype:cleric:2": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 2
+			"playable": true
 		},
 		{
 			"created": 1549118770116,
@@ -1305,9 +1497,12 @@
 			"feats": [
 				"feat:illusioner"
 			],
+			"needs": {
+				"archetype:wizard:2": 1
+			},
 			"subclassing": "archetype:wizard:1",
 			"is_subclass": true,
-			"level": 2
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1325,9 +1520,12 @@
 				"feat:paladin:oathbound",
 				"feat:paladin:oathofdevotion:3"
 			],
+			"needs": {
+				"archetype:paladin:3": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1344,9 +1542,12 @@
 			"feats": [
 				"feat:paladin:oathofdevotion:5"
 			],
+			"needs": {
+				"archetype:paladin:5": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 5
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1363,9 +1564,12 @@
 			"feats": [
 				"feat:auraofdevotion"
 			],
+			"needs": {
+				"archetype:paladin:7": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 7
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1380,9 +1584,12 @@
 			"feats": [
 				"feat:paladin:oathofdevotion:9"
 			],
+			"needs": {
+				"archetype:paladin:9": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 9
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1400,9 +1607,12 @@
 				"feat:paladin:oathbound",
 				"feat:paladin:oathoftheancients:3"
 			],
+			"needs": {
+				"archetype:paladin:3": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1419,9 +1629,12 @@
 			"feats": [
 				"feat:paladin:oathoftheancients:5"
 			],
+			"needs": {
+				"archetype:paladin:5": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 5
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1438,9 +1651,12 @@
 			"feats": [
 				"feat:auraofwarding"
 			],
+			"needs": {
+				"archetype:paladin:7": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 7
+			"playable": true
 		},
 		{
 			"created": 1559416744552,
@@ -1458,9 +1674,12 @@
 				"feat:paladin:oathofvengeance:3",
 				"feat:paladin:oathbound"
 			],
+			"needs": {
+				"archetype:paladin:3": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 3
+			"playable": true
 		},
 		{
 			"created": 1559416803211,
@@ -1477,9 +1696,12 @@
 			"feats": [
 				"feat:paladin:oathofvengeance:5"
 			],
+			"needs": {
+				"archetype:paladin:5": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 5
+			"playable": true
 		},
 		{
 			"created": 1559416817483,
@@ -1494,9 +1716,12 @@
 			"feats": [
 				"feat:paladin:oathofvengeance:9"
 			],
+			"needs": {
+				"archetype:paladin:9": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 9
+			"playable": true
 		},
 		{
 			"created": 1559416836538,
@@ -1513,9 +1738,12 @@
 			"feats": [
 				"feat:relentlessavenger"
 			],
+			"needs": {
+				"archetype:paladin:7": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 7
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1530,9 +1758,12 @@
 			"feats": [
 				"feat:paladin:oathoftheancients:9"
 			],
+			"needs": {
+				"archetype:paladin:9": 1
+			},
 			"subclassing": "archetype:paladin:1",
 			"is_subclass": true,
-			"level": 9
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1549,10 +1780,13 @@
 			"feats": [
 				"feat:channeldivinity"
 			],
+			"needs": {
+				"archetype:cleric:1": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 1,
-			"review": true
+			"review": true,
+			"playable": true
 		},
 		{
 			"created": 1563578409647,
@@ -1567,9 +1801,12 @@
 			"feats": [
 				"feat:deathcleric"
 			],
+			"needs": {
+				"archetype:cleric:1": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 1
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1585,14 +1822,17 @@
 			"feats": [
 				"feat:infiltrationexpertise"
 			],
+			"needs": {
+				"archetype:rogue:9": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 9,
 			"exclusives": [
 				"archetype:rogue:assassin",
 				"archetype:rogue:thief",
 				"archetype:rogue:arcanetrickster"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1608,14 +1848,17 @@
 			"feats": [
 				"feat:supremesneak"
 			],
+			"needs": {
+				"archetype:rogue:9": 1
+			},
 			"subclassing": "archetype:rogue:1",
 			"is_subclass": true,
-			"level": 9,
 			"exclusives": [
 				"archetype:rogue:assassin",
 				"archetype:rogue:thief",
 				"archetype:rogue:arcanetrickster"
-			]
+			],
+			"playable": true
 		},
 		{
 			"created": 1589999231408,
@@ -1633,9 +1876,12 @@
 			"feats": [
 				"feat:sorcerer:draconicbloodline:ancestry"
 			],
+			"needs": {
+				"archetype:sorcerer:1": 1
+			},
 			"subclassing": "archetype:sorcerer:1",
 			"is_subclass": true,
-			"level": 1
+			"playable": true
 		},
 		{
 			"created": 1589999231408,
@@ -1653,9 +1899,12 @@
 			"feats": [
 				"feat:sorcerer:draconicbloodline:affinity:brass"
 			],
+			"needs": {
+				"archetype:sorcerer:6": 1
+			},
 			"subclassing": "archetype:sorcerer:1",
 			"is_subclass": true,
-			"level": 6
+			"playable": true
 		},
 		{
 			"created": 1589999231408,
@@ -1671,9 +1920,12 @@
 			"feats": [
 				"feat:sorcerer:draconicbloodline:dragonwings"
 			],
+			"needs": {
+				"archetype:sorcerer:14": 1
+			},
 			"subclassing": "archetype:sorcerer:1",
 			"is_subclass": true,
-			"level": 14
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1689,9 +1941,12 @@
 			"feats": [
 				"feat:knowledgepriest (9)"
 			],
+			"needs": {
+				"archetype:cleric:9": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 9
+			"playable": true
 		},
 		{
 			"created": 1548905982210,
@@ -1709,9 +1964,12 @@
 			"feats": [
 				"feat:knowledgepriest (7)"
 			],
+			"needs": {
+				"archetype:cleric:7": 1
+			},
 			"subclassing": "archetype:cleric:1",
 			"is_subclass": true,
-			"level": 7
+			"playable": true
 		},
 		{
 			"created": 1622414795887,
@@ -1728,9 +1986,12 @@
 				"feat:wildshape:combat",
 				"feat:circleforms"
 			],
+			"needs": {
+				"archetype:druid:2": 1
+			},
 			"subclassing": "archetype:druid:1",
 			"is_subclass": true,
-			"level": 2
+			"playable": true
 		}
 	]
 }

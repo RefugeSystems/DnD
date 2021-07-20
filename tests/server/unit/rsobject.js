@@ -236,4 +236,32 @@ describe("RSObject", function() {
 		expect(res.cool.b).toBe(2);
 		expect(res.temp).toBe(null);
 	});
+	
+	it("can add successive Object values", function() {
+		var result = null,
+			a = null,
+			b = {},
+			c = {
+				"a": 1,
+				"b": 2,
+				"c": 1
+			},
+			d = {
+				"a": -1
+			};
+
+		result = RSObject.addValues(result, a);
+		result = RSObject.addValues(result, b);
+		result = RSObject.addValues(result, null);
+		result = RSObject.addValues(result, {});
+		result = RSObject.addValues(result, d);
+		result = RSObject.addValues(result, null);
+		result = RSObject.addValues(result, {});
+		result = RSObject.addValues(result, c);
+		result = RSObject.addValues(result, null);
+		result = RSObject.addValues(result, {});
+		expect(result.a).toBe(0);
+		expect(result.b).toBe(2);
+		expect(result.c).toBe(1);
+	});
 });

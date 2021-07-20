@@ -1,0 +1,420 @@
+{
+	"import": [{
+		"id": "archetype:barbarian:11",
+		"name": "barbarian 11"
+	}, {
+		"id": "archetype:barbarian:12",
+		"name": "barbarian 12"
+	}, {
+		"id": "archetype:barbarian:13",
+		"name": "barbarian 13"
+	}, {
+		"id": "archetype:barbarian:14",
+		"name": "barbarian 14"
+	}, {
+		"id": "archetype:barbarian:15",
+		"name": "barbarian 15"
+	}, {
+		"id": "archetype:barbarian:16",
+		"name": "barbarian 16"
+	}, {
+		"id": "archetype:barbarian:17",
+		"name": "barbarian 17"
+	}, {
+		"id": "archetype:barbarian:18",
+		"name": "barbarian 18"
+	}, {
+		"id": "archetype:barbarian:19",
+		"name": "barbarian 19"
+	}, {
+		"id": "archetype:barbarian:20",
+		"name": "barbarian 20"
+	}, {
+		"id": "archetype:bard:3",
+		"name": "bard 3"
+	}, {
+		"id": "archetype:bard:4",
+		"name": "bard 4"
+	}, {
+		"id": "archetype:bard:5",
+		"name": "bard 5"
+	}, {
+		"id": "archetype:bard:6",
+		"name": "bard 6"
+	}, {
+		"id": "archetype:bard:7",
+		"name": "bard 7"
+	}, {
+		"id": "archetype:bard:8",
+		"name": "bard 8"
+	}, {
+		"id": "archetype:bard:9",
+		"name": "bard 9"
+	}, {
+		"id": "archetype:bard:10",
+		"name": "bard 10"
+	}, {
+		"id": "archetype:bard:11",
+		"name": "bard 11"
+	}, {
+		"id": "archetype:bard:12",
+		"name": "bard 12"
+	}, {
+		"id": "archetype:bard:13",
+		"name": "bard 13"
+	}, {
+		"id": "archetype:bard:14",
+		"name": "bard 14"
+	}, {
+		"id": "archetype:bard:15",
+		"name": "bard 15"
+	}, {
+		"id": "archetype:bard:16",
+		"name": "bard 16"
+	}, {
+		"id": "archetype:bard:17",
+		"name": "bard 17"
+	}, {
+		"id": "archetype:bard:18",
+		"name": "bard 18"
+	}, {
+		"id": "archetype:bard:19",
+		"name": "bard 19"
+	}, {
+		"id": "archetype:bard:20",
+		"name": "bard 20"
+	}, {
+		"id": "archetype:cleric:12",
+		"name": "cleric 12"
+	}, {
+		"id": "archetype:cleric:13",
+		"name": "cleric 13"
+	}, {
+		"id": "archetype:cleric:14",
+		"name": "cleric 14"
+	}, {
+		"id": "archetype:cleric:15",
+		"name": "cleric 15"
+	}, {
+		"id": "archetype:cleric:16",
+		"name": "cleric 16"
+	}, {
+		"id": "archetype:cleric:17",
+		"name": "cleric 17"
+	}, {
+		"id": "archetype:cleric:18",
+		"name": "cleric 18"
+	}, {
+		"id": "archetype:cleric:19",
+		"name": "cleric 19"
+	}, {
+		"id": "archetype:cleric:20",
+		"name": "cleric 20"
+	}, {
+		"id": "archetype:druid:4",
+		"name": "druid 4"
+	}, {
+		"id": "archetype:druid:5",
+		"name": "druid 5"
+	}, {
+		"id": "archetype:druid:6",
+		"name": "druid 6"
+	}, {
+		"id": "archetype:druid:7",
+		"name": "druid 7"
+	}, {
+		"id": "archetype:druid:8",
+		"name": "druid 8"
+	}, {
+		"id": "archetype:druid:9",
+		"name": "druid 9"
+	}, {
+		"id": "archetype:druid:10",
+		"name": "druid 10"
+	}, {
+		"id": "archetype:druid:11",
+		"name": "druid 11"
+	}, {
+		"id": "archetype:druid:12",
+		"name": "druid 12"
+	}, {
+		"id": "archetype:druid:13",
+		"name": "druid 13"
+	}, {
+		"id": "archetype:druid:14",
+		"name": "druid 14"
+	}, {
+		"id": "archetype:druid:15",
+		"name": "druid 15"
+	}, {
+		"id": "archetype:druid:16",
+		"name": "druid 16"
+	}, {
+		"id": "archetype:druid:17",
+		"name": "druid 17"
+	}, {
+		"id": "archetype:druid:18",
+		"name": "druid 18"
+	}, {
+		"id": "archetype:druid:19",
+		"name": "druid 19"
+	}, {
+		"id": "archetype:druid:20",
+		"name": "druid 20"
+	}, {
+		"id": "archetype:fighter:3",
+		"name": "fighter 3"
+	}, {
+		"id": "archetype:fighter:4",
+		"name": "fighter 4"
+	}, {
+		"id": "archetype:fighter:5",
+		"name": "fighter 5"
+	}, {
+		"id": "archetype:fighter:6",
+		"name": "fighter 6"
+	}, {
+		"id": "archetype:fighter:7",
+		"name": "fighter 7"
+	}, {
+		"id": "archetype:fighter:8",
+		"name": "fighter 8"
+	}, {
+		"id": "archetype:fighter:9",
+		"name": "fighter 9"
+	}, {
+		"id": "archetype:fighter:10",
+		"name": "fighter 10"
+	}, {
+		"id": "archetype:fighter:11",
+		"name": "fighter 11"
+	}, {
+		"id": "archetype:fighter:12",
+		"name": "fighter 12"
+	}, {
+		"id": "archetype:fighter:13",
+		"name": "fighter 13"
+	}, {
+		"id": "archetype:fighter:14",
+		"name": "fighter 14"
+	}, {
+		"id": "archetype:fighter:15",
+		"name": "fighter 15"
+	}, {
+		"id": "archetype:fighter:16",
+		"name": "fighter 16"
+	}, {
+		"id": "archetype:fighter:17",
+		"name": "fighter 17"
+	}, {
+		"id": "archetype:fighter:18",
+		"name": "fighter 18"
+	}, {
+		"id": "archetype:fighter:19",
+		"name": "fighter 19"
+	}, {
+		"id": "archetype:fighter:20",
+		"name": "fighter 20"
+	}, {
+		"id": "archetype:paladin:10",
+		"name": "paladin 10"
+	}, {
+		"id": "archetype:paladin:11",
+		"name": "paladin 11"
+	}, {
+		"id": "archetype:paladin:12",
+		"name": "paladin 12"
+	}, {
+		"id": "archetype:paladin:13",
+		"name": "paladin 13"
+	}, {
+		"id": "archetype:paladin:14",
+		"name": "paladin 14"
+	}, {
+		"id": "archetype:paladin:15",
+		"name": "paladin 15"
+	}, {
+		"id": "archetype:paladin:16",
+		"name": "paladin 16"
+	}, {
+		"id": "archetype:paladin:17",
+		"name": "paladin 17"
+	}, {
+		"id": "archetype:paladin:18",
+		"name": "paladin 18"
+	}, {
+		"id": "archetype:paladin:19",
+		"name": "paladin 19"
+	}, {
+		"id": "archetype:paladin:20",
+		"name": "paladin 20"
+	}, {
+		"id": "archetype:ranger:10",
+		"name": "ranger 10"
+	}, {
+		"id": "archetype:ranger:11",
+		"name": "ranger 11"
+	}, {
+		"id": "archetype:ranger:12",
+		"name": "ranger 12"
+	}, {
+		"id": "archetype:ranger:13",
+		"name": "ranger 13"
+	}, {
+		"id": "archetype:ranger:14",
+		"name": "ranger 14"
+	}, {
+		"id": "archetype:ranger:15",
+		"name": "ranger 15"
+	}, {
+		"id": "archetype:ranger:16",
+		"name": "ranger 16"
+	}, {
+		"id": "archetype:ranger:17",
+		"name": "ranger 17"
+	}, {
+		"id": "archetype:ranger:18",
+		"name": "ranger 18"
+	}, {
+		"id": "archetype:ranger:19",
+		"name": "ranger 19"
+	}, {
+		"id": "archetype:ranger:20",
+		"name": "ranger 20"
+	}, {
+		"id": "archetype:rogue:11",
+		"name": "rogue 11"
+	}, {
+		"id": "archetype:rogue:12",
+		"name": "rogue 12"
+	}, {
+		"id": "archetype:rogue:13",
+		"name": "rogue 13"
+	}, {
+		"id": "archetype:rogue:14",
+		"name": "rogue 14"
+	}, {
+		"id": "archetype:rogue:15",
+		"name": "rogue 15"
+	}, {
+		"id": "archetype:rogue:16",
+		"name": "rogue 16"
+	}, {
+		"id": "archetype:rogue:17",
+		"name": "rogue 17"
+	}, {
+		"id": "archetype:rogue:18",
+		"name": "rogue 18"
+	}, {
+		"id": "archetype:rogue:19",
+		"name": "rogue 19"
+	}, {
+		"id": "archetype:rogue:20",
+		"name": "rogue 20"
+	}, {
+		"id": "archetype:sorcerer:12",
+		"name": "sorcerer 12"
+	}, {
+		"id": "archetype:sorcerer:13",
+		"name": "sorcerer 13"
+	}, {
+		"id": "archetype:sorcerer:14",
+		"name": "sorcerer 14"
+	}, {
+		"id": "archetype:sorcerer:15",
+		"name": "sorcerer 15"
+	}, {
+		"id": "archetype:sorcerer:16",
+		"name": "sorcerer 16"
+	}, {
+		"id": "archetype:sorcerer:17",
+		"name": "sorcerer 17"
+	}, {
+		"id": "archetype:sorcerer:18",
+		"name": "sorcerer 18"
+	}, {
+		"id": "archetype:sorcerer:19",
+		"name": "sorcerer 19"
+	}, {
+		"id": "archetype:sorcerer:20",
+		"name": "sorcerer 20"
+	}, {
+		"id": "archetype:warlock:3",
+		"name": "warlock 3"
+	}, {
+		"id": "archetype:warlock:4",
+		"name": "warlock 4"
+	}, {
+		"id": "archetype:warlock:5",
+		"name": "warlock 5"
+	}, {
+		"id": "archetype:warlock:6",
+		"name": "warlock 6"
+	}, {
+		"id": "archetype:warlock:7",
+		"name": "warlock 7"
+	}, {
+		"id": "archetype:warlock:8",
+		"name": "warlock 8"
+	}, {
+		"id": "archetype:warlock:9",
+		"name": "warlock 9"
+	}, {
+		"id": "archetype:warlock:10",
+		"name": "warlock 10"
+	}, {
+		"id": "archetype:warlock:11",
+		"name": "warlock 11"
+	}, {
+		"id": "archetype:warlock:12",
+		"name": "warlock 12"
+	}, {
+		"id": "archetype:warlock:13",
+		"name": "warlock 13"
+	}, {
+		"id": "archetype:warlock:14",
+		"name": "warlock 14"
+	}, {
+		"id": "archetype:warlock:15",
+		"name": "warlock 15"
+	}, {
+		"id": "archetype:warlock:16",
+		"name": "warlock 16"
+	}, {
+		"id": "archetype:warlock:17",
+		"name": "warlock 17"
+	}, {
+		"id": "archetype:warlock:18",
+		"name": "warlock 18"
+	}, {
+		"id": "archetype:warlock:19",
+		"name": "warlock 19"
+	}, {
+		"id": "archetype:warlock:20",
+		"name": "warlock 20"
+	}, {
+		"id": "archetype:wizard:12",
+		"name": "wizard 12"
+	}, {
+		"id": "archetype:wizard:14",
+		"name": "wizard 14"
+	}, {
+		"id": "archetype:wizard:15",
+		"name": "wizard 15"
+	}, {
+		"id": "archetype:wizard:16",
+		"name": "wizard 16"
+	}, {
+		"id": "archetype:wizard:17",
+		"name": "wizard 17"
+	}, {
+		"id": "archetype:wizard:18",
+		"name": "wizard 18"
+	}, {
+		"id": "archetype:wizard:19",
+		"name": "wizard 19"
+	}, {
+		"id": "archetype:wizard:20",
+		"name": "wizard 20"
+	}]
+}

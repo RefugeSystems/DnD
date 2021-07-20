@@ -6,8 +6,51 @@
 		font-size: 24px;
 	}
 	
-	.level button {
-		font-size: 14px;
+	.level {
+		position: relative;
+
+		button {
+			position: relative;
+			padding: 3px !important;
+			overflow: hidden;
+			font-size: 14px;
+			z-index: 1;
+
+			.level-back {
+				position: relative;
+				background-color: @rsBlack;
+				border-radius: 5px;
+				padding: 2px;
+				z-index: 3;
+			}
+
+			.level-up-fan-fare {
+				background: conic-gradient(yellow, transparent, yellow, transparent, yellow, transparent, yellow);
+				position: absolute;
+				z-index: 2;
+				top: -61px;
+				left: -25px;
+				width: 150px;
+				height: 150px;
+				transition: opacity .5s;
+				opacity: 0;
+			}
+		}
+
+		&.available {
+			
+			button {
+				box-shadow: 0px 0px 7px yellow;
+			}
+			
+			.level-back {
+				box-shadow: 0px 0px 4px yellow;
+			}
+
+			.level-up-fan-fare {
+				opacity: 1;
+			}
+		}
 	}
 
 	.bar {

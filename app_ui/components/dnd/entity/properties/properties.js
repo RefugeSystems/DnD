@@ -69,7 +69,7 @@ rsSystem.component("dndEntityProperties", {
 			});
 		},
 		"openProperty": function(field) {
-			console.log("Field: ", field);
+			// console.log("Field: ", field);
 			this.$emit("property", field);
 			this.$emit(field.id, this.entity[field.id]);
 		},

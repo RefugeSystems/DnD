@@ -25,5 +25,12 @@ rsSystem.component("DNDCore", {
 		};
 	},
 	"methods": {
+		"levelUpEntities": function(entities, amount) {
+			this.universe.send("points:give", {
+				"entities": entities,
+				"type": "level",
+				"amount": 1
+			});
+		}
 	}
 });

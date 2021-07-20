@@ -637,6 +637,17 @@ rsSystem.component("dndDialogRoll", {
 		},
 		"getSkillAdvIcon": function(check) {
 			var skill = check.skill,
+				classes = "";
+
+			if(this.entity.skill_advantage[skill.id] > 0) {
+				classes += " has-advantage";
+			} else if(this.entity.skill_advantage[skill.id] < 0) {
+				// classes += " has-disadvantage";
+			}
+	
+			return classes;
+			/*
+			var skill = check.skill,
 				classes = "",
 				advantage = 0;
 
@@ -653,13 +664,14 @@ rsSystem.component("dndDialogRoll", {
 			}
 
 			return classes;
+			*/
 		},
 		"getSkillDisIcon": function(check) {
 			var skill = check.skill,
 				classes = "";
 
 			if(this.entity.skill_advantage[skill.id] > 0) {
-				classes += " has-advantage";
+				// classes += " has-advantage";
 			} else if(this.entity.skill_advantage[skill.id] < 0) {
 				classes += " has-disadvantage";
 			}

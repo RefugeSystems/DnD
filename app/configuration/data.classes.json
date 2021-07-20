@@ -93,7 +93,7 @@
 		"id": "spell",
 		"name": "Spell",
 		"description": "Spell",
-		"fields": ["parent", "name", "icon", "note", "source", "instilled", "level", "character", "concealment", "concealed_ui", "is_concealed", "skill", "is_template", "is_singular", "template_process", "caster", "acquired", "description", "concentration", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_radius", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_attack", "cast_with", "cast_save", "duration", "archetypes", "ritual", "user", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items", "is_preview", "review", "attribute", "is_copy"]
+		"fields": ["parent", "name", "icon", "note", "source", "instilled", "level", "character", "concealment", "concealed_ui", "is_concealed", "skill", "is_template", "is_singular", "template_process", "caster", "acquired", "description", "concentration", "history", "dc", "use_from", "range_minimum", "range_normal", "range_maximum", "damage", "effects", "effect_radius", "effect_height", "effect_shape", "type", "action_cost", "targets", "cast_time", "cast_attack", "cast_with", "cast_save", "duration", "archetypes", "ritual", "cast_uses_verbal", "cast_uses_somatic", "cast_uses_items", "is_preview", "review", "attribute", "is_copy"]
 	}, {
 		"id": "archetype",
 		"name": "Class",

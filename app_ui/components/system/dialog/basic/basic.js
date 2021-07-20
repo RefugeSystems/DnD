@@ -38,8 +38,12 @@ rsSystem.component("systemDialogBasic", {
 				rsSystem.EventBus.$emit(button.emission);
 			} else if(typeof(button.emission) === "object") {
 				rsSystem.EventBus.$emit(button.emission.type, button.emission);
+			} else if(typeof(button.emission) === "function") {
+				button.emission(button);
+			} else if(typeof(button.action) === "function") {
+				button.action(button);
 			} else {
-				console.warn("Button has no emission property: ", button);
+				console.warn("Button has no emission or action property: ", button);
 			}
 		}
 	},

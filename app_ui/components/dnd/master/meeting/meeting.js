@@ -9,7 +9,8 @@
 rsSystem.component("dndMasterMeeting", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController
+		rsSystem.components.StorageController,
+		rsSystem.components.DNDCore
 	],
 	"props": {
 		"universe": {
@@ -199,6 +200,90 @@ rsSystem.component("dndMasterMeeting", {
 		 */
 		"newMeeting": function() {
 
+		},
+
+		"levelUp": function(amount) {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "systemDialogBasic",
+				"title": "Level Up Entities",
+				"messages": ["Select which entities should gain a level or close to cancel."],
+				"buttons": [{
+					"classes": "fas fa-users",
+					"text": "All",
+					"action": () => {
+						console.log("Leveling: ", this.active.entities);
+						this.universe.send("points:give", {
+							"entities": this.active.entities,
+							"type": "level",
+							"amount": amount
+						});
+						this.closeDialog();
+					}
+				}, {
+					"classes": "fas fa-users-crown",
+					"text": "Players",
+					"action": () => {
+						var entities = [],
+							entity,
+							i;
+						for(i=0; i<this.active.entities.length; i++) {
+							entity = this.universe.index.entity[this.active.entities[i]];
+							if(entity.owned && Object.keys(entity.owned) !== 0) {
+								entities.push(entity.id);
+							}
+						}
+						console.log("Leveling: ", entities);
+						this.universe.send("points:give", {
+							"entities": entities,
+							"type": "level",
+							"amount": amount
+						});
+						this.closeDialog();
+					}
+				}, {
+					"classes": "fas fa-users-cog",
+					"text": "NPCs",
+					"action": () => {
+						var entities = [],
+							entity,
+							i;
+						for(i=0; i<this.active.entities.length; i++) {
+							entity = this.universe.index.entity[this.active.entities[i]];
+							if(entity.is_npc) {
+								entities.push(entity.id);
+							}
+						}
+						console.log("Leveling: ", entities);
+						this.universe.send("points:give", {
+							"entities": entities,
+							"type": "level",
+							"amount": amount
+						});
+						this.closeDialog();
+					}
+				}, {
+					"classes": "fal fa-crosshairs",
+					"text": "Hostile",
+					"action": () => {
+						var entities = [],
+							entity,
+							i;
+						for(i=0; i<this.active.entities.length; i++) {
+							entity = this.universe.index.entity[this.active.entities[i]];
+							if(entity.is_hostile) {
+								entities.push(entity.id);
+							}
+						}
+						console.log("Leveling: ", entities);
+						this.universe.send("points:give", {
+							"entities": entities,
+							"type": "level",
+							"amount": amount
+						});
+						this.closeDialog();
+					}
+				}]
+			});
 		},
 		/**
 		 * Used to send the meeting description back to the server.

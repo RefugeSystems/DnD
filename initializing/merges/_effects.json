@@ -11,7 +11,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "barbarian/8 + 2"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"proficiencies": null,
 			"review": true,
@@ -47,7 +47,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -57,10 +56,8 @@
 			"note": "\n\nPrevious Immunities: {\n    \"poisoned\": true\n}",
 			"icon": "fas fa-turkey",
 			"throw": null,
-			"damage": {
-				"damage_type:piercing": ""
-			},
-			"duration": 14400,
+			"damage": {},
+			"duration": 86400,
 			"debuff": null,
 			"review": true,
 			"stat_strength": null,
@@ -80,7 +77,7 @@
 			"note": "\n\nPrevious Conditions: {\n    \"paralyzed\": false,\n    \"acid\": false,\n    \"frightened\": false,\n    \"fatigued\": false,\n    \"grappled\": false,\n    \"muted\": false,\n    \"petrified\": false,\n    \"poisoned\": false,\n    \"restrained\": false,\n    \"stunned\": false,\n    \"surprising\": false,\n    \"frozen\": false,\n    \"deafened\": false,\n    \"charmed\": true\n}",
 			"icon": "fas fa-grin-hearts",
 			"throw": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -102,7 +99,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "barbarian/8 + 2"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"proficiencies": null,
 			"armor": " ",
@@ -138,7 +135,7 @@
 			"icon": "fal fa-surprise",
 			"throw": null,
 			"feat": null,
-			"duration": 1,
+			"duration": 6,
 			"debuff": null,
 			"review": true,
 			"stat_strength": null,
@@ -157,7 +154,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 0,
 			"debuff": null,
 			"obscured": true
 		},
@@ -170,7 +166,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 0,
 			"debuff": null,
 			"obscured": true
 		},
@@ -183,7 +178,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 0,
 			"debuff": null,
 			"obscured": true
 		},
@@ -198,7 +192,6 @@
 			"damage": {
 				"damage_type:radiant": "1d4"
 			},
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -212,7 +205,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true,
 			"obscured": true
 		},
@@ -225,7 +217,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 0,
 			"debuff": null,
 			"obscured": true
 		},
@@ -238,7 +229,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 0,
 			"debuff": null,
 			"obscured": true
 		},
@@ -251,7 +241,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 0,
 			"debuff": null,
 			"obscured": true
 		},
@@ -263,7 +252,6 @@
 			"icon": "fal fa-gem",
 			"throw": null,
 			"feat": null,
-			"duration": 0,
 			"debuff": null,
 			"armor": null,
 			"obscured": true,
@@ -282,7 +270,7 @@
 			"icon": "fas fa-shield-cross",
 			"throw": null,
 			"feat": null,
-			"duration": 100,
+			"duration": 600,
 			"debuff": null,
 			"armor": "2",
 			"stat_strength": null,
@@ -301,7 +289,7 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": null
 		},
 		{
@@ -312,7 +300,6 @@
 			"icon": "fal fa-mountain",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"proficiencies": null,
 			"armor": null,
@@ -337,7 +324,6 @@
 			"icon": "fab fa-earlybirds",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -355,7 +341,6 @@
 			"icon": "fas fa-crow",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -375,7 +360,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -394,7 +379,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": "knowledge:guinessblend",
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"armor": null,
 			"review": true,
@@ -414,7 +399,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -426,7 +410,7 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": true
 		},
 		{
@@ -438,7 +422,7 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": false
 		},
 		{
@@ -450,7 +434,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -461,7 +444,6 @@
 			"icon": "fab fa-squarespace",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"review": true,
@@ -480,7 +462,6 @@
 			"icon": "far fa-shield",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"resist": {
 				"damage_type:poison": "50%"
@@ -494,7 +475,6 @@
 			"icon": "far fa-user-shield",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"armor": "1",
 			"stat_strength": null,
@@ -516,7 +496,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -527,7 +506,6 @@
 			"icon": "fas fa-squirrel",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"review": true,
@@ -546,7 +524,6 @@
 			"icon": "fal fa-drum-steelpan",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -565,7 +542,6 @@
 			"icon": "fal fa-road",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": false,
 			"armor": null,
 			"stat_strength": null,
@@ -585,7 +561,7 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false
 		},
 		{
@@ -597,7 +573,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -608,7 +583,7 @@
 			"icon": "fas fa-eye-slash",
 			"throw": null,
 			"feat": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"skill_check": {
 				"skill:stealth": 10
@@ -622,7 +597,6 @@
 			"icon": "fal fa-skull",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -656,7 +630,7 @@
 			"icon": "fal fa-lightbulb-on",
 			"throw": null,
 			"feat": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": false,
 			"armor": null,
 			"stat_strength": null,
@@ -677,7 +651,6 @@
 			"icon": "ra ra-player-despair",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:constitution": -1,
@@ -692,7 +665,6 @@
 			"icon": "ra ra-player-despair",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:acrobatics": -1,
@@ -713,7 +685,6 @@
 			"icon": "ra ra-player-despair",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:religion": -1,
@@ -735,7 +706,6 @@
 			"icon": "ra ra-player-despair",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:insight": -1,
@@ -758,7 +728,7 @@
 			"damage": {
 				"damage_type:acid": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:acid": "50%"
@@ -773,7 +743,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_check": {
 				"skill:performance": 1
@@ -789,7 +758,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -811,7 +779,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -825,7 +792,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": null
 		},
 		{
@@ -839,7 +806,7 @@
 			"damage": {
 				"damage_type:cold": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:cold": "50%"
@@ -856,7 +823,7 @@
 			"damage": {
 				"damage_type:fire": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"armor": null,
 			"stat_strength": null,
@@ -880,7 +847,7 @@
 			"damage": {
 				"damage_type:lightning": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:lightning": "50%"
@@ -897,7 +864,7 @@
 			"damage": {
 				"damage_type:necrotic": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:necrotic": "50%"
@@ -914,7 +881,7 @@
 			"damage": {
 				"damage_type:poison": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:poison": "50%"
@@ -931,7 +898,7 @@
 			"damage": {
 				"damage_type:psychic": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:psychic": "50%"
@@ -948,7 +915,7 @@
 			"damage": {
 				"damage_type:radiant": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:radiant": "50%"
@@ -965,7 +932,7 @@
 			"damage": {
 				"damage_type:thunder": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"resist": {
 				"damage_type:thunder": "50%"
@@ -979,7 +946,6 @@
 			"icon": "far fa-chevron-double-right",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": false,
 			"armor": null,
 			"review": true,
@@ -1004,7 +970,6 @@
 			"icon": "far fa-chevron-double-right",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": false,
 			"armor": null,
 			"review": true,
@@ -1032,7 +997,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": true
 		},
 		{
@@ -1044,7 +1009,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -1056,7 +1020,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1068,7 +1031,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -1079,7 +1041,6 @@
 			"icon": "fas fa-lock-alt",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -1099,7 +1060,6 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -1111,7 +1071,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": "knowledge:guinessblend",
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1130,10 +1089,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"damage": {
-				"damage_type:piercing": ""
-			},
-			"duration": null,
+			"damage": {},
 			"debuff": null,
 			"stat_strength": null,
 			"stat_dexterity": null,
@@ -1157,7 +1113,6 @@
 			"damage": {
 				"damage_type:chromatic": "1d6"
 			},
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -1169,7 +1124,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"obscured": true,
@@ -1201,7 +1155,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -1213,7 +1166,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"obscured": true,
@@ -1236,7 +1188,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 14400,
+			"duration": 86400,
 			"debuff": null,
 			"obscured": true,
 			"skill_advantage": {
@@ -1252,7 +1204,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1274,7 +1225,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_check": {
 				"skill:wisdom": 1
@@ -1289,7 +1239,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:strength": -1,
@@ -1344,7 +1293,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "barbarian/8 + 2"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"armor": " ",
 			"review": true,
@@ -1365,10 +1314,10 @@
 				"skill:slightofhand": 1
 			},
 			"resist": {
-				"damage_type:bludgeoning": "",
-				"damage_type:piercing": "",
-				"damage_type:crushing": "",
-				"damage_type:slashing": "",
+				"damage_type:bludgeoning": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:crushing": "50%",
+				"damage_type:slashing": "50%",
 				"damage_type:lightning": "50%",
 				"damage_type:necrotic": "50%",
 				"damage_type:radiant": "50%",
@@ -1392,7 +1341,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "barbarian/8 + 2"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"armor": " ",
 			"review": true,
@@ -1413,10 +1362,10 @@
 				"skill:slightofhand": 1
 			},
 			"resist": {
-				"damage_type:bludgeoning": "",
-				"damage_type:piercing": "",
-				"damage_type:crushing": "",
-				"damage_type:slashing": "",
+				"damage_type:bludgeoning": "50%",
+				"damage_type:piercing": "50%",
+				"damage_type:crushing": "50%",
+				"damage_type:slashing": "50%",
 				"damage_type:lightning": "50%",
 				"damage_type:necrotic": "50%",
 				"damage_type:radiant": "50%",
@@ -1440,7 +1389,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "barbarian/8 + 2"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"review": true,
 			"action_max": {
@@ -1478,7 +1427,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "barbarian/8 + 2"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"proficiencies": null,
 			"review": true,
@@ -1514,7 +1463,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1535,7 +1483,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -1546,7 +1493,6 @@
 			"icon": "ra ra-player-despair",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:climberskit": -1,
@@ -1563,7 +1509,6 @@
 			"icon": "ra ra-player-despair",
 			"throw": null,
 			"feat": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:deception": -1,
@@ -1582,7 +1527,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1604,7 +1548,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1620,7 +1563,6 @@
 			"damage": {
 				"damage_type:radiant": "1d4"
 			},
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1633,7 +1575,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"obscured": true,
@@ -1655,7 +1596,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -1669,7 +1609,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false,
 			"obscured": true
 		},
@@ -1684,7 +1623,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false,
 			"obscured": true
 		},
@@ -1699,7 +1637,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -1713,7 +1650,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": false
 		},
 		{
@@ -1726,7 +1662,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": "2",
 			"obscured": true,
@@ -1758,7 +1693,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1778,7 +1712,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1800,7 +1733,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1813,7 +1745,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 100,
+			"duration": 600,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1834,7 +1766,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1848,7 +1779,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null
 		},
 		{
@@ -1861,10 +1792,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"damage": {
-				"damage_type:piercing": ""
-			},
-			"duration": 14400,
+			"duration": 86400,
 			"debuff": null,
 			"obscured": true,
 			"stat_strength": null,
@@ -1888,7 +1816,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 100,
+			"duration": 600,
 			"debuff": null
 		},
 		{
@@ -1901,7 +1829,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -1925,7 +1852,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1939,7 +1865,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1953,7 +1878,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1967,7 +1891,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -1981,7 +1904,7 @@
 			"damage": {
 				"damage_type:force": "1d6"
 			},
-			"duration": 1,
+			"duration": 6,
 			"debuff": false,
 			"armor": null,
 			"stat_strength": null,
@@ -1991,7 +1914,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:fire": "",
 				"damage_type:force": "50%"
 			}
 		},
@@ -2005,7 +1927,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 0,
 			"debuff": null,
 			"armor": "1",
 			"obscured": true,
@@ -2031,7 +1952,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"review": true
 		},
@@ -2045,7 +1966,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:strength": -1,
@@ -2098,7 +2018,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:dexterity": -1
@@ -2115,7 +2034,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null
 		},
 		{
@@ -2129,7 +2048,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 100,
+			"duration": 600,
 			"debuff": null
 		},
 		{
@@ -2142,7 +2061,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_check": {
 				"skill:stealth": -1
@@ -2159,7 +2077,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null
 		},
 		{
@@ -2173,7 +2091,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null
 		},
 		{
@@ -2187,7 +2105,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2200,7 +2117,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2220,7 +2136,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2240,7 +2155,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2260,7 +2175,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -2283,7 +2197,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:constitution": -1,
@@ -2302,7 +2215,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2315,7 +2227,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:constitution": -1,
@@ -2334,7 +2245,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -2347,7 +2257,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:dexterity": -1,
@@ -2370,7 +2280,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:strength": -1,
@@ -2388,7 +2297,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2402,7 +2310,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2415,7 +2322,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:strength": -1,
@@ -2468,11 +2374,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"damage": {
-				"damage_type:force": "",
-				"damage_type:poison": ""
-			},
-			"duration": null,
+			"damage": {},
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2516,7 +2418,6 @@
 				"damage_type:fire": "1d8",
 				"damage_type:necrotic": "1d8"
 			},
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2537,10 +2438,8 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": {
-				"damage_type:force": "",
 				"damage_type:poison": "1d12"
 			},
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2568,7 +2467,7 @@
 			"throw": null,
 			"feat": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": true
 		},
 		{
@@ -2581,7 +2480,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": "knowledge:necromancy:soulmanipulation",
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2604,7 +2502,6 @@
 			"damage": {
 				"damage_type:fire": "2d4"
 			},
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"spells": [
@@ -2628,10 +2525,8 @@
 			"feat": null,
 			"knowledge": "knowledge:necromancy:soulmanipulation",
 			"damage": {
-				"damage_type:fire": "",
 				"damage_type:cold": "2d4"
 			},
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"spells": [
@@ -2655,7 +2550,6 @@
 			"feat": null,
 			"knowledge": "knowledge:necromancy:soulmanipulation",
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2668,7 +2562,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": "knowledge:necromancy:soulmanipulation",
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -2690,7 +2583,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null,
 			"obscured": true
 		},
@@ -2707,7 +2599,6 @@
 			"damage": {
 				"damage_type:necrotic": "1d12"
 			},
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -2728,7 +2619,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true,
 			"obscured": true
 		},
@@ -2743,7 +2633,7 @@
 			"feat": "feat:devilsstep",
 			"knowledge": null,
 			"damage": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": null
 		},
 		{
@@ -2759,7 +2649,6 @@
 			"damage": {
 				"damage_type:piercing": "5d12"
 			},
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2776,7 +2665,6 @@
 			"damage": {
 				"damage_type:acid": "1d4"
 			},
-			"duration": null,
 			"debuff": true,
 			"armor": "-1",
 			"stat_strength": null,
@@ -2800,7 +2688,6 @@
 			"damage": {
 				"damage_type:necrotic": "4d4"
 			},
-			"duration": null,
 			"debuff": true,
 			"armor": "-2",
 			"stat_strength": null,
@@ -2821,7 +2708,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 28800,
+			"duration": 172800,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:intelligence": -1,
@@ -2847,7 +2734,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -2859,7 +2745,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 5,
+			"duration": 30,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -2881,7 +2767,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"skill_advantage": {
 				"skill:intimidation": 1,
@@ -2902,7 +2788,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 2400,
+			"duration": 14400,
 			"debuff": null,
 			"skill_check": {
 				"skill:atheletics": 10
@@ -2919,7 +2805,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 2400,
+			"duration": 14400,
 			"debuff": null,
 			"skill_check": {
 				"skill:survival": 10
@@ -2936,7 +2822,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 0,
 			"debuff": null,
 			"skill_check": {
 				"skill:stealth": -4
@@ -2953,7 +2838,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 0,
 			"debuff": null,
 			"skill_check": {
 				"skill:stealth": -2
@@ -2970,7 +2854,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:initiative": 1
@@ -2987,7 +2871,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 300,
+			"duration": 1800,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:initiative": 1
@@ -3004,7 +2888,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 4800,
+			"duration": 28800,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -3026,7 +2910,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:dexterity": -1,
@@ -3046,7 +2929,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -3061,7 +2943,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -3075,7 +2956,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -3097,7 +2977,6 @@
 			"throw": null,
 			"feat": "feat:sorcerer:draconicbloodline:dragonwings",
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -3119,7 +2998,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -3147,7 +3026,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:perception": -1,
@@ -3168,7 +3046,6 @@
 			"damage": {
 				"damage_type:acid": "2d4"
 			},
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:perception": -1,
@@ -3189,7 +3066,6 @@
 			"damage": {
 				"damage_type:poison": "1d4"
 			},
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:perception": -1,
@@ -3210,7 +3086,6 @@
 			"damage": {
 				"damage_type:cold": "2d6"
 			},
-			"duration": null,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:perception": -1,
@@ -3230,7 +3105,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:constitution": 1
@@ -3250,7 +3125,6 @@
 			"damage": {
 				"damage_type:bludgeoning": "2d4"
 			},
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -3267,7 +3141,7 @@
 			"damage": {
 				"damage_type:bludgeoning": "2d6"
 			},
-			"duration": 10,
+			"duration": 60,
 			"debuff": null,
 			"skill_advantage": {
 				"skill:constitution": -1,
@@ -3286,7 +3160,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -3301,7 +3174,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -3315,7 +3187,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"armor": null,
 			"spells": [
@@ -3343,7 +3215,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"armor": null,
 			"spells": [
@@ -3372,7 +3244,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"skill_advantage": {
 				"skill:acrobatics": 1,
@@ -3392,7 +3264,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"skill_advantage": {
 				"skill:deception": 1,
@@ -3412,7 +3284,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"skill_advantage": {
 				"skill:religion": 1,
@@ -3436,7 +3308,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": false,
 			"skill_advantage": {
 				"skill:animalhandling": 1,
@@ -3460,7 +3332,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_check": {
 				"skill:constitution": -6
@@ -3477,7 +3348,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_check": {
 				"skill:strength": -6
@@ -3494,7 +3364,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_check": {
 				"skill:wisdom": -6
@@ -3511,7 +3380,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_check": {
 				"skill:intelligence": -6
@@ -3529,7 +3397,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 4800,
+			"duration": 28800,
 			"debuff": null
 		},
 		{
@@ -3544,7 +3412,7 @@
 			"feat": null,
 			"knowledge": "knowledge:spell:alterself",
 			"damage": null,
-			"duration": 600,
+			"duration": 3600,
 			"debuff": null
 		},
 		{
@@ -3558,7 +3426,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -3580,7 +3447,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-3",
@@ -3602,7 +3468,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -3619,7 +3484,6 @@
 			"damage": {
 				"damage_type:radiant": "2d8"
 			},
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -3640,7 +3504,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 1,
+			"duration": 6,
 			"debuff": null,
 			"proficiencies": null,
 			"armor": "5",
@@ -3662,7 +3526,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": "1",
 			"stat_strength": null,
@@ -3723,7 +3586,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-6",
@@ -3744,7 +3606,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-5",
@@ -3765,7 +3626,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-4",
@@ -3786,7 +3646,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-3",
@@ -3807,7 +3666,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-2",
@@ -3828,7 +3686,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": "-1",
@@ -3869,7 +3726,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 4800,
+			"duration": 28800,
 			"debuff": null,
 			"armor": "3",
 			"stat_strength": null,
@@ -3890,7 +3747,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": "1",
 			"stat_strength": null,
@@ -3912,7 +3768,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -3927,7 +3782,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null
 		},
 		{
@@ -3941,7 +3796,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:perception": -1
@@ -3958,7 +3812,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:acrobatics": -1
@@ -3975,7 +3828,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:animalhandling": -1
@@ -3992,7 +3844,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:arcana": -1
@@ -4009,7 +3860,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:atheletics": -1
@@ -4026,7 +3876,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:concentration": -1
@@ -4043,7 +3892,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:deception": -1
@@ -4060,7 +3908,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:history": -1
@@ -4077,7 +3924,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:insight": -1
@@ -4094,7 +3940,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:investigation": -1
@@ -4111,7 +3956,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:performance": -1
@@ -4128,7 +3972,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:intimidation": -1
@@ -4145,7 +3988,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:persuasion": -1
@@ -4162,7 +4004,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:slightofhand": -1
@@ -4179,7 +4020,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:stealth": -1
@@ -4196,7 +4036,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:survival": -1
@@ -4213,7 +4052,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"skill_advantage": {
 				"skill:medicine": -1
@@ -4231,7 +4069,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -4245,7 +4082,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -4268,7 +4104,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -4283,7 +4118,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 100,
+			"duration": 600,
 			"debuff": null
 		},
 		{
@@ -4297,7 +4132,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"proficiencies": null,
 			"armor": "6",
@@ -4320,7 +4154,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -4334,7 +4167,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -4359,7 +4191,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 2400,
+			"duration": 14400,
 			"debuff": null,
 			"skill_check": {
 				"skill:survival": 10
@@ -4376,7 +4208,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -4400,7 +4231,7 @@
 			"damage": {
 				"damage_type:fire": "1d8"
 			},
-			"duration": 2400,
+			"duration": 14400,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -4420,7 +4251,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -4435,7 +4265,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -4450,7 +4279,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": null
 		},
 		{
@@ -4465,7 +4294,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": true
 		},
 		{
@@ -4480,7 +4309,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 5,
+			"duration": 30,
 			"debuff": true
 		},
 		{
@@ -4495,7 +4324,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 20,
+			"duration": 120,
 			"debuff": true
 		},
 		{
@@ -4509,7 +4338,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4531,7 +4359,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4553,7 +4380,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4575,7 +4401,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4597,7 +4422,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": null,
 			"armor": null,
 			"stat_strength": null,
@@ -4618,7 +4442,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4646,7 +4469,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -4661,7 +4483,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -4676,7 +4497,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -4691,7 +4511,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -4705,7 +4524,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 0,
 			"debuff": null,
 			"armor": null,
 			"feats": [
@@ -4751,7 +4569,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 2400,
+			"duration": 14400,
 			"debuff": null
 		},
 		{
@@ -4765,7 +4583,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": "-2",
 			"stat_strength": null,
@@ -4790,7 +4607,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": null
 		},
 		{
@@ -4804,7 +4620,7 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": 1,
+			"duration": 6,
 			"debuff": true,
 			"armor": "-5",
 			"stat_strength": null,
@@ -4825,7 +4641,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -4846,7 +4661,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"review": true,
@@ -4869,7 +4683,7 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": 10,
+			"duration": 60,
 			"debuff": true
 		},
 		{
@@ -4884,7 +4698,6 @@
 			"feat": null,
 			"knowledge": null,
 			"damage": null,
-			"duration": null,
 			"debuff": true
 		},
 		{
@@ -4898,7 +4711,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4920,7 +4732,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4942,7 +4753,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4964,7 +4774,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -4986,7 +4795,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -5008,7 +4816,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -5032,7 +4839,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -5056,7 +4862,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -5080,7 +4885,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,
@@ -5104,7 +4908,6 @@
 			"throw": null,
 			"feat": null,
 			"knowledge": null,
-			"duration": null,
 			"debuff": true,
 			"armor": null,
 			"stat_strength": null,

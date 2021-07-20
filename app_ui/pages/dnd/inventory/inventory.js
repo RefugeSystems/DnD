@@ -390,6 +390,30 @@ rsSystem.component("DNDInventory", {
 						});
 					}
 				});
+				if(unequip.length === 1) {
+					this.controls.push({
+						"title": "Main Hand",
+						"icon": "fas fa-hand-rock",
+						"process": function() {
+							reference.universe.send("item:mainhand", {
+								"item": unequip[0],
+								"entity": reference.entity.id
+							});
+						}
+					});
+				}
+			}
+			if(this.entity.main_weapon) {
+				this.controls.push({
+					"title": "Move Main Weapon",
+					"icon": "fal fa-hand-rock",
+					"process": function() {
+						reference.universe.send("item:mainhand", {
+							"item": null,
+							"entity": reference.entity.id
+						});
+					}
+				});
 			}
 			if(v1h) {
 				this.controls.push({

@@ -6,7 +6,7 @@
 			<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
 		</div>
 		<div class="screen-column large entities">
-			<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
+			<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" v-on:removeentity="removeEntity(entity)" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
 		</div>
 		<div class="screen-action-column">
 			<button class="bucket general quick rounded action" v-on:click="witnessLimit(5)"  v-on:click.right.stop.prevent="witnessLimit(-5)">
@@ -16,6 +16,9 @@
 			<button class="bucket general quick rounded action" v-for="bucket in activeEntities._keys" v-on:click="switchEntityBucket(bucket)" :class="bucketClass(bucket)" :title="bucket">
 				<span :class="bucketIcon[bucket] || 'fas fa-users'"></span>
 			</button>
+		</div>
+		<div class="screen-column large" v-if="viewedEntity">
+			<dnd-entity-overview :entity="viewedEntity" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-container="storage" />
 		</div>
 		<div class="screen-action-column">
 			<dnd-chronicle-readout :player="player" :universe="universe" :configuration="configuration" :profile="profile" :storage="storage"></dnd-chronicle-readout>

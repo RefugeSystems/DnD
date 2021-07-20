@@ -6,7 +6,7 @@
  * @constructor
  * @module Components
  * @params {Universe} universe
- * @params {Object} block To render and feed
+ * @params {SelectionBlock} block To render and feed
  * @params {Array} outcome Where the selected element is queued
  */
 
@@ -52,7 +52,8 @@ rsSystem.component("rsSelectionBlock", {
 	},
 	"data": function() {
 		var data = {};
-		
+
+		this.limit = this.block.limit || 1;
 		this.block._selected = this.block._selected || [];
 		this.block._tracked = this.block._tracked || {};
 		
@@ -60,10 +61,22 @@ rsSystem.component("rsSelectionBlock", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		if(this.choices.length <= this.limit) {
+			setTimeout(() => {
+				for(var i=0; i<this.choices.length; i++) {
+					this.select(this.choices[i]);
+				}
+			}, 0);
+		}
 	},
 	"methods": {
 		"getIcon": function(choice) {
 			return this.block._tracked[choice.id || choice]?"far fa-check-square":"far fa-square";
+		},
+		"info": function(record) {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": record.id || record
+			});
 		},
 		"toggle": function(choice) {
 			if(this.block._tracked[choice.id || choice]) {
@@ -77,7 +90,7 @@ rsSystem.component("rsSelectionBlock", {
 				Vue.set(this.block._tracked, choice.id || choice, true);
 				this.block._selected.uniquely(choice.id);
 				this.$forceUpdate(); // TODO: Not updating naturally?
-				this.$emit("selected");
+				this.complete();
 			}
 		},
 		"deselect": function(choice) {
@@ -85,6 +98,15 @@ rsSystem.component("rsSelectionBlock", {
 				Vue.set(this.block._tracked, choice.id || choice, false);
 				this.block._selected.purge(choice.id);
 				this.$forceUpdate(); // TODO: Not updating naturally?
+				this.complete();
+			}
+		},
+		"complete": function() {
+			if(this.block._selected.length === this.limit) {
+				Vue.set(this.block, "_completed", true);
+				this.$emit("selected", this.block);
+			} else {
+				Vue.set(this.block, "_completed", false);
 			}
 		},
 		"clear": function() {

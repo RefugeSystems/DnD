@@ -31,6 +31,9 @@ rsSystem.component("rsStatBlock", {
 			"default": 5,
 			"type": Number
 		},
+		"filterable": {
+			"type": Boolean
+		},
 		"empties": {
 			"type": Boolean
 		},
@@ -94,6 +97,8 @@ rsSystem.component("rsStatBlock", {
 	},
 	"data": function() {
 		var data = {};
+
+		data.filtering = "";
 		
 		return data;
 	},
@@ -101,6 +106,12 @@ rsSystem.component("rsStatBlock", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"isVisible": function(field) {
+			if(!this.filtering) {
+				return true;
+			}
+			return field._search && field._search.indexOf(this.filtering) !== -1;
+		}
 	},
 	"template": Vue.templified("components/display/statblock.html")
 });

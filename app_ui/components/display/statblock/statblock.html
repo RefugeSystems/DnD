@@ -1,4 +1,7 @@
 <div class="rs-component rs-stat-block">
+	<div class="filter-container" v-if="filterable">
+		<input type="text" v-delayed:500.lower="filtering" v-on:keydown.esc.stop="filtering = ''" placeholder="Filter Information List..." />
+	</div>
 	<rs-display-field class="stat" v-for="field in fields" :universe="universe" :field="field.id" :object="object" :key="field.id" :empties="empties" :marking="marking"></rs-display-field>
 	<div class="general-warning-dark" v-if="object.must_know && fields.length === 0">
 		<span class="fas fa-info-circle rs-dark-yellow"></span>

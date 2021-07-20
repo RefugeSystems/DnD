@@ -100,6 +100,30 @@
 		"name": "Level 25",
 		"obscured": true
 	}, {
+		"id": "archetype:self:26",
+		"name": "Level 26",
+		"obscured": true
+	}, {
+		"id": "archetype:self:27",
+		"name": "Level 27",
+		"obscured": true
+	}, {
+		"id": "archetype:self:28",
+		"name": "Level 28",
+		"obscured": true
+	}, {
+		"id": "archetype:self:29",
+		"name": "Level 29",
+		"obscured": true
+	}, {
+		"id": "archetype:self:30",
+		"name": "Level 30",
+		"obscured": true
+	}, {
+		"id": "archetype:self:31",
+		"name": "Level 31",
+		"obscured": true
+	}, {
 		"id": "archetype:archetype:battlemage:1",
 		"name": "Battlemage"
 	}, {

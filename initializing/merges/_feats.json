@@ -602,7 +602,7 @@
 			],
 			"armor": null,
 			"damage": {
-				"damage_type:poison": "",
+				"damage_type:poison": "1d4 + 2",
 				"damage_type:piercing": "1d4 + 2"
 			},
 			"view": null,
@@ -666,7 +666,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
 				"damage_type:lightning": "50%"
 			}
 		},
@@ -1160,8 +1159,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
 				"damage_type:fire": "50%"
 			}
 		},
@@ -1188,8 +1185,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
 				"damage_type:fire": "50%"
 			}
 		},
@@ -1216,9 +1211,7 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "50%",
-				"damage_type:lightning": "",
-				"damage_type:fire": ""
+				"damage_type:acid": "50%"
 			}
 		},
 		{
@@ -1244,8 +1237,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
 				"damage_type:fire": "50%"
 			}
 		},
@@ -1272,9 +1263,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
-				"damage_type:fire": "",
 				"damage_type:cold": "50%"
 			}
 		},
@@ -1303,9 +1291,6 @@
 			"stat_charisma": null,
 			"hp_max": " ",
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
-				"damage_type:fire": "",
 				"damage_type:cold": "50%"
 			}
 		},
@@ -1332,10 +1317,6 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
-				"damage_type:fire": "",
-				"damage_type:cold": "",
 				"damage_type:poison": "50%"
 			}
 		},
@@ -1362,10 +1343,7 @@
 			"stat_wisdom": null,
 			"stat_charisma": null,
 			"resist": {
-				"damage_type:acid": "",
-				"damage_type:lightning": "",
-				"damage_type:fire": "50%",
-				"damage_type:cold": ""
+				"damage_type:fire": "50%"
 			}
 		},
 		{
@@ -2010,8 +1988,7 @@
 			"race": null,
 			"armor": null,
 			"damage": {
-				"damage_type:piercing": "1d6",
-				"damage_type:poison": ""
+				"damage_type:piercing": "1d6"
 			},
 			"view": null,
 			"known": null,
@@ -2031,8 +2008,7 @@
 			"race": null,
 			"armor": null,
 			"damage": {
-				"damage_type:piercing": "2d8",
-				"damage_type:poison": ""
+				"damage_type:piercing": "2d8"
 			},
 			"view": null,
 			"known": null,
@@ -2077,7 +2053,6 @@
 			"armor": null,
 			"damage": {
 				"damage_type:piercing": "2d6",
-				"damage_type:poison": "",
 				"damage_type:crushing": "2d6"
 			},
 			"view": null,
@@ -2102,7 +2077,6 @@
 			"armor": null,
 			"damage": {
 				"damage_type:piercing": "2d6",
-				"damage_type:poison": "",
 				"damage_type:crushing": "2d6"
 			},
 			"view": null,

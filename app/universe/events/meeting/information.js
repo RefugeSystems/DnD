@@ -106,8 +106,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} event.message.data.meeting
-	 * @param {String} event.message.data.name
-	 * @param {String} event.message.data.description
+	 * @param {String} event.message.data.entities
 	 */
 	universe.on("player:meeting:remove:entities", function(event) {
 		var entities = event.message.data.entities,

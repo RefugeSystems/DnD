@@ -154,9 +154,12 @@ for(i=0; i<merging.length; i++) {
 				classing.id = id + ":" + keys[j];
 				classing[root] = 1;
 				utility.finalize(classing);
+				classing.needs = {};
+				classing.playable = true;
 				if(keys[j] != 1) {
 					classing.name += " (" + keys[j] + ")";
 					classing.obscured = true;
+					classing.needs[id + ":" + (parseInt(keys[j]) - 1)] = 1;
 				} else {
 					classing.root = true;
 				}

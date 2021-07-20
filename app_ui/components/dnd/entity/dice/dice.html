@@ -1,10 +1,11 @@
 <div class="rs-component dnd-component entity-dice" v-if="storage">
 	<div class="divider"></div>
 	<div class="available flex h centered" v-if="storage.count">
-		<button class="general rounded quick action" v-on:click="clear()">
+		<button class="general rounded quick action" v-on:click="clear()" title="Total of individual dice rolled. Click to clear.">
 			<span>{{storage.sum}}</span>
 		</button>
-		<button class="general rounded quick action" v-for="dice in rollable" v-on:click="roll(dice)" v-on:click.right.stop.prevent="roll(dice)">
+		<button class="general rounded quick action" v-for="dice in rollable" v-on:click="roll(dice)" v-on:click.right.stop.prevent="roll(dice)" :title="'Roll 1 d' + dice.range">
+			<span class="action-label" v-if="storage.showLabels || (widget.attribute && widget.attribute.show_labels)">{{dice.range}}</span>
 			<span class="action-icon" :class="dice.icon"></span>
 			<span class="action-count" v-if="storage.count[dice.icon]">{{storage.count[dice.icon]}}</span>
 		</button>
