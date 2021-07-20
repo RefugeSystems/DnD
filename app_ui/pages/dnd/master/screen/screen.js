@@ -484,7 +484,7 @@ rsSystem.component("DNDMasterScreen", {
 			return classes;
 		},
 		"removeEntity": function(entity) {
-			var meeting = getMeeting();
+			var meeting = this.getMeeting();
 			console.log("Remove Entity: ", entity, meeting);
 			if(meeting) {
 				this.universe.send("meeting:remove:entities", {

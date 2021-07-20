@@ -892,12 +892,46 @@ class RSObject {
 
 	/**
 	 *
+	 * @method fetchValue
+	 * @param {Array | String} name Matching the Field ID to be used.
+	 * @param {Integer} [index]
+	 * @return {String | Number | Boolean | Object} Based on the RSField definition
+	 * 		for the referenced value.
+	 */
+	fetchValue(name, index) {
+		var trace;
+		if(typeof(name) === "string") {
+			name = name.split(".");
+		}
+		if(index === undefined || index === null) {
+			index = 0;
+		}
+		if(name[index] === "this") {
+			return this.fetchValue(name, index + 1);
+		} else if(index + 1 === name.length) {
+			return this[name[index]];
+		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
+			return this[name[index]][name[index + 1]];
+		} else if(this[name[index]]) {
+			// console.log("Request More: " + name + " @" + index);
+			trace = this._universe.get(this[name[index]]);
+			if(trace) {
+				return trace.fetchValue(name, index + 1);
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 *
 	 * @method getValue
+	 * @async
 	 * @param {Array | String} name Matching the Field ID to be used.
 	 * @param {Integer} [index]
 	 * @param {Function} callback Of structure function(err, value).
-	 * @return {String | Number | Boolean | Object} Based on the RSField definition
-	 * 		for the referenced value.
 	 */
 	getValue(name, index, callback) {
 		if(!callback) {
@@ -1387,7 +1421,7 @@ class RSObject {
 		if(conditional.condition && conditional.ifop) {
 			for(x=0; x<conditional._fields_condition.length; x++) {
 				field = conditional._fields_condition[x];
-				value = this.getValue(field);
+				value = this.fetchValue(field);
 				if(!RSObject.checkCondition(value, conditional.ifop[field], this[field])) {
 					return false;
 				}
