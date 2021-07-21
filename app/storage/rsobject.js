@@ -832,6 +832,7 @@ class RSObject {
 			this.name += " (Preview)";
 		}
 
+		/* Stacking is being removed for now to address memory usage issues, possible return with improved load/unload controls
 		keys = Object.keys(this._data);
 		if(keys.length > stackRestricted.length) {
 			this._stackable = false;
@@ -847,6 +848,7 @@ class RSObject {
 				this._stackable = true;
 			}
 		}
+		*/
 
 		// console.log("Updated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushUpdated(this.id);
@@ -1167,8 +1169,9 @@ class RSObject {
 		this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
-			this.updateFieldValues(true);
-			this._universe.emit("object-updated", this.getDelta(delta));
+			this.updateFieldValues();
+			// this.updateFieldValues(true);
+			// this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
 			}
@@ -1213,8 +1216,9 @@ class RSObject {
 		this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
-			this.updateFieldValues(true);
-			this._universe.emit("object-updated", this.getDelta(delta));
+			this.updateFieldValues();
+			// this.updateFieldValues(true);
+			// this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
 			}
@@ -1268,8 +1272,9 @@ class RSObject {
 		this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
-			this.updateFieldValues(true);
-			this._universe.emit("object-updated", this.getDelta(delta));
+			this.updateFieldValues();
+			// this.updateFieldValues(true);
+			// this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
 			}
@@ -1327,6 +1332,8 @@ class RSObject {
 					case "number":
 						if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
 							this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
+						} else if(typeof(result[field.id]) === "number" && result[field.id] > 0) {
+							this._data[field.id] = result[field.id] = 0;
 						}
 						break;
 					case "object":
@@ -1335,6 +1342,8 @@ class RSObject {
 							for(i=0; i<keys.length; i++) {
 								if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
 									result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
+								} else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > 0) {
+									result[field.id][keys[i]] = 0; // _data references same object
 								}
 							}
 						}
@@ -1346,6 +1355,8 @@ class RSObject {
 					case "number":
 						if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
 							this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
+						} else if(typeof(result[field.id]) === "number" && result[field.id] < 0) {
+							this._data[field.id] = result[field.id] = 0;
 						}
 						break;
 					case "object":
@@ -1354,6 +1365,8 @@ class RSObject {
 							for(i=0; i<keys.length; i++) {
 								if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
 									result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
+								} else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < 0) {
+									result[field.id][keys[i]] = 0; // _data references same object
 								}
 							}
 						}

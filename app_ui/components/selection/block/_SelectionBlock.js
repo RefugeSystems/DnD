@@ -24,6 +24,18 @@ class SelectionBlock {
 		 * @property limit
 		 * @type Integer
 		 */
+
+		/**
+		 * Key for a process to fill in the available choices handled by
+		 * the rsSelectionBlock component.
+		 * 
+		 * Options:
+		 * + Spell - Uses the spell_level property to determine the max level
+		 * 		to include.
+		 * 
+		 * @property fill
+		 * @type String
+		 */
 		
 		/**
 		 * Array of possible objects to choose

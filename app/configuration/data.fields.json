@@ -955,7 +955,7 @@
 		"id": "spell_slot_max",
 		"name": "Max Spell Slots",
 		"description": "Maps a spell level to the maximium number of spell slots for that object",
-		"type": "object",
+		"type": "object:dice",
 		"attribute": {}
 	}, {
 		"id": "warlock_slots",
@@ -1730,6 +1730,12 @@
 		"id": "is_subclass",
 		"name": "Is Subclass",
 		"description": "Flags this class as a subclass",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "is_inherited",
+		"name": "Is Inherited",
+		"description": "Flags this as an object that can not be selected and is instead inherited or gained naturally.",
 		"type": "boolean",
 		"attribute": {}
 	}, {

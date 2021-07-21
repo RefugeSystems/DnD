@@ -36,11 +36,13 @@ rsSystem.component("dndEntityName", {
 
 		},
 		"levelUp": function() {
-			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndCharacterLevelDialog",
-				"level": this.entity.level + 1,
-				"entity": this.entity.id
-			});
+			if(this.entity.point_pool && this.entity.point_pool.level > 0) {
+				rsSystem.EventBus.$emit("dialog-open", {
+					"component": "dndCharacterLevelDialog",
+					"level": this.entity.level + 1,
+					"entity": this.entity.id
+				});
+			}
 		}
 	},
 	"beforeDestroy": function() {

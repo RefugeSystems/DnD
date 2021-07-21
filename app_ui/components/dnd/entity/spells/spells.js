@@ -36,10 +36,15 @@ rsSystem.component("dndEntitySpells", {
 				i;
 
 			for(i=0; i<keys.length; i++) {
-				slots.push(keys[i]);
+				if(this.entity.spell_slot_max[keys[i]]) {
+					slots.push(keys[i]);
+				}
 			}
 
 			slots.sort();
+			if(slots.indexOf(this.storage.slot) === -1) {
+				Vue.set(this.storage, "slot", slots[0]);
+			}
 			return slots;
 		},
 		"styleSpellList": function() {

@@ -6,14 +6,14 @@
 				<span :class="getTabIcon(section)"></span>
 				<span>{{sectionInfo[section].name}}</span>
 			</button>
-			<button class="tab complete" :disabled="completed < sections.length" v-on:click="changeSection(null)">
+			<button class="tab" :class="section === null || section === undefined?'active':''" :disabled="completed < sections.length" v-on:click="changeSection(null)">
 				<span class="fas fa-upload"></span>
 				<span>Finish</span>
 			</button>
 		</div>
 		
 		<!-- Finish Confirmation-->
-		<div class="section" v-if="section == null">
+		<div class="section text" v-if="section == null">
 			<p>Finish Leveling?</p>
 			<div class="level-health">
 				<span>HP Gain: {{sectionInfo.hp.amount}} + {{this.entity.constitution}} (Constitution Modifier)</span>
@@ -25,6 +25,12 @@
 				</div>
 			</div>
 			<div class="section-customizations">
+			</div>
+			<div class="flex h righted">
+				<button class="rounded general action level-up" v-on:click="levelUp()">
+					<span class="fas fa-user-plus"></span>
+					<span>Level Up</span>
+				</button>
 			</div>
 		</div>
 

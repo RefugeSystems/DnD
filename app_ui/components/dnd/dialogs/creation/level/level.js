@@ -204,7 +204,7 @@ rsSystem.component("dndCharacterLevelDialog", {
 		},
 		"blockSelected": function(block) {
 			console.log("Block Selected: ", block);
-			this.finishSection();
+			this.finishSection("customizations");
 			if(this.sectionInfo.customizations.completed) {
 				this.nextSection();
 			}
@@ -216,11 +216,34 @@ rsSystem.component("dndCharacterLevelDialog", {
 			// this.finishSection(this.section);
 			this.changeSection(this.sections[index + 1]);
 		},
+		"getMax": function(...of) {
+			if(of && of.length) {
+				var max = parseInt(of[0][0]) || 0,
+					c,
+					i,
+					j;
+					
+				for(i=0; i<of.length; i++) {
+					for(j=0; j<of[i].length; j++) {
+						c = parseInt(of[i][j]);
+						if(typeof(c) === "number" && max < c) {
+							max = c;
+						}
+					}
+				}
+
+				return max;
+			}
+			return 0;
+		},
 		"changeSection": function(section) {
 			this.finishSection(this.section);
 			var map = {},
 				archetype,
+				subarch,
+				custom,
 				add,
+				max,
 				i,
 				j;
 
@@ -277,16 +300,23 @@ rsSystem.component("dndCharacterLevelDialog", {
 					break;
 				case "customizations":
 					this.customizations.splice(0);
+					max = this.getMax(Object.keys(this.entity.spell_slot_max), Object.keys(this.sectionInfo.class.archetype.spell_slot_max), Object.keys(this.sectionInfo.subclass.archetype.spell_slot_max));
 					archetype = this.sectionInfo.class.archetype;
 					if(archetype && archetype.selection) {
 						for(i=0; i<archetype.selection.length; i++) {
-							this.customizations.push(archetype.selection[i]);
+							custom = Object.assign({}, archetype.selection[i]);
+							custom.entity = this.entity.id;
+							custom.spell_level = max;
+							this.customizations.push(custom);
 						}
 					}
 					archetype = this.sectionInfo.subclass.archetype;
 					if(archetype && archetype.selection) {
 						for(i=0; i<archetype.selection.length; i++) {
-							this.customizations.push(archetype.selection[i]);
+							custom = Object.assign({}, archetype.selection[i]);
+							custom.entity = this.entity.id;
+							custom.spell_level = max;
+							this.customizations.push(custom);
 						}
 					}
 					if(this.customizations.length === 0) {
@@ -339,15 +369,29 @@ rsSystem.component("dndCharacterLevelDialog", {
 			Vue.set(this, "completed", completed);
 		},
 		"levelUp": function() {
-			var level = {};
+			var level = {},
+				custom,
+				i;
+
 			level.entity = this.entity.id;
 			level.to_level = this.toLevel;
-			level.archetypes = [this.sectionInfo.class.record.id];
+			level.archetypes = [this.sectionInfo.class.archetype.id];
 			level.hp_rolled = this.sectionInfo.hp.amount;
-			if(this.sectionInfo.subclass.record) {
-				level.archetypes.push(this.sectionInfo.subclass.record.id);
+			if(this.sectionInfo.subclass.archetype) {
+				level.archetypes.push(this.sectionInfo.subclass.archetype.id);
 			}
+			for(i=0; i<this.customizations.length; i++) {
+				custom = this.customizations[i];
+				if(custom) {
+					if(!level[custom.field]) {
+						level[custom.field] = [];
+					}
+					level[custom.field] = level[custom.field].concat(custom._selected);
+				}
+			}
+			console.log("Level Up: ", level);
 			this.universe.send("entity:level", level);
+			this.closeDialog();
 		}
 	},
 	"beforeDestroy": function() {

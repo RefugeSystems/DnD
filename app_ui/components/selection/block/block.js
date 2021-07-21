@@ -35,16 +35,56 @@ rsSystem.component("rsSelectionBlock", {
 	"computed": {
 		"choices": function() {
 			var choices = [],
+				archMap = {},
+				entity,
+				player,
 				record,
+				spell,
+				add,
+				i,
+				j,
 				x;
-				
-			for(x=0; x<this.block.choices.length; x++) {
-				record = this.universe.getObject(this.block.choices[x]);
-				if(record) {
-					choices.push(record);
-				} else {
-					choices.push(this.block.choices[x]);
-				}
+
+			switch(this.block.fill) {
+				case "spell":
+					entity = this.universe.index.entity[this.block.entity];
+					if(!entity) {
+						player = this.universe.index.player[this.universe.connection.session.player];
+						if(player && player.attribute && player.attribute.playing_as) {
+							entity = this.universe.index.entity[player.attribute.playing_as];
+						}
+					}
+					if(entity.archetypes) {
+						for(i=0; i<entity.archetypes.length; i++) {
+							archMap[entity.archetypes[i]] = true;
+						}
+					}
+					for(i=0; i<this.universe.listing.spell.length; i++) {
+						spell = this.universe.listing.spell[i];
+						add = false;
+						if(spell && spell.archetypes && spell.archetypes.length) {
+							for(j=0; !add && j<spell.archetypes.length; j++) {
+								if(archMap[spell.archetypes[j]]) {
+									add = true;
+								}
+							}
+						} else {
+							add = true;
+						}
+						if(add && (!entity.spells_known || entity.spells_known.indexOf(spell.id) === -1) && (typeof(spell.level) === "number" && spell.level >= 0) && !spell.obscured && !spell.is_preview && !spell.disabled && !spell.is_disabled && !spell.is_template && !spell.is_copy && !spell.is_inherited) {
+							choices.push(spell);
+						}
+					}
+					break;
+				default:
+					for(x=0; x<this.block.choices.length; x++) {
+						record = this.universe.getObject(this.block.choices[x]);
+						if(record) {
+							choices.push(record);
+						} else {
+							choices.push(this.block.choices[x]);
+						}
+					}
 			}
 				
 			return choices;

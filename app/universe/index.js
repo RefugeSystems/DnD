@@ -615,6 +615,52 @@ class Universe extends EventEmitter {
 
 	/**
 	 * 
+	 * @method copyPromise
+	 * @param {String | RSObject} source
+	 * @param {Object} [mask]
+	 * @return {Promise}
+	 */
+	copyPromise(source, mask) {
+		return new Promise((done, fail) => {
+			this.copy(source, mask, function(err, object) {
+				if(err) {
+					fail(err);
+				} else {
+					done(object);
+				}
+			});
+		});
+	}
+
+	/**
+	 * 
+	 * @method copyArray
+	 * @param {Array | String | RSObject} sources
+	 * @param {Object} [mask]
+	 * @return {Promise}
+	 */
+	copyArrayID(sources, mask) {
+		return new Promise((done, fail) => {
+			var promises = [],
+				i;
+
+			for(i=0; i<sources.length; i++) {
+				promises.push(this.copyPromise(sources[i], mask));
+			}
+
+			Promise.all(promises)
+			.then((copies) => {
+				for(i=0; i<copies.length; i++) {
+					copies[i] = copies[i].id;
+				}
+				done(copies);
+			})
+			.catch(fail);
+		});
+	}
+
+	/**
+	 * 
 	 * @method trackExpiration
 	 * @param {RSObject} expiring 
 	 * @param {String} target RSObject ID. Mostly for effects as items will simply be updated in place
