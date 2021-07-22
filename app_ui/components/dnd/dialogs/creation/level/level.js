@@ -286,7 +286,7 @@ rsSystem.component("dndCharacterLevelDialog", {
 							setTimeout(this.nextSection, 0);
 						}
 					} else {
-
+						
 					}
 					break;
 				case "hp":

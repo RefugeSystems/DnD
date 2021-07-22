@@ -222,7 +222,7 @@ module.exports.initialize = function(universe) {
 			id;
 		
 		if(typeof(entity) === "string") {
-			entity = universe.manager.item.object[entity];
+			entity = universe.manager.entity.object[entity];
 		}
 		if(entity && (entity.owned[event.player.id] || event.player.gm)) {
 			if(item) {

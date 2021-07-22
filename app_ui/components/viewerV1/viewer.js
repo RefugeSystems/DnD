@@ -1814,15 +1814,11 @@
 					}
 				}
 
-				if(this.player.gm && this.storage.master_view === "master") {
-					return true;
-				}
-
 				if(link.hidden || this.storage.hide[link.id] || link.obscured) {
 					return false;
 				}
 
-				return false;
+				return true;
 			},
 			"renderState": function() {
 				var state = "";
@@ -1936,7 +1932,7 @@
 			},
 			"update": function(source) {
 				var now = Date.now();
-				if(this.location && !source || source.location === this.location.id) {
+				if(this.location && (!source || source.location === this.location.id || source.id === this.location.id || (this.viewingEntity && (source.id === this.viewingEntity.id || source.entity === this.viewingEntity.id)))) {
 					if((now - this.last) > UPDATESTEP) {
 						this.last = now;
 						var buffer,
