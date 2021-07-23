@@ -123,7 +123,8 @@ module.exports.initialize = function(universe) {
 };
 
 var makeCharacter = function(universe, event, source, details) {
-	var data = {};
+	var data = {},
+		pg = {};
 	data.universe = universe;
 	data.details = details;
 	data.source = source;
@@ -135,13 +136,21 @@ var makeCharacter = function(universe, event, source, details) {
 	details.level_archetype = {};
 	details.level_archetype[data.archetype.name.toLowerCase()] = 1;
 
+	pg.id = "page:" + details.id;
 	return new Promise(function(done, fail) {
-		data.universe.createObject(data.details, function(err, character) {
-			if(err) {
-				fail(err);
+		data.universe.createObject(pg, function(perr, page) {
+			if(perr) {
+				fail(perr);
 			} else {
-				data.character = character;
-				done(data);
+				details.page = page.id;
+				data.universe.createObject(data.details, function(err, character) {
+					if(err) {
+						fail(err);
+					} else {
+						data.character = character;
+						done(data);
+					}
+				});
 			}
 		});
 	});

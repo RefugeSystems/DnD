@@ -1012,7 +1012,7 @@
 		"id": "hit_dice",
 		"name": "Hit Dice",
 		"description": "Hit dice present for this object, mapping the dice type (ie. d8) to the count possessed",
-		"type": "object",
+		"type": "object:dice",
 		"attribute": {
 			"bound_max": "hit_dice_max",
 			"min": 0
@@ -1021,7 +1021,7 @@
 		"id": "hit_dice_max",
 		"name": "Hit Dice Maximum",
 		"description": "Hit dice present for this object, mapping the dice type (ie. d8) to the count offered",
-		"type": "object",
+		"type": "object:dice",
 		"attribute": {}
 	}, {
 		"id": "range_minimum",

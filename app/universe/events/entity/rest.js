@@ -10,6 +10,7 @@ module.exports.initialize = function(universe) {
 	 * @param {String} [event.item] To attune
 	 */
 	universe.on("action:rest:finish", function(event) {
+		// console.log("Finish long rest");
 		var entity,
 			item,
 			feat,
@@ -39,7 +40,7 @@ module.exports.initialize = function(universe) {
 				for(i=0; i<die.length; i++) {
 					add.hit_dice[die[i]] = Math.ceil(parseInt(entity.hit_dice_max[die[i]])/2);
 				}
-				console.log("Adding: ", add);
+				// console.log("Adding: ", add);
 				entity.addValues(add);
 			}
 
@@ -81,7 +82,7 @@ module.exports.initialize = function(universe) {
 					has = (feat.recharges_long || 0) + 1;
 					if(feat.recharges_at_long <= has) {
 						feat.addValues({
-							"recharges_long": -1 * has,
+							"recharges_long": -1 * feat.recharges_long,
 							"charges": feat.recharges_amount_long
 						});
 					} else {
@@ -105,7 +106,7 @@ module.exports.initialize = function(universe) {
 	 * @param {String} [event.item] To attune
 	 */
 	universe.on("action:rest:short", function(event) {
-		console.log("Short: ", event.entity.id);
+		// console.log("Short: ", event.entity.id);
 		var entity,
 			item,
 			feat,
@@ -126,6 +127,7 @@ module.exports.initialize = function(universe) {
 					"hp": event.roll
 				});
 			}
+			// console.log("Sub: ", event.result);
 			if(event.result) {
 				entity.subValues({
 					"hit_dice": event.result
@@ -152,7 +154,7 @@ module.exports.initialize = function(universe) {
 					has = (item.recharges_short || 0) + 1;
 					if(item.recharges_at_short <= has) {
 						item.addValues({
-							"recharges_short": -1 * has,
+							"recharges_short": -1 * item.recharges_short,
 							"charges": item.recharges_amount_short
 						});
 					} else {
@@ -170,7 +172,7 @@ module.exports.initialize = function(universe) {
 					has = (feat.recharges_short || 0) + 1;
 					if(feat.recharges_at_short <= has) {
 						feat.addValues({
-							"recharges_short": -1 * has,
+							"recharges_short": -1 * feat.recharges_short,
 							"charges": feat.recharges_amount_short
 						});
 					} else {

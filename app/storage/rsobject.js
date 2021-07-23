@@ -362,7 +362,7 @@ class RSObject {
 									loading.inheriting_field = ifield;
 									loading.source = source.id || source;
 									loading.full_source = !!source.id;
-									this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
+									// this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to interpret object field inheritance.", 50, loading, null, this));
 							}
 							if(!this._involved[field.inheritanceFields[i]]) {
 								this._involved[field.inheritanceFields[i]] = {};
@@ -401,7 +401,7 @@ class RSObject {
 					loading.value = this._combined[field.id];
 					loading.field = field;
 					loading.source_id = id;
-					this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to load object to pull inherited fields.", 50, loading, null, this));
+					// this._universe.emit("error", new this._universe.Anomaly("object:value:inheritance", "Failed to load object to pull inherited fields.", 50, loading, null, this));
 				}
 			}
 		};
@@ -720,7 +720,7 @@ class RSObject {
 					loading.conditionals = this.conditionals;
 					loading.conditional = this.conditionals[x];
 					loading.index = x;
-					this._universe.emit("error", new this._universe.Anomaly("object:value:conditional", "Undefined conditional present in object", 40, loading, null, this));
+					// this._universe.emit("error", new this._universe.Anomaly("object:value:conditional", "Undefined conditional present in object", 40, loading, null, this));
 				}
 			}
 			
@@ -1144,10 +1144,12 @@ class RSObject {
 			i,
 			x;
 		
+		// console.log("Delta: ", delta);
 		for(x=0; x<this._manager.fieldIDs.length; x++) {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type);
+				// console.log(" - Adding: ", result[field.id]);
 				if(field.attribute) {
 					this.levelField(field, result);
 				}
@@ -1161,7 +1163,7 @@ class RSObject {
 				details.id = this.id;
 				details.result = result;
 				details.delta = delta;
-				this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
+				// this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
 		
@@ -1208,7 +1210,7 @@ class RSObject {
 				details.id = this.id;
 				details.result = result;
 				details.delta = delta;
-				this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
+				// this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
 		
@@ -1264,7 +1266,7 @@ class RSObject {
 				details.id = this.id;
 				details.result = result;
 				details.delta = delta;
-				this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
+				// this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
 		
@@ -1332,8 +1334,8 @@ class RSObject {
 					case "number":
 						if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
 							this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
-						} else if(typeof(result[field.id]) === "number" && result[field.id] > 0) {
-							this._data[field.id] = result[field.id] = 0;
+						// } else if(typeof(result[field.id]) === "number" && result[field.id] > 0) {
+						// 	this._data[field.id] = result[field.id] = 0;
 						}
 						break;
 					case "object":
@@ -1342,8 +1344,8 @@ class RSObject {
 							for(i=0; i<keys.length; i++) {
 								if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
 									result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
-								} else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > 0) {
-									result[field.id][keys[i]] = 0; // _data references same object
+								// } else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > 0) {
+								// 	result[field.id][keys[i]] = 0; // _data references same object
 								}
 							}
 						}
@@ -1355,8 +1357,8 @@ class RSObject {
 					case "number":
 						if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
 							this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
-						} else if(typeof(result[field.id]) === "number" && result[field.id] < 0) {
-							this._data[field.id] = result[field.id] = 0;
+						// } else if(typeof(result[field.id]) === "number" && result[field.id] < 0) {
+						// 	this._data[field.id] = result[field.id] = 0;
 						}
 						break;
 					case "object":
@@ -1365,8 +1367,8 @@ class RSObject {
 							for(i=0; i<keys.length; i++) {
 								if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
 									result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
-								} else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < 0) {
-									result[field.id][keys[i]] = 0; // _data references same object
+								// } else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < 0) {
+								// 	result[field.id][keys[i]] = 0; // _data references same object
 								}
 							}
 						}
@@ -1713,8 +1715,18 @@ RSObject.addValues = function(a, b, type, op) {
 				return RSObject.addObjects(a, b);
 		}
 	} else {
-		if((typeof(a) === "string" && typeof(b) === "number") || (typeof(a) === "number" && typeof(b) === "string")) {
-			return a + " + " + b;
+		if(typeof(a) === "number") {
+			if(isNaN(b)) {
+				return a + " + " + b;
+			} else {
+				return a + parseFloat(b);
+			}
+		} else if(typeof(b) === "number") {
+			if(isNaN(a)) {
+				return a + " + " + b;
+			} else {
+				return a + parseFloat(a);
+			}
 		} else {
 			throw new Error("Can not add values as types[" + type + "|" + typeof(a) + "|" + typeof(b) + "] do not match: " + (a?a.id:a) + "[" + (!!a) + "] | " + (b?b.id:b) + "[" + (!!b) + "]");
 		}

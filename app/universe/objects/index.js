@@ -269,7 +269,7 @@ module.exports = function(universe) {
 							details.consumer = consumer;
 							details.fields = source_fields;
 							details.id = value;
-							universe.emit("error", new universe.Anomaly("universe:trace:track", "Object not loaded", 40, details, null, "universe:objects"));
+							universe.emit("error", new universe.Anomaly("universe:trace:track", "Object not loaded", 20, details, null, "universe:objects"));
 						}
 					} else if(manager[classification].object[value] === undefined) {
 						// Doesn't exist
@@ -278,7 +278,7 @@ module.exports = function(universe) {
 						details.consumer = consumer;
 						details.field = source_fields[x];
 						details.value = value;
-						universe.emit("error", new universe.Anomaly("universe:trace:track", "No such object", 50, details, null, "universe:objects"));
+						universe.emit("error", new universe.Anomaly("universe:trace:track", "No such object", 20, details, null, "universe:objects"));
 					}  else {
 						// Already loaded
 					}
@@ -292,7 +292,7 @@ module.exports = function(universe) {
 				details.fields = source_fields;
 				details.available = Object.keys(manager);
 				details.value = value;
-				universe.emit("error", new universe.Anomaly("universe:trace:track", "No such class", 50, details, null, "universe:objects"));
+				universe.emit("error", new universe.Anomaly("universe:trace:track", "No such class", 20, details, null, "universe:objects"));
 
 				// console.trace("what1?");
 			}
@@ -364,7 +364,7 @@ module.exports = function(universe) {
 							details.consumer = consumer;
 							details.sources = sources;
 							details.id = sources[x];
-							universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 40, details, null, "universe:objects"));
+							universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 20, details, null, "universe:objects"));
 						}
 					} else if(manager[classification].object[sources[x]] === undefined) {
 						// Doesn't exist
@@ -373,7 +373,7 @@ module.exports = function(universe) {
 						details.consumer = consumer;
 						details.sources = sources;
 						details.value = sources[x];
-						universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 50, details, null, "universe:objects"));
+						universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 20, details, null, "universe:objects"));
 					}  else {
 						// Already loaded
 					}
@@ -386,7 +386,7 @@ module.exports = function(universe) {
 				details.consumer = consumer;
 				details.sources = sources;
 				details.value = sources[x];
-				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 50, details, null, "universe:objects"));
+				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 20, details, null, "universe:objects"));
 				// console.trace("what2?");
 			}
 		}
@@ -527,7 +527,7 @@ module.exports = function(universe) {
 				details.consumer = consumer;
 				details.sources = sources;
 				details.value = sources[x];
-				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 50, details, null, "universe:objects"));
+				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 20, details, null, "universe:objects"));
 			}
 		}
 		
@@ -549,7 +549,7 @@ module.exports = function(universe) {
 			var details = {};
 			details.managers = Object.keys(manager);
 			details.id = id;
-			universe.emit("error", new universe.Anomaly("universe:object:retrieval", "Failed to locate manager for requested ID", 50, details, null, "universe:objects"));
+			universe.emit("error", new universe.Anomaly("universe:object:retrieval", "Failed to locate manager for requested ID", 20, details, null, "universe:objects"));
 			return null;
 		}
 	};

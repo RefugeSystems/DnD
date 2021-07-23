@@ -27,7 +27,8 @@ module.exports.initialize = function(universe) {
 		if(typeof(object) === "string") {
 			object = universe.get(object);
 		}
-		console.log("Use: ", event.message.data);
+		// console.log("Use: ", event.message.data);
+		// TODO: Check Player ownership and entity has object
 		if(expend && entity && object && object.charges_max) {
 			object.subValues({
 				"charges": expend
@@ -62,8 +63,9 @@ module.exports.initialize = function(universe) {
 		if(typeof(object) === "string") {
 			object = universe.get(object);
 		}
-		console.log("Gain: ", event.message.data);
-		if(gained && entity && object && object.charges_max) {
+		// console.log("Gain: ", event.message.data);
+		// TODO: Check Player ownership and entity has object
+		if(gained && object && object.charges_max) {
 			object.addValues({
 				"charges": gained
 			});

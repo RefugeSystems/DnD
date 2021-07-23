@@ -28,6 +28,7 @@ module.exports.initialize = function(universe) {
 			delta = {};
 			delta.spell_slots = {};
 			delta.spell_slots[slot] = changes;
+			// console.log("Change: ", delta);
 			entity.addValues(delta);
 		}
 	});

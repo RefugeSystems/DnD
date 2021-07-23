@@ -120,6 +120,15 @@ describe("RSObject", function() {
 		b.old_obj = {
 			"k": 9
 		};
+		a.on.num = 4;
+		b.on.num = 3;
+		a.on.numm = 19;
+		b.on.numm = -4;
+
+		a.num = 4;
+		b.num = 3;
+		a.numm = 19;
+		b.numm = -4;
 
 		res = RSObject.addObjects(a, b);
 		expect(res.on.attack).toBeDefined();
@@ -127,6 +136,10 @@ describe("RSObject", function() {
 		expect(res.on.short_rest).toBeDefined();
 		expect(res.new_obj.j).toBe(4);
 		expect(res.old_obj.k).toBe(9);
+		expect(res.on.num).toBe(7);
+		expect(res.on.numm).toBe(15);
+		expect(res.num).toBe(7);
+		expect(res.numm).toBe(15);
 		expect(res.on.long_rest[0]).toBeDefined();
 		expect(res.on.long_rest[0].id).toBe(10);
 		expect(res.on.long_rest[0].a).toBe(12);

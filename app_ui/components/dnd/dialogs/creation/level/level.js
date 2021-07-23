@@ -300,32 +300,38 @@ rsSystem.component("dndCharacterLevelDialog", {
 					break;
 				case "customizations":
 					this.customizations.splice(0);
-					max = this.getMax(Object.keys(this.entity.spell_slot_max), Object.keys(this.sectionInfo.class.archetype.spell_slot_max), Object.keys(this.sectionInfo.subclass.archetype.spell_slot_max));
-					archetype = this.sectionInfo.class.archetype;
-					if(archetype && archetype.selection) {
-						for(i=0; i<archetype.selection.length; i++) {
-							custom = Object.assign({}, archetype.selection[i]);
-							custom.entity = this.entity.id;
-							custom.spell_level = max;
-							this.customizations.push(custom);
+					if(this.sectionInfo.class.archetype) {
+						if(this.sectionInfo.subclass.archetype) {
+							max = this.getMax(Object.keys(this.entity.spell_slot_max), Object.keys(this.sectionInfo.class.archetype.spell_slot_max), Object.keys(this.sectionInfo.subclass.archetype.spell_slot_max));
+						} else {
+							max = this.getMax(Object.keys(this.entity.spell_slot_max), Object.keys(this.sectionInfo.class.archetype.spell_slot_max));
 						}
-					}
-					archetype = this.sectionInfo.subclass.archetype;
-					if(archetype && archetype.selection) {
-						for(i=0; i<archetype.selection.length; i++) {
-							custom = Object.assign({}, archetype.selection[i]);
-							custom.entity = this.entity.id;
-							custom.spell_level = max;
-							this.customizations.push(custom);
+						archetype = this.sectionInfo.class.archetype;
+						if(archetype && archetype.selection) {
+							for(i=0; i<archetype.selection.length; i++) {
+								custom = Object.assign({}, archetype.selection[i]);
+								custom.entity = this.entity.id;
+								custom.spell_level = max;
+								this.customizations.push(custom);
+							}
 						}
-					}
-					if(this.customizations.length === 0) {
-						console.warn("No Customizations");
-						if(!this.sectionInfo.customizations.completed) {
-							setTimeout(this.nextSection, 0);
+						archetype = this.sectionInfo.subclass.archetype;
+						if(archetype && archetype.selection) {
+							for(i=0; i<archetype.selection.length; i++) {
+								custom = Object.assign({}, archetype.selection[i]);
+								custom.entity = this.entity.id;
+								custom.spell_level = max;
+								this.customizations.push(custom);
+							}
 						}
+						if(this.customizations.length === 0) {
+							console.warn("No Customizations");
+							if(!this.sectionInfo.customizations.completed) {
+								setTimeout(this.nextSection, 0);
+							}
+						}
+						break;
 					}
-					break;
 			}
 			Vue.set(this, "section", section);
 		},

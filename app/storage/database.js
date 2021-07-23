@@ -1157,9 +1157,13 @@ class ClassManager extends EventEmitter {
 				}
 			} else {
 				if(this.object[details.id] === false) {
-					var Construct = this.database.constructor[this.id] || RSObject;
-					this.object[details.id] = new Construct(universe, this, details);
-					done(this.object[details.id]);
+					try {
+						var Construct = this.database.constructor[this.id] || RSObject;
+						this.object[details.id] = new Construct(universe, this, details);
+						done(this.object[details.id]);
+					} catch(error) {
+						fail(error);
+					}
 				} else if(this.object[details.id]) {
 					done(this.object[details.id]);
 				} else {
