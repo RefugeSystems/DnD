@@ -448,8 +448,8 @@
 					Vue.set(this, "viewingEntity", this.universe.index.entity[this.storage.master_view]);
 				}
 			} else {
-				if(this.$route.param.entity) {
-					Vue.set(this, "viewingEntity", this.universe.index.entity[this.$route.param.entity]);
+				if(this.$route.params.entity) {
+					Vue.set(this, "viewingEntity", this.universe.index.entity[this.$route.params.entity]);
 					if(this.viewingEntity && (!this.viewingEntity.owned || !this.viewingEntity.owned[this.player.id])) {
 						Vue.set(this, "viewingEntity", null);
 					}
