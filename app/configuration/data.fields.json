@@ -3062,6 +3062,24 @@
 			"display_size": 90
 		}
 	}, {
+		"id": "concentration_required",
+		"name": "Concentration Required",
+		"description": "Indicates that an effect should end if the caster looses concentration on the originating spell.",
+		"type": "boolean",
+		"ordering": 305,
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
+		"id": "concentration_origin",
+		"name": "Concentration Origin",
+		"description": "Tracks the Spell ID that requires concentration from the caster.",
+		"type": "string",
+		"ordering": 305,
+		"attribute": {
+			"display_size": 90
+		}
+	}, {
 		"id": "tracked_timing",
 		"name": "Time Tracked",
 		"description": "Used on party object to track their game date/time and restore it when loaded. Two parties with this flagged can NOT be active at the same time and membership is checked when loading party. This is specifically to handle having multiple parties in the same world with differing in-game times but can also serve to keep party entities from being active together.",

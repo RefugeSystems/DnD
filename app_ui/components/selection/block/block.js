@@ -59,6 +59,9 @@ rsSystem.component("rsSelectionBlock", {
 							archMap[entity.archetypes[i]] = true;
 						}
 					}
+					if(this.block._archetype) {
+						archMap[this.block._archetype] = true;
+					}
 					for(i=0; i<this.universe.listing.spell.length; i++) {
 						spell = this.universe.listing.spell[i];
 						add = false;

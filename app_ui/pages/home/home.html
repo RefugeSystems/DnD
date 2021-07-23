@@ -37,5 +37,8 @@
 		<button class="app-link general" v-on:click="view(page)" :class="page === active?'active':'inactive'" v-for="page in pages">
 			<span>{{page}}</span>
 		</button>
+		<button class="app-link general version" v-if="state <= 0" v-on:click="view('Version')">
+			<span>V{{version}}</span>
+		</button>
 	</div>
 </div>

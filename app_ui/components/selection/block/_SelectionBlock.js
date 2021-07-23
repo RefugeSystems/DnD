@@ -44,6 +44,14 @@ class SelectionBlock {
 		 */
 
 		/**
+		 * Set by components while loading a block.
+		 * 
+		 * Specifies an additional archetype to include that is not yet part of the entity.
+		 * @property _archetype
+		 * @type String
+		 */
+
+		/**
 		 * Controlled by the UIComponent rsSelectionBlock.
 		 * 
 		 * Set true when this block is finished.

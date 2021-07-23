@@ -161,6 +161,12 @@
 				top: -40px !important;
 				color: @rsBlue;
 			}
+
+			&.version {
+				position: absolute;
+				top: -30px;
+				right: -5px;
+			}
 		}
 		
 		&.shown {
@@ -168,5 +174,19 @@
 				top: -30px;
 			}
 		}
+	}
+
+	.app-version-link {
+		position: fixed;
+		right: 2px;
+		bottom: 2px;
+		border-radius: 4px;
+		padding: 3px 6px;
+		margin: 0px 7px;
+		transition: top .5s;
+		height: 27px;
+		font-size: 14px;
+		top: 10px;
+		text-align: center;
 	}
 }

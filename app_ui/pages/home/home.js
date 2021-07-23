@@ -36,6 +36,7 @@ rsSystem.component("RSHome", {
 		
 		data.title = document.title;
 		data.pages = ["Privacy", "License", "Terms"];
+		data.version = rsSystem.version;
 		data.screenLock = null;
 		data.mainpage = "RSDashboard";
 		data.menuSpacing = null;

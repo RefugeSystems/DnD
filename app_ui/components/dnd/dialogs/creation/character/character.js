@@ -284,6 +284,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 					}
 
 					this.universe.send("create:character", details);
+					this.closeDialog();
 				} catch (exception) {
 					// TODO: Improve choiceBlock isolation to be resistant against the below or update display before
 					//		the client submits for "smoothness" (tm)
