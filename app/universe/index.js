@@ -593,21 +593,25 @@ class Universe extends EventEmitter {
 		}
 
 		if(source) {
-			if(source.is_template) {
-				Object.assign(details, mask);
-				if(source.template_process) {
-					// TODO: Handle Template Processing
-				}
+			if(source.is_singular) {
+				callback(null, source);
 			} else {
-				// Add check for hard-copy?
-				// Object.assign(details, source._data, mask);
-				Object.assign(details, mask);
+				if(source.is_template) {
+					Object.assign(details, mask);
+					if(source.template_process) {
+						// TODO: Handle Template Processing
+					}
+				} else {
+					// Add check for hard-copy?
+					// Object.assign(details, source._data, mask);
+					Object.assign(details, mask);
+				}
+				details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+				details.is_template = false;
+				details.is_copy = true;
+				details.parent = id;
+				this.createObject(details, callback);
 			}
-			details.id = Random.identifier(source._class, 10, 32).toLowerCase();
-			details.is_template = false;
-			details.is_copy = true;
-			details.parent = id;
-			this.createObject(details, callback);
 		} else {
 			callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
 		}

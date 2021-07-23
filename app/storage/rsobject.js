@@ -779,7 +779,7 @@ class RSObject {
 					this[field.id] = this._universe.calculator.computedDiceRoll(this[field.id], this);
 				}
 				// Defaults (For null computations) & Bounds
-				if(this[field.id] === null || this[field.id] === undefined) {
+				if(this[field.id] === null || this[field.id] === undefined || this[field.id] === "") {
 					if(field.attribute.default) {
 						this[field.id] = field.attribute.default;
 					} else if(field.type === "object" || field.type === "object:dice") {

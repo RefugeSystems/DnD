@@ -1,5 +1,5 @@
 var fs = require("fs"),
-	classes = ["bard", "barbarian", "cleric", "druid", "fighter", "paladin", "ranger", "rogue", "warlock", "wizard"],
+	classes = ["bard", "barbarian", "cleric", "druid", "fighter", "monk", "paladin", "ranger", "rogue", "sorcerer", "warlock", "wizard"],
 	starts = {
 		"bard": 3,
 		"barbarian": 11,
@@ -9,6 +9,8 @@ var fs = require("fs"),
 		"paladin": 10,
 		"ranger": 10,
 		"rogue": 11,
+		"monk": 3,
+		"sorcerer": 12,
 		"warlock": 3,
 		"wizard": 13
 	},

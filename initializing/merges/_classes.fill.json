@@ -1108,6 +1108,258 @@
 			"review": true
 		},
 		{
+			"id": "archetype:monk:3",
+			"name": "Monk (3)",
+			"needs": {
+				"archetype:monk:2": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:4",
+			"name": "Monk (4)",
+			"needs": {
+				"archetype:monk:3": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:5",
+			"name": "Monk (5)",
+			"needs": {
+				"archetype:monk:4": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:6",
+			"name": "Monk (6)",
+			"needs": {
+				"archetype:monk:5": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:7",
+			"name": "Monk (7)",
+			"needs": {
+				"archetype:monk:6": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:8",
+			"name": "Monk (8)",
+			"needs": {
+				"archetype:monk:7": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:9",
+			"name": "Monk (9)",
+			"needs": {
+				"archetype:monk:8": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:10",
+			"name": "Monk (10)",
+			"needs": {
+				"archetype:monk:9": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:11",
+			"name": "Monk (11)",
+			"needs": {
+				"archetype:monk:10": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:12",
+			"name": "Monk (12)",
+			"needs": {
+				"archetype:monk:11": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:13",
+			"name": "Monk (13)",
+			"needs": {
+				"archetype:monk:12": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:14",
+			"name": "Monk (14)",
+			"needs": {
+				"archetype:monk:13": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:15",
+			"name": "Monk (15)",
+			"needs": {
+				"archetype:monk:14": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:16",
+			"name": "Monk (16)",
+			"needs": {
+				"archetype:monk:15": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:17",
+			"name": "Monk (17)",
+			"needs": {
+				"archetype:monk:16": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:18",
+			"name": "Monk (18)",
+			"needs": {
+				"archetype:monk:17": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:19",
+			"name": "Monk (19)",
+			"needs": {
+				"archetype:monk:18": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:20",
+			"name": "Monk (20)",
+			"needs": {
+				"archetype:monk:19": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:21",
+			"name": "Monk (21)",
+			"needs": {
+				"archetype:monk:20": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:22",
+			"name": "Monk (22)",
+			"needs": {
+				"archetype:monk:21": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:23",
+			"name": "Monk (23)",
+			"needs": {
+				"archetype:monk:22": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:24",
+			"name": "Monk (24)",
+			"needs": {
+				"archetype:monk:23": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:25",
+			"name": "Monk (25)",
+			"needs": {
+				"archetype:monk:24": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:26",
+			"name": "Monk (26)",
+			"needs": {
+				"archetype:monk:25": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:27",
+			"name": "Monk (27)",
+			"needs": {
+				"archetype:monk:26": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:28",
+			"name": "Monk (28)",
+			"needs": {
+				"archetype:monk:27": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:29",
+			"name": "Monk (29)",
+			"needs": {
+				"archetype:monk:28": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:monk:30",
+			"name": "Monk (30)",
+			"needs": {
+				"archetype:monk:29": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
 			"id": "archetype:paladin:10",
 			"name": "Paladin (10)",
 			"needs": {
@@ -1661,6 +1913,177 @@
 			"name": "Rogue (30)",
 			"needs": {
 				"archetype:rogue:29": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:12",
+			"name": "Sorcerer (12)",
+			"needs": {
+				"archetype:sorcerer:11": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:13",
+			"name": "Sorcerer (13)",
+			"needs": {
+				"archetype:sorcerer:12": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:14",
+			"name": "Sorcerer (14)",
+			"needs": {
+				"archetype:sorcerer:13": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:15",
+			"name": "Sorcerer (15)",
+			"needs": {
+				"archetype:sorcerer:14": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:16",
+			"name": "Sorcerer (16)",
+			"needs": {
+				"archetype:sorcerer:15": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:17",
+			"name": "Sorcerer (17)",
+			"needs": {
+				"archetype:sorcerer:16": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:18",
+			"name": "Sorcerer (18)",
+			"needs": {
+				"archetype:sorcerer:17": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:19",
+			"name": "Sorcerer (19)",
+			"needs": {
+				"archetype:sorcerer:18": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:20",
+			"name": "Sorcerer (20)",
+			"needs": {
+				"archetype:sorcerer:19": 1
+			},
+			"playable": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:21",
+			"name": "Sorcerer (21)",
+			"needs": {
+				"archetype:sorcerer:20": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:22",
+			"name": "Sorcerer (22)",
+			"needs": {
+				"archetype:sorcerer:21": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:23",
+			"name": "Sorcerer (23)",
+			"needs": {
+				"archetype:sorcerer:22": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:24",
+			"name": "Sorcerer (24)",
+			"needs": {
+				"archetype:sorcerer:23": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:25",
+			"name": "Sorcerer (25)",
+			"needs": {
+				"archetype:sorcerer:24": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:26",
+			"name": "Sorcerer (26)",
+			"needs": {
+				"archetype:sorcerer:25": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:27",
+			"name": "Sorcerer (27)",
+			"needs": {
+				"archetype:sorcerer:26": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:28",
+			"name": "Sorcerer (28)",
+			"needs": {
+				"archetype:sorcerer:27": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:29",
+			"name": "Sorcerer (29)",
+			"needs": {
+				"archetype:sorcerer:28": 1
+			},
+			"obscured": true,
+			"review": true
+		},
+		{
+			"id": "archetype:sorcerer:30",
+			"name": "Sorcerer (30)",
+			"needs": {
+				"archetype:sorcerer:29": 1
 			},
 			"obscured": true,
 			"review": true
