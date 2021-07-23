@@ -68,7 +68,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for(x = 0; x < this.universe.listing.archetype.length; x++) {
-				if(this.universe.listing.archetype[x].playable && this.universe.listing.archetype[x].root && !this.universe.listing.archetype[x].attribute.no_show && !this.universe.listing.archetype[x].is_preview) {
+				if(this.universe.listing.archetype[x].playable && this.universe.listing.archetype[x].root && !this.universe.listing.archetype[x].attribute.is_copy && !this.universe.listing.archetype[x].attribute.no_show && !this.universe.listing.archetype[x].is_preview) {
 					selectable.push(this.universe.listing.archetype[x]);
 				}
 			}
@@ -77,7 +77,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for(x = 0; x < this.universe.listing.feat.length; x++) {
-				if(this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show && !this.universe.listing.feat[x].is_preview) {
+				if(this.universe.listing.feat[x].featbg && !this.universe.listing.feat[x].attribute.no_show && !this.universe.listing.feat[x].is_preview && !this.universe.listing.feat[x].is_copy) {
 					selectable.push(this.universe.listing.feat[x]);
 				}
 			}
@@ -86,7 +86,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 
 			selectable = [];
 			for(x = 0; x < this.universe.listing.alignment.length; x++) {
-				if(this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show && !this.universe.listing.alignment[x].is_preview) {
+				if(this.universe.listing.alignment[x].playable && !this.universe.listing.alignment[x].attribute.no_show && !this.universe.listing.alignment[x].is_preview && !this.universe.listing.alignment[x].is_copy) {
 					selectable.push(this.universe.listing.alignment[x]);
 				}
 			}
