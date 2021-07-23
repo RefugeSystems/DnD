@@ -34,7 +34,7 @@ rsSystem.component("dndEntityEffects", {
 				
 				for(i=0; i<this.entity.effects.length; i++) {
 					effect = this.universe.index.effect[this.entity.effects[i]];
-					if(effect) {
+					if(effect && !effect.obscured && !effect.is_obscured) {
 						if(this.storage && this.storage.hide && this.storage.hide[effect.id]) {
 							hidden.push(effect);
 						} else if(effect.debuff) {

@@ -34,7 +34,7 @@ rsSystem.component("dndEntityFeats", {
 
 			for(i=0; i<this.entity.feats.length; i++) {
 				feat = this.universe.index.feat[this.entity.feats[i]];
-				if(feat) {
+				if(feat && !feat.obscured && !feat.is_obscured) {
 					if(this.storage && this.storage.hide && this.storage.hide[feat.id]) {
 						feats.hidden.push(feat);
 					} else if(!feat.concealed) {

@@ -48,7 +48,7 @@
 		</panel-select>
 		<div class="notice" v-if="section === 'subclass' && availableClasses.length === 0">
 			<span class="fas fa-exclamation-triangle rs-yellow"></span>
-			<span>No Available Class Chioces</span>
+			<span>No Available Class Choices</span>
 		</div>
 
 		<!-- Choose Next Subclass if Applicable Level-->
@@ -65,7 +65,7 @@
 		</panel-select>
 		<div class="notice" v-if="section === 'subclass' && availableSubclasses.length === 0">
 			<span class="fas fa-exclamation-triangle rs-yellow"></span>
-			<span>No Available Subclass Chioces</span>
+			<span>No Available Subclass Choices</span>
 		</div>
 
 		<!-- Roll HP Addition -->
@@ -89,7 +89,7 @@
 			<rs-selection-block class="choice-block" v-for="block in customizations" :universe="universe" :block="block" v-on:selected="blockSelected($event)" />
 			<div class="notice" v-if="!customizations || customizations.length === 0">
 				<span class="fas fa-exclamation-triangle rs-yellow"></span>
-				<span>No Customization Chioces</span>
+				<span>No Customization Choices</span>
 			</div>
 		</div>
 	</div>

@@ -1286,6 +1286,16 @@
 			"display_size": 200
 		}
 	}, {
+		"id": "is_deprecated",
+		"name": "Is Deprecated",
+		"description": "Used to mark an object and its children for clean up. Once marked, the system will alert masters and log when it encounters those objects.",
+		"ordering": 707,
+		"type": "boolean",
+		"attribute": {
+			"hide_when_not_set": true,
+			"display_size": 200
+		}
+	}, {
 		"id": "template_process",
 		"name": "Template Process",
 		"description": "Specifies the process for for copying this object",
