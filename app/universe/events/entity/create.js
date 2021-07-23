@@ -109,6 +109,7 @@ module.exports.initialize = function(universe) {
 		details.owned = {};
 		details.owned[event.player.id] = Date.now();
 		details.played_by = event.player.id;
+		details.hp_rolled = 0;
 		details.gold = 0;
 		details.level = 1;
 		details.born = universe.time - year * (event.message.data.age || 0);
