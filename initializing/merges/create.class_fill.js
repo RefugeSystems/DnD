@@ -1,6 +1,17 @@
 var fs = require("fs"),
-	merging = require("./gap/classes.gap.json").import,
 	classes = ["bard", "barbarian", "cleric", "druid", "fighter", "paladin", "ranger", "rogue", "warlock", "wizard"],
+	starts = {
+		"bard": 3,
+		"barbarian": 11,
+		"cleric": 12,
+		"druid": 3,
+		"fighter": 3,
+		"paladin": 10,
+		"ranger": 10,
+		"rogue": 11,
+		"warlock": 3,
+		"wizard": 13
+	},
 	maxLevel = 30,
 	exporting = [],
 	archetype,
@@ -13,7 +24,7 @@ var fs = require("fs"),
 
 for(c=0; c<classes.length; c++) {
 	cl = classes[c];
-	for(l=1; l<=maxLevel; l++) {
+	for(l=starts[cl]; l<=maxLevel; l++) {
 		mod = {};
 		mod.id = "archetype:" + cl + ":" + l;
 		mod.name = cl[0].toUpperCase() + cl.substring(1) + " (" + l + ")";
@@ -26,6 +37,7 @@ for(c=0; c<classes.length; c++) {
 		} else {
 			mod.obscured = true;
 		}
+		mod.review = true;
 		exporting.push(mod);
 	}
 }

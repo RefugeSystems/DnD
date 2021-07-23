@@ -6,8 +6,7 @@
 			"needs": {
 				"archetype:bard:2": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:4",
@@ -15,8 +14,7 @@
 			"needs": {
 				"archetype:bard:3": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:5",
@@ -24,8 +22,7 @@
 			"needs": {
 				"archetype:bard:4": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:6",
@@ -33,8 +30,7 @@
 			"needs": {
 				"archetype:bard:5": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:7",
@@ -42,8 +38,7 @@
 			"needs": {
 				"archetype:bard:6": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:8",
@@ -51,8 +46,7 @@
 			"needs": {
 				"archetype:bard:7": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:9",
@@ -60,8 +54,7 @@
 			"needs": {
 				"archetype:bard:8": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:10",
@@ -69,8 +62,7 @@
 			"needs": {
 				"archetype:bard:9": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:11",
@@ -78,8 +70,7 @@
 			"needs": {
 				"archetype:bard:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:12",
@@ -87,8 +78,7 @@
 			"needs": {
 				"archetype:bard:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:13",
@@ -96,8 +86,7 @@
 			"needs": {
 				"archetype:bard:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:14",
@@ -105,8 +94,7 @@
 			"needs": {
 				"archetype:bard:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:15",
@@ -114,8 +102,7 @@
 			"needs": {
 				"archetype:bard:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:16",
@@ -123,8 +110,7 @@
 			"needs": {
 				"archetype:bard:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:17",
@@ -132,8 +118,7 @@
 			"needs": {
 				"archetype:bard:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:18",
@@ -141,8 +126,7 @@
 			"needs": {
 				"archetype:bard:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:19",
@@ -150,8 +134,7 @@
 			"needs": {
 				"archetype:bard:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:20",
@@ -159,8 +142,7 @@
 			"needs": {
 				"archetype:bard:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:bard:21",
@@ -168,8 +150,7 @@
 			"needs": {
 				"archetype:bard:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:22",
@@ -177,8 +158,7 @@
 			"needs": {
 				"archetype:bard:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:23",
@@ -186,8 +166,7 @@
 			"needs": {
 				"archetype:bard:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:24",
@@ -195,8 +174,7 @@
 			"needs": {
 				"archetype:bard:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:25",
@@ -204,8 +182,7 @@
 			"needs": {
 				"archetype:bard:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:26",
@@ -213,8 +190,7 @@
 			"needs": {
 				"archetype:bard:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:27",
@@ -222,8 +198,7 @@
 			"needs": {
 				"archetype:bard:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:28",
@@ -231,8 +206,7 @@
 			"needs": {
 				"archetype:bard:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:29",
@@ -240,8 +214,7 @@
 			"needs": {
 				"archetype:bard:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:bard:30",
@@ -249,8 +222,7 @@
 			"needs": {
 				"archetype:bard:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:11",
@@ -258,8 +230,7 @@
 			"needs": {
 				"archetype:barbarian:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:12",
@@ -267,8 +238,7 @@
 			"needs": {
 				"archetype:barbarian:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:13",
@@ -276,8 +246,7 @@
 			"needs": {
 				"archetype:barbarian:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:14",
@@ -285,8 +254,7 @@
 			"needs": {
 				"archetype:barbarian:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:15",
@@ -294,8 +262,7 @@
 			"needs": {
 				"archetype:barbarian:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:16",
@@ -303,8 +270,7 @@
 			"needs": {
 				"archetype:barbarian:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:17",
@@ -312,8 +278,7 @@
 			"needs": {
 				"archetype:barbarian:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:18",
@@ -321,8 +286,7 @@
 			"needs": {
 				"archetype:barbarian:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:19",
@@ -330,8 +294,7 @@
 			"needs": {
 				"archetype:barbarian:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:20",
@@ -339,8 +302,7 @@
 			"needs": {
 				"archetype:barbarian:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:barbarian:21",
@@ -348,8 +310,7 @@
 			"needs": {
 				"archetype:barbarian:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:22",
@@ -357,8 +318,7 @@
 			"needs": {
 				"archetype:barbarian:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:23",
@@ -366,8 +326,7 @@
 			"needs": {
 				"archetype:barbarian:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:24",
@@ -375,8 +334,7 @@
 			"needs": {
 				"archetype:barbarian:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:25",
@@ -384,8 +342,7 @@
 			"needs": {
 				"archetype:barbarian:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:26",
@@ -393,8 +350,7 @@
 			"needs": {
 				"archetype:barbarian:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:27",
@@ -402,8 +358,7 @@
 			"needs": {
 				"archetype:barbarian:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:28",
@@ -411,8 +366,7 @@
 			"needs": {
 				"archetype:barbarian:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:29",
@@ -420,8 +374,7 @@
 			"needs": {
 				"archetype:barbarian:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:barbarian:30",
@@ -429,8 +382,7 @@
 			"needs": {
 				"archetype:barbarian:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:12",
@@ -438,8 +390,7 @@
 			"needs": {
 				"archetype:cleric:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:13",
@@ -447,8 +398,7 @@
 			"needs": {
 				"archetype:cleric:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:14",
@@ -456,8 +406,7 @@
 			"needs": {
 				"archetype:cleric:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:15",
@@ -465,8 +414,7 @@
 			"needs": {
 				"archetype:cleric:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:16",
@@ -474,8 +422,7 @@
 			"needs": {
 				"archetype:cleric:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:17",
@@ -483,8 +430,7 @@
 			"needs": {
 				"archetype:cleric:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:18",
@@ -492,8 +438,7 @@
 			"needs": {
 				"archetype:cleric:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:19",
@@ -501,8 +446,7 @@
 			"needs": {
 				"archetype:cleric:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:20",
@@ -510,8 +454,7 @@
 			"needs": {
 				"archetype:cleric:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:cleric:21",
@@ -519,8 +462,7 @@
 			"needs": {
 				"archetype:cleric:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:22",
@@ -528,8 +470,7 @@
 			"needs": {
 				"archetype:cleric:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:23",
@@ -537,8 +478,7 @@
 			"needs": {
 				"archetype:cleric:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:24",
@@ -546,8 +486,7 @@
 			"needs": {
 				"archetype:cleric:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:25",
@@ -555,8 +494,7 @@
 			"needs": {
 				"archetype:cleric:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:26",
@@ -564,8 +502,7 @@
 			"needs": {
 				"archetype:cleric:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:27",
@@ -573,8 +510,7 @@
 			"needs": {
 				"archetype:cleric:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:28",
@@ -582,8 +518,7 @@
 			"needs": {
 				"archetype:cleric:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:29",
@@ -591,8 +526,7 @@
 			"needs": {
 				"archetype:cleric:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:cleric:30",
@@ -600,17 +534,7 @@
 			"needs": {
 				"archetype:cleric:29": 1
 			},
-			"obscured": true,
-			"review": true
-		},
-		{
-			"id": "archetype:druid:3",
-			"name": "Druid (3)",
-			"needs": {
-				"archetype:druid:2": 1
-			},
-			"playable": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:4",
@@ -618,8 +542,7 @@
 			"needs": {
 				"archetype:druid:3": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:5",
@@ -627,8 +550,7 @@
 			"needs": {
 				"archetype:druid:4": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:6",
@@ -636,8 +558,7 @@
 			"needs": {
 				"archetype:druid:5": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:7",
@@ -645,8 +566,7 @@
 			"needs": {
 				"archetype:druid:6": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:8",
@@ -654,8 +574,7 @@
 			"needs": {
 				"archetype:druid:7": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:9",
@@ -663,8 +582,7 @@
 			"needs": {
 				"archetype:druid:8": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:10",
@@ -672,8 +590,7 @@
 			"needs": {
 				"archetype:druid:9": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:11",
@@ -681,8 +598,7 @@
 			"needs": {
 				"archetype:druid:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:12",
@@ -690,8 +606,7 @@
 			"needs": {
 				"archetype:druid:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:13",
@@ -699,8 +614,7 @@
 			"needs": {
 				"archetype:druid:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:14",
@@ -708,8 +622,7 @@
 			"needs": {
 				"archetype:druid:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:15",
@@ -717,8 +630,7 @@
 			"needs": {
 				"archetype:druid:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:16",
@@ -726,8 +638,7 @@
 			"needs": {
 				"archetype:druid:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:17",
@@ -735,8 +646,7 @@
 			"needs": {
 				"archetype:druid:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:18",
@@ -744,8 +654,7 @@
 			"needs": {
 				"archetype:druid:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:19",
@@ -753,8 +662,7 @@
 			"needs": {
 				"archetype:druid:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:20",
@@ -762,8 +670,7 @@
 			"needs": {
 				"archetype:druid:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:druid:21",
@@ -771,8 +678,7 @@
 			"needs": {
 				"archetype:druid:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:22",
@@ -780,8 +686,7 @@
 			"needs": {
 				"archetype:druid:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:23",
@@ -789,8 +694,7 @@
 			"needs": {
 				"archetype:druid:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:24",
@@ -798,8 +702,7 @@
 			"needs": {
 				"archetype:druid:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:25",
@@ -807,8 +710,7 @@
 			"needs": {
 				"archetype:druid:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:26",
@@ -816,8 +718,7 @@
 			"needs": {
 				"archetype:druid:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:27",
@@ -825,8 +726,7 @@
 			"needs": {
 				"archetype:druid:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:28",
@@ -834,8 +734,7 @@
 			"needs": {
 				"archetype:druid:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:29",
@@ -843,8 +742,7 @@
 			"needs": {
 				"archetype:druid:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:druid:30",
@@ -852,8 +750,7 @@
 			"needs": {
 				"archetype:druid:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:3",
@@ -861,8 +758,7 @@
 			"needs": {
 				"archetype:fighter:2": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:4",
@@ -870,8 +766,7 @@
 			"needs": {
 				"archetype:fighter:3": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:5",
@@ -879,8 +774,7 @@
 			"needs": {
 				"archetype:fighter:4": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:6",
@@ -888,8 +782,7 @@
 			"needs": {
 				"archetype:fighter:5": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:7",
@@ -897,8 +790,7 @@
 			"needs": {
 				"archetype:fighter:6": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:8",
@@ -906,8 +798,7 @@
 			"needs": {
 				"archetype:fighter:7": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:9",
@@ -915,8 +806,7 @@
 			"needs": {
 				"archetype:fighter:8": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:10",
@@ -924,8 +814,7 @@
 			"needs": {
 				"archetype:fighter:9": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:11",
@@ -933,8 +822,7 @@
 			"needs": {
 				"archetype:fighter:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:12",
@@ -942,8 +830,7 @@
 			"needs": {
 				"archetype:fighter:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:13",
@@ -951,8 +838,7 @@
 			"needs": {
 				"archetype:fighter:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:14",
@@ -960,8 +846,7 @@
 			"needs": {
 				"archetype:fighter:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:15",
@@ -969,8 +854,7 @@
 			"needs": {
 				"archetype:fighter:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:16",
@@ -978,8 +862,7 @@
 			"needs": {
 				"archetype:fighter:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:17",
@@ -987,8 +870,7 @@
 			"needs": {
 				"archetype:fighter:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:18",
@@ -996,8 +878,7 @@
 			"needs": {
 				"archetype:fighter:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:19",
@@ -1005,8 +886,7 @@
 			"needs": {
 				"archetype:fighter:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:20",
@@ -1014,8 +894,7 @@
 			"needs": {
 				"archetype:fighter:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:fighter:21",
@@ -1023,8 +902,7 @@
 			"needs": {
 				"archetype:fighter:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:22",
@@ -1032,8 +910,7 @@
 			"needs": {
 				"archetype:fighter:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:23",
@@ -1041,8 +918,7 @@
 			"needs": {
 				"archetype:fighter:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:24",
@@ -1050,8 +926,7 @@
 			"needs": {
 				"archetype:fighter:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:25",
@@ -1059,8 +934,7 @@
 			"needs": {
 				"archetype:fighter:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:26",
@@ -1068,8 +942,7 @@
 			"needs": {
 				"archetype:fighter:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:27",
@@ -1077,8 +950,7 @@
 			"needs": {
 				"archetype:fighter:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:28",
@@ -1086,8 +958,7 @@
 			"needs": {
 				"archetype:fighter:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:29",
@@ -1095,8 +966,7 @@
 			"needs": {
 				"archetype:fighter:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:fighter:30",
@@ -1104,8 +974,7 @@
 			"needs": {
 				"archetype:fighter:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:10",
@@ -1113,8 +982,7 @@
 			"needs": {
 				"archetype:paladin:9": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:11",
@@ -1122,8 +990,7 @@
 			"needs": {
 				"archetype:paladin:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:12",
@@ -1131,8 +998,7 @@
 			"needs": {
 				"archetype:paladin:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:13",
@@ -1140,8 +1006,7 @@
 			"needs": {
 				"archetype:paladin:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:14",
@@ -1149,8 +1014,7 @@
 			"needs": {
 				"archetype:paladin:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:15",
@@ -1158,8 +1022,7 @@
 			"needs": {
 				"archetype:paladin:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:16",
@@ -1167,8 +1030,7 @@
 			"needs": {
 				"archetype:paladin:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:17",
@@ -1176,8 +1038,7 @@
 			"needs": {
 				"archetype:paladin:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:18",
@@ -1185,8 +1046,7 @@
 			"needs": {
 				"archetype:paladin:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:19",
@@ -1194,8 +1054,7 @@
 			"needs": {
 				"archetype:paladin:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:20",
@@ -1203,8 +1062,7 @@
 			"needs": {
 				"archetype:paladin:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:paladin:21",
@@ -1212,8 +1070,7 @@
 			"needs": {
 				"archetype:paladin:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:22",
@@ -1221,8 +1078,7 @@
 			"needs": {
 				"archetype:paladin:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:23",
@@ -1230,8 +1086,7 @@
 			"needs": {
 				"archetype:paladin:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:24",
@@ -1239,8 +1094,7 @@
 			"needs": {
 				"archetype:paladin:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:25",
@@ -1248,8 +1102,7 @@
 			"needs": {
 				"archetype:paladin:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:26",
@@ -1257,8 +1110,7 @@
 			"needs": {
 				"archetype:paladin:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:27",
@@ -1266,8 +1118,7 @@
 			"needs": {
 				"archetype:paladin:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:28",
@@ -1275,8 +1126,7 @@
 			"needs": {
 				"archetype:paladin:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:29",
@@ -1284,8 +1134,7 @@
 			"needs": {
 				"archetype:paladin:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:paladin:30",
@@ -1293,8 +1142,7 @@
 			"needs": {
 				"archetype:paladin:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:10",
@@ -1302,8 +1150,7 @@
 			"needs": {
 				"archetype:ranger:9": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:11",
@@ -1311,8 +1158,7 @@
 			"needs": {
 				"archetype:ranger:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:12",
@@ -1320,8 +1166,7 @@
 			"needs": {
 				"archetype:ranger:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:13",
@@ -1329,8 +1174,7 @@
 			"needs": {
 				"archetype:ranger:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:14",
@@ -1338,8 +1182,7 @@
 			"needs": {
 				"archetype:ranger:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:15",
@@ -1347,8 +1190,7 @@
 			"needs": {
 				"archetype:ranger:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:16",
@@ -1356,8 +1198,7 @@
 			"needs": {
 				"archetype:ranger:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:17",
@@ -1365,8 +1206,7 @@
 			"needs": {
 				"archetype:ranger:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:18",
@@ -1374,8 +1214,7 @@
 			"needs": {
 				"archetype:ranger:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:19",
@@ -1383,8 +1222,7 @@
 			"needs": {
 				"archetype:ranger:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:20",
@@ -1392,8 +1230,7 @@
 			"needs": {
 				"archetype:ranger:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:ranger:21",
@@ -1401,8 +1238,7 @@
 			"needs": {
 				"archetype:ranger:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:22",
@@ -1410,8 +1246,7 @@
 			"needs": {
 				"archetype:ranger:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:23",
@@ -1419,8 +1254,7 @@
 			"needs": {
 				"archetype:ranger:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:24",
@@ -1428,8 +1262,7 @@
 			"needs": {
 				"archetype:ranger:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:25",
@@ -1437,8 +1270,7 @@
 			"needs": {
 				"archetype:ranger:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:26",
@@ -1446,8 +1278,7 @@
 			"needs": {
 				"archetype:ranger:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:27",
@@ -1455,8 +1286,7 @@
 			"needs": {
 				"archetype:ranger:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:28",
@@ -1464,8 +1294,7 @@
 			"needs": {
 				"archetype:ranger:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:29",
@@ -1473,8 +1302,7 @@
 			"needs": {
 				"archetype:ranger:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:ranger:30",
@@ -1482,8 +1310,7 @@
 			"needs": {
 				"archetype:ranger:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:11",
@@ -1491,8 +1318,7 @@
 			"needs": {
 				"archetype:rogue:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:12",
@@ -1500,8 +1326,7 @@
 			"needs": {
 				"archetype:rogue:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:13",
@@ -1509,8 +1334,7 @@
 			"needs": {
 				"archetype:rogue:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:14",
@@ -1518,8 +1342,7 @@
 			"needs": {
 				"archetype:rogue:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:15",
@@ -1527,8 +1350,7 @@
 			"needs": {
 				"archetype:rogue:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:16",
@@ -1536,8 +1358,7 @@
 			"needs": {
 				"archetype:rogue:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:17",
@@ -1545,8 +1366,7 @@
 			"needs": {
 				"archetype:rogue:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:18",
@@ -1554,8 +1374,7 @@
 			"needs": {
 				"archetype:rogue:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:19",
@@ -1563,8 +1382,7 @@
 			"needs": {
 				"archetype:rogue:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:20",
@@ -1572,8 +1390,7 @@
 			"needs": {
 				"archetype:rogue:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:rogue:21",
@@ -1581,8 +1398,7 @@
 			"needs": {
 				"archetype:rogue:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:22",
@@ -1590,8 +1406,7 @@
 			"needs": {
 				"archetype:rogue:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:23",
@@ -1599,8 +1414,7 @@
 			"needs": {
 				"archetype:rogue:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:24",
@@ -1608,8 +1422,7 @@
 			"needs": {
 				"archetype:rogue:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:25",
@@ -1617,8 +1430,7 @@
 			"needs": {
 				"archetype:rogue:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:26",
@@ -1626,8 +1438,7 @@
 			"needs": {
 				"archetype:rogue:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:27",
@@ -1635,8 +1446,7 @@
 			"needs": {
 				"archetype:rogue:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:28",
@@ -1644,8 +1454,7 @@
 			"needs": {
 				"archetype:rogue:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:29",
@@ -1653,8 +1462,7 @@
 			"needs": {
 				"archetype:rogue:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:rogue:30",
@@ -1662,8 +1470,7 @@
 			"needs": {
 				"archetype:rogue:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:3",
@@ -1671,8 +1478,7 @@
 			"needs": {
 				"archetype:warlock:2": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:4",
@@ -1680,8 +1486,7 @@
 			"needs": {
 				"archetype:warlock:3": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:5",
@@ -1689,8 +1494,7 @@
 			"needs": {
 				"archetype:warlock:4": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:6",
@@ -1698,8 +1502,7 @@
 			"needs": {
 				"archetype:warlock:5": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:7",
@@ -1707,8 +1510,7 @@
 			"needs": {
 				"archetype:warlock:6": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:8",
@@ -1716,8 +1518,7 @@
 			"needs": {
 				"archetype:warlock:7": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:9",
@@ -1725,8 +1526,7 @@
 			"needs": {
 				"archetype:warlock:8": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:10",
@@ -1734,8 +1534,7 @@
 			"needs": {
 				"archetype:warlock:9": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:11",
@@ -1743,8 +1542,7 @@
 			"needs": {
 				"archetype:warlock:10": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:12",
@@ -1752,8 +1550,7 @@
 			"needs": {
 				"archetype:warlock:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:13",
@@ -1761,8 +1558,7 @@
 			"needs": {
 				"archetype:warlock:12": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:14",
@@ -1770,8 +1566,7 @@
 			"needs": {
 				"archetype:warlock:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:15",
@@ -1779,8 +1574,7 @@
 			"needs": {
 				"archetype:warlock:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:16",
@@ -1788,8 +1582,7 @@
 			"needs": {
 				"archetype:warlock:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:17",
@@ -1797,8 +1590,7 @@
 			"needs": {
 				"archetype:warlock:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:18",
@@ -1806,8 +1598,7 @@
 			"needs": {
 				"archetype:warlock:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:19",
@@ -1815,8 +1606,7 @@
 			"needs": {
 				"archetype:warlock:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:20",
@@ -1824,8 +1614,7 @@
 			"needs": {
 				"archetype:warlock:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:warlock:21",
@@ -1833,8 +1622,7 @@
 			"needs": {
 				"archetype:warlock:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:22",
@@ -1842,8 +1630,7 @@
 			"needs": {
 				"archetype:warlock:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:23",
@@ -1851,8 +1638,7 @@
 			"needs": {
 				"archetype:warlock:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:24",
@@ -1860,8 +1646,7 @@
 			"needs": {
 				"archetype:warlock:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:25",
@@ -1869,8 +1654,7 @@
 			"needs": {
 				"archetype:warlock:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:26",
@@ -1878,8 +1662,7 @@
 			"needs": {
 				"archetype:warlock:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:27",
@@ -1887,8 +1670,7 @@
 			"needs": {
 				"archetype:warlock:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:28",
@@ -1896,8 +1678,7 @@
 			"needs": {
 				"archetype:warlock:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:29",
@@ -1905,8 +1686,7 @@
 			"needs": {
 				"archetype:warlock:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:warlock:30",
@@ -1914,17 +1694,15 @@
 			"needs": {
 				"archetype:warlock:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
-			"id": "archetype:wizard:13",
-			"name": "Wizard (13)",
+			"id": "archetype:wizard:12",
+			"name": "Wizard (12)",
 			"needs": {
-				"archetype:wizard:12": 1
+				"archetype:wizard:11": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:14",
@@ -1932,8 +1710,7 @@
 			"needs": {
 				"archetype:wizard:13": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:15",
@@ -1941,8 +1718,7 @@
 			"needs": {
 				"archetype:wizard:14": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:16",
@@ -1950,8 +1726,7 @@
 			"needs": {
 				"archetype:wizard:15": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:17",
@@ -1959,8 +1734,7 @@
 			"needs": {
 				"archetype:wizard:16": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:18",
@@ -1968,8 +1742,7 @@
 			"needs": {
 				"archetype:wizard:17": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:19",
@@ -1977,8 +1750,7 @@
 			"needs": {
 				"archetype:wizard:18": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:20",
@@ -1986,8 +1758,7 @@
 			"needs": {
 				"archetype:wizard:19": 1
 			},
-			"playable": true,
-			"review": true
+			"playable": true
 		},
 		{
 			"id": "archetype:wizard:21",
@@ -1995,8 +1766,7 @@
 			"needs": {
 				"archetype:wizard:20": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:22",
@@ -2004,8 +1774,7 @@
 			"needs": {
 				"archetype:wizard:21": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:23",
@@ -2013,8 +1782,7 @@
 			"needs": {
 				"archetype:wizard:22": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:24",
@@ -2022,8 +1790,7 @@
 			"needs": {
 				"archetype:wizard:23": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:25",
@@ -2031,8 +1798,7 @@
 			"needs": {
 				"archetype:wizard:24": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:26",
@@ -2040,8 +1806,7 @@
 			"needs": {
 				"archetype:wizard:25": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:27",
@@ -2049,8 +1814,7 @@
 			"needs": {
 				"archetype:wizard:26": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:28",
@@ -2058,8 +1822,7 @@
 			"needs": {
 				"archetype:wizard:27": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:29",
@@ -2067,8 +1830,7 @@
 			"needs": {
 				"archetype:wizard:28": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		},
 		{
 			"id": "archetype:wizard:30",
@@ -2076,8 +1838,7 @@
 			"needs": {
 				"archetype:wizard:29": 1
 			},
-			"obscured": true,
-			"review": true
+			"obscured": true
 		}
 	]
 }

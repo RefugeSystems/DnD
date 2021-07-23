@@ -64,6 +64,35 @@ rsSystem.component("DNDMasterScreen", {
 			}
 			return available;
 		},
+		"dynamicCorpus": function() {
+			if(!this.storage.dynamicTable) {
+				return [];
+			}
+			var noun = this.storage.dynamicTable.dynamic_noun || "knowledge",
+				available = [],
+				buffer,
+				i;
+
+			if(!this.universe.listing[noun]) {
+				console.warn("Noun \"" + noun + "\" is not defined, defaulting to \"knowledge\".");
+				noun = "knowledge";
+			}
+
+			Vue.set(this.storage.dynamicTable, "label", noun.capitalize());
+			for(i=0; i<this.universe.listing[noun].length; i++) {
+				buffer = this.universe.listing[noun][i];
+				if(buffer && !buffer.disabled && !buffer.is_preview && !buffer.is_copy && !buffer.is_template) {
+					available.push(buffer);
+				}
+			}
+			return available;
+		},
+		"dynamicNouns": function() {
+			var nouns = Object.keys(this.universe.listing);
+			nouns.splice(nouns.indexOf("fields"), 1);
+			nouns.splice(nouns.indexOf("classes"), 1);
+			return nouns;
+		},
 		"viewedEntity": function() {
 			if(this.$route.query.entity) {
 				return this.universe.index.entity[this.$route.query.entity];
@@ -212,7 +241,14 @@ rsSystem.component("DNDMasterScreen", {
 		var data = {},
 			reference = this,
 			getMeeting,
+			nouns,
 			i;
+
+		nouns = this.universe.listing.classes;
+		nouns.sort(rsSystem.utility.sortByName);
+		// nouns = Object.keys(this.universe.listing);
+		// nouns.splice(nouns.indexOf("fields"), 1);
+		// nouns.splice(nouns.indexOf("classes"), 1);
 
 		data.tracking = {};
 		data.tracking.player = {};
@@ -233,7 +269,7 @@ rsSystem.component("DNDMasterScreen", {
 			"minions": "fas fa-dog"
 		};
 
-		data.itemHeadings = ["icon", "name", "is_template", "is_copy", "acquired", "created"];
+		data.itemHeadings = ["icon", "name", "is_template", "is_copy", "review", "created"];
 		data.itemControls = [{
 			"title": "Distribute Items",
 			"icon": "fas fa-abacus",
@@ -362,6 +398,13 @@ rsSystem.component("DNDMasterScreen", {
 				}
 			}
 		}];
+		data.dynamicHeadings = ["name", "category", "level", "range_normal", "cast_time", "created"];
+		data.dynamicControls = [];
+		data.dynamicSelections = [{
+			"title": "Noun",
+			"id": "dynamic_noun",
+			"options": nouns
+		}];
 
 		
 		data.formatter = {};
@@ -441,6 +484,12 @@ rsSystem.component("DNDMasterScreen", {
 		}
 		if(!this.storage.knowledgeTable.label) {
 			this.storage.knowledgeTable.label = "Knowledge";
+		}
+		if(this.storage && !this.storage.dynamicTable) {
+			Vue.set(this.storage, "dynamicTable", {});
+		}
+		if(!this.storage.dynamicTable.label) {
+			this.storage.dynamicTable.label = "Knowledge";
 		}
 	},
 	"methods": {

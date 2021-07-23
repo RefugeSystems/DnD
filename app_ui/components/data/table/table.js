@@ -83,6 +83,9 @@ rsSystem.component("rsTable", {
 		"headings": {
 			"type": Array
 		},
+		"profile": {
+			"type": Object
+		},
 		"hidden": {
 			"type": Object,
 			"default": function() {

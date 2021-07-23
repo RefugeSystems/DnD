@@ -9,10 +9,10 @@
 				<span :class="control.icon"></span>
 				<span>{{control.name}}</span>
 			</button>
-			<select class="ctrl selections info" v-for="control in selections" v-if="control.id && control.options" v-model="storage[control.id]" v-on:change="control.process(storage[control.id])" :title="control.title">
+			<select class="ctrl selections info" v-for="control in selections" v-if="control.id && control.options" v-model="storage[control.id]" v-on:change="control.process?control.process(storage[control.id]):null" :title="control.title">
 				<option v-if="control.null_option && control.null_option.id" :value="control.null_option.id">{{control.null_option.name}}</option>
 				<option v-if="control.null_option && !control.null_option.id" value>{{control.null_option.name || control.null_option}}</option>
-				<option v-for="option in control.options" :value="option.id">{{option.name}}</option>
+				<option v-for="option in control.options" :value="option.id || option">{{option.name || option}}</option>
 			</select>
 		</div>
 		<button class="ctrl selections clear" v-if="selected" v-on:click="clearSelection()" title="Unselect all selected rows, regardless of visibility">

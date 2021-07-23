@@ -31,17 +31,17 @@
 	</div>
 	<div class="options flex v">
 		<div class="option flex h">
-			<span>Rows per Page:</span>
+			<span>Rows per Page: </span>
 			<select v-model.number="storage.rows" title="Rows per page">
 				<option v-for="i in 100" :value="i">{{i}}</option>
 			</select>
 		</div>
 		<div class="option flex h">
-			<span>Sorting Column</span>
+			<span>Sorting Column: </span>
 			<span>{{getFieldName(storage.key) || "No Active Sort"}}</span>
 		</div>
 		<div class="option flex h">
-			<span>Sorting Direction</span>
+			<span>Sorting Direction: </span>
 			<span>{{storage.reverse === 1?"Forward":"Backward"}}</span>
 		</div>
 	</div>
