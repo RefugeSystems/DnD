@@ -66,8 +66,14 @@ updateCaches = function() {
 
 
 self.addEventListener("install", function(event) {
-	var result = caches.open(cacheID);
-	result.then(function(cache) {
+	var result = caches.keys()
+	.then(function(keys) {
+		for(var i = 0; i < keys.length; i++) {
+			caches.delete(keys[i]);
+		}
+		return caches.open(cacheID);
+	})
+	.then(function(cache) {
 		return cache.addAll([
 			"./",
 			"./index.html",
@@ -88,13 +94,13 @@ self.addEventListener("install", function(event) {
 
 			"./externals.js",
 			"./main.js"
-		])
-		.then(function() {
-			self.skipWaiting();
-		})
-		.catch(function(error) {
-			console.error("Install Fault: ", error);
-		});
+		]);
+	})
+	.then(function() {
+		self.skipWaiting();
+	})
+	.catch(function(error) {
+		console.error("Install Fault: ", error);
 	});
 
 	event.waitUntil(result);
