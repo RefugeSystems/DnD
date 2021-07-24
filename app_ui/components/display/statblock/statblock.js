@@ -55,7 +55,7 @@ rsSystem.component("rsStatBlock", {
 				return fields;
 			} else if(this.object.must_know) {
 				// TODO: Implement "Known" filtering
-				if(!this.player || !this.player.gm && (!this.player.attribute || !(entity = this.universe.index.entity[this.player.attribute.playing_as]) || !entity.knowledges || (entity.knowledges.indexOf(this.object.must_know) === -1 && (!entity.knowledge_matrix || !entity.knowledge_matrix[this.object.id])))) {
+				if(!this.player || (!this.player.gm && (!this.player.attribute || !(entity = this.universe.index.entity[this.player.attribute.playing_as]) || !entity.knowledges || (entity.knowledges.indexOf(this.object.must_know) === -1 && (!entity.knowledge_matrix || !entity.knowledge_matrix[this.object.id]))))) {
 					return fields;
 				}
 			}
@@ -65,7 +65,7 @@ rsSystem.component("rsStatBlock", {
 				if(classed.attribute && (cfields = classed.attribute["info_" + this.size] || classed.attribute.info_all)) {
 					for(x=0; x<cfields.length; x++) {
 						field = this.universe.index.fields[cfields[x]];
-						if(field && (!field.attribute || !field.attribute.private || this.shown)) {
+						if(this.isVisible(field)) {
 							fields.push(field);
 						}
 					}
@@ -73,7 +73,7 @@ rsSystem.component("rsStatBlock", {
 					cfields = classed.fields;
 					for(x=0; x<cfields.length; x++) {
 						field = this.universe.index.fields[classed.fields[x]];
-						if(field && (!field.attribute || !field.attribute.private || this.shown) && ((this.size > 100 && field.attribute.displayed !== false) || (field.attribute && field.attribute.display_size && field.attribute.display_size <= this.size)) || ((!field.attribute || !field.attribute.display_size) && 90 <= this.size)) {
+						if(this.isVisible(field)) {
 							// fields.push(field.id);
 							fields.push(field);
 						}
@@ -107,10 +107,7 @@ rsSystem.component("rsStatBlock", {
 	},
 	"methods": {
 		"isVisible": function(field) {
-			if(!this.filtering) {
-				return true;
-			}
-			return field._search && field._search.indexOf(this.filtering) !== -1;
+			return field && field.attribute && (!field.attribute || !field.attribute.private || this.shown) && field.attribute.displayed !== false && (!field.attribute.display_size || field.attribute.display_size <= this.size) && (!this.filtering || (field._search && field._search.indexOf(this.filtering) !== -1));
 		}
 	},
 	"template": Vue.templified("components/display/statblock.html")

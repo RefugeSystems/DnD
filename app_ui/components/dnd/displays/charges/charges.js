@@ -30,20 +30,20 @@ rsSystem.component("dndObjectCharges", {
 	},
 	"methods": {
 		"use": function() {
-			if(this.entity && this.universe) {
-				console.log("Use: ", this);
+			if(this.universe) {
+				// console.log("Use: ", this);
 				this.universe.send("charges:use", {
-					"entity": this.entity.id,
+					"entity": this.entity?this.entity.id:null,
 					"object": this.object.id,
 					"expend": 1
 				});
 			}
 		},
 		"restore": function() {
-			if(this.entity && this.universe) {
-				console.log("Restore: ", this);
+			if(this.universe) {
+				// console.log("Restore: ", this);
 				this.universe.send("charges:gain", {
-					"entity": this.entity.id,
+					"entity": this.entity?this.entity.id:null,
 					"object": this.object.id,
 					"gained": 1
 				});

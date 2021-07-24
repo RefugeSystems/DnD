@@ -1,0 +1,37 @@
+.rs-component,
+.rs-page {
+	.filter-container {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		background-color: @rsWhite;
+		min-height: 36px;
+		z-index: 1;
+
+		.filter-indicator {
+			position: absolute;
+			color: @rsBlack;
+			background-color: transparent;
+			right: 6px;
+			top: 50%;
+			margin-top: -11px;
+			font-size: 22px;
+			height: 22px;
+			width: 22px;
+			z-index: 3;
+		}
+
+		input {
+			position: relative;
+			padding: 3px 26px 3px 7px;
+			line-height: inherit;
+			background-color: @rsWhite;
+			flex-grow: 1;
+			z-index: 5;
+
+			&.buffering {
+				background-color: transparent;
+			}
+		}
+	}
+}

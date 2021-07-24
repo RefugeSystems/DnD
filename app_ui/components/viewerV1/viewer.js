@@ -254,6 +254,7 @@
 			data.dragX = null;
 			data.dragY = null;
 
+			data.resetViewportFlag = true;
 			data.focusedLocation = null;
 			data.availableCanvases = {};
 			data.availableLocales = {};
@@ -265,8 +266,10 @@
 			data.pins = true;
 			data.alter = "";
 			data.delayed = null;
+			data.applyTiming = 0;
 			data.last = 0;
 
+			data.renderedLocation = null;
 			data.legendDisplayed = true;
 			data.legendOpen = false;
 			data.legendHidden = {};
@@ -358,10 +361,8 @@
 			"location": {
 				"handler": function(newValue, oldValue) {
 					Vue.set(this, "measurementCanvas", null);
+					Vue.set(this, "resetViewportFlag", true);
 					this.update();
-					setTimeout(() => {
-						this.resetViewport();
-					}, 100);
 				}
 			},
 			"location.coordinates": {
@@ -468,11 +469,11 @@
 			// this.universe.$on("model:modified", this.update);
 			// this.location.$on("modified", this.update);
 
-			setTimeout(() => {
-				this.redrawPaths();
-			}, 10);
+			// setTimeout(() => {
+			// 	this.resetViewport();
+			// 	this.redrawPaths();
+			// }, 10);
 			this.update();
-			this.resetViewport();
 		},
 		"methods": {
 			"getMarkerSize": function() {
@@ -598,7 +599,7 @@
 				this.filterPOIs();
 			},
 			"filterPOIs": function(text) {
-				console.log("Filter: " + text);
+				// console.log("Filter: " + text);
 				var buffer;
 
 				if(text !== this.searchPrevious) {
@@ -813,7 +814,7 @@
 						});
 						break;
 					case "set-hidden":
-						console.log("Hide: ", option);
+						// console.log("Hide: ", option);
 						if(option.object) {
 							Vue.set(this.storage.hide, option.object, !this.storage.hide[option.object]);
 						}
@@ -828,17 +829,17 @@
 						break;
 					case "set-radial":
 						if(this.storage.radial_radius) {
-							console.log("Add Radial: ", {
-								"location": this.location.id,
-								"id": "cross:" + (issuing++) + ":" + Date.now(),
-								"x": this.actions.px,
-								"y": this.actions.py,
-								"object": this.localeInfo.shown?this.localeInfo.id:null,
-								"radial": this.storage.radial_radius,
-								"color": option.color,
-								"standalone": true,
-								"pathed": false
-							});
+							// console.log("Add Radial: ", {
+							// 	"location": this.location.id,
+							// 	"id": "cross:" + (issuing++) + ":" + Date.now(),
+							// 	"x": this.actions.px,
+							// 	"y": this.actions.py,
+							// 	"object": this.localeInfo.shown?this.localeInfo.id:null,
+							// 	"radial": this.storage.radial_radius,
+							// 	"color": option.color,
+							// 	"standalone": true,
+							// 	"pathed": false
+							// });
 							// this.renderRadial(null, this.storage.radial_radius, this.actions.px * 100, this.actions.py * 100);
 							this.universe.send("map:mark", {
 								"location": this.location.id,
@@ -1063,6 +1064,24 @@
 					"width": this.element.outerWidth()
 				};
 			},
+			"waitDimensions": function(path, callback) {
+//				console.log("Get Dimensions: " + path);
+				var img = new Image;
+
+				img.onload = () => {
+					this.image.height = img.height;
+					this.image.width = img.width;
+					this.image.ratio = img.width / img.height;
+					Object.assign(this.original, this.image);
+
+					Vue.set(this, "ready", true);
+					Vue.set(this, "parchment", this.element.find(".parchment"));
+					this.apply(this.image);
+					callback();
+				};
+
+				img.src = path;
+			},
 			"getDimensions": function(path) {
 //				console.log("Get Dimensions: " + path);
 				var img = new Image;
@@ -1085,50 +1104,23 @@
 
 			},
 			"down": function(event) {
-//				console.log("down:" + event.button, event);
+				// console.log("down: (" + event.pageX + ", " + event.pageY + "); (" + this.image.left + ", " + this.image.top + ")");
 				switch(event.button) {
 					case 0:
 						this.isDragging = true;
-						this.dragX = event.pageX;
-						this.dragY = event.pageY;
+						this.dragX = 0;
+						this.dragY = 0;
 						break;
 				}
 			},
 			"up": function(event) {
-//				console.log("up");
+				// console.log("up");
 				this.isDragging = false;
 			},
 			"out": function(event) {
 //				console.log("out");
 				if(event.fromElement.attributes.onexit && event.fromElement.attributes.onexit.value === "true") {
 					this.isDragging = false;
-				}
-			},
-			"panning": function($event) {
-
-			},
-			"dragging": function(event) {
-				if(this.isDragging) {
-					var left = this.parchment.css("left") || "0px",
-						top = this.parchment.css("top") || "0px",
-						dX = this.dragX - event.pageX,
-						dY = this.dragY - event.pageY;
-
-					left = parseInt(left.replace("px", ""));
-					top = parseInt(top.replace("px", ""));
-
-					//console.log("drag: " + left + " x " + top + " - [" + this.dragX + ", " + this.dragY + "] d[" + dX + ", " + dY + "] @[" + event.pageX + ", " + event.pageY + "]");
-
-					left -= dX;
-					top -= dY;
-
-					this.apply({
-						"left": left,
-						"top": top
-					});
-
-					this.dragX = event.pageX;
-					this.dragY = event.pageY;
 				}
 			},
 			"getCenter": function() {
@@ -1176,28 +1168,34 @@
 				}
 			},
 			"pan": function(panned) {
-				var left = this.parchment.css("left") || "0px",
-					top = this.parchment.css("top") || "0px",
+				var left,
+					top,
 					dX,
 					dY;
 
-//				console.log("Panning[]: ", panned.velocityX, panned.velocityY);
-				left = parseInt(left.replace("px", ""));
-				top = parseInt(top.replace("px", ""));
+				// console.log("Panning[]: ", panned.velocityX, panned.velocityY);
+				// left = this.parchment.css("left") || "0px";
+				// top = this.parchment.css("top") || "0px";
+				// left = parseInt(left.replace("px", ""));
+				// top = parseInt(top.replace("px", ""));
 
-//				console.log("Panning: ", panned);
+				// if(this.isDragging) {
+				// 	console.log("Panning: (" + panned.center.x + ", " + panned.center.y + "), (" + panned.deltaX + ", " + panned.deltaY + "); (" + this.image.left + ", " + this.image.top + ")");
+				// } else {
+				// 	console.warn("Panning: (" + panned.center.x + ", " + panned.center.y + "), (" + panned.deltaX + ", " + panned.deltaY + "); (" + this.image.left + ", " + this.image.top + ")");
+				// }
 				if(this.isDragging) {
 					dX = this.dragX - panned.deltaX;
 					dY = this.dragY - panned.deltaY;
 				} else {
 					this.isDragging = true;
-					dX = panned.deltaX;
-					dY = panned.deltaY;
+					dX = 0 - panned.deltaX;
+					dY = 0 - panned.deltaY;
 				}
 
 //				console.warn("Pan[" + dX + ", " + dY + "]: " + left + ", " + top + " --> " + (left-dX) + ", " + (top-dY));
-				left -= dX;
-				top -= dY;
+				left = this.image.left - dX;
+				top = this.image.top - dY;
 
 				if(panned.isFinal) {
 					this.isDragging = false;
@@ -1234,6 +1232,10 @@
 			"apply": function(applying) {
 				// console.log("Start Apply: ", _p(this.image), _p(applying), this.parchment);
 				if(this.parchment && this.parchment.length) {
+					var applyTiming = Date.now(),
+						zoomTiming,
+						pathTiming,
+						measureTiming;
 					if(applying.height === undefined) {
 						applying.height = this.image.height;
 					}
@@ -1264,6 +1266,7 @@
 					if(applying.zoom !== undefined && this.locales && this.locales.length && (this.image._lastzoom !== applying.zoom || this.image._lastlocation !== this.location.id)) {
 //						console.log("Apply Redraw: ", JSON.stringify(this.image, null, 4), JSON.stringify(applying, null, 4));
 //						console.log("Apply Redraw");
+						zoomTiming = Date.now();
 						this.image._lastlocation = this.location.id;
 						this.image._lastzoom = applying.zoom;
 						for(var x=0; x<this.locales.length; x++) {
@@ -1274,6 +1277,7 @@
 						}
 						Object.assign(this.image, applying);
 						this.redrawPaths();
+						zoomTiming = Date.now() - zoomTiming;
 					} else {
 						if(this.image._lastlocation !== this.location.id) {
 							this.image._lastlocation = this.location.id;
@@ -1291,8 +1295,15 @@
 						"left": applying.left + "px",
 						"top": applying.top + "px"
 				    });
-
+					
+					measureTiming = Date.now();
 					this.renderMeasurements();
+					measureTiming = measureTiming - Date.now();
+					// console.log("Applied: " + (Date.now() - applyTiming));
+					// if(zoomTiming !== undefined) {
+					// 	console.log(" - Zooming: " + zoomTiming);
+					// }
+					// console.log(" - Measuring: " + measureTiming);
 				}
 			},
 			"redrawPaths": function() {
@@ -1333,7 +1344,7 @@
 				this.renderMeasurements();
 			},
 			"drawPath": function(canvas, path) {
-				console.log("Draewing Path: ", canvas, path);
+				// console.log("Draewing Path: ", canvas, path);
 				if(path && path.rendering_has_path && !this.storage.hidden_legend[path.id]) {
 					var points = [],
 						buffer,
@@ -1625,11 +1636,15 @@
 									len += " @" + rsSystem.math.time.display(time, format.trim());
 								}
 								//canvas.fillRect(tx - 5, ty - 5, len.length * (20 + this.image.zoom), 30 + this.image.zoom);
+								canvas.strokeStyle = "#FFFFFF";
+								canvas.fillStyle = "#FFFFFF";
+								canvas.globalAlpha = 1;
+								canvas.lineWidth = 10;
 								canvas.fillText(len, mx, my);
 								canvas.strokeStyle = "#000000";
 								canvas.fillStyle = "#000000";
-								canvas.globalAlpha = .7;
-								canvas.lineWidth = 1;
+								canvas.globalAlpha = 1;
+								canvas.lineWidth = 3;
 								canvas.fillText(len, mx, my);
 								canvas.strokeStyle = "#FFFFFF";
 								canvas.fillStyle = "#FFFFFF";
@@ -1790,7 +1805,7 @@
 				var entity,
 					x;
 
-				if(link.template || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
+				if(link.template || link.is_template || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
 					return false;
 				}
 
@@ -1849,7 +1864,7 @@
 			"buildMenu": function() {
 				this.actions.options.splice(0);
 				if(this.localeInfo.shown) {
-					console.log("Locale: ", _p(this.localeInfo));
+					// console.log("Locale: ", _p(this.localeInfo));
 					this.actions.options.push(this.localeInfo);
 					if(this.player.gm) {
 						if(this.storage.hide[this.localeInfo.id]) {
@@ -1934,10 +1949,11 @@
 				var now = Date.now();
 				if(this.location && (!source || source.location === this.location.id || source.id === this.location.id || (this.viewingEntity && (source.id === this.viewingEntity.id || source.entity === this.viewingEntity.id)))) {
 					if((now - this.last) > UPDATESTEP) {
+						// console.log("Start Update: " + now);
 						this.last = now;
 						var buffer,
 							x;
-						
+
 						this.availablePOIs.splice(0);
 						this.locales.splice(0);
 						Vue.set(this, "baseFontSize", this.location.base_font_size || 10);
@@ -1973,9 +1989,12 @@
 							}
 						}
 
-						if(this.location) {
+						if(this.location && this.location.id !== this.renderedLocation) {
+							Vue.set(this, "renderedLocation", this.location.id);
 							Vue.set(this, "ready", false);
-							this.getDimensions(this.universe.getImagePath(this.location.map));
+							this.waitDimensions(this.universe.getImagePath(this.location.map), this.finishUpdate);
+						} else {
+							this.finishUpdate();
 						}
 
 						// if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
@@ -1984,10 +2003,6 @@
 							// this.apply(this.image);
 						// }
 
-						this.buildMenu();
-						this.determinePOIs();
-						this.redrawPaths();
-						this.renderMeasurements();
 					} else {
 						if(!this.delayed) {
 							this.delayed = setTimeout(() => {
@@ -1996,6 +2011,17 @@
 							}, UPDATESTEP);
 						}
 					}
+				}
+			},
+			"finishUpdate": function() {
+				this.buildMenu();
+				this.determinePOIs();
+				this.redrawPaths();
+				// console.log(" - Fin: " + (Date.now() - this.last));
+				// this.renderMeasurements();
+				if(this.resetViewportFlag) {
+					Vue.set(this, "resetViewportFlag", false);
+					this.resetViewport();
 				}
 			}
 		},

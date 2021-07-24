@@ -20,6 +20,7 @@ fields.push({
 	"ordering": 2,
 	"attribute": {
 		"obscures": ["name_hidden", "name_generic"],
+		"metadata": "npc",
 		"display_size": 110,
 		"displayed": false
 	}

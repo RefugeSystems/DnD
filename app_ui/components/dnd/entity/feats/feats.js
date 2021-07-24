@@ -77,7 +77,7 @@ rsSystem.component("dndEntityFeats", {
 					"dc",
 					"range",
 					"durability",
-					"charges",
+					"charges_max",
 					"strength",
 					"dexterity",
 					"constitution",
@@ -97,7 +97,7 @@ rsSystem.component("dndEntityFeats", {
 				"fieldComponent": {}
 			};
 			if(this.showCharges(feat)) {
-				details.fieldComponent.charges = "dndObjectCharges";
+				details.fieldComponent.charges_max = "dndObjectCharges";
 			}
 			rsSystem.EventBus.$emit("dialog-open", details);
 		}

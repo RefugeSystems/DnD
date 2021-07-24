@@ -184,6 +184,9 @@ class RSField extends EventEmitter {
 		if(!this.attribute.display_size) {
 			this.attribute.display_size = 90;
 		}
+		if(!this.attribute.metadata) {
+			this.attribute.metadata = "";
+		}
 		/**
  		 * Used to map values to a display string in the case of simple values, such
 		 * as mapping a "scale" integer to a label for the size.
@@ -219,7 +222,7 @@ class RSField extends EventEmitter {
 		 * @property _search
 		 * @type String
 		 */
-		this._search = this.id + " ::: " + this.name.toLowerCase();
+		this._search = this.id + " ::: " + this.name.toLowerCase() + this.attribute.metadata;
 
 		this.updateSpecification(specification);
 	}
@@ -245,6 +248,24 @@ class RSField extends EventEmitter {
 		if(typeof(this.attribute) === "string") {
 			this.attribute = JSON.parse(this.attribute);
 		}
+		
+		if(typeof(this.attribute) === "string") {
+			try {
+				this.attribute = JSON.parse(this.attribute);
+			} catch(parseException) {
+				
+			}
+		}
+		if(!this.attribute) {
+			this.attribute = {};
+		}
+		if(!this.attribute.display_size) {
+			this.attribute.display_size = 90;
+		}
+		if(!this.attribute.metadata) {
+			this.attribute.metadata = "";
+		}
+
 		if(typeof(this.displayed_as) === "string") {
 			try {
 				this.displayed_as = JSON.parse(this.displayed_as);
@@ -257,7 +278,7 @@ class RSField extends EventEmitter {
 			this.attribute = {};
 		}
 		this.updated = Date.now();
-		this._search = this.id + " ::: " + this.name.toLowerCase();
+		this._search = this.id + " ::: " + this.name.toLowerCase() + this.attribute.metadata;
 		this.emit("changed");
 	}
 	

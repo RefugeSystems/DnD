@@ -155,6 +155,13 @@
 			 *
 			 * @method closeInfo
 			 */
+			"showInfo": function(id) {
+				rsSystem.manipulateQuery({"info":id});
+			},
+			/**
+			 *
+			 * @method closeInfo
+			 */
 			"closeInfo": function() {
 				rsSystem.manipulateQuery(closeInfo);
 			}

@@ -43,6 +43,9 @@ class Constructor extends RSObject {
 				}
 			}
 		}
+		if(!this.label) {
+			this.label = this.name;
+		}
 	}
 }
 

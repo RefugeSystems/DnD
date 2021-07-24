@@ -14,7 +14,11 @@ class Constructor extends RSObject {
 		super(universe, manager, details);
 	}
 	
-	
+	postFieldUpdate() {
+		if(!this.label) {
+			this.label = this.name;
+		}
+	}
 }
 
 module.exports = Constructor;

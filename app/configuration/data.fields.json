@@ -6,6 +6,7 @@
 		"type": "integer",
 		"ordering": 10,
 		"attribute": {
+			"metadata": "npc",
 			"primary_stat": true,
 			"display_size": 0,
 			"default": 0
@@ -17,6 +18,7 @@
 		"type": "integer",
 		"ordering": 11,
 		"attribute": {
+			"metadata": "npc",
 			"primary_stat": true,
 			"display_size": 0,
 			"default": 0
@@ -28,6 +30,7 @@
 		"type": "integer",
 		"ordering": 12,
 		"attribute": {
+			"metadata": "npc",
 			"primary_stat": true,
 			"display_size": 0,
 			"default": 0
@@ -39,6 +42,7 @@
 		"type": "integer",
 		"ordering": 13,
 		"attribute": {
+			"metadata": "npc",
 			"primary_stat": true,
 			"display_size": 0,
 			"default": 0
@@ -50,6 +54,7 @@
 		"type": "integer",
 		"ordering": 14,
 		"attribute": {
+			"metadata": "npc",
 			"primary_stat": true,
 			"display_size": 0,
 			"default": 0
@@ -61,6 +66,7 @@
 		"type": "integer",
 		"ordering": 15,
 		"attribute": {
+			"metadata": "npc",
 			"primary_stat": true,
 			"display_size": 0,
 			"default": 0
@@ -339,7 +345,9 @@
 		"inheritable": [
 			"gender"
 		],
-		"attribute": {}
+		"attribute": {
+			"metadata": "npc"
+		}
 	}, {
 		"id": "url",
 		"name": "URL",
@@ -352,6 +360,7 @@
 		"description": "The general task or job for this NPC",
 		"type": "string",
 		"attribute": {
+			"metadata": "npc",
 			"display_size": 200
 		}
 	}, {
@@ -360,6 +369,7 @@
 		"description": "The general tone of voice for this NPC",
 		"type": "string",
 		"attribute": {
+			"metadata": "npc",
 			"display_size": 200
 		}
 	}, {
@@ -368,6 +378,7 @@
 		"description": "The general personality of this NPC",
 		"type": "string",
 		"attribute": {
+			"metadata": "npc",
 			"display_size": 200
 		}
 	}, {
@@ -392,6 +403,7 @@
 		"description": "Flag to indicate an entity is an NPC",
 		"type": "boolean",
 		"attribute": {
+			"metadata": "npc",
 			"displayed": false
 		}
 	}, {
@@ -554,6 +566,7 @@
 		"description": "Various points for improving your character in various ways",
 		"type": "object",
 		"attribute": {
+			"values": "integer",
 			"displayed": false
 		}
 	}, {
@@ -1844,7 +1857,9 @@
 		"inheritable": [
 			"race"
 		],
-		"attribute": {}
+		"attribute": {
+			"metadata": "npc"
+		}
 	}, {
 		"id": "effects",
 		"name": "Effects",
@@ -2937,7 +2952,9 @@
 		"inheritable": [
 			"item"
 		],
-		"attribute": {}
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "price",
 		"name": "Price",

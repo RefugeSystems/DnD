@@ -92,7 +92,7 @@ rsSystem.component("dndCard", {
 			if(typeof(this.card[field.id]) === "object") {
 				return this.card[field.id] !== null && Object.keys(this.card[field.id]).length;
 			} else {
-				return this.card[field.id] !== null && this.card[field.id] !== undefined;
+				return this.card[field.id] !== null && this.card[field.id] !== undefined && this.card[field.id] !== 0 && this.card[field.id] !== "";
 			}
 		},
 		"formatDate": function(date) {

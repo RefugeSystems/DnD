@@ -18,7 +18,7 @@
 	<div class="knowledge-matrix" v-if="relatedKnowledge.length">
 		<h3>Related Knowledge</h3>
 		<ul class="knowledge-related">
-			<li class="knowledge" v-on:click="info(knowledge)" v-for="knowledge in relatedKnowledge" :key="knowledge.id">
+			<li class="knowledge" v-on:click="showInfo(knowledge.id)" v-for="knowledge in relatedKnowledge" :key="knowledge.id">
 				<button class="flat action" :data-id="knowledge.id">
 					<span class="fas fa-info-circle"></span>
 				</button>

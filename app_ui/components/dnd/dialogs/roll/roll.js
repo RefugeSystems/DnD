@@ -477,6 +477,18 @@ rsSystem.component("dndDialogRoll", {
 			if(this.targeting[target.id]) {
 				classes += " targeted";
 			}
+			if(target.is_npc) {
+				classes += " npc";
+			}
+			if(target.is_hsotile) {
+				classes += " hostile";
+			}
+			if(target.is_chest) {
+				classes += " chest";
+			}
+			if(target.is_shop) {
+				classes += " shop";
+			}
 			return classes;
 		},
 		"selectTarget": function(target) {

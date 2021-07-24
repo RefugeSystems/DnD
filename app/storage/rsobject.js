@@ -442,10 +442,22 @@ class RSObject {
 							this._calculated[field.id][keys[i]] = parseInt(this._calculated[field.id][keys[i]]);
 						}
 					}
+					if(this._calculated[field.id] === null || this._calculated[field.id] === undefined || this._calculated[field.id] === "") {
+						if(field.attribute.default) {
+							this._calculated[field.id] = field.attribute.default;
+						} else if(field.type === "object" || field.type === "object:dice") {
+							this._calculated[field.id] = {};
+						} else if(field.type === "array") {
+							this._calculated[field.id] = [];
+						}
+					} else if(typeof(field.attribute.min) === "number" && this[field.id] < field.attribute.min) {
+						this[field.id] = field.attribute.min;
+					} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
+						this[field.id] = field.attribute.max;
+					}
 				}
 				/*
-				field = this._manager.database.field[fields[x]];
-				if(field && this._combined[field.id] !== undefined && this._combined[field.id] !== null) {
+				if(this._combined[field.id] !== undefined && this._combined[field.id] !== null) {
 					switch(field.type) {
 						case "string":
 						default:

@@ -59,6 +59,16 @@ rsSystem.component("sysInfoGeneral", {
 			this.controls.splice(0);
 			if(!this.info.is_preview && this.info._class) {
 				if(this.player) {
+					if(this.info._class === "location") {
+						if(this.info.map) {
+							this.controls.push({
+								"title": "Pull up the map of this location",
+								"icon": "fas fa-location-circle",
+								"type": "button",
+								"action": "goto"
+							});
+						}
+					}
 					if(this.player.gm) {
 						if(this.info.obscured) {
 							this.controls.push({
@@ -102,6 +112,9 @@ rsSystem.component("sysInfoGeneral", {
 		},
 		"process": function(control) {
 			switch(control.action) {
+				case "goto":
+					rsSystem.toPath("/map/" + this.info.id);
+					break;
 				case "assume":
 					this.universe.send("master:assume", {"entity": this.info.id});
 					rsSystem.toPath("/home", {"entity": this.info.id});

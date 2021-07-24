@@ -1,4 +1,4 @@
-<button class="flat action rs-component dnd-component object-charges flex h" v-on:click="use()" v-on:click.right.stop.prevent="restore()">
+<button class="flat action rs-component dnd-component object-charges flex h" v-on:click="use()" v-on:click.right.stop.prevent="restore()" title="Charges on this object. Left click to decrement. Right click to increment. Usage through other parts of the UI may have more automated handling, usage here is simply a tracker.">
 	<span>{{object.charges}}</span>
 	<span class="balanced-seperator">/</span>
 	<span>{{object.charges_max}}</span>

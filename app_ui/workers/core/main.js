@@ -6,7 +6,7 @@
  */
 var storageKey = "_rs_connectComponentKey",
 	// TODO: Centralize ServiceWorker versioning for app control (Align with package version?)
-	version = "0.8.1",
+	version = "0.9.26",
 	cacheID = "rsdnd_" + version,
 	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
 	followUp,
