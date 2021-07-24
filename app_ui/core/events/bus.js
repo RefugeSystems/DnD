@@ -19,8 +19,10 @@
 	
 	rsSystem.EventBus.$on("app-update", function() {
 		setTimeout(function() {
-			window.location.reload(true);
-		}, 10);
+			navigator.serviceWorker.controller.postMessage({
+				"action": "update"
+			});
+		}, 0);
 	});
 })();
 

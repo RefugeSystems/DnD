@@ -10,10 +10,14 @@
 			if(navigator.serviceWorker) {
 				var scope = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1?"/":"./";
 
+				if(Notification.permission === "default") {
+					Notification.requestPermission();
+				}
 				navigator.serviceWorker.register("./worker.js", {
 					"scope": scope
 				}).then(function(registration) {
 					// console.log("Service Worker Registered: ", registration);
+					rsSystem.worker = registration;
 				}).catch(function(error) {
 					// console.error("Service Worker Registration Error: ", error);
 				});

@@ -9,43 +9,83 @@ var storageKey = "_rs_connectComponentKey",
 	version = "0.9.26",
 	cacheID = "rsdnd_" + version,
 	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
+	processAction,
+	updateCaches,
 	followUp,
 	cacheOptions = {
 		"ignoreSearch": true
 	};
 
-self.addEventListener("install", function(event) {
-	// console.log("SW Install");
-	var result = caches.open(cacheID);
-	result.then(function(cache) {
+processAction = function(action, data) {
+	switch (action) {
+		case "update":
+			updateCaches();
+			break;
+	}
+};
+
+updateCaches = function() {
+	caches.keys()
+	.then(function(keys) {
+		for(var i = 0; i < keys.length; i++) {
+			caches.delete(keys[i]);
+		}
+		return caches.open(cacheID);
+	})
+	.then(function(cache) {
 		return cache.addAll([
-//				"/projects/rsswx/app/",
-//				"/projects/rsswx/app/index.html",
-//				"/projects/rsswx/app/main.css",
-//				"/projects/rsswx/app/fonts/starwars-glyphicons.css",
-//				"/projects/rsswx/app/fonts/xwing-miniatures.css",
-//				"/projects/rsswx/app/fonts/rpg-awesome.css",
-//				"/projects/rsswx/app/webfonts/all.css",
-//				"/projects/rsswx/app/fonts/rsswx.css",
-//				"/projects/rsswx/app/externals.js",
-//				"/projects/rsswx/app/main.js"
 			"./",
 			"./index.html",
 			"./configuration.json",
-			
+
 			"./images/rook.blue.png",
 			"./images/rook.green.png",
 			"./images/rook.orange.png",
 			"./images/rook.red.png",
 			"./favicon.png",
-			
+
 			"./fonts/starwars-glyphicons.css",
 			"./fonts/xwing-miniatures.css",
 			"./fonts/rpg-awesome.css",
 			"./webfonts/all.css",
 			"./fonts/rsswx.css",
 			"./main.css",
-			
+
+			"./externals.js",
+			"./main.js"
+		]);
+	})
+	.then(function() {
+		console.log("Cache Updated");
+		location.reload();
+	})
+	.catch(function(error) {
+		console.error("ServiceWorker Cache Update Error: ", error);
+	});
+};
+
+
+self.addEventListener("install", function(event) {
+	var result = caches.open(cacheID);
+	result.then(function(cache) {
+		return cache.addAll([
+			"./",
+			"./index.html",
+			"./configuration.json",
+
+			"./images/rook.blue.png",
+			"./images/rook.green.png",
+			"./images/rook.orange.png",
+			"./images/rook.red.png",
+			"./favicon.png",
+
+			"./fonts/starwars-glyphicons.css",
+			"./fonts/xwing-miniatures.css",
+			"./fonts/rpg-awesome.css",
+			"./webfonts/all.css",
+			"./fonts/rsswx.css",
+			"./main.css",
+
 			"./externals.js",
 			"./main.js"
 		])
@@ -56,16 +96,14 @@ self.addEventListener("install", function(event) {
 			console.error("Install Fault: ", error);
 		});
 	});
-	
+
 	event.waitUntil(result);
 });
 
 self.addEventListener("fetch", function(event) {
 	var complete = caches.match(event.request)
 	.then(function(response) {
-//		console.log(" > Responding[" + event.request.url + "]: ", !!response);
 		if(!development && response) {
-//		if(response) {
 			return response;
 		} else {
 			return fetch(event.request);
@@ -75,7 +113,20 @@ self.addEventListener("fetch", function(event) {
 		console.warn("Cache Match Failed: ", err);
 	});
 	event.respondWith(complete);
-	
+});
+
+self.addEventListener("notificationclick", function(event) {
+	console.log("Notification Clicked[" + event.action + "]: ", event);
+	if(event) {
+		processAction(event.action, event);
+	}
+});
+
+self.addEventListener("message", function(event) {
+	console.log("Message: ", event);
+	if(event) {
+		processAction(event.action, event);
+	}
 });
 
 self.addEventListener("push", function(event) {
@@ -97,7 +148,7 @@ self.addEventListener("testing", function(event) {
 });
 
 followUp = function() {
-//	console.log("Following Up...");
+	//	console.log("Following Up...");
 	setTimeout(followUp, 1000000);
 };
 

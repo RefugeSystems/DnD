@@ -284,6 +284,7 @@ rsSystem.component("systemOptionsDialog", {
 			data.pages.system.options.push({
 				"id": "app-update",
 				"action": "emit",
+				"icon": "fas fa-download",
 				"label": "Update"
 			});
 		}
