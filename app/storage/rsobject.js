@@ -442,19 +442,6 @@ class RSObject {
 							this._calculated[field.id][keys[i]] = parseInt(this._calculated[field.id][keys[i]]);
 						}
 					}
-					if(this._calculated[field.id] === null || this._calculated[field.id] === undefined || this._calculated[field.id] === "") {
-						if(typeof(field.attribute.default) !== "undefined") {
-							this._calculated[field.id] = field.attribute.default;
-						} else if(field.type === "object" || field.type === "object:dice") {
-							this._calculated[field.id] = {};
-						} else if(field.type === "array") {
-							this._calculated[field.id] = [];
-						}
-					} else if(typeof(field.attribute.min) === "number" && this[field.id] < field.attribute.min) {
-						this[field.id] = field.attribute.min;
-					} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
-						this[field.id] = field.attribute.max;
-					}
 				}
 				/*
 				if(this._combined[field.id] !== undefined && this._combined[field.id] !== null) {
@@ -500,7 +487,7 @@ class RSObject {
 			if(field && field.attribute) {
 				// Gaurentee Objects and Arrays where no value is set
 				if(this._calculated[field.id] === undefined || this._calculated[field.id] === null) {
-					if(field.type === "object") {
+					if(field.type === "object" || field.type === "object:dice" || field.type === "object:integer") {
 						if(field.attribute.default) {
 							// Risky: This maintains deeper mutatable references in complex cases
 							this._calculated[field.id] = Object.assign({}, field.attribute.default);
@@ -514,9 +501,13 @@ class RSObject {
 						} else {
 							this._calculated[field.id] = [];
 						}
-					} else if(field.attribute.default) {
+					} else if(typeof(field.attribute.default) !== "undefined"){
 						this._calculated[field.id] = field.attribute.default;
 					}
+				} else if(typeof(field.attribute.min) === "number" && this[field.id] < field.attribute.min) {
+					this[field.id] = field.attribute.min;
+				} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
+					this[field.id] = field.attribute.max;
 				}
 				// Cast final calculated values as needed
 				if(this._calculated[fields[x]]) {
