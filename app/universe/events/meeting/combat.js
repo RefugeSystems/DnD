@@ -65,7 +65,7 @@ module.exports.initialize = function(universe) {
 					universe.handleError("meeting:combat:start", "Failed to start a skirmish", err);
 				} else {
 					meeting.addValues({
-						"skimishes": [skirmish]
+						"skirmishes": [skirmish]
 					});
 				}
 			});

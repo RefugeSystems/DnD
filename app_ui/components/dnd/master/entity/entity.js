@@ -119,6 +119,12 @@ rsSystem.component("dndMasterEntity", {
 			}
 		},
 		"getRollClass": function(roll) {
+			if(roll.failure) {
+				return "crit-fail";
+			} else if(roll.critical) {
+				return "crit-pass";
+			}
+			/*
 			if(roll && roll.dice && roll.dice.d20) {
 				if(roll.dice.d20 && roll.dice.d20.length) {
 					if(roll.dice.d20[0] === 1) {
@@ -134,6 +140,7 @@ rsSystem.component("dndMasterEntity", {
 					return "crit-pass";
 				}
 			}
+			*/
 
 			return "";
 		},

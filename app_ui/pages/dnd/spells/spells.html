@@ -1,4 +1,4 @@
-<div class="rs-page dnd-page dnd-spells">
+<div class="rs-page dnd-page dnd-widget dnd-spells">
 	<div class="entity-spells" v-if="entity">
 		<rs-table :universe="universe" :source="known" :storage-container="storage" label="Spells" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
 		<div class="flex v entity-spells-details">

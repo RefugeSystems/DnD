@@ -195,8 +195,14 @@ rsSystem.component("DNDSpells", {
 	"mounted": function() {
 		rsSystem.register(this);
 		this.buildControls();
+		this.universe.$on("updated", this.checkUpdate);
 	},
 	"methods": {
+		"checkUpdate": function(event) {
+			if(this.entity && this.entity.id === event.id) {
+				this.buildControls();
+			}
+		},
 		"buildControls": function() {
 			var selected = Object.keys(this.storage.selected),
 				prepared = this.prepared,
@@ -250,10 +256,7 @@ rsSystem.component("DNDSpells", {
 		}
 	},
 	"beforeDestroy": function() {
-		/*
-		this.universe.$off("universe:modified", this.update);
-		rsSystem.EventBus.$off("key:escape", this.closeInfo);
-		*/
+		this.universe.$off("updated", this.checkUpdate);
 	},
 	"template": Vue.templified("pages/dnd/spells.html")
 });

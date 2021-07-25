@@ -3,9 +3,9 @@
 
 	</div>
 	<div class="count flex h wrap">
-		<div class="player-info inline flex h" v-for="play in universe.listing.player" v-if="displayed(play)" :title="play.id">
+		<div class="player-info inline flex h" v-for="play in universe.listing.player" v-if="displayed(play)" :title="play.id" v-on:click="info(play)">
 			<span class="player-connections" :class="play.connections?'connected':''">{{play.connections || 0}}</span>
-			<span class="player-name">{{play.name}}</span>
+			<button class="flat action player-name">{{play.name}}</button>
 		</div>
 	</div>
 </div>

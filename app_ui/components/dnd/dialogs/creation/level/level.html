@@ -86,7 +86,7 @@
 
 		<!-- Select Options for Class and Level -->
 		<div class="selection choices" v-if="section === 'customizations'">
-			<rs-selection-block class="choice-block" v-for="block in customizations" :universe="universe" :block="block" v-on:selected="blockSelected($event)" />
+			<rs-selection-block class="choice-block" v-for="block in customizations" :universe="universe" :block="block" v-on:selected="blockSelected($event)" :key="block.name" />
 			<div class="notice" v-if="!customizations || customizations.length === 0">
 				<span class="fas fa-exclamation-triangle rs-yellow"></span>
 				<span>No Customization Choices</span>

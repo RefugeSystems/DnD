@@ -224,11 +224,12 @@ rsSystem.component("dndMasterMeeting", {
 					"text": "Players",
 					"action": () => {
 						var entities = [],
+							player,
 							entity,
 							i;
 						for(i=0; i<this.active.entities.length; i++) {
 							entity = this.universe.index.entity[this.active.entities[i]];
-							if(entity.owned && Object.keys(entity.owned) !== 0) {
+							if(entity.played_by && (player = this.universe.index.player[entity.played_by]) && !player.gm) {
 								entities.push(entity.id);
 							}
 						}

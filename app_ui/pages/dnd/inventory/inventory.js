@@ -259,9 +259,15 @@ rsSystem.component("DNDInventory", {
 				Vue.set(this.share, "icon", "fas fa-users");
 			}
 		}
+		this.universe.$on("updated", this.checkUpdate);
 		this.buildControls();
 	},
 	"methods": {
+		"checkUpdate": function(event) {
+			if(this.entity && this.entity.id === event.id) {
+				this.buildControls();
+			}
+		},
 		"buildControls": function() {
 			var selected = this.storage && this.storage.selected?Object.keys(this.storage.selected):[],
 				reference = this,
@@ -466,10 +472,7 @@ rsSystem.component("DNDInventory", {
 		}
 	},
 	"beforeDestroy": function() {
-		/*
-		this.universe.$off("universe:modified", this.update);
-		rsSystem.EventBus.$off("key:escape", this.closeInfo);
-		*/
+		this.universe.$off("updated", this.checkUpdate);
 	},
 	"template": Vue.templified("pages/dnd/inventory.html")
 });
