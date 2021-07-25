@@ -897,11 +897,6 @@
 						*/
 						break;
 					case "set-location":
-						this.universe.send("master:control:map", {
-							"location": this.location.id,
-							"image": this.image
-						});
-						/*
 						buffer = this.universe.getObject(this.storage.alter);
 						if(buffer) {
 							this.universe.send("map:location", {
@@ -911,7 +906,6 @@
 								"y": (this.actions.y/this.image.height*100)
 							});
 						}
-						*/
 						break;
 					case "add-point":
 						this.appendPath(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
