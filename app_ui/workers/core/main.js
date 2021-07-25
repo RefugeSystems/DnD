@@ -57,7 +57,8 @@ updateCaches = function() {
 	})
 	.then(function() {
 		console.log("Cache Updated");
-		location.reload();
+		// TODO: Investigate how to trigger the refresh or prompt for it
+		// location.reload();
 	})
 	.catch(function(error) {
 		console.error("ServiceWorker Cache Update Error: ", error);
@@ -128,10 +129,10 @@ self.addEventListener("notificationclick", function(event) {
 	}
 });
 
-self.addEventListener("message", function(event) {
-	console.log("Message: ", event);
-	if(event) {
-		processAction(event.action, event);
+self.addEventListener("message", function(message) {
+	console.log("Message: ", message.data);
+	if(message.data) {
+		processAction(message.data.action, message.data);
 	}
 });
 

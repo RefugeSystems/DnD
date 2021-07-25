@@ -23,7 +23,7 @@
 						<span class="option-icon" :class="option.base[option.id]?'far fa-check-square':'far fa-square'"></span>
 						<span>{{option.label}}</span>
 					</button>
-					<button class="option-ctrl general" :class="getOptionClass(option)" v-on:click="actionOption(option.action, option.base, option.id)" v-if="option.action">
+					<button class="option-ctrl general" :class="getOptionClass(option)" v-on:click="actionOption(option.action, option.base, option.id, option)" v-if="option.action">
 						<span v-if="option.icon" class="option-icon" :class="option.icon"></span>
 						<span>{{option.label}}</span>
 					</button>

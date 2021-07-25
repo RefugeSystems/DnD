@@ -22,6 +22,11 @@
 			navigator.serviceWorker.controller.postMessage({
 				"action": "update"
 			});
+			// TODO: Stream-line this for better effect, or give a notification to complete by refreshing
+			//    reload doesn't seem to be availabe in the service worker?
+			setTimeout(function() {
+				location.reload();
+			}, 1000);
 		}, 0);
 	});
 })();

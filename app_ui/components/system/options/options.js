@@ -70,6 +70,7 @@ rsSystem.component("systemOptionsDialog", {
 		data.version_ui = rsSystem.version;
 		data.navigator = rsSystem.getBrowserName();
 		data.active = null;
+		data.updating = "";
 
 		for(i=0; i<this.universe.listing.dashboard.length; i++) {
 			if(!this.universe.listing.dashboard[i].is_preview && !this.universe.listing.dashboard[i].disabled) {
@@ -222,7 +223,7 @@ rsSystem.component("systemOptionsDialog", {
 					"value": this.universe.metrics.latency + "ms",
 					"type": "data"
 				}, {
-					"id": "app-update",
+					"id": "app-resync",
 					"action": "resync",
 					"icon": "fas fa-sync",
 					"label": "Resync"
@@ -385,7 +386,7 @@ rsSystem.component("systemOptionsDialog", {
 		"toggleOption": function(base, key) {
 			Vue.set(base, key, !base[key]);
 		},
-		"actionOption": function(action, base, key) {
+		"actionOption": function(action, base, key, option) {
 			switch(action) {
 				case "logout":
 					rsSystem.EventBus.$emit("logout");
@@ -429,6 +430,10 @@ rsSystem.component("systemOptionsDialog", {
 					break;
 				case "emit":
 					rsSystem.EventBus.$emit(key);
+					if(key === "app-update") {
+						// TODO: Update with smoothing of update process
+						Vue.set(option, "icon", "fas fa-sync fa-spin");
+					}
 					break;
 				case "resync":
 					this.universe.resync();
