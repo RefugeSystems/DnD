@@ -839,6 +839,26 @@
 			"server_only": true
 		}
 	}, {
+		"id": "meeting_previous",
+		"name": "Previously",
+		"description": "The meeting that preceeded this one",
+		"type": "string",
+		"inheritable": [
+			"meeting"
+		],
+		"attribute": {
+		}
+	}, {
+		"id": "meeting_next",
+		"name": "Up Next",
+		"description": "The meeting that proceeded this one",
+		"type": "string",
+		"inheritable": [
+			"meeting"
+		],
+		"attribute": {
+		}
+	}, {
 		"id": "audios",
 		"name": "Audios",
 		"description": "List of audio IDs",

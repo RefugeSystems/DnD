@@ -21,6 +21,30 @@ rsSystem.component("dndMasterPlayers", {
 			"type": Object
 		}
 	},
+	"computed": {
+		"players": function() {
+			var offline = [],
+				online = [],
+				player,
+				i;
+
+			for(i=0; i<this.universe.listing.player.length; i++) {
+				player = this.universe.listing.player[i];
+				if(player && !player.disabled && !player.is_disabled && !player.is_preview) {
+					if(player.connections) {
+						online.push(player);
+					} else {
+						offline.push(player);
+					}
+				}
+			}
+
+			offline.sort(rsSystem.utility.sortByName);
+			online.sort(rsSystem.utility.sortByName);
+
+			return online.concat(offline);
+		}
+	},
 	"data": function() {
 		var data = {};
 

@@ -66,14 +66,14 @@
 			<button class="rounded general quick action" v-on:click="setStartDate()">
 				<span class="fas fa-calendar-day"></span>
 			</button>
-			<button class="rounded general quick action" v-if="storage.timeLocked" v-on:click="timeToMeeting(active)">
+			<button class="rounded general quick action" v-if="storage.timeLocked" v-on:click="timeToMeeting(active)" title="Move the universe time to the start time for this meeting.">
 				<span class="fas fa-clock"></span>
 			</button>
-			<button class="rounded general action" v-on:click="setStartTime()">
+			<button class="rounded general action" v-on:click="setStartTime()" disabled=true title="Set the start time for this meeting">
 				<span class="fas fa-clock"></span>
 				<span>Start</span>
 			</button>
-			<button class="rounded general action" v-on:click="setEndTime()">
+			<button class="rounded general action" v-on:click="setEndTime()" title="Set the end real time for this meeting. Recommend using 'Create Next' instead unless this is the final meeting or a next isn't known">
 				<span class="fas fa-clock"></span>
 				<span>End</span>
 			</button>
@@ -81,7 +81,7 @@
 			<button class="rounded general quick action" v-on:click="levelUp(1)" v-on:click.right.stop.prevent="levelUp(-1)" title="Level up characters. Right click to level down.">
 				<span class="fas fa-user-plus"></span>
 			</button>
-			<button class="rounded general quick action" v-on:click="info(active)" title="Information on the current active meeting.">
+			<button class="rounded general quick action" v-on:click="info(active)" v-on:click.right.stop.prevent="active?editNoun($event, active):null" title="Information on the current active meeting.">
 				<span class="fas fa-info-circle"></span>
 			</button>
 		</div>

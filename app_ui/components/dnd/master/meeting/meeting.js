@@ -119,6 +119,13 @@ rsSystem.component("dndMasterMeeting", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"createNextMeeting": function() {
+			var create = {};
+			if(this.active) {
+				create.previous = this.active.id;
+			}
+			console.warn("Create Next Meeting: ", create);
+		},
 		"toggleNameEdit": function() {
 			Vue.set(this, "editName", !this.editName);
 			if(this.editName && this.active && this.active.name) {
