@@ -2,4 +2,8 @@
 	<h1>Version History: V{{version}}</h1>
 	<p>Page Pending.</p>
 	<p>See the <a href="https://trello.com/b/dO2fHEfu/rsdnd">Trello Board</a> for further details.</p>
+	<button class="general rounded action" v-on:click="update()">
+		<span :class="updateClasses"></span>
+		<span>Get Latest</span>
+	</button>
 </div>

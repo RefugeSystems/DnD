@@ -12,15 +12,18 @@ rsSystem.component("pageVersion", {
 	"props": {},
 	"data": function() {
 		var data = {};
+		data.updateClasses = "fas fa-download";
 		data.version = rsSystem.version;
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
 	},
 	"methods": {
-		
+		"update": function() {
+			Vue.set(this, "updateClasses", "fas fa-sync fa-spin");
+			rsSystem.EventBus.$emit("app-update");
+		}
 	},
 	"template": Vue.templified("pages/security/version.html")
 });
