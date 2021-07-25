@@ -108,7 +108,7 @@ rsSystem.component("dndEntitySpells", {
 			return "usable-spell";
 		},
 		"getDamageRoll": function(formula, spell) {
-			console.log("damage");
+			// console.log("damage");
 			var castAt = parseInt(this.storage.slot),
 				anchor = Object.assign({}, spell),
 				roll;
@@ -196,14 +196,14 @@ rsSystem.component("dndEntitySpells", {
 		},
 		"cast": function(spell) {
 			var available = this.slotAvailable(this.storage.slot);
-			console.log("Cast: ", available, spell);
+			// console.log("Cast: ", available, spell);
 			if(!this.profile.enforce_requirements || available > 0) {
-				console.log("Cast[" + this.storage.slot + "]: " + spell.id, spell);
+				// console.log("Cast[" + this.storage.slot + "]: " + spell.id, spell);
 				this.castSpell(this.storage.slot, spell);
 			}
 		},
 		"incrementSlot": function(slot) {
-			console.log("Increment: ", slot);
+			// console.log("Increment: ", slot);
 			this.universe.send("slot:changes", {
 				"entity": this.entity.id,
 				"changes": 1,
@@ -212,14 +212,14 @@ rsSystem.component("dndEntitySpells", {
 		},
 		"use": function(slot) {
 			if(this.storage.slot == slot) {
-				console.log("Decrement: ", slot);
+				// console.log("Decrement: ", slot);
 				this.universe.send("slot:changes", {
 					"entity": this.entity.id,
 					"changes": -1,
 					"slot": slot
 				});
 			} else {
-				Vue.set(this.storage, "slot", parseInt(slot));
+				Vue.set(this.storage, "slot", slot);
 			}
 		}
 	},

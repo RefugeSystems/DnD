@@ -443,7 +443,7 @@ class RSObject {
 						}
 					}
 					if(this._calculated[field.id] === null || this._calculated[field.id] === undefined || this._calculated[field.id] === "") {
-						if(field.attribute.default) {
+						if(typeof(field.attribute.default) !== "undefined") {
 							this._calculated[field.id] = field.attribute.default;
 						} else if(field.type === "object" || field.type === "object:dice") {
 							this._calculated[field.id] = {};
@@ -611,6 +611,7 @@ class RSObject {
 						case "boolean":
 							this[fields[x]] = this._calculated[fields[x]];
 							break;
+						case "object:integer":
 						case "object:dice":
 						case "object":
 							this[fields[x]] = Object.assign({}, this._calculated[fields[x]]);
@@ -666,6 +667,9 @@ class RSObject {
 				switch(field.type) {
 					case "calculated":
 						this[fields[x]] = this.calculateField(fields[x], this._calculated[fields[x]]);
+						if(field.attribute.searchable) {
+							this._search += " ::: " + this[field[x]];
+						}
 						break;
 					default:
 					case "array":
@@ -792,7 +796,7 @@ class RSObject {
 				}
 				// Defaults (For null computations) & Bounds
 				if(this[field.id] === null || this[field.id] === undefined || this[field.id] === "") {
-					if(field.attribute.default) {
+					if(typeof(field.attribute.default) !== "undefined") {
 						this[field.id] = field.attribute.default;
 					} else if(field.type === "object" || field.type === "object:dice") {
 						this[field.id] = {};

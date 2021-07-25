@@ -386,7 +386,7 @@ class RSUniverse extends EventEmitter {
 				this.state.synchronizing = false;
 				this.$emit("loaded", this);
 				console.log("Ready: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
-				rsSystem.diagnostics.finish = Date.now();
+				rsSystem.diagnostics.at.finish = Date.now();
 				console.log("Load Time: " + (rsSystem.diagnostics.at.finish - rsSystem.diagnostics.at.start) + "ms");
 			}, 0);
 		};

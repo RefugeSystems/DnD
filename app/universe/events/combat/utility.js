@@ -283,6 +283,16 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} damage Being dealth, with damage_type ID keys mapped to values
 	 */
 	sendDamage = function(activity, source, target, channel, damage) {
+		if(!damage) {
+			// TODO: Revise for better handling and update source calls to ensure damage is guarenteed
+			damage = {};
+			console.warn("Sending null damage");
+			universe.emit("warning", {
+				"message": "Null damage received",
+				"source": source,
+				"channel": channel
+			});
+		}
 		var notify = function() {
 			if(tracking[activity]) {
 				var type = Object.keys(damage),
@@ -501,15 +511,20 @@ module.exports.initialize = function(universe) {
 			}
 		}
 
-		if(targets.length) {
-			if(source && (source.owned[event.player] || event.player.gm)) {
-				sendDamages(source, targets, channel, damage);
-			} else if(!source && event.player.gm) {
-				sendDamages(null, targets, channel, damage);
+		if(damage) {
+			if(targets.length) {
+				if(source && (source.owned[event.player] || event.player.gm)) {
+					sendDamages(source, targets, channel, damage);
+				} else if(!source && event.player.gm) {
+					sendDamages(null, targets, channel, damage);
+				}
+			} else {
+				// TODO: Log bad event
+				console.log("Target missing: ", event.message.data);
 			}
 		} else {
 			// TODO: Log bad event
-			console.log("Target missing: ", event.message.data);
+			console.log("Damage missing: ", event.message.data);
 		}
 	});
 

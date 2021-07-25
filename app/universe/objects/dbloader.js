@@ -269,7 +269,9 @@ fields.push({
 	"description": "Dynamic attributes for the object.",
 	"type": "object",
 	"ordering": -900,
-	"attribute": {}
+	"attribute": {
+		"display_size": 110
+	}
 });
 fields.push({
 	"id": "permission",
@@ -398,14 +400,18 @@ fields.push({
 	"name": "X Position",
 	"description": "X location of the object.",
 	"type": "integer",
-	"attribute": {}
+	"attribute": {
+		"display_size": 110
+	}
 });
 fields.push({
 	"id": "y",
 	"name": "Y Position",
 	"description": "Y location of the object.",
 	"type": "integer",
-	"attribute": {}
+	"attribute": {
+		"display_size": 110
+	}
 });
 fields.push({
 	"id": "conditionals",
@@ -416,6 +422,7 @@ fields.push({
 		"conditional"
 	],
 	"attribute": {
+		"display_size": 110,
 		"displayed": false
 	}
 });
@@ -424,7 +431,9 @@ fields.push({
 	"name": "Order",
 	"description": "The order in which this field displays or computes when applicable.",
 	"type": "integer",
-	"attribute": {}
+	"attribute": {
+		"display_size": 110
+	}
 });
 fields.push({
 	"id": "preview_data",

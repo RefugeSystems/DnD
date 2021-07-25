@@ -331,6 +331,17 @@ rsSystem.component("DNDMasterScreen", {
 					console.warn("Missing Information to Remove to Meeting; Meeting: " + (meeting?meeting.id:"! No Meeting") + "\n - ", entities);
 				}
 			}
+		}, {
+			"title": "Create a character",
+			"icon": "fas fa-user-cog",
+			"process": function() {
+				rsSystem.EventBus.$emit("dialog-open", {
+					"component": "dndCreateCharacterDialog",
+					"storageKey": "master",
+					"id": "dndCreateCharacterDialog",
+					"max_size": true
+				});
+			}
 		}];
 
 		data.spellHeadings = ["name", "damage", "type", "level", "range_normal", "cast_time", "created"];
@@ -493,6 +504,14 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"methods": {
+		"createCharacter": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndCreateCharacterDialog",
+				"storageKey": "master",
+				"id": "dndCreateCharacterDialog",
+				"max_size": true
+			});
+		},
 		"checkToEditRecord": function(event) {
 			var follow,
 				i;

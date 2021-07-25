@@ -53,6 +53,7 @@ verify(configuration)
 	};
 	universe.on("error", logData);
 	universe.on("info", logData);
+	universe.on("warning", logData);
 	universe.on("warn", logData);
 	universe.on("log", logData);
 	
