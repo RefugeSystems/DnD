@@ -918,7 +918,7 @@
 							this.universe.send("control:map", {
 								"url": "/map/" + this.location.id,
 								"location": this.location.id,
-								"image": this.storage.image
+								"image": this.image
 							});
 						}
 						break;
@@ -951,7 +951,7 @@
 						p2.x = this.storage.measuring[this.location.id][1].x * this.image.width;
 						p2.y = this.storage.measuring[this.location.id][1].y * this.image.height;
 
-						length = rsSystem.math.distance.points2D(p1, p2) / (1 + .1 * this.storage.image.zoom);
+						length = rsSystem.math.distance.points2D(p1, p2) / (1 + .1 * this.image.zoom);
 						length = Math.floor(length + .5);
 						// console.log("Set Length: " + length);
 						length = (this.storage.distance * (rsSystem.math.distance.convert[this.storage.distance_unit] || 1)) / length;
@@ -1445,7 +1445,7 @@
 
 					if(/*this.storage.labels && path.rendering_name &&*/ typeof(path.x) === "number" && typeof(path.y) === "number") {
 						canvas.fillStyle = path.label_color || path.rendering_path_color || "#FFFFFF";
-						canvas.font = "bold " + Math.min(12 + this.storage.image.zoom, location.max_font_size || 50) + "px Arial";
+						canvas.font = "bold " + Math.min(12 + this.image.zoom, location.max_font_size || 50) + "px Arial";
 						canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
 						canvas.shadowBlur = path.label_shadow_blur || 3;
 						canvas.globalAlpha = path.label_opacity || 1;
@@ -1497,7 +1497,7 @@
 				}
 			},
 			"renderRadial": function(object, r, x, y, color) {
-				var zoom = 1 + .1 * this.storage.image.zoom,
+				var zoom = 1 + .1 * this.image.zoom,
 					canvas = $("#measuring"),
 					context;
 				if(canvas && (canvas = canvas[0]) && this.image) {
@@ -1555,7 +1555,7 @@
 				}
 			},
 			"renderMeasurements": function() {
-				// console.warn("Measurements[" + this.storage.image.zoom + "]...");
+				// console.warn("Measurements[" + this.image.zoom + "]...");
 				var canvas,
 					format,
 					party,
@@ -1593,13 +1593,13 @@
 					if(this.storage.measuring[this.location.id] && this.storage.measuring[this.location.id].length) {
 						points = [];
 						canvas.clearRect(0, 0, canvas.width, canvas.height);
-						canvas.font = Math.min(14 + this.storage.image.zoom, location.max_font_size || 50) + "px serif";
+						canvas.font = Math.min(14 + this.image.zoom, location.max_font_size || 50) + "px serif";
 						canvas.strokeStyle = "#FFFFFF";
 						canvas.fillStyle = "#FFFFFF";
 						canvas.globalAlpha = .7;
 						canvas.lineWidth = 2;
 
-						zoom = 1 + .1 * this.storage.image.zoom;
+						zoom = 1 + .1 * this.image.zoom;
 
 						// console.log("Rendering[" + this.image.width + "x" + this.image.height + "@" + zoom + "]: ", JSON.stringify(this.storage.measuring[this.location.id], null, 4));
 						canvas.beginPath();
