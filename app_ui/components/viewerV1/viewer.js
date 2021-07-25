@@ -206,6 +206,12 @@
 				"required": true,
 				"type": Object
 			},
+			"image": {
+				"type": Object,
+				"default": function() {
+					return {};
+				}
+			},
 			"entity": {
 				"type": Object
 			}
@@ -229,7 +235,7 @@
 			data.generateLocationClassingMap = generateLocationClassingMap;
 			data.viewingEntity = null;
 			data.search_criteria = [];
-			data.image = [];
+			// data.image = {};
 
 			data.measurementCanvas = null;
 			data.initializing = true;
@@ -401,12 +407,12 @@
 			if(this.storage.labels === undefined) {
 				Vue.set(this.storage, "labels", true);
 			}
-			if(this.storage.image) {
-				Vue.set(this, "image", this.storage.image);
-			} else {
-				Vue.set(this, "image", {});
-				Vue.set(this.storage, "image", this.image);
-			}
+			// if(this.storage.image) {
+			// 	Vue.set(this, "image", this.storage.image);
+			// } else {
+			// 	Vue.set(this, "image", {});
+			// 	Vue.set(this.storage, "image", this.image);
+			// }
 			if(this.storage.markers === undefined) {
 				Vue.set(this.storage, "markers", true);
 			}
@@ -878,13 +884,24 @@
 						}
 						break;
 					case "set-map":
+						this.universe.send("master:control:map", {
+							"location": this.location.id,
+							"image": this.image
+						});
+						/*
 						this.universe.send("map:view", {
 							"location": this.location.id,
 							"shown_at": Date.now(),
 							"image": this.image
 						});
+						*/
 						break;
 					case "set-location":
+						this.universe.send("master:control:map", {
+							"location": this.location.id,
+							"image": this.image
+						});
+						/*
 						buffer = this.universe.getObject(this.storage.alter);
 						if(buffer) {
 							this.universe.send("map:location", {
@@ -894,6 +911,7 @@
 								"y": (this.actions.y/this.image.height*100)
 							});
 						}
+						*/
 						break;
 					case "add-point":
 						this.appendPath(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
@@ -1919,15 +1937,15 @@
 				if(this.player.gm) {
 					this.actions.options.push({
 						"icon": "fas fa-map-marked",
-						"event": "set-current",
+						"event": "set-map",
 						"text": "Show Map"
 					});
 
-					this.actions.options.push({
-						"icon": "fas fa-map",
-						"event": "set-map",
-						"text": "Set Location View"
-					});
+					// this.actions.options.push({
+					// 	"icon": "fas fa-map",
+					// 	"event": "set-location",
+					// 	"text": "Set Location View"
+					// });
 					this.actions.options.push({
 						"icon": "fas fa-copy",
 						"event": "copy-key",

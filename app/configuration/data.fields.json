@@ -2805,6 +2805,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 			"conditionals": "+",
+			"skill_check": "+",
 			"response": "+",
 			"actions": "+",
 			"effects": "+",

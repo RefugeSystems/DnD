@@ -48,20 +48,26 @@ rsSystem.component("DNDMap", {
 	},
 	"data": function() {
 		var data = {};
-
+		data.image = {};
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
+		this.universe.$on("master:control", this.controlResponse);
 	},
 	"methods": {
+		"controlResponse": function(control) {
+			switch(control.control) {
+				case "map":
+					if(this.storage.follow) {
+						rsSystem.toPath("/map/" + control.data.location);
+					}
+					break;
+			}
+		}
 	},
 	"beforeDestroy": function() {
-		/*
-		this.universe.$off("universe:modified", this.update);
-		rsSystem.EventBus.$off("key:escape", this.closeInfo);
-		*/
+		this.universe.$off("master:control", this.controlResponse);
 	},
 	"template": Vue.templified("pages/dnd/map.html")
 });

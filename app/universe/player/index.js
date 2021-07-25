@@ -44,6 +44,11 @@ class PlayerConnection extends EventEmitter {
 			this.unloadObject(unload);
 		};
 		
+		var forwardControlMessage = (message) => {
+			message.type = "master:control";
+			this.forwardMessage(message);
+		};
+		
 		var forwardMessage = (message) => {
 			this.forwardMessage(message);
 		};
@@ -72,6 +77,7 @@ class PlayerConnection extends EventEmitter {
 		universe.on("object-created", receiveObject);
 		universe.on("unload", unloadObject);
 		universe.on("error", masterLogEvent);
+		universe.on("master:control", forwardControlMessage);
 
 		universe.chronicle.on("added", chronicled);
 	}
