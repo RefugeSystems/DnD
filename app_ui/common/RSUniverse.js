@@ -174,6 +174,10 @@ class RSUniverse extends EventEmitter {
 		 */
 		this.profile = {};
 		
+		/**
+		 * 
+		 * @event universe-reconnect
+		 */
 		rsSystem.EventBus.$on("universe-reconnect", () => {
 			if(!this.connection.socket) {
 				this.state.reconnectAttempts = 0;

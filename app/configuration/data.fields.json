@@ -3045,6 +3045,7 @@
 		"type": "markdown",
 		"attribute": {
 			"display_size": 200,
+			"metadata": "npc core",
 			"master_only": true
 		}
 	}, {

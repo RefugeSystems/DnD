@@ -81,6 +81,9 @@
 			<button class="rounded general quick action" v-on:click="levelUp(1)" v-on:click.right.stop.prevent="levelUp(-1)" title="Level up characters. Right click to level down.">
 				<span class="fas fa-user-plus"></span>
 			</button>
+			<button class="rounded general quick action" v-on:click="info(active)" title="Information on the current active meeting.">
+				<span class="fas fa-info-circle"></span>
+			</button>
 		</div>
 	</div>
 	<div class="flex h wrap master-actions">
