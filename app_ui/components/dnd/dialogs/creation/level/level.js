@@ -178,7 +178,7 @@ rsSystem.component("dndCharacterLevelDialog", {
 		},
 		"chooseClass": function(archetype) {
 			console.log("Choose Class: ", archetype);
-			if(!this.sectionInfo.class.archetype && this.sectionInfo.class.archetype.id !== archetype.id) {
+			if(!this.sectionInfo.class.archetype || this.sectionInfo.class.archetype.id !== archetype.id) {
 				Vue.set(this.sectionInfo.subclass, "archetype", null);
 				Vue.set(this.sectionInfo.subclass, "completed", false);
 				Vue.set(this.sectionInfo.hp, "amount", 0);
