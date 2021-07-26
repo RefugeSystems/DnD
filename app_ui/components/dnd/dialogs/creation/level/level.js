@@ -191,7 +191,7 @@ rsSystem.component("dndCharacterLevelDialog", {
 		},
 		"chooseSubclass": function(archetype) {
 			console.log("Choose Subclass: ", archetype);
-			if(this.sectionInfo.subclass.archetype && this.sectionInfo.subclass.archetype.id !== archetype.id) {
+			if(!this.sectionInfo.subclass.archetype || this.sectionInfo.subclass.archetype.id !== archetype.id) {
 				Vue.set(this.sectionInfo.customizations, "completed", false);
 			}
 			Vue.set(this.sectionInfo.subclass, "archetype", archetype);
