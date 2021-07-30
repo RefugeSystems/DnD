@@ -14,11 +14,12 @@
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in location.coordinates" v-if="!coordinate.standalone">
-					<span class="coordinate top left" :style="getCoordinateStyle(coordinate)"></span>
-					<span class="coordinate bottom right" :style="'left: ' + coordinate.x + '%; width: ' + (100-coordinate.x) + '%; top: ' + coordinate.y + '%; height: ' + (100-coordinate.y) + '%;' + (coordinate.color?'border-color: ' + coordinate.color + ';':'')"></span>
+					<span class="coordinate top left" :style="styleTL[coordinate.id]"></span>
+					<span class="coordinate bottom right" :style="styleBR[coordinate.id]"></span>
 				</div>
 				<div class="coordinate-dots">
-					<button class="dot" v-for="coordinate in location.coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button>
+					<!-- <button class="dot" v-for="coordinate in location.coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button> -->
+					<button class="dot" v-for="coordinate in location.coordinates" :style="stylePosition[coordinate.id]" v-on:click="dismissCoordinate(coordinate)"></button>
 				</div>
 				<div class="map-paths">
 					<canvas v-for="loc in locales" :data-id="'locale:' + loc.id"></canvas>

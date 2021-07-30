@@ -260,6 +260,10 @@
 			data.dragX = null;
 			data.dragY = null;
 
+			data.stylePosition = {};
+			data.styleTL = {};
+			data.styleBR = {};
+
 			data.resetViewportFlag = true;
 			data.focusedLocation = null;
 			data.availableCanvases = {};
@@ -1047,12 +1051,31 @@
 					}
 				}
 			},
-			"getCoordinateStyle": function(coordinate) {
+			/*
+			 * Move these calculations into the update step to rebuild when the coordinates change rather than with every redraw
+			 */
+			"getCoordinateTLStyle": function(coordinate) {
 				var object;
 				if(coordinate.object && (object = this.universe.getObject(coordinate.object))) {
 					return "width: " + (object.x || coordinate.x) + "%; height: " + (object.y || coordinate.y) + "%;" + (coordinate.color?"border-color: " + coordinate.color + ";":"");
 				} else {
 					return "width: " + coordinate.x + "%; height: " + coordinate.y + "%;" + (coordinate.color?"border-color: " + coordinate.color + ";":"");
+				}
+			},
+			"getCoordinateBRStyle": function(coordinate) {
+				var object;
+				if(coordinate.object && (object = this.universe.getObject(coordinate.object))) {
+					return "left: " + (object.x || coordinate.x) + "%; width: " + (100-(object.x || coordinate.x)) + "%; top: " + (object.y || coordinate.y) + "%; height: " + (100-(object.y || coordinate.y)) + "%;" + (coordinate.color?"border-color: " + coordinate.color + ";":"");
+				} else {
+					return "left: " + coordinate.x + "%; width: " + (100-coordinate.x) + "%; top: " + coordinate.y + "%; height: " + (100-coordinate.y) + "%;" + (coordinate.color?"border-color: " + coordinate.color + ";":"");
+				}
+			},
+			"getCoordinatePosition": function(coordinate) {
+				var object;
+				if(coordinate.object && (object = this.universe.getObject(coordinate.object))) {
+					return "left: " + (object.x || coordinate.x) + "%; top: " + (object.y || coordinate.y) + "%;" + (coordinate.color?"background-color: " + coordinate.color + ";":"");
+				} else {
+					return "left: " + coordinate.x + "%; top: " + coordinate.y + "%;" + (coordinate.color?"background-color: " + coordinate.color + ";":"");
 				}
 			},
 			"dismissCoordinate": function(coordinate) {
@@ -2007,6 +2030,22 @@
 							this.waitDimensions(this.universe.getImagePath(this.location.map), this.finishUpdate);
 						} else {
 							this.finishUpdate();
+						}
+
+						for(x=0; x<this.location.coordinates.length; x++) {
+							buffer = this.location.coordinates[x];
+							// TODO: Review this for possible memory leak issues.
+							//		In general, the style objects should be abandoned and garbage collected
+							//		before the lack of cleaning begins to become an issue, but intense map
+							//		usage on a single location may push this. However, that would mean a lot
+							//		of transient ro temporary objects had been placed on the map where the
+							//		cached values were no longer needed. Where as most usage should only
+							//		involve objects that are there the entire time with maybe a dozen that
+							//		could be cleaned up. Thus, this TODO is more of a note for memory issues
+							//		should any need checked, but should not be an issue.
+							this.stylePosition[buffer.id] = this.getCoordinatePosition(buffer);
+							this.styleTL[buffer.id] = this.getCoordinateTLStyle(buffer);
+							this.styleBR[buffer.id] = this.getCoordinateBRStyle(buffer);
 						}
 
 						// if(this.storage.follow && this.location.showing && this.location.shown_at && this.storage.viewed_at < this.location.shown_at) {
