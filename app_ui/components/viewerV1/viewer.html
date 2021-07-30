@@ -1,7 +1,7 @@
 
 <div class="rs-component component-viewer" :class="renderState()">
 
-	<div class="map" v-if="location && location.map" :style="" v-wheel="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomInOne">
+	<div class="map" v-if="location && location.map" :style="" v-wheel.passive="wheeling" v-pinch.in="zoomOutOne" v-pinch.out="zoomInOne">
 		<div class="view" onexit="true" v-pan="pan">
 			<div class="parchment" v-on:contextmenu.stop.prevent="openActions($event)" :style="'font-size: ' + getMarkerSize() + 'px;'">
 				<div class="pointsOfInterest" v-if="pointsOfInterest.length && storage.markers">

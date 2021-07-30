@@ -81,6 +81,15 @@ class PlayerConnection extends EventEmitter {
 
 		universe.chronicle.on("added", chronicled);
 	}
+
+	/**
+	 * 
+	 * @method isConnected
+	 * @returns {Boolean}
+	 */
+	isConnected() {
+		return !!Object.keys(this.connection).length;
+	}
 	
 	connect(session, socket) {
 		var id = RSRandom.identifier("socket", 10, 64);

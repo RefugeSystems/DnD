@@ -7,8 +7,17 @@
  */
 Vue.directive("wheel", {
 	"bind": function(el, binding) {
+		console.log("Wheel Binding: ", binding);
 		if (typeof(binding.value) === "function") {
-			el.addEventListener("mousewheel", binding.value);
+			if(binding.modifiers.passive) {
+
+				
+				el.addEventListener("mousewheel", binding.value, {"passive": true});
+			} else {
+
+
+				el.addEventListener("mousewheel", binding.value);
+			}
 		}
 	}
 });

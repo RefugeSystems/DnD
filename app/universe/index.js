@@ -897,6 +897,48 @@ class Universe extends EventEmitter {
 
 		return masters;
 	}
+
+	/**
+	 * 
+	 * @method getConnectedPlayers
+	 * @returns {Array}
+	 */
+	getConnectedPlayers() {
+		var players = Object.keys(this.connection),
+			connected = [],
+			connection,
+			i;
+		
+		for(i=0; i<players.length; i++) {
+			connection = this.connection[players[i]];
+			if(connection.isConnected()) {
+				connected.push(players[i]);
+			}
+		}
+
+		return connected;
+	}
+
+	/**
+	 * 
+	 * @method getConnectedRecipients
+	 * @return {Object}
+	 */
+	getConnectedRecipients() {
+		var players = Object.keys(this.connection),
+			connected = {},
+			connection,
+			i;
+		
+		for(i=0; i<players.length; i++) {
+			connection = this.connection[players[i]];
+			if(connection.isConnected()) {
+				connected[players[i]] = true;
+			}
+		}
+
+		return connected;
+	}
 	
 	/**
 	 * 

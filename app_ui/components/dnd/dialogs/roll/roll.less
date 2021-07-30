@@ -51,24 +51,44 @@
 		}
 	}
 
+	.npc {
+		.info-link {
+			border-color: @rsLightBlue;
+		}
+	}
+	
+	.hostile {
+		.info-link {
+			border-color: @rsLightRed;
+		}
+	}
+
 	.targeted {
-		box-shadow: 0px 0px 10px @rsGreen;
-		border: 1px solid @rsGreen;
+		.target {
+			box-shadow: 0px 0px 10px @rsGreen;
+			border: 1px solid @rsGreen;
+		}
 
 		&.npc {
-			box-shadow: 0px 0px 10px @rsLightBlue;
-			border: 1px solid @rsLightBlue;
+			.target {
+				box-shadow: 0px 0px 10px @rsLightBlue;
+				border: 1px solid @rsLightBlue;
+			}
 		}
 
 		&.hostile {
-			box-shadow: 0px 0px 10px @rsLightRed;
-			border: 1px solid @rsLightRed;
+			.target {
+				box-shadow: 0px 0px 10px @rsLightRed;
+				border: 1px solid @rsLightRed;
+			}
 		}
 
 		&.chest,
 		&.shop {
-			box-shadow: 0px 0px 10px @rsLightBrown;
-			border: 1px solid @rsLightBrown;
+			.target {
+				box-shadow: 0px 0px 10px @rsLightBrown;
+				border: 1px solid @rsLightBrown;
+			}
 		}
 	}
 

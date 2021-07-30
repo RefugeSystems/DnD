@@ -44,19 +44,23 @@ module.exports.initialize = function(universe) {
 	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}) {
 		var tracked = tracking[activity],
 			log = logged[activity],
-			was_damaged;
+			was_damaged,
+			notify;
 		
 		if(tracked) {
 			clearTimeout(alarms[activity]);
 			delete(tracking[activity]);
 			log.resist = resist;
-			setTimeout(function() {
-				universe.emit("send", {
-					"type": "dismiss-message",
-					"mid": activityPrefix + activity,
-					"recipients": tracked.target.owned
-				});
-			}, 0);
+			if(tracked.target.owned && Object.keys(tracked.target.owned).length) {
+				notify = tracked.target.owned;
+			} else {
+				notify = universe.getMasters();
+			}
+			universe.emit("send", {
+				"type": "dismiss-message",
+				"mid": activityPrefix + activity,
+				"recipients": notify
+			});
 		} else {
 			log = {};
 			log.target = entity.id;
@@ -85,6 +89,7 @@ module.exports.initialize = function(universe) {
 			succeeded,
 			castMask,
 			buffer,
+			notify,
 			keys,
 			i;
 		
@@ -98,13 +103,16 @@ module.exports.initialize = function(universe) {
 			log.critical = critical;
 			log.failure = failure;
 			log.succeeded = succeeded = tracked.difficulty <= save;
-			setTimeout(function() {
-				universe.emit("send", {
-					"type": "dismiss-message",
-					"mid": activityPrefix + activity,
-					"recipients": tracked.target.owned
-				});
-			}, 0);
+			if(tracked.target.owned && Object.keys(tracked.target.owned).length) {
+				notify = tracked.target.owned;
+			} else {
+				notify = universe.getMasters();
+			}
+			universe.emit("send", {
+				"type": "dismiss-message",
+				"mid": activityPrefix + activity,
+				"recipients": notify
+			});
 		} else {
 			log = {};
 			log.activity = activity;

@@ -1258,6 +1258,7 @@
 				} else if(event.deltaY > 0) {
 					this.zoomOutOne();
 				}
+				this.update();
 			},
 			"zoomOutOne": function() {
 				// console.log("Zoom -1");

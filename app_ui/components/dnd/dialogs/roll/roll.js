@@ -480,7 +480,7 @@ rsSystem.component("dndDialogRoll", {
 			if(target.is_npc) {
 				classes += " npc";
 			}
-			if(target.is_hsotile) {
+			if(target.is_hostile) {
 				classes += " hostile";
 			}
 			if(target.is_chest) {

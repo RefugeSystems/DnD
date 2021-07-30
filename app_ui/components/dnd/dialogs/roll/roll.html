@@ -43,11 +43,11 @@
 				<span>Target for {{details.using.name}}</span>
 			</div>
 		</div>
-		<div class="to-roll flex h" v-for="targetable in targets">
-			<button class="roll-key general rounded quick action" v-on:click="info(targetable)">
+		<div class="to-roll flex h" v-for="targetable in targets" :class="getTargetClass(targetable)">
+			<button class="roll-key general rounded quick action info-link" v-on:click="info(targetable)">
 				<span :class="targetable.icon"></span>
 			</button>
-			<button class="roll-result target flex v center general rounded" v-on:click="selectTarget(targetable)" :class="getTargetClass(targetable)">
+			<button class="roll-result target flex v center general rounded" v-on:click="selectTarget(targetable)">
 				<span>{{targetable.name}}</span>
 				<dnd-health-bar :entity="targetable"></dnd-health-bar>
 			</button>

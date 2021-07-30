@@ -110,52 +110,53 @@
 			 * @param {Object} event
 			 */
 			"receiveMessage": function(event) {
-				if(this.identified[event.id]) {
-					this.dismissMessage(this.identified[event.id]);
-				}
-				
-				event._display_time = new Date(event.time);
-				if(!event._display_time.getTime()) {
-					event._display_time = new Date();
-				}
-				
-				event.type = "notification";
-				if(!event.message) {
-					if(event.data) {
-						if(event.data.message) {
-							event.message = event.data.message;
-						} else if(event.data.description) {
-							event.message = event.data.description;
-						}
-					} else if(event.error) {
-						if(event.error.message) {
-							event.message = event.error.message;
-						} else if(event.error.description) {
-							event.message = event.error.description;
-						}
-					} else {
-						event.message = "Unidentified Error - See Logs: " + JSON.stringify(event);
+				console.log("Received: ", event);
+				if(!this.identified[event.id]) {
+					event._display_time = new Date(event.time);
+					if(!event._display_time.getTime()) {
+						event._display_time = new Date();
 					}
-				}
-				
-				if(event.id) {
-					Vue.set(this.identified, event.id, event);
-				}
-				
-				if(event.timeout) {
-					event.timeout = setTimeout(() => {
-						this.dismissMessage(event);
-					}, event.timeout);
-				}
-				
-				this.messages.unshift(event);
-				if(this.messages.length > 5) {
-					for(var x=this.messages.length - 1; 0<=x; x--) {
-						if(!this.messages[x].anchored) {
-							this.dismissMessage(this.messages[x]);
-							break;
+					
+					event.type = "notification";
+					if(!event.message) {
+						if(event.data) {
+							if(event.data.message) {
+								event.message = event.data.message;
+							} else if(event.data.description) {
+								event.message = event.data.description;
+							}
+						} else if(event.error) {
+							if(event.error.message) {
+								event.message = event.error.message;
+							} else if(event.error.description) {
+								event.message = event.error.description;
+							}
+						} else {
+							event.message = "Unidentified Error - See Logs: " + JSON.stringify(event);
 						}
 					}
+					
+					if(event.id) {
+						Vue.set(this.identified, event.id, event);
+					}
+					
+					if(event.timeout) {
+						event.timeout = setTimeout(() => {
+							this.dismissMessage(event);
+						}, event.timeout);
+					}
+					
+					this.messages.unshift(event);
+					if(this.messages.length > 5) {
+						for(var x=this.messages.length - 1; 0<=x; x--) {
+							if(!this.messages[x].anchored) {
+								this.dismissMessage(this.messages[x]);
+								break;
+							}
+						}
+					}
+				// } else {
+				// 	this.dismissMessage(this.identified[event.id]);
 				}
 			},
 			"printMessage": function(message) {
@@ -163,6 +164,7 @@
 				this.dismissMessage(message, true);
 			},
 			"dismiss": function(event) {
+				console.log("Dismiss: ", event);
 				var id = event.id || event.mid,
 					i;
 					
