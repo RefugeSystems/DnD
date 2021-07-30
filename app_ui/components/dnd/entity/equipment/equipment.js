@@ -69,6 +69,9 @@ rsSystem.component("dndEntityEquipment", {
 		}
 	},
 	"methods": {
+		"hoveredItem": function(item) {
+			this.$emit("hovered-object", item);
+		},
 		"toggleHide": function(feat) {
 			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);
 		},

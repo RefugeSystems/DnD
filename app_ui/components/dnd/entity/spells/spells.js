@@ -98,6 +98,9 @@ rsSystem.component("dndEntitySpells", {
 		}
 	},
 	"methods": {
+		"hoveredSpell": function(spell) {
+			this.$emit("hovered-object", spell);
+		},
 		"toggleList": function() {
 			Vue.set(this.storage, "collapsed", !this.storage.collapsed);
 		},

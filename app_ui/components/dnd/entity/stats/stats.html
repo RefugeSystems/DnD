@@ -22,7 +22,7 @@
 		</button>
 	</div>
 	<div class="property-container speed">
-		<button class="property" v-on:click="move()">
+		<button class="property" v-on:click="move()" v-on:mouseover="hoverMovement(entity)" v-on:mouseleave="hoverMovement(null)">
 			<span class="icon fas fa-running"></span>
 			<span>{{entity.movement_ground}}</span>
 		</button>

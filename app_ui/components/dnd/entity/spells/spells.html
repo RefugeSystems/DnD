@@ -27,7 +27,7 @@
 			</button>
 		</div>
 		<div class="spells grow-1" :style="styleSpellList">
-			<div class="spell flex h" v-for="spell in spells" :class="getSpellBoxDisplay(spell)">
+			<div class="spell flex h" v-for="spell in spells" :class="getSpellBoxDisplay(spell)" v-on:mouseover="hoveredSpell(spell)" v-on:mouseleave="hoveredSpell(null)">
 				<div class="details flex v grow-1" v-on:click="cast(spell)">
 					<div class="details simple flex h grow-1">
 						<button class="flat action">

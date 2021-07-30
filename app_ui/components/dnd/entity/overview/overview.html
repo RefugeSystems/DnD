@@ -3,6 +3,6 @@
 		<rs-image class="imagery" v-if="image" :image="image" />
 	</div>
 	<div class="widgets container flex v" :class="dashboard && dashboard.attribute?dashboard.attribute.container_classes:''">
-		<component v-for="(widget, $index) in widgets" :key="$index" v-if="widget && !widget.disabled" :is="widget.component" :universe="universe" :entity="entity" :profile="profile" :player="player" :widget="widget" :storage-key="entity.id + widget.id"/>
+		<component v-for="(widget, $index) in widgets" :key="$index" v-if="widget && !widget.disabled" :is="widget.component" :universe="universe" :entity="entity" :profile="profile" :player="player" :widget="widget" :storage-key="entity.id + widget.id" v-on:hovered-object="hoveredObject($event)"/>
 	</div>
 </div>

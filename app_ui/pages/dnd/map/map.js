@@ -77,6 +77,9 @@ rsSystem.component("DNDMap", {
 		this.universe.$on("master:control", this.controlResponse);
 	},
 	"methods": {
+		"hoveredObject": function(object) {
+			Vue.set(this.storage, "hovering", object);
+		},
 		"flyoutClass": function() {
 			var classes = "";
 			if(this.displayCharacter) {

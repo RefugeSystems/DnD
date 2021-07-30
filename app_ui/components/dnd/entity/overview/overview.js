@@ -120,6 +120,9 @@ rsSystem.component("dndEntityOverview", {
 		};
 	},
 	"methods": {
+		"hoveredObject": function(object) {
+			this.$emit("hovered-object", object);
+		},
 		"getImageURL": function() {
 			if(this.location) {
 				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id;

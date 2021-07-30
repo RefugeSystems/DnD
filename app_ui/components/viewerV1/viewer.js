@@ -260,6 +260,7 @@
 			data.dragX = null;
 			data.dragY = null;
 
+			data.characterRangeBand = null;
 			data.stylePosition = {};
 			data.styleTL = {};
 			data.styleBR = {};
@@ -378,6 +379,12 @@
 			"location.coordinates": {
 				"handler": function(newValue, oldValue) {
 					this.redrawPaths();
+				}
+			},
+			"storage.hovering": function(hovered) {
+				if(this.entity) {
+					Vue.set(this, "characterRangeBand", hovered);
+					this.renderMeasurements();
 				}
 			}
 		},
@@ -1518,6 +1525,10 @@
 						this.renderRadial(object, point.radial, point.x, point.y, point.color);
 					}
 				}
+
+				if(this.characterRangeBand && this.characterRangeBand.range_normal && this.entity && this.location.map_distance && typeof(this.entity.x) === "number" && typeof(this.entity.y) === "number" && this.entity.location === this.location.id) {
+					this.renderRadial(this.entity, this.characterRangeBand.range_normal, null, null, "");
+				}
 			},
 			"renderRadial": function(object, r, x, y, color) {
 				var zoom = 1 + .1 * this.image.zoom,
@@ -1569,6 +1580,11 @@
 							context.strokeStyle = "#FFFFFFE0";
 							context.fillStyle = "#FFFFFF30";
 							break;
+						case "rangeband":
+						case "gray":
+						case "grey":
+							context.strokeStyle = "#22222270";
+							context.fillStyle = "#22222230";
 						default: // Black
 							context.strokeStyle = "#000000E0";
 							context.fillStyle = "#00000030";

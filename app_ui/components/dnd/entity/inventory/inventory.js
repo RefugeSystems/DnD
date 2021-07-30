@@ -45,6 +45,9 @@ rsSystem.component("dndEntityInventory", {
 		};
 	},
 	"methods": {
+		"hoveredItem": function(item) {
+			this.$emit("hovered-object", item);
+		}
 	},
 	"beforeDestroy": function() {
 		/*

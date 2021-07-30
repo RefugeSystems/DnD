@@ -35,6 +35,15 @@ rsSystem.component("dndEntityStats", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"hoverMovement": function(pass) {
+			if(pass) {
+				this.$emit("hovered-object", {
+					"range_normal": this.entity.movement_ground
+				});
+			} else {
+				this.$emit("hovered-object", null);
+			}
+		},
 		/**
 		 * Use the DialogList to list actions and highlight usable vs. not usable
 		 * with a way to then use those actions.

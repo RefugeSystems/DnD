@@ -10,7 +10,7 @@
 				<span class="action-count" v-if="showCharges(item)">{{item.charges || 0}}</span>
 			</button>
 		</div>
-		<button class="item rounded general quick action" v-for="item in equipment.shown" v-on:click.left="use(item)" v-on:click.right.stop.prevent="toggleHide(item)" v-linkable="item.id">
+		<button class="item rounded general quick action" v-for="item in equipment.shown" v-on:click.left="use(item)" v-on:click.right.stop.prevent="toggleHide(item)" v-linkable="item.id" v-on:mouseover="hoveredItem(item)" v-on:mouseleave="hoveredItem(null)">
 			<span class="action-icon" :class="item.icon || 'fas fa-cube'"></span>
 			<span class="action-count" v-if="showCharges(item)">{{item.charges || 0}}</span>
 		</button>
