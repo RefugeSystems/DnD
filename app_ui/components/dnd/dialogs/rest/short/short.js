@@ -48,6 +48,7 @@ rsSystem.component("dndDialogShortRest", {
 			data.entity = this.details.entity;
 		}
 
+		data.message = null;
 		data.attune = null;
 		data.roll = 0;
 		if(data.entity.hit_dice) {
@@ -84,7 +85,8 @@ rsSystem.component("dndDialogShortRest", {
 			if(this.used[die] < parseInt(this.entity.hit_dice[die])) {
 				Vue.set(this.used, die, this.used[die] + 1);
 				if(this.profile.auto_roll) {
-					Vue.set(this, "roll", this.roll + rsSystem.dnd.Calculator.diceRoll(die));
+					Vue.set(this, "roll", this.roll + rsSystem.dnd.Calculator.diceRoll(die) + this.entity.constitution);
+					Vue.set(this, "message", "(Constitution Modifier Added Automatically)");
 				}
 			}
 		},

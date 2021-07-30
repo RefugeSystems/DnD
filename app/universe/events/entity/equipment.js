@@ -239,27 +239,39 @@ module.exports.initialize = function(universe) {
 				item = null;
 				id = null;
 			}
-			if(id && entity.equipped.indexOf(id) === -1) {
-				notify = Object.assign({}, universe.getMasters());
+			if(entity) {
+				if(id && entity.equipped.indexOf(id) === -1) {
+					notify = Object.assign({}, universe.getMasters());
+					notify[event.player.id] = true;
+					universe.emit("send", {
+						"type": "notice",
+						"icon": "fas fa-exclamation-triangle rs-lightred",
+						"recipients": notify,
+						"message": entity.name + " can not equip " + item.name + " to their main hand unless they have that item equipped",
+						"data": event.message.data,
+						"anchored": true
+					});
+				} else {
+					entity.setValues({
+						"main_weapon": id
+					});
+					notify[event.player.id] = true;
+					universe.emit("send", {
+						"type": "notice",
+						"icon": "fas fa-check rs-lightgreen",
+						"recipients": notify,
+						"message": item?entity.name + " equip " + item.name + " to their main hand":"Main hand unequipped",
+						"data": event.message.data,
+						"anchored": true
+					});
+				}
+			} else {
 				notify[event.player.id] = true;
 				universe.emit("send", {
 					"type": "notice",
 					"icon": "fas fa-exclamation-triangle rs-lightred",
 					"recipients": notify,
-					"message": entity.name + " can not equip " + item.name + " to their main hand unless they have that item equipped",
-					"data": event.message.data,
-					"anchored": true
-				});
-			} else {
-				entity.setValues({
-					"main_weapon": id
-				});
-				notify[event.player.id] = true;
-				universe.emit("send", {
-					"type": "notice",
-					"icon": "fas fa-check rs-lightgreen",
-					"recipients": notify,
-					"message": entity.name + " equip " + item.name + " to their main hand",
+					"message": "Unable to equip, creature missing",
 					"data": event.message.data,
 					"anchored": true
 				});

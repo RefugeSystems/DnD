@@ -27,6 +27,7 @@ module.exports.initialize = function(universe) {
 				level = parseInt(event.message.data.spellLevel),
 				attack = event.message.data.attack,
 				targets = [],
+				difficulty,
 				source,
 				load,
 				i;
@@ -52,9 +53,15 @@ module.exports.initialize = function(universe) {
 						}
 					}
 				}
+
+				if(spell.dc === undefined) {
+					difficulty = source.spell_dc;
+				} else {
+					difficulty = spell.dc;
+				}
 	
 				if(spell.cast_save) {
-					utility.sendSaves(source, targets, level, spell, spell.cast_save, source.spell_dc, damage);
+					utility.sendSaves(source, targets, level, spell, spell.cast_save, difficulty, damage);
 				} else if(spell.cast_attack) {
 					utility.sendDamages(source, targets, level, spell, damage, attack);
 				} else {

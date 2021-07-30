@@ -18,4 +18,12 @@
 	</div>
 	<!-- <rs-viewer-v1 class="map" v-else :universe="universe" :player="player" :profile="profile" :configuration="configuration" :location="location" storage-key="rsmap:storage"></rs-viewer-v1> -->
 	<rs-viewer-v1 class="map" v-else :universe="universe" :player="player" :profile="profile" :configuration="configuration" :location="location" :storage-container="storage"></rs-viewer-v1>
+	<div class="character-flyout" :class="flyoutClass()" v-if="playerCharacter">
+		<button class="pullout" v-on:click="toggleCharacter()">
+			<span class="far fa-chevron-left indicator"></span>
+		</button>
+		<div class="character-container">
+			<dnd-entity-overview :entity="playerCharacter" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-key="'_dndeoc:' + playerCharacter.id" />
+		</div>
+	</div>
 </div>

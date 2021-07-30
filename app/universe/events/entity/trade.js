@@ -31,12 +31,16 @@ module.exports.initialize = function(universe) {
 		if(typeof(target) === "string") {
 			target = universe.get(target);
 		}
-		if(entity && (entity.owned[event.player.id] || entity.played_by === event.player.id) && entity.inventory && target && target.inventory && items && items.length) {
+		if(entity && (entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) && entity.inventory && target && target.inventory && items && items.length) {
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
 				if(item && entity.inventory.indexOf(item.id) !== -1) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
+						item.setValues({
+							"character": null,
+							"user": null
+						});
 					} else {
 						universe.messagePlayer(event.player, "Can not give item \"" + item.name + "\" because it is currently equipped");
 					}
@@ -115,12 +119,16 @@ module.exports.initialize = function(universe) {
 		if(typeof(entity) === "string") {
 			entity = universe.get(entity);
 		}
-		if(entity && (entity.owned[event.player.id] || entity.played_by === event.player.id) && entity.inventory && items && items.length) {
+		if(entity && (entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) && entity.inventory && items && items.length) {
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
 				if(item && entity.inventory.indexOf(item.id) !== -1) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
+						item.setValues({
+							"character": null,
+							"user": null
+						});
 					} else {
 						universe.messagePlayer(event.player, "Can not give item \"" + item.name + "\" because it is currently equipped");
 					}

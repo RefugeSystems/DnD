@@ -14,7 +14,7 @@
 						<span :class="getRelationIcon(entity)"></span>
 						<span>{{entity.name}}</span>
 					</h1>
-					<dnd-health-bar :entity="entity" :classing="relative"></dnd-health-bar>
+					<dnd-health-bar :entity="entity" classing="relative"></dnd-health-bar>
 				</div>
 				<div class="entity-description" v-html="rsshowdown(entity.description, entity)"></div>
 			</div>

@@ -13,15 +13,22 @@
 						<span :class="'fas fa-dice-' + die"></span>
 						<span class="action-count">{{used[die]}}/{{entity.hit_dice[die]}}</span>
 					</button>
+					<div>
+						Con: {{entity.constitution<0?entity.constitution:"+" + entity.constitution}}
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<span>Rolled:</span>
+					<span>Healing:</span>
 				</td>
 				<td>
 					<input class="grow-1" type="number" v-model.number="roll" v-on:keyup.enter="rest()"/>
 				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><span v-if="message" class="rs-light-yellow">{{message}}</span></td>
 			</tr>
 			<tr v-if="attunables.length">
 				<td>

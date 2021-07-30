@@ -259,12 +259,16 @@ rsSystem.component("DNDInventory", {
 				Vue.set(this.share, "icon", "fas fa-users");
 			}
 		}
+		if(this.storage.processing) {
+			Vue.set(this.storage, "processing", null);
+		}
 		this.universe.$on("updated", this.checkUpdate);
 		this.buildControls();
 	},
 	"methods": {
 		"checkUpdate": function(event) {
 			if(this.entity && this.entity.id === event.id) {
+				Vue.set(this.storage, "processing", null);
 				this.buildControls();
 			}
 		},

@@ -17,7 +17,6 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.data.items
 	 */
 	universe.on("player:inventory:hide", function(event) {
-		console.log("Hide: ", event.message.data);
 		var entity = universe.get(event.message.data.entity),
 			map = entity.inventory_hidden || {},
 			items = event.message.data.items,
@@ -51,7 +50,6 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.data.items
 	 */
 	 universe.on("player:inventory:reveal", function(event) {
-		console.log("Reveal: ", event.message.data);
 		var entity = universe.get(event.message.data.entity),
 			map = entity.inventory_hidden || {},
 			items = event.message.data.items,

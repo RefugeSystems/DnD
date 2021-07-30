@@ -12,6 +12,11 @@ rsSystem.component("DNDControlEquipment", {
 			"type": Object
 		}
 	},
+	"computed": {
+		"playerCharacter": function() {
+			return this.getPlayerCharacter();
+		}
+	},
 	"methods": {
 		"give": function(item, to, from) {
 			this.sendEquipmentContorl("inventory:give", item, from, to);
@@ -22,14 +27,17 @@ rsSystem.component("DNDControlEquipment", {
 		"equipItem": function(item, entity) {
 			this.sendEquipmentContorl("equip:items", item, entity);
 		},
+		"mainhandItem": function(item, entity) {
+			this.sendEquipmentContorl("item:mainhand", item, entity);
+		},
 		"unequipItem": function(item, entity) {
 			this.sendEquipmentContorl("unequip:items", item, entity);
 		},
 		"dischargeItem": function(item, entity) {
-			this.sendEquipmentContorl("items:verstility:2handed", item, entity);
+			this.sendEquipmentContorl("object:charges", item, entity, null, -1);
 		},
 		"rechargeItem": function(item, entity) {
-			this.sendEquipmentContorl("items:verstility:2handed", item, entity);
+			this.sendEquipmentContorl("object:charges", item, entity, null, 1);
 		},
 		"revealItem": function(item, entity) {
 			this.sendEquipmentContorl("inventory:reveal", item, entity);
@@ -57,7 +65,7 @@ rsSystem.component("DNDControlEquipment", {
 				return null;
 			}
 		},
-		"sendEquipmentContorl": function(command, item, entity, target) {
+		"sendEquipmentContorl": function(command, item, entity, target, charges) {
 			if(!entity) {
 				entity = this.entity;
 			}
@@ -70,6 +78,9 @@ rsSystem.component("DNDControlEquipment", {
 			};
 			if(target) {
 				send.target = target.id || true;
+			}
+			if(charges) {
+				send.change = charges;
 			}
 			this.universe.send(command, send);
 		},

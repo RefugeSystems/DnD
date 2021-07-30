@@ -1,5 +1,56 @@
 .dnd-page.dnd-map {
 
 
-	
+	.character-flyout {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		height: 100%;
+		width: 420px;
+		max-width: 0px;
+		transition: max-width .3s;
+		background-color: @rsBlack;
+		z-index: 20;
+
+		&.open {
+			max-width: 420px;
+
+			.indicator {
+				transform: rotate(180deg);
+			}
+		}
+
+		.pullout {
+			position: absolute;
+			height: 100px;
+			width: 20px;
+			left: -20px;
+			top: ~"calc(50% - 50px)";
+			background-color: #ffffff60;
+			border-color: #00000060;
+			border-style: solid;
+			border-top-left-radius: 20px;
+			border-bottom-left-radius: 20px;
+			line-height: 100px;
+			font-size: 20px;
+			border-width: 1px;
+			border-right-width: 0px;
+
+			.indicator {
+				line-height: inherit;
+				font-size: inherit;
+				transition: transform .3s;
+				color: @rsBlack;
+			}
+		}
+
+		.character-container {
+			position: relative;
+			height: 100%;
+			top: 0px;
+			right: 0px;
+			width: 420px;
+			overflow: auto;
+		}
+	}
 }

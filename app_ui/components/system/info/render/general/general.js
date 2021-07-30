@@ -54,7 +54,9 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"methods": {
 		"populateControls": function() {
-			var loading;
+			var entity = this.playerCharacter || this.getPlayerCharacter(),
+				object = this.info,
+				loading;
 
 			this.controls.splice(0);
 			if(!this.info.is_preview && this.info._class) {
@@ -107,10 +109,56 @@ rsSystem.component("sysInfoGeneral", {
 							this.controls.push(loading);
 						}
 					}
+					if(entity) {
+						switch(this.info._class) {
+							case "item":
+								if(entity.inventory.indexOf(this.info.id) !== -1) {
+									if(entity.equipped.indexOf(object.id) === -1) {
+										this.controls.push({
+											"title": "Equip Item to " + entity.name,
+											"icon": "game-icon game-icon-sword-brandish",
+											"type": "button",
+											"action": "equip"
+										});
+									} else {
+										this.controls.push({
+											"title": "Unequip Item from " + entity.name,
+											"icon": "game-icon game-icon-drop-weapon",
+											"type": "button",
+											"action": "unequip"
+										});
+										if(object.melee || object.ranged || object.thrown) {
+											this.controls.push({
+												"title": "Equip as Main Hand for " + entity.name,
+												"icon": "fas fa-fist",
+												"type": "button",
+												"action": "mainhand"
+											});
+										}
+									}
+								}
+								this.controls.push({
+									"title": "Give item to another creature near " + entity.name,
+									"icon": "fas fa-people-carry",
+									"type": "button",
+									"action": "give"
+								});
+								this.controls.push({
+									"title": "Drop item from " + entity.name,
+									"icon": "fas fa-arrow-alt-to-bottom",
+									"type": "button",
+									"action": "drop"
+								});
+								break;
+						}
+					}
 				}
 			}
 		},
 		"process": function(control) {
+			var entity = this.playerCharacter || this.getPlayerCharacter(),
+				object = this.info;
+
 			switch(control.action) {
 				case "goto":
 					rsSystem.toPath("/map/" + this.info.id);
@@ -131,6 +179,33 @@ rsSystem.component("sysInfoGeneral", {
 						"obscured": false
 					});
 					break;
+				case "give":
+					rsSystem.EventBus.$emit("dialog-open", {
+						"component": "dndDialogGive",
+						"entity": entity.id,
+						"finish": (target) => {
+							if(target && target.id) {
+								this.universe.send("inventory:give", {
+									"items": [object.id],
+									"entity": entity.id,
+									"target": target.id
+								});
+							}
+						}
+					});
+					break;
+				case "equip":
+					this.equipItem(this.info.id);
+					break;
+				case "mainhand":
+					this.mainhandItem(this.info.id);
+					break;
+				case "unequip":
+					this.unequipItem(this.info.id);
+					break;
+				case "drop":
+					this.dropItem(this.info.id);
+					break;
 				case "color":
 					this.universe.send("master:recolor", {
 						"object": this.info.id,
@@ -144,7 +219,7 @@ rsSystem.component("sysInfoGeneral", {
 					break;
 			}
 		},
-		"option": function(contorl) {
+		"option": function(control) {
 
 		},
 		"getImageURL": function(record) {

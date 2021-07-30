@@ -74,7 +74,7 @@
 
 	var formatMarkdown = function(sourceText, universe, entity, allow_js) {
 		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
-		sourceText = sourceText.replace(compatibility.start, marking.start).replace(compatibility.end, marking.end);
+		sourceText = sourceText?sourceText.replace(compatibility.start, marking.start).replace(compatibility.end, marking.end):"";
 		
 		// Deprecated and Removing
 		var targetObject = null,

@@ -44,10 +44,31 @@ rsSystem.component("DNDMap", {
 					return location;
 				}
 			}
+		},
+		"playerCharacter": function() {
+			var entity;
+			if(this.$route.params.entity) {
+				entity = this.universe.index.entity[this.$route.params.entity];
+			} else if(this.$route.query.entity) {
+				entity = this.universe.index.entity[this.$route.query.entity];
+			} else {
+				entity = this.universe.index.entity[this.universe.index.player[this.universe.connection.session.player].attribute.playing_as];
+			}
+			if(entity) {
+				if(this.player.gm || entity.owned[this.player.id]) {
+					return entity;
+				} else {
+					console.warn("Invalid access to entity in map; Player[" + this.player.id + "] does not have access to Entity[" + entity.id + "]");
+					return null;
+				}
+			} else {
+				console.warn("Player[" + this.player.id + "] is not currently playing_as any entity");
+			}
 		}
 	},
 	"data": function() {
 		var data = {};
+		data.displayCharacter = false;
 		data.image = {};
 		return data;
 	},
@@ -56,6 +77,16 @@ rsSystem.component("DNDMap", {
 		this.universe.$on("master:control", this.controlResponse);
 	},
 	"methods": {
+		"flyoutClass": function() {
+			var classes = "";
+			if(this.displayCharacter) {
+				classes += "open ";
+			}
+			return classes;
+		},
+		"toggleCharacter": function() {
+			Vue.set(this, "displayCharacter", !this.displayCharacter);
+		},
 		"controlResponse": function(control) {
 			switch(control.control) {
 				case "map":
