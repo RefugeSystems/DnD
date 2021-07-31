@@ -1,7 +1,23 @@
 <div class="page-security page-version">
 	<h1>Version History: V{{version}}</h1>
 	<p>Page Pending.</p>
-	<p>See the <a href="https://trello.com/b/dO2fHEfu/rsdnd">Trello Board</a> for further details.</p>
+	<div class="version-details" v-if="status !== 10">
+		<span class="fas fa-sync"></span>
+		<span>Loading Version Details...</span>
+	</div>
+	<div class="version-details" v-if="status === 10">
+		<div class="version-current-details">
+			<div class="version-detail" v-for="detail in current">
+
+			</div>
+		</div>
+		<div class="version-previous-details">
+			<div class="version-detail" v-for="detail in previous">
+
+			</div>
+		</div>
+	</div>
+	<p>See the <a href="https://trello.com/b/dO2fHEfu/rsdnd" target="_blank">Trello Board</a> for further details.</p>
 	<button class="general rounded action" v-on:click="update()">
 		<span :class="updateClasses"></span>
 		<span>Get Latest</span>

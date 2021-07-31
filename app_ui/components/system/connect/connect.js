@@ -112,6 +112,32 @@
 					console.error("Failed to receive session: ", session);
 				}
 			}
+
+			if(this.storage.username) {
+				fetch(new Request(this.getHTTPAddress() + "/api/v1/meet/next/" + this.storage.username))
+				.then((res) => {
+					if(res.status === 200) {
+						return res.json();
+					}
+				})
+				.then((json) => {
+					var date;
+					if(json.meeting && json.meeting.date && !isNaN(date = new Date(json.meeting.date))) {
+						console.log("Meeting: ", json.meeting);
+						this.$emit("message", {
+							"class": "rsbd-lightblue",
+							"icon": "fas fa-calendar-day rs-lightblue",
+							"heading": "Next Meeting",
+							"text": "Next session is \"" + json.meeting.name + "\" on " + date.toLocaleDateString() + " at " + date.toLocaleTimeString()
+						});
+					} else {
+						console.log("No next meeting found for " + this.storage.username, json);
+					}
+				})
+				.catch((error) => {
+					console.warn("Failed to get Meeting: ", error);
+				});
+			}
 			
 			fetch(new Request(this.getHTTPAddress() + "/login/available"))
 			.then((res) => {

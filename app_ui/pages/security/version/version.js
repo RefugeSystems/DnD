@@ -14,6 +14,9 @@ rsSystem.component("pageVersion", {
 		var data = {};
 		data.updateClasses = "fas fa-download";
 		data.version = rsSystem.version;
+		data.current = [];
+		data.previous = [];
+		data.status = 10;
 		return data;
 	},
 	"mounted": function() {

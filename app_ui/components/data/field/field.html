@@ -46,7 +46,7 @@
 	<input :id="fid" type="password" v-if="field.type === 'password' || field.attribute.encrypted || field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 	<input :id="fid" type="text" v-if="availableReferences.length === 0 && !field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'icon' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data && !field.attribute.encrypted && !field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 
-	<input :id="fid" type="date" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
+	<input :id="fid" type="datetime-local" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 	<span class="indicator" v-if="field.type === 'file' || field.attribute.file_data">
 		<span class="" v-if="root[field.id]">
 			<span class="rs-light-green">[</span>

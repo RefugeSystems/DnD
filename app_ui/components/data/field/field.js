@@ -18,10 +18,13 @@
 		if(!time) {
 			return "";
 		}
+		return (new Date(time - offset)).toISOString().replace("Z", "");
 
 		var date = new Date(),
 			loading,
 			result;
+
+		return date.toISOString().replace("Z", "");
 
 		date.setTime(time);
 		result = date.getFullYear();
@@ -41,6 +44,8 @@
 			result += "-";
 		}
 		result += loading;
+
+		result += "T";
 
 		return result;
 	};
@@ -520,7 +525,7 @@
 				}
 			},
 			"processDate": function() {
-				Vue.set(this.root, this.field.id, new Date(this.buffer).getTime() + offset);
+				Vue.set(this.root, this.field.id, new Date(this.buffer).getTime());
 				this.emitChanged();
 			},
 			"bufferChangeProcess": function() {
@@ -573,7 +578,7 @@
 				Vue.set(this, "bufferChanging", false);
 			},
 			"useFileData": function(event) {
-				console.log("Se;ect Drop: ", event.files[0]);
+				console.log("Select Drop: ", event.files[0]);
 				this.readFile(event.files[0]);
 			},
 			"selectFile": function(event) {
