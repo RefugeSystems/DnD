@@ -202,6 +202,7 @@ rsSystem.component("dndEntitySpells", {
 			// console.log("Cast: ", available, spell);
 			if(!this.profile.enforce_requirements || available > 0) {
 				// console.log("Cast[" + this.storage.slot + "]: " + spell.id, spell);
+				// Cantrip adjustment handled in castSpell method
 				this.castSpell(this.storage.slot, spell);
 			}
 		},

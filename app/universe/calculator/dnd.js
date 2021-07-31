@@ -499,6 +499,7 @@ module.exports = function(universe) {
 		rolls = rolls || {};
 		var values = {},
 			roll = 0,
+			negative,
 			value,
 			dice,
 			d,
@@ -513,10 +514,17 @@ module.exports = function(universe) {
 		}
 		for(d=0; d<diceOrder.length; d++) {
 			if(debug) {
-				console.log(" > Dice[" + diceOrder[d] + "]: ", values[x]);
+				console.log(" > Dice[" + diceOrder[d] + "]: ", values[d]);
+			}
+			if(values[d] < 0) {
+				negative = true;
+				values[d] *= -1;
 			}
 			for(x=0; x<values[d] && !isNaN(values[d]); x++) {
 				value = Math.floor(diceValue[diceOrder[d]] * Math.random()) + 1;
+				if(negative) {
+					value *= -1;
+				}
 				roll += value;
 				if(!rolls[diceOrder[d]]) {
 					rolls[diceOrder[d]] = [];

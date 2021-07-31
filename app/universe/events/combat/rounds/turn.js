@@ -51,6 +51,14 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(entity && skirmish && skirmish.entities && skirmish.entities.indexOf(entity.id) !== -1 && event.player.gm) {
+			universe.emit("action:combat:turn:end", {
+				"action": "action:combat:turn:end",
+				"entity": skirmish.combat_turn
+			});
+			universe.emit("action:combat:turn:start", {
+				"action": "action:combat:turn:start",
+				"entity": entity
+			});
 			universe.emit("combat:turn", {
 				"skirmish": skirmish.id,
 				"turn": entity.id
@@ -124,11 +132,25 @@ module.exports.initialize = function(universe) {
 					if(current !== 0) {
 						universe.forwardTime(6);
 					}
+					for(i=0; i<entities.length; i++) {
+						universe.emit("action:combat:round:start", {
+							"action": "action:combat:round:start",
+							"entity": entities[i]
+						});
+					}
 					universe.emit("combat:round", {
 						"skirmish": skirmish.id,
 						"turn": entity.id
 					});
 				}
+				universe.emit("action:combat:turn:end", {
+					"action": "action:combat:turn:end",
+					"entity": skirmish.combat_turn
+				});
+				universe.emit("action:combat:turn:start", {
+					"action": "action:combat:turn:start",
+					"entity": entity
+				});
 				universe.emit("combat:turn", {
 					"skirmish": skirmish.id,
 					"turn": entity.id

@@ -171,6 +171,8 @@ rsSystem.component("dndDialogRoll", {
 		};
 		data.suffixed = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th", "17th", "18th", "19th", "20th", "21st", "22nd", "23rd", "24th"];
 		data.die[6].icon = "fad fa-dice-d10";
+		data.actionTitling = "";
+		data.actionNote = "";
 		data.statusResponse = null;
 		data.spellLevel = this.details.spellLevel || null;
 		data.negative = false;
@@ -388,13 +390,16 @@ rsSystem.component("dndDialogRoll", {
 			}
 		},
 		"getFinishName": function() {
+			var name = "";
 			if(this.details.rolling && this.details.finish_name) {
-				return this.details.finish_name;
+				name += this.details.finish_name;
 			} else if(this.details.action && this.details.action.name) {
-				return this.details.action.name;
+				name += this.details.action.name;
 			} else {
-				return "Perform Action";
+				name += "Perform Action";
 			}
+			name += this.actionNote;
+			return name;
 		},
 		"getRollName": function() {
 			if(this.details.rolling && this.details.rolling.name) {
@@ -836,25 +841,37 @@ rsSystem.component("dndDialogRoll", {
 			var i;
 			for(i=0; i<this.rolling.length; i++) {
 				if(!this.rolling[i].computed && this.rolling[i].computed !== 0) {
+					Vue.set(this, "actionTitling", "Missing roll result numbers");
+					Vue.set(this, "actionNote", "[Roll]");
 					return -1;
 				}
 			}
 			for(i=0; i<this.damages.length; i++) {
 				if(!this.damages[i].computed && this.damages[i].computed !== 0) {
+					Vue.set(this, "actionTitling", "Missing damage roll results");
+					Vue.set(this, "actionNote", "[Damage]");
 					return -1;
 				}
 			}
 			for(i=0; i<this.resists.length; i++) {
 				if(!this.resists[i].computed && this.resists[i].computed !== 0) {
+					Vue.set(this, "actionTitling", "Missing resistance roll results");
+					Vue.set(this, "actionNote", "[Resistances]");
 					return -1;
 				}
 			}
 
 			if(this.details.action && this.details.action.id === "action:free:damage") {
+				Vue.set(this, "actionTitling", "");
+				Vue.set(this, "actionNote", "");
 				return 0;
 			} else if((this.skills && this.skills.length && this.check === null && this.warn === 0) || (this.targets && this.targets.length && this.target === null && this.warn <= 1 && (!this.details.action || (this.details.action && this.details.action.targets && this.details.action.targets.length)))) {
+				Vue.set(this, "actionTitling", "Missing skill check result or not yet sent");
+				Vue.set(this, "actionNote", "[Send Skill Check]");
 				return 2;
 			} else {
+				Vue.set(this, "actionTitling", "");
+				Vue.set(this, "actionNote", "");
 				return 0;
 			}
 		},
@@ -954,7 +971,11 @@ rsSystem.component("dndDialogRoll", {
 				if(this.damages.length) {
 					perform.damage = {};
 					for(i=0; i<this.damages.length; i++) {
-						perform.damage[this.damages[i].key.id || this.damages[i].key] = this.damages[i].computed;
+						if(this.isCritical) {
+							perform.damage[this.damages[i].key.id || this.damages[i].key] = 2 * this.damages[i].computed;
+						} else {
+							perform.damage[this.damages[i].key.id || this.damages[i].key] = this.damages[i].computed;
+						}
 					}
 				}
 				if(this.resists.length) {

@@ -28,6 +28,12 @@ rsSystem.component("dndEntityHealthbar", {
 		this.$watch("entity.hp", function() {
 			this.updateBar();
 		});
+		this.$watch("entity.hp_max", function() {
+			this.updateBar();
+		});
+		this.$watch("entity.hp_temp", function() {
+			this.updateBar();
+		});
 	},
 	"methods": {
 		"updateBar": function() {

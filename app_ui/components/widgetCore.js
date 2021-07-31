@@ -160,6 +160,7 @@ rsSystem.component("DNDWidgetCore", {
 		},
 		/**
 		 * 
+		 * Cantrips ignore the passed level
 		 * @method castSpell
 		 * @param {Integer} level 
 		 * @param {Object} spell 
@@ -169,6 +170,7 @@ rsSystem.component("DNDWidgetCore", {
 			console.log("Cast at " + level + ": ", spell, action);
 			var targets = null,
 				damage = {},
+				cost = {},
 				cast,
 				keys,
 				i;
@@ -183,7 +185,7 @@ rsSystem.component("DNDWidgetCore", {
 
 			// Upcast if needed, stored to cast to avoid mutation of spell
 			cast = Object.assign({}, spell);
-			if(level > spell.level) {
+			if(spell.level !== 0 && level > spell.level) {
 				cast.level = level;
 			}
 

@@ -245,6 +245,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Array | RSObject} targets 
 	 * @param {RSObject | String} [channel] 
 	 * @param {Object} damage 
+	 * @param {Object} [attack] Rolled attack value, if any
 	 */
 	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack) {
 		var id = Random.identifier(activityPrefix, 10, 32),

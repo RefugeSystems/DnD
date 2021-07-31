@@ -1104,14 +1104,15 @@ class Universe extends EventEmitter {
 	/**
 	 * 
 	 * @method messagePlayers
-	 * @param {Object | String} player IDs
+	 * @param {Object} players IDs
 	 * @param {String} message Text
 	 */
-	messagePlayers(player, message) {
+	messagePlayers(players, message, icon) {
 		this.emit("send", {
 			"type": "notice",
-			"recipients": player,
+			"recipients": players,
 			"message": message,
+			"icon": icon,
 			"anchored": true
 		});
 	}

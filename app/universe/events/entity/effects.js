@@ -31,15 +31,26 @@ module.exports.initialize = function(universe) {
 
 		for(i=0; i<effects.length; i++) {
 			effect = universe.manager.effect.object[effects[i]];
-			if(effect && effect.character && (characterMap[effect.character] || (character = universe.manager.entity.object[effect.character]))) {
-				if(!subtractions[character.id]) {
-					characterMap[character.id] = character;
-					subtractions[character.id] = [];
-					characters.push(character.id);
+			// console.log("Check Effect: " + effects[i]);
+			if(effect && effect.character) {
+				// console.log(" > Read Effect: " + effect.id);
+				if(characterMap[effect.character]) {
+					character = characterMap[effect.character];
+				} else {
+					character = characterMap[effect.character] = universe.manager.entity.object[effect.character];
 				}
-				subtractions[character.id].push(effect.id);
+				if(character) {
+					// console.log(" > Character: " + character.id);
+					if(!subtractions[character.id]) {
+						characterMap[character.id] = character;
+						subtractions[character.id] = [];
+						characters.push(character.id);
+					}
+					subtractions[character.id].push(effect.id);
+				}
 			}
 		}
+		// console.log("Revoking: " + JSON.stringify(subtractions, null, 4));
 		for(i=0; i<characters.length; i++) {
 			character = characterMap[characters[i]];
 			character.subValues({

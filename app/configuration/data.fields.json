@@ -1424,6 +1424,7 @@
 			"reaction": "Reaction"
 		},
 		"attribute": {
+			"values": "integer",
 			"bound_max": "action_max",
 			"min": 0
 		}
@@ -1448,7 +1449,9 @@
 			"movement": "Movement",
 			"reaction": "Reaction"
 		},
-		"attribute": {}
+		"attribute": {
+			"values": "integer"
+		}
 	}, {
 		"id": "action_max",
 		"name": "Action Max",
@@ -1460,7 +1463,9 @@
 			"movement": "Movement",
 			"reaction": "Reaction"
 		},
-		"attribute": {}
+		"attribute": {
+			"values": "integer"
+		}
 	}, {
 		"id": "section",
 		"name": "Section",
@@ -2287,7 +2292,9 @@
 		"name": "Level",
 		"description": "The general level of this object.",
 		"type": "integer",
-		"attribute": {}
+		"attribute": {
+			"default": 0
+		}
 	}, {
 		"id": "level_requried",
 		"name": "Required Level",

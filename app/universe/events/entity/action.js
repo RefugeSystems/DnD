@@ -9,16 +9,21 @@ module.exports.initialize = function(universe) {
 	 * @event action
 	 */
 	manager.objectIDs.forEach(function(id) {
+		// TODO: Improve at-response-time handling to allow actions to be created on the fly
 		// console.log("Actionable - " + id);
 		universe.on(id, function(event) {
-			// console.log("Action: ", event.action?event.action.id || event.action:"none?");
 			var entity = event.source || event.entity;
 			if(typeof(entity) === "string") {
 				entity = universe.get(entity);
 			}
+			// console.log("Action: ", event.action?event.action.id || event.action:"none?", entity?entity.id:"No Entityt");
 			if(entity && entity.response && entity.response[id] && entity.response[id].length) {
 				var response,
-					i;
+					rolled,
+					rolls,
+					ref,
+					i,
+					j;
 
 				for(i=0; i<entity.response[id].length; i++) {
 					response = entity.response[id][i];
@@ -31,6 +36,27 @@ module.exports.initialize = function(universe) {
 						}
 						if(response.set) {
 							entity.setValues(response.set);
+						}
+						if(response.add_roll) {
+							rolls = Object.keys(response.add_roll);
+							rolled = {};
+							ref = [];
+							for(j=0; j<rolls.length; j++) {
+								rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.add_roll[rolls[j]], entity, ref);
+							}
+							entity.addValues(rolled);
+						}
+						if(response.sub_roll) {
+							rolls = Object.keys(response.sub_roll);
+							rolled = {};
+							ref = [];
+							for(j=0; j<rolls.length; j++) {
+								rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.sub_roll[rolls[j]], entity, ref);
+							}
+							entity.subValues(rolled);
+						}
+						if(response.announced) {
+							universe.messagePlayers(entity.owned, (response.name || "An event") + " happened to " + (entity.name || "a creature of yours"), response.icon);
 						}
 					}
 				}
