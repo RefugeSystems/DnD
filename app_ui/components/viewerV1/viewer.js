@@ -1200,13 +1200,15 @@
 					cenY += vh;
 					cenX += vw;
 
-					this.apply({
-						"height": targetHeight,
-						"width": targetWidth,
-						"zoom": level,
-						"left": cenX,
-						"top": cenY
-					});
+					if(targetWidth !== 0 && targetHeight !== 0) {
+						this.apply({
+							"height": targetHeight,
+							"width": targetWidth,
+							"zoom": level,
+							"left": cenX,
+							"top": cenY
+						});
+					}
 				}
 			},
 			"pan": function(panned) {
