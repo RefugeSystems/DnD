@@ -146,11 +146,27 @@ rsSystem.component("dndDialogShop", {
 	},
 	"methods": {
 		"checkout": function() {
-			console.log("Checkout: ", Object.keys(this.table.selected));
+			var selected = this.table && this.table.selected?Object.keys(this.table.selected):[],
+				items = [],
+				buffer,
+				i,
+				j;
+
+			for(i=0; i<selected.length; i++) {
+				buffer = this.universe.index.item[selected[i]];
+				if(buffer && !buffer.disabled && !buffer.is_preview) {
+					for(j=0; j<this.table.selected[buffer.id]; j++) {
+						items.push(buffer.id);
+					}
+				}
+				Vue.delete(this.table.selected, buffer.id);
+			}
+
+			console.log("Checkout: ", items);
 			this.universe.send("shop:checkout", {
 				"entity": this.entity.id,
 				"shop": this.shop.id,
-				"items": Object.keys(this.table.selected)
+				"items": items
 			});
 		},
 		"update": function() {

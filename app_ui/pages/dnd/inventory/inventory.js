@@ -296,7 +296,6 @@ rsSystem.component("DNDInventory", {
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.item[selected[i]];
 				if(buffer && !buffer.disabled && !buffer.is_preview && (this.entity.owned[this.player.id] || this.player.gm) && this.entity.inventory.indexOf(buffer.id) !== -1) {
-					console.log("Buffer: ", _p(buffer));
 					for(j=0; j<this.storage.selected[buffer.id]; j++) {
 						items.push(buffer.id);
 					}

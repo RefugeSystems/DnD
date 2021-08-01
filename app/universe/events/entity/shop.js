@@ -32,7 +32,7 @@ module.exports.initialize = function(universe) {
 		if(typeof(shop) === "string") {
 			shop = universe.manager.entity.object[shop];
 		}
-		if(entity && shop && items && items.length && entity.owned && entity.owned[event.player.id]) {
+		if(entity && shop && items && items.length && (event.player.gm || (entity.owned && entity.owned[event.player.id]))) {
 			for(i=0; i<items.length; i++) {
 				item = items[i];
 				if(shop.inventory.indexOf(item) !== -1 && (item = universe.manager.item.object[item])) {
@@ -68,7 +68,7 @@ module.exports.initialize = function(universe) {
 					"history": [{
 						"event": "sold:items",
 						"time": universe.time,
-						"cost": cost,
+						"gold": cost,
 						"items": purchasing,
 						"to": entity.id
 					}]
@@ -78,6 +78,7 @@ module.exports.initialize = function(universe) {
 				});
 				entity.addValues({
 					"inventory": purchasing,
+					"gold": -1 * cost,
 					"history": [{
 						"event": "recv:items",
 						"time": universe.time,
