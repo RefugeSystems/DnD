@@ -152,7 +152,7 @@ rsSystem.component("rsTable", {
 				if(!counts[this.source[i].id]) {
 					if(filter) {
 						if(filter === ":selected") {
-							if(this.storage.selected[this.source[i].id]) {
+							if(this.storage.selected && this.storage.selected[this.source[i].id]) {
 								filtered.push(this.source[i]);
 								counts[this.source[i].id] = 1;
 							}
