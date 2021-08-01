@@ -59,7 +59,7 @@ module.exports.initialize = function(universe) {
 		}
 		if(from) {
 			for(i=0; i<from.length; i++) {
-				character = universe.manager.character.object[from[i]];
+				character = universe.manager.entity.object[from[i]];
 				if(character) {
 					character.subValues({
 						"effects": effects

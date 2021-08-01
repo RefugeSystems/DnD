@@ -99,6 +99,17 @@ rsSystem.component("dndEntityEffects", {
 					"resistance",
 					"advantage",
 					"disadvantage"],
+				"actions": [{
+					"icon": "fas fa-ban",
+					"title": "Dismiss this effect",
+					"process": () => {
+						this.closeDialog();
+						this.universe.send("effect:revoke", {
+							"effects": [effect.id],
+							"from": [this.entity.id]
+						});
+					}
+				}],
 				"fieldComponent": {
 					"duration": "dndObjectDuration"
 				}

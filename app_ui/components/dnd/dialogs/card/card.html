@@ -15,6 +15,11 @@
 			<div class="detail description" v-if="card.description">
 				<div v-html="rsshowdown(card.description, card, profile?profile.inline_javascript:false)"></div>
 			</div>
+			<div class="quick-actions flex h wrap">
+				<button class="general rounded quick action" v-for="action in actions" v-on:click="action.process()">
+					<span :class="action.icon" :title="action.title"></span>
+				</button>
+			</div>
 			<div class="bubble-details flex h wrap">
 				<div v-for="field in bubbles" v-if="isVisible(field)" class="bubble detail" :class="field.id">
 					<component v-if="details.fieldComponent[field.id]" :is="details.fieldComponent[field.id]" :entity="entity" :field="field" :object="card" :universe="universe" :player="player" :profile="profile"></component>

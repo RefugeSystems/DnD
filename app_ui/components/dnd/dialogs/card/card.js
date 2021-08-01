@@ -44,6 +44,22 @@ rsSystem.component("dndCard", {
 
 			return bubbles;
 		},
+		"actions": function() {
+			var actions = [],
+				action,
+				i;
+
+			if(this.details.actions) {
+				for(i=0; i<this.details.actions.length; i++) {
+					action = this.details.actions[i];
+					if(typeof(action.process) === "function") {
+						actions.push(action);
+					}
+				}
+			}
+
+			return actions;
+		},
 		"fields": function() {
 			var fields = [],
 				field,

@@ -47,7 +47,19 @@ rsSystem.component("rsTableControls", {
 	"computed": {
 		"selected": function() {
 			if(this.storage && this.storage.selected) {
-				return Object.keys(this.storage.selected).length;
+				var keys = Object.keys(this.storage.selected),
+					selected = 0,
+					i;
+
+				for(i=0; i<keys.length; i++) {
+					if(isNaN(this.storage.selected[keys[i]])) {
+						selected++;
+					} else {
+						selected += this.storage.selected[keys[i]];
+					}
+				}
+				
+				return selected;
 			}
 			return 0;
 		},

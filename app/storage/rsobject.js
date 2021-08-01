@@ -354,6 +354,11 @@ class RSObject {
 									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
 									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
+								case "~":
+									if(this._calculated[field.inheritanceFields[i]] === undefined || this._calculated[field.inheritanceFields[i]] === null) {
+										this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									}
+									break;
 								default:
 									loading = {};
 									loading.id = this.id;
@@ -1810,6 +1815,7 @@ RSObject.subValues = function(a, b, type) {
 	var buffer,
 		lookup,
 		index,
+		id,
 		i;
 
 	// Level set for string differences; Affects object mapped values from the editor, need to add better tracking for object subvalues to keep them settled correctly
@@ -1877,13 +1883,22 @@ RSObject.subValues = function(a, b, type) {
 				lookup = {};
 				for(i=0; i<b.length; i++) {
 					if(b[i]) {
-						lookup[b[i].id || b[i]] = true;
+						id = b[i].id || b[i];
+						if(lookup[id]) {
+							lookup[id]++;
+						} else {
+							lookup[id] = 1;
+						}
 					}
 				}
 				buffer = [].concat(a);
 				for(i=buffer.length - 1; 0<=i; i--) {
-					if(lookup[buffer[i]] || (buffer[i] && lookup[buffer[i].id || buffer[i]])) {
-						buffer.splice(i, 1);
+					if(buffer[i]) { // Arrays reasonable do not have nulls so "filtering them out" here should not happen nor be a problem
+						id = buffer[i].id || buffer[i];
+						if(lookup[id]) {
+							buffer.splice(i, 1);
+							lookup[id]--;
+						}
 					}
 				}
 				return buffer;

@@ -128,7 +128,7 @@
 							"class": "rsbd-lightblue",
 							"icon": "fas fa-calendar-day rs-lightblue",
 							"heading": "Next Meeting",
-							"text": "Next session is \"" + json.meeting.name + "\" on " + date.toLocaleDateString() + " at " + date.toLocaleTimeString()
+							"text": "Next meeting is \"" + json.meeting.name + "\" on " + date.toLocaleDateString() + " at " + date.toLocaleTimeString()
 						});
 					} else {
 						console.log("No next meeting found for " + this.storage.username, json);

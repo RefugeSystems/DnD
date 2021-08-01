@@ -1746,6 +1746,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 			"spell_slot_max": "+",
+			"spells_known": "+",
 			"spells": "+",
 			"skill_check": "+=",
 			"skill_proficiency": "=",
@@ -2071,7 +2072,6 @@
 			"resistance": "+=",
 			"damage": "+=",
 			"actions": "+",
-			"spells": "+",
 			"skills": "+",
 			"skill_check": "+=",
 			"movement_ground": "+",
@@ -2080,7 +2080,9 @@
 			"effects": "+",
 			"action_max": "+",
 			"hp_max": "+",
+			"spells_known": "+",
 			"spell_slot_max": "+",
+			"spells": "+",
 			"conditionals": "+"
 		},
 		"inheritable": [
@@ -2789,6 +2791,9 @@
 		"description": "The types that apply to this object",
 		"type": "array",
 		"ordering": 155,
+		"inheritance": {
+			"icon": "~"
+		},
 		"inheritable": [
 			"type"
 		],

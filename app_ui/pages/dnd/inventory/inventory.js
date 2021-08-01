@@ -281,8 +281,10 @@ rsSystem.component("DNDInventory", {
 				v2h = false,
 				unequip = [],
 				equip = [],
+				items = [],
 				buffer,
-				i;
+				i,
+				j;
 
 			this.unattunable.splice(0);
 			this.attunable.splice(0);
@@ -294,6 +296,10 @@ rsSystem.component("DNDInventory", {
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.item[selected[i]];
 				if(buffer && !buffer.disabled && !buffer.is_preview && (this.entity.owned[this.player.id] || this.player.gm) && this.entity.inventory.indexOf(buffer.id) !== -1) {
+					console.log("Buffer: ", _p(buffer));
+					for(j=0; j<this.storage.selected[buffer.id]; j++) {
+						items.push(buffer.id);
+					}
 					if(this.entity.inventory_hidden && this.entity.inventory_hidden[buffer.id]) {
 						show = true;
 					} else {
@@ -328,7 +334,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-arrow-alt-to-bottom",
 					"process": function() {
 						reference.universe.send("inventory:drop", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}
@@ -343,7 +349,7 @@ rsSystem.component("DNDInventory", {
 							"finish": function(target) {
 								if(target && target.id) {
 									reference.universe.send("inventory:give", {
-										"items": Object.keys(reference.storage.selected),
+										"items": items,
 										"entity": reference.entity.id,
 										"target": target.id
 									});
@@ -359,7 +365,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-eye-slash",
 					"process": function() {
 						reference.universe.send("inventory:hide", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}
@@ -371,7 +377,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-eye",
 					"process": function() {
 						reference.universe.send("inventory:reveal", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}
@@ -431,7 +437,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fad fa-praying-hands rs-secondary-transparent",
 					"process": function() {
 						reference.universe.send("items:verstility:1handed", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}
@@ -443,7 +449,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-praying-hands",
 					"process": function() {
 						reference.universe.send("items:verstility:2handed", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}
@@ -455,7 +461,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-user-lock",
 					"process": function() {
 						reference.universe.send("items:attune", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}
@@ -467,7 +473,7 @@ rsSystem.component("DNDInventory", {
 					"icon": "fas fa-user-unlock",
 					"process": function() {
 						reference.universe.send("items:unattune", {
-							"items": Object.keys(reference.storage.selected),
+							"items": items,
 							"entity": reference.entity.id
 						});
 					}

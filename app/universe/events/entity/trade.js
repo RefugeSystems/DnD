@@ -37,10 +37,12 @@ module.exports.initialize = function(universe) {
 				if(item && entity.inventory.indexOf(item.id) !== -1) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
-						item.setValues({
-							"character": null,
-							"user": null
-						});
+						if(!item.is_singular) {
+							item.setValues({
+								"character": null,
+								"user": null
+							});
+						}
 					} else {
 						universe.messagePlayer(event.player, "Can not give item \"" + item.name + "\" because it is currently equipped");
 					}

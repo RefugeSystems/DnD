@@ -131,6 +131,7 @@ rsSystem.component("rsTable", {
 		},
 		"filtered": function() {
 			var filtered = [],
+				counts = {},
 				filter,
 				i;
 
@@ -140,28 +141,42 @@ rsSystem.component("rsTable", {
 				filter = "";
 			}
 
-			if(!filter) {
-				// Return quickly in the case of large datasets
-				this.source.sort(this.sortRows);
-				return this.source;
-			}
+			// The list must be populated to build repeat counts, thus the raw list can not be returned
+			// if(!filter) {
+			// 	// Return quickly in the case of large datasets
+			// 	this.source.sort(this.sortRows);
+			// 	return this.source;
+			// }
 
 			for(i=0; i<this.source.length; i++) {
-				if(filter === ":selected") {
-					if(this.storage.selected[this.source[i].id]) {
+				if(!counts[this.source[i].id]) {
+					if(filter) {
+						if(filter === ":selected") {
+							if(this.storage.selected[this.source[i].id]) {
+								filtered.push(this.source[i]);
+								counts[this.source[i].id] = 1;
+							}
+						} else {
+							if(this.source[i]._search !== undefined && this.source[i]._search !== null) {
+								if(this.source[i]._search.indexOf(filter) !== -1) {
+									filtered.push(this.source[i]);
+									counts[this.source[i].id] = 1;
+								}
+							} else if(this.source[i].name && this.source[i].name.toLowerCase().indexOf(filter) !== -1) {
+								filtered.push(this.source[i]);
+								counts[this.source[i].id] = 1;
+							}
+						}
+					} else {
 						filtered.push(this.source[i]);
+						counts[this.source[i].id] = 1;
 					}
 				} else {
-					if(this.source[i]._search !== undefined && this.source[i]._search !== null) {
-						if(this.source[i]._search.indexOf(filter) !== -1) {
-							filtered.push(this.source[i]);
-						}
-					} else if(this.source[i].name && this.source[i].name.toLowerCase().indexOf(filter) !== -1) {
-						filtered.push(this.source[i]);
-					}
+					counts[this.source[i].id]++;
 				}
 			}
 
+			Vue.set(this, "idCount", counts);
 			if(this.storage.key) {
 				filtered.sort(this.sortRows);
 			}
@@ -183,7 +198,13 @@ rsSystem.component("rsTable", {
 		},
 		"corpus": function() {
 			var rows = this.storage.rows || 20,
-				page = this.storage.page || 0;
+				page = this.storage.page || 0,
+				corpus = [],
+				record,
+				slice,
+				child,
+				i,
+				j;
 
 			if(isNaN(page)) {
 				page = 0;
@@ -196,7 +217,26 @@ rsSystem.component("rsTable", {
 			if(page !== this.storage.page) {
 				Vue.set(this.storage, "page", page);
 			}
-			return this.filtered.slice(rows * page, rows * page + rows);
+			
+			slice = this.filtered.slice(rows * page, rows * page + rows);
+			for(i=0; i<slice.length; i++) {
+				record = slice[i];
+				corpus.push(record);
+				if(this.storage.selected[record.id] && this.idCount[record.id] > 1) {
+					for(j=1; j<this.idCount[record.id]; j++) {
+						child = {};
+						child.name = record.name;
+						child.parent = record.id;
+						child.select = j + 1;
+						corpus.push(child);
+					}
+					if(this.storage.selected[record.id] > this.idCount[record.id]) {
+						Vue.set(this.storage.selected, record.id, this.idCount[record.id]);
+					}
+				}
+			}
+
+			return corpus;
 		}
 	},
 	"watch": {
@@ -204,7 +244,7 @@ rsSystem.component("rsTable", {
 	},
 	"data": function() {
 		var data = {};
-		
+		data.idCount = {};
 		return data;
 	},
 	"mounted": function() {
@@ -320,10 +360,18 @@ rsSystem.component("rsTable", {
 					Vue.delete(this.storage.selected, record.id);
 					this.$emit("deselected", record, header);
 				} else {
-					Vue.set(this.storage.selected, record.id, true);
+					Vue.set(this.storage.selected, record.id, 1);
 					this.$emit("selected", record, header);
 				}
 			}
+		},
+		"selectChild": function(record) {
+			if(this.storage.selected[record.parent] === record.select) {
+				Vue.set(this.storage.selected, record.parent, 1);
+			} else {
+				Vue.set(this.storage.selected, record.parent, record.select);
+			}
+			this.$emit("selected", record);
 		},
 		"repeatSelect": function(event) {
 			this.$emit("selected", event);

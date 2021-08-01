@@ -194,6 +194,21 @@ describe("RSObject", function() {
 		expect(res.indexOf("c")).toBe(1);
 	});
 	
+	it("can selective subtract from Array values with repeats", function() {
+		var a = {},
+			b = {},
+			res;
+			
+		a.effects = ["a", "b", "b", "d", "c", "b"];
+		b.effects = ["b", "a"];
+
+		res = RSObject.subValues(a.effects, b.effects);
+		console.log(res);
+		expect(res.indexOf("b")).not.toBe(-1);
+		expect(res.indexOf("a")).toBe(-1);
+		expect(res.indexOf("c")).not.toBe(-1);
+	});
+	
 	it("can subtract from Object values", function() {
 		var a = {},
 			b = {},

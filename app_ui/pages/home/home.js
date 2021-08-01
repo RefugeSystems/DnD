@@ -40,6 +40,7 @@ rsSystem.component("RSHome", {
 		data.screenLock = null;
 		data.mainpage = "RSDashboard";
 		data.menuSpacing = null;
+		data.meetingNotice = false;
 		
 		data.active = null;
 		data.configuration = null;
@@ -75,6 +76,31 @@ rsSystem.component("RSHome", {
 			this.chatCore.setPlayer(this.player);
 			if(this.state >= 0) {
 				Vue.set(this, "state", 10);
+				setTimeout(() => {
+					var now = Date.now(),
+						nextMeet,
+						meeting,
+						date,
+						i;
+					if(!this.meetingNotice) {
+						this.meetingNotice = true;
+						for(i=0; i<this.universe.listing.meeting.length; i++) {
+							meeting = this.universe.listing.meeting[i];
+							if(now < meeting.date && !meeting.is_preview && !meeting.disabled && !meeting.is_disabled && meeting.players.indexOf(this.player.id) !== -1 && (!nextMeet || meeting.date < nextMeet.date)) {
+								nextMeet = meeting;
+							}
+						}
+						// If logging in within an hours of the next meeting, don't pop-up
+						if(now + this.universe.calendar.CONSTANTS.hour < nextMeet.date) {
+							date = new Date(nextMeet.date);
+							rsSystem.EventBus.$emit("message", {
+								"icon": "fas fa-calendar-day rs-lightblue",
+								"message": "Next meeting is \"" + nextMeet.name + "\" on " + date.toLocaleDateString() + " at " + date.toLocaleTimeString(),
+								"timeout": 10000
+							});
+						}
+					}
+				}, 0);
 			}
 		});
 
