@@ -115,6 +115,7 @@ module.exports.initialize = function(universe) {
 		details.born = universe.time - year * (event.message.data.age || 0);
 
 		makeCharacter(universe, event, source, details)
+		.then(copySpells)
 		.then(copyFeats)
 		.then(addPicture)
 		.then(addPortrait)
@@ -154,6 +155,48 @@ var makeCharacter = function(universe, event, source, details) {
 				});
 			}
 		});
+	});
+};
+
+var copySpells = function(data) {
+	return new Promise(function(done, fail) {
+		var promised = [],
+			errors = [],
+			mask = {},
+			count = 0,
+			collect,
+			i;
+
+		if(data.details.spells) {
+			mask.acquired = data.universe.time;
+			mask.character = data.character.id;
+			mask.caster = data.character.id;
+			mask.user = data.character.id;
+			promised.push(universe.copyArrayID(data.details.spells, mask)
+			.then(function(copies) {
+				data.sets.spells = copies;
+			}));
+		}
+		if(data.details.spells_known) {
+			mask.acquired = data.universe.time;
+			mask.character = data.character.id;
+			mask.caster = data.character.id;
+			mask.user = data.character.id;
+			promised.push(universe.copyArrayID(data.details.spells_known, mask)
+			.then(function(copies) {
+				data.sets.spells_known = copies;
+			}));
+		}
+
+		if(promised.length) {
+			Promise.all(promised)
+			.then(function() {
+				done(data);
+			})
+			.catch(fail);
+		} else {
+			done(data);
+		}
 	});
 };
 
@@ -199,7 +242,7 @@ var copyFeats = function(data) {
 				done(data);
 			}
 		} else {
-			done();
+			done(data);
 		}
 	});
 };

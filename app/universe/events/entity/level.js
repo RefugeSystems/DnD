@@ -25,6 +25,7 @@ module.exports.initialize = function(universe) {
 			notify = Object.assign({}, universe.getMasters()),
 			leveling = {},
 			wait = [],
+			spells_known,
 			spells,
 			feats,
 			copy,
@@ -38,16 +39,6 @@ module.exports.initialize = function(universe) {
 		notify[event.player.id] = true;
 
 		if(entity && (event.player.gm || (entity.owned && entity.owned[event.player.id]))) {
-			if(event.message.data.feats) {
-				mask = {};
-				mask.character = entity.id;
-				mask.user = entity.id;
-				mask.acquired = universe.time;
-				wait.push(universe.copyArrayID(event.message.data.feats, mask)
-				.then(function(copies) {
-					feats = copies;
-				}));
-			}
 			if(event.message.data.spells_known) {
 				mask = {};
 				mask.character = entity.id;
@@ -56,7 +47,28 @@ module.exports.initialize = function(universe) {
 				mask.acquired = universe.time;
 				wait.push(universe.copyArrayID(event.message.data.spells_known, mask)
 				.then(function(copies) {
+					spells_known = copies;
+				}));
+			}
+			if(event.message.data.spells) {
+				mask = {};
+				mask.character = entity.id;
+				mask.caster = entity.id;
+				mask.user = entity.id;
+				mask.acquired = universe.time;
+				wait.push(universe.copyArrayID(event.message.data.spells, mask)
+				.then(function(copies) {
 					spells = copies;
+				}));
+			}
+			if(event.message.data.feats) {
+				mask = {};
+				mask.character = entity.id;
+				mask.user = entity.id;
+				mask.acquired = universe.time;
+				wait.push(universe.copyArrayID(event.message.data.feats, mask)
+				.then(function(copies) {
+					feats = copies;
 				}));
 			}
 			Promise.all(wait)
@@ -69,8 +81,11 @@ module.exports.initialize = function(universe) {
 				leveling.point_pool = {
 					"level": -1
 				};
+				if(spells_known) {
+					leveling.spells_known = spells_known;
+				}
 				if(spells) {
-					leveling.spells_known = spells;
+					leveling.spells = spells;
 				}
 				if(feats) {
 					leveling.feats = feats;
