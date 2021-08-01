@@ -768,12 +768,18 @@ class RSObject {
 					}
 				}
 				// Normalize Numeric Fields
-				if(field.type === "number" && isNaN(this[field.id])) {
-					this[field.id] = parseFloat(this[field.id]);
-					if(isNaN(this[field.id]) && field.attribute) {
-						this[field.id] = field.attribute.default || 0;
-					} else {
-						this[field.id] = 0;
+				if(field.type === "number") {
+					if(isNaN(this[field.id])) {
+						this[field.id] = parseFloat(this[field.id]);
+						if(isNaN(this[field.id]) && field.attribute) {
+							this[field.id] = field.attribute.default || 0;
+						} else {
+							this[field.id] = 0;
+						}
+					} else if(typeof(this[field.id]) === "number") {
+						if(typeof(field.attribute.fixed) === "number") {
+							this[field.id] = parseFloat(this[field.id].toFixed(field.attribute.fixed));
+						}
 					}
 				} else if(field.type === "integer" && isNaN(this[field.id])) {
 					this[field.id] = parseInt(this[field.id]);

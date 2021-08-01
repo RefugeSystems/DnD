@@ -18,7 +18,7 @@ module.exports.initialize = function(universe) {
 
 	universe.on("player:send:gold", function(event) {
 		var target = universe.get(event.message.data.target),
-			amount = parseInt(event.message.data.amount),
+			amount = parseFloat(event.message.data.amount),
 			entity;
 
 		if(event.message.data.entity || event.message.data.source) {
