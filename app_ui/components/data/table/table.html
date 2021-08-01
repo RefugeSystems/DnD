@@ -1,4 +1,4 @@
-<div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editNoun($event)">
+<div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editNoun($event)" v-if="storage.selected">
 	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
 	<div class="table-container" v-if="storage">
 		<table class="table-element" :class="storage.classes">
