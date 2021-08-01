@@ -222,7 +222,7 @@ rsSystem.component("rsTable", {
 			for(i=0; i<slice.length; i++) {
 				record = slice[i];
 				corpus.push(record);
-				if(this.storage.selected[record.id] && this.idCount[record.id] > 1) {
+				if(this.storage.selected && this.storage.selected[record.id] && this.idCount[record.id] > 1) {
 					for(j=1; j<this.idCount[record.id]; j++) {
 						child = {};
 						child.name = record.name;
