@@ -91,7 +91,7 @@ rsSystem.component("RSHome", {
 							}
 						}
 						// If logging in within an hours of the next meeting, don't pop-up
-						if(now + this.universe.calendar.CONSTANTS.hour < nextMeet.date) {
+						if(nextMeet && now + this.universe.calendar.CONSTANTS.hour < nextMeet.date) {
 							date = new Date(nextMeet.date);
 							rsSystem.EventBus.$emit("message", {
 								"icon": "fas fa-calendar-day rs-lightblue",
