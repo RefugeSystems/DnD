@@ -40,7 +40,9 @@ module.exports.initialize = function(universe) {
 					purchasing.push(item.id);
 				}
 			}
-			if(shop.discount) {
+			if(shop.is_chest) {
+				cost = 0;
+			} else if(shop.discount) {
 				discount = parseFloat(shop.discount[entity.id] || shop.discount.all || shop.discount.everyone || 0);
 				if(typeof(discount) === "number" && 0 <= discount && discount <= 1) {
 					cost = (1 - discount) * cost;

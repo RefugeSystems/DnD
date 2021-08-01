@@ -60,6 +60,10 @@ rsSystem.component("dndDialogShop", {
 				return 0;
 			}
 
+			if(this.shop.is_chest) {
+				return 0;
+			}
+
 			var selected = Object.keys(this.table.selected),
 				cost = 0,
 				discount,
