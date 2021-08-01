@@ -226,7 +226,7 @@ rsSystem.component("rsTable", {
 					for(j=1; j<this.idCount[record.id]; j++) {
 						child = {};
 						child.name = record.name;
-						child.parent = record.id;
+						child.child_parent = record.id;
 						child.select = j + 1;
 						corpus.push(child);
 					}
@@ -244,7 +244,9 @@ rsSystem.component("rsTable", {
 	},
 	"data": function() {
 		var data = {};
+
 		data.idCount = {};
+
 		return data;
 	},
 	"mounted": function() {
@@ -366,10 +368,10 @@ rsSystem.component("rsTable", {
 			}
 		},
 		"selectChild": function(record) {
-			if(this.storage.selected[record.parent] === record.select) {
-				Vue.set(this.storage.selected, record.parent, 1);
+			if(this.storage.selected[record.child_parent] === record.select) {
+				Vue.set(this.storage.selected, record.child_parent, 1);
 			} else {
-				Vue.set(this.storage.selected, record.parent, record.select);
+				Vue.set(this.storage.selected, record.child_parent, record.select);
 			}
 			this.$emit("selected", record);
 		},

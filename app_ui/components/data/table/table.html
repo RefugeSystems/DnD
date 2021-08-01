@@ -26,8 +26,8 @@
 						<span>No Items Available</span>
 					</td>
 				</tr>
-				<tr v-for="record in corpus" :key="record.id" :class="(!record.parent && storage.selected[record.id]) || (record.parent && storage.selected[record.parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id">
-					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.parent" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
+				<tr v-for="record in corpus" :key="record.id" :class="(!record.child_parent && storage.selected[record.id]) || (record.child_parent && storage.selected[record.child_parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id">
+					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.child_parent" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
 						<!-- TODO: Field attribute Checks -->
 						<div v-if="!header.noCross" class="crosshair"></div>
 						<div v-if="!header.noHighlight && storage.selected[record.id] && i === 0" class="highlight starting"></div>
@@ -55,15 +55,15 @@
 							</slot>
 						</button>
 					</td>
-					<td v-if="record.parent"></td>
-					<td v-if="record.parent" :colspan="headers.length - 1" class="table-record child-record">
-						<div v-if="storage.selected[record.parent] >= record.select" class="highlight starting"></div>
-						<div v-if="storage.selected[record.parent] >= record.select" class="highlight ending"></div>
+					<td v-if="record.child_parent"></td>
+					<td v-if="record.child_parent" :colspan="headers.length - 1" class="table-record child-record">
+						<div v-if="storage.selected[record.child_parent] >= record.select" class="highlight starting"></div>
+						<div v-if="storage.selected[record.child_parent] >= record.select" class="highlight ending"></div>
 						<button class="child table-content" v-on:click="selectChild(record)">
 							<span>{{record.name}}</span>
 						</button>
 					</td>
-					<td v-if="!record.parent && idCount[record.id] && idCount[record.id] > 1">
+					<td v-if="!record.child_parent && idCount[record.id] && idCount[record.id] > 1">
 						<span>x {{idCount[record.id]}}</span>
 					</td>
 				</tr>
