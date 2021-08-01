@@ -172,7 +172,7 @@ var copySpells = function(data) {
 			mask.character = data.character.id;
 			mask.caster = data.character.id;
 			mask.user = data.character.id;
-			promised.push(universe.copyArrayID(data.details.spells, mask)
+			promised.push(data.universe.copyArrayID(data.details.spells, mask)
 			.then(function(copies) {
 				data.sets.spells = copies;
 			}));
@@ -182,7 +182,7 @@ var copySpells = function(data) {
 			mask.character = data.character.id;
 			mask.caster = data.character.id;
 			mask.user = data.character.id;
-			promised.push(universe.copyArrayID(data.details.spells_known, mask)
+			promised.push(data.universe.copyArrayID(data.details.spells_known, mask)
 			.then(function(copies) {
 				data.sets.spells_known = copies;
 			}));
