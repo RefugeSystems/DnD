@@ -68,6 +68,18 @@ rsSystem.component("dndDialogShortRest", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"getOverUnder": function() {
+			if(this.roll && this.entity.hp_max && this.entity.hp) {
+				var diff = this.entity.hp_max - (this.entity.hp + this.roll);
+				if(diff < 0) {
+					return Math.abs(diff) + " over max";
+				} else if(diff > 0) {
+					return diff + " under max";
+				} else {
+					return "Perfect Heal";
+				}
+			}
+		},
 		"rest": function() {
 			this.universe.send("action:perform", {
 				"action": "action:rest:short",

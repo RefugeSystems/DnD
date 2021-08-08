@@ -1,0 +1,57 @@
+.dnd-display.display-initiatives {
+	display: flex;
+	flex-direction: column;
+
+	.end-turn {
+		height: 40px;
+		border-color: @rsLightRed;
+		border-style: solid;
+		border-width: 1px 0px;
+		box-shadow: 0px 0px 10px inset @rsLightRed;
+		font-size: 20px;
+	}
+	
+	.combatant {
+		position: relative;
+		margin: 5px;
+		background-color: @rsBlack;
+
+		.portrait {
+			&.me {
+				border-color: @rsLightOrange !important;
+			}
+
+			&.current_turn {
+				box-shadow: 0px 0px 15px @rsLightGreen;
+			}
+
+			&.current_turn.me {
+				box-shadow: 0px 0px 15px @rsLightOrange;
+			}
+
+			&.current_turn.npc {
+				box-shadow: 0px 0px 15px @rsLightBlue;
+			}
+			
+			&.current_turn.hostile {
+				box-shadow: 0px 0px 15px @rsLightRed;
+			}
+		}
+
+		.info {
+			position: relative;
+			margin-left: 5px;
+			flex-grow: 1;
+			justify-content: center;
+
+			.name {
+				color: white;
+				text-align: left;
+			}
+
+			.display-healthbar {
+				position: relative;
+			}
+		}
+	}
+}

@@ -179,4 +179,11 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="combatants" v-if="skirmish" :class="combatantsOpen?'open':'closed'">
+		<button class="control toggle" v-on:click="toggleCombatants()">
+			<span class="rotational-icon" :class="combatantsIcon"></span>
+		</button>
+		<dnd-initiatives :universe="universe" :skirmish="skirmish" :player="player" :entity="viewingEntity"></dnd-initiatives>
+	</div>
 </div>

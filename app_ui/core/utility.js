@@ -10,6 +10,11 @@
 	 * @static
 	 */
 	rsSystem.utility = {
+		"info": function(record) {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": record.id || record
+			});
+		},
 		/**
 		 *
 		 * @method idFromName

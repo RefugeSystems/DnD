@@ -167,7 +167,6 @@ rsSystem.component("DNDWidgetCore", {
 		 * @param {String | Object} [action] 
 		 */
 		"castSpell": function(level, spell, action) {
-			console.log("Cast at " + level + ": ", spell, action);
 			var targets = null,
 				damage = {},
 				cost = {},
@@ -185,9 +184,10 @@ rsSystem.component("DNDWidgetCore", {
 
 			// Upcast if needed, stored to cast to avoid mutation of spell
 			cast = Object.assign({}, spell);
-			if(spell.level !== 0 && level > spell.level) {
+			if(spell.level && spell.level !== "0" /* Bug handling */ && level > spell.level) {
 				cast.level = level;
 			}
+			console.log("Cast at " + level + ": ", _p(spell), action, cast);
 
 			if(typeof(action) === "string") {
 				action = this.universe.index.action[action];
@@ -212,7 +212,7 @@ rsSystem.component("DNDWidgetCore", {
 				"component": "dndDialogRoll",
 				"storageKey": "store:roll:" + this.entity.id,
 				"entity": this.entity.id,
-				"spellLevel": level,
+				"spellLevel": cast.level,
 				"targeted": targets,
 				"rolling": damage,
 				"action": action,

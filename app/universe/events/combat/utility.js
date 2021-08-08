@@ -93,6 +93,9 @@ module.exports.initialize = function(universe) {
 			keys,
 			i;
 		
+		if(!save) {
+			save = 0;
+		}
 		if(tracked) {
 			clearTimeout(alarms[activity]);
 			delete(tracking[activity]);
@@ -383,6 +386,14 @@ module.exports.initialize = function(universe) {
 		if(typeof(skill) === "string") {
 			skill = universe.get(skill);
 		}
+		// A null skill shouldn't exist but is covered to support mal-formed spell objects
+		if(skill === null || skill === undefined) {
+			universe.warnMasters("No skill associated with spell: " + (channel?channel.name:"No spell?"), {
+				"source": source?source.id:null,
+				"spell": channel?channel.id:null,
+				"skill": skill
+			});
+		}
 
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
@@ -405,7 +416,7 @@ module.exports.initialize = function(universe) {
 				"channel": channel?channel.id:null,
 				"difficulty": difficulty,
 				"damage": damage,
-				"skill": skill.id,
+				"skill": skill?skill.id:null,
 				"level": level
 			};
 
@@ -458,7 +469,7 @@ module.exports.initialize = function(universe) {
 						"source": source?source.id:null,
 						"entity": target.id,
 						"channel": channel.id,
-						"skill": skill.id || skill,
+						"skill": skill?skill.id || skill:null,
 						"damage": damage,
 						"fill_damage": true,
 						"closeAfterAction": true
@@ -592,7 +603,7 @@ module.exports.initialize = function(universe) {
 			failure = event.message.data.failure,
 			activity = event.message.data.activity,
 			resist = event.message.data.resist,
-			save = event.message.data.check.computed;
+			save = event.message.data.check?event.message.data.check.computed:null;
 		
 		if(entity && activity) {
 			finishSave(activity, entity, save, resist, critical, failure);

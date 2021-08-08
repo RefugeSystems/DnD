@@ -35,6 +35,18 @@
 				transition: opacity .5s;
 				opacity: 0;
 			}
+
+			.end-turn-fan-fare {
+				background: conic-gradient(red, transparent, red, transparent, red, transparent, red);
+				position: absolute;
+				z-index: 2;
+				top: -61px;
+				left: -25px;
+				width: 150px;
+				height: 150px;
+				transition: opacity .5s;
+				opacity: 0;
+			}
 		}
 
 		&.available {
@@ -48,6 +60,21 @@
 			}
 
 			.level-up-fan-fare {
+				opacity: 1;
+			}
+		}
+
+		&.combat {
+			
+			button {
+				box-shadow: 0px 0px 7px red;
+			}
+			
+			.level-back {
+				box-shadow: 0px 0px 4px red;
+			}
+
+			.end-turn-fan-fare {
 				opacity: 1;
 			}
 		}

@@ -202,6 +202,11 @@ rsSystem.component("dndCharacterLevelDialog", {
 				this.nextSection();
 			}
 		},
+		"hpRoll": function() {
+			if(this.hitDie && !this.sectionInfo.hp.amount) {
+				Vue.set(this.sectionInfo.hp, "amount", Random.integer(parseInt(this.hitDie.substring(1)), 1));
+			}
+		},
 		"blockSelected": function(block) {
 			console.log("Block Selected: ", block);
 			this.finishSection("customizations");

@@ -1,0 +1,28 @@
+.dnd-display.display-portrait {
+	position: relative;
+	display: flex;
+	width: 46px;
+	height: 46px;
+	overflow: hidden;
+	border-radius: 40px;
+	border-width: 3px;
+	border-style: solid;
+	
+	border-color: @rsLightGreen;
+	background-color: @rsBlack;
+
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+
+	&.npc {
+		border-color: @rsLightBlue;
+	}
+	&.hostile {
+		border-color: @rsLightRed;
+	}
+
+	.portrait-image {
+		position: relative;
+	}
+}

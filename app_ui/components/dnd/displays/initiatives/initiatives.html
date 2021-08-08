@@ -1,0 +1,13 @@
+<div class="dnd-display display-initiatives">
+	<button class="general action end-turn" v-if="myTurn" v-on:click="endTurn()">
+		<span class="game-icon game-icon-player-next"></span>
+		<span>End Turn</span>
+	</button>
+	<div class="combatant flex h" v-for="combatant in combatants" v-on:click="info(combatant)">
+		<dnd-portrait class="portrait" :entity="combatant" :universe="universe" :class="combatantPortraitClass(combatant)"></dnd-portrait>
+		<div class="info flex v">
+			<button class="name flat action">{{combatant.name}}</button>
+			<dnd-health-bar :entity="combatant"></dnd-health-bar>
+		</div>
+	</div>
+</div>

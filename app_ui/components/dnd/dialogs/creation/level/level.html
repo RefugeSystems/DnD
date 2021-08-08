@@ -73,7 +73,10 @@
 			<!-- Get HP Roll -->
 			<div class="roll flex h centered">
 				<input type="number" class="rolled" v-model.number="sectionInfo.hp.amount" :placeholder="'1' + hitDie" v-on:keydown.enter="hpSet()" />
-				<button class="rounded general quick action" v-on:click="hpSet()">
+				<button class="rounded general quick action" v-if="!sectionInfo.hp.amount" v-on:click="hpRoll()" title="Randomly set the HP gain based on the Hit Die for you">
+					<span class="fas fa-dice"></span>
+				</button>
+				<button class="rounded general quick action" :disabled="!sectionInfo.hp.amount" v-on:click="hpSet()" title="Click here once you have set how much HP you have gained">
 					<span class="game-icon game-icon-health-increase"></span>
 				</button>
 			</div>

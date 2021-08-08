@@ -199,6 +199,7 @@
 		"inherit": true,
 		"mixins": [
 			rsSystem.components.StorageController,
+			rsSystem.components.DNDCombatUtility,
 			rsSystem.components.RSCore
 		],
 		"props": {
@@ -280,6 +281,8 @@
 			data.applyTiming = 0;
 			data.last = 0;
 
+			data.combatantsIcon = "fas fa-swords";
+			data.combatantsOpen = false;
 			data.renderedLocation = null;
 			data.legendDisplayed = true;
 			data.legendOpen = false;
@@ -673,6 +676,14 @@
 				Vue.set(this.storage.hidden_legend, locale.id, !this.storage.hidden_legend[locale.id]);
 				this.redrawPaths();
 			},
+			"toggleCombatants": function() {
+				Vue.set(this, "combatantsOpen", !this.combatantsOpen);
+				if(this.combatantsOpen) {
+					Vue.set(this, "combatantsIcon", "fas fa-caret-square-up rot180");
+				} else {
+					Vue.set(this, "combatantsIcon", "fas fa-swords");
+				}
+			},
 			"processAction": function(item, event) {
 //				console.log("Process Action: ", item);
 				var buffer;
@@ -892,6 +903,16 @@
 							Vue.set(this.storage.pathing, "icon", "fad fa-chart-network rs-secondary-transparent");
 							Vue.set(this.storage.pathing, "text", "Point Path On");
 							Vue.set(this.storage.pathing, "state", true);
+						}
+						break;
+					case "move-to":
+						if(this.viewingEntity) {
+							this.universe.send("entity:move", {
+								"entity": this.viewingEntity.id,
+								"location": this.location.id,
+								"x": (this.actions.x/this.image.width*100),
+								"y": (this.actions.y/this.image.height*100)
+							});
 						}
 						break;
 					case "set-map":
@@ -1939,6 +1960,14 @@
 					}
 				}
 
+				if(this.viewingEntity && (this.player.gm || this.viewingEntity.owned[this.player.id])) {
+					this.actions.options.push({
+						// TODO: Set Markings Action
+						"icon": "fas fa-route",
+						"event": "move-to",
+						"text": "Move To"
+					});
+				}
 				this.actions.options.push({
 					// TODO: Set Markings Action
 					"icon": "fas fa-map-marker-alt",

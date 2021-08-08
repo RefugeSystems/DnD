@@ -9,7 +9,8 @@
 rsSystem.component("dndEntityName", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.DNDWidgetCore
+		rsSystem.components.DNDWidgetCore,
+		rsSystem.components.DNDCombatUtility
 	],
 	"props": {
 		"entity": {
@@ -23,6 +24,14 @@ rsSystem.component("dndEntityName", {
 			}
 		}
 	},
+	"computed": {
+		"combat": function() {
+			return this.skirmish && this.skirmish.combat_turn === this.entity.id;
+		},
+		"leveling": function() {
+			return this.entity.point_pool && this.entity.point_pool.level;
+		}
+	},
 	"data": function() {
 		var data = {};
 
@@ -32,17 +41,34 @@ rsSystem.component("dndEntityName", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"getLevelClasses": function() {
+			var classes = "";
+
+			if(this.leveling) {
+				classes += "available ";
+			}
+			if(this.combat) {
+				classes += "combat ";
+			}
+
+			return classes;
+		},
 		"name": function() {
 
 		},
-		"levelUp": function() {
-			if(this.entity.point_pool && this.entity.point_pool.level > 0) {
-				rsSystem.EventBus.$emit("dialog-open", {
-					"component": "dndCharacterLevelDialog",
-					"level": this.entity.level + 1,
-					"entity": this.entity.id
-				});
+		"progressState": function() {
+			if(this.combat) {
+				this.endTurn();
+			} else if(this.leveling) {
+				this.levelUp();
 			}
+		},
+		"levelUp": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndCharacterLevelDialog",
+				"level": this.entity.level + 1,
+				"entity": this.entity.id
+			});
 		}
 	},
 	"beforeDestroy": function() {

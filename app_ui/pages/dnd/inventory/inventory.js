@@ -69,12 +69,12 @@ rsSystem.component("DNDInventory", {
 						console.warn("Item Missing: " + this.entity.inventory[i]);
 					}
 				}
-				if(!this.$route.params.entity) {
+				if(!this.$route.params.entity && this.storage.show_shared) {
 					if(this.meeting && this.meeting.entities) {
 						for(j=0; j<this.meeting.entities.length; j++) {
 							if(!this.entity || this.meeting.entities[j] !== this.entity.id) {
 								entity = this.universe.getObject(this.meeting.entities[j]);
-								if(entity.inventory_share) {
+								if(entity.inventory_share || entity.owned[this.player.id]) {
 									for(i=0; i<entity.inventory.length; i++) {
 										if(!entity.inventory_hidden || !entity.inventory_hidden[entity.inventory[i]]) {
 											item = this.universe.getObject(entity.inventory[i]);
@@ -326,6 +326,25 @@ rsSystem.component("DNDInventory", {
 						}
 					}
 				}
+			}
+			if(this.storage.show_shared) {
+				this.controls.push({
+					"title": "Click toggle shared items. They are currently shown.",
+					"icon": "fas fa-backpack rs-green",
+					"process": function() {
+						Vue.set(reference.storage, "show_shared", false);
+						reference.buildControls();
+					}
+				});
+			} else {
+				this.controls.push({
+					"title": "Click toggle shared items. They are currently hidden.",
+					"icon": "fas fa-backpack rs-light-red",
+					"process": function() {
+						Vue.set(reference.storage, "show_shared", true);
+						reference.buildControls();
+					}
+				});
 			}
 			if(selected.length) {
 				this.controls.push({

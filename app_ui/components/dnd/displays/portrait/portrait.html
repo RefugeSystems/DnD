@@ -1,0 +1,5 @@
+<div class="dnd-display display-portrait" :class="getEntityClassing()">
+	<rs-image class="portrait-image" v-if="entity.portrait" :image="entity.portrait" :universe="universe"></rs-image>
+	<span class="portrait-icon" v-else-if="entity.icon" :class="entity.icon"></span>
+	<span class="portrait-icon fas fa-user" v-else></span>
+</div>

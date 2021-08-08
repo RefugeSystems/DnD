@@ -1,0 +1,18 @@
+<div class="rs-component dnd-component dialog-endturn">
+	<div class="text">
+		<p>End your turn?</p>
+	</div>
+	<ul class="remaining" v-if="remaining.length">
+		<li class="action" v-for="action in remaining">{{action.count}} {{action.name}} remaining</li>
+	</ul>
+	<div class="options flex h justified">
+		<button class="simple general rounded action end-turn" v-on:click="endTurn()">
+			<span class="game-icon game-icon-player-next"></span>
+			<span>End Turn</span>
+		</button>
+		<button class="simple general rounded action cancel" v-on:click="closeDialog()">
+			<span class="fas fa-ban"></span>
+			<span>Cancel</span>
+		</button>
+	</div>
+</div>
