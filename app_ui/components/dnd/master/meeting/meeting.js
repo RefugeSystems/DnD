@@ -55,6 +55,7 @@ rsSystem.component("dndMasterMeeting", {
 			for(i=0; i<this.universe.listing.meeting.length; i++) {
 				meet = this.universe.listing.meeting[i];
 				if(meet.is_active && !meet.disabled && !meet.is_preview) {
+					Vue.set(this, "description", meet.description || "");
 					if(!meet.name) {
 						Vue.set(this, "editName", true);
 					} else {
@@ -89,8 +90,9 @@ rsSystem.component("dndMasterMeeting", {
 	},
 	"watch": {
 		"active.id": function(newValue, oldValue) {
-			this.syncDescription(oldValue, this.description);
-			Vue.set(this, "description", this.active.description);
+			console.log("Sync Active");
+			// this.syncDescription(oldValue, this.description);
+			// Vue.set(this, "description", this.active.description);
 			Vue.set(this, "id", this.active.id);
 		},
 		"id": function(newValue, oldValue) {
@@ -110,7 +112,7 @@ rsSystem.component("dndMasterMeeting", {
 
 		data.editName = false;
 		data.name = "";
-		data.description = "";
+		data.description = this.active?this.active.description:"";
 		data.id = "";
 
 		return data;
@@ -303,8 +305,13 @@ rsSystem.component("dndMasterMeeting", {
 		 * multi-client synced editing.
 		 * @method syncDescription
 		 */
-		"syncDescription": function() {
-			if(this.active) {
+		"syncDescription": function(meeting, description) {
+			if(meeting) {
+				this.universe.send("meeting:details", {
+					"meeting": meeting,
+					"description": description
+				});
+			} else if(this.active) {
 				this.universe.send("meeting:details", {
 					"meeting": this.active.id,
 					"name": this.name,
