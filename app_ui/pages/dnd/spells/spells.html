@@ -1,19 +1,21 @@
 <div class="rs-page dnd-page dnd-widget dnd-spells">
-	<div class="entity-spells" v-if="entity">
+	<div class="entity-spells flex h wrap" v-if="entity">
 		<rs-table :universe="universe" :source="known" :storage-container="storage" label="Spells" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
-		<div class="flex v entity-spells-details">
-			<div class="entity-name">
-				<span>{{entity.name}}</span>
-				<button class="flat action fas fa-info-circle rs-light-blue" v-on:click="info(entity)"></button>
+		<div class="detail-container">
+			<div class="flex v entity-spells-details">
+				<div class="entity-name">
+					<span>{{entity.name}}</span>
+					<button class="flat action fas fa-info-circle rs-light-blue" v-on:click="info(entity)"></button>
+				</div>
+				<div class="section entity-cantrips" :class="prepared_cantrips.length>entity.cantrips_maximum?'error':'nominal'">Cantrips: {{prepared_cantrips.length}}/{{entity.cantrips_maximum}}</div>
+				<ul>
+					<li v-for="cantrip in prepared_cantrips">{{cantrip.name}}</li>
+				</ul>
+				<div class="section entity-spells" :class="prepared_spells.length>entity.spells_maximum?'error':'nominal'">Spells: {{prepared_spells.length}}/{{entity.spells_maximum}}</div>
+				<ul>
+					<li v-for="spell in prepared_spells">{{spell.name}}</li>
+				</ul>
 			</div>
-			<div class="section entity-cantrips" :class="prepared_cantrips.length>entity.cantrips_maximum?'error':'nominal'">Cantrips: {{prepared_cantrips.length}}/{{entity.cantrips_maximum}}</div>
-			<ul>
-				<li v-for="cantrip in prepared_cantrips">{{cantrip.name}}</li>
-			</ul>
-			<div class="section entity-spells" :class="prepared_spells.length>entity.spells_maximum?'error':'nominal'">Spells: {{prepared_spells.length}}/{{entity.spells_maximum}}</div>
-			<ul>
-				<li v-for="spell in prepared_spells">{{spell.name}}</li>
-			</ul>
 		</div>
 	</div>
 	<div class="general-warning" v-else>

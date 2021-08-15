@@ -12,6 +12,10 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} resist 
 	 */
 	var takeDamage = function(entity, damage, resist) {
+		if(!damage) {
+			return null;
+		}
+
 		var keys = Object.keys(damage),
 			received,
 			set = {},
@@ -125,8 +129,12 @@ module.exports.initialize = function(universe) {
 			entity = universe.get(entity);
 		}
 		if(player && (player.gm || entity.owned[event.player])) {
-			universe.chronicle.addOccurrence("entity:damage", event, universe.time, entity.id, entity.id);
-			takeDamage(entity, event.damage, event.resist);
+			if(event.damage) {
+				universe.chronicle.addOccurrence("entity:damage", event, universe.time, entity.id, entity.id);
+				takeDamage(entity, event.damage, event.resist);
+			} else {
+				universe.generalError("action:free:damage", null, "No damage specified", event);
+			}
 		}
 	});
 
@@ -178,7 +186,7 @@ module.exports.initialize = function(universe) {
 	universe.on("action:damage:complete", function(event) {
 		var attack = tracking[event.activity];
 		console.log("Complete Damage: ", event);
-		if(attack && attack.target.owned[event.player]) {
+		if(attack && attack.target.owned[event.player] && event.damage) {
 			clearTimeout(alarms[event.activity]);
 			delete(tracking[event.activity]);
 			universe.chronicle.addOccurrence("entity:attack:complete", event, universe.time, attack.source.id, attack.target.id);

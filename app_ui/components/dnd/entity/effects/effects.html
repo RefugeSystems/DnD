@@ -7,10 +7,12 @@
 		<div class="feats flex h wrap hidden-list" v-if="storage && storage.show_hidden">
 			<button class="feat rounded general quick action hidden-shadow" v-for="effect in effects.hidden" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id">
 				<span class="action-icon" :class="effectClasses(effect)"></span>
+				<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 			</button>
 		</div>
 		<button class="effect rounded general quick action" v-for="effect in effects.shown" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id">
 			<span class="action-icon" :class="effectClasses(effect)"></span>
+			<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 		</button>
 	</div>
 </div>

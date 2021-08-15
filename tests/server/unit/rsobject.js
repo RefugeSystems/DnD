@@ -203,7 +203,6 @@ describe("RSObject", function() {
 		b.effects = ["b", "a"];
 
 		res = RSObject.subValues(a.effects, b.effects);
-		console.log(res);
 		expect(res.indexOf("b")).not.toBe(-1);
 		expect(res.indexOf("a")).toBe(-1);
 		expect(res.indexOf("c")).not.toBe(-1);

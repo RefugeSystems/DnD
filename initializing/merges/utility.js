@@ -348,8 +348,8 @@ utility.finalize = function(merged) {
 		remap(merged.damage);
 	}
 	if(merged.reduction) {
-		merged.resist = merged.reduction
-		remap(merged.resist);
+		merged.resistance = merged.reduction
+		remap(merged.resistance);
 	}
 	delete(merged.reduction);
 

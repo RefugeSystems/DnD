@@ -3,18 +3,18 @@
 		<span>{{entity.name}}</span>
 		<span v-if="details.action">: {{details.action.name}}</span>
 	</h1>
-	<div class="rolling spell-level" v-if="details.spell && spellLevel">
+	<div class="rolling spell-level" v-if="details.spell && spellLevel !== null">
 		<div class="roll-label flex h">
 			<button class="roll-key general rounded quick action" v-on:click="info(details.spell)">
 				<span :class="details.spell.icon || 'fas fa-cube'"></span>
 			</button>
 			<div class="target flex v center grow1">
 				<span>Casting: {{details.spell.name}}</span>
-				<span>at Level {{spellLevel}}</span>
+				<span v-if="spellLevel > 0">at Level {{spellLevel}}</span>
 			</div>
 		</div>
 	</div>
-	<div class="rolling spell-level" v-if="details.spell && !spellLevel">
+	<div class="rolling spell-level" v-if="details.spell && spellLevel === null">
 		<!-- TODO: Select Spell Level for cast send -->
 	</div>
 	<!-- div class="rolling target" v-if="details.targeted && target">

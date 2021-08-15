@@ -1,5 +1,5 @@
 var fs = require("fs"),
-	merging = require("./source/characters.json"),
+	merging = require("./source/characters.important.json"),
 	utility = require("./utility.js"),
 	Random = require("rs-random"),
 	exporting = [],
@@ -407,5 +407,5 @@ for(i=0; i<merging.length; i++) {
 }
 
 exporting = generated.concat(exporting);
-fs.writeFile("_characters.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
+fs.writeFile("_characters.important.json", JSON.stringify({"import": exporting}, null, "\t"), () => {});
 module.exports.data = exporting;

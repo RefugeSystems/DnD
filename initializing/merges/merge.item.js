@@ -62,7 +62,12 @@ for(i=0; i<merging.length; i++) {
 		if(merged.attribute) {
 			merged.stat = merged.attribute;
 		}
-		delete(merged.attribute)
+		delete(merged.attribute);
+		if(merged.attuned) {
+			merged.is_singular = false;
+		} else {
+			merged.is_singular = true;
+		}
 
 		if(!id.startsWith("item:")) {
 			console.log("Update item: " + id);

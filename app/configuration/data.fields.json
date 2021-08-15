@@ -2339,7 +2339,8 @@
 		"description": "Maps skill IDs to a boolean to indicate proficiency in that skill.",
 		"type": "object",
 		"attribute": {
-			"inherited_key": "skill"
+			"inherited_key": "skill",
+			"values": "integer"
 		}
 	}, {
 		"id": "skill_advantage",

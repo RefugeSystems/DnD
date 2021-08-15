@@ -174,7 +174,7 @@ rsSystem.component("dndDialogRoll", {
 		data.actionTitling = "";
 		data.actionNote = "";
 		data.statusResponse = null;
-		data.spellLevel = this.details.spellLevel || null;
+		data.spellLevel = this.details.spellLevel;
 		data.negative = false;
 		data.tracking = null;
 		data.active = null;
@@ -185,6 +185,13 @@ rsSystem.component("dndDialogRoll", {
 		data.waiting = {};
 		data.seen = [];
 		data.warn = 0;
+
+		if(typeof(data.spellLevel) === "string") {
+			data.spellLevel = parseInt(data.spellLevel);
+		}
+		if(typeof(data.spellLevel) !== "number") {
+			data.spellLevel = null;
+		}
 
 		if(typeof(this.details.target) === "string") {
 			data.target = this.universe.index.entity[this.details.target];
