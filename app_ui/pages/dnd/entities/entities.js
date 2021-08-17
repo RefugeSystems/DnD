@@ -170,7 +170,7 @@ rsSystem.component("DNDEntities", {
 			// }
 			controls.push({
 				"icon": "fas fa-swords",
-				"title": "Include hostile creatures in the list of creatures nearby",
+				"title": "Show creatures with initiative values for combat",
 				"ctrl": "list",
 				"type": "flip",
 				"id": "combat"

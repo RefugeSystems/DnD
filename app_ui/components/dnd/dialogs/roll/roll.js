@@ -937,9 +937,9 @@ rsSystem.component("dndDialogRoll", {
 				if(this.details.using) {
 					perform.using = this.details.using.id;
 				}
-				if(this.target) {
-					perform.target = this.target.id;
-				}
+				// if(this.target) {
+				// 	perform.target = this.target.id;
+				// }
 				if(this.targeting) {
 					keys = Object.keys(this.targeting);
 					if(keys.length) {

@@ -56,8 +56,10 @@
 		 * @method forceReload
 		 */
 		"forceReload": function() {
-			location.reload(true);
-			/* TODO: Implement Server side cache clearing response or signal to the ServiceWorker */
+			navigator.serviceWorker.controller.postMessage({
+				"action": "update"
+			});
+			location.reload();
 		},
 		"isOwner": function(record, player) {
 			player = this.player || player;

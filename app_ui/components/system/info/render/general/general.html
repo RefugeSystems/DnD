@@ -4,7 +4,7 @@
 	<div class="description" v-html="description"/>
 	<div class="control-block flex h" v-if="controls.length">
 		<div class="control" v-for="control in controls">
-			<button v-if="control.type === 'button'" class="quick rounded general action" v-on:click="process(control)" v-on:click.right.stop.prevent="option(control)">
+			<button v-if="control.type === 'button'" class="quick rounded general action" v-on:click="process(control)" v-on:click.right.stop.prevent="option(control)" :title="control.title">
 				<span :class="control.icon"></span>
 			</button>
 			<select v-if="control.type === 'select'" class="rounded" v-model="control._value" v-on:change="process(control)">

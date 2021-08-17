@@ -92,7 +92,7 @@
 				<span :class="check.skill.icon"></span>
 			</button>
 			<div class="roll-result flex v center" :class="getTrackedClass(check)">
-				<input type="text" v-model="check.computed" :id="check.skill.id.substring(7)" v-on:focus="setTracking(check)" v-on:click.right.stop.prevent="setTracking(check, true)" :placeholder="check.formula" v-on:keyup.enter="sendSkill(check)" />
+				<input type="number" v-model.number="check.computed" :id="check.skill.id.substring(7)" v-on:focus="setTracking(check)" v-on:click.right.stop.prevent="setTracking(check, true)" :placeholder="check.formula" v-on:keyup.enter="sendSkill(check)" />
 			</div>
 			<button class="rounded general roll result quick action" v-if="!check.computed && check.computed !== 0" v-on:click="rollSkill(check)">
 				<span class="fas fa-dice"></span>
@@ -144,7 +144,7 @@
 				<span>{{roll.key}}</span>
 			</div>
 			<div class="roll-result flex v center" :class="getTrackedClass(roll)">
-				<input type="text" v-model="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
+				<input type="number" v-model.number="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
 			</div>
 			<div class="rolled flex h" v-if="roll.dice_rolls">
 				<div class="results flex h" v-for="(results, die) in roll.dice_rolls">
@@ -175,7 +175,7 @@
 				<span>{{roll.key}}</span>
 			</div>
 			<div class="roll-result flex v center" :class="getTrackedClass(roll)">
-				<input type="text" v-model="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
+				<input type="number" v-model.number="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
 			</div>
 			<div class="rolled flex h" v-if="roll.dice_rolls">
 				<div class="results flex h" v-for="(results, die) in roll.dice_rolls">
@@ -199,7 +199,7 @@
 				<span>{{roll.key}}</span>
 			</div>
 			<div class="roll-result flex v center" :class="getTrackedClass(roll)">
-				<input type="text" v-model="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
+				<input type="number" v-model.number="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
 			</div>
 			<div class="rolled flex h" v-if="roll.dice_rolls">
 				<div class="results flex h" v-for="(results, die) in roll.dice_rolls">

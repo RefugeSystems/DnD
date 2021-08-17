@@ -262,6 +262,7 @@ module.exports.initialize = function(universe) {
 
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
+			console.log("Multi - Sending: " + (target?target.id || target:"No Target"), "Source: " + (source?source.id || source:"No Source"));
 			activity = id + ":" + target.id;
 			tracking[activity] = {
 				"gametime": universe.time,
@@ -328,6 +329,8 @@ module.exports.initialize = function(universe) {
 					recipients = universe.getMasters();
 				}
 
+				console.log(" > Sending: " + (target?target.id || target:"No Target"), "Source: " + (source?source.id || source:"No Source"), "Recipients: ", recipients);
+
 				universe.emit("send", {
 					"type": "notice",
 					"mid": activityPrefix + activity,
@@ -352,6 +355,8 @@ module.exports.initialize = function(universe) {
 
 				// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
 				alarms[activity] = setTimeout(notify, 5000);
+			} else {
+				console.log("Send Damage - No Track - ", target?target.id || target:"No Target?");
 			}
 		};
 		notify();

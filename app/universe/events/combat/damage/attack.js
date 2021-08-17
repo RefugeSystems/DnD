@@ -25,8 +25,9 @@ module.exports.initialize = function(universe) {
 	 * 		Null source requires Game Master player.
 	 */
 	universe.on("player:action:main:attack", function(event) {
-		console.log(event.message.data);
-		var damage = event.message.data.result,
+		console.log("Player Attack: ", event.message.data);
+		var channel = event.message.data.item || event.message.data.using || event.message.data.spell || event.message.data.channel,
+			damage = event.message.data.result,
 			targets = [],
 			channel,
 			target,
@@ -69,10 +70,12 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(targets.length) {
-			if(source && (source.owned[event.player] || event.player.gm)) {
+			if(source && (source.owned[event.player.id] || event.player.gm)) {
 				utility.sendDamages(source, targets, channel, damage);
 			} else if(!source && event.player.gm) {
 				utility.sendDamages(null, targets, channel, damage);
+			} else {
+				console.log("Data Missing? ", !!source, event.player.id, source.owned);
 			}
 		} else {
 			// TODO: Log bad event

@@ -868,6 +868,18 @@ class RSUniverse extends EventEmitter {
 	}
 
 	/**
+	 * 
+	 * @method getReconnectLimit
+	 */
+	getReconnectLimit() {
+		if(this.profile) {
+			return parseInt(this.profile.reconnectLimit) || Infinity;
+		} else {
+			return 5;
+		}
+	}
+
+	/**
 	 *
 	 * @method reconnect
 	 * @param {Object} [event] When available, the event that caused the disconnect. Used to retrieve
@@ -876,7 +888,7 @@ class RSUniverse extends EventEmitter {
 	reconnect(event) {
 		setTimeout(() => {
 			rsSystem.log.warn("Possible Reconnect: ", event);
-			if((!event || event.code <4100) && this.state.reconnectAttempts < 5) {
+			if((!event || event.code <4100) && this.state.reconnectAttempts < this.getReconnectLimit()) {
 				this.$emit("error:reconnecting");
 				this.$emit("error", {
 					"id": "universe:connection:status",
@@ -1169,6 +1181,9 @@ class RSUniverse extends EventEmitter {
 				});
 			} else if(ui[1] !== app[1] && !this.state.version_warning) {
 				this.state.version_warning = true;
+				navigator.serviceWorker.controller.postMessage({
+					"action": "update"
+				});
 				this.$emit("warning", {
 					"id": "app:update",
 					"message": "New Version Available",

@@ -130,7 +130,7 @@ rsSystem.component("sysInfoGeneral", {
 										if(object.melee || object.ranged || object.thrown) {
 											this.controls.push({
 												"title": "Equip as Main Hand for " + entity.name,
-												"icon": "fas fa-fist",
+												"icon": "fas fa-hand-rock",
 												"type": "button",
 												"action": "mainhand"
 											});
