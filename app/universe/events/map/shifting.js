@@ -20,7 +20,7 @@ module.exports.initialize = function(universe) {
 		if(event.player.gm) {
 			
 		} else {
-			universe.handleError("universe:time", "Non-Gamemaster attempted to modify meeting time", null, {
+			universe.handleError("universe:time", "Non-Gamemaster attempted to perform a map control", null, {
 				"player": event.player.id,
 				"message": event.message
 			});
@@ -48,7 +48,7 @@ module.exports.initialize = function(universe) {
 		if(event.player.gm) {
 			
 		} else {
-			universe.handleError("universe:time", "Non-Gamemaster attempted to modify meeting time", null, {
+			universe.handleError("universe:time", "Non-Gamemaster attempted to send a map view point", null, {
 				"player": event.player.id,
 				"message": event.message
 			});

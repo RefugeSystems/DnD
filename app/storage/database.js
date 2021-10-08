@@ -848,6 +848,7 @@ class ClassManager extends EventEmitter {
 				console.log("Loaded: " + this.id);
 			} catch(e) {
 				console.log("Failed to parse attributes for field " + this.id, this.attribute, e);
+				this.attribute = {};
 			}
 		}
 		

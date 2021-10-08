@@ -30,7 +30,7 @@ module.exports.initialize = function(universe) {
 				});
 			}
 		} else {
-			universe.handleError("universe:time", "Non-Gamemaster attempted to modify meeting time", null, {
+			universe.handleError("map:distance", "Non-Gamemaster attempted to modify meeting time", null, {
 				"player": event.player.id,
 				"message": event.message
 			});
@@ -160,11 +160,20 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(location && object) {
-			object.setValues({
-				"location": location.id,
-				"x": x,
-				"y": y
-			});
+			if(event.player.gm || (object.owned[event.player.id] || object.played_by === event.player.id)) {
+				object.setValues({
+					"location": location.id,
+					"x": x,
+					"y": y
+				});
+			} else {
+				universe.handleError("map:location", "Non-Gamemaster attempted to change and object's location", null, {
+					"player": event.player.id,
+					"message": event.message,
+					"object": object.id,
+					"location": location.id
+				});
+			}
 		}
 	});
 };

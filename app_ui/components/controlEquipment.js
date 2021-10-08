@@ -28,7 +28,16 @@ rsSystem.component("DNDControlEquipment", {
 			this.sendEquipmentContorl("equip:items", item, entity);
 		},
 		"mainhandItem": function(item, entity) {
-			this.sendEquipmentContorl("item:mainhand", item, entity);
+			// if(!entity) {
+			// 	entity = this.entity;
+			// }
+			// if(entity) {
+			// 	this.universe.send("item:mainhand", {
+			// 		"item": item?item.id || item:item,
+			// 		"entity": entity.id || entity
+			// 	});
+			// }
+			this.sendSingleEquipmentContorl("item:mainnhand", item, entity);
 		},
 		"unequipItem": function(item, entity) {
 			this.sendEquipmentContorl("unequip:items", item, entity);
@@ -74,6 +83,25 @@ rsSystem.component("DNDControlEquipment", {
 			}
 			var send = {
 				"items": [item.id || item],
+				"entity": entity.id || entity
+			};
+			if(target) {
+				send.target = target.id || true;
+			}
+			if(charges) {
+				send.change = charges;
+			}
+			this.universe.send(command, send);
+		},
+		"sendSingleEquipmentContorl": function(command, item, entity, target, charges) {
+			if(!entity) {
+				entity = this.entity;
+			}
+			if(!entity) {
+				entity = this.getPlayerCharacter();
+			}
+			var send = {
+				"item": item,
 				"entity": entity.id || entity
 			};
 			if(target) {

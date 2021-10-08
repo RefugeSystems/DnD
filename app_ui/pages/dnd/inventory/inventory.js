@@ -439,8 +439,8 @@ rsSystem.component("DNDInventory", {
 			}
 			if(this.entity.main_weapon) {
 				this.controls.push({
-					"title": "Move Main Weapon",
-					"icon": "fal fa-hand-rock",
+					"title": "Remove Main Weapon",
+					"icon": "fal fa-hand-rock rot180",
 					"process": function() {
 						reference.universe.send("item:mainhand", {
 							"item": null,

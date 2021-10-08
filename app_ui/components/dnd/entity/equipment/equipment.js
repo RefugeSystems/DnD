@@ -89,41 +89,43 @@ rsSystem.component("dndEntityEquipment", {
 			return typeof(object.charges_max) === "number" || typeof(object.charges_max) === "string";
 		},
 		"open": function(item) {
-			var details = {
-				"component": "dndCard",
-				"entity": this.entity.id,
-				"object": item,
-				"bubbles": [
-					"attuned",
-					"armor",
-					"damage_type",
-					"dice_type",
-					"dc",
-					"range",
-					"durability",
-					"charges_max",
-					"strength",
-					"dexterity",
-					"constitution",
-					"intelligence",
-					"wisdom",
-					"charisma",
-					"movement_ground",
-					"movement_walk" /* Future Proofing */ ,
-					"movement_fly",
-					"movement_swim",
-					"duration"],
-				"fields": [
-					"damage",
-					"resistance",
-					"advantage",
-					"disadvantage"],
-				"fieldComponent": {}
-			};
-			if(this.showCharges(item)) {
-				details.fieldComponent.charges_max = "dndObjectCharges";
-			}
-			rsSystem.EventBus.$emit("dialog-open", details);
+			this.info(item);
+
+			// var details = {
+			// 	"component": "dndCard",
+			// 	"entity": this.entity.id,
+			// 	"object": item,
+			// 	"bubbles": [
+			// 		"attuned",
+			// 		"armor",
+			// 		"damage_type",
+			// 		"dice_type",
+			// 		"dc",
+			// 		"range",
+			// 		"durability",
+			// 		"charges_max",
+			// 		"strength",
+			// 		"dexterity",
+			// 		"constitution",
+			// 		"intelligence",
+			// 		"wisdom",
+			// 		"charisma",
+			// 		"movement_ground",
+			// 		"movement_walk" /* Future Proofing */ ,
+			// 		"movement_fly",
+			// 		"movement_swim",
+			// 		"duration"],
+			// 	"fields": [
+			// 		"damage",
+			// 		"resistance",
+			// 		"advantage",
+			// 		"disadvantage"],
+			// 	"fieldComponent": {}
+			// };
+			// if(this.showCharges(item)) {
+			// 	details.fieldComponent.charges_max = "dndObjectCharges";
+			// }
+			// rsSystem.EventBus.$emit("dialog-open", details);
 		}
 	},
 	"beforeDestroy": function() {

@@ -367,6 +367,7 @@
 				"text": "Set Name Point"
 			};
 
+			data.noResetViewportFlag = false;
 			data.canvas = null;
 
 			return data;
@@ -374,14 +375,34 @@
 		"watch": {
 			"location": {
 				"handler": function(newValue, oldValue) {
+					console.warn("Location Change");
 					Vue.set(this, "measurementCanvas", null);
-					Vue.set(this, "resetViewportFlag", true);
+					if(this.noResetViewportFlag) {
+						Vue.set(this, "noResetViewportFlag", false);
+					} else if(!this.$route.query.viewing) {
+						console.warn("Flag Reset: ", JSON.stringify(this.$route.query, null, 4));
+						Vue.set(this, "resetViewportFlag", true);
+					}
 					this.update();
+					if(this.$route.query.viewing) {
+						setTimeout(() => {
+							this.queryViewPort();
+						},0);
+					}
 				}
 			},
 			"location.coordinates": {
 				"handler": function(newValue, oldValue) {
 					this.redrawPaths();
+				}
+			},
+			"$route.query": function() {
+				if(this.location && this.$route.query.viewing === this.location.id) {
+					console.warn("View Change: ", JSON.stringify(this.$route.query, null, 4));
+					Vue.set(this, "noResetViewportFlag", true);
+					this.queryViewPort();
+				} else {
+					console.warn("Query Change: ", JSON.stringify(this.$route.query, null, 4));
 				}
 			},
 			"storage.hovering": function(hovered) {
@@ -560,14 +581,59 @@
 					}
 				}
 			},
+			"queryViewPort": function() {
+				if(this.location && this.$route.query.viewing === this.location.id) {
+					if(this.controlSource) {
+						Vue.set(this, "controlSource", false);
+					} else {
+						console.warn("Query View Port: ", JSON.stringify(this.$route.query, null, 4));
+						var view = {};
+						view.zoom = parseInt(this.$route.query.zoom);
+						view.x = parseFloat(this.$route.query.x);
+						view.y = parseFloat(this.$route.query.y);
+						rsSystem.manipulateQuery({
+							"viewing": null,
+							"zoom": null,
+							"x": null,
+							"y": null
+						});
+
+						this.centerView(view);
+						if(view.zoom) {
+							this.zoom(view.zoom);
+						}
+					}
+				}
+			},
+			/**
+			 * 
+			 * @method receiveViewPort
+			 * @param {Number} x
+			 * @param {Number} y
+			 * @param {Integer} [zoom]
+			 */
+			"receiveViewPort": function(x, y, zoom) {
+				var view = this.getViewport(),
+					offX,
+					offY;
+
+				offX = x - view.width/2;
+				offY = y - view.height/2;
+				this.apply({
+					"zoom": zoom,
+					"left": offX,
+					"top": offY
+				});
+			},
 			/**
 			 * 
 			 * @method centerView
 			 * @param {Object} location
 			 * @param {Number} location.x
 			 * @param {Number} location.y
+			 * @param {Integer} [zoom]
 			 */
-			"centerView": function(location) {
+			"centerView": function(location, zoom) {
 				var locX,
 					locY,
 					view;
@@ -579,6 +645,7 @@
 					locY -= view.height/2;
 					locX -= view.width/2;
 					this.apply({
+						"zoom": zoom,
 						"left": -1* locX,
 						"top": -1* locY
 					});
@@ -928,6 +995,10 @@
 						});
 						*/
 						break;
+					case "set-map-view":
+						buffer = this.getCenter();
+						buffer.location = this.location.id;
+						this.universe.send("master:control:mapview", buffer);
 					case "set-location":
 						buffer = this.universe.getObject(this.storage.alter);
 						if(buffer) {
@@ -1198,6 +1269,7 @@
 				top = this.image.top - vh;
 
 				return {
+					"zoom": this.image.zoom,
 					"x": -1* ((left/this.image.width) * 100).toFixed(3),
 					"y": -1* ((top/this.image.height) * 100).toFixed(3),
 					"left": left,
@@ -2004,6 +2076,11 @@
 						"icon": "fas fa-map-marked",
 						"event": "set-map",
 						"text": "Show Map"
+					});
+					this.actions.options.push({
+						"icon": "fas fa-window-frame",
+						"event": "set-map-view",
+						"text": "Send View"
 					});
 
 					// this.actions.options.push({

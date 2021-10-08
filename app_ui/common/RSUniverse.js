@@ -875,7 +875,7 @@ class RSUniverse extends EventEmitter {
 		if(this.profile) {
 			return parseInt(this.profile.reconnectLimit) || Infinity;
 		} else {
-			return 5;
+			return 60;
 		}
 	}
 

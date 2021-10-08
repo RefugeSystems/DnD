@@ -10,30 +10,28 @@ module.exports = new (function() {
 		cacheString;
 
 	cacheString = "public, max-age=" + cacheDuration;
-
-	typeShort["jpeg"] = "image/jpeg";
-	typeShort["jpg"] = "image/jpeg";
-	typeShort["jfif"] = "image/jpeg";
-	typeShort["pjpeg"] = "image/jpeg";
-	typeShort["pjp"] = "image/jpeg";
-	typeShort["png"] = "image/png";
-	typeShort["svg"] = "image/svg";
+	
+	typeShort["mp3"] = "audio/mp3";
+	typeShort["mid"] = "audio/midi";
+	typeShort["midi"] = "audio/midi";
+	typeShort["oga"] = "audio/ogg";
+	typeShort["aac"] = "audio/aac";
 	
 	this.initialize = (api) => {
 		return new Promise((done) => {
-			var manager = api.universe.manager.image;
+			var manager = api.universe.manager.audio;
 			
 			this.router.get("/:id", (req, res, next) => {
 				// Handles sending an Image entry as the appropriate file type
 				var parsed,
-					image;
+					audio;
 					
-				if(manager && (image = manager.object[req.params.id])) {
-					if(image.data.startsWith("data:image")) {
-						parsed = parseDataUrl(image.data);
+				if(manager && (audio = manager.object[req.params.id])) {
+					if(audio.data.startsWith("data:audio")) {
+						parsed = parseDataUrl(audio.data);
 						if(parsed) {
-							res.setHeader("Content-Type", typeShort[image.content_type] || image.content_type || "image/jpeg");
-							if(image.is_preview) {
+							res.setHeader("Content-Type", typeShort[audio.content_type] || audio.content_type || "audio/mp3");
+							if(audio.is_preview) {
 								res.set("Cache-Control", "no-store");
 							} else {
 								res.set("Cache-control", cacheString);
@@ -46,7 +44,7 @@ module.exports = new (function() {
 						next();
 					}
 				} else {
-					// No manager or no image, use normal 404 process
+					// No manager or no audio, use normal 404 process
 					next();
 				}
 			});

@@ -36,6 +36,9 @@ rsSystem.component("sysInfoGeneral", {
 			if(this.info.portrait && this.universe.index.image[this.info.portrait]) {
 				return this.universe.index.image[this.info.portrait];
 			}
+		},
+		"entity": function() {
+			return this.playerCharacter || this.getPlayerCharacter();
 		}
 	},
 	"watch": {
@@ -51,8 +54,14 @@ rsSystem.component("sysInfoGeneral", {
 	"mounted": function() {
 		rsSystem.register(this);
 		this.populateControls();
+		this.universe.$on("updated", this.repopulateControls);
 	},
 	"methods": {
+		"repopulateControls": function(event) {
+			if(event.id === this.entity.id) {
+				this.populateControls();
+			}
+		},
 		"populateControls": function() {
 			var entity = this.playerCharacter || this.getPlayerCharacter(),
 				object = this.info,
@@ -128,12 +137,21 @@ rsSystem.component("sysInfoGeneral", {
 											"action": "unequip"
 										});
 										if(object.melee || object.ranged || object.thrown) {
-											this.controls.push({
-												"title": "Equip as Main Hand for " + entity.name,
-												"icon": "fas fa-hand-rock",
-												"type": "button",
-												"action": "mainhand"
-											});
+											if(entity.main_weapon === object.id) {
+												this.controls.push({
+													"title": "Remove as Main Hand for " + entity.name,
+													"icon": "fal fa-hand-rock rot180",
+													"type": "button",
+													"action": "unmainhand"
+												});
+											} else {
+												this.controls.push({
+													"title": "Equip as Main Hand for " + entity.name,
+													"icon": "fas fa-hand-rock",
+													"type": "button",
+													"action": "mainhand"
+												});
+											}
 										}
 									}
 								}
@@ -195,16 +213,19 @@ rsSystem.component("sysInfoGeneral", {
 					});
 					break;
 				case "equip":
-					this.equipItem(this.info.id);
+					this.equipItem(this.info.id, entity);
 					break;
 				case "mainhand":
-					this.mainhandItem(this.info.id);
+					this.mainhandItem(this.info.id, entity);
+					break;
+				case "unmainhand":
+					this.mainhandItem(null, entity);
 					break;
 				case "unequip":
-					this.unequipItem(this.info.id);
+					this.unequipItem(this.info.id, entity);
 					break;
 				case "drop":
-					this.dropItem(this.info.id);
+					this.dropItem(this.info.id, entity);
 					break;
 				case "color":
 					this.universe.send("master:recolor", {
@@ -233,6 +254,7 @@ rsSystem.component("sysInfoGeneral", {
 		}
 	},
 	"beforeDestroy": function() {
+		this.universe.$off("updated", this.repopulateControls);
 		/*
 		this.universe.$off("universe:modified", this.update);
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);

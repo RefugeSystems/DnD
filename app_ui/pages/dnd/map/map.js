@@ -91,10 +91,21 @@ rsSystem.component("DNDMap", {
 			Vue.set(this, "displayCharacter", !this.displayCharacter);
 		},
 		"controlResponse": function(control) {
+			console.log("Map Control: ", control);
 			switch(control.control) {
 				case "map":
 					if(this.storage.follow) {
 						rsSystem.toPath("/map/" + control.data.location);
+					}
+					break;
+				case "mapview":
+					if(this.storage.follow) {
+						rsSystem.toPath("/map/" + control.data.location, {
+							"viewing": control.data.location,
+							"zoom": control.data.zoom,
+							"x": control.data.x,
+							"y": control.data.y
+						});
 					}
 					break;
 			}
