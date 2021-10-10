@@ -120,6 +120,16 @@ rsSystem.component("sysInfoGeneral", {
 					}
 					if(entity) {
 						switch(this.info._class) {
+							case "effect":
+								if(entity.effects.indexOf(this.info.id) !== -1) {
+									this.controls.push({
+										"title": "Revoke effect " + this.info.name + " from " + entity.name,
+										"icon": "fas fa-ban",
+										"type": "button",
+										"action": "revoke"
+									});
+								}
+								break;
 							case "item":
 								if(entity.inventory.indexOf(this.info.id) !== -1) {
 									if(entity.equipped.indexOf(object.id) === -1) {
@@ -195,6 +205,12 @@ rsSystem.component("sysInfoGeneral", {
 					this.universe.send("master:obscure", {
 						"object": this.info.id,
 						"obscured": false
+					});
+					break;
+				case "revoke":
+					this.universe.send("effect:revoke", {
+						"effects": [this.info.id],
+						"from": [entity.id]
 					});
 					break;
 				case "give":
