@@ -121,7 +121,7 @@ rsSystem.component("sysInfoGeneral", {
 					if(entity) {
 						switch(this.info._class) {
 							case "effect":
-								if(entity.effects.indexOf(this.info.id) !== -1) {
+								if(entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked) {
 									this.controls.push({
 										"title": "Revoke effect " + this.info.name + " from " + entity.name,
 										"icon": "fas fa-ban",
