@@ -1,7 +1,18 @@
 <div class="info-general rs-black">
 	<img class="image" v-if="info && info._class === 'image'" :src="getImageURL(info)" />
 	<rs-image v-if="image" :image="image" />
-	<div class="description" v-html="description"/>
+	<div v-if="!editing" class="description" v-html="description"/>
+	<div v-if="editing" class="description">
+		<textarea class="edit-description" v-model="editDescription"></textarea>
+		<div class="controls flex h justified">
+			<button class="main general rounded action" v-on:click="submitDescription()">
+				<span class="fas fa-check rs-green"></span>
+			</button>
+			<button class="main general rounded action" v-on:click="cancelDescription()">
+				<span class="fas fa-times rs-red"></span>
+			</button>
+		</div>
+	</div>
 	<div class="control-block flex h" v-if="controls.length">
 		<div class="control" v-for="control in controls">
 			<button v-if="control.type === 'button'" class="quick rounded general action" v-on:click="process(control)" v-on:click.right.stop.prevent="option(control)" :title="control.title">

@@ -17,7 +17,7 @@ module.exports.initialize = function(universe) {
 	universe.on("player:master:assume", function(event) {
 		var entity = event.message.data.entity,
 			attributes = Object.assign({}, event.player.attribute);
-		if(entity && event.player.gm) {
+		if(entity && (event.player.gm || (entity.owned && entity.owned[event.player.id]))) {
 			attributes.playing_as = entity;
 			event.player.setValues({
 				"attribute": attributes

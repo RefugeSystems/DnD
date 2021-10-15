@@ -34,33 +34,37 @@ module.exports.initialize = function(universe) {
 			// console.log("Check Effect: " + effects[i]);
 			if(effect && effect.character) {
 				// console.log(" > Read Effect: " + effect.id);
-				if(characterMap[effect.character]) {
-					character = characterMap[effect.character];
-				} else {
-					character = characterMap[effect.character] = universe.manager.entity.object[effect.character];
-				}
-				if(character) {
-					// console.log(" > Character: " + character.id);
-					if(!subtractions[character.id]) {
-						characterMap[character.id] = character;
-						subtractions[character.id] = [];
-						characters.push(character.id);
+				if(!effect.is_locked || event.player.gm) {
+					if(characterMap[effect.character]) {
+						character = characterMap[effect.character];
+					} else {
+						character = characterMap[effect.character] = universe.manager.entity.object[effect.character];
 					}
-					subtractions[character.id].push(effect.id);
+					if(character) {
+						// console.log(" > Character: " + character.id);
+						if(!subtractions[character.id]) {
+							characterMap[character.id] = character;
+							subtractions[character.id] = [];
+							characters.push(character.id);
+						}
+						subtractions[character.id].push(effect.id);
+					}
 				}
 			}
 		}
 		// console.log("Revoking: " + JSON.stringify(subtractions, null, 4));
 		for(i=0; i<characters.length; i++) {
 			character = characterMap[characters[i]];
-			character.subValues({
-				"effects": subtractions[character.id]
-			});
+			if(character.owned[event.player.id] || event.player.gm) {
+				character.subValues({
+					"effects": subtractions[character.id]
+				});
+			}
 		}
 		if(from) {
 			for(i=0; i<from.length; i++) {
 				character = universe.manager.entity.object[from[i]];
-				if(character) {
+				if(event.player.gm || (character && character.owned[event.player.id])) {
 					character.subValues({
 						"effects": effects
 					});

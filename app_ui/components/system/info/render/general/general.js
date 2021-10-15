@@ -48,6 +48,8 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"data": function() {
 		var data = {};
+		data.editDescription = "";
+		data.editing = false;
 		data.controls = [];
 		return data;
 	},
@@ -64,6 +66,7 @@ rsSystem.component("sysInfoGeneral", {
 		},
 		"populateControls": function() {
 			var entity = this.playerCharacter || this.getPlayerCharacter(),
+				character = this.info.character || this.info.caster, 
 				object = this.info,
 				loading;
 
@@ -117,6 +120,13 @@ rsSystem.component("sysInfoGeneral", {
 							}
 							this.controls.push(loading);
 						}
+					} else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id]) {
+						this.controls.push({
+							"title": "Assume Entity in Overview",
+							"icon": "game-icon game-icon-console-controller",
+							"type": "button",
+							"action": "assume"
+						});
 					}
 					if(entity) {
 						switch(this.info._class) {
@@ -180,14 +190,28 @@ rsSystem.component("sysInfoGeneral", {
 								break;
 						}
 					}
+					if(character && !this.info.is_singular) {
+						this.controls.push({
+							"title": "Edit description for " + this.info.name,
+							"icon": "fas fa-edit",
+							"type": "button",
+							"action": "edit-description"
+						});
+					}
 				}
 			}
+		},
+		"submitDescription": function() {
+			this.process("send-description");
+		},
+		"cancelDescription": function() {
+			this.process("cancel-description");
 		},
 		"process": function(control) {
 			var entity = this.playerCharacter || this.getPlayerCharacter(),
 				object = this.info;
 
-			switch(control.action) {
+			switch(control.action || control) {
 				case "goto":
 					rsSystem.toPath("/map/" + this.info.id);
 					break;
@@ -211,6 +235,21 @@ rsSystem.component("sysInfoGeneral", {
 					this.universe.send("effect:revoke", {
 						"effects": [this.info.id],
 						"from": [entity.id]
+					});
+					break;
+				case "edit-description":
+					Vue.set(this, "editDescription", this.info.description);
+					Vue.set(this, "editing", true);
+					break;
+				case "cancel-description":
+					Vue.set(this, "editing", false);
+					break;
+				case "send-description":
+					console.log(" [Edit]>> ", control, this.editDescription);
+					Vue.set(this, "editing", false);
+					this.universe.send("object:describe", {
+						"id": this.info.id,
+						"description": this.editDescription
 					});
 					break;
 				case "give":
