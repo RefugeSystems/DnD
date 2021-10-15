@@ -44,6 +44,9 @@ rsSystem.component("sysInfoGeneral", {
 	"watch": {
 		"info": function() {
 			this.populateControls();
+			if(this.editing) {
+				Vue.set(this, "editing", false);
+			}
 		}
 	},
 	"data": function() {
