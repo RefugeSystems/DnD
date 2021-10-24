@@ -1,13 +1,13 @@
 <div class="rs-component chat-window">
 	<div class="flex h container">
-		<div class="flex v groups">
+		<div class="flex v groups" v-if="!forceChannel">
 			<button class="rounded general action group" v-for="group in groups" v-on:click="selectGroup(group)" :class="group === storage.active?'active':''">
 				<span class="fas fa-comment-exclamation" v-if="(!chatCore.chat._last[group] && chatCore.chat._recent[group]) || chatCore.chat._last[group] < chatCore.chat._recent[group]"></span>
 				<span>{{getGroupName(group)}}</span>
 			</button>
 		</div>
 		<div class="flex v stream grow-1" v-on:drop.stop.prevent="processDrop()" v-on:dragover.prevent="">
-			<div class="messages">
+			<div class="chat-messages messages">
 				<chat-stream :universe="universe" :player="player" :profile="profile" :stream="stream"></chat-stream>
 			</div>
 			<div class="send flex h centered">
@@ -15,7 +15,7 @@
 					<textarea id="message-text" v-model="storage.message" v-on:keypress.enter.stop.prevent="send($event)"></textarea>
 				</div>
 				<div class="flex v send-button">
-					<button class="rounded general quick action send grow-1" v-on:click="send()">
+					<button class="rounded general quick action send grow-1" v-on:click="send()" v-on:click.right.stop.prevent="altSend()">
 						<span class="fas fa-comment-lines"></span>
 					</button>
 				</div>

@@ -26,7 +26,7 @@
 						<span>No Items Available</span>
 					</td>
 				</tr>
-				<tr v-for="record in corpus" :key="record.id" :class="(!record.child_parent && storage.selected[record.id]) || (record.child_parent && storage.selected[record.child_parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id">
+				<tr v-for="record in corpus" :key="record.id" :class="(!record.child_parent && storage.selected[record.id]) || (record.child_parent && storage.selected[record.child_parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id" v-linkable="record.id">
 					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.child_parent" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
 						<!-- TODO: Field attribute Checks -->
 						<div v-if="!header.noCross" class="crosshair"></div>

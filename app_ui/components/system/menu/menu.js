@@ -53,6 +53,7 @@ rsSystem.component("systemMenu", {
 			item = {
 				"path": "/home",
 				"to": "/home",
+				"highlight": "/home",
 				"component": rsSystem.components[this.configuration.mainpage],
 				"icon": "fas fa-globe"
 			};

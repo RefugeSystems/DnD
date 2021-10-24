@@ -78,7 +78,7 @@ class RSChatCore extends EventEmitter {
 		event.received = Date.now();
 		this.chat[event.group].push(event);
 		if(this.chat[event.group].length > this.MAX_LENGTH) {
-			this.chat[event.group].splice(this.MAX_LENGTH);
+			this.chat[event.group].shift();
 		}
 		Vue.set(this.chat._recent, event.group, event.received);
 		if(event.from === this.player.id) {

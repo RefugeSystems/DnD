@@ -43,7 +43,7 @@ module.exports.initialize = function(universe) {
 			object,
 			x;
 
-		if(id && (object = universe.get(id)) && (event.player.gm || ((entity = universe.get(object.character)) && entity.owned[event.player.id]))) {
+		if(id && (object = universe.get(id)) && (event.player.gm || ((entity = universe.get(object.character) || universe.get(object.caster) || universe.get(object.user)) && entity.owned[event.player.id]))) {
 			// console.log(" [object:describe]>> ", event.message.data);
 			if(!object.is_singular) {
 				object.setValues({

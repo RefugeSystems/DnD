@@ -69,7 +69,7 @@ rsSystem.component("sysInfoGeneral", {
 		},
 		"populateControls": function() {
 			var entity = this.playerCharacter || this.getPlayerCharacter(),
-				character = this.info.character || this.info.caster, 
+				character = this.info.character || this.info.caster || this.info.user, 
 				object = this.info,
 				loading;
 
@@ -219,8 +219,11 @@ rsSystem.component("sysInfoGeneral", {
 					rsSystem.toPath("/map/" + this.info.id);
 					break;
 				case "assume":
-					this.universe.send("master:assume", {"entity": this.info.id});
-					rsSystem.toPath("/home", {"entity": this.info.id});
+					if(this.player.gm) {
+						this.universe.send("master:assume", {"entity": this.info.id});
+					} else if(this.info.played_by === this.player.id) {
+						this.universe.send("entity:assume", {"entity": this.info.id});
+					}
 					break;
 				case "obscure":
 					this.universe.send("master:obscure", {

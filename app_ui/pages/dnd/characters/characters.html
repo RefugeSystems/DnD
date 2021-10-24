@@ -1,0 +1,11 @@
+<div class="rs-page dnd-page dnd-characters">
+	<div class="player-entity column" v-for="entity in characters">
+		<div class="column-content">
+			<dnd-entity-overview :entity="entity" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-key="'_dndeoc:' + entity.id" :key="entity.id" />
+		</div>
+	</div>
+	<button class="dnd-character-create general rounded action" v-on:click="createPlayer()">
+		<span class="action-icon fas fa-user-plus"></span>
+		<span class="action-text">Character</span>
+	</button>
+</div>

@@ -91,8 +91,10 @@ rsSystem.component("DNDEntities", {
 					}
 				}
 			} else {
-				for(x=0; x<this.universe.listing.entity.length; x++) {
-					entity = this.universe.listing.entity[x];
+				// for(x=0; x<this.universe.listing.entity.length; x++) {
+					// entity = this.universe.listing.entity[x];
+				for(x=0; x<this.meeting.entities.length; x++) {
+					entity = this.universe.index.entity[this.meeting.entities[x]];
 					if(entity && !entity.disabled && entity.state !== "deceased" && !entity.is_preview && !entity.obscured && !entity.is_minion && entity.id !== this.player.attribute.playing_as) {
 						if(entity.played_by === this.player.id) {
 							played.push(entity);

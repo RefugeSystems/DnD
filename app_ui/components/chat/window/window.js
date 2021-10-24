@@ -4,6 +4,11 @@
  * @class chatWindow
  * @constructor
  * @module Components
+ * @param {RSUniverse} universe
+ * @param {RSPlayer} player
+ * @param {Object} configuration
+ * @param {RSUniverse} profile
+ * @param {ChatCore} chatCore
  */
 rsSystem.component("chatWindow", {
 	"inherit": true,
@@ -29,8 +34,12 @@ rsSystem.component("chatWindow", {
 				return {};
 			}
 		},
+		"forceChannel": {
+			"required": false,
+			"type": String
+		},
 		"chatCore": {
-			"requried": true,
+			"required": true,
 			"type": RSChatCore
 		}
 	},
@@ -93,8 +102,14 @@ rsSystem.component("chatWindow", {
 			this.selectGroup("all");
 		}
 		this.chatCore.$on("received", this.receive);
+		if(this.forceChannel) {
+			this.selectGroup(this.forceChannel);
+		}
 	},
 	"methods": {
+		"altSend": function() {
+			this.$emit("altsend", this.storage.message);
+		},
 		"processDrop": function(event) {
 			var data = rsSystem.dragndrop.general.drop();
 			// if(data && (data = this.universe.getObject(data))) {

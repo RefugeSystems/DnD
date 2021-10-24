@@ -110,6 +110,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "chat_top",
+					"label": "Chat Window to Top",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "enable_cache",
 					"label": "Enable Cache",
 					"base": this.profile,

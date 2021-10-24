@@ -47,15 +47,18 @@ rsSystem.component("dndMasterPlayers", {
 	},
 	"data": function() {
 		var data = {};
-
+		data.offline = false;
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"toggleOffline": function() {
+			Vue.set(this, "offline", !this.offline);
+		},
 		"displayed": function(player) {
-			if(player.id.indexOf(":preview:") === -1) {
+			if(player.id.indexOf(":preview:") === -1 && (player.connections || this.offline)) {
 				return true;
 			}
 			return false;

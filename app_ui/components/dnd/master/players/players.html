@@ -7,6 +7,9 @@
 			<span class="player-connections" :class="play.connections?'connected':''">{{play.connections || 0}}</span>
 			<button class="flat action player-name">{{play.name}}</button>
 		</div>
+		<button class="rounded general action offline-toggle" v-on:click="toggleOffline()">
+			<span class="fa-users" :class="offline?'fas':'fal'"></span>
+		</button>
 	</div>
 </div>
 
