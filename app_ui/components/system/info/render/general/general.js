@@ -132,6 +132,12 @@ rsSystem.component("sysInfoGeneral", {
 						});
 					}
 					if(entity) {
+						// this.controls.push({
+						// 	"title": "Create knowledge for this " + entity.name,
+						// 	"icon": "fas fa-brain",
+						// 	"type": "button",
+						// 	"action": "knowing"
+						// });
 						switch(this.info._class) {
 							case "effect":
 								if(entity.effects.indexOf(this.info.id) !== -1 && (!this.info.is_locked || this.player.gm)) {
@@ -140,6 +146,28 @@ rsSystem.component("sysInfoGeneral", {
 										"icon": "fas fa-ban",
 										"type": "button",
 										"action": "revoke"
+									});
+								}
+								break;
+							case "entity":
+								if(this.info.owned && this.info.owned[this.player.id]) {
+									this.controls.push({
+										"title": "Open inventory of " + entity.name,
+										"icon": "fas fa-backpack",
+										"type": "button",
+										"action": "inventory"
+									});
+									this.controls.push({
+										"title": "Open spellbook for " + entity.name,
+										"icon": "fas fa-book-spells",
+										"type": "button",
+										"action": "spellbook"
+									});
+									this.controls.push({
+										"title": "Play as " + entity.name,
+										"icon": "fas fa-user",
+										"type": "button",
+										"action": "assume"
 									});
 								}
 								break;
@@ -272,6 +300,21 @@ rsSystem.component("sysInfoGeneral", {
 							}
 						}
 					});
+					break;
+				case "knowing":
+					rsSystem.EventBus.$emit("dialog-open", {
+						"component": "dndDialogKnowing",
+						"entity": entity.id,
+						"finish": (target) => {
+							console.log("Finish: ", target);
+						}
+					});
+					break;
+				case "inventory":
+					rsSystem.toPath("/inventory/" + this.info.id);
+					break;
+				case "spellbook":
+					rsSystem.toPath("/spells/" + this.info.id);
 					break;
 				case "equip":
 					this.equipItem(this.info.id, entity);
