@@ -967,6 +967,16 @@ class Universe extends EventEmitter {
 	forwardTime(increment, lock) {
 		this.toTime((this.time || 0) + increment, lock);
 	}
+
+	/**
+	 * 
+	 * @method setTime
+	 * @param {Integer} end [description]
+	 * @param {Boolean} lock The Timeline. Pass as true to jump times without processing or timeline jumping.
+	 */
+	setTime(end, lock) {
+		this.toTime(end, lock);
+	}
 	
 	/**
 	 * 
@@ -974,7 +984,7 @@ class Universe extends EventEmitter {
 	 * @param {Integer} end [description]
 	 * @param {Boolean} lock The Timeline. Pass as true to jump times without processing or timeline jumping.
 	 */
-	 toTime(end, lock) {
+	 toTime(end, lock, timeline) {
 		var reverse = end < this.time;
 
 		if(!lock) {
@@ -1032,14 +1042,16 @@ class Universe extends EventEmitter {
 				}
 			});
 
-			if(reverse && !this.reversing) {
-				this.reversing = true;
-				this.timeline++;
-				this.manager.setting.object["setting:timeline"].setValues({
-					"value": this.timeline
-				});
-			} else if(!reverse && this.reversing) {
-				this.reversing = false;
+			if(timeline === undefined) {
+				if(reverse && !this.reversing) {
+					this.reversing = true;
+					this.timeline++;
+					this.manager.setting.object["setting:timeline"].setValues({
+						"value": this.timeline
+					});
+				} else if(!reverse && this.reversing) {
+					this.reversing = false;
+				}
 			}
 		}
 
@@ -1047,6 +1059,19 @@ class Universe extends EventEmitter {
 		this.manager.setting.object["setting:time"].setValues({
 			"value": this.time
 		});
+		if(timeline && this.timeline !== timeline) {
+			this.timeline = timeline;
+			this.manager.setting.object["setting:timeline"].setValues({
+				"value": this.timeline
+			});
+		}
+
+		if(lock) {
+			this.emit("time:changed", {
+				"timeline": this.timeline,
+				"time": this.time
+			});
+		}
 	}
 
 	/**

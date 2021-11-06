@@ -99,6 +99,13 @@ rsSystem.component("rsTableControls", {
 				"source": this.source
 			});
 		},
+		/**
+		 * 
+		 * @method exportCorpus
+		 */
+		"exportCorpus": function() {
+			this.$emit("download");
+		},
 		"toggleSelected": function() {
 			if(this.storage.filter === ":selected") {
 				Vue.set(this.storage, "filter", this.flip || "");

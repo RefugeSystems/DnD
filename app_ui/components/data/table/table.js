@@ -1,4 +1,3 @@
-
 /**
  * 
  * 
@@ -22,7 +21,8 @@
 rsSystem.component("rsTable", {
 	"inherit": true,
 	"mixins": [
-		rsSystem.components.StorageController
+		rsSystem.components.StorageController,
+		rsSystem.components.RSShowdown
 	],
 	"props": {
 		"universe": {
@@ -330,13 +330,82 @@ rsSystem.component("rsTable", {
 			html += "<ul>";
 		},
 		"getValue": function(field, value) {
+			var referenced,
+				loading,
+				buffer,
+				load,
+				text,
+				i,
+				j;
+
 			if(field.inheritable) {
-				var referenced = this.universe.getObject(value);
+				referenced = this.universe.getObject(value);
 				if(referenced && !referenced.disabled && !referenced.is_preview) {
 					return referenced.name || referenced.id;
 				}
 			}
 			return value;
+		},
+		"exportCorpus": function(title) {
+			var selection = this.storage.selected?Object.keys(this.storage.selected):[],
+				appendTo = $(document).find("#anchors")[0],
+				anchor = document.createElement("a"),
+				exporting = {},
+				checking = {},
+				classes = [],
+				source,
+				record,
+				i,
+				j;
+			
+			exporting.classes = [];
+			exporting.fields = this.headers;
+			exporting.export = [];
+			if(!title) {
+				if(selection.length) {
+					title = document.title + ".selection";
+				} else {
+					title = document.title + ".filtered";
+				}
+			}
+			if(selection.length) {
+				source = [];
+				this.universe.transcribeInto(selection, source);
+			} else {
+				source = this.corpus;
+			}
+			title = title.replace(/ /g, "_").toLowerCase();
+	
+			console.log("Exporting: ", this);
+			for(i=0; i<source.length; i++) {
+				if(!checking[source[i]._class]) {
+					checking[source[i]._class] = true;
+					classes.push(source[i]._class);
+				}
+				if(this.storage.filter_exports) {
+					// Restrict to displayed Headers
+					record = {};
+					record.id = source[i].id;
+					for(j=0; j<this.headers.length; j++) {
+						record[this.headers[j].id] = source[i][this.headers[j].id];
+					}
+					exporting.export.push(record);
+				} else {
+					// Export Entire Object
+					exporting.export.push(source[i]._data);
+				}
+			}
+			for(i=0; i<classes.length; i++) {
+				exporting.classes.push(this.universe.index.classes[classes[i]]);
+			}
+	
+			appendTo.appendChild(anchor);
+			anchor.href = URL.createObjectURL(new Blob([JSON.stringify({"export": exporting}, null, "\t")]));
+			anchor.download = title + "." + Date.now() + ".json";
+			anchor.click();
+			
+			URL.revokeObjectURL(anchor.href);
+			appendTo.removeChild(anchor);
 		},
 		/**
 		 * 

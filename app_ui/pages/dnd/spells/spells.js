@@ -229,6 +229,78 @@ rsSystem.component("DNDSpells", {
 				}
 			}
 
+			this.controls.push({
+				"title": "Acquire Additional Spells",
+				"icon": "fas fa-book-open",
+				"process": () => {
+					var knowns = this.universe.transcribeInto(this.entity.spells_known, []),
+						details = {},
+						known = {},
+						object,
+						i;
+		
+					details.title = this.entity.name;
+					details.component = "dndDialogList";
+					details.sections = ["no_school", "known"];
+					details.cards = {
+						"no_school": {
+							"name": "No School",
+							"icon": "fas fa-cube"
+						},
+						"known": {
+							"name": "Already Known",
+							"icon": "fas fa-cube"
+						}
+					};
+					details.limit = 10,
+					details.data = {
+						"no_school": [],
+						"known": []
+					};
+		
+					details.activate = (section, object) => {
+						if(!known[object.id]) {
+							this.universe.send("spells:grant", {
+								"entities": [this.entity.id],
+								"spells": [object.id]
+							});
+						} else {
+							this.info(object);
+							console.log("Already Known");
+						}
+					};
+					
+					for(i=0; i<knowns.length; i++) {
+						object = knowns[i];
+						known[object.id] = true;
+						if(object.parent) {
+							known[object.parent] = true;
+						}
+					}
+
+					for(i=0; i<this.universe.listing.spell.length; i++) {
+						object = this.universe.listing.spell[i];
+						if(object && !object.disabled && !object.is_disabled && !object.is_copy && (object.selectable || object.is_selectable)) {
+							if(known[object.id]) {
+								details.data.known.push(object);
+							} else if(object.type) {
+								if(!details.data[object.type]) {
+									details.data[object.type] = [];
+									details.cards[object.type] = {};
+									details.cards[object.type].icon = this.universe.index.type[object.type].icon || "fas fa-cube";
+									details.cards[object.type].name = this.universe.index.type[object.type].name || object.type;
+								}
+								details.data[object.type].push(object);
+							} else {
+								details.data.no_school.push(object);
+							}
+						}
+					}
+		
+					console.log("Open Details: ", details);
+					rsSystem.EventBus.$emit("dialog-open", details);
+				}
+			});
 			if(preparable.length) {
 				this.controls.push({
 					"title": "Prepare Spells",

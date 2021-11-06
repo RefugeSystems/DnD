@@ -38,8 +38,12 @@
 			<option :value="40">40</option>
 			<option :value="50">50</option>
 		</select>
+		<button class="ctrl selections download" v-if="storage.download_available" v-on:click="exportCorpus()" title="Download the current filtered dataset">
+			<span class="fas fa-download"></span>
+		</button>
 		<button class="ctrl selections configure" v-on:click="configureTable()" title="Configure this tables columns and rows">
 			<span class="far fa-cog"></span>
 		</button>
 	</div>
+	<div class="dlanchors"></div>
 </div>

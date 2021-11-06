@@ -49,6 +49,10 @@ module.exports.initialize = function(universe) {
 						}
 						subtractions[character.id].push(effect.id);
 					}
+					effect.setValues({
+						"revoked": universe.time,
+						"is_deletable": true
+					});
 				}
 			}
 		}

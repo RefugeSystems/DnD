@@ -120,6 +120,9 @@ rsSystem.component("rsTableConfigure", {
 		}
 	},
 	"methods": {
+		"toggleDownload": function() {
+			Vue.set(this.storage, "download_available", !this.storage.download_available);
+		},
 		"resetHeaders": function() {
 			this.storage.headings.splice(0);
 			this.storage.headings.push.apply(this.storage.headings, this.storage.defaultHeaders || ["name"]);

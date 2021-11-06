@@ -72,7 +72,7 @@ module.exports.initialize = function(universe) {
 					if(typeof(entity) === "string") {
 						entity = universe.manager.entity.object[entity];
 					}
-					if(entity && !entity.disabled && !entity.is_preview) {
+					if(entity && !entity.disabled && !entity.is_preview && meeting.entities.indexOf(entity.id) === -1) {
 						changing.push(entity.id);
 					}
 				}

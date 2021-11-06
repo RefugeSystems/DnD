@@ -24,7 +24,14 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("player:knowledge:grant", function(event) {
 		var entities = event.message.data.entities,
-			knowledges = event.message.data.knowledges;
+			knowledges = event.message.data.knowledges,
+			meeting = universe.manager.setting.object["setting:meeting"];
+
+		if(meeting && meeting.value) {
+			meeting = meeting.value;
+		} else {
+			meeting = false;
+		}
 
 		if(event.player.gm && entities && entities.length) {
 			entities.forEach(function(entity) {
@@ -37,12 +44,16 @@ module.exports.initialize = function(universe) {
 						knowledge,
 						i;
 
-					mask.acquired = universe.time;
 					mask.template_process = {};
-					mask.is_template = false;
+					mask.character = entity.id;
 					mask.caster = entity.id;
 					mask.user = entity.id;
+					mask.is_template = false;
 					mask.is_copy = true;
+					mask.acquired = universe.time;
+					if(meeting) {
+						mask.acquired_in = meeting;
+					}
 
 					for(i=0; i<knowledges.length; i++) {
 						knowledge = knowledges[i];

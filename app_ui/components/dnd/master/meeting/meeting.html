@@ -60,7 +60,16 @@
 			</button>
 		</div>
 		<div class="calendar-date">
-			<span>{{renderedDate}}</span>
+			<div v-on:click="toggleTimeStamp()">{{renderedDate}}</div>
+			<div v-if="storage.show_time">
+				<div>{{universe.time}}</div>
+				<input v-model="storage.new_time" />
+				<div>{{universe.calendar.toDisplay(storage.new_time)}}</div>
+				<button class="general rounded action set-time" v-on:click="setTimeTo(storage.new_time)">
+					<span class="action-icon fas fa-clock"></span>
+					<span>Set Time</span>
+				</button>
+			</div>
 		</div>
 		<div class="flex h wrap master-actions">
 			<button class="rounded general quick action" v-on:click="setStartDate()">
@@ -91,7 +100,7 @@
 			<span class="fas fa-calendar-plus"></span>
 		</button>
 		<select class="select-meeting grow-1" v-model="id">
-			<option v-for="meet in meetings" :value="meet.id">{{meet.name}}</option>
+			<option v-for="meet in meetings" :value="meet.id" :title="meet.id">{{meet.name}}</option>
 		</select>
 	</div>
 	<!-- <div class="flex v" v-if="entities.length">

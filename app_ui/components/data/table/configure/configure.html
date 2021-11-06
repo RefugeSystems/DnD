@@ -31,6 +31,10 @@
 	</div>
 	<div class="options flex v">
 		<div class="option flex h">
+			<span>Sorting Direction: </span>
+			<span>{{storage.reverse === 1?"Forward":"Backward"}}</span>
+		</div>
+		<div class="option flex h">
 			<span>Rows per Page: </span>
 			<select v-model.number="storage.rows" title="Rows per page">
 				<option v-for="i in 100" :value="i">{{i}}</option>
@@ -40,9 +44,10 @@
 			<span>Sorting Column: </span>
 			<span>{{getFieldName(storage.key) || "No Active Sort"}}</span>
 		</div>
-		<div class="option flex h">
-			<span>Sorting Direction: </span>
-			<span>{{storage.reverse === 1?"Forward":"Backward"}}</span>
+		<div class="option flex h" v-on:click="toggleDownload()">
+			<button class="flat rounded action far" :class="storage.download_available?'fa-check-square rs-light-green':'fa-square rs-white'">
+			</button>
+			<span> Show Download</span>
 		</div>
 	</div>
 </div>

@@ -81,7 +81,7 @@ rsSystem.component("DNDMasterScreen", {
 			Vue.set(this.storage.dynamicTable, "label", noun.capitalize());
 			for(i=0; i<this.universe.listing[noun].length; i++) {
 				buffer = this.universe.listing[noun][i];
-				if(buffer && !buffer.disabled && !buffer.is_preview && !buffer.is_copy && !buffer.is_template) {
+				if(buffer && !buffer.disabled && !buffer.is_preview && !buffer.is_copy) {
 					available.push(buffer);
 				}
 			}

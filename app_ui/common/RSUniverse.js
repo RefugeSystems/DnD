@@ -1039,6 +1039,7 @@ class RSUniverse extends EventEmitter {
 		}
 	}
 	
+	/*
 	exportData() {
 		var appendTo = $("#anchors")[0],
 			anchor = document.createElement("a");
@@ -1048,6 +1049,69 @@ class RSUniverse extends EventEmitter {
 		anchor.download = "universe_complete." + Date.now() + ".json";
 
 		anchor.click();
+		URL.revokeObjectURL(anchor.href);
+		appendTo.removeChild(anchor);
+	}
+	*/
+	
+	exportData(title) {
+		var appendTo = $(document).find("#anchors")[0],
+			anchor = document.createElement("a"),
+			keys = Object.keys(this.listing),
+			exporting = {},
+			i,
+			j;
+			
+		exporting.classes = [];
+		exporting.fields = [];
+		exporting.export = [];
+		if(!title) {
+			title = document.title || "universe";
+		}
+		title = title.replace(/ /g, "_").toLowerCase();
+
+		for(i=0; i<keys.length; i++) {
+			for(j=0; j<this.listing[keys[i]].length; j++) {
+				if(keys[i] === "classes" || keys[i] === "fields") {
+					exporting[keys[i]].push(this.listing[keys[i]][j]);
+				} else {
+					exporting.export.push(this.listing[keys[i]][j]._data);
+				}
+			}
+		}
+
+		appendTo.appendChild(anchor);
+		anchor.href = URL.createObjectURL(new Blob([JSON.stringify({"export": exporting}, null, "\t")]));
+		anchor.download = title + ".export." + Date.now() + ".json";
+		anchor.click();
+		
+		URL.revokeObjectURL(anchor.href);
+		appendTo.removeChild(anchor);
+	}
+	
+	exportFilteredData(title, data) {
+		var appendTo = $(document).find("#anchors")[0],
+			anchor = document.createElement("a"),
+			exporting = {},
+			i;
+			
+		exporting.classes = [];
+		exporting.fields = [];
+		exporting.export = [];
+		if(!title) {
+			title = document.title || "universe";
+		}
+		title = title.replace(/ /g, "_").toLowerCase();
+
+		for(i=0; i<data.length; i++) {
+			exporting.export.push(data[i]);
+		}
+
+		appendTo.appendChild(anchor);
+		anchor.href = URL.createObjectURL(new Blob([JSON.stringify({"export": exporting}, null, "\t")]));
+		anchor.download = title + ".export." + Date.now() + ".json";
+		anchor.click();
+		
 		URL.revokeObjectURL(anchor.href);
 		appendTo.removeChild(anchor);
 	}
@@ -1119,41 +1183,6 @@ class RSUniverse extends EventEmitter {
 		return destination;
 	}
 	
-	exportData(title) {
-		var appendTo = $(document).find("#anchors")[0],
-			anchor = document.createElement("a"),
-			keys = Object.keys(this.listing),
-			exporting = {},
-			i,
-			j;
-			
-		exporting.classes = [];
-		exporting.fields = [];
-		exporting.export = [];
-		if(!title) {
-			title = document.title || "universe";
-		}
-		title = title.replace(/ /g, "_").toLowerCase();
-
-		for(i=0; i<keys.length; i++) {
-			for(j=0; j<this.listing[keys[i]].length; j++) {
-				if(keys[i] === "classes" || keys[i] === "fields") {
-					exporting[keys[i]].push(this.listing[keys[i]][j]);
-				} else {
-					exporting.export.push(this.listing[keys[i]][j]._data);
-				}
-			}
-		}
-
-		appendTo.appendChild(anchor);
-		anchor.href = URL.createObjectURL(new Blob([JSON.stringify({"export": exporting}, null, "\t")]));
-		anchor.download = title + ".export." + Date.now() + ".json";
-		anchor.click();
-		
-		URL.revokeObjectURL(anchor.href);
-		appendTo.removeChild(anchor);
-	}
-	
 	checkVersion() {
 		if(this.version != rsSystem.version) {
 			var ui = rsSystem.version.split("."),
@@ -1179,7 +1208,7 @@ class RSUniverse extends EventEmitter {
 						}]
 					}
 				});
-			} else if(ui[1] !== app[1] && !this.state.version_warning) {
+			} else {
 				this.state.version_warning = true;
 				navigator.serviceWorker.controller.postMessage({
 					"action": "update"
@@ -1188,7 +1217,7 @@ class RSUniverse extends EventEmitter {
 					"id": "app:update",
 					"message": "New Version Available",
 					"icon": "fas fa-sync rs-lightyellow",
-					"timeout": 20000,
+					"anchored": true,
 					"emission": {
 						"type": "dialog-open",
 						"title": "Refresh page for new version?",
@@ -1203,9 +1232,6 @@ class RSUniverse extends EventEmitter {
 						}]
 					}
 				});
-			} else if(!this.state.version_warning) {
-				this.state.version_warning = true;
-				rsSystem.log.warn("New version available");
 			}
 		}
 	}
