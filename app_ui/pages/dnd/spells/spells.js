@@ -280,15 +280,21 @@ rsSystem.component("DNDSpells", {
 
 					for(i=0; i<this.universe.listing.spell.length; i++) {
 						object = this.universe.listing.spell[i];
-						if(object && !object.disabled && !object.is_disabled && !object.is_copy && (object.selectable || object.is_selectable)) {
+						if(object && !object.disabled && !object.is_disabled && !object.is_copy && !object.is_preview && !object.is_deprecated && (object.selectable || object.is_selectable)) {
 							if(known[object.id]) {
 								details.data.known.push(object);
 							} else if(object.type) {
 								if(!details.data[object.type]) {
 									details.data[object.type] = [];
 									details.cards[object.type] = {};
-									details.cards[object.type].icon = this.universe.index.type[object.type].icon || "fas fa-cube";
-									details.cards[object.type].name = this.universe.index.type[object.type].name || object.type;
+									if(this.universe.index.type[object.type]) {
+										details.cards[object.type].icon = this.universe.index.type[object.type].icon || "fas fa-cube";
+										details.cards[object.type].name = this.universe.index.type[object.type].name || object.type;
+									} else {
+										details.cards[object.type].icon = "fas fa-cube";
+										details.cards[object.type].name = "Unknown: " + object.type;
+									}
+									details.sections.push(object.type);
 								}
 								details.data[object.type].push(object);
 							} else {
