@@ -294,7 +294,7 @@ rsSystem.component("DNDSpells", {
 										details.cards[object.type].icon = "fas fa-cube";
 										details.cards[object.type].name = "Unknown: " + object.type;
 									}
-									details.sections.push(object.type);
+									details.sections.unshift(object.type);
 								}
 								details.data[object.type].push(object);
 							} else {
