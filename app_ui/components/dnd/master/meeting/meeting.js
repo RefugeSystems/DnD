@@ -105,7 +105,7 @@
 			},
 			"id": function(newValue, oldValue) {
 				console.log("New ID: ", newValue, oldValue);
-				if(newValue && newValue !== this.active.id) {
+				if(newValue && (!this.active || newValue !== this.active.id)) {
 					this.universe.send("meeting:activate", {
 						"meeting": newValue
 					});

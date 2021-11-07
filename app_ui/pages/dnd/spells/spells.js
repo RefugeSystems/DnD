@@ -250,23 +250,28 @@ rsSystem.component("DNDSpells", {
 						"known": {
 							"name": "Already Known",
 							"icon": "fas fa-cube"
+						},
+						"unavailable": {
+							"name": "Unavailable",
+							"icon": "fas fa-cube"
 						}
 					};
 					details.limit = 10,
 					details.data = {
+						"unavailable": [],
 						"no_school": [],
 						"known": []
 					};
 		
 					details.activate = (section, object) => {
-						if(!known[object.id]) {
+						if(!known[object.id] && (!object.archetypes || object.archetypes.hasCommon(this.entity.archetypes))) {
 							this.universe.send("spells:grant", {
 								"entities": [this.entity.id],
 								"spells": [object.id]
 							});
 						} else {
 							this.info(object);
-							console.log("Already Known");
+							console.log("Already Known or Unavailable");
 						}
 					};
 					
@@ -283,6 +288,8 @@ rsSystem.component("DNDSpells", {
 						if(object && !object.disabled && !object.is_disabled && !object.is_copy && !object.is_preview && !object.is_deprecated && (object.selectable || object.is_selectable)) {
 							if(known[object.id]) {
 								details.data.known.push(object);
+							} else if(object.archetypes && !object.archetypes.hasCommon(this.entity.archetypes)) {
+								details.data.unavailable.push(object);
 							} else if(object.type) {
 								if(!details.data[object.type]) {
 									details.data[object.type] = [];

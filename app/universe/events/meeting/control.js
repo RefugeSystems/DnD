@@ -116,7 +116,6 @@ module.exports.initialize = function(universe) {
 				generate.time = universe.time;
 				universe.createObject(generate, function(err, meet) {
 					if(err) {
-						console.log("Err");
 						universe.emit("send", {
 							"type": "notice",
 							"mid": "generate:meeting",
