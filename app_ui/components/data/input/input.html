@@ -1,6 +1,6 @@
 <div class="rs-input rs-component">
-	<input v-model="buffer" :type="type" v-on:keydown="press()"/>
-	<div class="flag" v-if="flagged">
+	<input v-model="buffer" :type="type" v-on:keydown="press($event)" :placeholder="placeholder"/>
+	<div class="flag">
 		<span :class="flagged"></span>
 	</div>
 </div>

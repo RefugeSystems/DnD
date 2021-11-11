@@ -189,7 +189,14 @@ rsSystem.component("DNDKnowledge", {
 			return "";
 		};
 
+		data.available_types = [];
 		data.selections = [];
+		data.renderedKnowns = [];
+		data.knowns = [];
+
+		data.timeline = {};
+		data.timeline.events = [];
+		data.timeline.tags = {};
 
 		return data;
 	},
@@ -207,8 +214,143 @@ rsSystem.component("DNDKnowledge", {
 			"null_option": "Change State...",
 			"options": this.classifications.states
 		});
+		if(this.storage.type_known === undefined) {
+			Vue.set(this.storage, "type_known", "");
+		}
+
+		this.buildEvents();
+		this.update();
 	},
 	"methods": {
+		"fillKnowns": function() {
+			var matrix = Object.keys(this.entity.knowledge_matrix),
+				mapped = {},
+				knowledge,
+				object,
+				i,
+				j;
+
+			this.knowns.splice(0);
+			if(this.storage.type_known) {
+				for(i=0; i<matrix.length; i++) {
+					if(!mapped[matrix[i]]) {
+						mapped[matrix[i]] = true;
+						object = this.universe.getObject(matrix[i]);
+						if(object && (object.type === this.storage.type_known || (object.types && object.types.indexOf(this.storage.type_known) !== -1) || object._class === this.storage.type_known)) {
+							this.knowns.push(object);
+						}
+					}
+				}
+				this.knowns.sort(rsSystem.utility.sortByName);
+			}
+			this.renderKnowns();
+		},
+		"renderKnowns": function() {
+			var filtering,
+				i;
+
+			this.renderedKnowns.splice(0);
+
+			if(this.storage.filter_knowns) {
+				filtering = this.storage.filter_knowns.toLowerCase();
+				for(i=0; i<this.knowns.length; i++)	 {
+					if(this.knowns[i]._search.indexOf(filtering) !== -1) {
+						this.renderedKnowns.push(this.knowns[i]);
+					}
+				}
+			} else {
+				this.renderedKnowns.push.apply(this.renderedKnowns, this.knowns);
+			}
+		},
+		"buildEvents": function() {
+			var event,
+				i;
+
+			this.timeline.events.splice(0);
+			for(i=0; i<this.universe.listing.event.length; i++) {
+				event = this.universe.listing.event[i];
+				if(event.associations && event.is_disabled && event.associations.indexOf(this.entity.id) !== -1) {
+					this.addEventPoint(event);
+				}
+			}
+
+			for(i=0; i<this.universe.listing.skirmish.length; i++) {
+				event = this.universe.listing.skirmish[i];
+				if(event.entities && event.entities.indexOf(this.entity.id) !== -1) {
+					this.addEventPoint(event);
+				}
+			}
+
+			for(i=0; i<this.entity.knowledges.length; i++) {
+				event = this.universe.index.knowledge[this.entity.knowledges[i]];
+				if(event) {
+					this.addEventPoint(event, event.name, "fa-solid fa-brain-circuit");
+				}
+			}
+		},
+		"addEventPoint": function(object, name, icon, time, end) {
+			time = time || object.time || object.acquired;
+			if(time) {
+				this.timeline.events.push({
+					"name": name || object.name,
+					"icon": icon || object.icon,
+					"end": end || object.time_end,
+					"point": object,
+					"time": time
+				});
+			}
+		},
+		"update": function(event) {
+			if(!event) {
+				var matrix = Object.keys(this.entity.knowledge_matrix),
+					mapped = {},
+					types = {},
+					object,
+					type,
+					i,
+					j;
+
+				this.available_types.splice(0);
+				this.knowns.splice(0);
+				for(i=0; i<matrix.length; i++) {
+					if(!mapped[matrix[i]]) {
+						mapped[matrix[i]] = true;
+						object = this.universe.getObject(matrix[i]);
+						if(object) {
+							if(object.type && !types[object.type]) {
+								types[object.type] = true;
+								this.available_types.push(this.universe.index.type[object.type]);
+							}
+							if(object._class && !types[object._class]) {
+								types[object._class] = true;
+								this.available_types.push(this.universe.index.classes[object._class]);
+							}
+							if(object.types && this.available_types.length < 50) {
+								for(j=0; j<object.types.length; j++) {
+									if(object.types[j] && !types[object.types[j]]) {
+										types[object.types[j]] = true;
+										if(type = this.universe.index.type[object.types[j]]) {
+											this.available_types.push(type);
+										} else {
+											// this.available_types.push({
+											// 	"name": object.types[j],
+											// 	"id": object.types[j]
+											// });
+										}
+									}		
+								}
+							}
+							if(object.type === this.storage.type_known || (object.types && object.types.indexOf(this.storage.type_known) !== -1)) {
+								this.knowns.push(object);
+							}
+						}
+					}
+				}
+				this.available_types.sort(rsSystem.utility.sortByName);
+				this.knowns.sort(rsSystem.utility.sortByName);
+				this.fillKnowns();
+			}
+		}
 	},
 	"beforeDestroy": function() {
 		/*

@@ -1,7 +1,23 @@
 <div class="rs-page dnd-page dnd-knowledge">
 	<div class="flex v" v-if="entity">
-		<h1 class="today">Today: {{today}}</h1>
-		<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :selections="selections" label="Knowledge" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" />
+		<rs-timeline :universe="universe" :events="timeline.events" :active-tags="timeline.tags"></rs-timeline>
+		<div class="overview flex h">
+			<div class="known-listing">
+				<div class="known-listing-type flex v">
+					<rs-input type="text" v-model="storage.filter_knowns" placeholder="Filter items..." v-on:input="renderKnowns()"></rs-input>
+					<select v-model="storage.type_known" v-on:change="fillKnowns()">
+						<option value="">Hide Knowns</option>
+						<option :value="type.id" v-for="type in available_types">{{type.name}}</option>
+					</select>
+				</div>
+				<div class="known-list flex v">
+					<button class="known-item rounded general flat action" v-linkable="known.id" v-for="known in renderedKnowns" v-on:click="info(known)">
+						<span class="">{{known.name}}</span>
+					</button>
+				</div>
+			</div>
+			<rs-table :universe="universe" :source="knowledge" storage-key="dnd:knowledge" :selections="selections" label="Knowledge" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" />
+		</div>
 	</div>
 	<div class="general-warning" v-else>
 		<span class="rs-lightyellow fas fa-exclamation-triangle"></span>

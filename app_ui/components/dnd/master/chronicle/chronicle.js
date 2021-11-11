@@ -159,6 +159,7 @@ rsSystem.component("dndChronicleReadout", {
 		}
 	},
 	"beforeDestroy": function() {
+		this.universe.$off("chronicled", this.receiveEvent);
 		this.universe.$off("entity:roll", this.receiveRoll);
 		/*
 		this.universe.$off("universe:modified", this.update);

@@ -15,13 +15,20 @@ rsSystem.component("rsInput", {
 	],
 	"props": {
 		"type": {
-			"default": "text",
+			"default": function() {
+				return "";
+			},
 			"type": String
+		},
+		"placeholder": {
+			"type": String,
+			"default": ""
 		},
 		"value": {
 		},
 		"delay": {
-			"type": Number
+			"type": Number,
+			"default": 300
 		},
 		"storage": {
 			"type": Object
@@ -39,7 +46,7 @@ rsSystem.component("rsInput", {
 		data.buffer = this.value || "";
 		data.timeout = null;
 		data.update = 0;
-		data.flagged = "";
+		data.flagged = "fas fa-search";
 
 		return data;
 	},
@@ -49,11 +56,13 @@ rsSystem.component("rsInput", {
 	"methods": {
 		"changed": function() {
 			this.$emit("input", this.buffer);
-			if(this.flagged) {
-				Vue.set(this, "flagged", "");
-				this.timeout = null;
-				this.update = 0;
-			}
+			Vue.set(this, "flagged", "fas fa-search");
+			this.timeout = null;
+			this.update = 0;
+		},
+		"clearFilter": function() {
+			Vue.set(this, "buffer", "");
+			this.$emit("input", this.buffer);
 		},
 		"process": function() {
 			if(this.delay) {
@@ -66,11 +75,20 @@ rsSystem.component("rsInput", {
 				this.changed();
 			}
 		},
-		"press": function() {
+		"press": function(event) {
 			this.update = Date.now();
-			if(this.timeout === null && this.delay) {
-				this.timeout = setTimeout(this.process, this.delay);
-				Vue.set(this, "flagged", "fas fa-spinner fa-pulse");
+			if(event.key === "Enter") {
+				if(this.timeout) {
+					clearTimeout(this.timeout);
+				}
+				this.changed();
+			} else if(event.key === "Escape") {
+				this.clearFilter();
+			} else {
+				if(this.timeout === null && this.delay) {
+					this.timeout = setTimeout(this.process, this.delay);
+					Vue.set(this, "flagged", "fas fa-spinner fa-pulse");
+				}
 			}
 		}
 	},

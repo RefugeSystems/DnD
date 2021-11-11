@@ -37,7 +37,7 @@ module.exports.initialize = function(universe) {
 				}
 			}
 
-			if(spell.dc === undefined) {
+			if(spell.dc === undefined || spell.dc === null) {
 				difficulty = source.spell_dc;
 			} else {
 				difficulty = spell.dc;

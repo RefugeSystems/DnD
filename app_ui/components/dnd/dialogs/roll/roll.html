@@ -213,7 +213,7 @@
 	</div>
 	<div class="roll-bottom">
 		<div class="roll-complete flex h">
-			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendResults(resists)" :title="actionTitling">
+			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendResults()" :title="actionTitling">
 				<span :class="getSendResultIcon()"></span>
 				<span>{{getFinishName()}}</span>
 			</button>

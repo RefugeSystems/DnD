@@ -946,6 +946,20 @@ rsSystem.component("dndDialogRoll", {
 						perform.targets = keys;
 					}
 				}
+				if(this.details.target) {
+					if(perform.targets) {
+						perform.targets.push(this.details.target);
+					} else {
+						perform.targets = [this.details.target];
+					}
+				}
+				if(this.details.targets) {
+					if(perform.targets) {
+						perform.targets.push.apply(perform.targets, this.details.target);
+					} else {
+						perform.targets = [].concat(this.details.targets);
+					}
+				}
 				if(this.source) {
 					perform.source = this.source.id;
 				}
