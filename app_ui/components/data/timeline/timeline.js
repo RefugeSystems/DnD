@@ -632,17 +632,19 @@ rsSystem.component("rsTimeline", {
 
 		},
 		"panTimeline": function(event) {
-			// console.log("Pan: " + event.deltaX + " @" + event.velocityX, event);
-			var pan = -1 * event.deltaX;
-			// Vue.set(this.storage, "render_offset", this.storage.render_offset + this.widthToTimespan(pan));
-			// Vue.set(this, "jump", this.storage.render_offset + this.start);
-			this.render_velocity = this.widthToTimespan(event.velocityX * -200);
-			this.render_decelleration = this.render_velocity * -.1;
-			this.render_terminal = this.render_velocity * .01;
-			this.render_decelleration_step = 100;
-			// console.log("Velocity: " + this.render_velocity + " @" + this.render_decelleration);
-			// this.render_velocity = 0;
-			this.render();
+			if(0 < this.max_offset) { // Full timeline rendered?
+				// console.log("Pan: " + event.deltaX + " @" + event.velocityX, event);
+				var pan = -1 * event.deltaX;
+				// Vue.set(this.storage, "render_offset", this.storage.render_offset + this.widthToTimespan(pan));
+				// Vue.set(this, "jump", this.storage.render_offset + this.start);
+				this.render_velocity = this.widthToTimespan(event.velocityX * -200);
+				this.render_decelleration = this.render_velocity * -.1;
+				this.render_terminal = this.render_velocity * .01;
+				this.render_decelleration_step = 100;
+				// console.log("Velocity: " + this.render_velocity + " @" + this.render_decelleration);
+				// this.render_velocity = 0;
+				this.render();
+			}
 		},
 		"tracked": function(event) {
 			this.render_velocity = 0;
@@ -677,7 +679,7 @@ rsSystem.component("rsTimeline", {
 			this.render_mouse = x;
 			this.nearest = this.findNearest(x, y);
 
-			if(this.dragging !== false) {
+			if(this.dragging !== false && 0 < this.max_offset) {
 				width = -1 * (event.x - this.dragging);
 				this.setOffset(this.storage.render_offset + this.widthToTimespan(width));
 				this.dragging = event.x;
