@@ -6,6 +6,7 @@
 	width: 100%;
 
 	.timeline-container {
+		box-shadow: 0px 0px 10px inset black;
 		max-width: 100%;
 		height: 300px;
 		overflow: hidden;
@@ -13,9 +14,89 @@
 		min-width: 300px;
 	}
 
+	.rendering-pouch {
+		display: none;
+	}
+
 	.timeline-render {
 		position: relative;
 		height: 100%;
 		transition: width .5s;
+		z-index: 3;
+	}
+
+	.timeline-age {
+		position: absolute;
+		left: 1px;
+		bottom: 1px;
+		z-index: 5;
+		font-size: 17px;
+	}
+
+	.timeline-jump {
+		position: absolute;
+		right: 1px;
+		bottom: 1px;
+		z-index: 5;
+		font-size: 17px;
+		padding: 2px;
+		overflow: hidden;
+
+		.timeline-ctrl {
+			position: relative;
+			margin-right: 3px;
+		}
+		
+		.timeline-ctrl:last-child {
+			margin-right: 0px;
+		}
+		
+		button.timeline-ctrl {
+			height: 25px;
+			width: 30px;
+			font-size: 23px;
+			line-height: 23px;
+			padding: 0px;
+			color: @rsWhite;
+			border: 1px solid @rsWhite;
+			background-color: @rsBlack;
+			border-radius: 4px;
+			text-align: center;
+		}
+
+		.input-container {
+			background-color: white;
+			border-radius: 2px;
+		}
+
+		.icon {
+			z-index: 2;
+			right: 2px;
+			top: 2px;
+			font-size: 19px;
+			line-height: 19px;
+			color: white;
+		}
+
+		.jump-icon {
+			position: absolute;
+			z-index: 2;
+			right: 2px;
+			top: 2px;
+			font-size: 19px;
+			line-height: 19px;
+			color: black;
+		}
+
+		.jump-input {
+			position: relative;
+			z-index: 4;
+			width: 100px;
+			padding: 2px 20px 2px 2px;
+			border: 0px;
+			margin: 0px;
+			line-height: 21px;
+			background: transparent;
+		}
 	}
 }

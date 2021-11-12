@@ -289,3 +289,70 @@ if(!Array.prototype.hasCommon) {
 		this.sort(sortBySorters[field]);
 	};
 })();
+
+/**
+ * 
+ * @for CanvasRenderingContext2D
+ * @method roundRect
+ * @see https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-using-html-canvas
+ * @author jhoff
+ * @author Grumdrig
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} w
+ * @param {Number} h
+ * @param {Number} r
+ */
+if(!CanvasRenderingContext2D.prototype.roundRect) {
+	CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+		if (w < 2 * r) {
+			r = w / 2;
+		}
+		if (h < 2 * r) {
+			r = h / 2;
+		}
+		this.beginPath();
+		this.moveTo(x+r, y);
+		this.arcTo(x+w, y,   x+w, y+h, r);
+		this.arcTo(x+w, y+h, x,   y+h, r);
+		this.arcTo(x,   y+h, x,   y,   r);
+		this.arcTo(x,   y,   x+w, y,   r);
+		this.closePath();
+		return this;
+	};
+}
+
+
+/**
+ * 
+ * @for CanvasRenderingContext2D
+ * @method fillIcon
+ * @see https://stackoverflow.com/questions/63601531/draw-font-awesome-icons-to-canvas-based-on-class-names
+ * @author tdon
+ * @param {String} class_string For example "fas fa-bell rs-red"
+ * @param {Number} x
+ * @param {Number} y
+ */
+ if(!CanvasRenderingContext2D.prototype.fillIcon) {
+	CanvasRenderingContext2D.prototype.fillIcon = function (class_string, x, y) {
+		const i = document.createElement("i");
+		i.setAttribute("class", class_string);
+		document.body.appendChild(i);
+
+		// get the styles for the icon you just made
+		const iStyles = window.getComputedStyle(i),
+			iBeforeStyles = window.getComputedStyle(i, ":before"),
+
+			fontFamily = iStyles.getPropertyValue("font-family"),
+			fontWeight = iStyles.getPropertyValue("font-weight"),
+			fontSize = "40px", // just to make things a little bigger...
+
+			canvasFont = `${fontWeight} ${fontSize} ${fontFamily}`, // should be something like: '900 40px "Font Awesome 5 Pro"'
+			icon = String.fromCodePoint(iBeforeStyles.getPropertyValue("content").codePointAt(1)); // codePointAt(1) because the first character is a double quote
+
+		this.font = canvasFont;
+		this.textBaseline = "middle";
+		this.textAlign = "center";
+		this.fillText(icon, x, y);
+	};
+}

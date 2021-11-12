@@ -158,22 +158,22 @@
 		 */
 		"sortByTime": function(a, b) {
 			if((a.time === undefined || a.time === null) && b.time !== undefined && b.time !== null) {
-				return 1;
-			} else if((b.time === undefined || b.time === null) && a.time !== undefined && a.time !== null) {
 				return -1;
+			} else if((b.time === undefined || b.time === null) && a.time !== undefined && a.time !== null) {
+				return 1;
 			}
 			if(a.time !== undefined && b.time !== undefined && a.time !== null && b.time !== null) {
 				if(a.time < b.time) {
-					return 1;
-				} else if(a.time > b.time) {
 					return -1;
+				} else if(a.time > b.time) {
+					return 1;
 				}
 			}
 
 			if(a.name < b.name) {
-				return -1;
-			} else if(a.name > b.name) {
 				return 1;
+			} else if(a.name > b.name) {
+				return -1;
 			}
 			
 			return 0;

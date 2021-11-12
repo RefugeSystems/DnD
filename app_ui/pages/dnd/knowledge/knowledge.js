@@ -222,6 +222,9 @@ rsSystem.component("DNDKnowledge", {
 		this.update();
 	},
 	"methods": {
+		"toggleTimeline": function() {
+			Vue.set(this.storage, "hide_timeline", !this.storage.hide_timeline);
+		},
 		"fillKnowns": function() {
 			var matrix = Object.keys(this.entity.knowledge_matrix),
 				mapped = {},
@@ -295,6 +298,7 @@ rsSystem.component("DNDKnowledge", {
 					"name": name || object.name,
 					"icon": icon || object.icon,
 					"end": end || object.time_end,
+					"id": object.id,
 					"point": object,
 					"time": time
 				});

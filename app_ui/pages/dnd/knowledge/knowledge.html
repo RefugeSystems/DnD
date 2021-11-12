@@ -1,6 +1,11 @@
 <div class="rs-page dnd-page dnd-knowledge">
 	<div class="flex v" v-if="entity">
-		<rs-timeline :universe="universe" :events="timeline.events" :active-tags="timeline.tags"></rs-timeline>
+		<div class="timeline control" :class="storage.hide_timeline?'pad-out':''">
+			<button class="general rounded main action toggle ctrl" v-on:click="toggleTimeline()">
+				<span class="fa-solid fa-timeline-arrow action-icon"></span>
+			</button>
+		</div>
+		<rs-timeline v-if="!storage.hide_timeline" :universe="universe" :events="timeline.events" :active-tags="timeline.tags" :storage-container="storage"></rs-timeline>
 		<div class="overview flex h">
 			<div class="known-listing">
 				<div class="known-listing-type flex v">

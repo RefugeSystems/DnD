@@ -1,5 +1,26 @@
 <div class="rs-timeline system-component">
-	<div class="timeline-container">
-		<canvas class="timeline-render" v-on:click="clicked($event)"></canvas>
+	<div class="timeline-container" v-swipe.left="panTimeline" v-swipe.right="panTimeline">
+		<canvas class="timeline-render" v-on:mousedown="tracked($event)" v-on:mouseup="clicked($event)"></canvas>
+		<div class="timeline-today flex h" v-if="age">
+			<span class="rs-white">{{age}} Days Ago</span>
+		</div>
+		<div class="timeline-age flex h" v-if="age">
+			<span class="rs-white">{{age}} Days Ago</span>
+		</div>
+		<div class="timeline-jump flex h">
+			<button class="timeline-ctrl start" v-on:click="jumpToStart()">
+				<span class="icon fa-solid fa-arrow-right-to-bracket rot180"></span>
+			</button>
+			<div class="timeline-ctrl input-container">
+				<input class="jump-input" v-model.number="jump" type="number" v-on:keyup.enter="jumpTimeline(jump)" />
+				<div class="jump-icon">
+					<span class="fa-solid fa-watch"></span>
+				</div>
+			</div>
+			<button class="timeline-ctrl end" v-on:click="jumpToEnd()">
+				<span class="icon fa-solid fa-arrow-right-to-bracket"></span>
+			</button>
+		</div>
+		<div class="rendering-pouch"></div>
 	</div>
 </div>

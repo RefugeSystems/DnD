@@ -1,5 +1,24 @@
 .dnd-page.dnd-knowledge {
 
+	.timeline.control {
+		position: relative;
+
+		.toggle.ctrl {
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			transition: left .5s;
+			z-index: 10;
+		}
+
+		&.pad-out {
+			min-height: 0px;
+
+			.toggle.ctrl {
+				left: ~"calc(100% - 52px)";
+			}
+		}
+	}
 
 	.rs-table {
 		.name {
