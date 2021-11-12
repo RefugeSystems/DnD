@@ -47,6 +47,21 @@ rsSystem.component("rsTimeline", {
 			"handler": function() {
 				this.update();
 			}
+		// },
+		// "time_width": {
+		// 	"handler": function() {
+		// 		console.log("Time Width Changed[CW:" + this.client_width + "]: ->", this.time_width, this.max_offset, this.time_scale);
+		// 	}
+		// },
+		// "time_scale": {
+		// 	"handler": function() {
+		// 		console.log("Time Scale Changed[CW:" + this.client_width + "]: ->", this.time_scale, this.max_offset, this.time_width);
+		// 	}
+		// },
+		// "max_offset": {
+		// 	"handler": function() {
+		// 		console.log("Max Offset Changed[CW:" + this.client_width + "]: ->", this.max_offset, this.time_scale, this.time_width);
+		// 	}
 		}
 	},
 	"data": function() {
@@ -116,6 +131,7 @@ rsSystem.component("rsTimeline", {
 		data.distBot = 30;
 		data.lastTop = [];
 		data.lastBot = [];
+		data.dragging = false;
 		data.track_x = 0;
 		data.track_y = 0;
 		data.swap = true;
@@ -132,16 +148,17 @@ rsSystem.component("rsTimeline", {
 		this.pouch = this.$el.getElementsByClassName("rendering-pouch")[0];
 		this.context = this.rendering.getContext("2d");
 		this.rendering.height = 300;
-		if(!this.storage.render_offset) {
-			/**
-			 * Time value to offset for the viewport.
-			 * @property storage.render_offset
-			 * @type Number
-			 */
-			Vue.set(this.storage, "render_offset", 0);
-		} else {
-			Vue.set(this, "jump", this.render_offset);
-		}
+		/**
+		 * Time value (number of game seconds) to offset for the viewport.
+		 * @property storage.render_offset
+		 * @type Number
+		 */
+		// Processed by buildEventData
+		// if(!this.storage.render_offset) {
+		// 	Vue.set(this.storage, "render_offset", 0);
+		// } else {
+		// 	Vue.set(this, "jump", this.render_offset);
+		// }
 
 		this.bounds = this.rendering.getBoundingClientRect();
 		this.container.addEventListener("mouseenter", this.followMouse);
@@ -210,13 +227,31 @@ rsSystem.component("rsTimeline", {
 						this.render_decelleration_step--;
 						this.render_next = null;
 						this.setOffset(this.storage.render_offset + this.render_velocity);
-						this.render_velocity += this.render_decelleration;
-						this.render_decelleration /= 2;
-						if(this.render_decelleration_step <= 0 || this.render_velocity < this.render_terminal) {
-							this.render_velocity = 0;
-						} else {
-							this.render(context);
+						if(this.render_velocity > 0) {
+							this.render_velocity += this.render_decelleration;
+							if(this.render_velocity <= 0) {
+								this.render_velocity = 0;
+							} else {
+								this.render(context);
+							}
+						} else if(this.render_velocity < 0) {
+							this.render_velocity += this.render_decelleration;
+							if(this.render_velocity >= 0) {
+								this.render_velocity = 0;
+							} else {
+								this.render(context);
+							}
 						}
+						if(-1 <= this.render_decelleration || this.render_decelleration <= 1) {
+							this.render_velocity = 0;
+						}
+						// console.log("Velocity: " + this.render_velocity + " @" + this.render_decelleration + " -> " + (this.render_decelleration = this.render_decelleration/1.5));
+						// this.render_decelleration /= 2;
+						// if(this.render_decelleration_step <= 0 || this.render_velocity < this.render_terminal) {
+						// 	this.render_velocity = 0;
+						// } else {
+						// 	this.render(context);
+						// }
 					}, this.render_decelleration_timing);
 				}
 			}
@@ -510,9 +545,11 @@ rsSystem.component("rsTimeline", {
 		 * @method buildEventData
 		 */
 		"buildEventData": function() {
+			console.log("Build: ");
 			this.setControlConstants();
-			this.setAvailableWidth();
 			this.setSpan();
+			console.log(" - Built Span: ", this.start, this.end);
+			this.setAvailableWidth();
 
 			var current = this.start + this.time_scale,
 				span = this.start,
@@ -542,9 +579,10 @@ rsSystem.component("rsTimeline", {
 			}
 
 			this.timeline_length = this.time_width * tick;
-			if(this.jump === 0 || isNaN(this.jump)) {
-				Vue.set(this, "jump", this.max);
+			if(isNaN(this.storage.render_offset)) {
+				Vue.set(this.storage, "render_offset", this.max_offset);
 			}
+			Vue.set(this, "jump", this.storage.render_offset + this.start);
 			
 			this.render(this.context);
 		},
@@ -553,21 +591,19 @@ rsSystem.component("rsTimeline", {
 		 * @method setSpan
 		 */
 		"setSpan": function() {
-			var debug = [],
-				event,
+			var event,
 				i;
 
 			this.start = this.universe.time;
 			this.end = this.universe.time;
 			for(i=0; i<this.events.length; i++) {
 				event = this.events[i];
-				debug.push(event.time + ": " + event.name);
 				if(event.time < this.start) {
 					this.start = event.time;
 				}
 				if(event.end && this.end < event.end) {
 					this.end = event.end;
-				} else if(this.end < event.time) {
+				} else if(event.time && this.end < event.time) {
 					this.end = event.time;
 				}
 			}
@@ -577,11 +613,6 @@ rsSystem.component("rsTimeline", {
 			this.timeline_span = this.end - this.start;
 			this.start -= this.half_scale;
 			this.end += this.half_scale;
-			if(this.jump < this.start) {
-				Vue.set(this, "jump", this.start);
-			} else if(this.end < this.jump) {
-				Vue.set(this, "jump", this.end);
-			}
 		},
 		"setAvailableWidth": function() {
 			this.bounds = this.rendering.getBoundingClientRect();
@@ -597,13 +628,16 @@ rsSystem.component("rsTimeline", {
 
 
 
+		"dragTimeline": function(event) {
+
+		},
 		"panTimeline": function(event) {
 			// console.log("Pan: " + event.deltaX + " @" + event.velocityX, event);
 			var pan = -1 * event.deltaX;
-			Vue.set(this.storage, "render_offset", this.storage.render_offset + this.widthToTimespan(pan));
-			Vue.set(this, "jump", this.storage.render_offset + this.start);
+			// Vue.set(this.storage, "render_offset", this.storage.render_offset + this.widthToTimespan(pan));
+			// Vue.set(this, "jump", this.storage.render_offset + this.start);
 			this.render_velocity = this.widthToTimespan(event.velocityX * -200);
-			this.render_decelleration = this.render_velocity/-2;
+			this.render_decelleration = this.render_velocity * -.1;
 			this.render_terminal = this.render_velocity * .01;
 			this.render_decelleration_step = 100;
 			// console.log("Velocity: " + this.render_velocity + " @" + this.render_decelleration);
@@ -611,18 +645,21 @@ rsSystem.component("rsTimeline", {
 			this.render();
 		},
 		"tracked": function(event) {
+			this.render_velocity = 0;
+			this.dragging = event.x;
 			this.track_x = event.x;
 			this.track_y = event.y;
 		},
 		"clicked": function(event) {
 			var x = event.x - this.bounds.x;
-			console.log("Clicked[" + event.x + "]: " + this.pointToTime(event.x) + " -> " + this.universe.calendar.toDisplay(this.pointToTime(x)), event);
+			// console.log("Clicked[" + event.x + "]: " + this.pointToTime(event.x) + " -> " + this.universe.calendar.toDisplay(this.pointToTime(x)), event);
 			if(this.distanceBetweenPoints(event.x, event.y, this.track_x, this.track_y) < 5 && this.nearest) {
 				this.info(this.nearest.point);
 			}
+			this.dragging = false;
+			this.render();
 		},
 		"followMouse": function(event) {
-			// console.log("Mouse Entered: ", event);
 			this.render_mouse = event.x - this.bounds.x;
 			this.render();
 		},
@@ -630,19 +667,22 @@ rsSystem.component("rsTimeline", {
 			// console.log("Mouse Exited: ", event);
 			Vue.set(this, "age", 0);
 			this.render_mouse = null;
+			this.dragging = false;
 			this.render();
 		},
 		"mouseMoved": function(event) {
 			var x = event.x - this.bounds.x,
 				y = event.y - this.bounds.y,
-				nearest;
+				width;
 			this.render_mouse = x;
 			this.nearest = this.findNearest(x, y);
-			// if(nearest) {
-			// 	this.nearest = nearest;
-			// } else {
-			// 	this.nearest = null;
-			// }
+
+			if(this.dragging !== false) {
+				width = -1 * (event.x - this.dragging);
+				this.setOffset(this.storage.render_offset + this.widthToTimespan(width));
+				this.dragging = event.x;
+			}
+
 			this.render();
 		},
 

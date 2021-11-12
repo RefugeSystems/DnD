@@ -270,24 +270,26 @@ rsSystem.component("DNDKnowledge", {
 				i;
 
 			this.timeline.events.splice(0);
-			for(i=0; i<this.universe.listing.event.length; i++) {
-				event = this.universe.listing.event[i];
-				if(event.associations && event.is_disabled && event.associations.indexOf(this.entity.id) !== -1) {
-					this.addEventPoint(event);
+			if(this.entity.owned[this.player.id] || this.player.gm) {
+				for(i=0; i<this.universe.listing.event.length; i++) {
+					event = this.universe.listing.event[i];
+					if(event.associations && event.is_disabled && event.associations.indexOf(this.entity.id) !== -1) {
+						this.addEventPoint(event);
+					}
 				}
-			}
 
-			for(i=0; i<this.universe.listing.skirmish.length; i++) {
-				event = this.universe.listing.skirmish[i];
-				if(event.entities && event.entities.indexOf(this.entity.id) !== -1) {
-					this.addEventPoint(event);
+				for(i=0; i<this.universe.listing.skirmish.length; i++) {
+					event = this.universe.listing.skirmish[i];
+					if(event.entities && event.entities.indexOf(this.entity.id) !== -1) {
+						this.addEventPoint(event);
+					}
 				}
-			}
 
-			for(i=0; i<this.entity.knowledges.length; i++) {
-				event = this.universe.index.knowledge[this.entity.knowledges[i]];
-				if(event) {
-					this.addEventPoint(event, event.name, "fa-solid fa-brain-circuit");
+				for(i=0; i<this.entity.knowledges.length; i++) {
+					event = this.universe.index.knowledge[this.entity.knowledges[i]];
+					if(event) {
+						this.addEventPoint(event, event.name, "fa-solid fa-brain-circuit");
+					}
 				}
 			}
 		},
