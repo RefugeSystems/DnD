@@ -545,10 +545,10 @@ rsSystem.component("rsTimeline", {
 		 * @method buildEventData
 		 */
 		"buildEventData": function() {
-			console.log("Build: ");
+			// console.log("Build: ");
 			this.setControlConstants();
 			this.setSpan();
-			console.log(" - Built Span: ", this.start, this.end);
+			// console.log(" - Built Span: ", this.start, this.end);
 			this.setAvailableWidth();
 
 			var current = this.start + this.time_scale,

@@ -273,7 +273,7 @@ rsSystem.component("DNDKnowledge", {
 			if(this.entity.owned[this.player.id] || this.player.gm) {
 				for(i=0; i<this.universe.listing.event.length; i++) {
 					event = this.universe.listing.event[i];
-					if(event.associations && event.is_disabled && event.associations.indexOf(this.entity.id) !== -1) {
+					if(event.associations && !event.is_disabled && event.associations.indexOf(this.entity.id) !== -1) {
 						this.addEventPoint(event);
 					}
 				}
