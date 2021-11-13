@@ -595,6 +595,7 @@ class RSObject {
 						case "calculated":
 							// this._calculated[fields[x]] = this.calculateField(fields[x], this._data[fields[x]]);
 							break;
+						case "markdown":
 						case "string":
 							if(field.attribute.searchable) {
 								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
