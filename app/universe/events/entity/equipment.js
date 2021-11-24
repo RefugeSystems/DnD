@@ -1,5 +1,3 @@
-const { clearNonPrintableCharacter } = require("xss");
-
 module.exports.initialize = function(universe) {
 	/**
 	 * 

@@ -37,6 +37,24 @@ rsSystem.component("dndEntityInfo", {
 			}
 
 			return total;
+		},
+		"languages": function() {
+			var languages = [],
+				track = {},
+				prf,
+				i;
+			if(this.entity.proficiencies) {
+				for(i=0; i<this.entity.proficiencies.length; i++) {
+					if(!track[this.entity.proficiencies[i]]) {
+						track[this.entity.proficiencies[i]] = true;
+						prf = this.universe.index.proficiency[this.entity.proficiencies[i]];
+						if(prf && prf.id.indexOf("language") !== -1) {
+							languages.push(prf);
+						}
+					}
+				}
+			}
+			return languages;
 		}
 	},
 	"data": function() {
@@ -93,6 +111,35 @@ rsSystem.component("dndEntityInfo", {
 			} else {
 				return "";
 			}
+		},
+		"viewDefenses": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndDefenses",
+				"entity": this.entity
+			});
+		},
+		"viewLanguages": function() {
+			var details = {};
+
+			details.title = this.entity.name + " Languages";
+			details.component = "dndDialogList";
+			details.sections = ["language"];
+			details.related = {};
+			details.cards = {
+				"language": {
+					"name": "Language",
+					"icon": "fas fa-comment",
+					"description": "Languages you are proficient in speaking and reading. Languages you know but can not speak and read are represented in your knowledge."
+				}
+			};
+			details.data = {
+				"language": this.languages
+			};
+			details.activate = (section, action) => {
+				this.info(action);
+			};
+
+			rsSystem.EventBus.$emit("dialog-open", details);
 		},
 		"takeDamage": function() {
 			var rolling = {},

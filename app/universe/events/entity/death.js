@@ -24,7 +24,7 @@ module.exports.initialize = function(universe) {
 					object.addValues({
 						"death_save": 1
 					});
-					universe.chronicler.addOccurrence("entity:death:save", {
+					universe.chronicle.addOccurrence("entity:death:save", {
 						"entity": object.id
 					});
 				}
@@ -47,7 +47,7 @@ module.exports.initialize = function(universe) {
 					object.addValues({
 						"death_fail": 1
 					});
-					universe.chronicler.addOccurrence("entity:death:fail", {
+					universe.chronicle.addOccurrence("entity:death:fail", {
 						"entity": object.id
 					});
 				}

@@ -104,6 +104,7 @@ var config = {
 				"Anomaly",
 				"Random",
 				"Dice",
+				"Roll",
 				"_p",
 
 				"RSCalculator",

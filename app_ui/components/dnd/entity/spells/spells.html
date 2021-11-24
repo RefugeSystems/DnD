@@ -66,7 +66,7 @@
 					</div>
 					<div class="details stats" v-if="storage.size>1">
 						<div class="mini-divider"></div>
-						<div class="flex h stat-components">
+						<div class="flex h wrap stat-components">
 							<button v-if="spell.cast_uses_somatic" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_somatic')">
 								<span class="stat-icon game-icon game-icon-magic-palm"></span>
 							</button>
@@ -82,6 +82,14 @@
 							<button class="range flex h flat action icon" v-on:click="info('fields:range_normal')">
 								<span class="stat-icon game-icon game-icon-arrow-dunk"></span>
 								<span>{{spellRange(spell)}}</span>
+							</button>
+							<button v-if="spell.action_cost" class="flat action icon" v-on:click.stop.prevent="info('fields:action_cost')">
+								<span class="stat-icon fa-regular fa-abacus"></span>
+								<span>{{getActionCost(spell)}}</span>
+							</button>
+							<button v-if="spell.duration" class="flat action icon" v-on:click.stop.prevent="info('fields:duration')">
+								<span class="stat-icon fa-solid fa-hourglass"></span>
+								<span>{{getDuration(spell)}})</span>
 							</button>
 						</div>
 					</div>

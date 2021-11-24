@@ -1885,13 +1885,12 @@
 				}
 			},
 			"elementVisible": function(element, entity) {
-				if(element.template || element.hidden || (element.obscured && !this.player.gm)) {
-					return false;
+				entity = entity || this.entity;
+				if(entity && entity.gm) {
+					return true;
 				}
 
-				if(element.must_know && !this.player.gm) {
-
-				}
+				return !(element.template || element.is_template || element.preview || element.is_preview || element.hidden || element.is_hidden || element.concealed || element.is_concealed || element.obscured || this.storage.hide[element.id]);
 			},
 			"localeVisible": function(locale) {
 				if(!this.elementVisible(locale)) {
@@ -1952,7 +1951,7 @@
 				var entity,
 					x;
 
-				if(link.template || link.is_template || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
+				if(link.template || link.is_template || link.preview || link.is_preview || link.x === undefined || link.y === undefined || link.x === null || link.y === null) {
 					return false;
 				}
 
@@ -1960,8 +1959,11 @@
 					return true;
 				}
 
-				//console.log("Link[" + link.id + " | " + link.must_know + "]: " + ( (!this.player.gm || this.storage.master_view !== "master") && (!this.viewingEntity || !this.viewingEntity.knowsOf(link)) ), " | ", this.viewingEntity.knowsOf(link), "\n > ", this.viewingEntity);
-				if(!this.viewingEntity || !this.entityKnowsOf(this.viewingEntity, link)) {
+				if(!this.viewingEntity) {
+					return false;
+				}
+
+				if(!this.elementVisible(link, this.viewingEntity)) {
 					return false;
 				}
 
@@ -1974,10 +1976,6 @@
 							return false;
 						}
 					}
-				}
-
-				if(link.hidden || this.storage.hide[link.id] || link.obscured) {
-					return false;
 				}
 
 				return true;
@@ -2130,6 +2128,13 @@
 
 						for(x=0; x<this.universe.listing.entity.length; x++) {
 							buffer = this.universe.listing.entity[x];
+							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+								this.availablePOIs.push(buffer);
+							}
+						}
+
+						for(x=0; x<this.universe.listing.item.length; x++) {
+							buffer = this.universe.listing.item[x];
 							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
 								this.availablePOIs.push(buffer);
 							}

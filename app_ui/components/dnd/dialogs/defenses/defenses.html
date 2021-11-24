@@ -1,0 +1,53 @@
+<div class="rs-component dnd-component dialog-dnd-defenses">
+	<h1>
+		<span class="fas fa-shield"></span>
+		<span>{{entity.nickname || entity.name}}</span>
+	</h1>
+	<div class="details">
+		<section class="basics">
+			<div class="basic">
+				<span class="fas fa-heartbeat"></span>
+				<span>Health: {{entity.hp}} / {{entity.hp_max}}</span>
+			</div>
+			<div class="basic">
+				<span class="fad fa-heartbeat rs-secondary-lightblue"></span>
+				<span>Temporary Health: {{entity.hp_temp}}</span>
+			</div>
+			<div class="basic">
+				<span class="fas fa-shield"></span>
+				<span>Armor: {{entity.armor}}</span>
+			</div>
+			<div class="basic">
+				<span class="fas fa-weight-scale"></span>
+				<span>Weight: {{entity.weight}}</span>
+			</div>
+			<div class="basic">
+				<span class="fas fa-backpack"></span>
+				<span>Bag Weight: {{bag_weight}} / {{max_carry}}</span>
+			</div>
+		</section>
+		<section class="resistances">
+			<h2>Resistances</h2>
+			<div class="data resistance" v-for="resistance in resistances">
+				<button class="general rounded quick action" v-on:click="info(resistance)">
+					<span class="action-icon" :class="resistance.icon"></span>
+				</button>
+				<span>{{resistance.name}}:</span>
+				<span>{{entity.resistance[resistance.id]}}</span>
+			</div>
+			<div class="data resistance" v-if="resistances.length === 0">
+				<span>None</span>
+			</div>
+		</section>
+		<section class="actions">
+			<h2>Actions</h2>
+			<div class="data action" v-for="action in actions">
+				<button class="general rounded quick action" v-on:click="useAction(action)" v-on:click.right.prevent.stop="refundAction(action)">
+					<span class="action-icon fa-light fa-abacus"></span>
+				</button>
+				<span>{{nameAction(action)}}:</span>
+				<span>{{entity.action_count[action]}}/{{entity.action_max[action]}}</span>
+			</div>
+		</section>
+	</div>
+</div>

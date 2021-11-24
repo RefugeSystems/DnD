@@ -1,0 +1,25 @@
+<div class="rs-component component-form">
+	<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-if="isVisible(field)" :key="field.id">
+		<span slot="info">
+			<span v-if="field.id === 'icon' || field.type === 'icon'" :class="details.icon"></span>
+			<button class="clear-link ctrl-link flat fas fa-clock" v-if="field.type === 'gametime'" v-on:click="setTimeToNow(field)" tabindex=2>
+			</button>
+			<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearData(field)" tabindex=2>
+			</button>
+			<button class="clear-link ctrl-link flat fas fa-times-octagon" v-on:click="noData(field)" tabindex=2>
+			</button>
+			<span v-if="field.attribute.server_only">
+				<span class="fas fa-server rs-light-red" title="Field data restricted to the Server"></span>
+			</span>
+			<span v-if="details[field.id] === undefined && show_undefined">
+				<span class="fa-light fa-empty-set rs-light-yellow" title="This field has no data"></span>
+			</span>
+			<span v-if="field.attribute.deprecated">
+				<span class="fas fa-sensor-alert rs-light-red" title="This field is deprecated"></span>
+			</span>
+			<span v-if="hasInheritance(field)">
+				<span class="fas fa-chart-network rs-light-yellow" title="This field has inherited data from children"></span>
+			</span>
+		</span>
+	</rs-field>
+</div>

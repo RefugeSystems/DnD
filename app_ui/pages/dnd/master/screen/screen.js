@@ -410,7 +410,96 @@ rsSystem.component("DNDMasterScreen", {
 			}
 		}];
 		data.dynamicHeadings = ["name", "category", "level", "range_normal", "cast_time", "created"];
-		data.dynamicControls = [];
+		data.dynamicControls = [{
+			"title": "Delete Selection",
+			"icon": "fas fa-trash",
+			"process": function() {
+				var deleting = Object.keys(reference.storage.dynamicTable.selected),
+					flag = [],
+					send = [],
+					object,
+					i;
+
+				if(deleting.length) {
+					for(i=0; i<deleting.length; i++) {
+						object = reference.universe.getObject(deleting[i]);
+						if(object) {
+							if(object.is_deletable) {
+								send.push(object.id);
+							} else {
+								flag.push(object.id);
+							}
+						} else {
+							console.warn("Non-existent object in selection: " + deleting[i]);
+						}
+					}
+					if(flag.length) {
+						reference.universe.send("delete:flag", {
+							"objects": flag
+						});
+					}
+					if(send.length) {
+						reference.universe.send("delete:objects", {
+							"objects": send
+						});
+					}
+				} else {
+					console.warn("Missing Information to Delete");
+				}
+			}
+		}, {
+			"title": "Mass Edit Selected",
+			"icon": "fas fa-edit",
+			"process": function() {
+				var selected = reference.universe.transcribeInto(Object.keys(reference.storage.dynamicTable.selected)),
+					fields = [],
+					field,
+					i;
+
+				for(i=0; i<reference.storage.dynamicTable.headings.length; i++) {
+					field = reference.universe.index.fields[reference.storage.dynamicTable.headings[i]];
+					if(field && !field.deprecated && !field.is_deprecated) {
+						fields.push(field);
+					}
+				}
+				rsSystem.EventBus.$emit("dialog-open", {
+					"component": "dndUpdateObjects",
+					"show_undefined": true,
+					"objects": selected,
+					"fields": fields
+				});
+			}
+		/*
+		}, {
+			"title": "Obscure Selection",
+			"icon": "fas fa-eye-slash",
+			"process": function() {
+				var selected = Object.keys(reference.storage.dynamicTable.selected);
+				if(selected.length) {
+					reference.universe.send("master:obscure", {
+						"objects": selected,
+						"obscured": true
+					});
+				} else {
+					console.warn("Missing Information to Obscure");
+				}
+			}
+		}, {
+			"title": "Unobscure Selection",
+			"icon": "fas fa-eye",
+			"process": function() {
+				var selected = Object.keys(reference.storage.dynamicTable.selected);
+				if(selected.length) {
+					reference.universe.send("master:obscure", {
+						"objects": selected,
+						"obscured": false
+					});
+				} else {
+					console.warn("Missing Information to Unobscure");
+				}
+			}
+		*/
+		}];
 		data.dynamicSelections = [{
 			"title": "Noun",
 			"id": "dynamic_noun",

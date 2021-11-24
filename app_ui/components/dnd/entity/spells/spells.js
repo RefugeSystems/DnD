@@ -64,6 +64,7 @@ rsSystem.component("dndEntitySpells", {
 		var data = {},
 			i;
 
+		data.action_field = this.universe.index.fields.action_cost;
 		data.sizes = [{
 			"id": "1",
 			"name": "Simple",
@@ -98,6 +99,25 @@ rsSystem.component("dndEntitySpells", {
 		}
 	},
 	"methods": {
+		"getActionCost": function(spell) {
+			var actions = Object.keys(spell.action_cost),
+				result = "Cost:",
+				i;
+
+			if(actions.length) {
+				for(i=0; i<actions.length; i++) {
+					result += spell.action_cost[actions[i]] + " " + (this.action_field.displayed_as?this.action_field.displayed_as[actions[i]] || actions[i].capitalize():actions[i].capitalize());
+				}
+			} else {
+				result += " 0 Actions";
+			}
+
+			return result;
+		},
+		"getDuration": function(spell) {
+			var rounds = spell.duration/6;
+			return rounds + " Rounds (" + this.universe.calendar.displayDuration(spell.duration);
+		},
 		"hoveredSpell": function(spell) {
 			this.$emit("hovered-object", spell);
 		},

@@ -3,6 +3,43 @@ module.exports.initialize = function(universe) {
 	var manager = universe.manager.action;
 
 	/**
+	 * 
+	 * @event player:action:count
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.entity
+	 * @param {String} event.message.data.action
+	 * @param {Integer} event.message.data.delta
+	 */
+	 universe.on("player:action:count", function(event) {
+		var action = event.message.data.action,
+			entity = event.message.data.entity,
+			change = event.message.data.delta,
+			update;
+
+		if(typeof(entity) === "string") {
+			entity = universe.manager.entity.object[entity];
+		}
+
+		if(entity && entity.action_count && (event.player.gm || (entity.owned && entity.owned[event.player.id]))) {
+			update = {};
+			update.action_count = {};
+			update.action_count[action] = change;
+			entity.addValues(update);
+		} else {
+			universe.warnMasters("Entity action count change failed by player action", event.message.data);
+		}
+	 });
+
+	/**
 	 * General action bindings processed here.
 	 * 
 	 * This currently specifically applies to entity responses.
@@ -64,13 +101,24 @@ module.exports.initialize = function(universe) {
 		});
 	});
 
-
 	/**
 	 * Generic action handling routing.
 	 * 
 	 * Ensures basic rights access on the source and/or entity object
 	 * then re-emits for an action handler to process.
 	 * @event player:action:perform
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.entity
+	 * @param {Roll} event.message.data.roll
 	 */
 	 universe.on("player:action:perform", function(event) {
 		var perform,
@@ -86,6 +134,7 @@ module.exports.initialize = function(universe) {
 			"damage": event.message.data.damage,
 			"resist": event.message.data.resist,
 			"entity": event.message.data.entity || event.message.data.source,
+			"source": event.message.data.source || event.message.data.entity,
 			"action": event.message.data.action,
 			"target": event.message.data.target,
 			"skill": event.message.data.skill,

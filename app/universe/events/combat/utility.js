@@ -191,12 +191,14 @@ module.exports.initialize = function(universe) {
 	 */
 	var resolveDamage = function(entity, damage, resist = {}) {
 		var keys = Object.keys(damage),
-			was_damaged = false,
+			was_damaged = false,	
 			received,
-			set = {},
+			add = {},
+			temp_cap,
 			i;
 
-		set.hp = entity.hp;
+		add.hp_temp = 0;
+		add.hp = 0; //entity.hp;
 		for(i = 0; i < keys.length; i++) {
 			if(typeof(resist[keys[i]]) === "string") {
 				resist[keys[i]] = universe.calculator.computedDiceRoll(resist[keys[i]], entity, undefined, damage[keys[i]]);
@@ -207,33 +209,44 @@ module.exports.initialize = function(universe) {
 				received = 0;
 			}
 			if(keys[i] === "damage_type:heal") {
-				set.hp += received;
+				add.hp += received;
+			} else if(keys[i] === "damage_type:temphp") {
+				add.hp_temp += received;
 			} else {
-				set.hp -= received;
+				add.hp -= received;
 			}
 		}
 
-		if(set.hp < 0) {
-			set.hp = 0;
-		} else if(set.hp > entity.hp_max) {
-			set.hp = entity.hp_max;
+		// if(add.hp < 0) {
+		// 	add.hp = 0;
+		// } else if(add.hp > entity.hp_max) { // This is also "passively" handled by the max configuration on the hp field
+		// 	add.hp = entity.hp_max;
+		// }
+
+		if(entity.hp_temp && add.hp < 0) {
+			temp_cap = -1 * entity.hp_temp;
+			if(temp_cap <= add.hp) {
+				add.hp_temp = add.hp;
+				add.hp = 0;
+			} else {
+				add.hp_temp = temp_cap;
+				add.hp -= temp_cap;
+			}
 		}
 
 		// TODO: Process channel.instilled if any[#178704758]; was_damaged -> effect.damage_required
-		if(set.hp !== entity.hp) {
+		if(add.hp !== 0) {
 			was_damaged = true;
 		}
 
-		if(set.hp) {
-			set.death_fail = 0;
-			set.death_save = 0;
+		if(add.hp) {
+			add.death_fail = 0;
+			add.death_save = 0;
 		}
 
-		entity.setValues(set, function(err) {
+		entity.addValues(add, function(err) {
 			if(err) {
 				universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
-			} else {
-				
 			}
 		});
 

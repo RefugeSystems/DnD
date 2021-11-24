@@ -26,6 +26,10 @@ rsSystem.component("DialogController", {
 
 	},
 	"methods": {
+		"getVisibleName": function(object, entity) {
+			entity = entity || this.entity;
+			return rsSystem.utility.getName(entity, object);
+		},
 		"performAction": function(action, using) {
 			// TODO: Check for action rolls and open roll dialog if needed
 			var action = this.universe.index.action[action],
@@ -75,6 +79,11 @@ rsSystem.component("DialogController", {
 				return 1;
 			}
 			return 0;
+		},
+		"info": function(record) {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": record.id || record
+			});
 		},
 		"sortData": rsSystem.utility.sortData,
 		"noOp": function() {}

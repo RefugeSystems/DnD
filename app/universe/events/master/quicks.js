@@ -38,17 +38,34 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} event.message.data.object
+	 * @param {Array | String} event.message.data.objects
 	 * @param {Boolean} event.message.data.obscured State
 	 */
 	universe.on("player:master:obscure", function(event) {
-		var object = event.message.data.object;
+		var state = !!(event.message.data.obscured || event.message.data.state),
+			objects = event.message.data.objects,
+			object = event.message.data.object,
+			i;
+		
 		if(typeof(object) === "string") {
 			object = universe.get(object);
 		}
-		if(object && event.player.gm) {
+
+		if(object && (event.player.gm || (object.owned && object.owned[event.player.id]))) {
 			object.setValues({
-				"obscured": !!event.message.data.obscured
+				"obscured": state
 			});
+		}
+
+		if(objects && objects.length) {
+			for(i=0; i<objects.length; i++) {
+				object = universe.get(objects[i]);
+				if(object && (event.player.gm || (object.owned && object.owned[event.player.id]))) {
+					object.setValues({
+						"obscured": state
+					});
+				}
+			}
 		}
 	});
 	/**

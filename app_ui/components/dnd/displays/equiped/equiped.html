@@ -1,0 +1,26 @@
+<div class="rs-component dnd-component dnd-display-equipped">
+	<div class="equipment-containment">
+		<div class="entity-slot" v-for="slot in slots">
+			<div class="entity-slot-header">
+				<span :class="slot.icon"></span>
+				<span>{{slot.name}}:</span>
+				<span>{{entity.equip_slots[slot.id]}} Slot Open</span>
+			</div>
+			<div class="entity-slot-contain">
+				<div class="slot-contents" v-for="item in sloted[slot.id]">
+					<!-- <button class="flat rounded action icon fas fa-info-circle rs-blue" v-on:click="info(item)"></button> -->
+					<button class="general quick rounded action" :class="item.icon" v-on:click="info(item)"></button>
+					<span>{{item.name}}</span>
+				</div>
+			</div>
+		</div>
+		<h2>Attuned</h2>
+		<div class="entity-attuned">
+			<div class="attuned" v-for="item in attuned">
+				<!-- <button class="flat rounded action icon fas fa-info-circle rs-blue" v-on:click="info(item)"></button> -->
+				<button class="general quick rounded action" :class="item.icon" v-on:click="info(item)"></button>
+				<span>{{item.name}}</span>
+			</div>
+		</div>
+	</div>
+</div>

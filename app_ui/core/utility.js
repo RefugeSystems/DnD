@@ -82,6 +82,137 @@
 				return false;
 			}
 		},
+		/**
+		 * Check if an object is disabled or obscured.
+		 * @method isValid
+		 * @param {RSObject} object 
+		 * @returns {Boolean}
+		 */
+		"isValid": function(object) {
+			return object && !object.is_preview && !object.disabled && !object.is_disabled && !object.obscured && !object.is_obscured && !object.template && !object.is_template && !object.inactive && !object.is_inactive;
+		},
+		/**
+		 * 
+		 * @method hasCommonKey
+		 * @param {Object} object 
+		 * @param {Array} array 
+		 * @return {Boolean} True if the object contains a key that matches a value in the array.
+		 */
+		"hasCommonKey": function(object, array) {
+			if(!object || !array) {
+				return false;
+			}
+
+			for(var i=0; i<array.length; i++) {
+				if(object[array[i]]) {
+					return true;
+				}
+			}
+			
+			return false;
+		},
+		/**
+		 * 
+		 * @method hasDamage
+		 * @param {RSObject} object 
+		 * @return {Boolean}
+		 */
+		"hasDamage": function(object) {
+			return object && rsSystem.utility.isNotEmpty(object.damage);
+		},
+		/**
+		 * Test if an object contains no properties.
+		 * @method isEmpty
+		 * @param {Object} object 
+		 * @return {Boolean} Returns true if the object is falsey or has no children
+		 */
+		"isEmpty": function(object) {
+			if(!object) {
+				return true;
+			}
+			for(var i in object) {
+				return false;
+			}
+			return true;
+		},
+		/**
+		 * Test if an object contains properties.
+		 * @method isNotEmpty
+		 * @param {Object} object 
+		 * @return {Boolean} Returns has children
+		 */
+		"isNotEmpty": function(object) {
+			if(!object) {
+				return false;
+			}
+			for(var i in object) {
+				return true;
+			}
+			return false;
+		},
+		/**
+		 * 
+		 * TODO: This, in theory, should be removed and leverage the server obscuring data instead, however
+		 * 		this is proving expensive
+		 * @method getName
+		 * @param {RSObject} entity 
+		 * @param {RSObject} object 
+		 * @return {String} The name of the object according to the passed entity
+		 */
+		"getName":function(entity, object) {
+			if(object.must_know) {
+				if(entity) {
+					if(isNaN(object.must_know)) {
+						if(entity.knowledge_matrix[object.must_know] && entity.knowledge_matrix[object.must_know].length !== 0) {
+							return object.name;
+						}
+					} else if(entity.knowledge_matrix[object.id] && object.must_know <= entity.knowledge_matrix[object.id].length) {
+						return object.name;
+					}
+				}
+				if(object.concealment && object.concealment.name) {
+					return object.concealment.name;
+				}
+				return "Unknown";
+			} else {
+				return object.name;
+			}
+		},
+		/**
+		 * TODO: Expand to handle more specific cases
+		 * TODO: This, in theory, should be removed and leverage the server obscuring data instead, however
+		 * 		this is proving expensive
+		 * @method getKnownProperty
+		 * @param {RSObject} entity 
+		 * @param {RSObject} object 
+		 * @param {String} property 
+		 * @return {String} The name of the object according to the passed entity
+		 */
+		"getKnownProperty":function(entity, object, property) {
+			if(object.must_know) {
+				if(isNaN(object.must_know)) {
+					if(entity.knowledge_matrix[object.must_know] && entity.knowledge_matrix[object.must_know].length !== 0) {
+						return object[property];
+					}
+				} else if(entity.knowledge_matrix[object.id] && object.must_know <= entity.knowledge_matrix[object.id].length) {
+					return object[property];
+				}
+				if(object.concealment && object.concealment[property]) {
+					return object.concealment[property];
+				}
+				return "Unknown";
+			} else {
+				return object[property];
+			}
+		},
+		/**
+		 * 
+		 * @method showInfo
+		 * @deprecated Use embeded `info` method from storage component. View/Base/Target break up has been replaced by object references.
+		 * @param {Object} view 
+		 * @param {Object} base 
+		 * @param {Object} target 
+		 */
 		"showInfo": function(view, base, target) {
 			if(view && view.id && rsSystem.utility.isOwner(view)) {
 				rsSystem.EventBus.$emit("display-info", {

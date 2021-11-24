@@ -1,5 +1,5 @@
 <div class="rs-component dnd-component dialog-list">
-	<h1 v-if="details.title" class="flex h">
+	<h1 v-if="details.title" class="heading flex h">
 		<span>{{details.title}}</span>
 		<!-- <input class="filter grow-1" type="text" v-if="storage" v-delayed:500="storage.filter" /> -->
 		<button class="general quick rounded action" v-if="details.link" v-on:click="toLink()">
@@ -7,6 +7,7 @@
 		</button>
 		<rs-input class="grow-1" v-model="storage.filter" :delay="500"/>
 	</h1>
+	<div class="extra-detail" v-if="details.extra" v-html="details.extra"></div>
 	<div class="listing">
 		<div class="list-container" v-for="section in sections">
 			<div class="card-container">

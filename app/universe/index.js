@@ -608,6 +608,8 @@ class Universe extends EventEmitter {
 				}
 				details.id = Random.identifier(source._class, 10, 32).toLowerCase();
 				details.is_template = false;
+				details.selectable = false;
+				details.playable = false;
 				details.is_copy = true;
 				details.parent = id;
 				this.createObject(details, callback);
@@ -1093,7 +1095,7 @@ class Universe extends EventEmitter {
 	 * @param {Object} [details] 
 	 */
 	generalError(code, error, message, details) {
-		console.trace(" [!] Universe General Error Handling: " + error.message);
+		console.trace(" [!] Universe General Error Handling: " + (error?error.message:"No Error"));
 		var anomaly = new Anomaly(code, message, 50, details, error);
 		this.emit("error", anomaly);
 	}

@@ -268,6 +268,15 @@ rsSystem.component("rsDisplayField", {
 			var value = this.object[this.field];
 			if(this.fieldData.displayed_as && this.fieldData.displayed_as[value]) {
 				return this.fieldData.displayed_as[value];
+			} else if(this.fieldData.attribute && this.fieldData.attribute.display_format) {
+				switch(this.fieldData.attribute.display_format) {
+					case "duration":
+						return Math.floor(value/6) + " Rounds (" + this.universe.calendar.displayDuration(value) + ")";
+					default:
+						console.warn("Unknown Display Format: " + this.fieldData.attribute.display_format, this);
+						return value;
+				}
+				return this.fieldData.displayed_as[value];
 			} else if(this.fieldData.inheritable) {
 				value = this.universe.getObject(value);
 				if(value) {

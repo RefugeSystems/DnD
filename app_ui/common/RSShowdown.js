@@ -13,7 +13,7 @@
 		"tables": true
 	});
 
-	var validTags = ["class", "style", "data", "data-id", "uri", "href", "src", "draggable", "value", "id"];
+	var validTags = ["class", "style", "data", "data-id", "uri", "href", "src", "draggable", "value", "id", "title", "data-formula", "data-result", "data-showstate"];
 
 	var xssOptions = {
 		"whiteList": {
@@ -141,9 +141,11 @@
 					} else {
 						properties.classes += " flat-result ";
 						value = parseFloat(value);
+
 					}
 
-					element = $("<span class=\"rendered-value " + properties.classes + "\" title=\"" + title + "\">" + value + "</span>");
+					element = $("<span class=\"rendered-value " + properties.classes + "\" title=\"" + title + "\" data-formula=\"(=" + title + ")\" data-result=\"" + value + "\" data-showstate=\"result\">" + value + "</span>");
+					console.log("Element: ", element);
 				} else if(value[0] === "~") {
 					// Walked Reference
 					value = value.substring(1).split(".");
@@ -216,7 +218,7 @@
 					if(mark) {
 						element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 					} else {
-						element = $("<span class=\"calculated-result rendered-value " + properties.classes + " not-found\">" + value + "[Not Known]</span>");
+						element = $("<span class=\"null-result rendered-value " + properties.classes + " not-found\">" + value + "[Not Known]</span>");
 					}
 				}
 //				console.warn("Properties: ", properties);
@@ -258,6 +260,22 @@
 //				console.warn("RS Showdown: ", entity, base, target);
 				return converter.makeHtml(formatMarkdown(sourceText, this.universe, entity, allow_js));
 			}
+		}
+	});
+
+	document.body.addEventListener("click", function(event) {
+		if(event.target && typeof(event.target.getAttribute) === "function") {
+			switch(event.target.getAttribute("data-showstate")) {
+				case "result":
+					event.target.innerText = event.target.getAttribute("data-formula");
+					event.target.setAttribute("data-showstate", "formula");
+					break;
+				case "formula":
+					event.target.innerText = event.target.getAttribute("data-result");
+					event.target.setAttribute("data-showstate", "result");
+					break;
+			}
+
 		}
 	});
 })();

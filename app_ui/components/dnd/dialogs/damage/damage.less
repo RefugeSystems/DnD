@@ -1,0 +1,120 @@
+.dnd-component.dialog-dnd-damage {
+	position: relative;
+	border-radius: 5px;
+	overflow: auto;
+    width: 600px;
+    max-width: 80vw;
+
+	.declaring {
+		position: relative;
+		width: 100%;
+		min-height: 100px;
+		overflow: hidden;
+
+		.declaration-slider {
+			position: relative;
+			left: 0px;
+			transition: left .5s;
+
+			&.page1 {
+				left: 0px;
+			}
+
+			&.page2 {
+				left: -100%;
+			}
+
+			&.page3 {
+				left: -200%;
+			}
+
+			&.page4 {
+				left: -300%;
+			}
+
+			&.page5 {
+				left: -400%;
+			}
+
+			&.page6 {
+				left: -500%;
+			}
+
+			&.page7 {
+				left: -600%;
+			}
+
+			&.page8 {
+				left: -700%;
+			}
+		}
+	}
+
+	.section-tab {
+		margin: 2px 3px;
+		padding: 3px;
+
+		.section-tab-icon {
+			font-size: 1.2em;
+			vertical-align: middle;
+			line-height: 1.4em;
+		}
+	}
+
+	section {
+		width: 100%;
+		flex-shrink: 0;
+
+		&.page {
+			height: 400px;
+			max-height: 100vh;
+			overflow: auto;
+		}
+
+		.page-contents {
+			padding: 5px;
+		}
+
+		.expandable {
+			overflow: hidden;
+			max-height: 0px;
+			padding: 0px;
+			margin: 0px;
+			border: 0px;
+			transition: max-height .5s;
+
+			&.expanded {
+				max-height: 300px;
+				overflow: auto;
+			}
+		}
+
+		.target {
+			margin-top: 5px;
+
+			.quick {
+				margin-right: 5px;
+			}
+		}
+
+		.damage-container {
+			margin: 5px 0px 0px 0px;
+		}
+
+	}
+
+	.targeted {
+
+		.target-select {
+			box-shadow: 0px 0px 10px @rsLightRed;
+		}
+	}
+
+	.dice {
+		border-top: 1px solid @rsLightBlue;
+
+		.roll-add {
+			margin: 5px;
+		}
+	}
+}

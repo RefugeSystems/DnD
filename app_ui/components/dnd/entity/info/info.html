@@ -2,7 +2,11 @@
 	<div class="property-container health" v-if="!widget.attribute.hide_health">
 		<button class="property" v-on:click="takeDamage()">
 			<span class="icon fas fa-heartbeat"></span>
-			<span>
+			<span class="flex h">
+				<span class="flex h" v-if="entity.hp_temp">
+					<span class="rs-light-blue">{{entity.hp_temp}}</span>
+					<span class="seperator">|</span>
+				</span>
 				<span>{{entity.hp}}</span>
 				<span class="seperator">/</span>
 				<span>{{entity.hp_max}}</span>
@@ -10,10 +14,14 @@
 		</button>
 	</div>
 	<div class="property-container armor" v-if="!widget.attribute.hide_armor">
-		<div class="property">
+		<button class="property" v-on:click="viewDefenses()">
 			<span class="icon fas fa-shield"></span>
 			<span>{{entity.armor}}</span>
-		</div>
+		</button>
+		<button class="property" v-on:click="viewLanguages()">
+			<span class="icon fas fa-comment"></span>
+			<span>{{languages.length}}</span>
+		</button>
 	</div>
 	<div class="property-container gold" v-if="!widget.attribute.hide_gold">
 		<button class="property" v-on:click="transferGold()">

@@ -1,5 +1,12 @@
 .dnd-page.dnd-inventory {
 
+	.heading {
+		padding: 5px;
+
+		.weight {
+			border-width: 0px 0px 1px 0px;
+		}
+	}
 
 	.rs-table {
 		.name {
@@ -30,6 +37,26 @@
 			.equipped_item {
 				background-color: @rsDarkOrange;
 				color: @rsWhite;
+			}
+		}
+	}
+
+	.entity-slot {
+		margin-top: 10px;
+
+		.entity-slot-header {
+			line-height: 20px;
+			font-size: 20px;
+			vertical-align: middle;
+		}
+		
+		.entity-slot-contain {
+			padding: 5px 0px 0px 0px;
+			line-height: 18px;
+			font-size: 16px;
+
+			.slot-contents {
+				padding: 3px 15px;
 			}
 		}
 	}

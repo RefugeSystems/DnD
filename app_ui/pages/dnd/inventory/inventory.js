@@ -50,8 +50,68 @@ rsSystem.component("DNDInventory", {
 		"today": function() {
 			return this.universe.calendar.toDisplay(this.universe.time, false);
 		},
+		"slots": function() {
+			var result = [],
+				islots,
+				slots,
+				slot,
+				item,
+				e,
+				i;
+
+			if(this.entity.equip_slots) {
+				slots = Object.keys(this.entity.equip_slots);
+				for(i=0; i<slots.length; i++) {
+					slot = this.universe.index.slot[slots[i]];
+					if(slot) {
+						if(this.sloted[slot.id]) {
+							this.sloted[slot.id].splice(0);
+						} else {
+							Vue.set(this.sloted, slot.id, []);
+						}
+						result.push(slot);
+					}
+				}
+				result.sort(rsSystem.utility.sortByName);
+
+				if(this.entity.equipped) {
+					for(i=0; i<this.entity.equipped.length; i++) {
+						item = this.universe.index.item[this.entity.equipped[i]];
+						if(item && item.equip_slots) {
+							islots = Object.keys(item.equip_slots);
+							for(e=0; e<islots.length; e++) {
+								this.sloted[islots[e]].push(item);
+							}
+						}
+					}
+
+					islots = Object.keys(this.sloted);
+					for(i=0; i<islots.length; i++) {
+						this.sloted[islots[i]].sort(rsSystem.utility.sortByName);
+					}
+				}
+			}
+
+			return result;
+		},
+		"max_bag_weight": function() {
+			return this.entity.encumberance_max?this.entity.encumberance_max:0;
+		},
+		"bag_weight_classing": function() {
+			if(this.max_bag_weight < this.bag_weight) {
+				Vue.set(this, "bag_weight_color", "light-red");
+				return "fa-solid fa-scale-unbalanced-flip rs-light-red";
+			} else if((.8 * this.max_bag_weight) < this.bag_weight) {
+				Vue.set(this, "bag_weight_color", "yellow");
+				return "fa-solid fa-scale-balanced rs-yellow";
+			} else {
+				Vue.set(this, "bag_weight_color", "light-green");
+				return "fa-solid fa-scale-unbalanced rs-light-green";
+			}
+		},
 		"inventory": function() {
 			var inventory = [],
+				weight = 0,
 				cats = {},
 				entity,
 				item,
@@ -64,6 +124,8 @@ rsSystem.component("DNDInventory", {
 					item = this.universe.getObject(this.entity.inventory[i]);
 					if(item) {
 						Vue.set(this.held_by, item.id, this.entity.nickname || this.entity.name);
+						// console.log("Add Weight: " + item.weight);
+						weight += item.weight || 0;
 						inventory.push(item);
 					} else {
 						console.warn("Item Missing: " + this.entity.inventory[i]);
@@ -93,6 +155,8 @@ rsSystem.component("DNDInventory", {
 				}
 			}
 
+			// console.log("Bag Weight: " + weight);
+			Vue.set(this, "bag_weight", weight);
 			return inventory;
 		}
 	},
@@ -112,7 +176,12 @@ rsSystem.component("DNDInventory", {
 	},
 	"data": function() {
 		var reference = this,
-			data = {};
+			data = {},
+			slots,
+			slot,
+			item,
+			e,
+			i;
 
 		data.categories = [];
 		data.headings = ["icon", "name", "types", "held_by", "acquired", "age", "info"];
@@ -244,9 +313,13 @@ rsSystem.component("DNDInventory", {
 			}
 		};
 
+		data.bag_weight_color = "white";
 		data.controls = [];
 		data.attunable = [];
 		data.unattunable = [];
+		data.bag_weight = 0;
+		data.sloted = {};
+		data.attuned = 0;
 
 		return data;
 	},
@@ -272,6 +345,18 @@ rsSystem.component("DNDInventory", {
 				this.buildControls();
 			}
 		},
+		"displayNumber": function(number) {
+			if(typeof(number) === "number") {
+				return number.toFixed(2);
+			}
+			return number;
+		},
+		"viewEquiped": function() {
+			var details = {};
+			details.component = "dndDialogEquiped";
+			details.entity = this.entity;
+			rsSystem.EventBus.$emit("dialog-open", details);
+		},
 		"buildControls": function() {
 			var selected = this.storage && this.storage.selected?Object.keys(this.storage.selected):[],
 				reference = this,
@@ -280,9 +365,11 @@ rsSystem.component("DNDInventory", {
 				v1h = false,
 				v2h = false,
 				unequip = [],
+				attuned = 0,
 				equip = [],
 				items = [],
 				buffer,
+				item,
 				i,
 				j;
 
@@ -292,6 +379,14 @@ rsSystem.component("DNDInventory", {
 			if(this.entity && this.share) {
 				this.controls.push(this.share);
 			}
+
+			for(i=0; i<this.universe.listing.item.length; i++) {
+				item = this.universe.listing.item[i];
+				if(item && item.attuned === this.entity.id && rsSystem.utility.isValid(item)) {
+					attuned++;
+				}
+			}
+			Vue.set(this, "attuned", attuned);
 
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.item[selected[i]];

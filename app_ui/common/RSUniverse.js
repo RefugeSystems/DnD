@@ -1216,7 +1216,7 @@ class RSUniverse extends EventEmitter {
 				this.$emit("warning", {
 					"id": "app:update",
 					"message": "New Version Available",
-					"icon": "fas fa-sync rs-lightyellow",
+					"icon": "fas fa-exclamation-triangle rs-lightyellow",
 					"anchored": true,
 					"emission": {
 						"type": "dialog-open",

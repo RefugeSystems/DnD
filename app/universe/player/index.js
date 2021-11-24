@@ -144,6 +144,7 @@ class PlayerConnection extends EventEmitter {
 					try {
 						this.universe.emit(message.type, message);
 					} catch(violation) {
+						// Essentially never happens due to asynchronous implementation but kept for stability
 						this.emit("error", {
 							"received": now,
 							"error": violation,

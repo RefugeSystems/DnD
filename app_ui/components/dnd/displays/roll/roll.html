@@ -1,0 +1,14 @@
+<div class="rs-component dnd-component dnd-display-roll" :class="roll.is_focused?'roll-focused':''">
+	<input class="roll-result" :placeholder="roll.formula" v-model.number="roll.computed" v-on:focus="focused(true)" v-on:blur="focused(false)" />
+	<button class="general rounded quick action" v-if="roll.formula" v-on:click="rollResult()">
+		<span class="action-icon fas fa-dice"></span>
+	</button>
+	<div class="rolled flex h" v-if="roll.dice_rolls">
+		<div class="results flex h" v-for="(results, die) in roll.dice_rolls">
+			<button class="result rounded general action" v-for="(result, $index) in results" v-on:click="roll.reroll(die, $index)" v-on:click.right.stop.prevent="roll.remove(die, $index)">
+				<span class="fas" :class="'fa-dice-' + die"></span>
+				<span class="die-roll">{{result}}</span>
+			</button>
+		</div>
+	</div>
+</div>

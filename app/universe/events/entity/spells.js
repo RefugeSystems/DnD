@@ -22,6 +22,8 @@ module.exports.initialize = function(universe) {
 		var entity = event.message.data.entity,
 			spells = event.message.data.spells,
 			prepared = [],
+			cantrip_count,
+			spell_count,
 			notify,
 			spell,
 			i;
@@ -45,14 +47,38 @@ module.exports.initialize = function(universe) {
 						universe.handleError("equipment:equip", err);
 						console.error(err);
 					} else {
-						if(entity._data.spells && typeof(entity.spells_maximum) === "number" && entity._data.spells_prepared.length > entity.spells_maximum) {
+						cantrip_count = 0;
+						spell_count = 0;
+						for(i=0; i<entity._data.spells_prepared.length; i++) {
+							spell = universe.manager.spell.object[entity._data.spells_prepared[i]];
+							if(spell) {
+								if(spell.level === 0 || isNaN(spell.level)) {
+									cantrip_count++;
+								} else if(spell.level > 0) {
+									spell_count++;
+								}
+							}
+						}
+						if(typeof(entity.spells_maximum) === "number" && spell_count > entity.spells_maximum) {
 							notify = Object.assign({}, universe.getMasters());
 							notify[event.player.id] = true;
 							universe.emit("send", {
 								"type": "notice",
 								"icon": "fas fa-exclamation-triangle rs-lightred",
 								"recipients": notify,
-								"message": entity.name + " has prepared " + entity._data.spells_prepared.length + " Spells and has a maximum preparation of " + entity.spells_maximum,
+								"message": entity.name + " has prepared " + spell_count + " Spells and has a maximum preparation of " + entity.spells_maximum,
+								"data": event.message.data,
+								"anchored": true
+							});
+						}
+						if(typeof(entity.cantrips_maximum) === "number" && cantrip_count > entity.cantrips_maximum) {
+							notify = Object.assign({}, universe.getMasters());
+							notify[event.player.id] = true;
+							universe.emit("send", {
+								"type": "notice",
+								"icon": "fas fa-exclamation-triangle rs-lightred",
+								"recipients": notify,
+								"message": entity.name + " has prepared " + cantrip_count + " Cantrips and has a maximum preparation of " + entity.cantrips_maximum,
 								"data": event.message.data,
 								"anchored": true
 							});

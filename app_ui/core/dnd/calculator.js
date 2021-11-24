@@ -130,6 +130,55 @@
 		}
 	};
 
+
+	/**
+	 * 
+	 * @method getRollResult
+	 * @param {Roll} roll 
+	 * @param {RSObject} [source]
+	 * @return {Integer}
+	 */
+	rsSystem.dnd.Calculator.getRollResult = rsSystem.dnd.getRollResult = function(roll, source) {
+		var result = 0,
+			formula,
+			percent,
+			rolls,
+			dice,
+			res,
+			i,
+			j;
+		
+		if(typeof(roll) === "string") {
+			roll = new Roll(roll);
+		}
+
+		formula = rsSystem.dnd.parseDiceRoll(rsSystem.dnd.reducedDiceRoll(roll.formula, source));
+		dice = Object.keys(formula);
+		for(i=0; i<dice.length; i++) {
+			rolls = rsSystem.dnd.compute(formula[dice[i]]);
+			if(dice[i][0] === "d") {
+				if(!roll.dice_rolls[dice[i]]) {
+					Vue.set(roll.dice_rolls, dice[i], []);
+				}
+				for(j=0; j<rolls; j++) {
+					res = rsSystem.dnd.diceRoll(dice[i]);
+					roll.dice_rolls[dice[i]].push(res);
+					result += res;
+				}
+			}
+		}
+		if(formula.remainder) {
+			result += rsSystem.dnd.compute(formula.remainder);
+		}
+		if(formula["%"]) {
+			percent = rsSystem.dnd.compute(formula["%"]);
+			result += Math.floor(result * (percent/100));
+		}
+
+		Vue.set(roll, "result", result);
+		return roll;
+	};
+
 	/**
 	 * 
 	 * @method diceRoll

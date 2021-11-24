@@ -1,0 +1,37 @@
+.dnd-component.dnd-display-roll {
+	.roll-result {
+		margin: 0px 5px;
+		padding: 0px 5px;
+	}
+
+	.roll-result {
+		transition: border-color .5s;
+	}
+
+	&.roll-focused {
+
+		.roll-result {
+			box-shadow: 0px 0px 10px @rsGreen;
+			border-color: @rsLightGreen;
+		}
+	}
+
+	.roll-container {
+	}
+	
+	.roll {
+		padding: 5px;
+		margin: 5px;
+		box-shadow: 0px 0px 5px @rsWhite;
+		border-radius: 5px;
+		min-width: 40px;
+		flex-shrink: 0;
+
+		& > * {
+			text-align: center;
+		}
+		&.active {
+			box-shadow: 0px 0px 7px @rsGreen;
+		}
+	}
+}

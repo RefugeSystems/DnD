@@ -35,7 +35,7 @@
 	</span>
 
 	<button :id="fid" v-if="field.type === 'boolean'" v-on:click="set(!root[field.id])" class="flat">
-		<span class="far" :class="root[field.id]?'fa-check-square':'fa-square'"></span>
+		<span class="far" :class="root[field.id]?'fa-check-square':(root[field.id] === undefined || root[field.id] === null?'fa-square':'fa-times-square')"></span>
 	</button>
 
 	<!-- TODO: Add Game Calendar handler for "gametime" typed fields -->

@@ -11,7 +11,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} damage 
 	 * @param {Object} resist 
 	 */
-	var takeDamage = function(entity, damage, resist) {
+	var __takeDamage = function(entity, damage, resist) {
 		if(!damage) {
 			return null;
 		}
@@ -59,6 +59,71 @@ module.exports.initialize = function(universe) {
 				
 			}
 		});
+	};
+
+
+	var takeDamage = function(entity, damage, resist = {}) {
+		var keys = Object.keys(damage),
+			was_damaged = false,	
+			received,
+			add = {},
+			temp_cap,
+			i;
+
+		add.hp_temp = 0;
+		add.hp = 0; //entity.hp;
+		for(i = 0; i < keys.length; i++) {
+			if(typeof(resist[keys[i]]) === "string") {
+				resist[keys[i]] = universe.calculator.computedDiceRoll(resist[keys[i]], entity, undefined, damage[keys[i]]);
+			}
+			received = damage[keys[i]] - (resist[keys[i]] || 0);
+			// TODO: Handle feats/effects that allow heal on damage type over-resist
+			if(received < 0) {
+				received = 0;
+			}
+			if(keys[i] === "damage_type:heal") {
+				add.hp += received;
+			} else if(keys[i] === "damage_type:temphp") {
+				add.hp_temp += received;
+			} else {
+				add.hp -= received;
+			}
+		}
+
+		// if(add.hp < 0) {
+		// 	add.hp = 0;
+		// } else if(add.hp > entity.hp_max) { // This is also "passively" handled by the max configuration on the hp field
+		// 	add.hp = entity.hp_max;
+		// }
+
+		if(entity.hp_temp && add.hp < 0) {
+			temp_cap = -1 * entity.hp_temp;
+			if(temp_cap <= add.hp) {
+				add.hp_temp = add.hp;
+				add.hp = 0;
+			} else {
+				add.hp_temp = temp_cap;
+				add.hp -= temp_cap;
+			}
+		}
+
+		// TODO: Process channel.instilled if any[#178704758]; was_damaged -> effect.damage_required
+		if(add.hp !== 0) {
+			was_damaged = true;
+		}
+
+		if(add.hp) {
+			add.death_fail = 0;
+			add.death_save = 0;
+		}
+
+		entity.addValues(add, function(err) {
+			if(err) {
+				universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
+			}
+		});
+
+		return was_damaged;
 	};
 
 	/**

@@ -69,7 +69,7 @@ module.exports = new (function() {
 						next();
 					})
 					.catch(function(err) {
-						console.log("fauly: " ,err);
+						console.log("fault: " ,err);
 						next(err);
 					});
 					

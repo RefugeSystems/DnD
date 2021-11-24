@@ -1,6 +1,4 @@
-
 module.exports.initialize = function(universe) {
-	
 	/**
 	 * 
 	 * @event player:items:attune
@@ -85,7 +83,6 @@ module.exports.initialize = function(universe) {
 					"attuned_on": universe.time,
 					"attuned_to": entity.id, // Potential future proofing
 					"attuned": entity.id,
-					"character": entity.id,
 					"creature": entity.id,
 					"user": entity.id
 				});
@@ -129,7 +126,6 @@ module.exports.initialize = function(universe) {
 					"attuned_on": null,
 					"attuned_to": null, // Potential future proofing
 					"attuned": null,
-					"character": null,
 					"creature": null,
 					"user": null
 				});

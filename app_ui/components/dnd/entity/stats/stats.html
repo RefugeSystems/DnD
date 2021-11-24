@@ -1,6 +1,6 @@
 <div class="rs-component dnd-component entity-stats">
 	<div class="property-container gold">
-		<button class="property" v-on:click="listActions()">
+		<button class="property" v-on:click="declareAttack()">
 			<span class="icon game-icon game-icon-saber-slash"></span>
 			<span>{{getMainHand()}}</span>
 			<span class="seperator">|</span>
@@ -22,7 +22,8 @@
 		</button>
 	</div>
 	<div class="property-container speed">
-		<button class="property" v-on:click="move()" v-on:mouseover="hoverMovement(entity)" v-on:mouseleave="hoverMovement(null)">
+		<!-- <button class="property" v-on:click="move()" v-on:mouseover="hoverMovement(entity)" v-on:mouseleave="hoverMovement(null)"> -->
+		<button class="property" v-on:click="listActions()" v-on:mouseover="hoverMovement(entity)" v-on:mouseleave="hoverMovement(null)">
 			<span class="icon fas fa-running"></span>
 			<span>{{entity.movement_ground}}</span>
 		</button>

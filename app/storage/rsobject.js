@@ -299,7 +299,7 @@ class RSObject {
 		if(this._data.parent && (parent = this._universe.objectHandler.retrieve(this._data.parent))) {
 			fields = this._manager.fieldIDs;
 			for(i=0; i<fields.length; i++) {
-				if(this._data[fields[i]] === null || this._data[fields[i]] === undefined) {
+				if((this._data[fields[i]] === null || this._data[fields[i]] === undefined) && fields[i] !== "template" && fields[i] !== "is_template" /* TODO: Implement Field Attribute for no parental inheritance */) {
 					this._combined[fields[i]] = parent._combined[fields[i]];
 				} else {
 					this._combined[fields[i]] = this._data[fields[i]];

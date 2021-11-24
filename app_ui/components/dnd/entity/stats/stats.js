@@ -24,7 +24,21 @@ rsSystem.component("dndEntityStats", {
 		}
 	},
 	"computed": {
-
+		"bag_weight": function() {
+			var bag_weight = 0,
+				items,
+				i;
+	
+			items = this.universe.transcribeInto(this.entity.inventory);
+			for(i=0; i<items.length; i++) {
+				bag_weight += items[i].weight;
+			}
+	
+			return bag_weight.toFixed(2);
+		},
+		"max_carry": function() {
+			return this.entity.encumberance_max?this.entity.encumberance_max.toFixed(2):0;
+		}
 	},
 	"data": function() {
 		var data = {};
@@ -43,6 +57,21 @@ rsSystem.component("dndEntityStats", {
 			} else {
 				this.$emit("hovered-object", null);
 			}
+		},
+		/**
+		 * Open the damage display to declare damage to something
+		 * @method declareAttack
+		 */
+		"declareAttack": function() {
+			var details = {},
+				i,
+				j;
+
+			details.title = this.entity.name + " Actions";
+			details.component = "dndDialogDamage";
+			details.entity = this.entity;
+
+			rsSystem.EventBus.$emit("dialog-open", details);
 		},
 		/**
 		 * Use the DialogList to list actions and highlight usable vs. not usable
@@ -203,6 +232,7 @@ rsSystem.component("dndEntityStats", {
 			details.link = "/spells/" + this.entity.id;
 			details.entity = this.entity.id;
 			details.sections = ["prepared", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+			details.extra = "Spell Attack Bonus: " + (this.entity.spell_attack || 0) + " | Spell DC: " + (this.entity.spell_dc || 0);
 			details.cards = {};
 			details.limit = 20,
 			details.data = {
@@ -284,6 +314,7 @@ rsSystem.component("dndEntityStats", {
 			details.sections = ["effects", "knowledges", "feats"];
 			details.cards = {};
 			details.limit = 20,
+			details.extra = "Bag Weight: " + this.bag_weight + " / " + this.max_carry;
 			details.data = {
 				"none": []
 			};
