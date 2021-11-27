@@ -1,11 +1,11 @@
 <div class="rs-component dnd-component dialog-dnd-damage">
 	<!-- All selections depend on the passed entity -->
-	<div class="progress flex h">
+	<div class="progress flex h v-center">
 		<button class="section-tab flat action rs-white" v-for="section in prepared" v-on:click="goToSection(section)">
 			<span>{{section.name}}</span>
 			<span class="section-tab-icon fa-solid fa-chevron-right" v-if="sections[section.index + 1] && section.index !== activeSection.index"></span>
 		</button>
-		<button class="rounded quick action" v-on:click="finishSection(activeSection)">
+		<button class="general rounded quick action" v-on:click="finishSection(activeSection)">
 			<span class="action-icon fa-solid" :class="sections[activeSection.index + 1]?'fa-chevrons-right':'fa-upload'"></span>
 		</button>
 	</div>
@@ -13,73 +13,80 @@
 		<div class="declaration-slider flex h" :class="activeSection.classing">
 			<section class="page channels">
 				<div class="page-contents">
-					<div class="section-heading">
-						<span>Method</span>
-					</div>
 					<!-- This may be passed in as an object "channel" or "method" (preferably channel but method makes more sense as plain english, avoiding for javascript method confusion)-->
 					<div class="channel none flex h" v-on:click="selectChannel(null)">
 						<button class="general rounded quick action spells">
 							<span class="action-icon fas fa-ban"></span>
 						</button>
-						<button class="general rounded action">
-							<span class="action-text">No Specific Method</span>
+						<button class="general rounded selection action" :class="channelClasses(null)">
+							<span class="action-text">Manual Entry</span>
 						</button>
 					</div>
 
 					<!-- Item, Feat, Effect, or Spell -->
-					<div class="channel weapons flex h">
-						<div class="channel weapon flex h" v-if="mainhand">
+					<h3>Items</h3>
+					<div class="spaced weapons flex h wrap">
+						<div class="channel weapon flex h grow-1" v-if="mainhand">
 							<button class="general rounded quick action item" v-on:click="info(mainhand)">
 								<span class="action-icon" :class="mainhand.icon"></span>
 							</button>
-							<button class="general rounded action item" v-on:click="selectChannel(mainhand)">
-								<span class="action-text">Main hand</span>
+							<button class="general rounded action selection item" v-on:click="selectChannel(mainhand)" :class="channelClasses(mainhand)">
+								<span class="action-text">{{mainhand.name}}</span>
 							</button>
 						</div>
-						<div class="channel weapon flex h" v-for="offhand in available_offhand">
+						<div class="channel weapon flex h grow-1" v-for="offhand in available_offhand">
 							<button class="general rounded quick action item" v-on:click="info(offhand)">
 								<span class="action-icon" :class="offhand.icon"></span>
 							</button>
-							<button class="general rounded action item" v-on:click="selectChannel(offhand)">
-								<span class="action-text">Off hand</span>
+							<button class="general rounded action selection item" v-on:click="selectChannel(offhand)" :class="channelClasses(offhand)">
+								<span class="action-text">{{offhand.name}}</span>
 							</button>
 						</div>
 					</div>
-					<div class="channel toggles">
+					<!-- <div class="channel toggles">
 						<button class="general rounded action toggle spells"" v-on:click="toggleSpells()">
 							<span class="action-text">Spells</span>
 						</button>
 						<button class="general rounded action toggle feats" v-on:click="toggleFeats()">
 							<span class="action-text">Feats</span>
 						</button>
-					</div>
+					</div> -->
 
 					<!-- Select from available -->
-					<div class="flex h wrap">
-						<div class="channel spells expandable" :class="show_spells?'expanded':'shrunk'">
-							<button class="general rounded action channel-feat" v-if="available_spells.length === 0">
-								<span class="action-icon fas fa-ban"></span>
+					<div class="spaced flex h wrap">
+						<!-- <div class="channel spells expandable grow-1" :class="show_spells?'expanded':'shrunk'"> -->
+						<div class="channel spells grow-1">
+							<h3>
+								<span>Spells - Level</span>
+								<select v-model="cast_level">
+									<option v-for="level in available_levels" :value="level">{{level}}</option>
+								</select>
+							</h3>
+							<div class="message general rounded action channel-feat" v-if="available_spells.length === 0">
+								<span class="action-icon fas fa-empty-set"></span>
 								<span class="action-text">No Usable Spells</span>
-							</button>
-							<div class="channel spell flex h" v-for="spell in available_spells">
+							</div>
+							<div class="spaced channel spell flex h" v-for="spell in available_spells" v-if="spell.level <= cast_level">
 								<button class="general rounded quick action spell" v-on:click="info(spell)">
 									<span class="action-icon" :class="spell.icon"></span>
 								</button>
-								<button class="general rounded action channel-spell" v-on:click="selectChannel(spell)">
+								<button class="general rounded action selection channel-spell" v-on:click="selectChannel(spell)" :class="channelClasses(spell)">
 									<span class="action-text">{{spell.name}}</span>
 								</button>
 							</div>
 						</div>
-						<div class="channel feats expandable" :class="show_feats?'expanded':'shrunk'">
-							<button class="general rounded action channel-feat" v-if="available_feats.length === 0">
-								<span class="action-icon fas fa-ban"></span>
+						<!-- <div class="channel feats expandable grow-1" :class="show_feats?'expanded':'shrunk'"> -->
+						<div class="channel feats grow-1">
+							<h3>Feats</h3>
+							<div class="message channel-feat" v-if="available_feats.length === 0">
+								<span class="action-icon fas fa-empty-set"></span>
 								<span class="action-text">No Usable Feats</span>
-							</button>
-							<div class="channel feat flex h" v-for="feat in available_feats">
+							</div>
+							<div class="spaced channel feat flex h" v-for="feat in available_feats">
 								<button class="general rounded quick action feat" v-on:click="info(feat)">
 									<span class="action-icon" :class="feat.icon"></span>
 								</button>
-								<button class="general rounded action channel-feat" v-on:click="selectChannel(feat)">
+								<button class="general rounded action selection channel-feat" v-on:click="selectChannel(feat)" :class="channelClasses(feat)">
 									<span class="action-icon" :class="feat.icon"></span>
 									<span class="action-text">{{feat.name}}</span>
 								</button>
@@ -90,19 +97,26 @@
 			</section>
 			<section class="page targets">
 				<div class="page-contents">
-					<div class="section-heading">
-						<span>Targets</span>
-					</div>
 					<!-- This may be passed in as an array of IDs "targets" -->
+					<div class="message channel-feat" v-if="available_targets.length === 0">
+						<span class="action-icon fas fa-empty-set"></span>
+						<span class="action-text">No Avaialble Targets</span>
+					</div>
 
 					<!-- Select from entities, items, spells, effects, etc. in shared location (Togglable type limited from method when known, starts as true on dialog open) -->
 					<div class="targets-list">
-						<div class="target flex h" v-for="target in available_targets" :class="targeting[target.id]?'targeted':''">
-							<button class="general rounded quick action" v-on:click="info(target)">
+						<div class="spaced target flex h" v-for="target in available_targets" :class="getTargetClasses(target)">
+							<button class="general rounded quick action icon" v-on:click="info(target)">
 								<span class="action-icon" :class="target.icon"></span>
 							</button>
-							<button class="general rounded action target-select" v-on:click="toggleTarget(target)">
-								<span class="action-text">{{getVisibleName(target)}}</span>
+							<button class="general rounded action selection target-select has-hp" v-on:click="toggleTarget(target)">
+								<span v-if="target.color_flag" class="target-hat game-icon game-icon-top-hat" :class="getHatColor(target)"></span>
+								<span class="action-text">
+									<span>{{getVisibleName(target)}}</span>
+									<span v-if="ranging[target.id]">
+										( <span :class="getRangeClasses(target)">{{ranging[target.id]}} studs</span> )
+									</span>
+								</span>
 								<dnd-health-bar :entity="target"></dnd-health-bar>
 							</button>
 						</div>
@@ -111,21 +125,34 @@
 			</section>
 			<section class="page checks">
 				<div class="page-contents">
-					<div class="section-heading">
-						<span>Skill Checks</span>
-					</div>
 					<!-- Perform any necessary attack rolls (Indicate advantage here) and can force additional checks with an object "check" (Maps skill IDs). Default behavior derived from "channel" when possible. -->
+					<div class="message channel-feat" v-if="skill_checks.length === 0">
+						<span class="action-icon fas fa-empty-set"></span>
+						<span class="action-text">No Skill Checks</span>
+					</div>
 
+					<div class="check" v-for="check in skill_checks">
+						<div class="check-skill">
+							<span>{{check.skill.name}}</span>
+							<span v-if="check.target">to {{check.target.name}}</span>
+						</div>
+						<div class="flex h">
+							<button class="general rounded quick action" v-on:click="info(check.skill)">
+								<span class="action-icon" :class="check.skill.icon"></span>
+							</button>
+							<button class="general rounded quick action selection" v-on:click="info(check.target)" v-if="check.target">
+								<span class="action-icon" :class="check.target.icon"></span>
+							</button>
+							<dnd-display-roll class="selection" :class="skillVantage(check.skill)" :roll="check.roll" :source="entity" :skill="check.skill" :profile="profile" v-on:rollfocused="setFocus($event)"></dnd-display-roll>
+						</div>
+					</div>
 				</div>
 			</section>
 			<section class="page damages">
 				<div class="page-contents">
-					<div class="section-heading">
-						<span>Damage</span>
-					</div>
 					<!-- Roll damage based on method selection, may force base available values passing in an object "damage" (Maps damage_type IDs) -->
 					<div class="damage-list flex h wrap">
-						<div class="damage-container flex h" v-for="dmg in available_damages">
+						<div class="damage-container flex h" v-for="dmg in available_damages" :class="roll_damage[dmg.id].computed?'fill':''">
 							<button class="general rounded quick action" v-on:click="info(dmg)">
 								<span class="action-icon" :class="dmg.icon"></span>
 							</button>
@@ -136,20 +163,116 @@
 			</section>
 			<section class="page effects">
 				<div class="page-contents">
-					<div class="section-heading">
-						<span>Effects</span>
-					</div>
 					<!-- Effects to pass to the target. Defaults to a list based on method. Button to edit. Selection limited to "playable" effects. Defaults gained from "channel" -->
+					<div class="message" v-if="effects.length === 0">
+						<span class="action-icon fas fa-empty-set"></span>
+						<span class="action-text">No Effects Passed</span>
+					</div>
+					<div class="message" v-if="effects.length !== 0">
+						<span class="action-icon game-icon game-icon-beams-aura"></span>
+						<span class="action-text">Effects Passed to Targets</span>
+					</div>
+					<div class="effect flex h" v-for="effect in effects">
+						<button class="general rounded quick action" v-on:click="info(effect)">
+							<span class="action-icon" :class="effect.icon"></span>
+						</button>
+						<button class="general rounded action selection" v-on:click="info(effect)">
+							<span class="action-text">{{effect.name}}</span>
+						</button>
+					</div>
 
+					<div class="message" v-if="effects_self.length === 0">
+						<span class="action-icon fas fa-empty-set"></span>
+						<span class="action-text">No Effects Received</span>
+					</div>
+					<div class="message" v-if="effects_self.length !== 0">
+						<span class="action-icon game-icon game-icon-beams-aura"></span>
+						<span class="action-text">Effects Received by You</span>
+					</div>
+					<div class="effect flex h" v-for="effect in effects_self">
+						<button class="general rounded quick action" v-on:click="info(effect)">
+							<span class="action-icon" :class="effect.icon"></span>
+						</button>
+						<button class="general rounded action selection" v-on:click="info(effect)">
+							<span class="action-text">{{effect.name}}</span>
+						</button>
+					</div>
 				</div>
 			</section>
 			<section class="page review">
 				<div class="page-contents">
-					<div class="section-heading">
-						<span>Review</span>
-					</div>
 					<!-- -->
+					<div class="channel flex v" v-if="channel">
+						<h3>Using</h3>
+						<div class="spaced channel flex h">
+							<button class="general rounded quick action" v-on:click="info(channel)">
+								<span class="action-icon" :class="channel.icon"></span>
+							</button>
+							<button class="general rounded action selection" v-on:click="info(channel)">
+								<span class="action-text">{{channel.name}}</span>
+								<span v-if="channel._class === 'spell'">(Level: {{cast_level}})</span>
+							</button>
+						</div>
+					</div>
+					<div class="targets" v-if="active_targets.length">
+						<h3>Targets</h3>
+						<div class="spaced target targeted flex h v-center" v-for="target in active_targets" :class="getTargetClasses(target)">
+							<!-- TODO: Figure out flex issue or determine a better way of listing data -->
+							<button class="general rounded quick action" v-on:click="info(target_check[target.id].skill)" v-if="target_check[target.id]">
+								<span class="action-icon" :class="target_check[target.id].skill.icon"></span>
+							</button>
+							<button class="general rounded action selection" v-on:click="info(target_check[target.id].skill)" v-if="target_check[target.id]">
+								<span class="action-text">{{target_check[target.id].skill.name}} ({{target_check[target.id].roll.computed}})</span>
+							</button>
+							<span class="seperator fas fa-chevrons-right" v-if="target_check[target.id]"></span>
+							<button class="general rounded quick action" v-on:click="info(target)">
+								<span class="action-icon" :class="target.icon"></span>
+							</button>
+							<button class="general rounded action selection" v-on:click="info(target)">
+								<span class="action-text">{{target.name}}</span>
+							</button>
+						</div>
+					</div>
+					<div class="channel flex v" v-if="channel && !isEmpty(channel.action_cost)">
+						<h3>Action Cost</h3>
+						<div class="spaced channel flex h message" v-for="(action, cost) in action_cost">
+							<span>{{action}} : {{cost}}</span>
+						</div>
+					</div>
+					<div class="targets flex v" v-if="available_damages.length">
+						<h3>Damage</h3>
+						<div class="spaced damage flex h" v-for="dmg in available_damages" v-if="roll_damage[dmg.id].computed">
+							<button class="general rounded quick action" v-on:click="info(dmg)">
+								<span class="action-icon" :class="dmg.icon"></span>
+							</button>
+							<button class="general rounded action selection" v-on:click="info(dmg)">
+								<span class="action-text">{{dmg.name}} = {{roll_damage[dmg.id].computed}}</span>
+							</button>
+						</div>
+					</div>
+					<div class="effects flex v" v-if="effects.length">
+						<h3>Effects</h3>
+						<div class="spaced channel flex h" v-for="effect in effects">
+							<button class="general rounded quick action" v-on:click="info(effect)">
+								<span class="action-icon" :class="effect.icon"></span>
+							</button>
+							<button class="general rounded action selection" v-on:click="info(effect)">
+								<span class="action-text">{{effect.name}}</span>
+							</button>
+						</div>
 
+						<div class="effects flex v" v-if="effects_self.length">
+							<h3>Self Effects</h3>
+							<div class="spaced channel flex h" v-for="effect in effects_self">
+								<button class="general rounded quick action" v-on:click="info(effect)">
+									<span class="action-icon" :class="effect.icon"></span>
+								</button>
+								<button class="general rounded action selection" v-on:click="info(effect)">
+									<span class="action-text">{{effect.name}}</span>
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</section>
 		</div>
@@ -161,10 +284,10 @@
 			<span class="action-icon" :class="die.icon"></span>
 			<span class="action-count" v-if="focused_roll">{{focused_roll.dice_rolls[die.id]?focused_roll.dice_rolls[die.id].length:0}}</span>
 		</button>
-		<button class="general rounded quick action roll-add stat" v-for="stat in stats" :class="stat.classes" v-on:click="addStat(stat)" :title="stat.name + ' which is ' + stat.value">
+		<button class="general rounded quick action roll-add stat" v-for="stat in stats" :class="stat.classes" v-on:click="addStat(stat)" :title="'Add ' + stat.name + ' (' + stat.value + ')'">
+			<span class="action-label">{{stat.value}}</span>
 			<span class="action-icon" :class="stat.icon"></span>
 			<span class="action-text">{{stat.name}}</span>
-			<span class="action-count">{{stat.value}}</span>
 		</button>
 	</section>
 </div>

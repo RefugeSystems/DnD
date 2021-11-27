@@ -116,7 +116,7 @@ rsSystem.component("sysInfoGeneral", {
 								"property": "color_flag",
 								"type": "select",
 								"_value": this.info.color_flag,
-								"options": ["red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
+								"options": ["", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
 							};
 							if(loading.options.indexOf[loading._value] === -1) {
 								loading._missing = loading._value;

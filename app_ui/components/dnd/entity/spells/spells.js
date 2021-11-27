@@ -87,6 +87,8 @@ rsSystem.component("dndEntitySpells", {
 			data.index[data.sizes[i].id] = data.sizes[i];
 		}
 
+		data.entity_state = "";
+
 		return data;
 	},
 	"mounted": function() {
@@ -97,6 +99,8 @@ rsSystem.component("dndEntitySpells", {
 		if(this.storage && !this.storage.slot) {
 			Vue.set(this.storage, "slot", "1");
 		}
+		this.universe.$on("updated", this.update);
+		this.updateEntityState();
 	},
 	"methods": {
 		"getActionCost": function(spell) {
@@ -125,10 +129,19 @@ rsSystem.component("dndEntitySpells", {
 			Vue.set(this.storage, "collapsed", !this.storage.collapsed);
 		},
 		"getSpellBoxDisplay": function(spell) {
+			var classes = "";
+
 			if(spell.level > this.storage.slot) {
-				return "unusable-spell";
+				classes += " unusable-spell";
 			}
-			return "usable-spell";
+			if(spell.action_cost && !this.hasActions(spell.action_cost)) {
+				classes += " no-actions";
+			}
+			if(this.entity.concentrations && this.entity.concentrations.length && this.entity.concentrations.indexOf(spell.id) === -1) {
+				classes += " concentrating";
+			}
+
+			return classes;
 		},
 		"getDamageRoll": function(formula, spell) {
 			// console.log("damage");
@@ -150,7 +163,7 @@ rsSystem.component("dndEntitySpells", {
 		"getSlotClass": function(slot) {
 			var classes = "";
 			if(this.storage.slot == slot) {
-				return "active-slot";
+				return " active-slot";
 			}
 			return classes;
 		},
@@ -245,10 +258,59 @@ rsSystem.component("dndEntitySpells", {
 			} else {
 				Vue.set(this.storage, "slot", slot);
 			}
+		},
+		"isSilenced": function() {
+			var effect,
+				i;
+			if(this.entity.cannot_speak) {
+				return true;
+			}
+			if(this.entity.effects) {
+				for(i=0; i<this.entity.effects.length; i++) {
+					effect = this.universe.index.effect[this.entity.effects[i]];
+					if(effect && (effect.id === "effect:sileneced" || effect.parent === "effect:silenced")) {
+						return true;
+					}
+				}
+			}
+			return false;
+		},
+		"isRestrained": function() {
+			var effect,
+				i;
+			if(this.entity.cannot_gesture) {
+				return true;
+			}
+			if(this.entity.effects) {
+				for(i=0; i<this.entity.effects.length; i++) {
+					effect = this.universe.index.effect[this.entity.effects[i]];
+					if(effect && (effect.id === "effect:restrained" || effect.parent === "effect:restrained")) {
+						return true;
+					}
+				}
+			}
+			return false;
+		},
+		"updateEntityState": function() {
+			var state = "";
+
+			if(this.isSilenced()) {
+				state += " not_speak";
+			}
+			if(this.isRestrained()) {
+				state += " not_gesture";
+			}
+
+			Vue.set(this, "entity_state", state);
+		},
+		"update": function(event) {
+			if(event && event.id === this.entity.id) {
+				this.updateEntityState();
+			}
 		}
 	},
 	"beforeDestroy": function() {
-
+		this.universe.$off("updated", this.update);
 	},
 	"template": Vue.templified("components/dnd/entity/spells.html")
 });

@@ -245,6 +245,7 @@
 
 			data.lengths = rsSystem.math.distance.lengths;
 			data.distancing = [];
+			data.total_length = 0;
 			data.totalLength = 0;
 			data.totalTime = 0;
 			data.distance = 0;
@@ -1061,7 +1062,9 @@
 						if(!isNaN(length)) {
 							this.universe.send("map:distance", {
 								"location": this.location.id,
-								"distance": length
+								"distance": length,
+								"height": this.original.height * length,
+								"width": this.original.width * length
 							});
 						}
 						break;
@@ -1819,6 +1822,7 @@
 							// console.log("Total Length: ", total_length);
 							// Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["pc", "ly", "km"]));
 							// Vue.set(this, "totalLength", rsSystem.math.distance.display(rsSystem.math.distance.reduceMeters(total_length), "", ["km", "m"]));
+							this.total_length = total_length;
 							uS = Math.ceil(total_length%1000);
 							kS = Math.floor(total_length/1000);
 							if(kS) {

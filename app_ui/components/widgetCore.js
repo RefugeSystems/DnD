@@ -168,13 +168,18 @@ rsSystem.component("DNDWidgetCore", {
 		 */
 		"castSpell": function(level, spell, action) {
 			var targets = null,
+				details = {},
 				damage = {},
 				cost = {},
 				cast,
 				keys,
-				i;
+				i,
+				j;
 
 
+			/*
+			 * Legacy
+			 */
 			if(typeof(spell) === "string") {
 				spell = this.universe.index.spell[spell];
 			}
@@ -184,7 +189,7 @@ rsSystem.component("DNDWidgetCore", {
 
 			// Upcast if needed, stored to cast to avoid mutation of spell
 			cast = Object.assign({}, spell);
-			if(spell.level && spell.level !== "0" /* Bug handling */ && level > spell.level) {
+			if(spell.level && spell.level !== "0" /* Cantrip Bug/Bad-State handling */ && level > spell.level) {
 				cast.level = level;
 			}
 			console.log("Cast at " + level + ": ", _p(spell), action, cast);
@@ -208,6 +213,17 @@ rsSystem.component("DNDWidgetCore", {
 				}
 			}
 
+			/*
+			 * Damage Process UI
+			 */
+			details.title = this.entity.name + " Actions";
+			details.component = "dndDialogDamage";
+			details.entity = this.entity;
+			details.channel = cast;
+			details.action = action;
+			rsSystem.EventBus.$emit("dialog-open", details);
+
+			/*
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
 				"storageKey": "store:roll:" + this.entity.id,
@@ -219,9 +235,48 @@ rsSystem.component("DNDWidgetCore", {
 				"spell": cast,
 				"closeAfterAction": true
 			});
+			*/
 		},
 		"computeRoll": function(formula, source) {
 			return rsSystem.dnd.reducedDiceRoll(formula, source);
+		},
+		"hasActions": function(count, entity) {
+			entity = entity || this.entity;
+			var keys,
+				i;
+			if(typeof(count) === "object" && typeof(entity.action_count)) {
+				keys = Object.keys(count);
+				for(i=0; i<keys.length; i++) {
+					if(!entity.action_count[keys[i]] || entity.action_count[keys[i]] < count[keys[i]]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		},
+		"distanceTo": function(from, to) {
+			var location,
+				distance;
+
+			if(from && to && from.location === to.location && from.x && from.y && to.x && to.y) {
+				location = this.universe.index.location[from.location];
+				if(location) {
+					if(location.width && location.height) {
+						distance = rsSystem.math.distance.points2D(from.x * location.width, from.y * location.height, to.x * location.width, to.y * location.height);
+						return Math.floor(distance + .5);
+					} else {
+						// No distance defined on location
+						return undefined;
+					}
+				} else {
+					console.warn("Distance calculation with undefined location: ", {
+						"location": from.location,
+						"from": from,
+						"to": to
+					});
+				}
+			}
+			return null;
 		},
 		"startRoll": function(rolling, targeted) {
 			rsSystem.EventBus.$emit("dialog-open", {

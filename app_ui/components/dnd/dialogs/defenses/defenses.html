@@ -19,11 +19,15 @@
 			</div>
 			<div class="basic">
 				<span class="fas fa-weight-scale"></span>
-				<span>Weight: {{entity.weight}}</span>
+				<span>Weight: {{entity.weight - bag_weight}}</span>
 			</div>
 			<div class="basic">
 				<span class="fas fa-backpack"></span>
 				<span>Bag Weight: {{bag_weight}} / {{max_carry}}</span>
+			</div>
+			<div class="basic">
+				<span class="fas fa-weight-hanging"></span>
+				<span>Total Weight: {{entity.weight}}</span>
 			</div>
 		</section>
 		<section class="resistances">

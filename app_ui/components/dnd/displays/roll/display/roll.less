@@ -1,0 +1,80 @@
+.dnd-component.dnd-display-roll {
+	.roll-result {
+		background-color: lightblue;
+		margin: 0px 0px 0px 5px;
+		padding: 0px 5px;
+		transition: border-color .5s;
+		max-width: 100px;
+	}
+
+	.action {
+		margin: 0px 0px 0px 5px;
+	}
+
+	&.roll-focused {
+		.roll-result {
+			box-shadow: 0px 0px 10px lightblue;
+			background-color: white;
+		}
+	}
+
+	.roll-container {
+
+	}
+
+	.advantage {
+		color: @rsGreen;
+	}
+
+	.disadvantage {
+		color: @rsRed;
+	}
+
+	&.advantage {
+		.advantage {
+			color: @rsWhite;
+			background-color: @rsDarkGreen;
+			border-color: @rsLightGreen;
+			box-shadow: 0px 0px 10px @rsGreen;
+		}
+	}
+
+	&.disadvantage {
+		.disadvantage {
+			color: @rsWhite;
+			background-color: @rsDarkRed;
+			border-color: @rsLightRed;
+			box-shadow: 0px 0px 10px @rsRed;
+		}
+	}
+
+	&.critical {
+		.roll-result {
+			border: 2px solid @rsLightGreen;
+			box-shadow: 0px 0px 10px @rsGreen;
+		}
+	}
+
+	&.failure {
+		.roll-result {
+			border: 2px solid @rsLightRed;
+			box-shadow: 0px 0px 10px @rsRed;
+		}
+	}
+	
+	.roll {
+		padding: 5px;
+		margin: 5px;
+		box-shadow: 0px 0px 5px @rsWhite;
+		border-radius: 5px;
+		min-width: 40px;
+		flex-shrink: 0;
+
+		& > * {
+			text-align: center;
+		}
+		&.active {
+			box-shadow: 0px 0px 7px @rsGreen;
+		}
+	}
+}

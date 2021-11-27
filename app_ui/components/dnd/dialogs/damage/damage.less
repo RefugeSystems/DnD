@@ -75,6 +75,14 @@
 			padding: 5px;
 		}
 
+		.spaced {
+			margin: 5px 0px 0px 0px;
+		}
+
+		.action.selection {
+			margin-left: 5px;
+		}
+
 		.expandable {
 			overflow: hidden;
 			max-height: 0px;
@@ -89,25 +97,119 @@
 			}
 		}
 
-		.target {
-			margin-top: 5px;
-
-			.quick {
-				margin-right: 5px;
-			}
-		}
-
 		.damage-container {
 			margin: 5px 0px 0px 0px;
 		}
+	}
 
+	.target-hat {
+		border-radius: 50px;
+		background-color: @rsWhite;
+
+		&.rs-light-grey,
+		&.rs-light-gray,
+		&.rs-lightgrey,
+		&.rs-lightgray,
+		&.rs-white {
+			background-color: @rsBlack;
+		}
+	}
+
+	.action.selection {
+		padding: 7px 5px 7px 5px;
+
+		&.has-hp {
+			padding: 3px 5px 11px 5px;
+		}
+	}
+
+	.within-range {
+		color: @rsLightGreen;
+	}
+
+	.within-radius {
+		color: @rsLightYellow;
+	}
+	
+	.out-of-range {
+		color: @rsLightRed;
 	}
 
 	.targeted {
-
-		.target-select {
-			box-shadow: 0px 0px 10px @rsLightRed;
+		.action.icon {
+			box-shadow: 0px 0px 10px @rsWhite;
 		}
+		.target-select {
+			box-shadow: 0px 0px 10px @rsWhite;
+		}
+	}
+
+	.npc {
+		.action.icon {
+			border-color: @rsLightBlue;
+		}
+
+		.action.selection {
+
+		}
+
+		&.targeted {
+			.action.icon {
+				box-shadow: 0px 0px 10px @rsLightBlue;
+			}
+			.action.selection {
+				box-shadow: 0px 0px 10px @rsLightBlue;
+				border-color: @rsBlue;
+			}
+		}
+	}
+
+	.minion {
+		.action.icon {
+			border-color: @rsLightYellow;
+		}
+
+		.action.selection {
+
+		}
+
+		&.targeted {
+			.action.icon {
+				box-shadow: 0px 0px 10px @rsLightYellow;
+			}
+			.action.selection {
+				box-shadow: 0px 0px 10px @rsLightYellow;
+				border-color: @rsYellow;
+			}
+		}
+	}
+
+	.hostile {
+		.action.icon {
+			border-color: @rsLightRed;
+		}
+
+		.action.selection {
+
+		}
+
+		&.targeted {
+			.action.icon {
+				box-shadow: 0px 0px 10px @rsLightRed;
+			}
+			.action.selection {
+				box-shadow: 0px 0px 10px @rsLightRed;
+				border-color: @rsRed;
+			}
+		}
+	}
+
+	.message {
+		line-height: 34px;
+	}
+
+	.active-channel {
+		box-shadow: 0px 0px 10px @rsGreen;
 	}
 
 	.dice {
@@ -116,5 +218,9 @@
 		.roll-add {
 			margin: 5px;
 		}
+	}
+
+	.seperator {
+		margin: 0px 5px;
 	}
 }

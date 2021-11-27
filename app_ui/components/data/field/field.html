@@ -100,6 +100,9 @@
 		<div class="referenced" v-for="(reference, $index) in root[field.id]" :data-id="reference">
 			<button class="remove fas fa-times-square" v-on:click="dismissReference($index)"></button>
 			<span class="reference-display">{{getReferenceName(reference)}}</span>
+			<select v-model="shiftIndex[$index]" v-on:change="moveIndex($index, shiftIndex[$index])">
+				<option v-for="i in (root[field.id].length)" :value="i-1">{{i-1}}</option>
+			</select>
 			<button class="info fas fa-info-circle" v-if="field.inheritable && !field.attribute.no_link" v-on:click="openReference(reference)"></button>
 		</div>
 		<div class="referenced">

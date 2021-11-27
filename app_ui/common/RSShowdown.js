@@ -145,7 +145,6 @@
 					}
 
 					element = $("<span class=\"rendered-value " + properties.classes + "\" title=\"" + title + "\" data-formula=\"(=" + title + ")\" data-result=\"" + value + "\" data-showstate=\"result\">" + value + "</span>");
-					console.log("Element: ", element);
 				} else if(value[0] === "~") {
 					// Walked Reference
 					value = value.substring(1).split(".");

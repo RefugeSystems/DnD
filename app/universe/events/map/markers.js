@@ -20,13 +20,23 @@ module.exports.initialize = function(universe) {
 	universe.on("player:map:distance", function(event) {
 		if(event.player.gm) {
 			var location = event.message.data.location,
-				distance = event.message.data.distance;
+				distance = event.message.data.distance,
+				height = event.message.data.height,
+				width = event.message.data.width;
 			if(typeof(location) === "string") {
 				location = universe.manager.location.object[location];
 			}
+			if(typeof(height) === "string") {
+				height = parseFloat(height);
+			}
+			if(typeof(width) === "string") {
+				width = parseFloat(width);
+			}
 			if(location && typeof(distance) === "number") {
 				location.setValues({
-					"map_distance": distance
+					"map_distance": distance,
+					"height": Math.floor(height),
+					"width": Math.floor(width)
 				});
 			}
 		} else {

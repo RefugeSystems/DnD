@@ -50,6 +50,18 @@
 		overflow: auto;
 		margin: 5px;
 
+		&.not_speak {
+			.verbal {
+				color: @rsRed;
+			}
+		}
+	
+		&.not_gesture {
+			.somatic {
+				color: @rsRed;
+			}
+		}
+
 		.spell {
 			background-color: @rsBlack;
 			box-shadow: 0px 0px 5px @rsWhite;
@@ -60,6 +72,18 @@
 
 			&.unusable-spell {
 				box-shadow: 0px 0px 10px @rsLightRed;
+			}
+
+			&.no-actions {
+				.action-cost {
+					color: @rsLightRed;
+				}
+			}
+
+			&.concentrating {
+				.concentration {
+					color: @rsLightRed;
+				}
 			}
 
 			&:hover {
@@ -98,6 +122,8 @@
 			}
 		}
 	}
+
+
 
 	.stat-components {
 

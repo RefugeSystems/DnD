@@ -199,7 +199,7 @@
 				<span>{{roll.key}}</span>
 			</div>
 			<div class="roll-result flex v center" :class="getTrackedClass(roll)">
-				<input type="number" v-model.number="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
+				<input type="text" v-model.number="roll.computed" v-on:focus="setTracking(roll)" v-on:click.right.stop.prevent="setTracking(roll, true)" :placeholder="roll.formula" v-on:keyup.enter="sendResults()" />
 			</div>
 			<div class="rolled flex h" v-if="roll.dice_rolls">
 				<div class="results flex h" v-for="(results, die) in roll.dice_rolls">

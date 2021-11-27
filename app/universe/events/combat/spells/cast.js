@@ -4,10 +4,10 @@ var Random = require("rs-random"),
 
 module.exports.initialize = function(universe) {
 	var cast = function(event) {
-		console.log(event.message.data);
+		console.log("Casting Spell: ", event.message.data);
 		var spell = universe.get(event.message.data.spell),
 			damage = event.message.data.result || {},
-			level = parseInt(event.message.data.spellLevel),
+			level = parseInt(event.message.data.spell_level),
 			attack = event.message.data.attack,
 			targets = [],
 			difficulty,
@@ -16,11 +16,15 @@ module.exports.initialize = function(universe) {
 			i;
 
 		if(isNaN(level)) {
-			level = null;
+			level = spell.level || null;
 		}
 
 		source = event.message.data.source || event.message.data.entity;
-		if(source && (source = universe.get(source))) {
+		if(spell && source && (source = universe.get(source))) {
+			if(level && spell.level && level < spell.level) {
+				universe.warnMasters(source.name + " casting spell " + spell.name + " at a level below the spell (" + level + " < " + spell.level + ")");
+			}
+
 			if(event.message.data.target) {
 				load = universe.get(event.message.data.target);
 				if(load && !load.disabled && !load.is_preview) {
@@ -61,7 +65,7 @@ module.exports.initialize = function(universe) {
 			});
 		} else {
 			// TODO: Improve error handling
-			console.error("No source for cast");
+			console.error("Missing spell or source for cast: ", event);
 		}
 	};
 
@@ -87,6 +91,25 @@ module.exports.initialize = function(universe) {
 		 * @param {Object} event.message.data.attack Roll value
 		 */
 		universe.on("player:action:main:cast", function(event) {
+			cast(event);
+		});
+		
+		/**
+		 * 
+		 * @event player:action:cast:spell
+		 * @for Universe
+		 * @param {Object} event With data from the system
+		 * @param {String} event.type The event name being fired, should match this event's name
+		 * @param {Integer} event.received Timestamp of when the server received the event
+		 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+		 * @param {RSObject} event.player That triggered the event
+		 * @param {Object} event.message The payload from the UI
+		 * @param {Object} event.message.type Original event type indicated by the UI
+		 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+		 * @param {Object} event.message.data Typical location of data from the UI
+		 * @param {Object} event.message.data.attack Roll value
+		 */
+		universe.on("player:action:cast:spell", function(event) {
 			cast(event);
 		});
 		

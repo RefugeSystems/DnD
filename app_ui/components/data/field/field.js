@@ -159,6 +159,7 @@
 
 			data.activeCompletion = null;
 			data.completions = [];
+			data.shiftIndex = {};
 
 			data.bufferChanging = false;
 			data.bufferLoading = false;
@@ -369,7 +370,18 @@
 					return "NULL";
 				}
 			},
+			"moveIndex": function(from, to) {
+				var buffer = this.root[this.field.id][from];
+				Vue.set(this.root[this.field.id], from, this.root[this.field.id][to]);
+				Vue.set(this.root[this.field.id], to, buffer);
+				Vue.set(this.shiftIndex, from, from);
+			},
 			"addReference": function(reference) {
+				if(this.root[this.field.id]) {
+					Vue.set(this.shiftIndex, this.root[this.field.id].length, this.root[this.field.id].length);
+				} else {
+					Vue.set(this.shiftIndex, 0, 0);
+				}
 				if(!this.root[this.field.id]) {
 					Vue.set(this.root, this.field.id, []);
 				}

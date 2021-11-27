@@ -1,5 +1,7 @@
 var Random = require("rs-random");
 
+var TRACKING_Limit = 18;
+
 /**
  * 
  * @class CombatUtility
@@ -44,9 +46,14 @@ module.exports.initialize = function(universe) {
 	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}) {
 		var tracked = tracking[activity],
 			log = logged[activity],
+			waiting = [],
 			was_damaged,
-			notify;
-		
+			adding,
+			effect,
+			notify,
+			copy,
+			i;
+
 		if(tracked) {
 			clearTimeout(alarms[activity]);
 			delete(tracking[activity]);
@@ -68,8 +75,61 @@ module.exports.initialize = function(universe) {
 			log.damage = damage;
 			log.resist = resist;
 		}
-		universe.chronicle.addOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
-		was_damaged = resolveDamage(entity, damage, resist);
+		if(damage) {
+			universe.chronicle.addOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
+			was_damaged = resolveDamage(entity, damage, resist);
+			if(tracked && tracked.source && tracked.target) {
+				if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
+					for(i=0; i<tracked.channel.instilled.length; i++) {
+						effect = universe.get(tracked.channel.instilled[i]);
+						if(!effect.damage_required || was_damaged) {
+							waiting.push(universe.copyPromise(effect, {
+								"character": tracked.target.id,
+								"caster": tracked.source.id
+							}));
+						}
+					}
+				}
+				if(tracked.effects && tracked.effects.length) {
+					for(i=0; i<tracked.effects.length; i++) {
+						effect = universe.get(tracked.effects[i]);
+						if(!effect.damage_required || was_damaged) {
+							waiting.push(universe.copyPromise(effect, {
+								"character": tracked.target.id,
+								"caster": tracked.source.id
+							}));
+						}
+					}
+				}
+				if(waiting.length) {
+					Promise.all(waiting)
+					.then(function(effects) {
+						adding = [];
+						for(i=0; i<effects.length; i++) {
+							adding.push(effects[i].id);
+						}
+						tracked.target.addValues({
+							"effects": adding
+						});
+					})
+					.catch(function(err) {
+						universe.generalError("damage:taken", null, "Error while instilling channel effects", {
+							"activity": activity,
+							"log": log
+						});
+					});
+				}
+			}
+		} else {
+			try {
+				universe.generalError("damage:taken", null, "No damage was received for entity:damaged event", {
+					"activity": activity,
+					"log": log
+				});
+			} catch(shouldNotHappen) {
+				universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received for entity:damaged event");
+			}
+		}
 	};
 
 	/**
@@ -190,6 +250,10 @@ module.exports.initialize = function(universe) {
 	 * 		return true that "healing" "damage" was taken. Merely indicates HP changed.
 	 */
 	var resolveDamage = function(entity, damage, resist = {}) {
+		if(!damage) {
+			universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received");
+			return false;
+		}
 		var keys = Object.keys(damage),
 			was_damaged = false,	
 			received,
@@ -324,7 +388,10 @@ module.exports.initialize = function(universe) {
 			});
 		}
 		var notify = function() {
-			if(tracking[activity]) {
+			var tracked = tracking[activity];
+			if(tracked && (!tracked.resend || tracked.resend < TRACKING_Limit)) {
+				tracked.resend = (tracked.resend || 0) + 1;
+				// TODO: UI for tracked visibility & expiry process for notifications to be deleted
 				var type = Object.keys(damage),
 					recipients,
 					icon;
@@ -367,7 +434,7 @@ module.exports.initialize = function(universe) {
 				});
 
 				// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
-				alarms[activity] = setTimeout(notify, 5000);
+				alarms[activity] = setTimeout(notify, 10000);
 			} else {
 				console.log("Send Damage - No Track - ", target?target.id || target:"No Target?");
 			}
@@ -457,7 +524,9 @@ module.exports.initialize = function(universe) {
 	 */
 	sendSave = function(activity, source, target, channel, skill, damage) {
 		var notify = function() {
-			if(tracking[activity]) {
+			var tracked = tracking[activity];
+			if(tracked && (!tracked.resend || tracked.resend < TRACKING_Limit)) {
+				tracked.resend = (tracked.resend || 0) + 1;
 				var type,
 					recipients,
 					icon;
@@ -522,6 +591,7 @@ module.exports.initialize = function(universe) {
 	 * 		Null source requires Game Master player.
 	 */
 	universe.on("player:action:damage:send", function(event) {
+		console.log("Sending Damage: ", event.message.data);
 		var damage = event.message.data.damage,
 			targets = [],
 			channel,
@@ -593,7 +663,7 @@ module.exports.initialize = function(universe) {
 		 var entity = universe.get(event.message.data.entity);
 		 if(entity) {
 			 if(entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) {
-				takeDamage(event.message.data.activity, entity, event.message.data.damage, event.message.data.resist);
+				takeDamage(event.message.data.activity, entity, event.message.data.damage || {}, event.message.data.resist);
 			 }
 		} else {
 			// TODO: Log bad event

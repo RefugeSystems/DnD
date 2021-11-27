@@ -34,7 +34,7 @@
 					<span class="rolls">{{joinRolls(rolled)}}</span>
 				</span>
 			</span>
-			<span v-if="occurred.data.dice.vantage">
+			<span v-if="occurred.data.dice && occurred.data.dice.vantage">
 				<span class="rolls">(From: {{joinRolls(occurred.data.dice.vantage)}})</span>
 			</span>
 		</span>

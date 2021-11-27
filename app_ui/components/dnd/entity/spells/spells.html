@@ -26,7 +26,7 @@
 				<span class="text">{{slotMax(slot)}}</span>
 			</button>
 		</div>
-		<div class="spells grow-1" :style="styleSpellList">
+		<div class="spells grow-1" :style="styleSpellList" :class="entity_state">
 			<div class="spell flex h" v-for="spell in spells" :class="getSpellBoxDisplay(spell)" v-linkable="spell.id" v-on:mouseover="hoveredSpell(spell)" v-on:mouseleave="hoveredSpell(null)">
 				<div class="details flex v grow-1" v-on:click="cast(spell)">
 					<div class="details simple flex h grow-1">
@@ -67,27 +67,27 @@
 					<div class="details stats" v-if="storage.size>1">
 						<div class="mini-divider"></div>
 						<div class="flex h wrap stat-components">
-							<button v-if="spell.cast_uses_somatic" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_somatic')">
+							<button v-if="spell.cast_uses_somatic" class="flat action icon somatic" v-on:click.stop.prevent="info('fields:cast_uses_somatic')">
 								<span class="stat-icon game-icon game-icon-magic-palm"></span>
 							</button>
-							<button v-if="spell.cast_uses_verbal" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_verbal')">
+							<button v-if="spell.cast_uses_verbal" class="flat action icon verbal" v-on:click.stop.prevent="info('fields:cast_uses_verbal')">
 								<span class="stat-icon fas fa-comment"></span>
 							</button>
-							<button v-if="spell.cast_uses_item" class="flat action icon" v-on:click.stop.prevent="info('fields:cast_uses_item')">
+							<button v-if="spell.cast_uses_item" class="flat action icon item" v-on:click.stop.prevent="info('fields:cast_uses_item')">
 								<span class="stat-icon fas fa-sack"></span>
 							</button>
-							<button v-if="spell.concentration" class="flat action icon" v-on:click.stop.prevent="info('fields:concentration')">
+							<button v-if="spell.concentration" class="flat action icon concentration" v-on:click.stop.prevent="info('fields:concentration')">
 								<span class="stat-icon fas fa-brain"></span>
 							</button>
 							<button class="range flex h flat action icon" v-on:click="info('fields:range_normal')">
 								<span class="stat-icon game-icon game-icon-arrow-dunk"></span>
 								<span>{{spellRange(spell)}}</span>
 							</button>
-							<button v-if="spell.action_cost" class="flat action icon" v-on:click.stop.prevent="info('fields:action_cost')">
+							<button v-if="spell.action_cost" class="flat action icon action-cost" v-on:click.stop.prevent="info('fields:action_cost')">
 								<span class="stat-icon fa-regular fa-abacus"></span>
 								<span>{{getActionCost(spell)}}</span>
 							</button>
-							<button v-if="spell.duration" class="flat action icon" v-on:click.stop.prevent="info('fields:duration')">
+							<button v-if="spell.duration" class="flat action icon duration" v-on:click.stop.prevent="info('fields:duration')">
 								<span class="stat-icon fa-solid fa-hourglass"></span>
 								<span>{{getDuration(spell)}})</span>
 							</button>

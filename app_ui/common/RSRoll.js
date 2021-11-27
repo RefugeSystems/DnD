@@ -25,7 +25,7 @@ class Roll {
 		 * @property computed
 		 * @type integer
 		 */
-		this.computed = details.computed || 0;
+		this.computed = details.computed; // Left undefined for input placeholders to display when no initial data is present
 		/**
 		 * Name to display for the roll
 		 * @property name
@@ -33,7 +33,7 @@ class Roll {
 		 */
 		this.name = details.name || "";
 		/**
-		 * Title to display for the roll
+		 * Title for the roll to drive HTML hover displays
 		 * @property title
 		 * @type String
 		 */
@@ -55,6 +55,31 @@ class Roll {
 		 */
 		this.dice_rolls = Object.assign({}, details.dice_rolls);
 		/**
+		 * Applies only to d20 rolls and lists all results
+		 * @property dice_rolls.vantage
+		 * @deprecated Use `this.rerolled.d20`
+		 * @type Array
+		 */
+		/**
+		 * Maps a dice type (ie. d6 or d20) to an array of rolls of that dice for this roll. This is to
+		 * help track discarded rolls.
+		 * @property rerolled
+		 * @type Object
+		 */
+		this.rerolled = Object.assign({}, details.rerolled);
+		/**
+		 * Used for d20 critical/failure detection.
+		 * @property entity
+		 * @type RSObject
+		 */
+		this.entity = details.entity;
+		/**
+		 * Used for formula calculation and in the case of entity skill checks serves for d20 critical/failure detection.
+		 * @property source
+		 * @type RSObject
+		 */
+		this.source = details.source;
+		/**
 		 * Indicates if this roll is immediately considered a sucessful roll.
 		 * @property is_critical
 		 * @type Boolean
@@ -73,9 +98,59 @@ class Roll {
 		 */
 		this.is_focused = false;
 	}
+	/**
+	 * 
+	 * @method setEntity
+	 * @deprecated Use `setSource`
+	 * @param {RSObject} entity
+	 */
+	setEntity(entity) {
+		Vue.set(this, "entity", entity);
+		Vue.set(this, "source", entity);
+	}
+	/**
+	 * 
+	 * @method setSource
+	 * @param {RSObject} source
+	 */
+	 setSource(source) {
+		Vue.set(this, "source", source);
+	}
+	/**
+	 * 
+	 * @method setFormula
+	 * @param {String} formula
+	 */
+	setFormula(formula) {
+		Vue.set(this, "formula", formula);
+	}
+	/**
+	 * Clear out current roll data.
+	 * @method clear
+	 */
+	clear() {
+		var die,
+			i;
+		Vue.delete(this, "computed");
+		for(i=0; i<rsSystem.dnd.dice.length; i++) {
+			die = rsSystem.dnd.dice[i];
+			Vue.delete(this.rerolled, die);
+			Vue.delete(this.dice_rolls, die);
+		}
+		Vue.set(this, "is_critical", false);
+		Vue.set(this, "is_failure", false);
+	}
+	/**
+	 * 
+	 * @method focused
+	 */
 	focused() {
 		Vue.set(this, "is_focused", true);
 	}
+	/**
+	 * 
+	 * @method blurred
+	 */
 	blurred() {
 		Vue.set(this, "is_focused", false);
 	}
@@ -96,7 +171,7 @@ class Roll {
 			j;
 		
 		// Parse Formula
-		formula = rsSystem.dnd.parseDiceRoll(rsSystem.dnd.reducedDiceRoll(this.formula, source));
+		formula = rsSystem.dnd.parseDiceRoll(rsSystem.dnd.reducedDiceRoll(formula || this.formula, source || this.source || this.entity));
 		
 		// Clear any previous data
 		dice = Object.keys(this.dice_rolls);
@@ -131,6 +206,7 @@ class Roll {
 
 		// Result
 		Vue.set(this, "computed", result);
+		this.checkState();
 		return result;
 	}
 	/**
@@ -144,7 +220,8 @@ class Roll {
 			Vue.set(this.dice_rolls, dice, []);
 		}
 		this.dice_rolls[dice].push(result);
-		Vue.set(this, "computed", this.computed + result);
+		Vue.set(this, "computed", (this.computed || 0) + result);
+		this.checkState();
 	}
 	/**
 	 * 
@@ -156,7 +233,8 @@ class Roll {
 		if(this.dice_rolls[dice] && index < this.dice_rolls[dice].length) {
 			var result = this.dice_rolls[dice][index];
 			this.dice_rolls[dice].splice(index, 1);
-			Vue.set(this, "computed", this.computed - result);
+			Vue.set(this, "computed", (this.computed || 0) - result);
+			this.checkState();
 		}
 	}
 	/**
@@ -164,12 +242,74 @@ class Roll {
 	 * @method reroll
 	 * @param {String} dice Which die to remove
 	 * @param {Integer} index From the dice_rolls list to remove
+	 * @param {Integer} [keep] Indicates if a the lower or greater value should be kept.
+	 * 		Undefined or 0 simply rerolls, `keep > 0` means keep the higher of the 2 values,
+	 * 		and `keep < 0` means to keep the lower of the 2 values.
 	 */
-	 reroll(dice, index) {
+	 reroll(dice, index, keep) {
 		if(this.dice_rolls[dice] && index < this.dice_rolls[dice].length) {
-			var result = this.dice_rolls[dice][index];
-			this.dice_rolls[dice][index] = rsSystem.dnd.diceRoll(dice);
-			Vue.set(this, "computed", this.computed - result + this.dice_rolls[dice][index]);
+			var current = this.dice_rolls[dice][index],
+				result = rsSystem.dnd.diceRoll(dice);
+
+			if(!this.rerolled[dice]) {
+				Vue.set(this.rerolled, dice, []);
+			}
+
+			if(isNaN(keep) || keep === 0 || (keep < 0 && current > result) || (keep > 0 && current < result)) {
+				this.rerolled[dice].unshift(current);
+				this.dice_rolls[dice][index] = result;
+				Vue.set(this, "computed", (this.computed || 0) - current + result);
+			} else {
+				this.rerolled[dice].unshift(result);
+			}
+		}
+		this.checkState();
+	}
+	/**
+	 * 
+	 * @method checkState
+	 */
+	checkState() {
+		if(this.source && this.dice_rolls.d20 && this.dice_rolls.d20.length) {
+			if(this.dice_rolls.d20[0] >= this.source.skill_critical) {
+				Vue.set(this, "is_critical", true);
+				Vue.set(this, "is_failure", false);
+			} else if(this.dice_rolls.d20[0] <= this.source.skill_failure) {
+				Vue.set(this, "is_critical", false);
+				Vue.set(this, "is_failure", true);
+			} else {
+				Vue.set(this, "is_critical", false);
+				Vue.set(this, "is_failure", false);
+			}
+		} else if(this.entity && this.dice_rolls.d20 && this.dice_rolls.d20.length) {
+			if(this.dice_rolls.d20[0] >= this.entity.skill_critical) {
+				Vue.set(this, "is_critical", true);
+				Vue.set(this, "is_failure", false);
+			} else if(this.dice_rolls.d20[0] <= this.entity.skill_failure) {
+				Vue.set(this, "is_critical", false);
+				Vue.set(this, "is_failure", true);
+			} else {
+				Vue.set(this, "is_critical", false);
+				Vue.set(this, "is_failure", false);
+			}
 		}
 	}
 }
+
+/**
+ * 
+ * @class RSRoll
+ * @extends Roll
+ * @constructor
+ * @param {Object} [details] 
+ * @param {String} [details.id] 
+ * @param {String} [details.name] 
+ * @param {String} [details.formula] 
+ * @param {String} [details.title] 
+ * @param {Object} [details.dice_rolls] 
+ * @param {Array} [details.dice_rolls.vantage] Specifically for d20 rolls and holds
+ * 		the 2 rolls performed, the first was kept and the second was discarded.
+ * @param {Object} [details.rerolled] 
+ * @param {Object} [details.manual] 
+ */
+var RSRoll = Roll;
