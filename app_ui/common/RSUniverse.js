@@ -1208,7 +1208,7 @@ class RSUniverse extends EventEmitter {
 						}]
 					}
 				});
-			} else {
+			} else if(navigator.serviceWorker && navigator.serviceWorker.controller) {
 				this.state.version_warning = true;
 				navigator.serviceWorker.controller.postMessage({
 					"action": "update"
@@ -1232,6 +1232,8 @@ class RSUniverse extends EventEmitter {
 						}]
 					}
 				});
+			} else {
+				console.warn("Issues with Service Worker");
 			}
 		}
 	}
