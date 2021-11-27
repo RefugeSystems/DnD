@@ -131,8 +131,9 @@ rsSystem.component("dndEntitySpells", {
 		"getSpellBoxDisplay": function(spell) {
 			var classes = "";
 
+			// Check Usability
 			if(spell.level > this.storage.slot) {
-				classes += " unusable-spell";
+				classes += " invalid-slot";
 			}
 			if(spell.action_cost && !this.hasActions(spell.action_cost)) {
 				classes += " no-actions";
@@ -140,6 +141,13 @@ rsSystem.component("dndEntitySpells", {
 			if(this.entity.concentrations && this.entity.concentrations.length && this.entity.concentrations.indexOf(spell.id) === -1) {
 				classes += " concentrating";
 			}
+
+			if(classes.length || (this.isSilenced() && spell.cast_has_verbal) || (this.isRestrained() && spell.cast_has_somatic)) {
+				classes += " unusable-spell";
+			}
+
+			// Additional Styling
+			// (Currently None)
 
 			return classes;
 		},

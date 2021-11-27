@@ -262,7 +262,7 @@ rsSystem.component("DNDWidgetCore", {
 				location = this.universe.index.location[from.location];
 				if(location) {
 					if(location.width && location.height) {
-						distance = rsSystem.math.distance.points2D(from.x * location.width, from.y * location.height, to.x * location.width, to.y * location.height);
+						distance = rsSystem.math.distance.points2D(from.x/100 * location.width, from.y/100 * location.height, to.x/100 * location.width, to.y/100 * location.height);
 						return Math.floor(distance + .5);
 					} else {
 						// No distance defined on location
