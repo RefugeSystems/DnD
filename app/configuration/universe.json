@@ -26,6 +26,7 @@
 			"entity",
 			"ability",
 			"gender",
+			"recipe",
 			"skill",
 			"state",
 			"stat",

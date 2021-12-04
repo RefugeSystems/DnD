@@ -70,6 +70,11 @@
 		"description": "Group of entities.",
 		"fields": ["parent", "icon", "symbol", "name", "description", "x", "y", "tracked_timing", "tracked_time", "disabled", "entities", "is_preview", "review", "attribute"]
 	}, {
+		"id": "recipe",
+		"name": "Recipe",
+		"description": "Defines how to create something, such as herbs for alchemy, or ore for blacksmithing.",
+		"fields": ["parent", "name", "icon", "description", "is_preview", "review", "types", "consume_from", "yields", "duration", "attribute"]
+	}, {
 		"id": "slot",
 		"name": "Slot",
 		"description": "An entry where an item can be placed in association with another object.",
@@ -118,7 +123,7 @@
 		"id": "race",
 		"name": "Race",
 		"description": "",
-		"fields": ["parent", "name", "icon", "description", "armor", "response", "view", "mobility", "encumberance_max", "receive", "weight_max", "proficiency_rating", "selection", "variants", "stat_strength", "stat_dexterity", "hp_max", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "pool_gain", "feats", "playable", "score", "types", "size", "skills", "movement_ground", "datasets", "movement_swim", "movement_fly", "actions", "skill_advantage", "skill_disadvantage", "skill_check", "skill_proficiency", "spells", "threat", "action_max", "equip_slots", "spell_slot_max",  "proficiencies", "attune_max", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "conditionals", "is_preview", "review", "attribute", "is_copy"]
+		"fields": ["parent", "name", "icon", "description", "armor", "response", "view", "mobility", "encumberance_max", "receive", "weight_max", "proficiency_rating", "selection", "variants", "stat_strength", "stat_dexterity", "hp_max", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "pool_gain", "feats", "playable", "score", "types", "size", "skills", "movement_ground", "datasets", "movement_swim", "movement_fly", "actions", "skill_advantage", "skill_disadvantage", "skill_check", "skill_proficiency", "spells", "threat", "action_max", "equip_slots", "spell_slot_max", "proficiencies", "attune_max", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "conditionals", "is_preview", "review", "attribute", "is_copy"]
 	}, {
 		"id": "type",
 		"name": "Type",
