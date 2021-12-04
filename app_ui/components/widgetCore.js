@@ -104,10 +104,13 @@ rsSystem.component("DNDWidgetCore", {
 		"performSkillCheck": function(skill) {
 			// var action = this.universe.index.action[action];
 			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndDialogRoll",
+				// "component": "dndDialogRoll",
+				"component": "dndDialogCheck",
 				"storageKey": "store:roll:" + this.entity.id,
 				"entity": this.entity.id,
 				"skill": skill,
+				"hideFormula": true,
+				"hideHistory": true,
 				// "action": action,
 				"closeAfterCheck": true
 			});
@@ -142,11 +145,24 @@ rsSystem.component("DNDWidgetCore", {
 		},
 		"takeAction": function(action, using, rolls, targeted) {
 			rolls.unshift({});
-			var rolling = Object.assign.apply(Object.assign, rolls);
+			var rolling = Object.assign.apply(Object.assign, rolls),
+				details = {};
 			if(typeof(action) === "string") {
 				action = this.universe.index.action[action];
 			}
 
+			// TODO: Distinguish between different items for attack or say scroll/potion/recipe
+			/*
+			 * Damage Process UI
+			 */
+			details.title = this.entity.name + " Attack";
+			details.component = "dndDialogDamage";
+			details.entity = this.entity;
+			details.channel = using;
+			details.action = action;
+			rsSystem.EventBus.$emit("dialog-open", details);
+
+			/*
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogRoll",
 				"storageKey": "store:roll:" + this.entity.id,
@@ -157,6 +173,17 @@ rsSystem.component("DNDWidgetCore", {
 				"using": using,
 				"closeAfterAction": true
 			});
+			*/
+		},
+		"useAction": function(action, delta = -1, entity) {
+			entity = entity || this.entity;
+			if(entity) {
+				this.universe.send("action:count", {
+					"entity": entity.id,
+					"action": action,
+					"delta": delta
+				});
+			}
 		},
 		/**
 		 * 

@@ -89,7 +89,7 @@
 		 * @returns {Boolean}
 		 */
 		"isValid": function(object) {
-			return object && !object.is_preview && !object.disabled && !object.is_disabled && !object.obscured && !object.is_obscured && !object.template && !object.is_template && !object.inactive && !object.is_inactive;
+			return object && !object.is_preview && !object.disabled && !object.is_disabled && !object.obscured && !object.is_obscured && !object.inactive && !object.is_inactive;
 		},
 		/**
 		 * 

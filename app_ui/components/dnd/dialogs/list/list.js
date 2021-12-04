@@ -11,6 +11,7 @@
  * @param {Object} [details.sections] If omitted, inferred from the `details.data` object.
  * @param {Object} [details.activate] If specified, this is called to process clicks to the list
  * 		item. Otherwise it is passed to info.
+ * @param {Object} [details.clear] Reset the search string
  * @param {Object} details.cards
  * @param {Object} details.data
  */
@@ -80,6 +81,9 @@ rsSystem.component("dndDialogList", {
 	},
 	"mounted": function () {
 		rsSystem.register(this);
+		if(this.details.clear) {
+			Vue.set(this.storage, "filter", "");
+		}
 	},
 	"methods": {
 		"toLink": function() {

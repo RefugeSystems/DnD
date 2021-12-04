@@ -59,6 +59,12 @@ rsSystem.component("dndEntityDeath", {
 		},
 		"failSave": function() {
 			this.universe.send("death:fail", this.send);
+		},
+		"unPass": function() {
+			this.universe.send("death:unsave", this.send);
+		},
+		"unFail": function() {
+			this.universe.send("death:unfail", this.send);
 		}
 	},
 	"beforeDestroy": function() {

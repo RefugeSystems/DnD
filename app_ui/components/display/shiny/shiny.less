@@ -1,0 +1,164 @@
+.rs-component.shiny-action {
+	position: relative;
+	padding: 4px;
+	z-index: 1;
+	background-color: @rsBlack;
+	overflow: hidden;
+	border: 1px solid @rsWhite;
+	border-radius: 5px;
+
+	.fan-fare {
+		position: absolute;
+		opacity: 0;
+		z-index: 2;
+		border: 0px;
+		padding: 0px;
+		margin: 0px;
+		transition: opacity .5s;
+		height: 400px;
+		width: 400px;
+	}
+
+	.content {
+		position: relative;
+		border-radius: inherit;
+		display: block;
+		z-index: 5;
+		color: @rsWhite;
+		background-color: @rsBlack;
+		padding: 1px 3px;
+	}
+
+	&.cascade {
+		.fan-fare {
+			left: -100px;
+			top: -100px;
+		}
+	}
+
+	&.siren {
+		.fan-fare {
+			left: calc(-200px + 50%);
+			top: calc(-200px + 50%);
+		}
+	}
+
+	&.red-fan-fare {
+		box-shadow: 0px 0px 7px @rsRed;
+		border-color: @rsLightRed;
+
+		.fan-fare {
+			background: conic-gradient(@rsRed, transparent, @rsRed, transparent, @rsRed, transparent, @rsRed);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsRed;
+		}
+	}
+
+	&.orange-fan-fare {
+		box-shadow: 0px 0px 7px @rsOrange;
+		border-color: @rsLightOrange;
+
+		.fan-fare {
+			background: conic-gradient(@rsOrange, transparent, @rsOrange, transparent, @rsOrange, transparent, @rsOrange);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsOrange;
+		}
+	}
+
+	&.yellow-fan-fare {
+		box-shadow: 0px 0px 7px @rsYellow;
+		border-color: @rsLightYellow;
+
+		.fan-fare {
+			background: conic-gradient(@rsYellow, transparent, @rsYellow, transparent, @rsYellow, transparent, @rsYellow);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsYellow;
+		}
+	}
+
+	&.green-fan-fare {
+		box-shadow: 0px 0px 7px @rsGreen;
+		border-color: @rsLightGreen;
+
+		.fan-fare {
+			background: conic-gradient(@rsGreen, transparent, @rsGreen, transparent, @rsGreen, transparent, @rsGreen);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsGreen;
+		}
+	}
+
+	&.blue-fan-fare {
+		box-shadow: 0px 0px 7px @rsBlue;
+		border-color: @rsLightBlue;
+
+		.fan-fare {
+			background: conic-gradient(@rsBlue, transparent, @rsBlue, transparent, @rsBlue, transparent, @rsBlue);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsBlue;
+		}
+	}
+
+	&.blue-fan-fare {
+		box-shadow: 0px 0px 7px @rsCyan;
+		border-color: @rsLightCyan;
+
+		.fan-fare {
+			background: conic-gradient(@rsCyan, transparent, @rsCyan, transparent, @rsCyan, transparent, @rsCyan);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsCyan;
+		}
+	}
+
+	&.purple-fan-fare {
+		box-shadow: 0px 0px 7px @rsPurple;
+		border-color: @rsLightPurple;
+
+		.fan-fare {
+			background: conic-gradient(@rsPurple, transparent, @rsPurple, transparent, @rsPurple, transparent, @rsPurple);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px @rsPurple;
+		}
+	}
+
+	&.black-fan-fare {
+		box-shadow: 0px 0px 7px #444;
+		border-color: #333;
+
+		.fan-fare {
+			background: conic-gradient(#444, transparent, #444, transparent, #444, transparent, #444);
+			opacity: 1;
+		}
+
+		.content {
+			box-shadow: 0px 0px 7px #444;
+		}
+	}
+
+	&.no-background {
+		.content {
+			background: transparent !important;
+			box-shadow: none !important;
+		}
+	}
+}

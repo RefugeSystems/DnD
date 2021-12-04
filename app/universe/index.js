@@ -556,6 +556,16 @@ class Universe extends EventEmitter {
 	}
 
 	/**
+	 * Get the definition for a field in the system.
+	 * @method field
+	 * @param {String} id 
+	 * @returns {RSField}
+	 */
+	field(id) {
+		return this.objectHandler.getField(id) || null;
+	}
+
+	/**
 	 * 
 	 * @method list
 	 * @param {String} classificaiton Name
@@ -1073,6 +1083,37 @@ class Universe extends EventEmitter {
 				"timeline": this.timeline,
 				"time": this.time
 			});
+		}
+	}
+
+	/**
+	 * Checks if an object is valid for use or consumption. Essentially exists, not a `Preview` and not disabled
+	 * with future proofing.
+	 * @method isValid
+	 * @param {RSObject} object 
+	 * @returns {Boolean}
+	 */
+	isValid(object) {
+		return object && !object.disabled && !object.is_disabled && !object.preview && !object.is_preview;
+	}
+
+	/**
+	 * Replace String references in an array with the identified object if they are "valid".
+	 * @method transcribeArray
+	 * @param {Array | String} array 
+	 */
+	transcribeArray(array) {
+		var buffer,
+			i;
+
+		for(i=0; i<array.length; i++) {
+			buffer = array[i];
+			if(typeof(buffer) === "string") {
+				buffer = this.get(buffer);
+				if(this.isValid(buffer)) {
+					array[i] = buffer;
+				}
+			}
 		}
 	}
 

@@ -17,13 +17,13 @@
 		<button class="flat action fas fa-info-circle display-info rs-blue" v-if="fieldData.inheritable && fieldData.type === 'string'" v-on:click="info(object[field])" v-linkable="object[field]"></button>
 		<button class="flat action fas rs-chevron-circle-down" :class="valuesContainerClass()" v-if="canToggleField" v-on:click="toggleField()"></button>
 		<button class="flat action fad rs-purple" :class="viewInvolved?'fa-layer-minus':'fa-layer-plus'" v-if="hasInvolved()" v-on:click="toggleInvolved()"></button>
-		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula" :title="object._calculated[field]" v-on:click="toggleFormula(object[field])"></button>
+		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula && realType !== 'object'" :title="object._calculated[field]" v-on:click="toggleFormula()"></button>
 	</div>
 	<div class="markdown" v-if="fieldData.type === 'markdown'" v-html="rsshowdown(object[field])"></div>
 	<div class="formula" v-if="viewFormula">
 		<span class="formula-value">
 			<span class="fas fa-function rs-blue"></span>
-			<span>{{object._calculated[field]}}</span>
+			<span>{{object._calculated[field] || object._formula[field]}}</span>
 		</span>
 	</div>
 	<div class="pointed" v-if="!image">
@@ -58,18 +58,19 @@
 			<div class="value array flex v" v-if="fieldData.type === 'array'">
 				<div class="element" v-for="value in getArrayValue()" v-if="!value.obscured && !value.hidden">
 					<span class="text">{{getValueDisplay(fieldData, value)}}</span>
-					<button class="flat action" v-if="value.id" v-on:click="info(value)" v-linkable="value.id">
-						<span class="fas fa-info-circle"></span>
-					</button>
+					<button class="flat action fas fa-info-circle" v-if="value.id" v-on:click="info(value)" v-linkable="value.id"></button>
 				</div>
 			</div>
-			<div class="value object flex v" v-else-if="fieldData.type === 'object' || fieldData.type === 'object:dice'">
-				<div class="element" v-for="key in getObjectKeys()">
+			<div class="value object flex v" v-else-if="fieldData.type === 'object' || fieldData.type === 'object:dice' || fieldData.type === 'object:calculated'">
+				<div class="element" v-for="key in objectKeys">
 					<span class="text">{{key.name}}:</span>
 					<span class="text">{{getObjectValue(key)}}</span>
-					<button class="flat action" v-if="!key.faux" v-on:click="info(key)">
-						<span class="fas fa-info-circle display-info"></span>
-					</button>
+					<button class="flat action fas fa-info-circle display-info" v-if="!key.faux" v-on:click="info(key)"></button>
+					<button class="flat action fas fa-sigma display-info rs-blue" v-if="object._formula && object._formula[field] && object._formula[field][key.id] && object[field][key.id] != object._formula[field][key.id]" :title="object._formula[field][key.id]" v-on:click="toggleFormulaKey(key.id)"></button>
+					<span class="key-formula-value" v-if="viewFormulaKey[key.id]">
+						<span class="fas fa-function rs-blue"></span>
+						<span>{{object._formula[field][key.id]}}</span>
+					</span>
 				</div>
 			</div>
 		</div>

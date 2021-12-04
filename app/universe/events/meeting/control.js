@@ -114,8 +114,8 @@ module.exports.initialize = function(universe) {
 				generate.date = meeting.date + 2 * week;
 				generate.meeting_previous = meeting.id;
 				generate.time = universe.time;
-				universe.createObject(generate, function(err, meet) {
-					if(err) {
+				universe.createObject(generate, function(error, meet) {
+					if(error) {
 						universe.emit("send", {
 							"type": "notice",
 							"mid": "generate:meeting",

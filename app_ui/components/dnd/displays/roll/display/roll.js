@@ -13,6 +13,9 @@ rsSystem.component("dndDisplayRoll", {
 			"requried": true,
 			"type": Object
 		},
+		"autoFocus": {
+			"type": Boolean
+		},
 		"source": {
 			"type": Object
 		},
@@ -27,6 +30,13 @@ rsSystem.component("dndDisplayRoll", {
 		"autoRollBinding": function() {
 			this.autoRoll(true);
 			this.setClasses();
+			if(this.source && this.skill && this.source.skill_advantage && this.source.skill_advantage[this.skill.id]) {
+				if(this.source.skill_advantage[this.skill.id] > 0) {
+					return "advantage ";
+				} else if(this.source.skill_advantage[this.skill.id] < 0) {
+					return "disadvantage ";
+				}
+			}
 			return "";
 		}
 	},
@@ -49,6 +59,9 @@ rsSystem.component("dndDisplayRoll", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		if(this.autoFocus) {
+			this.$el.querySelector("input").focus();
+		}
 	},
 	"methods": {
 		"autoRoll": function(set) {
@@ -69,6 +82,7 @@ rsSystem.component("dndDisplayRoll", {
 					Vue.set(this, "is_failure", this.roll.is_failure);
 					this.setClasses();
 				}
+				this.$emit("rolled");
 			}
 		},
 		"focused": function(state) {
@@ -80,20 +94,29 @@ rsSystem.component("dndDisplayRoll", {
 				this.setClasses();
 			}
 		},
+		"toggleCritical": function() {
+			Vue.set(this.roll, "is_critical", !this.roll.is_critical); // Due to Vue update cycle issues with usage within the Roll class, 
+		},
+		"toggleFailure": function() {
+			Vue.set(this.roll, "is_failure", !this.roll.is_failure); // Due to Vue update cycle issues with usage within the Roll class, 
+		},
 		"advantage": function() {
 			if(!this.roll.dice_rolls.d20 || !this.roll.dice_rolls.d20.length) {
 				this.rollResult();
 			}
 			this.roll.reroll("d20", 0, 1);
+			this.$emit("rolled");
 		},
 		"disadvantage": function() {
 			if(!this.roll.dice_rolls.d20 || !this.roll.dice_rolls.d20.length) {
 				this.rollResult();
 			}
 			this.roll.reroll("d20", 0, -1);
+			this.$emit("rolled");
 		},
 		"rollResult": function() {
 			this.roll.roll(this.source);
+			this.$emit("rolled");
 		},
 		"setClasses": function() {
 			var classes = "";

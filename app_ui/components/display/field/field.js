@@ -47,7 +47,8 @@ rsSystem.component("rsDisplayField", {
 			return this.universe.index.fields[this.field];
 		},
 		"hasFormula": function() {
-			return this.object._calculated && this.fieldData && this.fieldData.type === "calculated" && this.object._calculated[this.field] !== undefined && this.object._calculated[this.field] !== null && isNaN(this.object._calculated[this.field]);
+			return (this.object._calculated && this.fieldData && this.fieldData.type === "calculated" && this.object._calculated[this.field] !== undefined && this.object._calculated[this.field] !== null && isNaN(this.object._calculated[this.field])) ||
+					(this.object._formula && this.fieldData && this.object._formula[this.field] !== undefined && this.object._formula[this.field] !== null && isNaN(this.object._formula[this.field]));
 		},
 		"displayed": function() {
 			if(this.object.picture === this.object.portrait && (this.field === "picture" || this.field === "portrait")) {
@@ -57,6 +58,9 @@ rsSystem.component("rsDisplayField", {
 				return false;
 			}
 			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
+		},
+		"realType": function() {
+			return typeof(this.object[this.field]);
 		},
 		"image": function() {
 			return this.universe.index.image[this.object[this.field]];
@@ -89,11 +93,15 @@ rsSystem.component("rsDisplayField", {
 		data.viewInvolved = false;
 		data.viewFormula = false;
 		data.detailInvolved = {};
+		data.viewFormulaKey = {};
+
+		data.objectKeys = [];
 
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		this.update();
 	},
 	"methods": {
 		"toggleField": function() {
@@ -160,6 +168,9 @@ rsSystem.component("rsDisplayField", {
 		"toggleFormula": function() {
 			Vue.set(this, "viewFormula", !this.viewFormula);
 		},
+		"toggleFormulaKey": function(key) {
+			Vue.set(this.viewFormulaKey, key, !this.viewFormulaKey[key]);
+		},
 		"getValueDisplay": function(field, value) {
 			if(field.attribute.obscures) {
 				for(var x=0; x<field.attribute.obscures.length; x++) {
@@ -216,31 +227,7 @@ rsSystem.component("rsDisplayField", {
 			}
 		},
 		"getObjectKeys": function() {
-			var oKeys = [],
-				keys,
-				load,
-				x;
-			
-			if(this.object[this.field]) {
-				keys = Object.keys(this.object[this.field]);
-				if(this.fieldData.attribute.inherited_key && this.fieldData.attribute.displayed !== false) {
-					for(x=0; x<keys.length; x++) {
-						if(load = this.universe.getObject(keys[x])) {
-							oKeys.push(load);
-						}
-					}
-				} else {
-					for(x=0; x<keys.length; x++) {
-						oKeys.push({
-							"name": this.fieldData.displayed_as?this.fieldData.displayed_as[keys[x]] || keys[x]:keys[x],
-							"id": keys[x],
-							"faux": true
-						});
-					}
-				}
-			}
-			
-			return oKeys;
+			console.warn("Deprecated");
 		},
 		"getObjectValue": function(key) {
 			var value = this.object[this.field][key.id],
@@ -292,6 +279,31 @@ rsSystem.component("rsDisplayField", {
 						return new Date(value).toLocaleString();
 					default:
 						return value;
+				}
+			}
+		},
+		"update": function() {
+			var keys,
+				load,
+				x;
+			
+			this.objectKeys.splice(0);
+			if(this.realType === "object" && this.object[this.field]) {
+				keys = Object.keys(this.object[this.field]);
+				if(this.fieldData.attribute.inherited_key && this.fieldData.attribute.displayed !== false) {
+					for(x=0; x<keys.length; x++) {
+						if(load = this.universe.getObject(keys[x])) {
+							this.objectKeys.push(load);
+						}
+					}
+				} else {
+					for(x=0; x<keys.length; x++) {
+						this.objectKeys.push({
+							"name": this.fieldData.displayed_as?this.fieldData.displayed_as[keys[x]] || keys[x]:keys[x],
+							"id": keys[x],
+							"faux": true
+						});
+					}
 				}
 			}
 		}

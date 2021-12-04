@@ -37,6 +37,12 @@ rsSystem.component("rsInput", {
 			"type": String
 		}
 	},
+	"watch": {
+		"value": function(nV, oV) {
+			console.log("Input Value Change: ", oV, " -> ", nV);
+			Vue.set(this, "buffer", nV);
+		}
+	},
 	"computed": {
 		
 	},

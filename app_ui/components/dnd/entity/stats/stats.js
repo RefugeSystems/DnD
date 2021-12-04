@@ -88,6 +88,7 @@ rsSystem.component("dndEntityStats", {
 			details.title = this.entity.name + " Actions";
 			details.component = "dndDialogList";
 			details.sections = ["movement", "main", "bonus", "reaction", "multiple", "free"];
+			details.clear = true;
 			details.related = {};
 			details.cards = {};
 			details.data = {
@@ -233,6 +234,7 @@ rsSystem.component("dndEntityStats", {
 			details.entity = this.entity.id;
 			details.sections = ["prepared", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 			details.extra = "Spell Attack Bonus: " + (this.entity.spell_attack || 0) + " | Spell DC: " + (this.entity.spell_dc || 0);
+			details.clear = true;
 			details.cards = {};
 			details.limit = 20,
 			details.data = {
@@ -312,6 +314,7 @@ rsSystem.component("dndEntityStats", {
 			details.component = "dndDialogList";
 			details.entity = this.entity.id;
 			details.sections = ["effects", "knowledges", "feats"];
+			details.clear = true;
 			details.cards = {};
 			details.limit = 20,
 			details.extra = "Bag Weight: " + this.bag_weight + " / " + this.max_carry;

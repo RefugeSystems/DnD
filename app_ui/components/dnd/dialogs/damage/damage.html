@@ -105,6 +105,15 @@
 
 					<!-- Select from entities, items, spells, effects, etc. in shared location (Togglable type limited from method when known, starts as true on dialog open) -->
 					<div class="targets-list">
+						<div class="spaced flex h">
+							<button class="general rounded quick action spells" v-on:click="toggleSplitDamage()">
+								<span class="action-icon fal" :class="splitDamage?'fa-check-square':'fa-square'"></span>
+							</button>
+							<button class="general rounded selection action" v-on:click="info('knowledge:operation:damage:split')">
+								<span class="action-icon fas fa-info-circle rs-light-blue"></span>
+								<span class="action-text">Individal Target Damage</span>
+							</button>
+						</div>
 						<div class="spaced target flex h" v-for="target in available_targets" :class="getTargetClasses(target)">
 							<button class="general rounded quick action icon" v-on:click="info(target)">
 								<span class="action-icon" :class="target.icon"></span>
@@ -131,7 +140,7 @@
 						<span class="action-text">No Skill Checks</span>
 					</div>
 
-					<div class="check" v-for="check in skill_checks">
+					<div class="check spaced" v-for="check in skill_checks">
 						<div class="check-skill">
 							<span>{{check.skill.name}}</span>
 							<span v-if="check.target">to {{check.target.name}}</span>
@@ -151,12 +160,18 @@
 			<section class="page damages">
 				<div class="page-contents">
 					<!-- Roll damage based on method selection, may force base available values passing in an object "damage" (Maps damage_type IDs) -->
-					<div class="damage-list flex h wrap">
-						<div class="damage-container flex h" v-for="dmg in available_damages" :class="roll_damage[dmg.id].computed?'fill':''">
-							<button class="general rounded quick action" v-on:click="info(dmg)">
+					<div class="damage-list flex h wrap" v-for="target in damage_targets">
+						<div class="target name-damage" v-if="target">
+							<span class="heading-text">{{target && targeting[target]?targeting[target].name:"[Err]"}}</span>
+						</div>
+						<div class="damage-container flex h" v-for="dmg in available_damages" :class="roll_damage[target][dmg.id].computed?'fill':''">
+							<button class="general rounded quick action" v-on:click="info(dmg)" v-if="!channel || channel.damage_type !== dmg.id">
 								<span class="action-icon" :class="dmg.icon"></span>
 							</button>
-							<dnd-display-roll :roll="roll_damage[dmg.id]" :source="entity" :profile="profile" v-on:rollfocused="setFocus($event)"></dnd-display-roll>
+							<rs-shiny-button class="general rounded quick action no-background" color="black" :active="true" v-on:click="info(dmg)" v-if="channel && channel.damage_type === dmg.id">
+								<span class="action-icon" :class="dmg.icon"></span>
+							</rs-shiny-button>
+							<dnd-display-roll :roll="roll_damage[target][dmg.id]" :source="entity" :profile="profile" v-on:rollfocused="setFocus($event)"></dnd-display-roll>
 						</div>
 					</div>
 				</div>
@@ -235,18 +250,21 @@
 					</div>
 					<div class="channel flex v" v-if="channel && !isEmpty(channel.action_cost)">
 						<h3>Action Cost</h3>
-						<div class="spaced channel flex h message" v-for="(action, cost) in action_cost">
-							<span>{{action}} : {{cost}}</span>
+						<div class="spaced channel flex h message" v-for="(cost, action) in action_cost">
+							<span>{{cost}}<span v-if="entity && entity.action_count">/{{entity.action_count[action]}}</span> {{action}} action</span>
 						</div>
 					</div>
-					<div class="targets flex v" v-if="available_damages.length">
-						<h3>Damage</h3>
-						<div class="spaced damage flex h" v-for="dmg in available_damages" v-if="roll_damage[dmg.id].computed">
+					<div class="targets flex v" v-if="available_damages.length" v-for="target in damage_targets">
+						<h3>
+							<span>Damage</span>
+							<span v-if="target">{{targeting[target].name}}</span>
+						</h3>
+						<div class="spaced damage flex h" v-for="dmg in available_damages" v-if="roll_damage[target][dmg.id].computed">
 							<button class="general rounded quick action" v-on:click="info(dmg)">
 								<span class="action-icon" :class="dmg.icon"></span>
 							</button>
 							<button class="general rounded action selection" v-on:click="info(dmg)">
-								<span class="action-text">{{dmg.name}} = {{roll_damage[dmg.id].computed}}</span>
+								<span class="action-text">{{dmg.name}} = {{roll_damage[target][dmg.id].computed}}</span>
 							</button>
 						</div>
 					</div>

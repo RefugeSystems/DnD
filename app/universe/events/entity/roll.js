@@ -21,7 +21,7 @@
 
 module.exports.initialize = function(universe) {
 	universe.on("player:action:check", function(event) {
-		// console.log("Chec: ", event.message.data);
+		console.log("Check: ", event.message.data);
 		var entity,
 			skill,
 			roll = {
@@ -30,10 +30,13 @@ module.exports.initialize = function(universe) {
 				"entity": event.message.data.entity,
 				"skill": event.message.data.skill,
 				"target": event.message.data.target,
+				"channel": event.message.data.channel,
 				"action": event.message.data.action,
+				"level": event.message.data.spell_level,
 				"name": event.message.data.name,
 				"dice": event.message.data.dice,
 				"time": universe.time,
+				"roll": event.message.data.roll,
 				"critical": event.message.data.critical,
 				"failure": event.message.data.failure,
 				"recipients": universe.getMasters()
@@ -41,7 +44,25 @@ module.exports.initialize = function(universe) {
 
 		roll.recipients[event.player.id] = true;
 
-		if(roll.target && (roll.action === "action:main:attack" || roll.action === "action:bonus:attack:light" || roll.action === "action:main:attack:extra")) {
+		if(roll.skill === "skill:initiative") {
+			skill = {"initiative":roll.result};
+		} else if(roll.skill === "skill:investigation") {
+			skill = {"investigation":roll.result};
+		} else if(roll.skill === "skill:perception") {
+			skill = {"perception":roll.result};
+		} else if(roll.skill === "skill:stealth") {
+			skill = {"stealth":roll.result};
+		}
+		if(skill) {
+			// console.log("Has");
+			entity = universe.get(roll.entity);
+			if(entity) {
+				// console.log("Set");
+				entity.setValues(skill);
+			}
+		}
+
+		if(roll.target && (roll.action === "action:main:attack" || roll.action === "action:bonus:attack:light" || roll.action === "action:main:attack:extra" || roll.skill === "skill:offhand" || roll.skill === "skill:mainhand")) {
 			universe.getObject(roll.target, function(err, object) {
 				if(err) {
 					// TODO:
@@ -54,39 +75,28 @@ module.exports.initialize = function(universe) {
 						"recipient": event.player.id
 					};
 
+					roll.difficulty = object.armor || 0;
 					if(roll.dice.d20 && roll.dice.d20[0] === 1) {
 						sending.message = "Miss";
+						roll.succeeded = false;
 					} else if(roll.dice.d20 && roll.dice.d20[0] === 20) {
 						sending.message = "Critical";
+						roll.succeeded = true;
 					} else if(roll.result < object.armor) {
 						sending.message = "Miss";
+						roll.succeeded = false;
 					} else {
 						sending.message = "Hit";
+						roll.succeeded = true;
 					}
 					universe.emit("send", sending);
 				}
+				universe.chronicle.addOccurrence("character:check", roll, Date.now(), roll.source || roll.entity, roll.target);
+				universe.emit("send", roll);
 			});
-		} else if(roll.skill === "skill:initiative") {
-			skill = {"initiative":roll.result};
-		} else if(roll.skill === "skill:investigation") {
-			skill = {"investigation":roll.result};
-		} else if(roll.skill === "skill:perception") {
-			skill = {"perception":roll.result};
-		} else if(roll.skill === "skill:stealth") {
-			skill = {"stealth":roll.result};
+		} else {
+			universe.chronicle.addOccurrence("character:check", roll, Date.now(), roll.source || roll.entity, roll.target);
+			universe.emit("send", roll);
 		}
-
-		// console.log("Check: ", roll);
-		if(skill) {
-			// console.log("Has");
-			entity = universe.get(roll.entity);
-			if(entity) {
-				// console.log("Set");
-				entity.setValues(skill);
-			}
-		}
-
-		universe.chronicle.addOccurrence("character:check", roll, Date.now(), roll.source || roll.entity, roll.target);
-		universe.emit("send", roll);
 	});
 };

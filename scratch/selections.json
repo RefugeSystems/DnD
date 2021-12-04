@@ -1,0 +1,80 @@
+[{
+        "name": "Acquired Spells",
+        "field": "spells_prepared",
+        "limit": 2,
+        "choices": [
+            "spell:shield",
+            "spell:heroism"
+        ]
+    }, {
+        "name": "Extra Attack",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:extraattack"]
+    }, {
+        "name": "Magical Tinkering",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:magicaltinkering"]
+    }, {
+        "name": "Right Tool for the Job",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:artificer:righttool"]
+    }, {
+        "name": "Ability Score Improvements",
+        "limit": 2,
+        "field": "feats",
+        "choices": [
+			"feat:score:strength",
+			"feat:score:strength:1",
+			"feat:score:dexterity",
+			"feat:score:dexterity:1",
+			"feat:score:constitution",
+			"feat:score:constitution:1",
+			"feat:score:intelligence",
+			"feat:score:intelligence:1",
+			"feat:score:wisdom",
+			"feat:score:wisdom:1",
+			"feat:score:charisma",
+			"feat:score:charisma:1"]
+    }, {
+        "name": "Known Infusions",
+        "field": "feats",
+        "limit": 4,
+        "unique": true,
+        "choices": [
+            "feat:artificer:infusion:armor:magicalstrength",
+            "feat:artificer:infusion:armor:tools",
+            "feat:artificer:infusion:focus:enchanted",
+            "feat:artificer:enchant:defense",
+            "feat:artificer:enchant:weapon",
+            "feat:artificer:servant:homunculus",
+            "feat:infusion:replicatemagicitem",
+            "feat:artificer:mindsharpener",
+            "feat:artificer:repeatingshot",
+            "feat:artificer:returningweapon"]
+    },
+    [{
+            "name": "Poison Damage",
+            "announced": true,
+            "icon": "rs-light-red fas fa-flask-poison",
+            "add_roll": {
+                "hp": "-1d6"
+            }
+        }
+    ],
+    [{
+            "name": "Gain Temp HP",
+            "announced": true,
+            "icon": "rs-light-blue fas fa-shield",
+            "add_roll": {
+                "hp_temp": "caster.spell_modifier"
+            }
+        }
+    ]
+	,
+	
+	[ { "name": "Poison Damage", "announced": true, "icon": "rs-light-red fas fa-flask-poison", "add_roll": { "hp": "-1d6" } } ]
+
+]

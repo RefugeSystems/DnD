@@ -111,10 +111,10 @@ class RSObject {
 		/**
 		 * Stores the original formula before computation for computed values.
 		 * Notably this stores the full formula after conditions and other effects.
-		 * @property _formulas
+		 * @property _formula
 		 * @type Object
 		 */
-		this._formulas = {};
+		this._formula = {};
 		/**
 		 * Maps a property to an array of IDs for other objects involved in computing
 		 * the value.
@@ -566,6 +566,9 @@ class RSObject {
 	 */
 	updateFieldValues(suppress, debug) {
 		// console.trace(" > Update: " + this._data.id);
+		if(debug) {
+			console.log(" > Update: " + this._data.id);
+		}
 		if(typeof(this.preFieldUpdate) === "function") {
 			this.preFieldUpdate();
 		}
@@ -661,6 +664,9 @@ class RSObject {
 		for(x=0; x<fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			if(field && this._calculated[field.id] !== undefined && this._calculated[field.id] !== null) {
+				if(debug) {
+					console.log(" > Update Field[" + this._data.id + "] - " + field.id + ": ", this._calculated[field.id]);
+				}
 				switch(field.type) {
 					case "calculated":
 						this[fields[x]] = this.calculateField(fields[x], this._calculated[fields[x]]);
@@ -736,6 +742,9 @@ class RSObject {
 					// this._universe.emit("error", new this._universe.Anomaly("object:value:conditional", "Undefined conditional present in object", 40, loading, null, this));
 				}
 			}
+			if(debug) {
+				console.log(" > Gathder Conditionals[" + this._data.id + "] - " + field.id + ": ", this._conditionals);
+			}
 			
 			for(x=0; x<this._conditionals.length; x++) {
 				for(i=0; i<this._manager.fieldIDs.length; i++) {
@@ -759,12 +768,15 @@ class RSObject {
 				if(this[field.id] && (field.type === "dice" || field.type === "object:dice")) {
 					if(typeof(this[field.id]) === "object") {
 						keys = Object.keys(this[field.id]);
+						this._formula[field.id] = {};
 						for(i=0; i<keys.length; i++) {
 							if(typeof(this[field.id][keys[i]]) === "string") {
+								this._formula[field.id][keys[i]] = this[field.id][keys[i]];
 								this[field.id][keys[i]] = this._universe.calculator.reducedDiceRoll(this[field.id][keys[i]], this);
 							}
 						}
 					} else {
+						this._formula[field.id] = this[field.id];
 						this[field.id] = this._universe.calculator.reducedDiceRoll(this[field.id], this);
 					}
 				}
@@ -795,7 +807,15 @@ class RSObject {
 						this[field.id][keys[i]] = parseInt(this[field.id][keys[i]]);
 					}
 				} else if(field.type === "calculated" && isNaN(this[field.id])) {
+					this._formula[field.id] = this[field.id];
 					this[field.id] = this._universe.calculator.computedDiceRoll(this[field.id], this);
+				} else if(field.type === "object:calculated" && isNaN(this[field.id])) {
+					keys = Object.keys(this[field.id]);
+					this._formula[field.id] = {};
+					for(i=0; i<keys.length; i++) {
+						this._formula[field.id][keys[i]] = this[field.id][keys[i]];
+						this[field.id][keys[i]] = this._universe.calculator.computedDiceRoll(this[field.id][keys[i]], this);
+					}
 				}
 				// Defaults (For null computations) & Bounds
 				if(this[field.id] === null || this[field.id] === undefined || this[field.id] === "") {
@@ -849,6 +869,10 @@ class RSObject {
 
 		if(this.is_preview) {
 			this.name += " (Preview)";
+		}
+
+		if(debug) {
+			console.log(" > Updated[" + this.id + "]");
 		}
 
 		/* Stacking is being removed for now to address memory usage issues, possible return with improved load/unload controls
@@ -1575,7 +1599,7 @@ class RSObject {
 						} else {
 							json[field.id] = null;
 						}
-						if(field.type === "calculated") {
+						if(field.type === "calculated" || field.type === "dice" || field.type === "object:dice" || field.type === "object:calculated") {
 							formulas[field.id] = this._calculated[field.id];
 						}
 					} else {
@@ -1608,12 +1632,14 @@ class RSObject {
 			json._conditionals = this._conditionals;
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
+			json._formula = this._formula;
 			json._calculated = calculated;
 			json._calcRef = this._calcRef;
 			json._grid = this._grid;
 			json._x = this._x;
 			json._y = this._y;
 		} else {
+			json._formula = this._formula;
 			json._calculated = formulas;
 		}
 		if(!json.attribute) {

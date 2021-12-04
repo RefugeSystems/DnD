@@ -330,7 +330,7 @@
 			for(x=0; x<buffer.length; x++) {
 				expression = expression.replace(buffer[x], "");
 			}
-			dice.remainder = expression;
+			dice.remainder = expression; // Note: This is explicitly NOT parsed to an integer as the remainder can include other variables for some expressions
 		}
 
 		return dice;
@@ -339,9 +339,9 @@
 	/**
 	 * 
 	 * @method reducedDiceRoll
-	 * @param {String} expression 
+	 * @param {String | Object} expression Of dice or the already parsed expression.
 	 * @param {Object} [source] 
-	 * @returns 
+	 * @returns {String}
 	 */
 	var reducedDiceRoll = rsSystem.dnd.Calculator.reducedDiceRoll = rsSystem.dnd.reducedDiceRoll = function(expression, source) {
 		var reduced = "",
@@ -349,7 +349,13 @@
 			dice,
 			x;
 
-		dice = parseDiceRoll(expression);
+		if(typeof(expression) === "string") {
+			dice = parseDiceRoll(expression);
+		} else if(typeof(expression) === "object") {
+			dice = expression;
+		} else {
+			throw new Error("DnDCalculator: Invalid expression for dice roll reduction");
+		}
 		if(debug) {
 			console.log("Computing: ", dice);
 		}

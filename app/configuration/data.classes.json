@@ -80,6 +80,11 @@
 		"description": "Sexuality of an entity.",
 		"fields": ["parent", "name", "icon", "description", "is_preview", "review", "attribute"]
 	}, {
+		"id": "recipe",
+		"name": "Recipe",
+		"description": "Defines how to create something, such as herbs for alchemy, or ore for blacksmithing.",
+		"fields": ["parent", "name", "icon", "description", "is_preview", "review", "types", "consume_from", "yields", "duration", "attribute"]
+	}, {
 		"id": "alignment",
 		"name": "Alignment",
 		"description": "Acts as a generally summary for how this entity may act.",

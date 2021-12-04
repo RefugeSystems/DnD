@@ -79,7 +79,6 @@ rsSystem.component("dndDefenses", {
 			return action.capitalize();
 		},
 		"useAction": function(action) {
-			console.log("Use: ", action);
 			this.universe.send("action:count", {
 				"entity": this.entity.id,
 				"action": action,
@@ -87,7 +86,6 @@ rsSystem.component("dndDefenses", {
 			});
 		},
 		"refundAction": function(action) {
-			console.log("Refund: ", action);
 			this.universe.send("action:count", {
 				"entity": this.entity.id,
 				"action": action,

@@ -1,15 +1,29 @@
 <div class="rs-component dnd-component dnd-display-roll flex h" :class="autoRollBinding + classes">
-	<input class="roll-result" :placeholder="roll.formula" v-model.number="roll.computed" v-on:focus="focused(true)" v-on:blur="focused(false)" />
-	<button class="general rounded quick action" v-if="roll.formula" :title="roll.formula" v-on:click="rollResult()">
-		<span class="action-icon fas fa-dice"></span>
-	</button>
-	<button class="general rounded quick action advantage" v-if="roll.formula && skill_check" title="Roll with Advantage" v-on:click="advantage()">
-		<span class="action-icon fas fa-chevrons-up"></span>
-	</button>
-	<button class="general rounded quick action disadvantage" v-if="roll.formula && skill_check" title="Roll with Disadvantage" v-on:click="disadvantage()">
-		<span class="action-icon fas fa-chevrons-down"></span>
-	</button>
-	<div class="rolled flex h" v-if="roll.dice_rolls">
+	<div class="flex v roll-control-center">
+		<div class="flex h v-center roll-control">
+			<input class="roll-result" :placeholder="roll.formula" v-model="roll.computed" v-on:focus="focused(true)" v-on:blur="focused(false)" />
+			<button class="general rounded quick action" v-if="roll.formula" :title="roll.formula" v-on:click="rollResult()">
+				<span class="action-icon fas fa-dice"></span>
+			</button>
+			<button class="general rounded quick action advantage" v-if="roll.formula && skill_check" title="Roll with Advantage" v-on:click="advantage()">
+				<span class="action-icon fas fa-chevrons-up"></span>
+			</button>
+			<button class="general rounded quick action disadvantage" v-if="roll.formula && skill_check" title="Roll with Disadvantage" v-on:click="disadvantage()">
+				<span class="action-icon fas fa-chevrons-down"></span>
+			</button>
+		</div>
+		<div class="flex h v-center roll-critical" v-if="roll.dice_rolls && roll.dice_rolls.d20 && roll.dice_rolls.d20.length">
+			<button class="rounded general action toggle critical" v-on:click="toggleCritical()">
+				<span class="far" :class="roll.is_critical?'fa-check-square rs-light-green':'fa-square'"></span>
+				<span>Critical</span>
+			</button>
+			<button class="rounded general action toggle critical" v-on:click="toggleFailure()">
+				<span class="far" :class="roll.is_failure?'fa-check-square rs-light-red':'fa-square'"></span>
+				<span>Failure</span>
+			</button>
+		</div>
+	</div>
+	<div class="rolled flex h roll-readout" v-if="roll.dice_rolls">
 		<div class="results flex h" v-for="(results, die) in roll.dice_rolls">
 			<button class="result rounded general action" v-for="(result, $index) in results" v-on:click="roll.reroll(die, $index)" v-on:click.right.stop.prevent="roll.remove(die, $index)">
 				<span class="" :class="die === 'd100'?'fad fa-dice-d10':'fas fa-dice-' + die"></span>

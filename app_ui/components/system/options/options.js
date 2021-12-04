@@ -100,6 +100,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "auto_submit",
+					"label": "Quick Submit Rolls",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "screen_wake",
 					"label": "Lock Screen Awake",
 					"base": this.profile,

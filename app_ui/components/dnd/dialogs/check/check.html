@@ -1,0 +1,21 @@
+<div class="rs-component dnd-component dialog-dnd-check">
+	<div class="heading">
+		<span>{{name}} Check</span>
+	</div>
+	<div class="check">
+		<dnd-display-roll class="roll" :roll="roll" :source="entity" :skill="skill" :profile="profile" v-on:rollfocused="setFocus($event)" :auto-focus="true"></dnd-display-roll>
+	</div>
+	<div class="dice">
+		<button class="general rounded quick action roll-add die" v-for="die in dice" :class="die.classes" v-on:click="addDie(die)":title="die.name">
+			<span class="action-label">{{die.sides}}</span>
+			<span class="action-icon" :class="die.icon"></span>
+			<span class="action-count">{{roll.dice_rolls[die.id]?roll.dice_rolls[die.id].length:0}}</span>
+		</button>
+	</div>
+	<div class="controls">
+		<button class="general rounded action" v-on:click="send()">
+			<span class="fas fa-share-square"></span>
+			<span>Finish</span>
+		</button>
+	</div>
+</div>

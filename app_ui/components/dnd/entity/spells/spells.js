@@ -147,7 +147,12 @@ rsSystem.component("dndEntitySpells", {
 			}
 
 			// Additional Styling
-			// (Currently None)
+			if(spell.cast_has_somatic) {
+				classes += " has-somatic";
+			}
+			if(spell.cast_has_verbal) {
+				classes += " has-verbal";
+			}
 
 			return classes;
 		},

@@ -264,6 +264,11 @@ rsSystem.component("dndDialogRoll", {
 		data.isCritical = false;
 		data.isFailure = false;
 
+		data.hideFormula = this.details.hideFormula;
+		data.hideHistory = this.details.hideHistory;
+		data.ready = !this.profile.auto_roll;
+		data.canMiss = true;
+
 		data.skills = [];
 		if(this.details.skill) {
 			if(typeof(this.details.skill) === "string") {
@@ -281,7 +286,7 @@ rsSystem.component("dndDialogRoll", {
 			if(data.entity && data.entity.skill_check && data.entity.skill_check[roll.skill.id]) {
 				roll.formula += " + " + data.entity.skill_check[roll.skill.id];
 			}
-			data.skills.push(roll);
+			data.skills.push(new Roll(roll));
 		} else if(this.details.action && this.details.action.skills && this.details.action.skills.length) {
 			for(i=0; i<this.details.action.skills.length; i++) {
 				skill = this.universe.index.skill[this.details.action.skills[i]];
@@ -296,7 +301,7 @@ rsSystem.component("dndDialogRoll", {
 					if(data.entity && data.entity.skill_check[roll.skill.id]) {
 						roll.formula += " + " + data.entity.skill_check[roll.skill.id];
 					}
-					data.skills.push(roll);
+					data.skills.push(new Roll(roll));
 				} else {
 					console.warn("Unknown Skill: ", this.details.action.skill[i]);
 				}
@@ -306,6 +311,8 @@ rsSystem.component("dndDialogRoll", {
 		if(data.skills.length === 1) {
 			data.tracking = data.skills[0];
 		}
+
+		data.testActive = true;
 
 		return data;
 	},
@@ -325,8 +332,16 @@ rsSystem.component("dndDialogRoll", {
 				find[0].focus();
 			}
 		}
+		if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+			setTimeout(() => {
+				this.sendResults();
+			}, 100);
+		}
 	},
 	"methods": {
+		"testClick": function(event) {
+			console.log("Click: ", event);
+		},
 		"toggleFailure": function(state) {
 			if(state === undefined) {
 				Vue.set(this, "isFailure", !this.isFailure);
@@ -594,15 +609,20 @@ rsSystem.component("dndDialogRoll", {
 
 			if(this.skills.length === 1) {
 				var advantage = 0;
-	
+				this.skills[0].roll();
 				if(this.entity.skill_advantage && this.entity.skill_advantage[this.skills[0].skill.id] && this.entity.skill_advantage[this.skills[0].skill.id] !== "0") {
 					advantage += parseInt(this.entity.skill_advantage[this.skills[0].skill.id]) || 1;
 				}
+				// Disadvantage is deprecated but the idea applies the same
 				if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[this.skills[0].skill.id] && this.entity.skill_disadvantage[this.skills[0].skill.id] !== "0") {
 					advantage -= parseInt(this.entity.skill_disadvantage[this.skills[0].skill.id]) || 1;
 				}
 				// console.log("Advantage: ", advantage, this.entity.skill_advantage);
-				this.rollSkill(this.skills[0], advantage);
+				if(advantage < 0) {
+					this.skills[0].reroll("d20", 0, -1);
+				} else if(advantage > 0) {
+					this.skills[0].reroll("d20", 0, 1);
+				}
 			}
 		},
 		"clearSkillRolls": function(skip) {
@@ -614,13 +634,14 @@ rsSystem.component("dndDialogRoll", {
 			for(i=0; i<this.skills.length; i++) {
 				check = this.skills[i];
 				if(skip !== check) {
-					Vue.set(check, "computed", "");
-					if(check.dice_rolls) {
-						dice = Object.keys(check.dice_rolls);
-						for(j=0; j<dice.length; j++) {
-							check.dice_rolls[dice[j]].splice(0);
-						}
-					}
+					check.clear();
+					// Vue.set(check, "computed", "");
+					// if(check.dice_rolls) {
+					// 	dice = Object.keys(check.dice_rolls);
+					// 	for(j=0; j<dice.length; j++) {
+					// 		check.dice_rolls[dice[j]].splice(0);
+					// 	}
+					// }
 				}
 			}
 			this.$forceUpdate();
@@ -807,6 +828,7 @@ rsSystem.component("dndDialogRoll", {
 		},
 		"rollDice": function(die) {
 			var rolled = Random.integer(this.range[die.label], 1),
+				parsed,
 				store;
 			console.log(" > Roll[" + die.label + "]: " + rolled, this.tracking, die);
 			if(this.tracking) {
@@ -829,10 +851,27 @@ rsSystem.component("dndDialogRoll", {
 				Vue.set(this, "active", store);
 				this.storage.rolls.unshift(store);
 			}
-			if(this.negative) {
-				Vue.set(store, "computed", (store.computed || 0) - rolled);
+			if(typeof(store.computed) === "number") {
+				if(this.negative) {
+					Vue.set(store, "computed", (store.computed || 0) - rolled);
+				} else {
+					Vue.set(store, "computed", (store.computed || 0) + rolled);
+				}
+			} else if(typeof(store.computed) === "string") {
+				parsed = rsSystem.dnd.parseDiceRoll(store.computed);
+				if(this.negative) {
+					parsed.remainder = parseInt(parsed.remainder || 0) - rolled;
+				} else {
+					parsed.remainder = parseInt(parsed.remainder || 0) + rolled;
+				}
+				Vue.set(store, "computed", rsSystem.dnd.reducedDiceRoll(parsed));
 			} else {
-				Vue.set(store, "computed", (store.computed || 0) + rolled);
+				console.warn("Failed to preserve previous Roll value - Computed roll value is currently non-sense: ", _p(store));
+				if(this.negative) {
+					Vue.set(store, "computed", -1 * rolled);
+				} else {
+					Vue.set(store, "computed", rolled);
+				}
 			}
 			if(!store.dice_rolls[die.label]) {
 				Vue.set(store.dice_rolls, die.label, []);
@@ -913,6 +952,25 @@ rsSystem.component("dndDialogRoll", {
 				return "fas fa-dice";
 			}
 			*/
+		},
+		/**
+		 * Zero the resist and damage values, then send the result. This is to essentially
+		 * declare an attack a miss.
+		 * @method sendZeroResults
+		 */
+		"sendZeroResults": function() {
+			var i;
+			if(this.damages.length) {
+				for(i=0; i<this.damages.length; i++) {
+					this.damages[i].computed = 0;
+				}
+			}
+			if(this.resists.length) {
+				for(i=0; i<this.resists.length; i++) {
+					this.resists[i].computed = 0;
+				}
+			}
+			this.sendResults();
 		},
 		"sendResults": function() {
 			var state = this.getResultState(),

@@ -43,7 +43,10 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("player:skirmish:finish", function(event) {
 		console.log("Finish Incoming: ", event.message.data);
-		var skirmish = event.message.data.skirmish;
+		var skirmish = event.message.data.skirmish,
+			entity,
+			i;
+
 		if(typeof(skirmish) === "string") {
 			skirmish = universe.manager.skirmish.object[skirmish];
 		}
@@ -52,6 +55,17 @@ module.exports.initialize = function(universe) {
 				"time_end": universe.time,
 				"is_active": false
 			});
+
+			if(skirmish.entities && skirmish.entities.length) {
+				for(i=0; i<skirmish.entities.length; i++) {
+					entity = skirmish = universe.manager.entity.object[skirmish.entities[i]];
+					if(entity) {
+						entity.setValues({
+							"initiative": null
+						});
+					}
+				}
+			}
 		}
 	});
 };

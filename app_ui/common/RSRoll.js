@@ -21,9 +21,13 @@ class Roll {
 		 */
 		this.id = details.id || Random.identifier("roll");
 		/**
-		 * The result of the roll
+		 * The result of the roll. This may be a string with a formula instead of a straight value.
+		 * 
+		 * For instance "15 + 50%" is a valid full outcome for a resistance roll.
+		 * 
+		 * Additionally, submission of "6d6 + 50%" to the server should be allowed.
 		 * @property computed
-		 * @type integer
+		 * @type String | Integer
 		 */
 		this.computed = details.computed; // Left undefined for input placeholders to display when no initial data is present
 		/**
@@ -99,6 +103,17 @@ class Roll {
 		this.is_focused = false;
 	}
 	/**
+	 * Copy the parts of a roll that label (name, title, formula) it but not that roll's individual data, such as the
+	 * is_critical, dice rolls, or source properties.
+	 * @method copy
+	 * @param {Roll} roll 
+	 */
+	copy(roll) {
+		Vue.set(this, "name", roll.name);
+		Vue.set(this, "title", roll.title);
+		Vue.set(this, "formula", roll.formula);
+	}
+	/**
 	 * 
 	 * @method setEntity
 	 * @deprecated Use `setSource`
@@ -113,7 +128,7 @@ class Roll {
 	 * @method setSource
 	 * @param {RSObject} source
 	 */
-	 setSource(source) {
+	setSource(source) {
 		Vue.set(this, "source", source);
 	}
 	/**
@@ -215,12 +230,25 @@ class Roll {
 	 * @param {String} dice ie. d6 or d11
 	 */
 	add(dice) {
-		var result = rsSystem.dnd.diceRoll(dice);
+		var result = rsSystem.dnd.diceRoll(dice),
+			parsed;
+
 		if(!this.dice_rolls[dice]) {
 			Vue.set(this.dice_rolls, dice, []);
 		}
 		this.dice_rolls[dice].push(result);
-		Vue.set(this, "computed", (this.computed || 0) + result);
+
+		if(typeof(this.computed) === "number") {
+			Vue.set(this, "computed", (this.computed || 0) + result);
+		} else if(typeof(this.computed) === "string") {
+			parsed = rsSystem.dnd.parseDiceRoll(this.computed);
+			parsed.remainder = parseInt(parsed.remainder || 0) + result;
+			Vue.set(this, "computed", rsSystem.dnd.reducedDiceRoll(parsed));
+		} else {
+			console.warn("Failed to preserve previous Roll value - Computed roll value is currently non-sense: ", _p(this));
+			Vue.set(this, "computed", result);
+		}
+
 		this.checkState();
 	}
 	/**
@@ -231,9 +259,22 @@ class Roll {
 	 */
 	 remove(dice, index) {
 		if(this.dice_rolls[dice] && index < this.dice_rolls[dice].length) {
-			var result = this.dice_rolls[dice][index];
+			var result = this.dice_rolls[dice][index],
+				parsed;
+
 			this.dice_rolls[dice].splice(index, 1);
-			Vue.set(this, "computed", (this.computed || 0) - result);
+
+			if(typeof(this.computed) === "number") {
+				Vue.set(this, "computed", (this.computed || 0) - result);
+			} else if(typeof(this.computed) === "string") {
+				parsed = rsSystem.dnd.parseDiceRoll(this.computed);
+				parsed.remainder = parseInt(parsed.remainder || 0) - result;
+				Vue.set(this, "computed", rsSystem.dnd.reducedDiceRoll(parsed));
+			} else {
+				console.warn("Failed to preserve previous Roll value - Computed roll value is currently non-sense: ", _p(this));
+				Vue.set(this, "computed", -1 * result);
+			}
+
 			this.checkState();
 		}
 	}
@@ -249,7 +290,8 @@ class Roll {
 	 reroll(dice, index, keep) {
 		if(this.dice_rolls[dice] && index < this.dice_rolls[dice].length) {
 			var current = this.dice_rolls[dice][index],
-				result = rsSystem.dnd.diceRoll(dice);
+				result = rsSystem.dnd.diceRoll(dice),
+				parsed;
 
 			if(!this.rerolled[dice]) {
 				Vue.set(this.rerolled, dice, []);
@@ -258,7 +300,17 @@ class Roll {
 			if(isNaN(keep) || keep === 0 || (keep < 0 && current > result) || (keep > 0 && current < result)) {
 				this.rerolled[dice].unshift(current);
 				this.dice_rolls[dice][index] = result;
-				Vue.set(this, "computed", (this.computed || 0) - current + result);
+
+				if(typeof(this.computed) === "number") {
+					Vue.set(this, "computed", (this.computed || 0) - current + result);
+				} else if(typeof(this.computed) === "string") {
+					parsed = rsSystem.dnd.parseDiceRoll(this.computed);
+					parsed.remainder = parseInt(parsed.remainder || 0) + result - current;
+					Vue.set(this, "computed", rsSystem.dnd.reducedDiceRoll(parsed));
+				} else {
+					console.warn("Failed to preserve previous Roll value - Computed roll value is currently non-sense: ", _p(this));
+					Vue.set(this, "computed", result - current);
+				}
 			} else {
 				this.rerolled[dice].unshift(result);
 			}
@@ -293,6 +345,19 @@ class Roll {
 				Vue.set(this, "is_failure", false);
 			}
 		}
+	}
+
+	toJSON() {
+		return {
+			"computed": this.computed,
+			"result": this.computed, // Legacy
+			"name": this.name,
+			"formula": this.formula,
+			"dice_rolls": this.dice_rolls,
+			"rerolled": this.rerolled,
+			"is_critical": this.is_critical,
+			"is_failure": this.is_failure
+		};
 	}
 }
 

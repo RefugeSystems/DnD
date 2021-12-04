@@ -303,9 +303,11 @@ module.exports.initialize = function(universe) {
 			was_damaged = true;
 		}
 
-		if(add.hp) {
-			add.death_fail = 0;
-			add.death_save = 0;
+		if(add.hp > 0 && (entity.death_fail || entity.death_save)) {
+			entity.setValues({
+				"death_fail": 0,
+				"death_save": 0
+			}); // TODO: Link with general error tracking for callback in universe, but if this fails, the latter ops will fail, so tracking there for now
 		}
 
 		entity.addValues(add, function(err) {

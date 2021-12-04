@@ -85,9 +85,11 @@
 	</div>
 	<div class="rolling skill-roll" v-if="skills.length && !check && (!details.targeted || target)">
 		<div class="roll-label" v-if="!details.using">
-			Roll a Skill:
+			Save:
 		</div>
 		<div class="to-roll flex h" v-for="check in skills">
+			<dnd-display-roll class="selection" :roll="check" :source="entity" :skill="check.skill" :profile="profile"></dnd-display-roll>
+			<!--
 			<button class="roll-key general rounded quick action" v-on:click="info(check.skill)">
 				<span :class="check.skill.icon"></span>
 			</button>
@@ -114,9 +116,12 @@
 			<button class="rounded general roll result quick action" v-if="check.computed || check.computed === 0" v-on:click="clearSkill(check)">
 				<span class="fas fa-ban"></span>
 			</button>
+			-->
+			<!--
 			<button class="rounded general roll result quick action" v-if="check.computed || check.computed === 0" v-on:click="sendSkill(check)">
 				<span class="fas fa-share-square"></span>
 			</button>
+			-->
 		</div>
 	</div>
 	<div class="response dnd-widget align-center" v-if="statusResponse">
@@ -213,10 +218,24 @@
 	</div>
 	<div class="roll-bottom">
 		<div class="roll-complete flex h">
+			<rs-shiny-button class="send-action" color="blue" slot="content" :active="ready" v-if="details.action" v-on:click="sendResults()" :title="actionTitling">
+				<span>
+					<span :class="getSendResultIcon()"></span>
+					<span>{{getFinishName()}}</span>
+				</span>
+			</rs-shiny-button>
+			<rs-shiny-button class="send-action" color="green" slot="content" :active="ready" v-if="canMiss" v-on:click="sendZeroResults()" title="Declare this a miss">
+				<span>
+					<span :class="getSendResultIcon()"></span>
+					<span>Declare Miss</span>
+				</span>
+			</rs-shiny-button>
+			<!--
 			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendResults()" :title="actionTitling">
 				<span :class="getSendResultIcon()"></span>
 				<span>{{getFinishName()}}</span>
 			</button>
+			-->
 			<button class="general rounded action roll-action crited" v-if="skills.length" :class="isCritical?'active':''" v-on:click="toggleCritical()">
 				<span class="far" :class="isCritical?'fa-check-square':'fa-square'"></span>
 				<span>Critical</span>
@@ -241,7 +260,7 @@
 					<span class="action-count" v-if="active && active.dice_rolls && active.dice_rolls[dice.id] && active.dice_rolls[dice.id].length">{{active.dice_rolls[dice.id].length}}</span>
 				</button>
 			</div>
-			<div class="flex h">
+			<div class="flex h formula-bar" v-if="!hideFormula">
 				<input type="text" v-model="storage.formula" v-on:keydown.enter="roll(storage.formula)" v-on:keydown.esc.prevent.stop="clearHistory()" v-on:keyup.esc.prevent.stop="" v-on:keypress.esc.prevent.stop="" v-on:focus="setTracking(null)" />
 				<button class="rounded general quick action dice" v-on:click="roll(storage.formula)">
 					<span class="fas fa-dice"></span>
@@ -251,7 +270,7 @@
 				</button>
 			</div>
 		</div>
-		<div class="h-container roll-history">
+		<div class="h-container roll-history" v-if="!hideHistory">
 			<div class="output flex h">
 				<div class="roll inline flex v" v-for="(roll, $index) in storage.rolls" v-on:click.right.prevent.stop="dismiss($index)" :class="roll == active?'active':''" :title="roll.title || JSON(roll)">
 					<button class="result flat action rs-white rsbg-black">{{roll.computed}}</button>

@@ -3,15 +3,15 @@
 		<div class="death-title">Saves</div>
 		<div class="divider"></div>
 		<div class="death-container saves flex h center">
-			<button class="property" v-for="i in 3" v-on:click="passSave()">
-				<span class="fa-angel" :class="i<=entity.death_save?'fas rs-lightgreen':'fal'"></span>
+			<button class="property" v-for="i in 3" v-on:click="passSave()" v-on:click.right.prevent.stop="unPass()">
+				<span class="save-indicator fa-angel" :class="i<=entity.death_save?'fas rs-lightgreen':'fal'"></span>
 			</button>
 		</div>
 		<div class="death-title">Fails</div>
 		<div class="divider"></div>
 		<div class="death-container fails flex h center">
-			<button class="property" v-for="i in 3" v-on:click="failSave()">
-				<span class="fa-skull" :class="i<=entity.death_fail?'fas rs-lightred':'fal'"></span>
+			<button class="property" v-for="i in 3" v-on:click="failSave()" v-on:click.right.prevent.stop="unFail()">
+				<span class="save-indicator fa-skull" :class="i<=entity.death_fail?'fas rs-lightred':'fal'"></span>
 			</button>
 		</div>
 	</div>

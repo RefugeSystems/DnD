@@ -104,6 +104,16 @@ module.exports = function(universe) {
 	};
 	
 	/**
+	 * 
+	 * @method getField
+	 * @param {String} name
+	 * @return {Object}
+	 */
+	this.getField = function(name) {
+		return database.field[name] || null;
+	};
+	
+	/**
 	 * @method modifyField
 	 * @param {Object} specification 
 	 * @return {Promise} 
