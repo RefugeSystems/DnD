@@ -48,8 +48,11 @@ rsSystem.component("dndEntityActions", {
 	"data": function() {
 		var data = {};
 
-		data.core = ["main", "movement", "bonus"];
-		data.oot = ["reaction"];
+		if(this.entity.action_max) {
+			data.actions = Object.keys(this.entity.action_max);
+		} else {
+			data.actions = [];
+		}
 
 		return data;
 	},
@@ -57,7 +60,13 @@ rsSystem.component("dndEntityActions", {
 		rsSystem.register(this);
 	},
 	"methods": {
-
+		"name": function(action) {
+			switch(action) {
+				case "movement": return "Move";
+				case "reaction": return "React";
+				default: return action.capitalize();
+			}
+		}
 	},
 	"beforeDestroy": function() {
 		/*

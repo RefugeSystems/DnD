@@ -109,6 +109,36 @@ rsSystem.component("sysInfoGeneral", {
 								"type": "button",
 								"action": "assume"
 							});
+							if(this.info.is_hostile) {
+								this.controls.push({
+									"title": "Declare Entity as no longer Hostile",
+									"icon": "fas fa-smile-beam",
+									"type": "button",
+									"action": "nonhostile"
+								});
+							} else {
+								this.controls.push({
+									"title": "Declare Entity as Hostile",
+									"icon": "fas fa-angry",
+									"type": "button",
+									"action": "hostile"
+								});
+							}
+							if(this.info.is_locked) {
+								this.controls.push({
+									"title": "Unlock Entity",
+									"icon": "fas fa-unlock",
+									"type": "button",
+									"action": "unlock"
+								});
+							} else {
+								this.controls.push({
+									"title": "Lock Entity",
+									"icon": "fas fa-lock",
+									"type": "button",
+									"action": "lock"
+								});
+							}
 							loading = {
 								"title": "Color Code",
 								"icon": "fas fa-palette",
@@ -265,6 +295,34 @@ rsSystem.component("sysInfoGeneral", {
 						"obscured": false
 					});
 					break;
+				case "lock":
+					this.universe.send("master:quick:set", {
+						"object": this.info.id,
+						"field": "is_locked",
+						"value": true
+					});
+					break;
+				case "unlock":
+					this.universe.send("master:quick:set", {
+						"object": this.info.id,
+						"field": "is_locked",
+						"value": false
+					});
+					break;
+				case "hostile":
+					this.universe.send("master:quick:set", {
+						"object": this.info.id,
+						"field": "is_hostile",
+						"value": true
+					});
+					break;
+				case "nonhostile":
+					this.universe.send("master:quick:set", {
+						"object": this.info.id,
+						"field": "is_hostile",
+						"value": false
+					});
+					break;
 				case "revoke":
 					this.universe.send("effect:revoke", {
 						"effects": [this.info.id],
@@ -291,9 +349,14 @@ rsSystem.component("sysInfoGeneral", {
 						"component": "dndDialogGive",
 						"entity": entity.id,
 						"finish": (target) => {
+							console.log("Giving: ", target.id, {
+								"items": [this.info.id],
+								"entity": entity.id,
+								"target": target.id
+							});
 							if(target && target.id) {
 								this.universe.send("inventory:give", {
-									"items": [object.id],
+									"items": [this.info.id],
 									"entity": entity.id,
 									"target": target.id
 								});

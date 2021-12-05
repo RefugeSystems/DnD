@@ -118,9 +118,13 @@ rsSystem.component("dndEntitySpells", {
 
 			return result;
 		},
-		"getDuration": function(spell) {
-			var rounds = spell.duration/6;
-			return rounds + " Rounds (" + this.universe.calendar.displayDuration(spell.duration);
+		"getDuration": function(duration) {
+			var rounds = duration/6;
+			if(rounds <= 20) {
+				return rounds + " Rounds (" + this.universe.calendar.displayDuration(duration) + ")";
+			} else {
+				return this.universe.calendar.displayDuration(duration);
+			}
 		},
 		"hoveredSpell": function(spell) {
 			this.$emit("hovered-object", spell);
@@ -147,10 +151,10 @@ rsSystem.component("dndEntitySpells", {
 			}
 
 			// Additional Styling
-			if(spell.cast_has_somatic) {
+			if(spell.cast_uses_somatic) {
 				classes += " has-somatic";
 			}
-			if(spell.cast_has_verbal) {
+			if(spell.cast_uses_verbal) {
 				classes += " has-verbal";
 			}
 

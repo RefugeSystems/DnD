@@ -37,6 +37,7 @@
 					<div class="list-data-details">
 						<h3>
 							<span>{{entry.name}}</span>
+							<span v-if="multiples[section][entry.id] !== 1">(x{{multiples[section][entry.id]}})</span>
 							<button class="flat action fas fa-info-circle rs-light-blue" v-on:click="info(entry)"></button>
 						</h3>
 						<div v-if="details.note" v-html="details.note(section, entry)"></div>

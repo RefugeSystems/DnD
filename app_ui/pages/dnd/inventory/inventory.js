@@ -335,6 +335,9 @@ rsSystem.component("DNDInventory", {
 		if(this.storage.processing) {
 			Vue.set(this.storage, "processing", null);
 		}
+		if(this.storage.show_shared === undefined) {
+			Vue.set(this.storage, "show_shared", false);
+		}
 		this.universe.$on("updated", this.checkUpdate);
 		this.buildControls();
 	},
@@ -446,6 +449,7 @@ rsSystem.component("DNDInventory", {
 					"title": "Drop Items",
 					"icon": "fas fa-arrow-alt-to-bottom",
 					"process": function() {
+						rsSystem.utility.clearObject(reference.storage.selected);
 						reference.universe.send("inventory:drop", {
 							"items": items,
 							"entity": reference.entity.id
@@ -461,6 +465,7 @@ rsSystem.component("DNDInventory", {
 							"entity": reference.entity.id,
 							"finish": function(target) {
 								if(target && target.id) {
+									rsSystem.utility.clearObject(reference.storage.selected);
 									reference.universe.send("inventory:give", {
 										"items": items,
 										"entity": reference.entity.id,

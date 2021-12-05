@@ -76,6 +76,7 @@
 			border-bottom-right-radius: 10px;
 			border-top-right-radius: 10px;
 			transition: color .5s;
+			padding: 0px 0px 0px 5px;
 			margin: 5px;
 
 			&.unusable-spell {
@@ -100,7 +101,7 @@
 				}
 			}
 
-			&:hover {
+			&:hover .simple {
 				.level, .name, .icon {
 					color: @rsLightBlue;
 				}
@@ -127,11 +128,12 @@
 					flex-grow: 1;
 					min-height: 30px;
 					width: 30px;
+					margin: 0px 0px 0px 5px;
 
-					&:hover {
-						box-shadow: 0px 0px 5px @rsLightBlue;
-						color: @rsBlue;
-					}
+					// &:hover {
+					// 	box-shadow: 0px 0px 5px @rsLightBlue;
+					// 	color: @rsBlue;
+					// }
 				}
 			}
 		}
@@ -143,6 +145,10 @@
 
 		button {
 			margin: 0px 7px;
+
+			&:hover {
+				color: @rsBlue;
+			}
 		}
 
 		.range {

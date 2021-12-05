@@ -42,7 +42,7 @@ rsSystem.component("dndDefenses", {
 		data.actions = [];
 		data.bag_weight = 0;
 
-		items = data.entity.action_count?Object.keys(data.entity.action_count):[];
+		items = data.entity.action_max?Object.keys(data.entity.action_max):[];
 		for(i=0; i<items.length; i++) {
 			if(data.entity.action_max[items[i]]) {
 				data.actions.push(items[i]);

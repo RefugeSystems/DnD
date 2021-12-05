@@ -223,6 +223,18 @@
 			}
 		},
 		/**
+		 * 
+		 * @method clearObject
+		 * @param {Object} object 
+		 */
+		"clearObject": function(object) {
+			var keys = Object.keys(object),
+				i;
+			for(i=0; i<keys.length; i++) {
+				Vue.delete(object, keys[i]);
+			}
+		},
+		/**
 		 *
 		 * @method sortByID
 		 * @param a

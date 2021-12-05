@@ -20,6 +20,21 @@
 		overflow: hidden;
 	}
 
+	.skill-proficient {
+		display: none;
+		width: 9px;
+
+		&::before {
+			margin-left: -3px;
+		}
+	}
+
+	.proficient {
+		.skill-proficient {
+			display: block;
+		}
+	}
+
 	.seperator.fa-dice {
 		color: @rsOrange;
 	}

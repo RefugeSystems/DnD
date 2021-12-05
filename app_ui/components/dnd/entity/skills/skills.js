@@ -98,6 +98,19 @@ rsSystem.component("dndEntitySkills", {
 		"toggleSection": function(section) {
 			Vue.set(this.storage, section, !this.storage[section]);
 		},
+		"getSkillClasses": function(skill) {
+			var classes = "";
+			
+			if(this.storage && (this.storage.rolled[skill.id] || this.storage.rolled[skill.id] === 0)) {
+				classes += " marked";
+			}
+
+			if(this.entity.skill_proficiency && this.entity.skill_proficiency[skill.id] && 1 <= this.entity.skill_proficiency[skill.id]) {
+				classes += " proficient";
+			}
+
+			return classes;
+		},
 		"getSkillIcon": function(skill) {
 			var classes = skill.icon || "";
 

@@ -46,25 +46,44 @@ rsSystem.component("dndDialogList", {
 			return this.details.controls;
 		},
 		"listing": function() {
-			var listing = [],
+			var listing = {},
+				section,
 				extras,
+				counts,
 				entry,
+				sync,
 				i,
 				j;
 
+			sync = [];
 			for(i=0; i<this.sections.length; i++) {
-				listing[this.sections[i]] = [];
+				section = this.sections[i];
+				listing[section] = [];
+				if(!this.multiples[section]) {
+					Vue.set(this.multiples, section, {});
+				}
+				sync.splice(0);
+				counts = {};
 				extras = 0;
-				for(j=0; j<this.details.data[this.sections[i]].length; j++) {
-					entry = this.details.data[this.sections[i]][j];
+				for(j=0; j<this.details.data[section].length; j++) {
+					entry = this.details.data[section][j];
 					if(entry && !entry.disabled && !entry.concealed && (!this.storage || !this.storage.filter || (entry._search && entry._search.indexOf(this.storage.filter) !== -1))) {
-						if(!this.details.limit || listing[this.sections[i]].length < this.details.limit) {
-							listing[this.sections[i]].push(entry);
+						if(!counts[entry.id]) {
+							counts[entry.id] = 1;
+							sync.push(entry.id);
+							if(!this.details.limit || listing[section].length < this.details.limit) {
+								listing[section].push(entry);
+							} else {
+								extras += 1;
+							}
 						} else {
-							extras += 1;
+							counts[entry.id]++;
 						}
 					}
-					Vue.set(this.extras, this.sections[i], extras);
+					Vue.set(this.extras, section, extras);
+				}
+				for(j=0; j<sync.length; j++) {
+					Vue.set(this.multiples[section], sync[j], counts[sync[j]]);
 				}
 			}
 			
@@ -75,6 +94,7 @@ rsSystem.component("dndDialogList", {
 		var data = {};
 
 		data.cards = this.details.cards;
+		data.multiples = {};
 		data.extras = {};
 
 		return data;

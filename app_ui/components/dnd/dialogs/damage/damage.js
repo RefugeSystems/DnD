@@ -578,18 +578,17 @@ rsSystem.component("dndDialogDamage", {
 					}
 					break;
 				case "damage":
-					if(this.splitDamage) {
-
-					}
-					if(this.available_damages.length === 0 && !this.autoskipped[this.activeSection.id]) {
-						this.autoskipped[this.activeSection.id] = true;
-						setTimeout(() => {
-							this.goToNextSection();
-						});
-					} else if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
-						setTimeout(() => {
-							this.goToNextSection();
-						});
+					if(this.channel) {
+						if(this.available_damages.length === 0 && !this.autoskipped[this.activeSection.id]) {
+							this.autoskipped[this.activeSection.id] = true;
+							setTimeout(() => {
+								this.goToNextSection();
+							});
+						} else if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+							setTimeout(() => {
+								this.goToNextSection();
+							});
+						}
 					}
 					break;
 				case "effects":

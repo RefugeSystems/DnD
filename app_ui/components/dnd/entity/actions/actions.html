@@ -1,15 +1,5 @@
-<div class="rs-component dnd-component entity-actions flex v" v-if="isVisible">
-	<div class="heading flex h v-center">
-		<span class="fa-solid fa-abbaccus"></span>
-	</div>
-	<div class="core-actions flex h center wrap">
-		<button class="rounded general action" v-for="act in core" v-on:click="useAction(act)" v-on:click.right.prevent.stop="useAction(act, 1)">
-			{{entity.action_count[act]}}/{{entity.action_max[act]}} {{act}}
-		</button>
-	</div>
-	<div class="outofturn-actions flex h center wrap">
-		<button class="rounded general action" v-for="act in oot" v-on:click="useAction(act)" v-on:click.right.prevent.stop="useAction(act, 1)">
-			{{entity.action_count[act]}}/{{entity.action_max[act]}} {{act}}
-		</button>
-	</div>
+<div class="rs-component dnd-component entity-actions flex h center wrap" v-if="isVisible">
+	<button class="rounded general action" v-for="act in actions" v-on:click="useAction(act)" v-on:click.right.prevent.stop="useAction(act, 1)">
+		{{entity.action_count[act] || 0}}/{{entity.action_max[act]}} {{name(act)}}
+	</button>
 </div>

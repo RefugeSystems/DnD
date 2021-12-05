@@ -18,14 +18,20 @@ rsSystem.component("DNDControlEquipment", {
 		}
 	},
 	"methods": {
+		"giveItem": function(item, to, from) {
+			this.sendEquipmentControl("inventory:give", item, from, to);
+		},
+		"dropItem": function(item, entity) {
+			this.sendEquipmentControl("inventory:drop", item, entity);
+		},
 		"give": function(item, to, from) {
-			this.sendEquipmentContorl("inventory:give", item, from, to);
+			this.sendEquipmentControl("inventory:give", item, from, to);
 		},
 		"drop": function(item, entity) {
-			this.sendEquipmentContorl("inventory:Drop", item, entity);
+			this.sendEquipmentControl("inventory:drop", item, entity);
 		},
 		"equipItem": function(item, entity) {
-			this.sendEquipmentContorl("equip:items", item, entity);
+			this.sendEquipmentControl("equip:items", item, entity);
 		},
 		"mainhandItem": function(item, entity) {
 			// if(!entity) {
@@ -37,34 +43,34 @@ rsSystem.component("DNDControlEquipment", {
 			// 		"entity": entity.id || entity
 			// 	});
 			// }
-			this.sendSingleEquipmentContorl("item:mainnhand", item, entity);
+			this.sendSingleEquipmentControl("item:mainhand", item, entity);
 		},
 		"unequipItem": function(item, entity) {
-			this.sendEquipmentContorl("unequip:items", item, entity);
+			this.sendEquipmentControl("unequip:items", item, entity);
 		},
 		"dischargeItem": function(item, entity) {
-			this.sendEquipmentContorl("object:charges", item, entity, null, -1);
+			this.sendEquipmentControl("object:charges", item, entity, null, -1);
 		},
 		"rechargeItem": function(item, entity) {
-			this.sendEquipmentContorl("object:charges", item, entity, null, 1);
+			this.sendEquipmentControl("object:charges", item, entity, null, 1);
 		},
 		"revealItem": function(item, entity) {
-			this.sendEquipmentContorl("inventory:reveal", item, entity);
+			this.sendEquipmentControl("inventory:reveal", item, entity);
 		},
 		"hideItem": function(item, entity) {
-			this.sendEquipmentContorl("inventory:hide", item, entity);
+			this.sendEquipmentControl("inventory:hide", item, entity);
 		},
 		"attuneItem": function(item, entity) {
-			this.sendEquipmentContorl("items:attune", item, entity);
+			this.sendEquipmentControl("items:attune", item, entity);
 		},
 		"unattuneItem": function(item, entity) {
-			this.sendEquipmentContorl("items:unattune", item, entity);
+			this.sendEquipmentControl("items:unattune", item, entity);
 		},
 		"versatilityToOneHanded": function(item, entity) {
-			this.sendEquipmentContorl("items:verstility:1handed", item, entity);
+			this.sendEquipmentControl("items:verstility:1handed", item, entity);
 		},
 		"versatilityToTwoHanded": function(item, entity) {
-			this.sendEquipmentContorl("items:verstility:2handed", item, entity);
+			this.sendEquipmentControl("items:verstility:2handed", item, entity);
 		},
 		"getPlayerCharacter": function() {
 			try {
@@ -74,7 +80,7 @@ rsSystem.component("DNDControlEquipment", {
 				return null;
 			}
 		},
-		"sendEquipmentContorl": function(command, item, entity, target, charges) {
+		"sendEquipmentControl": function(command, item, entity, target, charges) {
 			if(!entity) {
 				entity = this.entity;
 			}
@@ -91,9 +97,10 @@ rsSystem.component("DNDControlEquipment", {
 			if(charges) {
 				send.change = charges;
 			}
+			console.log("Equipment Control: ", send);
 			this.universe.send(command, send);
 		},
-		"sendSingleEquipmentContorl": function(command, item, entity, target, charges) {
+		"sendSingleEquipmentControl": function(command, item, entity, target, charges) {
 			if(!entity) {
 				entity = this.entity;
 			}

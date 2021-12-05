@@ -59,6 +59,14 @@ class Roll {
 		 */
 		this.dice_rolls = Object.assign({}, details.dice_rolls);
 		/**
+		 * Multiply the dice values by this number for soe variability.
+		 * 
+		 * This was implemented to support "2x Dice Value" for critical strikes.
+		 * @property dice_multiplier
+		 * @type Object
+		 */
+		this.dice_multiplier = details.dice_multiplier || 1;
+		/**
 		 * Applies only to d20 rolls and lists all results
 		 * @property dice_rolls.vantage
 		 * @deprecated Use `this.rerolled.d20`
@@ -112,6 +120,14 @@ class Roll {
 		Vue.set(this, "name", roll.name);
 		Vue.set(this, "title", roll.title);
 		Vue.set(this, "formula", roll.formula);
+	}
+	/**
+	 * 
+	 * @method setDiceMultiplier
+	 * @param {Number} multiplier
+	 */
+	setDiceMultiplier(multiplier) {
+		Vue.set(this, "dice_multiplier", multiplier);
 	}
 	/**
 	 * 
