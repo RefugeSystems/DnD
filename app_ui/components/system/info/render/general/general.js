@@ -63,7 +63,7 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"methods": {
 		"repopulateControls": function(event) {
-			if(event.id === this.entity.id) {
+			if(event.id === this.info.id) {
 				this.populateControls();
 			}
 		},
