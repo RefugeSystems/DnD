@@ -118,7 +118,7 @@ module.exports.initialize = function(universe) {
 		var object = event.message.data.object,
 			field = event.message.data.field,
 			value = event.message.data.value,
-			set;
+			set = {};
 
 		if(typeof(object) === "string") {
 			object = universe.get(object);
