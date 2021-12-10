@@ -344,6 +344,25 @@ rsSystem.component("rsTable", {
 					return referenced.name || referenced.id;
 				}
 			}
+
+			if(field.attribute) {
+				switch(field.attribute.display_format) {
+					case "duration":
+						if(typeof(value) !== "number") {
+							value = parseInt(value);
+						}
+						if(isNaN(value)) {
+							return "[BadValue]";
+						}
+						buffer = value/6;
+						value = this.universe.calendar.displayDuration(value);
+						if(buffer <= 20) {
+							value = buffer + " Rounds (" + value + ")";
+						}
+						break;
+				}
+			}
+
 			return value;
 		},
 		"exportCorpus": function(title) {

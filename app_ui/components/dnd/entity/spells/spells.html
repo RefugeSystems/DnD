@@ -40,7 +40,7 @@
 						<div class="mini-divider"></div>
 						<div class="flex h damage justified">
 							<div class="damage flex v" :style="styleTypeList" v-if="spell.damage">
-								<div class="damage flex h" v-for="(roll, damage) in spell.damage">
+								<div class="damage flex h v-center" v-for="(roll, damage) in spell.damage">
 									<button class="rounded general quick action" v-on:click.stop="info(damage)">
 										<span :class="damageIcon(damage)"></span>
 									</button>

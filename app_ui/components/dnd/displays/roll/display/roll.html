@@ -1,4 +1,4 @@
-<div class="rs-component dnd-component dnd-display-roll flex h" :class="autoRollBinding + classes">
+<div class="rs-component dnd-component dnd-display-roll flex h v-center" :class="autoRollBinding + classes">
 	<div class="flex v roll-control-center">
 		<div class="flex h v-center roll-control">
 			<input class="roll-result" :placeholder="roll.formula" v-model="roll.computed" v-on:focus="focused(true)" v-on:blur="focused(false)" />

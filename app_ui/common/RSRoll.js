@@ -128,6 +128,7 @@ class Roll {
 	 */
 	setDiceMultiplier(multiplier) {
 		Vue.set(this, "dice_multiplier", multiplier);
+		this.recalculate();
 	}
 	/**
 	 * 
@@ -203,7 +204,8 @@ class Roll {
 		
 		// Parse Formula
 		formula = rsSystem.dnd.parseDiceRoll(rsSystem.dnd.reducedDiceRoll(formula || this.formula, source || this.source || this.entity));
-		
+		console.log("Rolling: ", formula, source, this.source);
+
 		// Clear any previous data
 		dice = Object.keys(this.dice_rolls);
 		for(i=0; i<dice.length; i++) {
@@ -221,7 +223,7 @@ class Roll {
 				for(j=0; j<rolls; j++) {
 					roll = rsSystem.dnd.diceRoll(dice[i]);
 					this.dice_rolls[dice[i]].push(roll);
-					result += roll;
+					result += Math.floor(this.dice_multiplier * roll);
 				}
 			}
 		}
@@ -239,6 +241,47 @@ class Roll {
 		Vue.set(this, "computed", result);
 		this.checkState();
 		return result;
+	}
+	/**
+	 * Use existing dice values and dice multiplier values to recalculate the
+	 * computed result for the roll.
+	 * @method recalculate
+	 */
+	recalculate() {
+		var result = 0,
+			percent,
+			formula,
+			rolls,
+			dice,
+			roll,
+			i,
+			j;
+
+		if(this.formula && this.dice_rolls) {
+			formula = rsSystem.dnd.parseDiceRoll(rsSystem.dnd.reducedDiceRoll(this.formula, this.source || this.entity));
+			console.log("Recalculating: ", formula, this.source);
+			// Roll
+			dice = Object.keys(formula);
+			for(i=0; i<dice.length; i++) {
+				rolls = rsSystem.dnd.compute(formula[dice[i]]);
+				if(dice[i][0] === "d") {
+					if(this.dice_rolls[dice[i]]) {
+						for(j=0; j<rolls; j++) {
+							roll = this.dice_rolls[dice[i]][j] || 0;
+							result += Math.floor(this.dice_multiplier * roll);
+						}
+					}
+				}
+			}
+			if(formula.remainder) {
+				result += rsSystem.dnd.compute(formula.remainder);
+			}
+			if(formula["%"]) {
+				percent = rsSystem.dnd.compute(formula["%"]);
+				result += Math.floor(result * (percent/100));
+			}
+			Vue.set(this, "computed", result);
+		}
 	}
 	/**
 	 * 
@@ -278,6 +321,7 @@ class Roll {
 			var result = this.dice_rolls[dice][index],
 				parsed;
 
+			result = Math.floor(this.dice_multiplier * result);
 			this.dice_rolls[dice].splice(index, 1);
 
 			if(typeof(this.computed) === "number") {
@@ -314,6 +358,8 @@ class Roll {
 			}
 
 			if(isNaN(keep) || keep === 0 || (keep < 0 && current > result) || (keep > 0 && current < result)) {
+				current = Math.floor(this.dice_multiplier * current);
+				result = Math.floor(this.dice_multiplier * result);
 				this.rerolled[dice].unshift(current);
 				this.dice_rolls[dice][index] = result;
 

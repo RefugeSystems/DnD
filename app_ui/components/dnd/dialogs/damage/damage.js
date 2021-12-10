@@ -459,7 +459,8 @@ rsSystem.component("dndDialogDamage", {
 			// TODO: Validate Current
 			var targets,
 				check,
-				i;
+				i,
+				j;
 
 			switch(this.activeSection.id) {
 				case "checks":
@@ -467,6 +468,35 @@ rsSystem.component("dndDialogDamage", {
 						check = this.skill_checks[i];
 						if(check.target) {
 							this.target_check[check.target.id] = check;
+						}
+						if(check.roll && check.roll.is_critical) {
+							if(check.target) {
+								for(j=0; j<this.available_damages.length; j++) {
+									if(this.roll_damage[check.target.id][this.available_damages[j].id].dice_multiplier != 2) {
+										this.roll_damage[check.target.id][this.available_damages[j].id].setDiceMultiplier(2);
+									}
+								}
+							} else {
+								for(j=0; j<this.available_damages.length; j++) {
+									if(this.roll_damage[null][this.available_damages[j].id].dice_multiplier != 2) {
+										this.roll_damage[null][this.available_damages[j].id].setDiceMultiplier(2);
+									}
+								}
+							}
+						} else {
+							if(check.target) {
+								for(j=0; j<this.available_damages.length; j++) {
+									if(this.roll_damage[check.target.id][this.available_damages[j].id].dice_multiplier != 1) {
+										this.roll_damage[check.target.id][this.available_damages[j].id].setDiceMultiplier(1);
+									}
+								}
+							} else {
+								for(j=0; j<this.available_damages.length; j++) {
+									if(this.roll_damage[null][this.available_damages[j].id].dice_multiplier != 1) {
+										this.roll_damage[null][this.available_damages[j].id].setDiceMultiplier(1);
+									}
+								}
+							}
 						}
 					}
 					break;
@@ -513,14 +543,29 @@ rsSystem.component("dndDialogDamage", {
 					}
 				}
 			}
-			if(this.channel && (this.isWeapon(this.channel) || this.channel.cast_attack)) {
-				targets = Object.keys(this.targeting);
-				if(this.entity.main_weapon === this.channel.id) {
-					skill = this.universe.index.skill["skill:mainhand"];
-				} else {
-					skill = this.universe.index.skill[this.channel.skill] || this.universe.index.skill["skill:offhand"];
-				}
-				if(skill) {
+			if(this.channel) {
+				if((this.isWeapon(this.channel) || this.channel.cast_attack)) {
+					targets = Object.keys(this.targeting);
+					if(this.entity.main_weapon === this.channel.id) {
+						skill = this.universe.index.skill["skill:mainhand"];
+					} else {
+						skill = this.universe.index.skill[this.channel.skill] || this.universe.index.skill["skill:offhand"];
+					}
+					if(skill) {
+						for(i=0; i<targets.length; i++) {
+							this.skill_checks.push({
+								"roll": new Roll({
+									"formula": "1d20 + " + (this.entity.skill_check[skill.id] || 0),
+									"entity": this.entity
+								}),
+								"target": this.universe.getObject(targets[i]) || targets[i],
+								"skill": skill
+							});
+						}
+					} else {
+						console.warn("Unable to find skill for channel: ", this.channel);
+					}
+				} else if(this.channel.dc_save && (skill = this.universe.index.skill[this.channel.dc_save])) {
 					for(i=0; i<targets.length; i++) {
 						this.skill_checks.push({
 							"roll": new Roll({
@@ -531,8 +576,6 @@ rsSystem.component("dndDialogDamage", {
 							"skill": skill
 						});
 					}
-				} else {
-					console.warn("Unable to find skill for channel: ", this.channel);
 				}
 			}
 		},
@@ -839,7 +882,7 @@ rsSystem.component("dndDialogDamage", {
 						}
 					}
 
-					if(this.isEmpty(event.damage)) {
+					if(this.details.action === "channel:use" || this.isEmpty(event.damage)) {
 						this.universe.send("channel:use", event);
 					} else {
 						if(this.channel && this.channel._class === "spell") {
@@ -865,7 +908,7 @@ rsSystem.component("dndDialogDamage", {
 					}
 				}
 
-				if(this.isEmpty(sending.damage)) {
+				if(this.details.action === "channel:use" || this.isEmpty(sending.damage)) {
 					this.universe.send("channel:use", sending);
 				} else {
 					if(this.channel && this.channel._class === "spell") {

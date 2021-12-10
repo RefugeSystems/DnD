@@ -77,15 +77,21 @@ rsSystem.component("dndDialogGive", {
 		"getEntityClassing": function(entity) {
 			var classes = "";
 			if(entity.is_npc) {
-				classes += "is_npc ";
+				classes += " is_npc";
 			}
 			if(entity.is_hostile) {
-				classes += "is_hostile ";
+				classes += " is_hostile";
+			}
+			if(entity.is_shop) {
+				classes += " is_shop";
+			}
+			if(entity.is_chest) {
+				classes += " is_chest";
 			}
 			return classes;
 		},
 		"isVisible": function(entity) {
-			if(entity && this.entity.id !== entity.id && (!this.filter || (entity._search && entity._search.indexOf(this.filter) !== -1))) {
+			if(entity && this.entity.id !== entity.id && !entity.is_locked && (!this.filter || (entity._search && entity._search.indexOf(this.filter) !== -1))) {
 				return true;
 			}
 			return false;

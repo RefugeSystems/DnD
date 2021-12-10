@@ -42,22 +42,38 @@ rsSystem.component("rsStatBlock", {
 		}
 	},
 	"computed": {
+		"isKnown": function() {
+			var entity;
+
+			if(!this.player) {
+				return false;
+			}
+			if(this.player.gm && this.universe.master_info) {
+				return true;
+			}
+			
+			entity = this.universe.index.entity[this.player.attribute.playing_as];
+			// return !this.player || (!this.player.gm && (!this.player.attribute || !(entity = this.universe.index.entity[this.player.attribute.playing_as]) || !entity.knowledges || (entity.knowledges.indexOf(this.object.must_know) === -1 && (!entity.knowledge_matrix || !entity.knowledge_matrix[this.object.id]))));
+			if(typeof(this.object.must_know) === "string") {
+				return entity.knowledges && entity.knowledges.indexOf(this.object.must_know) === -1;
+			 } else if(typeof(this.object.must_know) === "number") {
+				return entity.knowledge_matrix[this.object.id] && this.object.must_know < entity.knowledge_matrix[this.object.id].length;
+			 } else {
+				 return entity.knowledge_matrix[this.object.id] && entity.knowledge_matrix[this.object.id].length;
+			 }
+		},
 		"fields": function() {
 			var fields = [],
-				knowledge,
 				cfields,
 				classed,
-				entity,
 				field,
 				x;
 
 			if(this.object.concealed && this.size <= 150) {
 				return fields;
-			} else if(this.object.must_know) {
+			} else if(this.object.must_know && !this.isKnown) {
 				// TODO: Implement "Known" filtering
-				if(!this.player || (!this.player.gm && (!this.player.attribute || !(entity = this.universe.index.entity[this.player.attribute.playing_as]) || !entity.knowledges || (entity.knowledges.indexOf(this.object.must_know) === -1 && (!entity.knowledge_matrix || !entity.knowledge_matrix[this.object.id]))))) {
-					return fields;
-				}
+				return fields;
 			}
 			
 			if(this.object._class) {
@@ -106,6 +122,11 @@ rsSystem.component("rsStatBlock", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		"info": function(id) {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": id
+			});
+		},
 		"isVisible": function(field) {
 			return field && field.attribute && (!field.attribute || !field.attribute.private || this.shown) && field.attribute.displayed !== false && (!field.attribute.display_size || field.attribute.display_size <= this.size) && (!this.filtering || (field._search && field._search.indexOf(this.filtering) !== -1));
 		}

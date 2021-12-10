@@ -102,6 +102,23 @@ rsSystem.component("sysInfoGeneral", {
 								"action": "obscure"
 							});
 						}
+						if(this.info.is_active !== undefined && this.info.is_active !== null) {
+							if(this.info.is_active) {
+								this.controls.push({
+									"title": "Deactivate",
+									"icon": "fad fa-toggle-off rs-red rs-secondary-white rs-secondary-solid",
+									"type": "button",
+									"action": "deactivate"
+								});
+							} else {
+								this.controls.push({
+									"title": "Activate",
+									"icon": "fad fa-toggle-on rs-secondary-green rs-secondary-solid",
+									"type": "button",
+									"action": "activate"
+								});
+							}
+						}
 						if(this.info._class === "entity") {
 							this.controls.push({
 								"title": "Assume Entity in Overview",
@@ -109,49 +126,55 @@ rsSystem.component("sysInfoGeneral", {
 								"type": "button",
 								"action": "assume"
 							});
-							if(this.info.is_hostile) {
-								this.controls.push({
-									"title": "Declare Entity as no longer Hostile",
-									"icon": "fas fa-smile-beam",
-									"type": "button",
-									"action": "nonhostile"
-								});
-							} else {
-								this.controls.push({
-									"title": "Declare Entity as Hostile",
-									"icon": "fas fa-angry",
-									"type": "button",
-									"action": "hostile"
-								});
+							if(this.info.is_npc || this.info.is_minion) {
+								if(this.info.is_hostile) {
+									this.controls.push({
+										"title": "Declare Entity as no longer Hostile",
+										"icon": "fas fa-smile-beam",
+										"type": "button",
+										"action": "nonhostile"
+									});
+								} else {
+									this.controls.push({
+										"title": "Declare Entity as Hostile",
+										"icon": "fas fa-angry",
+										"type": "button",
+										"action": "hostile"
+									});
+								}
 							}
-							if(this.info.is_locked) {
-								this.controls.push({
-									"title": "Unlock Entity",
-									"icon": "fas fa-unlock",
-									"type": "button",
-									"action": "unlock"
-								});
-							} else {
-								this.controls.push({
-									"title": "Lock Entity",
-									"icon": "fas fa-lock",
-									"type": "button",
-									"action": "lock"
-								});
+							if(this.info.is_chest || this.info.is_shop) {
+								if(this.info.is_locked) {
+									this.controls.push({
+										"title": "Unlock Entity",
+										"icon": "fas fa-unlock",
+										"type": "button",
+										"action": "unlock"
+									});
+								} else {
+									this.controls.push({
+										"title": "Lock Entity",
+										"icon": "fas fa-lock",
+										"type": "button",
+										"action": "lock"
+									});
+								}
 							}
-							loading = {
-								"title": "Color Code",
-								"icon": "fas fa-palette",
-								"action": "color",
-								"property": "color_flag",
-								"type": "select",
-								"_value": this.info.color_flag,
-								"options": ["", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
-							};
-							if(loading.options.indexOf[loading._value] === -1) {
-								loading._missing = loading._value;
+							if(this.info.is_minion || this.info.is_npc || rsSystem.utility.isEmpty(this.info.owned)) {
+								loading = {
+									"title": "Color Code",
+									"icon": "fas fa-palette",
+									"action": "color",
+									"property": "color_flag",
+									"type": "select",
+									"_value": this.info.color_flag,
+									"options": ["", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
+								};
+								if(loading.options.indexOf[loading._value] === -1) {
+									loading._missing = loading._value;
+								}
+								this.controls.push(loading);
 							}
-							this.controls.push(loading);
 						}
 					} else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id]) {
 						this.controls.push({
@@ -170,7 +193,7 @@ rsSystem.component("sysInfoGeneral", {
 						// });
 						switch(this.info._class) {
 							case "effect":
-								if(entity.effects.indexOf(this.info.id) !== -1 && (!this.info.is_locked || this.player.gm)) {
+								if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
 									this.controls.push({
 										"title": "Revoke effect " + this.info.name + " from " + entity.name,
 										"icon": "fas fa-ban",
@@ -236,6 +259,14 @@ rsSystem.component("sysInfoGeneral", {
 										}
 									}
 								}
+								if(this.info.consume) {
+									this.controls.push({
+										"title": this.info.consume_hint || ("Consume " + this.info.name),
+										"icon": this.info.consume_icon || ("fa-solid fa-drumstick-bite"),
+										"type": "button",
+										"action": "consume"
+									});
+								}
 								this.controls.push({
 									"title": "Give item to another creature near " + entity.name,
 									"icon": "fas fa-people-carry",
@@ -274,63 +305,77 @@ rsSystem.component("sysInfoGeneral", {
 
 			switch(control.action || control) {
 				case "goto":
-					rsSystem.toPath("/map/" + this.info.id);
+					rsSystem.toPath("/map/" + object.id);
 					break;
 				case "assume":
 					if(this.player.gm) {
-						this.universe.send("master:assume", {"entity": this.info.id});
-					} else if(this.info.played_by === this.player.id) {
-						this.universe.send("entity:assume", {"entity": this.info.id});
+						this.universe.send("master:assume", {"entity": object.id});
+					} else if(object.played_by === this.player.id) {
+						this.universe.send("entity:assume", {"entity": object.id});
 					}
 					break;
 				case "obscure":
 					this.universe.send("master:obscure", {
-						"object": this.info.id,
+						"object": object.id,
 						"obscured": true
 					});
 					break;
 				case "unobscure":
 					this.universe.send("master:obscure", {
-						"object": this.info.id,
+						"object": object.id,
 						"obscured": false
 					});
 					break;
 				case "lock":
 					this.universe.send("master:quick:set", {
-						"object": this.info.id,
+						"object": object.id,
 						"field": "is_locked",
 						"value": true
 					});
 					break;
 				case "unlock":
 					this.universe.send("master:quick:set", {
-						"object": this.info.id,
+						"object": object.id,
 						"field": "is_locked",
 						"value": false
 					});
 					break;
 				case "hostile":
 					this.universe.send("master:quick:set", {
-						"object": this.info.id,
+						"object": object.id,
 						"field": "is_hostile",
 						"value": true
 					});
 					break;
 				case "nonhostile":
 					this.universe.send("master:quick:set", {
-						"object": this.info.id,
+						"object": object.id,
 						"field": "is_hostile",
+						"value": false
+					});
+					break;
+				case "activate":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_active",
+						"value": true
+					});
+					break;
+				case "deactivate":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_active",
 						"value": false
 					});
 					break;
 				case "revoke":
 					this.universe.send("effect:revoke", {
-						"effects": [this.info.id],
+						"effects": [object.id],
 						"from": [entity.id]
 					});
 					break;
 				case "edit-description":
-					Vue.set(this, "editDescription", this.info.description);
+					Vue.set(this, "editDescription", object.description);
 					Vue.set(this, "editing", true);
 					break;
 				case "cancel-description":
@@ -340,23 +385,24 @@ rsSystem.component("sysInfoGeneral", {
 					console.log(" [Edit]>> ", control, this.editDescription);
 					Vue.set(this, "editing", false);
 					this.universe.send("object:describe", {
-						"id": this.info.id,
+						"id": object.id,
 						"description": this.editDescription
 					});
 					break;
 				case "give":
+					this.closeInfo();
 					rsSystem.EventBus.$emit("dialog-open", {
 						"component": "dndDialogGive",
 						"entity": entity.id,
 						"finish": (target) => {
 							console.log("Giving: ", target.id, {
-								"items": [this.info.id],
+								"items": [object.id],
 								"entity": entity.id,
 								"target": target.id
 							});
 							if(target && target.id) {
 								this.universe.send("inventory:give", {
-									"items": [this.info.id],
+									"items": [object.id],
 									"entity": entity.id,
 									"target": target.id
 								});
@@ -365,6 +411,7 @@ rsSystem.component("sysInfoGeneral", {
 					});
 					break;
 				case "knowing":
+					this.closeInfo();
 					rsSystem.EventBus.$emit("dialog-open", {
 						"component": "dndDialogKnowing",
 						"entity": entity.id,
@@ -373,30 +420,40 @@ rsSystem.component("sysInfoGeneral", {
 						}
 					});
 					break;
+				case "consume":
+					this.closeInfo();
+					rsSystem.EventBus.$emit("dialog-open", {
+						"title": this.entity.name + " Actions",
+						"component": "dndDialogDamage",
+						"action": "channel:use",
+						"entity": entity,
+						"channel": object
+					});
+					break;
 				case "inventory":
-					rsSystem.toPath("/inventory/" + this.info.id);
+					rsSystem.toPath("/inventory/" + object.id);
 					break;
 				case "spellbook":
-					rsSystem.toPath("/spells/" + this.info.id);
+					rsSystem.toPath("/spells/" + object.id);
 					break;
 				case "equip":
-					this.equipItem(this.info.id, entity);
+					this.equipItem(object.id, entity);
 					break;
 				case "mainhand":
-					this.mainhandItem(this.info.id, entity);
+					this.mainhandItem(object.id, entity);
 					break;
 				case "unmainhand":
 					this.mainhandItem(null, entity);
 					break;
 				case "unequip":
-					this.unequipItem(this.info.id, entity);
+					this.unequipItem(object.id, entity);
 					break;
 				case "drop":
-					this.dropItem(this.info.id, entity);
+					this.dropItem(object.id, entity);
 					break;
 				case "color":
 					this.universe.send("master:recolor", {
-						"object": this.info.id,
+						"object": object.id,
 						"color": control._value
 					});
 					if(control.options.indexOf[control._value] === -1) {
@@ -418,6 +475,16 @@ rsSystem.component("sysInfoGeneral", {
 			} else {
 				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + record.id + "?ctrl=" + Date.now();
 			}
+		},
+		/**
+		 *
+		 * @method closeInfo
+		 */
+		"closeInfo": function() {
+			rsSystem.manipulateQuery({
+				"info": null,
+				"view": null
+			});
 		}
 	},
 	"beforeDestroy": function() {

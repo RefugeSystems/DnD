@@ -328,11 +328,13 @@ module.exports.initialize = function(universe) {
 	 * @param {RSObject | String} [channel] 
 	 * @param {Object} damage 
 	 * @param {Object} [attack] Rolled attack value, if any
+	 * @param {Object} [attacks] Rolled attack value per target, if any
 	 */
-	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack) {
+	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks) {
 		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
 			target,
+			atk,
 			i;
 
 		if(typeof(channel) === "string") {
@@ -340,6 +342,11 @@ module.exports.initialize = function(universe) {
 		}
 
 		for(i=0; i<targets.length; i++) {
+			if(attacks && typeof(attacks[target.id]) !== "undefined") {
+				atk = attacks[target.id];
+			} else {
+				atk = attack;
+			}
 			target = targets[i];
 			console.log("Multi - Sending: " + (target?target.id || target:"No Target"), "Source: " + (source?source.id || source:"No Source"));
 			activity = id + ":" + target.id;
@@ -349,7 +356,7 @@ module.exports.initialize = function(universe) {
 				"source": source,
 				"target": target,
 				"channel": channel,
-				"attack": attack,
+				"attack": atk,
 				"damage": damage
 			};
 			logged[activity] = {
@@ -357,7 +364,7 @@ module.exports.initialize = function(universe) {
 				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
-				"attack": attack,
+				"attack": atk,
 				"damage": damage
 			};
 

@@ -81,7 +81,7 @@ rsSystem.component("DNDMasterScreen", {
 			Vue.set(this.storage.dynamicTable, "label", noun.capitalize());
 			for(i=0; i<this.universe.listing[noun].length; i++) {
 				buffer = this.universe.listing[noun][i];
-				if(buffer && !buffer.disabled && !buffer.is_preview && !buffer.is_copy) {
+				if(buffer && !buffer.disabled && !buffer.is_preview && ((this.storage && this.storage.include_copies) || !buffer.is_copy)) {
 					available.push(buffer);
 				}
 			}
@@ -469,6 +469,17 @@ rsSystem.component("DNDMasterScreen", {
 					"fields": fields
 				});
 			}
+		}, {
+			"title": "Toggle Copy Inclusion",
+			"icon": (this.storage && this.storage.include_copies)?"fas fa-copy rs-light-green":"fas fa-copy rs-light-red",
+			"process": () => {
+				Vue.set(this.storage, "include_copies", !this.storage.include_copies);
+				if(this.storage.include_copies) {
+					this.dynamicControls[2].icon = "fas fa-copy rs-light-green";
+				} else {
+					this.dynamicControls[2].icon = "fas fa-copy rs-light-red";
+				}
+			}
 		/*
 		}, {
 			"title": "Obscure Selection",
@@ -590,6 +601,9 @@ rsSystem.component("DNDMasterScreen", {
 		}
 		if(!this.storage.dynamicTable.label) {
 			this.storage.dynamicTable.label = "Knowledge";
+		}
+		if(!this.storage.include_copies) {
+			Vue.set(this.storage, "include_copies", false);
 		}
 	},
 	"methods": {

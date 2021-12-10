@@ -1,7 +1,12 @@
 
 /**
  * 
- * 
+ * These seem to persist for the info statblock and merely switch objects, resulting in
+ * minor descrepencies. The most notable is that the rsSystem.lookup only works when
+ * the page loads. Subsequent changes destroy the initially mapped object and since they
+ * don't get remounted, they never get new hooks. Great for memory in a way, so leaving,
+ * but needs noted. Will likely investiage a way for statblock to track the references
+ * for debugging purposes later. Or a debug mode that exposes a button.
  * @class rsDisplayField
  * @constructor
  * @module Components
@@ -84,6 +89,14 @@ rsSystem.component("rsDisplayField", {
 				}
 			}
 			return null;
+		}
+	},
+	"watch": {
+		"object": function() {
+			this.update();
+		},
+		"field": function() {
+			this.update();
 		}
 	},
 	"data": function() {

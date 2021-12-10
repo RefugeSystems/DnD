@@ -1,4 +1,5 @@
-var utility = require("../utility.js");
+var combat = require("../combat/utility.js"),
+	utility = require("../utility.js");
 
 /**
  * 
@@ -24,6 +25,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Array | String} event.message.data.targets
 	 * @param {Object} event.message.data.target_checks
 	 * @param {Object} event.message.data.action_cost
+	 * @param {String} event.message.data.channel_skill
 	 * @param {String} event.message.data.channel
 	 * @param {Array | RSRoll} event.message.data.checks
 	 * @param {Object} event.message.data.damage
@@ -36,11 +38,17 @@ module.exports.initialize = function(universe) {
 			target_checks = event.message.data.target_checks,
 			checks = event.message.data.checks,
 			damage = event.message.data.damage,
+			channel_skill,
+			damage_checks,
 			loading,
 			target,
+			broad,
+			check,
 			load,
+			keys,
 			i;
 
+		console.log("Target Checks: " + JSON.stringify(target_checks, null, 4));
 		if(targets && targets instanceof Array) {
 			universe.transcribeArray(targets);
 		} else {
@@ -51,11 +59,28 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(source && channel && (event.player.gm || source.owned[event.player.id])) {
+			channel_skill = event.message.data.channel_skill || channel.dc_save || channel.skill;
 			// Process Checks [TODO: This needs thought and may not be needed but probably exists as a step]
 			
 			
 			// Send Damage [TODO: This is currently handled by combat actions]
-
+			if(damage) {
+				damage_checks = {};
+				if(checks) {
+					for(i=0; i<checks.length; i++) {
+						check = checks[i];
+						if(check.skill === channel_skill) {
+							if(check.target) {
+								damage_checks[check.target] = check;
+							} else {
+								broad = check;
+							}
+						}
+						
+					}
+				}
+				combat.sendDamages(source, targets, channel, damage, broad, damage_checks);
+			}
 
 			// Instill Effects
 			if(channel.instilled) {
@@ -66,7 +91,7 @@ module.exports.initialize = function(universe) {
 			}
 			// Process Consume/Use
 			if(channel.consume || (channel.yields && channel.yields.length)) {
-				loading = utility.consumeObject(universe, source, channel, targets);
+				loading = utility.consumeObject(universe, source, channel, targets, target_checks);
 			}
 
 			// Finishing Touches

@@ -22,6 +22,26 @@
         "limit": 1,
         "choices": ["feat:artificer:righttool"]
     }, {
+        "name": "Second Wind",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:secondwind"]
+    }, {
+        "name": "Action Surge",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:actionsurge"]
+    }, {
+        "name": "Channel Divinity",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:channeldivinity"]
+    }, {
+        "name": "Infernal Legacy",
+        "field": "feats",
+        "limit": 1,
+        "choices": ["feat:infernallegacy"]
+    }, {
         "name": "Ability Score Improvements",
         "limit": 2,
         "field": "feats",

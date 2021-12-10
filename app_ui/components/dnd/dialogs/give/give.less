@@ -38,4 +38,61 @@
 			}
 		}
 	}
+
+	.entity-select {
+		border-width: 2px !important;
+	}
+
+	.entity:hover {
+		.entity-select {
+			box-shadow: 0px 0px 10px @rsWhite;
+		}
+		&.is_npc {
+			.entity-select {
+				box-shadow: 0px 0px 10px @rsLightBlue;
+			}
+		}
+	
+		&.is_hostile {
+			.entity-select {
+				box-shadow: 0px 0px 10px @rsLightRed;
+			}
+		}
+	
+		&.is_chest {
+			.entity-select {
+				box-shadow: 0px 0px 10px @rsLightOrange;
+			}
+		}
+	
+		&.is_shop {
+			.entity-select {
+				box-shadow: 0px 0px 10px @rsDarkOrange;
+			}
+		}
+	}
+
+	.is_npc {
+		.entity-select {
+			border-color: @rsLightBlue;
+		}
+	}
+
+	.is_hostile {
+		.entity-select {
+			border-color: @rsLightRed;
+		}
+	}
+
+	.is_chest {
+		.entity-select {
+			border-color: @rsLightOrange;
+		}
+	}
+
+	.is_shop {
+		.entity-select {
+			border-color: @rsDarkOrange;
+		}
+	}
 }

@@ -113,9 +113,10 @@ module.exports.addUniquely = function(universe, adding, to) {
  * @param {RSObject} [channel] The is causing the effects to apply (Spell, Item, etc)
  * @param {Boolean} [hit] Was the target successfully hit by the source. Used for effect instill consideration.
  * @param {Boolean} [damaged] Was the target successfully damaged by the source. Used for effect instill consideration.
+ * @param {Boolean} [saved] Did the target successful save on any checks involved.
  * @return {Array} Of encountered problems. Gaurenteed to exist. If empty, success.
  */
-module.exports.instillEffects = function(universe, effects, source, target, channel, hit, damaged) {
+module.exports.instillEffects = function(universe, effects, source, target, channel, hit, damaged, saved) {
 	var waiting = [],
 		mask = {},
 		effect,
@@ -131,7 +132,7 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 
 	for(i=0; i<effects.length; i++) {
 		effect = effects[i];
-		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.damage_required || damaged)) {
+		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.is_hit_required || hit) && (!effect.damage_required || damaged) && (!effect.is_damage_required || damaged) && (!effect.is_fail_required || !saved)) {
 			waiting.push(universe.copyPromise(effect, mask));
 		}
 	}
@@ -178,17 +179,19 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
  * @param {String | Object} consuming This object or ID of what is being consumed (Feat, Item, Entity, Effect, etc.) Special case for
  * 		Recipes and Spells where they are not intended to be "consumed" but follow the samefield definitions for consume_from & yield.
  * @param {Array | String | Object} targets Of the consumed channel (Such as someone using a healing potion on someone else)
+ * @param {Object} checks Mapping targets to skill checks or saves
  * @param {Boolean} [abort] When true, this process returns any preventative problems before processing. Defaults to false.
  * @param {String} [within] Where the consuming object should be on source. Defaults based on the `STANDARD_MAP`
  * @param {Object} [map] Indicating where yielded objects should be placed by class. Defaults to the utility's `STANDARD_MAP`
  * @return {Array} Of encountered problems. Gaurenteed to exist. If empty, success.
  */
-module.exports.consumeObject = function(universe, source, consuming, targets, abort = false, within, map) {
+module.exports.consumeObject = function(universe, source, consuming, targets, checks, abort = false, within, map) {
 	map = map || STANDARD_MAP;
 	var problems = [],
 		lossSubs = {}, // Source Loss (Sub)
 		lossSets = {},
 		yields = [], // Target(s) Gains - Placed by map
+		saved = {}, // Maps target to boolean for successful save or not by the `checks` rolls and consuming.dc
 		add = {}, // Modify Channel (ie. Charges for Items/Feats/etc.)
 		set = {},
 		sub = {},
@@ -212,7 +215,7 @@ module.exports.consumeObject = function(universe, source, consuming, targets, ab
 	}
 	if(source && consuming) {
 		// Does Source have the object?
-		within = universe.field(within || STANDARD_MAP[source._class]);
+		within = universe.field(within || STANDARD_MAP[consuming._class]);
 		if(within) {
 			if(source[within.id]) {
 				if(within.type.startsWith("array") && source[within.id].indexOf && source[within.id].indexOf(consuming.id) !== -1) {
@@ -233,7 +236,7 @@ module.exports.consumeObject = function(universe, source, consuming, targets, ab
 				}
 			}
 		} else {
-			universe.warnMasters("Unable to determine container for consume operation for " + source.name + "[" + source.id + "] consuming " + consuming.name + "[" + consuming.id + "]", {"consuming": consuming.id, "source": source.id, "class": source._class});
+			universe.warnMasters("Unable to determine container for consume operation for " + source.name + " [ " + source.id + " ] consuming " + consuming.name + " [ " + consuming.id + " ]", {"consuming": consuming.id, "source": source.id, "class": source._class});
 			problems.push("Source " + source.name + " does not properly contain " + consuming.name);
 			within = null;
 		}
@@ -369,9 +372,11 @@ module.exports.consumeObject = function(universe, source, consuming, targets, ab
 					}
 				}
 
-				meeting.addValues(meet);
 				target.addValues(add);
 				target.setValues(set);
+				if(meeting) {
+					meeting.addValues(meet);
+				}
 			});
 		});
 	}

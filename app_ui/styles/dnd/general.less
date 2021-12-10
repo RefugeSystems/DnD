@@ -2,6 +2,129 @@
 .dnd-page {
 }
 
+.message-box {
+	display: flex;
+	flex-direction: row;
+	border-radius: 5px;
+	margin: 10px;
+	font-size: 15px;
+	overflow: hidden;
+
+	.message-text {
+		padding: 5px 9px 5px 5px;
+	}
+
+	.message-icon {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		background-color: transparent;
+		border-width: 0px 1px 0px 0px;
+		border-style: solid;
+		border-color: black;
+		transition: background-color .5s, color .5s;
+		padding: 5px;
+		font-size: 1.2em;
+
+		span {
+			color: inherit;
+		}
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	&.notice {
+		border: 1px solid @rsLightGreen;
+		box-shadow: 0px 0px 7px @rsLightGreen;
+
+		.message-icon {
+			color: @rsDarkGreen;
+			border-color: @rsLightGreen;
+
+			&:hover {
+				background-color: @rsLightGreen;
+				color: @rsBlack;
+			}
+		}
+	}
+
+	&.notice.dark {
+		border: 1px solid @rsDarkGreen;
+		box-shadow: 0px 0px 7px @rsDarkGreen;
+
+		.message-icon {
+			border-color: @rsDarkGreen;
+
+			&:hover {
+				background-color: @rsDarkGreen;
+				color: @rsWhite;
+			}
+		}
+	}
+
+	&.warning {
+		border: 1px solid @rsLightYellow;
+		box-shadow: 0px 0px 7px @rsLightYellow;
+
+		.message-icon {
+			color: @rsDarkYellow;
+			border-color: @rsLightYellow;
+
+			&:hover {
+				background-color: @rsLightYellow;
+				color: @rsBlack;
+			}
+		}
+	}
+
+	&.warning.dark {
+		border: 1px solid @rsDarkYellow;
+		box-shadow: 0px 0px 7px @rsDarkYellow;
+
+		.message-icon {
+			border-color: @rsDarkYellow;
+
+			&:hover {
+				background-color: @rsDarkYellow;
+				color: @rsWhite;
+			}
+		}
+	}
+
+	&.error {
+		border: 1px solid @rsLightRed;
+		box-shadow: 0px 0px 7px @rsLightRed;
+
+		.message-icon {
+			color: @rsDarkRed;
+			border-color: @rsLightRed;
+
+			&:hover {
+				background-color: @rsLightRed;
+				color: @rsBlack;
+			}
+		}
+	}
+
+	&.error.dark {
+		border: 1px solid @rsDarkRed;
+		box-shadow: 0px 0px 7px @rsDarkRed;
+
+		.message-icon {
+			border-color: @rsDarkRed;
+
+			&:hover {
+				background-color: @rsDarkRed;
+				color: @rsWhite;
+			}
+		}
+	}
+}
+
 .general-notification {
 	border: 1px solid @rsLightGreen;
 	box-shadow: 0px 0px 7px @rsLightGreen;

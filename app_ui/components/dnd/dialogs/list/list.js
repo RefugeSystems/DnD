@@ -106,6 +106,30 @@ rsSystem.component("dndDialogList", {
 		}
 	},
 	"methods": {
+		"entryClassing": function(section, entry) {
+			var classes = "";
+
+			if(typeof(this.details.classing) === "function") {
+				classes += this.details.classing(section, entry);
+			}
+			if(entry.is_npc) {
+				classes += " is_npc";
+			}
+			if(entry.is_hostile) {
+				classes += " is_hostile";
+			}
+			if(entry.is_chest) {
+				classes += " is_chest";
+			}
+			if(entry.is_shop) {
+				classes += " is_shop";
+			}
+			if(entry.is_locked) {
+				classes += " is_locked";
+			}
+
+			return classes;
+		},
 		"toLink": function() {
 			if(this.details.link) {
 				rsSystem.toPath(this.details.link);

@@ -13,7 +13,7 @@
 			</button>
 		</div>
 	</div>
-	<div class="control-block flex h" v-if="controls.length || info.charges_max">
+	<div class="control-block flex h wrap" v-if="controls.length || info.charges_max">
 		<div class="control" v-for="control in controls">
 			<button v-if="control.type === 'button'" class="quick rounded general action" v-on:click="process(control)" v-on:click.right.stop.prevent="option(control)" :title="control.title">
 				<span :class="control.icon"></span>
