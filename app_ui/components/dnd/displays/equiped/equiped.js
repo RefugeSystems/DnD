@@ -62,7 +62,11 @@ rsSystem.component("dndDisplayEquiped", {
 						if(item && item.equip_slots) {
 							islots = Object.keys(item.equip_slots);
 							for(e=0; e<islots.length; e++) {
-								this.sloted[islots[e]].push(item);
+								if(this.sloted[islots[e]]) {
+									this.sloted[islots[e]].push(item);
+								} else {
+									console.warn("Unkown Slot Type[" + islots[e] + "] on item: ", item);
+								}
 							}
 						}
 					}
