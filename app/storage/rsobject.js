@@ -1480,7 +1480,7 @@ class RSObject {
 			for(x=0; x<conditional._fields_condition.length; x++) {
 				field = conditional._fields_condition[x];
 				value = this.fetchValue(conditional.condition[field]) || conditional.condition[field];
-				if(!RSObject.checkCondition(value, conditional.ifop[field], this[field])) {
+				if(!RSObject.checkCondition(this[field], conditional.ifop[field], value)) {
 					return false;
 				}
 			}
