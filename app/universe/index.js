@@ -617,6 +617,8 @@ class Universe extends EventEmitter {
 					Object.assign(details, mask);
 				}
 				details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+				details.acquired_in = this.manager.setting.object["setting:meeting"].value;
+				details.acquired = this.time;
 				details.is_template = false;
 				details.selectable = false;
 				details.playable = false;

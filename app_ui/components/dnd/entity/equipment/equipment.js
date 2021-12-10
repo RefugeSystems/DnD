@@ -72,18 +72,18 @@ rsSystem.component("dndEntityEquipment", {
 		"hoveredItem": function(item) {
 			this.$emit("hovered-object", item);
 		},
-		"toggleHide": function(feat) {
-			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);
+		"toggleHide": function(item) {
+			if(item.is_melee || item.is_ranged || item.melee || item.ranged) {
+				this.takeAction(this.universe.index.action["action:main:attack"], item, [item.damage]);
+			} else {
+				Vue.set(this.storage.hide, item.id, !this.storage.hide[item.id]);
+			}
 		},
 		"toggleHidden": function() {
 			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);
 		},
 		"use": function(item) {
-			if(item.is_melee || item.is_ranged || item.melee || item.ranged) {
-				this.takeAction(this.universe.index.action["action:main:attack"], item, [item.damage]);
-			} else {
-				this.open(item);
-			}
+			this.open(item);
 		},
 		"showCharges": function(object) {
 			return typeof(object.charges_max) === "number" || typeof(object.charges_max) === "string";

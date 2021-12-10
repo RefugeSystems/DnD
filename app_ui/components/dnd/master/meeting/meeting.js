@@ -47,7 +47,7 @@
 				
 				for(i=0; i<this.universe.listing.meeting.length; i++) {
 					meet = this.universe.listing.meeting[i];
-					if(meet && !meet.is_preview && !meet.disabled && (!meet.date || (mark < meet.date))) {
+					if(meet && !meet.is_preview && !meet.disabled && mark < meet.date) {
 						meetings.push(meet);
 					}
 				}

@@ -37,8 +37,10 @@ module.exports.initialize = function(universe) {
 				if(item && entity.inventory.indexOf(item.id) !== -1) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
-						if(!item.is_singular) {
+						if(!item.is_singular || item.is_special) {
 							item.setValues({
+								"acquired_in": universe.manager.setting.object["setting:meeting"].value,
+								"acquired": universe.time,
 								"character": null,
 								"user": null
 							});
