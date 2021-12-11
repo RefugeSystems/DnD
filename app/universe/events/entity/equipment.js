@@ -20,6 +20,7 @@ module.exports.initialize = function(universe) {
 		var entity = event.message.data.entity,
 			items = event.message.data.items,
 			equip = [],
+			main,
 			item,
 			set,
 			i;
@@ -34,6 +35,9 @@ module.exports.initialize = function(universe) {
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
 				if(item && entity.inventory.indexOf(item.id) !== -1 && entity.equipped.indexOf(item.id) === -1) {
+					if(!entity.main_weapon && (item.melee || item.ranged || item.thrown)) {
+						main = item.id;
+					}
 					item.setValues(set);
 					equip.push(item.id);
 				}
@@ -69,6 +73,11 @@ module.exports.initialize = function(universe) {
 						}
 					}
 				});
+				if(main) {
+					entity.setValues({
+						"main_weapon": main
+					});
+				}
 			} else {
 				console.log("nothing to equi[p");
 			}
@@ -97,6 +106,7 @@ module.exports.initialize = function(universe) {
 		var entity = event.message.data.entity,
 			items = event.message.data.items,
 			equip = [],
+			unmain,
 			item,
 			set,
 			i;
@@ -111,12 +121,20 @@ module.exports.initialize = function(universe) {
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
 				if(item) {
+					if(entity.main_weapon === item.id) {
+						umain = true;
+					}
 					item.setValues(set);
 					equip.push(item.id);
 				}
 			}
 			if(equip.length) {
 				entity.subValues({"equipped": equip});
+				if(unmain) {
+					entity.setValues({
+						"main_weapon": null
+					});
+				}
 			}
 		}
 	});

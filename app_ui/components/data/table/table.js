@@ -321,13 +321,18 @@ rsSystem.component("rsTable", {
 			}
 		},
 		"formatObjectHeader": function(object) {
-			var x, keys, html;
-			keys = Object.keys(object);
+			var html,
+				keys,
+				x;
 			html = "<ul>";
-			for(x=0; x<keys.length; x++) {
-				html += "<li><span class='property'>" + keys[x] + "</span>: <span class='value'>" + object[keys[x]] + "</span></li>"; 
+			if(object) {
+				keys = Object.keys(object);
+				for(x=0; x<keys.length; x++) {
+					html += "<li><span class='property'>" + keys[x] + "</span>: <span class='value'>" + object[keys[x]] + "</span></li>"; 
+				}
 			}
 			html += "<ul>";
+			return html;
 		},
 		"getValue": function(field, value) {
 			var referenced,

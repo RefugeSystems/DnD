@@ -32,8 +32,8 @@ module.exports = function(universe) {
 	
 	
 	var diceReductionRegEx = new RegExp("\\+?(-?[0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\. ]+?\\))(d[0-9]+|%)", "g"),
-		calculateSecurityRegEx = new RegExp("^(([<>'a-zA-Z0-9\\(\\)+-\\/\\* ]+|==)+|Math\\.[a-zA-Z]+)$"),
-		variableExpression = new RegExp("([a-z:_]+)(\\.?[a-z:_]+)*", "gi"),
+		calculateSecurityRegEx = new RegExp("^(([<>'a-zA-Z0-9\\(\\)+-\\/\\*: ]+|==)+|Math\\.[a-zA-Z]+)$"),
+		variableExpression = new RegExp("([a-z:_]+)\\.?([a-z:_]+)?\\.?([a-z:_]+)?\\.?([a-z:_]+)?\\.?([a-z:_]+)?\\.?([a-z:_]+)?\\.?([a-z:_]+)?\\.?([a-z:_]+)?\\.?([a-z:_]+)?", "gi"), // TODO: Clean up for efficiency (Though a hard upper limit may be a good thing)
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
 		spaces = new RegExp(" ", "g"),
 		dots = new RegExp("\\.", "g"),
