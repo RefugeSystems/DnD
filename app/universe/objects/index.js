@@ -571,9 +571,10 @@ module.exports = function(universe) {
 	 * to determine what objects need to _calculate_.
 	 * has changed.
 	 * @method pushCalculated
+	 * @deprecated This is currently not used. Additionally possibly lacks cyclic prevention
 	 * @param {String} id 
 	 */
-	this.pushCalculated = function(id) {
+	this.pushCalculated = function(id, debug) {
 		mark[id] = Date.now();
 		if(reference[id] && reference[id]._list.length) {
 			var changing = {};
@@ -582,6 +583,10 @@ module.exports = function(universe) {
 			changing.index = 0;
 			changing.type = "calculated";
 			changing.start = Date.now();
+			changing.debug = debug;
+			if(changing.debug) {
+				console.log("Recalculate Origin: " + id);
+			}
 			trackCalculations(changing);
 		} else {
 			// console.log(" !! No Calc: " + id);
@@ -597,16 +602,27 @@ module.exports = function(universe) {
 	 */
 	var trackCalculations = function(changing) {
 		setTimeout(function() {
+			if(changing.debug) {
+				console.log(" - Recalculate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index++]);
+			}
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
 			if(cascade) {
+				if(changing.debug) {
+					console.log(" - ...");
+				}
 				cascade.calculateFieldValues();
 				cascade.updateFieldValues();
 				if(changing.index < changing.queue.length) {
 					trackCalculations(changing);
 				} else {
 					changing.duration = Date.now() - changing.start;
+					if(changing.debug) {
+						console.log(" √ Recalculate Complete[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]");
+					}
 					universe.emit("cascaded", changing);
 				}
+			} else if(changing.debug) {
+				console.log(" ! Recalculate Error[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: Cascade Target not found");
 			}
 		}, 0);
 	};
@@ -619,14 +635,13 @@ module.exports = function(universe) {
 	 * @method pushUpdated
 	 * @param {String} id 
 	 */
-	this.pushUpdated = function(id, origins) {
+	this.pushUpdated = function(id, origins, debug) {
 		// console.log("Update: ", inheritance[id]);
 		mark[id] = Date.now();
-		if(origins) {
-			origins.uniquely(id);
-		} else {
-			origins = [id];
+		if(!origins) {
+			origins = {};
 		}
+		origins[id] = true;
 		if(inheritance[id] && inheritance[id]._list.length) {
 			var changing = {};
 			changing.origin = id;
@@ -635,6 +650,10 @@ module.exports = function(universe) {
 			changing.origins = origins;
 			changing.type = "updated";
 			changing.start = Date.now();
+			changing.debug = debug;
+			if(changing.debug) {
+				console.log("Reupdate Origin: " + id);
+			}
 			trackUpdates(changing);
 		}
 	};
@@ -648,8 +667,11 @@ module.exports = function(universe) {
 	 */
 	var trackUpdates = function(changing) {
 		setTimeout(function() {
+			if(changing.debug) {
+				console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index]);
+			}
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
-			if(cascade && changing.origins.indexOf(cascade.id) === -1) {
+			if(cascade && !changing.origins[cascade.id]) {
 				// cascade.updateFieldValues();
 				// cascade.recalculateFieldValues();
 				cascade.calculateFieldValues(changing.origins);
@@ -658,8 +680,13 @@ module.exports = function(universe) {
 					trackUpdates(changing);
 				} else {
 					changing.duration = Date.now() - changing.start;
+					if(changing.debug) {
+						console.log(" √ Reupdate Complete[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: ", changing);
+					}
 					universe.emit("cascaded", changing);
 				}
+			} else if(changing.debug) {
+				console.log(" ! Reupdate Error[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: Cascade Target not found");
 			}
 		}, 0);
 	};

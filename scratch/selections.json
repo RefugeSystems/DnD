@@ -7,10 +7,48 @@
             "spell:heroism"
         ]
     }, {
-        "name": "Extra Attack",
+        "name": "Sneak Attack",
         "field": "feats",
         "limit": 1,
-        "choices": ["feat:extraattack"]
+        "choices": [
+        "feat:sneakattack"
+		]
+    }, {
+        "name": "Forect Gnome Spells",
+        "field": "spells",
+        "limit": 1,
+        "choices": [
+        "spell:naturalillusionist"
+		]
+    }, {
+        "name": "Illusionist Spells",
+        "field": "spells",
+        "limit": 1,
+        "choices": [
+        "spell:minorillusion"
+		]
+    }, {
+        "name": "Death Cleirc Spells",
+        "field": "spells",
+        "limit": 2,
+        "choices": [
+        "spell:rayofsickness",
+        "spell:falselife"
+		]
+    }, {
+        "name": "Conjurer Spells",
+        "field": "spells",
+        "limit": 1,
+        "choices": [
+			"spell:minorconjuration"
+		]
+    }, {
+        "name": "Blue Dragonborn Skills",
+        "field": "spells",
+        "limit": 1,
+        "choices": [
+        "spell:racial:lightningbreath"
+		]
     }, {
         "name": "Magical Tinkering",
         "field": "feats",
