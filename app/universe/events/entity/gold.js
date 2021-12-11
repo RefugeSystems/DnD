@@ -65,7 +65,7 @@ module.exports.initialize = function(universe) {
 					// TODO: Warning
 				}
 			} else if(entity) {
-				if(entity.owned[event.player.id]) {
+				if(entity.owned[event.player.id] || event.player.gm) {
 					if(amount <= entity.gold) {
 						entity.addValues({
 							"gold": -1 * amount,
