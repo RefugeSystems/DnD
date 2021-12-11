@@ -816,7 +816,8 @@ class ClassManager extends EventEmitter {
 			for(x=0; x<reference.fieldIDs.length; x++) {
 				loading = reference.database.field[reference.fieldIDs[x]];
 				if(loading) {
-					if(loading.inheritance && Object.keys(loading.inheritance).length) {
+					if(loading.inheritance !== null && typeof(loading.inheritance) === "object") {
+					// if(loading.inheritance && Object.keys(loading.inheritance).length) {
 						reference.inheritableFields.push(loading.id);
 					}
 				} else {

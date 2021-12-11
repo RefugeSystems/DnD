@@ -50,7 +50,13 @@ class Roll {
 		if(typeof(details) === "string") {
 			this.formula = details;
 		} else {
-			this.formula = details.formula || "";
+			if(typeof(details.formula) === "string") {
+				this.formula = details.formula;
+			} else if(typeof(details.formula) === "number") {
+				this.formula = details.formula.toString();
+			} else {
+				this.formula = (details.formula || "").toString();
+			}
 		}
 		/**
 		 * Maps a dice type (ie. d6 or d20) to an array of rolls related to computing this rolls value

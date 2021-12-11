@@ -564,7 +564,7 @@ class RSObject {
 	 * @param {Boolean} suppress The updated event, typically in lieu of a smaller
 	 * 		update such as a delta.
 	 */
-	updateFieldValues(suppress, debug) {
+	updateFieldValues(origins, suppress, debug) {
 		// console.trace(" > Update: " + this._data.id);
 		if(debug) {
 			console.log(" > Update: " + this._data.id);
@@ -906,7 +906,7 @@ class RSObject {
 		// this._universe.objectHandler.pushUpdated(this.id);
 
 		if(!suppress) {
-			this._universe.emit("object-updated", this.toJSON());
+			this._universe.emit("object-updated", this);
 		}
 	}
 
@@ -1327,7 +1327,7 @@ class RSObject {
 		.then(() => {
 			this.calculateFieldValues();
 			this.updateFieldValues();
-			// this.updateFieldValues(true);
+			// this.updateFieldValues(undefined, true);
 			// this._universe.emit("object-updated", this.getDelta(delta));
 			if(typeof(callback) === "function") {
 				callback(null, this);
@@ -1785,7 +1785,7 @@ RSObject.addValues = function(a, b, type, op) {
 				return a + parseFloat(a);
 			}
 		} else {
-			throw new Error("Can not add values as types[" + type + "|" + typeof(a) + "|" + typeof(b) + "] do not match: " + (a?a.id:a) + "[" + (!!a) + "] | " + (b?b.id:b) + "[" + (!!b) + "]");
+			throw new Error("Can not add values as types[" + type + "|" + typeof(a) + "|" + typeof(b) + "] do not match: " + (a?a.id||a:a) + "[" + (!!a) + "] | " + (b?b.id||b:b) + "[" + (!!b) + "]");
 		}
 	}
 };

@@ -752,7 +752,7 @@ class Universe extends EventEmitter {
 					.then(() => {
 						created.calculateFieldValues();
 						created.updateFieldValues();
-						this.emit("object-created", created.toJSON());
+						this.emit("object-created", created);
 						callback(null, created);
 					})
 					.catch(callback);
@@ -783,7 +783,7 @@ class Universe extends EventEmitter {
 						.then(() => {
 							created.calculateFieldValues();
 							created.updateFieldValues();
-							this.emit("object-created", created.toJSON());
+							// this.emit("object-created", created);
 							callback(null, created);
 						})
 						.catch(callback);

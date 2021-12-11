@@ -89,7 +89,7 @@ module.exports = new (function() {
 			this.router.get("/object/:id/update", (req, res, next) => {
 				res.result = {};
 				res.result.object = api.universe.objectHandler.retrieve(req.params.id);
-				res.result.object.updateFieldValues(null, true);
+				res.result.object.updateFieldValues(undefined, undefined, true);
 				next();
 			});
 			
