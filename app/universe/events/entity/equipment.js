@@ -122,7 +122,7 @@ module.exports.initialize = function(universe) {
 				item = universe.manager.item.object[items[i]];
 				if(item) {
 					if(entity.main_weapon === item.id) {
-						umain = true;
+						unmain = true;
 					}
 					item.setValues(set);
 					equip.push(item.id);
