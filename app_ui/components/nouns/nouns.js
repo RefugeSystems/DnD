@@ -94,6 +94,19 @@
 					this.reclassing();
 				}
 			},
+			"storage.fieldFilter": function() {
+				if(this.fieldParts) {
+					var parts = this.storage.fieldFilter.split(","),
+						i;
+					this.fieldParts.splice(0);
+					for(i=0; i<parts.length; i++) {
+						parts[i] = parts[i].trim();
+						if(parts[i]) {
+							this.fieldParts.push(parts[i].toLowerCase());
+						}
+					}
+				}
+			},
 			"$route.params.id": function(id) {
 				if(id) {
 					this.reclassing();
@@ -120,6 +133,7 @@
 			};
 
 			data.classification = this.$route.params.classification || this.universe.listing.classes[0].id;
+			data.fieldParts = [];
 			data.rawValue = "";
 			data.details = {};
 			data.copy = null;
@@ -168,6 +182,15 @@
 			} else if(!this.storage.classification) {
 				Vue.set(this.storage, "classification", this.universe.listing.classes[0].id);
 			}
+			if(this.storage.fieldFilter) {
+				keys = this.storage.fieldFilter.split(",");
+				for(x=0; x<keys.length; x++) {
+					keys[x] = keys[x].trim();
+					if(keys[x]) {
+						this.fieldParts.push(keys[x].toLowerCase());
+					}
+				}
+			}
 			this.reclassing();
 		},
 		"methods": {
@@ -187,7 +210,16 @@
 				return source.id.indexOf(":preview:") === -1;
 			},
 			"isVisible": function(field) {
-				return !this.storage.fieldFilter || field.id.indexOf(this.storage.fieldFilter) !== -1;
+				if(this.fieldParts.length === 0) {
+					return true;
+				}
+				for(var i=0; i<this.fieldParts.length; i++) {
+					if(field.id.indexOf(this.fieldParts[i]) !== -1) {
+						return true;
+					}
+				}
+				return false;
+				// return !this.storage.fieldFilter || field.id.indexOf(this.storage.fieldFilter) !== -1;
 			},
 			"nameSource": function(source) {
 				var name = source.is_copy?"[C] ":"";
