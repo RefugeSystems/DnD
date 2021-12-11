@@ -955,7 +955,7 @@ class RSObject {
 			return this.fetchValue(name, index + 1);
 		} else if(index + 1 === name.length) {
 			return this[name[index]];
-		} else if(typeof(this[name[index]]) === "object" && index + 2 === name.length) {
+		} else if(this[name[index]] !== null && typeof(this[name[index]]) === "object" && index + 2 === name.length) {
 			return this[name[index]][name[index + 1]];
 		} else if(this[name[index]]) {
 			// console.log("Request More: " + name + " @" + index);
