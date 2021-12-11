@@ -350,7 +350,7 @@
 			x;
 
 		if(typeof(expression) === "number") {
-			return expression.toString()
+			return expression.toString();
 		} else if(typeof(expression) === "string") {
 			dice = parseDiceRoll(expression);
 		} else if(typeof(expression) === "object") {
