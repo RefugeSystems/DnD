@@ -1513,7 +1513,8 @@ class RSObject {
 					this._involved[field] = [];
 				}
 				this._involved[field].push(conditional.id);
-				result.add[field] = this._universe.calculator.compute(conditional.add[field], this);
+				// result.add[field] = this._universe.calculator.compute(conditional.add[field], this);
+				result.add[field] = conditional.add[field];
 			}
 		}
 		
@@ -1525,7 +1526,8 @@ class RSObject {
 					this._involved[field] = [];
 				}
 				this._involved[field].push(conditional.id);
-				result.sub[field] = this._universe.calculator.compute(conditional.sub[field], this);
+				// result.sub[field] = this._universe.calculator.compute(conditional.sub[field], this);
+				result.sub[field] = conditional.sub[field];
 			}
 		}
 		
@@ -1537,7 +1539,8 @@ class RSObject {
 					this._involved[field] = [];
 				}
 				this._involved[field].push(conditional.id);
-				result.set[field] = this._universe.calculator.compute(conditional.set[field], this);
+				// result.set[field] = this._universe.calculator.compute(conditional.set[field], this);
+				result.set[field] = conditional.set[field];
 			}
 		}
 		return result;
