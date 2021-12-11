@@ -749,11 +749,20 @@ class RSObject {
 			for(x=0; x<this._conditionals.length; x++) {
 				for(i=0; i<this._manager.fieldIDs.length; i++) {
 					field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
+					/*
 					if(this._conditionals[x].adds && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
 						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
 					} else if(this._conditionals[x].subs && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
 						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
 					} else if(this._conditionals[x].sets && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
+						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
+					}
+					*/
+					if(this._conditionals[x].adds && (loading = this._conditionals[x].adds[field.id])) {
+						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
+					} else if(this._conditionals[x].subs && (loading = this._conditionals[x].adds[field.id])) {
+						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
+					} else if(this._conditionals[x].sets && (loading = this._conditionals[x].adds[field.id])) {
 						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
 					}
 				}
