@@ -2,6 +2,9 @@
 	var skipped = /[^a-zA-Z0-9]/g,
 		spacing = /[ _-]/g;
 
+
+	var locationScanClasses = ["location", "entity", "item"];
+
 	/**
 	 *
 	 * @class Utility
@@ -9,7 +12,7 @@
 	 * @constructor
 	 * @static
 	 */
-	rsSystem.utility = {
+	var utility = rsSystem.utility = {
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record
@@ -177,6 +180,103 @@
 			} else {
 				return object.name;
 			}
+		},
+
+		/**
+		 * Search a location for all objects. Mostly for general information for Game Masters when viewing location information.
+		 * @method scanLocation
+		 * @param {RSUniverse} universe 
+		 * @param {RSLocation} location 
+		 * @param {Object} [result] Used for recursive calls to contained locations or can be specified to build across multiple
+		 * 		locations.
+		 * @return {Object} With properties for every class found at the location as well as contained locations pointing
+		 * 		to lists of found IDs; ie. {"entity": [], "location": [], "item": [], "weather": []}.
+		 * 		Additionally possess a "_scanned" list and a "_scanCheck" object properties noting the IDs of all locations
+		 * 		that were scanned. This doubles as cyclic referencing prevention.
+		 */
+		"scanLocation": function(universe, location, result) {
+			var start,
+				scan,
+				test,
+				cls,
+				i,
+				j,
+				k;
+
+			if(!result) {
+				start = Date.now();
+			}
+
+			if(!result) {
+				result = {};
+				result._scanCheck = {};
+				result._scanned = [];
+			}
+
+			// Validate and Scan Location properties
+			if(!location) {
+				console.warn("No location passed: ", universe, location, result);
+			}
+
+			// Scan for Contents
+			if(!result._scanCheck[location.id]) {
+				if(location.links_to && utility.isValid(test = universe.index.location[location.links_to])) {
+					utility.scanLocation(universe, test, result);
+				}
+				if(location.interior && utility.isValid(test = universe.index.location[location.interior])) {
+					utility.scanLocation(universe, test, result);
+				}
+
+				result._scanCheck[location.id] = location;
+				result._scanned.push(location.id);
+				for(k=0; k<locationScanClasses.length; k++) {
+					cls = locationScanClasses[k];
+					if(!result[cls]) {
+						result[cls] = [];
+					}
+					for(i=0; i<universe.listing[cls].length; i++) {
+						scan = universe.listing[cls][i];
+						if(utility.isValid(scan) && scan.location === location.id) {
+							result[cls].push(scan);
+							if(cls === "location") {
+								utility.scanLocation(universe, scan, result);
+							}
+							if(scan.interior && utility.isValid(test = universe.index.location[scan.interior])) {
+								utility.scanLocation(universe, test, result);
+							}
+							if(scan.links_to && utility.isValid(test = universe.index.location[scan.links_to])) {
+								utility.scanLocation(universe, test, result);
+							}
+						}
+					}
+				}
+			}
+
+			if(start) {
+				console.warn("Scan Duration: " + (Date.now() - start) + "ms");
+			}
+
+			return result;
+		},
+		/**
+		 * 
+		 * TODO: Boolean reductions
+		 * @method isKnownBy
+		 * @param {RSEntity} entity Indicates the Knowledge Matrix to leverage
+		 * @param {RSObject} object To test for knowledge
+		 */
+		"isKnownBy": function(entity, object) {
+			if(object.must_know) {
+				if(isNaN(object.must_know)) {
+					if(entity.knowledge_matrix[object.must_know] && entity.knowledge_matrix[object.must_know].length !== 0) {
+						return true;
+					}
+				} else if(entity.knowledge_matrix[object.id] && object.must_know <= entity.knowledge_matrix[object.id].length) {
+					return true;
+				}
+				return false;
+			}
+			return true;
 		},
 		/**
 		 * TODO: Expand to handle more specific cases

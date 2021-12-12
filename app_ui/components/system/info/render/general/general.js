@@ -76,16 +76,6 @@ rsSystem.component("sysInfoGeneral", {
 			this.controls.splice(0);
 			if(!this.info.is_preview && this.info._class) {
 				if(this.player) {
-					if(this.info._class === "location") {
-						if(this.info.map) {
-							this.controls.push({
-								"title": "Pull up the map of this location",
-								"icon": "fas fa-location-circle",
-								"type": "button",
-								"action": "goto"
-							});
-						}
-					}
 					if(this.player.gm) {
 						if(this.info.obscured) {
 							this.controls.push({
@@ -210,6 +200,16 @@ rsSystem.component("sysInfoGeneral", {
 						// 	"action": "knowing"
 						// });
 						switch(this.info._class) {
+							case "location":
+								if(this.info.map) {
+									this.controls.push({
+										"title": "Pull up the map of this location",
+										"icon": "fas fa-location-circle",
+										"type": "button",
+										"action": "goto"
+									});
+								}
+								break;
 							case "effect":
 								if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
 									this.controls.push({
@@ -239,6 +239,14 @@ rsSystem.component("sysInfoGeneral", {
 										"icon": "fas fa-user",
 										"type": "button",
 										"action": "assume"
+									});
+								}
+								if(entity && this.info.interior && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
+									this.controls.push({
+										"title": "Go to the interior map of " + rsSystem.utility.getKnownProperty(entity, this.info, "name"),
+										"icon": "fas fa-location-circle",
+										"type": "button",
+										"action": "interior"
 									});
 								}
 								break;
@@ -324,6 +332,9 @@ rsSystem.component("sysInfoGeneral", {
 			switch(control.action || control) {
 				case "goto":
 					rsSystem.toPath("/map/" + object.id);
+					break;
+				case "interior":
+					rsSystem.toPath("/map/" + object.interior);
 					break;
 				case "assume":
 					if(this.player.gm) {

@@ -15,7 +15,7 @@
 	<component :is="view" v-if="info" v-on:click="processRequest($event)" v-on:close="closeInfo()" :info="info" :size="size" :universe="universe" :player="player" :configuration="configuration" :profile="profile"></component>
 	<!-- rs-object-info v-if="viewing" v-on:click="processRequest($event)" v-on:close="closeInfo()" :record="viewing" :universe="universe" :user="user" :player="player" :target="target" :base="base" :options="options"></rs-object-info -->
 
-	<div class="knowledge-matrix" v-if="relatedKnowledge.length">
+	<div class="adjacent-information knowledge-matrix" v-if="relatedKnowledge.length">
 		<h3>Related Knowledge</h3>
 		<ul class="knowledge-related">
 			<li class="knowledge" v-on:click="showInfo(knowledge.id)" v-for="knowledge in relatedKnowledge" :key="knowledge.id">
@@ -23,6 +23,27 @@
 					<span class="fas fa-info-circle"></span>
 				</button>
 				<span>{{knowledge.name}}</span>
+			</li>
+		</ul>
+	</div>
+
+	<button class="adjacency-toggle general rounded" v-if="player.gm" v-on:click="scanObject()">
+		<span class="fas fa-refresh fa-spin" v-if="scanning"></span>
+		<span class="fas fa-refresh" v-if="!scanning"></span>
+		<span>Scan for Contents</span>
+	</button>
+	<button class="adjacency-toggle general rounded" v-if="player.gm && contains && contains.entity && contains.entity.length" v-on:click="toggleEntities()">
+		<span>Toggle Entity List: {{contains.entity.length}} Entities</span>
+	</button>
+	<div class="adjacent-information contained-entities" v-if="listEntities && player.gm && contains && contains.entity && contains.entity.length">
+		<h3>Entities Here</h3>
+		<ul class="knowledge-related">
+			<li class="entity" v-on:click="showInfo(entity.id)" v-for="entity in contains.entity" :key="entity.id">
+				<button class="flat action" :data-id="entity.id">
+					<span class="fas fa-info-circle"></span>
+				</button>
+				<span :class="entity.icon"></span>
+				<span>{{entity.name}}</span>
 			</li>
 		</ul>
 	</div>

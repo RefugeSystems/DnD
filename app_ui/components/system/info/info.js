@@ -62,6 +62,14 @@
 			 */
 			data.info = null;
 			
+
+			data.listEntities = false;
+
+			data.scanning = false;
+			data.contains = null;
+			data.containNoLimit = {};
+			data.containsList = {};
+
 			data.count = 0;
 
 			return data;
@@ -88,6 +96,7 @@
 		},
 		"watch": {
 			"$route.query.info": function(nV, oV) {
+				Vue.set(this, "contains", null);
 				this.checkView();
 			},
 			"$route.query.view": function(nV, oV) {
@@ -114,6 +123,28 @@
 			this.checkView();
 		},
 		"methods": {
+			"scanObject": function() {
+				if(!this.scanning) {
+					Vue.set(this, "scanning", true);
+					setTimeout(() => {
+						if(this.info && this.player.gm) {
+							if(this.info._class === "location") {
+								Vue.set(this, "contains", rsSystem.utility.scanLocation(this.universe, this.info));
+							} else if(this.info.interior && rsSystem.utility.isValid(this.universe.index.location[this.info.interior])) {
+								Vue.set(this, "contains", rsSystem.utility.scanLocation(this.universe, this.universe.index.location[this.info.interior]));
+							} else {
+								Vue.set(this, "contains", null);
+							}
+						} else {
+							Vue.set(this, "contains", null);
+						}
+						Vue.set(this, "scanning", false);
+					}, 0);
+				}
+			},
+			"toggleEntities": function() {
+				Vue.set(this, "listEntities", !this.listEntities);
+			},
 			"processDrag": function(record) {
 				rsSystem.dragndrop.general.drag(record.id);
 			},
