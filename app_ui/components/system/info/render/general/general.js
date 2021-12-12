@@ -175,6 +175,24 @@ rsSystem.component("sysInfoGeneral", {
 								}
 								this.controls.push(loading);
 							}
+							switch(this.info._class) {
+								case "entity":
+									if(this.info.hp === 0 && this.info.types.indexOf("type:dead") === -1) {
+										this.controls.push({
+											"title": "Declare Dead",
+											"icon": "fas fa-skull",
+											"type": "button",
+											"action": "nowdead"
+										});
+									} else if(this.info.hp !== 0 && this.info.types.indexOf("type:dead") !== -1) {
+										this.controls.push({
+											"title": "Declare Revived",
+											"icon": "game-icon game-icon-rod-of-asclepius",
+											"type": "button",
+											"action": "notdead"
+										});
+									}
+							}
 						}
 					} else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id]) {
 						this.controls.push({
@@ -366,6 +384,20 @@ rsSystem.component("sysInfoGeneral", {
 						"object": object.id,
 						"field": "is_active",
 						"value": false
+					});
+					break;
+				case "nowdead":
+					this.universe.send("master:quick:add", {
+						"object": object.id,
+						"field": "types",
+						"value": ["type:dead"]
+					});
+					break;
+				case "notdead":
+					this.universe.send("master:quick:sub", {
+						"object": object.id,
+						"field": "types",
+						"value": ["type:dead"]
 					});
 					break;
 				case "revoke":
