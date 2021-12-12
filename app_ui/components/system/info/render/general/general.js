@@ -208,6 +208,13 @@ rsSystem.component("sysInfoGeneral", {
 										"type": "button",
 										"action": "goto"
 									});
+								} else if(this.info.links_to) {
+									this.controls.push({
+										"title": "Pull up the map of this location",
+										"icon": "fas fa-location-circle",
+										"type": "button",
+										"action": "gotolink"
+									});
 								}
 								break;
 							case "effect":
@@ -332,6 +339,9 @@ rsSystem.component("sysInfoGeneral", {
 			switch(control.action || control) {
 				case "goto":
 					rsSystem.toPath("/map/" + object.id);
+					break;
+				case "gotolink":
+					rsSystem.toPath("/map/" + object.links_to);
 					break;
 				case "interior":
 					rsSystem.toPath("/map/" + object.interior);
