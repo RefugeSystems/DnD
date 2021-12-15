@@ -58,6 +58,13 @@ rsSystem.component("dndEntityStats", {
 				this.$emit("hovered-object", null);
 			}
 		},
+		"toggleMovementBoundry": function() {
+			this.$emit("toggle-boundry", {
+				"object": this.entity.id,
+				"type": this.entity._class,
+				"field": "movement_ground"
+			});
+		},
 		/**
 		 * Open the damage display to declare damage to something
 		 * @method declareAttack

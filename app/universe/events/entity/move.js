@@ -38,11 +38,21 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(entity && location && typeof(x) === "number" && typeof(y) === "number" && (event.player.gm || entity.owned[event.player.id])) {
-			entity.setValues({
-				"location": location.id,
-				"x": x,
-				"y": y
-			});
+			if(location.interior_of) {
+				entity.setValues({
+					"inside": location.interior_of,
+					"location": location.id,
+					"x": x,
+					"y": y
+				});
+			} else {
+				entity.setValues({
+					"inside": null,
+					"location": location.id,
+					"x": x,
+					"y": y
+				});
+			}
 			entity.addValues({
 				"action_count": {
 					"movement": -1

@@ -5,6 +5,17 @@
 
 	var locationScanClasses = ["location", "entity", "item"];
 
+	var sizeViewDistanceEquation = function(size) {
+		return Math.floor(Math.pow(size - 1, 1.7) * 8 + 12);
+	};
+
+	var sizeViewReference = {};
+	(function() {
+		for(var i=1; i<21; i++) {
+			sizeViewReference[i] = sizeViewDistanceEquation(i);
+		}
+	})();
+
 	/**
 	 *
 	 * @class Utility
@@ -29,6 +40,14 @@
 				return name.toLowerCase().replace(spacing, ":").replace(skipped, "");
 			}
 			return "";
+		},
+		/**
+		 * 
+		 * @method setUniverse
+		 * @param {RSUniverse} universe 
+		 */
+		"setUniverse": function(universe) {
+			utility.universe = universe;
 		},
 		/**
 		 *
@@ -257,6 +276,61 @@
 			}
 
 			return result;
+		},
+		/**
+		 * 
+		 * @method distanceTo
+		 * @param {RSUniverse} universe 
+		 * @param {RSObject} from 
+		 * @param {RSObject} to 
+		 * @returns {Integer} Studs between the 2 objects if they share a location and have position, null otherwise. If the location has
+		 * 		no dimensions defined, this returns undefined instead as a subtle error message but this is treated as allowable and
+		 * 		dismissed.
+		 */
+		"distanceTo": function(universe, from, to) {
+			var location,
+				distance;
+
+			if(from && to && from.location === to.location && typeof(from.x) === "number" && typeof(from.y) === "number" && typeof(to.x) === "number" && typeof(to.y) === "number") {
+				location = universe.index.location[from.location];
+				if(location) {
+					if(location.width && location.height) {
+						distance = rsSystem.math.distance.points2D(from.x/100 * location.width, from.y/100 * location.height, to.x/100 * location.width, to.y/100 * location.height);
+						return Math.floor(distance + .5);
+					} else {
+						// No distance defined on location
+						return undefined;
+					}
+				} else {
+					console.warn("Distance calculation with undefined location: ", {
+						"location": from.location,
+						"from": from,
+						"to": to
+					});
+				}
+			}
+			return null;
+		},
+		/**
+		 * 
+		 * @method isVisibleTo
+		 * @param {RSUniverse} universe 
+		 * @param {RSObject} entity 
+		 * @param {RSObject} object 
+		 * @returns {Boolean} Indicating if the entity can see the object factoring in size and the entity's view range.
+		 */
+		"isVisibleTo": function(universe, entity, object) {
+			var distance = utility.distanceTo(universe, entity, object),
+				visibility = entity.view || 48,
+				size = object.size || 1;
+
+			if(typeof(object.stealth) === "number" && ( (typeof(entity.perception) === "number" && entity.perception < object.stealth) || ((entity.perception === 0 || typeof(entity.perception) !== "number") && entity.passive_perception < object.stealth)) ) {
+				// Object is stealthed to entity (Active Check and Can Not See, or No Active thus passive check and Can Not See)
+				return false;
+			} else if(distance) {
+				return distance < sizeViewReference[size] && distance < visibility;
+			}
+			return false;
 		},
 		/**
 		 * 
@@ -569,4 +643,6 @@
 			return 0;
 		}
 	};
+
+	utility.sizeViewReference = sizeViewReference;
 })();

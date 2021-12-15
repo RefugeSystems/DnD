@@ -64,11 +64,14 @@
 			
 
 			data.listEntities = false;
+			data.listHolders = false;
 
+			data.scanning_hold = false;
 			data.scanning = false;
 			data.contains = null;
 			data.containNoLimit = {};
 			data.containsList = {};
+			data.holders = [];
 
 			data.count = 0;
 
@@ -97,6 +100,7 @@
 		"watch": {
 			"$route.query.info": function(nV, oV) {
 				Vue.set(this, "contains", null);
+				this.holders.splice(0);
 				this.checkView();
 			},
 			"$route.query.view": function(nV, oV) {
@@ -142,8 +146,29 @@
 					}, 0);
 				}
 			},
+			"scanForHolders": function() {
+				if(!this.scanning_hold && this.info && this.player.gm && this.info._class === "item") {
+					Vue.set(this, "scanning_hold", true);
+					var entity,
+						i;
+
+					this.holders.splice(0);
+					setTimeout(() => {
+						for(i=0; i<this.universe.listing.entity.length; i++) {
+							entity = this.universe.listing.entity[i];
+							if(rsSystem.utility.isValid(entity) && (entity.inventory instanceof Array) && entity.inventory.indexOf(this.info.id) !== -1) {
+								this.holders.push(entity);
+							}
+						}
+						Vue.set(this, "scanning_hold", false);
+					}, 0);
+				}
+			},
 			"toggleEntities": function() {
 				Vue.set(this, "listEntities", !this.listEntities);
+			},
+			"toggleHolders": function() {
+				Vue.set(this, "listHolders", !this.listHolders);
 			},
 			"processDrag": function(record) {
 				rsSystem.dragndrop.general.drag(record.id);

@@ -281,6 +281,15 @@ rsSystem.component("DNDWidgetCore", {
 			}
 			return true;
 		},
+		/**
+		 * 
+		 * @method distanceTo
+		 * @param {RSObject} from 
+		 * @param {RSObject} to 
+		 * @returns {Integer} Studs between the 2 objects if they share a location and have position, null otherwise. If the location has
+		 * 		no dimensions defined, this returns undefined instead as a subtle error message but this is treated as allowable and
+		 * 		dismissed.
+		 */
 		"distanceTo": function(from, to) {
 			var location,
 				distance;

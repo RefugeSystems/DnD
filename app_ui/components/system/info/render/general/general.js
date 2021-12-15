@@ -32,6 +32,12 @@ rsSystem.component("sysInfoGeneral", {
 		"description": function() {
 			return this.rsshowdown(this.info.description || "", this.info, this.profile?this.profile.inline_javascript:false);
 		},
+		"note": function() {
+			if(this.player.gm) {
+				return this.rsshowdown(this.info.note || "", this.info, this.profile?this.profile.inline_javascript:false);
+			}
+			return null;
+		},
 		"image": function() {
 			if(this.info.portrait && this.universe.index.image[this.info.portrait]) {
 				return this.universe.index.image[this.info.portrait];
@@ -52,6 +58,7 @@ rsSystem.component("sysInfoGeneral", {
 	"data": function() {
 		var data = {};
 		data.editDescription = "";
+		data.editNote = "";
 		data.editing = false;
 		data.controls = [];
 		return data;
@@ -109,13 +116,81 @@ rsSystem.component("sysInfoGeneral", {
 								});
 							}
 						}
-						if(this.info._class === "entity") {
+						if(this.info.is_open !== undefined && this.info.is_open !== null) {
+							if(this.info.is_open) {
+								this.controls.push({
+									"title": "Close",
+									"icon": "fa-solid fa-door-closed",
+									"type": "button",
+									"action": "closeopennable"
+								});
+							} else {
+								this.controls.push({
+									"title": "Open",
+									"icon": "fa-solid fa-door-open",
+									"type": "button",
+									"action": "openopennable"
+								});
+							}
+						}
+						if(this.info.is_powered !== undefined && this.info.is_powered !== null) {
+							if(this.info.is_powered) {
+								this.controls.push({
+									"title": "Unpower",
+									"icon": "fa-thin fa-bolt rs-light-red",
+									"type": "button",
+									"action": "unpower"
+								});
+							} else {
+								this.controls.push({
+									"title": "Power",
+									"icon": "fa-solid fa-bolt rs-light-green",
+									"type": "button",
+									"action": "power"
+								});
+							}
+						}
+						if(this.info.must_know) {
 							this.controls.push({
-								"title": "Assume Entity in Overview",
-								"icon": "game-icon game-icon-console-controller",
+								"title": "Public Knowledge",
+								"icon": "fa-solid fa-cloud-slash",
 								"type": "button",
-								"action": "assume"
+								"action": "public"
 							});
+						} else {
+							this.controls.push({
+								"title": "Must be known",
+								"icon": "fa-solid fa-cloud",
+								"type": "button",
+								"action": "private"
+							});
+						}
+						// if(this.info.must_know && this.info.is_position_hidden !== undefined && this.info.is_position_hidden !== null) {
+						if(this.info.is_position_hidden) {
+							this.controls.push({
+								"title": "Reveal Position",
+								"icon": "fa-solid fa-location-crosshairs",
+								"type": "button",
+								"action": "showposition"
+							});
+						} else {
+							this.controls.push({
+								"title": "Hide Position",
+								"icon": "fa-solid fa-location-crosshairs-slash",
+								"type": "button",
+								"action": "hideposition"
+							});
+						}
+						// }
+						if(this.info._class === "entity") {
+							if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
+								this.controls.push({
+									"title": "Assume Entity in Overview",
+									"icon": "game-icon game-icon-console-controller",
+									"type": "button",
+									"action": "assume"
+								});
+							}
 							if(this.info.is_npc || this.info.is_minion) {
 								if(this.info.is_hostile) {
 									this.controls.push({
@@ -184,13 +259,13 @@ rsSystem.component("sysInfoGeneral", {
 									}
 							}
 						}
-					} else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id]) {
-						this.controls.push({
-							"title": "Assume Entity in Overview",
-							"icon": "game-icon game-icon-console-controller",
-							"type": "button",
-							"action": "assume"
-						});
+					// } else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id] && this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
+					// 	this.controls.push({
+					// 		"title": "Assume Entity in Overview",
+					// 		"icon": "game-icon game-icon-console-controller",
+					// 		"type": "button",
+					// 		"action": "assume"
+					// 	});
 					}
 					if(entity) {
 						// this.controls.push({
@@ -235,18 +310,22 @@ rsSystem.component("sysInfoGeneral", {
 										"type": "button",
 										"action": "inventory"
 									});
-									this.controls.push({
-										"title": "Open spellbook for " + entity.name,
-										"icon": "fas fa-book-spells",
-										"type": "button",
-										"action": "spellbook"
-									});
-									this.controls.push({
-										"title": "Play as " + entity.name,
-										"icon": "fas fa-user",
-										"type": "button",
-										"action": "assume"
-									});
+									if((this.info.spells_known && this.info.spells_known.length) || !rsSystem.utility.isEmpty(this.info.spell_slot_max)) {
+										this.controls.push({
+											"title": "Open spellbook for " + entity.name,
+											"icon": "fas fa-book-spells",
+											"type": "button",
+											"action": "spellbook"
+										});
+									}
+									if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
+										this.controls.push({
+											"title": "Play as " + entity.name,
+											"icon": "fas fa-user",
+											"type": "button",
+											"action": "assume"
+										});
+									}
 								}
 								if(entity && this.info.interior && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
 									this.controls.push({
@@ -379,6 +458,34 @@ rsSystem.component("sysInfoGeneral", {
 						"value": false
 					});
 					break;
+				case "closeopennable":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_open",
+						"value": false
+					});
+					break;
+				case "openopennable":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_open",
+						"value": true
+					});
+					break;
+				case "public":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "must_know",
+						"value": null
+					});
+					break;
+				case "private":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "must_know",
+						"value": 1
+					});
+					break;
 				case "hostile":
 					this.universe.send("master:quick:set", {
 						"object": object.id,
@@ -390,6 +497,34 @@ rsSystem.component("sysInfoGeneral", {
 					this.universe.send("master:quick:set", {
 						"object": object.id,
 						"field": "is_hostile",
+						"value": false
+					});
+					break;
+				case "hideposition":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_position_hidden",
+						"value": true
+					});
+					break;
+				case "showposition":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_position_hidden",
+						"value": false
+					});
+					break;
+				case "power":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_powered",
+						"value": true
+					});
+					break;
+				case "unpower":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_powered",
 						"value": false
 					});
 					break;
@@ -429,6 +564,9 @@ rsSystem.component("sysInfoGeneral", {
 					break;
 				case "edit-description":
 					Vue.set(this, "editDescription", object.description);
+					if(this.player.gm) {
+						Vue.set(this, "editNote", object.note);
+					}
 					Vue.set(this, "editing", true);
 					break;
 				case "cancel-description":
@@ -437,10 +575,18 @@ rsSystem.component("sysInfoGeneral", {
 				case "send-description":
 					console.log(" [Edit]>> ", control, this.editDescription);
 					Vue.set(this, "editing", false);
-					this.universe.send("object:describe", {
-						"id": object.id,
-						"description": this.editDescription
-					});
+					if(this.player.gm) {
+						this.universe.send("object:describe", {
+							"id": object.id,
+							"description": this.editDescription,
+							"note": this.editNote
+						});
+					} else {
+						this.universe.send("object:describe", {
+							"id": object.id,
+							"description": this.editDescription
+						});
+					}
 					break;
 				case "give":
 					this.closeInfo();
@@ -515,6 +661,8 @@ rsSystem.component("sysInfoGeneral", {
 						Vue.delete(control, "_missing");
 					}
 					break;
+				default:
+					console.warn("Unknown Command: " + (control.action || control));
 			}
 		},
 		"option": function(control) {

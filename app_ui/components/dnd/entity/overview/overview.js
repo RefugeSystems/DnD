@@ -123,6 +123,9 @@ rsSystem.component("dndEntityOverview", {
 		"hoveredObject": function(object) {
 			this.$emit("hovered-object", object);
 		},
+		"toggleBoundry": function(object) {
+			this.$emit("toggle-boundry", object);
+		},
 		"getImageURL": function() {
 			if(this.location) {
 				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id;

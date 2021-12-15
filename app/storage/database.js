@@ -5,7 +5,8 @@
  * @param {Object} specification
  */
 
-var EventEmitter = require("events").EventEmitter,
+var appPackage = require("../../package.json"),
+	EventEmitter = require("events").EventEmitter,
 	Anomaly = require("../management/anomaly"),
 	sqlite3 = require("sqlite3").verbose(),
 	emptyArray = [],
@@ -466,6 +467,9 @@ class RSDatabase extends EventEmitter {
 		if(!this.field[id]) {
 			delta.name = delta.name || id;
 			delta.id = delta._newid || id;
+			delta.attribute = delta.attribute || {};
+			delta.attribute.version_since = appPackage.version;
+			delta.attribute.version_update = appPackage.version;
 			return this.createField(delta);
 		}
 		
@@ -476,6 +480,9 @@ class RSDatabase extends EventEmitter {
 				keys,
 				x;
 				
+			field.attribute = field.attribute || {};
+			field.attribute.version_update = appPackage.version;
+
 			for(x=0; x<fieldColumns.length; x++) {
 				if(delta[fieldColumns[x]]) {
 					statement += ", " + fieldColumns[x] + " = $" + fieldColumns[x];

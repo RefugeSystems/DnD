@@ -205,24 +205,32 @@ class Universe extends EventEmitter {
 			})
 			.then((loading) => {
 				// Update Loaded Objects
-				var x;
+				var start = Date.now(),
+					mark,
+					x;
 				
-				console.log("Linking Objects");
+				console.log("Linking Objects...");
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
 					}
 				}
+				console.log(" + Updated: " + (Date.now() - start) + "ms");
+				mark = Date.now();
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].calculateFieldValues();
 					}
 				}
+				console.log(" + Calculated: " + (Date.now() - mark) + "ms");
+				mark = Date.now();
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
 					}
 				}
+				console.log(" + Reupdated: " + (Date.now() - mark) + "ms");
+				console.log("...Total Time: " + (Date.now() - start) + "ms");
 				
 				return this.chronicle.initialize(this.objectHandler);
 			})
@@ -311,6 +319,7 @@ class Universe extends EventEmitter {
 			}).then(() => {
 				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/events", "i"),
+						start = Date.now(),
 						initializing = [],
 						errors = [],
 						queue = [],
@@ -348,6 +357,9 @@ class Universe extends EventEmitter {
 									fail(errors);
 								} else {
 									Promise.all(initializing)
+									.then(function() {
+										console.log("[Events] Complete in " + (Date.now() - start) + "ms");
+									})
 									.then(done)
 									.catch(fail);
 								}
@@ -360,6 +372,7 @@ class Universe extends EventEmitter {
 			}).then(() => {
 				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/simulation", "i"),
+						start = Date.now(),
 						initializing = [],
 						errors = [],
 						queue = [],
@@ -398,6 +411,9 @@ class Universe extends EventEmitter {
 									fail(errors);
 								} else {
 									Promise.all(initializing)
+									.then(function() {
+										console.log("[Sim] Complete in " + (Date.now() - start) + "ms");
+									})
 									.then(done)
 									.catch(fail);
 								}
@@ -534,6 +550,25 @@ class Universe extends EventEmitter {
 		}
 		
 		return players;
+	}
+
+
+	/**
+	 * 
+	 * @method getTime
+	 * @returns {Integer} Current time stamp for the universe
+	 */
+	getTime() {
+		return this.time;
+	}
+
+	/**
+	 * 
+	 * @method getCurrentMeeting
+	 * @returns {String} Meeting ID for the current meeting.
+	 */
+	getCurrentMeeting() {
+		return this.manager.setting.object["setting:meeting"].value;
 	}
 
 	/**

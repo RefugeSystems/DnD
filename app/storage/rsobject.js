@@ -1640,8 +1640,8 @@ class RSObject {
 		json._search = this._search;
 		json._data = data;
 		json._stackable = this._stackable;
+		json._conditionals = this._conditionals;
 		if(include) {
-			json._conditionals = this._conditionals;
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
 			json._formula = this._formula;

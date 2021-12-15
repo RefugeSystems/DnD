@@ -75,10 +75,23 @@ rsSystem.component("DNDMap", {
 	"mounted": function() {
 		rsSystem.register(this);
 		this.universe.$on("master:control", this.controlResponse);
+		if(!this.storage.boundries) {
+			Vue.set(this.storage, "boundries", {});
+		}
 	},
 	"methods": {
 		"hoveredObject": function(object) {
 			Vue.set(this.storage, "hovering", object);
+		},
+		"toggleBoundry": function(event) {
+			if(event && event.object && event.field) {
+				if(this.storage.boundries[event.object]) {
+					Vue.delete(this.storage.boundries, event.object);
+				} else {
+					Vue.set(this.storage.boundries, event.object, event);
+				}
+				Vue.set(this.storage, "boundry_keys", Object.keys(this.storage.boundries));
+			}
 		},
 		"flyoutClass": function() {
 			var classes = "";

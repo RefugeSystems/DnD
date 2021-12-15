@@ -1,5 +1,6 @@
 
-var express = require("express");
+var appPackage = require("../../../package.json"),
+	express = require("express");
 
 module.exports = new (function() {
 	this.router = express.Router();

@@ -27,18 +27,39 @@
 		</ul>
 	</div>
 
-	<button class="adjacency-toggle general rounded" v-if="player.gm" v-on:click="scanObject()">
+	<button class="adjacency-toggle general rounded" v-if="player.gm && info && (info._class === 'location' || info._class === 'entity')" v-on:click="scanObject()">
 		<span class="fas fa-refresh fa-spin" v-if="scanning"></span>
 		<span class="fas fa-refresh" v-if="!scanning"></span>
 		<span>Scan for Contents</span>
 	</button>
-	<button class="adjacency-toggle general rounded" v-if="player.gm && contains && contains.entity && contains.entity.length" v-on:click="toggleEntities()">
+	<button class="adjacency-toggle general rounded" v-if="player.gm && info && (info._class === 'location' || info._class === 'entity') && contains && contains.entity && contains.entity.length" v-on:click="toggleEntities()">
 		<span>Toggle Entity List: {{contains.entity.length}} Entities</span>
 	</button>
-	<div class="adjacent-information contained-entities" v-if="listEntities && player.gm && contains && contains.entity && contains.entity.length">
+	<div class="adjacent-information contained-entities" v-if="listEntities && info && (info._class === 'location' || info._class === 'entity') && player.gm && contains && contains.entity && contains.entity.length">
 		<h3>Entities Here</h3>
 		<ul class="knowledge-related">
 			<li class="entity" v-on:click="showInfo(entity.id)" v-for="entity in contains.entity" :key="entity.id">
+				<button class="flat action" :data-id="entity.id">
+					<span class="fas fa-info-circle"></span>
+				</button>
+				<span :class="entity.icon"></span>
+				<span>{{entity.name}}</span>
+			</li>
+		</ul>
+	</div>
+
+	<button class="adjacency-toggle general rounded" v-if="player.gm && info && info._class === 'item'" v-on:click="scanForHolders()">
+		<span class="fas fa-refresh fa-spin" v-if="scanning_hold"></span>
+		<span class="fas fa-refresh" v-if="!scanning_hold"></span>
+		<span>Scan for Holders ({{holders.length}})</span>
+	</button>
+	<button class="adjacency-toggle general rounded" v-if="player.gm && info && info._class === 'item' && holders.length" v-on:click="toggleHolders()">
+		<span>Toggle Held List: {{holders.length}} Entities</span>
+	</button>
+	<div class="adjacent-information contained-entities" v-if="player.gm && info && info._class === 'item' && holders.length && listHolders">
+		<h3>Entities with Item</h3>
+		<ul class="knowledge-related">
+			<li class="entity" v-on:click="showInfo(entity.id)" v-for="entity in holders" :key="entity.id">
 				<button class="flat action" :data-id="entity.id">
 					<span class="fas fa-info-circle"></span>
 				</button>

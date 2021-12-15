@@ -376,12 +376,12 @@
 		"watch": {
 			"location": {
 				"handler": function(newValue, oldValue) {
-					console.warn("Location Change");
+					// console.warn("Location Change");
 					Vue.set(this, "measurementCanvas", null);
 					if(this.noResetViewportFlag) {
 						Vue.set(this, "noResetViewportFlag", false);
 					} else if(!this.$route.query.viewing) {
-						console.warn("Flag Reset: ", JSON.stringify(this.$route.query, null, 4));
+						// console.warn("Flag Reset: ", JSON.stringify(this.$route.query, null, 4));
 						Vue.set(this, "resetViewportFlag", true);
 					}
 					this.update();
@@ -399,16 +399,22 @@
 			},
 			"$route.query": function() {
 				if(this.location && this.$route.query.viewing === this.location.id) {
-					console.warn("View Change: ", JSON.stringify(this.$route.query, null, 4));
+					// console.warn("View Change: ", JSON.stringify(this.$route.query, null, 4));
 					Vue.set(this, "noResetViewportFlag", true);
 					this.queryViewPort();
 				} else {
-					console.warn("Query Change: ", JSON.stringify(this.$route.query, null, 4));
+					// console.warn("Query Change: ", JSON.stringify(this.$route.query, null, 4));
 				}
 			},
 			"storage.hovering": function(hovered) {
 				if(this.entity) {
 					Vue.set(this, "characterRangeBand", hovered);
+					this.renderMeasurements();
+				}
+			},
+			"storage.boundry_keys": {
+				// "deep": true,
+				"handler": function() {
 					this.renderMeasurements();
 				}
 			}
@@ -712,8 +718,16 @@
 				this.determinePOIs();
 			},
 			"updateMasterView": function() {
-				Vue.set(this, "viewingEntity", this.universe.index.entity[this.storage.master_view]);
-				this.filterPOIs();
+				if(this.player.gm) {
+					if(this.storage.master_view === "") {
+						Vue.set(this, "viewingEntity", this.universe.index.entity[this.player.attribute.playing_as]);
+					} else if(this.storage.master_view === "master") {
+						Vue.set(this, "viewingEntity", null);
+					} else {
+						Vue.set(this, "viewingEntity", this.universe.index.entity[this.storage.master_view]);
+					}
+					this.filterPOIs();
+				}
 			},
 			"testSearchCriteria": function(string, criteria) {
 				var x;
@@ -804,7 +818,7 @@
 					x;
 
 				point = event.target.getAttribute("data-id") || event.target.parentNode.getAttribute("data-id");
-				if(point && (point = this.universe.index.location[point] || this.universe.index.entity[point] || this.universe.index.party[point] || this.universe.index.storm[point]) && point.x && point.y) {
+				if(point && (point = this.universe.index.location[point] || this.universe.index.entity[point] || this.universe.index.item[point] || this.universe.index.party[point] || this.universe.index.storm[point]) && point.x && point.y) {
 					// console.log("Buffer: ", buffer);
 					xc = this.image.width * point.x/100;
 					yc = this.image.height * point.y/100;
@@ -1611,6 +1625,7 @@
 			"renderRadials": function() {
 				var object,
 					point,
+					field,
 					i;
 				
 				for(i=0; i<this.location.coordinates.length; i++) {
@@ -1627,6 +1642,16 @@
 
 				if(this.characterRangeBand && this.characterRangeBand.range_normal && this.entity && this.location.map_distance && typeof(this.entity.x) === "number" && typeof(this.entity.y) === "number" && this.entity.location === this.location.id) {
 					this.renderRadial(this.entity, this.characterRangeBand.range_normal, null, null, "");
+				}
+				if(this.storage.boundry_keys) {
+					for(i=0; i<this.storage.boundry_keys.length; i++) {
+						object = this.universe.getObject(this.storage.boundry_keys[i]);
+						field = this.storage.boundries[object.id].field;
+						console.log("Boundry Render[" + field + "]: " + (object?object[field]:null), object);
+						if(object && object.location === this.location.id && typeof(object[field]) === "number") {
+							this.renderRadial(object, object[field], null, null, "");
+						}
+					}
 				}
 			},
 			"renderRadial": function(object, r, x, y, color) {
@@ -2107,6 +2132,12 @@
 					});
 				}
 			},
+			"isVisibleTo": function(entity, object) {
+				return rsSystem.utility.isVisibleTo(this.universe, entity, object);
+			},
+			"isRendered": function(entity, object) {
+				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && (this.player.gm || (object.owned && object.owned[this.player.id]) || ((!object.is_position_hidden || this.isVisibleTo(entity, object))));
+			},
 			"update": function(source) {
 				var now = Date.now();
 				if(this.location && (!source || source.location === this.location.id || source.id === this.location.id || (this.viewingEntity && (source.id === this.viewingEntity.id || source.entity === this.viewingEntity.id)))) {
@@ -2122,7 +2153,7 @@
 
 						for(x=0; x<this.universe.listing.location.length; x++) {
 							buffer = this.universe.listing.location[x];
-							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							if(this.isRendered(this.viewingEntity, buffer)) {
 								this.availablePOIs.push(buffer);
 								if(buffer.rendering_has_path && this.locales) {
 									this.locales.push(buffer);
@@ -2132,28 +2163,28 @@
 
 						for(x=0; x<this.universe.listing.entity.length; x++) {
 							buffer = this.universe.listing.entity[x];
-							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							if(this.isRendered(this.viewingEntity, buffer)) {
 								this.availablePOIs.push(buffer);
 							}
 						}
 
 						for(x=0; x<this.universe.listing.item.length; x++) {
 							buffer = this.universe.listing.item[x];
-							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							if(this.isRendered(this.viewingEntity, buffer)) {
 								this.availablePOIs.push(buffer);
 							}
 						}
 
 						for(x=0; x<this.universe.listing.party.length; x++) {
 							buffer = this.universe.listing.party[x];
-							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							if(this.isRendered(this.viewingEntity, buffer)) {
 								this.availablePOIs.push(buffer);
 							}
 						}
 
 						for(x=0; x<this.universe.listing.storm.length; x++) {
 							buffer = this.universe.listing.storm[x];
-							if(buffer && !buffer.disabled && !buffer.is_preview && (!buffer.obscured || this.player.gm) && buffer.location === this.location.id) {
+							if(this.isRendered(this.viewingEntity, buffer)) {
 								this.availablePOIs.push(buffer);
 							}
 						}
