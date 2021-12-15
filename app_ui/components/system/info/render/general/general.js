@@ -185,7 +185,7 @@ rsSystem.component("sysInfoGeneral", {
 						if(this.info._class === "entity") {
 							if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 								this.controls.push({
-									"title": "Assume Entity in Overview",
+									"title": "Assume entity in Overview",
 									"icon": "game-icon game-icon-console-controller",
 									"type": "button",
 									"action": "assume"
@@ -320,7 +320,7 @@ rsSystem.component("sysInfoGeneral", {
 									}
 									if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 										this.controls.push({
-											"title": "Play as " + entity.name,
+											"title": "Play as this character",
 											"icon": "fas fa-user",
 											"type": "button",
 											"action": "assume"
