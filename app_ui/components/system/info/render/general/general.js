@@ -79,7 +79,8 @@ rsSystem.component("sysInfoGeneral", {
 				var entity = this.playerCharacter || this.getPlayerCharacter(),
 					character = this.info.character || this.info.caster || this.info.user, 
 					object = this.info,
-					loading;
+					loading,
+					name;
 
 				this.controls.splice(0);
 				if(!this.info.is_preview && this.info._class) {
@@ -286,6 +287,7 @@ rsSystem.component("sysInfoGeneral", {
 						// 	});
 						}
 						if(entity) {
+							name = rsSystem.utility.getKnownProperty(entity, this.info, "name") || "Unknown";
 							// this.controls.push({
 							// 	"title": "Create knowledge for this " + entity.name,
 							// 	"icon": "fas fa-brain",
@@ -297,14 +299,14 @@ rsSystem.component("sysInfoGeneral", {
 									if(!this.info.is_locked || this.info.is_open) {
 										if(this.info.map) {
 											this.controls.push({
-												"title": "Pull up the map of this location",
+												"title": "Pull up the map of " + name,
 												"icon": "fas fa-location-circle",
 												"type": "button",
 												"action": "goto"
 											});
 										} else if(this.info.links_to) {
 											this.controls.push({
-												"title": "Pull up the map of this location",
+												"title": "Pull up the map of " + name,
 												"icon": "fas fa-location-circle",
 												"type": "button",
 												"action": "gotolink"
@@ -325,14 +327,14 @@ rsSystem.component("sysInfoGeneral", {
 								case "entity":
 									if(this.info.owned && this.info.owned[this.player.id]) {
 										this.controls.push({
-											"title": "Open inventory of " + entity.name,
+											"title": "Open inventory of " + name,
 											"icon": "fas fa-backpack",
 											"type": "button",
 											"action": "inventory"
 										});
 										if((this.info.spells_known && this.info.spells_known.length) || !rsSystem.utility.isEmpty(this.info.spell_slot_max)) {
 											this.controls.push({
-												"title": "Open spellbook for " + entity.name,
+												"title": "Open spellbook for " + name,
 												"icon": "fas fa-book-spells",
 												"type": "button",
 												"action": "spellbook"
@@ -340,7 +342,7 @@ rsSystem.component("sysInfoGeneral", {
 										}
 										if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 											this.controls.push({
-												"title": "Play as this character",
+												"title": "Play as " + name,
 												"icon": "fas fa-user",
 												"type": "button",
 												"action": "assume"
@@ -349,7 +351,7 @@ rsSystem.component("sysInfoGeneral", {
 									}
 									if(entity && this.info.interior && (!this.info.is_locked || this.info.is_open || this.info.hp === 0) && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
 										this.controls.push({
-											"title": "Go to the interior map of " + rsSystem.utility.getKnownProperty(entity, this.info, "name"),
+											"title": "Go to the interior map of " + name,
 											"icon": "fas fa-location-circle",
 											"type": "button",
 											"action": "interior"
@@ -390,39 +392,39 @@ rsSystem.component("sysInfoGeneral", {
 												}
 											}
 										}
-									}
-									if(this.info.consume) {
+										if(this.info.consume) {
+											this.controls.push({
+												"title": this.info.consume_hint || ("Consume " + this.info.name),
+												"icon": this.info.consume_icon || ("fa-solid fa-drumstick-bite"),
+												"type": "button",
+												"action": "consume"
+											});
+										}
 										this.controls.push({
-											"title": this.info.consume_hint || ("Consume " + this.info.name),
-											"icon": this.info.consume_icon || ("fa-solid fa-drumstick-bite"),
+											"title": "Give item to another creature near " + entity.name,
+											"icon": "fas fa-people-carry",
 											"type": "button",
-											"action": "consume"
+											"action": "give"
+										});
+										this.controls.push({
+											"title": "Drop item from " + entity.name,
+											"icon": "fas fa-arrow-alt-to-bottom",
+											"type": "button",
+											"action": "drop"
 										});
 									}
-									this.controls.push({
-										"title": "Give item to another creature near " + entity.name,
-										"icon": "fas fa-people-carry",
-										"type": "button",
-										"action": "give"
-									});
-									this.controls.push({
-										"title": "Drop item from " + entity.name,
-										"icon": "fas fa-arrow-alt-to-bottom",
-										"type": "button",
-										"action": "drop"
-									});
 									break;
 							}
 						}
 						this.controls.push({
-							"title": "Create a personal knowledge entry for this",
+							"title": "Create a personal knowledge entry for " + name,
 							"icon": "fa-solid fa-thought-bubble",
 							"type": "button",
 							"action": "knowing"
 						});
 						if(this.player.gm || (character && !this.info.is_singular)) {
 							this.controls.push({
-								"title": "Edit description for " + this.info.name,
+								"title": "Edit description for " + name,
 								"icon": "fas fa-edit",
 								"type": "button",
 								"action": "edit-description"
