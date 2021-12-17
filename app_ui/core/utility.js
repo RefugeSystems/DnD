@@ -121,13 +121,25 @@
 		 * @return {Boolean} True if the object contains a key that matches a value in the array.
 		 */
 		"hasCommonKey": function(object, array) {
+			var keys,
+				i;
+
 			if(!object || !array) {
 				return false;
 			}
 
-			for(var i=0; i<array.length; i++) {
-				if(object[array[i]]) {
-					return true;
+			if(array instanceof Array) {
+				for(i=0; i<array.length; i++) {
+					if(object[array[i]]) {
+						return true;
+					}
+				}
+			} else if(typeof(array) === "object") {
+				keys = Object.keys(array);
+				for(i=0; i<keys.length; i++) {
+					if(object[keys[i]] !== undefined && object[keys[i]] !== null) {
+						return true;
+					}
 				}
 			}
 			
