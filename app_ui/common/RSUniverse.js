@@ -463,6 +463,15 @@ class RSUniverse extends EventEmitter {
 
 	/**
 	 * 
+	 * @method getCurrentMeeting
+	 * @return {String} ID for the current active meeting, if any
+	 */
+	getCurrentMeeting() {
+		return this.index.setting["setting:meeting"].value;
+	}
+
+	/**
+	 * 
 	 * @method cacheData
 	 */
 	cacheData() {

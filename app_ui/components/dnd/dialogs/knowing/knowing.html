@@ -1,5 +1,50 @@
 <div class="rs-component dnd-component dialog-dnd-knowing">
-	<div class="card-box">
-		
+	<div class="sections flex h" :class="page">
+		<section class="knowing-choose">
+			<div class="choices fill flex h wrap v-center center">
+				<button class="general rounded choice" v-for="choice in choices" v-on:click="select(choice)" :title="choice.title">
+					<span class="choice-icon">
+						<span class="choice-icon-render" :class="choice.icon"></span>
+					</span>
+					<span class="choice-text">
+						<span class="choice-text-render">{{choice.name}}</span>
+					</span>
+				</button>
+			</div>
+		</section>
+		<section class="knowing-entry">
+			<div class="fill choice create flex h center v-center" v-if="choice && choice.id === 'create'">
+				<div class="simple-form flex v">
+					<input class="name" v-model="knowledge.name" placeholder="Name..." />
+					<textarea class="description" placeholder="Description..." v-model="knowledge.description"></textarea>
+					<select v-model="knowledge.category">
+						<option value="">[Select Category]</option>
+						<option v-for="category in categories" :value="category.id">{{category.name}}</option>
+					</select>
+					<button class="submit general rounded action" :disabled="!knowledge.name || !knowledge.description" v-on:click="submit()">
+						<span class="action-icon" :class="choice.icon"></span>
+						<span>Create Knowledge Entry</span>
+					</button>
+				</div>
+			</div>
+			<div class="choice append fill flex h v-center center" v-else-if="choice && choice.id === 'append'">
+				<select v-model="target">
+					<option value="">Choose knowledge to which to add</option>
+					<option v-for="knowledge in knowledges" :value="knowledge.id">{{knowledge.name}}</option>
+				</select>
+				<button class="general rounded quick action" :disabled="!target" v-on:click="submit()">
+					<span class="action-icon" :class="choice.icon"></span>
+				</button>
+			</div>
+			<div class="choice share fill flex h v-center center" v-else-if="choice && choice.id === 'share'">
+				<select v-model="target">
+					<option value="">Choose the knowledge to share</option>
+					<option v-for="knowledge in knowledges" :value="knowledge.id">{{knowledge.name}}</option>
+				</select>
+				<button class="general rounded quick action" :disabled="!target" v-on:click="submit()">
+					<span class="action-icon" :class="choice.icon"></span>
+				</button>
+			</div>
+		</section>
 	</div>
 </div>

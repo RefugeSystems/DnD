@@ -21,7 +21,7 @@
 					<!-- <button class="dot" v-for="coordinate in location.coordinates" :style="'left: ' + coordinate.x + '%; top: ' + coordinate.y + '%;' + (coordinate.color?'background-color: ' + coordinate.color + ';':'')" v-on:click="dismissCoordinate(coordinate)"></button> -->
 					<button class="dot" v-for="coordinate in location.coordinates" :style="stylePosition[coordinate.id]" v-on:click="dismissCoordinate(coordinate)"></button>
 				</div>
-				<div class="map-paths">
+				<div class="map-paths time-of-day" :class="hourClassing">
 					<canvas v-for="loc in locales" :data-id="'locale:' + loc.id"></canvas>
 					<canvas id="measuring"></canvas>
 				</div>

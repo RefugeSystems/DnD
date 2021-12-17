@@ -1,7 +1,98 @@
 .dnd-component.dialog-dnd-knowing {
 	position: relative;
-	border-radius: 5px;
-	overflow: auto;
-	// padding: 7px 7px;
-	
+    width: 500px;
+	max-width: 100vw;
+    min-height: 100px;
+    overflow: hidden;
+
+	.sections {
+		position: relative;
+		left: 0px;
+		transition: left 0.5s;
+
+		&.page1 {
+			left: 0px;
+		}
+
+		&.page2 {
+			left: -100%;
+		}
+
+		&.page3 {
+			left: -200%;
+		}
+
+		&.page4 {
+			left: -300%;
+		}
+
+		&.page5 {
+			left: -400%;
+		}
+
+		&.page6 {
+			left: -500%;
+		}
+
+		&.page7 {
+			left: -600%;
+		}
+
+		&.page8 {
+			left: -700%;
+		}
+
+		section {
+			display: block;
+			width: 100%;
+			height: 400px;
+			max-height: 100vh;
+			overflow: auto;
+			flex-shrink: 0;
+		}
+
+		select {
+			padding: 5px;
+			line-height: 34px;
+			height: 34px;
+		}
+
+		button.choice {
+			width: 200px;
+			height: 140px;
+
+			.choice-icon {
+				font-size: 30px;
+			}
+		}
+
+		.simple-form {
+			height: 100%;
+		}
+
+		.choice.create {
+
+			* {
+				margin: 8px;
+			}
+
+			input {
+				padding: 5px 8px;
+				font-size: 20px;
+				flex-shrink: 0;
+			}
+
+			textarea {
+				min-height: 200px;
+				resize: none;
+				flex-grow: 5;
+			}
+
+			button.submit {
+				padding: 5px 8px;
+				font-size: 20px;
+				flex-shrink: 0;
+			}
+		}
+	}
 }

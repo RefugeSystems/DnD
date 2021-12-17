@@ -778,11 +778,11 @@ rsSystem.component("dndDialogDamage", {
 				for(i=0; i<this.universe.listing.damage_type.length; i++) {
 					dmg = this.universe.listing.damage_type[i];
 					this.roll_damage[null][dmg.id].setFormula("");
-					this.roll_damage[null][keys[i]].setSource(null);
+					this.roll_damage[null][dmg.id].setSource(null);
 					for(j=0; j<this.available_targets.length; j++) {
 						target = this.available_targets[j].id;
-						this.roll_damage[target][dmg].setFormula("");
-						this.roll_damage[target][dmg].setSource(null);
+						this.roll_damage[target][dmg.id].setFormula("");
+						this.roll_damage[target][dmg.id].setSource(null);
 					}
 				}
 			}

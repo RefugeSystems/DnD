@@ -276,20 +276,22 @@ rsSystem.component("sysInfoGeneral", {
 						// });
 						switch(this.info._class) {
 							case "location":
-								if(this.info.map) {
-									this.controls.push({
-										"title": "Pull up the map of this location",
-										"icon": "fas fa-location-circle",
-										"type": "button",
-										"action": "goto"
-									});
-								} else if(this.info.links_to) {
-									this.controls.push({
-										"title": "Pull up the map of this location",
-										"icon": "fas fa-location-circle",
-										"type": "button",
-										"action": "gotolink"
-									});
+								if(!this.info.is_locked || !this.info.is_closed) {
+									if(this.info.map) {
+										this.controls.push({
+											"title": "Pull up the map of this location",
+											"icon": "fas fa-location-circle",
+											"type": "button",
+											"action": "goto"
+										});
+									} else if(this.info.links_to) {
+										this.controls.push({
+											"title": "Pull up the map of this location",
+											"icon": "fas fa-location-circle",
+											"type": "button",
+											"action": "gotolink"
+										});
+									}
 								}
 								break;
 							case "effect":
@@ -327,7 +329,7 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 								}
-								if(entity && this.info.interior && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
+								if(entity && this.info.interior && (!this.info.is_locked || !this.info.is_closed || this.info.hp === 0) && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
 									this.controls.push({
 										"title": "Go to the interior map of " + rsSystem.utility.getKnownProperty(entity, this.info, "name"),
 										"icon": "fas fa-location-circle",
@@ -394,7 +396,13 @@ rsSystem.component("sysInfoGeneral", {
 								break;
 						}
 					}
-					if(character && !this.info.is_singular) {
+					this.controls.push({
+						"title": "Create a personal knowledge entry for this",
+						"icon": "fa-solid fa-thought-bubble",
+						"type": "button",
+						"action": "knowing"
+					});
+					if(this.player.gm || (character && !this.info.is_singular)) {
 						this.controls.push({
 							"title": "Edit description for " + this.info.name,
 							"icon": "fas fa-edit",
@@ -614,6 +622,8 @@ rsSystem.component("sysInfoGeneral", {
 					rsSystem.EventBus.$emit("dialog-open", {
 						"component": "dndDialogKnowing",
 						"entity": entity.id,
+						"associations": [this.info.id],
+						"can_share": this.info._class === "entity",
 						"finish": (target) => {
 							console.log("Finish: ", target);
 						}

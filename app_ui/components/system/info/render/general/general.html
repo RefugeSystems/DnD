@@ -2,7 +2,7 @@
 	<img class="image" v-if="info && info._class === 'image'" :src="getImageURL(info)" />
 	<rs-image v-if="image" :image="image" />
 	<div v-if="!editing" class="description" v-html="description"/>
-	<div v-if="!editing && player.gm" class="note description" v-html="note"/>
+	<div v-if="!editing && player.gm && note" class="note description" v-html="note"/>
 	<div v-if="editing" class="description">
 		<textarea class="edit-description" v-model="editDescription"></textarea>
 		<textarea v-if="player.gm" class="edit-description" v-model="editNote"></textarea>

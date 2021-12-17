@@ -233,7 +233,14 @@
 		"data": function() {
 			var data = {};
 
+			data.activeMeeting = this.universe.index.meeting[this.universe.index.setting["setting:meeting"]];
+			if(this.viewingEntity && this.location && this.viewingEntity.location === this.location.id) {
+				data.hourClassing = "time-hour-" + this.universe.calendar.hour;
+			} else {
+				data.hourClassing = "";
+			}
 			data.generateLocationClassingMap = generateLocationClassingMap;
+			data.hourOfDay = this.universe.calendar.hour;
 			data.viewingEntity = null;
 			data.search_criteria = [];
 			// data.image = {};
@@ -2132,14 +2139,32 @@
 					});
 				}
 			},
+			"updateTimeOfDay": function() {
+				Vue.set(this, "hourOfDay", this.universe.calendar.hour);
+				if((!this.activeMeeting || this.activeMeeting.is_sky_visible === undefined || this.activeMeeting.is_sky_visible === null || this.activeMeeting.is_sky_visible === true) && (this.location.is_sky_visible === undefined || this.location.is_sky_visible === null || this.location.is_sky_visible === true) && this.viewingEntity && this.location && this.viewingEntity.location === this.location.id) {
+					Vue.set(this, "hourClassing", "time-hour-" + this.universe.calendar.hour);
+				} else {
+					Vue.set(this, "hourClassing", "");
+				}
+			},
 			"isVisibleTo": function(entity, object) {
 				return rsSystem.utility.isVisibleTo(this.universe, entity, object);
 			},
 			"isRendered": function(entity, object) {
-				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && (this.player.gm || (object.owned && object.owned[this.player.id]) || ((!object.is_position_hidden || this.isVisibleTo(entity, object))));
+				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && (this.player.gm || (object.owned && object.owned[this.player.id]) || ((!object.is_position_hidden || this.isVisibleTo(entity, object)) && (!object.is_marker || !object.must_know || rsSystem.utility.isKnownBy(entity, object))));
 			},
 			"update": function(source) {
+				console.log("Update Source: ", source);
 				var now = Date.now();
+				if(source) {
+					if(source.id === "setting:meeting") {
+						Vue.set(this, "activeMeeting", this.universe.index.meeting[source.value]);
+					} else if(source && source.id === "setting:time") {
+						setTimeout(() => {
+							this.updateTimeOfDay();
+						});
+					}
+				}
 				if(this.location && (!source || source.location === this.location.id || source.id === this.location.id || (this.viewingEntity && (source.id === this.viewingEntity.id || source.entity === this.viewingEntity.id)))) {
 					if((now - this.last) > UPDATESTEP) {
 						// console.log("Start Update: " + now);
@@ -2219,6 +2244,7 @@
 							// this.apply(this.image);
 						// }
 
+						this.updateTimeOfDay();
 					} else {
 						if(!this.delayed) {
 							this.delayed = setTimeout(() => {

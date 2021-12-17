@@ -76,19 +76,23 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("player:object:describe", function(event) {
 		var description = event.message.data.description,
+			note = event.message.data.note,
 			id = event.message.data.id,
 			entity,
 			object,
+			set,
 			x;
 
 		if(id && (object = universe.get(id)) && (event.player.gm || ((entity = universe.get(object.character) || universe.get(object.caster) || universe.get(object.user)) && entity.owned[event.player.id]))) {
 			// console.log(" [object:describe]>> ", event.message.data);
-			if(!object.is_singular) {
-				object.setValues({
-					"description": description
-				});
-			} else {
-				// TODO: Non-Editable Record
+			set = {
+				"description": description
+			};
+			if(event.player.gm && note !== undefined)  {
+				set.note = note;
+			}
+			if(event.player.gm || !object.is_singular) {
+				object.setValues(set);
 			}
 		} else {
 			// TODO: Security Event
