@@ -116,6 +116,23 @@ rsSystem.component("sysInfoGeneral", {
 								});
 							}
 						}
+						if(this.info.is_locked !== undefined && this.info.is_locked !== null) {
+							if(this.info.is_locked) {
+								this.controls.push({
+									"title": "Unlock",
+									"icon": "fas fa-lock rs-light-red",
+									"type": "button",
+									"action": "unlock"
+								});
+							} else {
+								this.controls.push({
+									"title": "Lock",
+									"icon": "fas fa-unlock rs-light-green",
+									"type": "button",
+									"action": "lock"
+								});
+							}
+						}
 						if(this.info.is_open !== undefined && this.info.is_open !== null) {
 							if(this.info.is_open) {
 								this.controls.push({
