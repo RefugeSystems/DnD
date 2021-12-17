@@ -293,7 +293,7 @@ rsSystem.component("sysInfoGeneral", {
 						// });
 						switch(this.info._class) {
 							case "location":
-								if(!this.info.is_locked || !this.info.is_closed) {
+								if(!this.info.is_locked || this.info.is_open) {
 									if(this.info.map) {
 										this.controls.push({
 											"title": "Pull up the map of this location",
@@ -346,7 +346,7 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 								}
-								if(entity && this.info.interior && (!this.info.is_locked || !this.info.is_closed || this.info.hp === 0) && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
+								if(entity && this.info.interior && (!this.info.is_locked || this.info.is_open || this.info.hp === 0) && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
 									this.controls.push({
 										"title": "Go to the interior map of " + rsSystem.utility.getKnownProperty(entity, this.info, "name"),
 										"icon": "fas fa-location-circle",
