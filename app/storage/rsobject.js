@@ -2105,7 +2105,7 @@ RSObject.checkCondition = function(from, op, to) {
 			break;
 			*/
 		case "=":
-			return from == to;
+			return from === to;
 			/*
 			if(!from && to) {
 				return false;
