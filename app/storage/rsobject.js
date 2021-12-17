@@ -2063,6 +2063,8 @@ RSObject.checkCondition = function(from, op, to) {
 			}
 			break;
 		case "<=":
+			return from <= to;
+			/*
 			if(!from && to) {
 				return true;
 			} else if(from && !to) {
@@ -2073,7 +2075,10 @@ RSObject.checkCondition = function(from, op, to) {
 				return from <= to;
 			}
 			break;
+			*/
 		case "<":
+			return from < to;
+			/*
 			if(!from && to) {
 				return true;
 			} else if(from && !to) {
@@ -2084,7 +2089,10 @@ RSObject.checkCondition = function(from, op, to) {
 				return from < to;
 			}
 			break;
+			*/
 		case "!=":
+			return from != to;
+			/*
 			if(!from && to) {
 				return true;
 			} else if(from && !to) {
@@ -2095,7 +2103,10 @@ RSObject.checkCondition = function(from, op, to) {
 				return from != to;
 			}
 			break;
+			*/
 		case "=":
+			return from == to;
+			/*
 			if(!from && to) {
 				return false;
 			} else if(from && !to) {
@@ -2106,7 +2117,10 @@ RSObject.checkCondition = function(from, op, to) {
 				return from == to;
 			}
 			break;
+			*/
 		case ">":
+			return from > to;
+			/*
 			if(!from && to) {
 				return false;
 			} else if(from && !to) {
@@ -2117,7 +2131,10 @@ RSObject.checkCondition = function(from, op, to) {
 				return from > to;
 			}
 			break;
+			*/
 		case ">=":
+			return from >= to;
+			/*
 			if(!from && to) {
 				return false;
 			} else if(from && !to) {
@@ -2128,6 +2145,7 @@ RSObject.checkCondition = function(from, op, to) {
 				return from >= to;
 			}
 			break;
+			*/
 		default:
 			throw new Error("Invalid conditional operation: " + op);
 	}
