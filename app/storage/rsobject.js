@@ -574,7 +574,7 @@ class RSObject {
 		}
 		
 		// this._involved = {};
-		var fields = this._manager.fieldIDs,
+		var fields = this._manager.fieldIDs,conditional,
 			inherit,
 			loading,
 			source,
@@ -747,6 +747,7 @@ class RSObject {
 			}
 			
 			for(x=0; x<this._conditionals.length; x++) {
+				conditional = this._conditionals[x];
 				for(i=0; i<this._manager.fieldIDs.length; i++) {
 					field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
 					/*
@@ -758,11 +759,11 @@ class RSObject {
 						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
 					}
 					*/
-					if(this._conditionals[x].adds && (loading = this._conditionals[x].adds[field.id])) {
+					if(conditional.adds && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
-					} else if(this._conditionals[x].subs && (loading = this._conditionals[x].adds[field.id])) {
+					} else if(conditional.subs && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
-					} else if(this._conditionals[x].sets && (loading = this._conditionals[x].adds[field.id])) {
+					} else if(conditional.sets && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
 					}
 				}
@@ -1740,7 +1741,9 @@ RSObject.addValues = function(a, b, type, op) {
 			}
 		}
 		switch(type) {
+			case "markdown":
 			case "string":
+			case "icon":
 				return a + " " + b;
 			case "integer":
 				return parseInt(a || 0) + parseInt(b || 0);
@@ -1877,6 +1880,7 @@ RSObject.subValues = function(a, b, type) {
 
 	if(typeof(a) === "undefined") {
 		switch(typeof(b)) {
+			case "markdown":
 			case "string":
 				return "";
 			case "integer":
@@ -1912,7 +1916,9 @@ RSObject.subValues = function(a, b, type) {
 		// console.log(" > A[" + typeof(a) + "]: " + a + " | B[" + typeof(b) + "]: " + b);
 
 		switch(type) {
+			case "markdown":
 			case "string":
+			case "icon":
 				return a.replace(b, "");
 			case "integer":
 			case "number":
