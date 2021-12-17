@@ -2151,7 +2151,7 @@
 				return rsSystem.utility.isVisibleTo(this.universe, entity, object);
 			},
 			"isRendered": function(entity, object) {
-				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && (this.player.gm || (object.owned && object.owned[this.player.id]) || ((!object.is_position_hidden || this.isVisibleTo(entity, object)) && (!object.is_marker || !object.must_know || rsSystem.utility.isKnownBy(entity, object))));
+				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && ((this.player.gm && this.storage.master_view === "master") || (object.owned && object.owned[this.player.id]) || ((!object.is_position_hidden || this.isVisibleTo(entity, object)) && ((this.player.gm && this.storage.master_view === "master") || !object.is_marker || !object.must_know || rsSystem.utility.isKnownBy(entity, object))));
 			},
 			"update": function(source) {
 				console.log("Update Source: ", source);
