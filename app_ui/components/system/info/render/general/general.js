@@ -75,360 +75,362 @@ rsSystem.component("sysInfoGeneral", {
 			}
 		},
 		"populateControls": function() {
-			var entity = this.playerCharacter || this.getPlayerCharacter(),
-				character = this.info.character || this.info.caster || this.info.user, 
-				object = this.info,
-				loading;
+			setTimeout(() => {
+				var entity = this.playerCharacter || this.getPlayerCharacter(),
+					character = this.info.character || this.info.caster || this.info.user, 
+					object = this.info,
+					loading;
 
-			this.controls.splice(0);
-			if(!this.info.is_preview && this.info._class) {
-				if(this.player) {
-					if(this.player.gm) {
-						if(this.info.obscured) {
-							this.controls.push({
-								"title": "Unobscure object",
-								"icon": "fas fa-eye",
-								"type": "button",
-								"action": "unobscure"
-							});
-						} else {
-							this.controls.push({
-								"title": "Obscure object",
-								"icon": "fas fa-eye-slash",
-								"type": "button",
-								"action": "obscure"
-							});
-						}
-						if(this.info.is_active !== undefined && this.info.is_active !== null) {
-							if(this.info.is_active) {
+				this.controls.splice(0);
+				if(!this.info.is_preview && this.info._class) {
+					if(this.player) {
+						if(this.player.gm) {
+							if(this.info.obscured) {
 								this.controls.push({
-									"title": "Deactivate",
-									"icon": "fad fa-toggle-off rs-red rs-secondary-white rs-secondary-solid",
+									"title": "Unobscure object",
+									"icon": "fas fa-eye",
 									"type": "button",
-									"action": "deactivate"
+									"action": "unobscure"
 								});
 							} else {
 								this.controls.push({
-									"title": "Activate",
-									"icon": "fad fa-toggle-on rs-secondary-green rs-secondary-solid",
+									"title": "Obscure object",
+									"icon": "fas fa-eye-slash",
 									"type": "button",
-									"action": "activate"
+									"action": "obscure"
 								});
 							}
-						}
-						if(this.info.is_locked !== undefined && this.info.is_locked !== null) {
-							if(this.info.is_locked) {
-								this.controls.push({
-									"title": "Unlock",
-									"icon": "fas fa-lock rs-light-red",
-									"type": "button",
-									"action": "unlock"
-								});
-							} else {
-								this.controls.push({
-									"title": "Lock",
-									"icon": "fas fa-unlock rs-light-green",
-									"type": "button",
-									"action": "lock"
-								});
-							}
-						}
-						if(this.info.is_open !== undefined && this.info.is_open !== null) {
-							if(this.info.is_open) {
-								this.controls.push({
-									"title": "Close",
-									"icon": "fa-solid fa-door-closed",
-									"type": "button",
-									"action": "closeopennable"
-								});
-							} else {
-								this.controls.push({
-									"title": "Open",
-									"icon": "fa-solid fa-door-open",
-									"type": "button",
-									"action": "openopennable"
-								});
-							}
-						}
-						if(this.info.is_powered !== undefined && this.info.is_powered !== null) {
-							if(this.info.is_powered) {
-								this.controls.push({
-									"title": "Unpower",
-									"icon": "fa-thin fa-bolt rs-light-red",
-									"type": "button",
-									"action": "unpower"
-								});
-							} else {
-								this.controls.push({
-									"title": "Power",
-									"icon": "fa-solid fa-bolt rs-light-green",
-									"type": "button",
-									"action": "power"
-								});
-							}
-						}
-						if(this.info.must_know) {
-							this.controls.push({
-								"title": "Public Knowledge",
-								"icon": "fa-solid fa-cloud-slash",
-								"type": "button",
-								"action": "public"
-							});
-						} else {
-							this.controls.push({
-								"title": "Must be known",
-								"icon": "fa-solid fa-cloud",
-								"type": "button",
-								"action": "private"
-							});
-						}
-						// if(this.info.must_know && this.info.is_position_hidden !== undefined && this.info.is_position_hidden !== null) {
-						if(this.info.is_position_hidden) {
-							this.controls.push({
-								"title": "Reveal Position",
-								"icon": "fa-solid fa-location-crosshairs",
-								"type": "button",
-								"action": "showposition"
-							});
-						} else {
-							this.controls.push({
-								"title": "Hide Position",
-								"icon": "fa-solid fa-location-crosshairs-slash",
-								"type": "button",
-								"action": "hideposition"
-							});
-						}
-						// }
-						if(this.info._class === "entity") {
-							if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
-								this.controls.push({
-									"title": "Assume entity in Overview",
-									"icon": "game-icon game-icon-console-controller",
-									"type": "button",
-									"action": "assume"
-								});
-							}
-							if(this.info.is_npc || this.info.is_minion) {
-								if(this.info.is_hostile) {
+							if(this.info.is_active !== undefined && this.info.is_active !== null) {
+								if(this.info.is_active) {
 									this.controls.push({
-										"title": "Declare Entity as no longer Hostile",
-										"icon": "fas fa-smile-beam",
+										"title": "Deactivate",
+										"icon": "fad fa-toggle-off rs-red rs-secondary-white rs-secondary-solid",
 										"type": "button",
-										"action": "nonhostile"
+										"action": "deactivate"
 									});
 								} else {
 									this.controls.push({
-										"title": "Declare Entity as Hostile",
-										"icon": "fas fa-angry",
+										"title": "Activate",
+										"icon": "fad fa-toggle-on rs-secondary-green rs-secondary-solid",
 										"type": "button",
-										"action": "hostile"
+										"action": "activate"
 									});
 								}
 							}
-							if(this.info.is_chest || this.info.is_shop) {
+							if(this.info.is_locked !== undefined && this.info.is_locked !== null) {
 								if(this.info.is_locked) {
 									this.controls.push({
-										"title": "Unlock Entity",
-										"icon": "fas fa-unlock",
+										"title": "Unlock",
+										"icon": "fas fa-lock rs-light-red",
 										"type": "button",
 										"action": "unlock"
 									});
 								} else {
 									this.controls.push({
-										"title": "Lock Entity",
-										"icon": "fas fa-lock",
+										"title": "Lock",
+										"icon": "fas fa-unlock rs-light-green",
 										"type": "button",
 										"action": "lock"
 									});
 								}
 							}
-							if(this.info.is_minion || this.info.is_npc || rsSystem.utility.isEmpty(this.info.owned)) {
-								loading = {
-									"title": "Color Code",
-									"icon": "fas fa-palette",
-									"action": "color",
-									"property": "color_flag",
-									"type": "select",
-									"_value": this.info.color_flag,
-									"options": ["", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
-								};
-								if(loading.options.indexOf[loading._value] === -1) {
-									loading._missing = loading._value;
+							if(this.info.is_open !== undefined && this.info.is_open !== null) {
+								if(this.info.is_open) {
+									this.controls.push({
+										"title": "Close",
+										"icon": "fa-solid fa-door-closed",
+										"type": "button",
+										"action": "closeopennable"
+									});
+								} else {
+									this.controls.push({
+										"title": "Open",
+										"icon": "fa-solid fa-door-open",
+										"type": "button",
+										"action": "openopennable"
+									});
 								}
-								this.controls.push(loading);
 							}
-							switch(this.info._class) {
-								case "entity":
-									if(this.info.hp === 0 && this.info.types.indexOf("type:dead") === -1) {
-										this.controls.push({
-											"title": "Declare Dead",
-											"icon": "fas fa-skull",
-											"type": "button",
-											"action": "nowdead"
-										});
-									} else if(this.info.hp !== 0 && this.info.types.indexOf("type:dead") !== -1) {
-										this.controls.push({
-											"title": "Declare Revived",
-											"icon": "game-icon game-icon-rod-of-asclepius",
-											"type": "button",
-											"action": "notdead"
-										});
-									}
+							if(this.info.is_powered !== undefined && this.info.is_powered !== null) {
+								if(this.info.is_powered) {
+									this.controls.push({
+										"title": "Unpower",
+										"icon": "fa-thin fa-bolt rs-light-red",
+										"type": "button",
+										"action": "unpower"
+									});
+								} else {
+									this.controls.push({
+										"title": "Power",
+										"icon": "fa-solid fa-bolt rs-light-green",
+										"type": "button",
+										"action": "power"
+									});
+								}
 							}
-						}
-					// } else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id] && this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
-					// 	this.controls.push({
-					// 		"title": "Assume Entity in Overview",
-					// 		"icon": "game-icon game-icon-console-controller",
-					// 		"type": "button",
-					// 		"action": "assume"
-					// 	});
-					}
-					if(entity) {
-						// this.controls.push({
-						// 	"title": "Create knowledge for this " + entity.name,
-						// 	"icon": "fas fa-brain",
-						// 	"type": "button",
-						// 	"action": "knowing"
-						// });
-						switch(this.info._class) {
-							case "location":
-								if(!this.info.is_locked || this.info.is_open) {
-									if(this.info.map) {
-										this.controls.push({
-											"title": "Pull up the map of this location",
-											"icon": "fas fa-location-circle",
-											"type": "button",
-											"action": "goto"
-										});
-									} else if(this.info.links_to) {
-										this.controls.push({
-											"title": "Pull up the map of this location",
-											"icon": "fas fa-location-circle",
-											"type": "button",
-											"action": "gotolink"
-										});
-									}
-								}
-								break;
-							case "effect":
-								if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
+							if(this.info.must_know) {
+								this.controls.push({
+									"title": "Public Knowledge",
+									"icon": "fa-solid fa-cloud-slash",
+									"type": "button",
+									"action": "public"
+								});
+							} else {
+								this.controls.push({
+									"title": "Must be known",
+									"icon": "fa-solid fa-cloud",
+									"type": "button",
+									"action": "private"
+								});
+							}
+							// if(this.info.must_know && this.info.is_position_hidden !== undefined && this.info.is_position_hidden !== null) {
+							if(this.info.is_position_hidden) {
+								this.controls.push({
+									"title": "Reveal Position",
+									"icon": "fa-solid fa-location-crosshairs",
+									"type": "button",
+									"action": "showposition"
+								});
+							} else {
+								this.controls.push({
+									"title": "Hide Position",
+									"icon": "fa-solid fa-location-crosshairs-slash",
+									"type": "button",
+									"action": "hideposition"
+								});
+							}
+							// }
+							if(this.info._class === "entity") {
+								if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 									this.controls.push({
-										"title": "Revoke effect " + this.info.name + " from " + entity.name,
-										"icon": "fas fa-ban",
+										"title": "Assume entity in Overview",
+										"icon": "game-icon game-icon-console-controller",
 										"type": "button",
-										"action": "revoke"
+										"action": "assume"
 									});
 								}
-								break;
-							case "entity":
-								if(this.info.owned && this.info.owned[this.player.id]) {
-									this.controls.push({
-										"title": "Open inventory of " + entity.name,
-										"icon": "fas fa-backpack",
-										"type": "button",
-										"action": "inventory"
-									});
-									if((this.info.spells_known && this.info.spells_known.length) || !rsSystem.utility.isEmpty(this.info.spell_slot_max)) {
+								if(this.info.is_npc || this.info.is_minion) {
+									if(this.info.is_hostile) {
 										this.controls.push({
-											"title": "Open spellbook for " + entity.name,
-											"icon": "fas fa-book-spells",
+											"title": "Declare Entity as no longer Hostile",
+											"icon": "fas fa-smile-beam",
 											"type": "button",
-											"action": "spellbook"
-										});
-									}
-									if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
-										this.controls.push({
-											"title": "Play as this character",
-											"icon": "fas fa-user",
-											"type": "button",
-											"action": "assume"
-										});
-									}
-								}
-								if(entity && this.info.interior && (!this.info.is_locked || this.info.is_open || this.info.hp === 0) && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
-									this.controls.push({
-										"title": "Go to the interior map of " + rsSystem.utility.getKnownProperty(entity, this.info, "name"),
-										"icon": "fas fa-location-circle",
-										"type": "button",
-										"action": "interior"
-									});
-								}
-								break;
-							case "item":
-								if(entity.inventory.indexOf(this.info.id) !== -1) {
-									if(entity.equipped.indexOf(object.id) === -1) {
-										this.controls.push({
-											"title": "Equip Item to " + entity.name,
-											"icon": "game-icon game-icon-sword-brandish",
-											"type": "button",
-											"action": "equip"
+											"action": "nonhostile"
 										});
 									} else {
 										this.controls.push({
-											"title": "Unequip Item from " + entity.name,
-											"icon": "game-icon game-icon-drop-weapon",
+											"title": "Declare Entity as Hostile",
+											"icon": "fas fa-angry",
 											"type": "button",
-											"action": "unequip"
+											"action": "hostile"
 										});
-										if(object.melee || object.ranged || object.thrown) {
-											if(entity.main_weapon === object.id) {
-												this.controls.push({
-													"title": "Remove as Main Hand for " + entity.name,
-													"icon": "fal fa-hand-rock rot180",
-													"type": "button",
-													"action": "unmainhand"
-												});
-											} else {
-												this.controls.push({
-													"title": "Equip as Main Hand for " + entity.name,
-													"icon": "fas fa-hand-rock",
-													"type": "button",
-													"action": "mainhand"
-												});
+									}
+								}
+								if(this.info.is_chest || this.info.is_shop) {
+									if(this.info.is_locked) {
+										this.controls.push({
+											"title": "Unlock Entity",
+											"icon": "fas fa-unlock",
+											"type": "button",
+											"action": "unlock"
+										});
+									} else {
+										this.controls.push({
+											"title": "Lock Entity",
+											"icon": "fas fa-lock",
+											"type": "button",
+											"action": "lock"
+										});
+									}
+								}
+								if(this.info.is_minion || this.info.is_npc || rsSystem.utility.isEmpty(this.info.owned)) {
+									loading = {
+										"title": "Color Code",
+										"icon": "fas fa-palette",
+										"action": "color",
+										"property": "color_flag",
+										"type": "select",
+										"_value": this.info.color_flag,
+										"options": ["", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
+									};
+									if(loading.options.indexOf[loading._value] === -1) {
+										loading._missing = loading._value;
+									}
+									this.controls.push(loading);
+								}
+								switch(this.info._class) {
+									case "entity":
+										if(this.info.hp === 0 && this.info.types.indexOf("type:dead") === -1) {
+											this.controls.push({
+												"title": "Declare Dead",
+												"icon": "fas fa-skull",
+												"type": "button",
+												"action": "nowdead"
+											});
+										} else if(this.info.hp !== 0 && this.info.types.indexOf("type:dead") !== -1) {
+											this.controls.push({
+												"title": "Declare Revived",
+												"icon": "game-icon game-icon-rod-of-asclepius",
+												"type": "button",
+												"action": "notdead"
+											});
+										}
+								}
+							}
+						// } else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id] && this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
+						// 	this.controls.push({
+						// 		"title": "Assume Entity in Overview",
+						// 		"icon": "game-icon game-icon-console-controller",
+						// 		"type": "button",
+						// 		"action": "assume"
+						// 	});
+						}
+						if(entity) {
+							// this.controls.push({
+							// 	"title": "Create knowledge for this " + entity.name,
+							// 	"icon": "fas fa-brain",
+							// 	"type": "button",
+							// 	"action": "knowing"
+							// });
+							switch(this.info._class) {
+								case "location":
+									if(!this.info.is_locked || this.info.is_open) {
+										if(this.info.map) {
+											this.controls.push({
+												"title": "Pull up the map of this location",
+												"icon": "fas fa-location-circle",
+												"type": "button",
+												"action": "goto"
+											});
+										} else if(this.info.links_to) {
+											this.controls.push({
+												"title": "Pull up the map of this location",
+												"icon": "fas fa-location-circle",
+												"type": "button",
+												"action": "gotolink"
+											});
+										}
+									}
+									break;
+								case "effect":
+									if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
+										this.controls.push({
+											"title": "Revoke effect " + this.info.name + " from " + entity.name,
+											"icon": "fas fa-ban",
+											"type": "button",
+											"action": "revoke"
+										});
+									}
+									break;
+								case "entity":
+									if(this.info.owned && this.info.owned[this.player.id]) {
+										this.controls.push({
+											"title": "Open inventory of " + entity.name,
+											"icon": "fas fa-backpack",
+											"type": "button",
+											"action": "inventory"
+										});
+										if((this.info.spells_known && this.info.spells_known.length) || !rsSystem.utility.isEmpty(this.info.spell_slot_max)) {
+											this.controls.push({
+												"title": "Open spellbook for " + entity.name,
+												"icon": "fas fa-book-spells",
+												"type": "button",
+												"action": "spellbook"
+											});
+										}
+										if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
+											this.controls.push({
+												"title": "Play as this character",
+												"icon": "fas fa-user",
+												"type": "button",
+												"action": "assume"
+											});
+										}
+									}
+									if(entity && this.info.interior && (!this.info.is_locked || this.info.is_open || this.info.hp === 0) && rsSystem.utility.isValid(this.universe.index.location[this.info.interior]) && rsSystem.utility.isKnownBy(entity, this.info)) {
+										this.controls.push({
+											"title": "Go to the interior map of " + rsSystem.utility.getKnownProperty(entity, this.info, "name"),
+											"icon": "fas fa-location-circle",
+											"type": "button",
+											"action": "interior"
+										});
+									}
+									break;
+								case "item":
+									if(entity.inventory.indexOf(this.info.id) !== -1) {
+										if(entity.equipped.indexOf(object.id) === -1) {
+											this.controls.push({
+												"title": "Equip Item to " + entity.name,
+												"icon": "game-icon game-icon-sword-brandish",
+												"type": "button",
+												"action": "equip"
+											});
+										} else {
+											this.controls.push({
+												"title": "Unequip Item from " + entity.name,
+												"icon": "game-icon game-icon-drop-weapon",
+												"type": "button",
+												"action": "unequip"
+											});
+											if(object.melee || object.ranged || object.thrown) {
+												if(entity.main_weapon === object.id) {
+													this.controls.push({
+														"title": "Remove as Main Hand for " + entity.name,
+														"icon": "fal fa-hand-rock rot180",
+														"type": "button",
+														"action": "unmainhand"
+													});
+												} else {
+													this.controls.push({
+														"title": "Equip as Main Hand for " + entity.name,
+														"icon": "fas fa-hand-rock",
+														"type": "button",
+														"action": "mainhand"
+													});
+												}
 											}
 										}
 									}
-								}
-								if(this.info.consume) {
+									if(this.info.consume) {
+										this.controls.push({
+											"title": this.info.consume_hint || ("Consume " + this.info.name),
+											"icon": this.info.consume_icon || ("fa-solid fa-drumstick-bite"),
+											"type": "button",
+											"action": "consume"
+										});
+									}
 									this.controls.push({
-										"title": this.info.consume_hint || ("Consume " + this.info.name),
-										"icon": this.info.consume_icon || ("fa-solid fa-drumstick-bite"),
+										"title": "Give item to another creature near " + entity.name,
+										"icon": "fas fa-people-carry",
 										"type": "button",
-										"action": "consume"
+										"action": "give"
 									});
-								}
-								this.controls.push({
-									"title": "Give item to another creature near " + entity.name,
-									"icon": "fas fa-people-carry",
-									"type": "button",
-									"action": "give"
-								});
-								this.controls.push({
-									"title": "Drop item from " + entity.name,
-									"icon": "fas fa-arrow-alt-to-bottom",
-									"type": "button",
-									"action": "drop"
-								});
-								break;
+									this.controls.push({
+										"title": "Drop item from " + entity.name,
+										"icon": "fas fa-arrow-alt-to-bottom",
+										"type": "button",
+										"action": "drop"
+									});
+									break;
+							}
+						}
+						this.controls.push({
+							"title": "Create a personal knowledge entry for this",
+							"icon": "fa-solid fa-thought-bubble",
+							"type": "button",
+							"action": "knowing"
+						});
+						if(this.player.gm || (character && !this.info.is_singular)) {
+							this.controls.push({
+								"title": "Edit description for " + this.info.name,
+								"icon": "fas fa-edit",
+								"type": "button",
+								"action": "edit-description"
+							});
 						}
 					}
-					this.controls.push({
-						"title": "Create a personal knowledge entry for this",
-						"icon": "fa-solid fa-thought-bubble",
-						"type": "button",
-						"action": "knowing"
-					});
-					if(this.player.gm || (character && !this.info.is_singular)) {
-						this.controls.push({
-							"title": "Edit description for " + this.info.name,
-							"icon": "fas fa-edit",
-							"type": "button",
-							"action": "edit-description"
-						});
-					}
 				}
-			}
+			});
 		},
 		"submitDescription": function() {
 			this.process("send-description");
