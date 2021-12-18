@@ -566,6 +566,7 @@ class RSObject {
 	/**
 	 * Calculate and set the `_calculated` property values for this object.
 	 * @method updateFieldValues
+	 * @param {Object} origins
 	 * @param {Boolean} suppress The updated event, typically in lieu of a smaller
 	 * 		update such as a delta.
 	 */
@@ -913,7 +914,7 @@ class RSObject {
 
 		if(!suppress && this.changed()) {
 			for(i=0; i<this._manager.fieldIDs.length; i++) {
-				field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
+				field = this._manager.fieldIDs[i];
 				switch(typeof(this[field])) {
 					case "object":
 						if(this[field] === null) {
@@ -941,7 +942,7 @@ class RSObject {
 			i;
 
 		for(i=0; i<this._manager.fieldIDs.length; i++) {
-			field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
+			field = this._manager.fieldIDs[i];
 			if(!_.isEqual(this._previous[field], this[field])) {
 			// if(!RSObject.isEqual(this._previous[field], this[field])) {
 				return true;
@@ -1668,14 +1669,6 @@ class RSObject {
 				}
 			}
 		}
-		
-		// Name added last for inheritted names
-		if(this.name) {
-			this._search += " ::: " + this.name.toLowerCase();
-		}
-		if(this._data.name) {
-			this._search += " ::: " + this._data.name.toLowerCase();
-		}
 
 		json.id = this.id;
 		json._class = this._class;
@@ -1687,6 +1680,7 @@ class RSObject {
 		if(include) {
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
+			json._previous = this._previous;
 			json._formula = this._formula;
 			json._calculated = calculated;
 			json._calcRef = this._calcRef;

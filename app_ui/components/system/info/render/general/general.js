@@ -122,14 +122,14 @@ rsSystem.component("sysInfoGeneral", {
 								if(this.info.is_locked) {
 									this.controls.push({
 										"title": "Unlock",
-										"icon": "fas fa-lock rs-light-red",
+										"icon": "fas fa-lock",
 										"type": "button",
 										"action": "unlock"
 									});
 								} else {
 									this.controls.push({
 										"title": "Lock",
-										"icon": "fas fa-unlock rs-light-green",
+										"icon": "fas fa-unlock",
 										"type": "button",
 										"action": "lock"
 									});
@@ -323,7 +323,7 @@ rsSystem.component("sysInfoGeneral", {
 									} else {
 										this.controls.push({
 											"title": "Set " + name + " as a marker",
-											"icon": "fas fa-map-marker-slash",
+											"icon": "fas fa-map-marker-alt",
 											"type": "button",
 											"action": "ismarker"
 										});
