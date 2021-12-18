@@ -313,6 +313,21 @@ rsSystem.component("sysInfoGeneral", {
 											});
 										}
 									}
+									if(this.info.is_marker) {
+										this.controls.push({
+											"title": "Set " + name + " as not a marker",
+											"icon": "fas fa-map-marker-alt-slash",
+											"type": "button",
+											"action": "notmarker"
+										});
+									} else {
+										this.controls.push({
+											"title": "Set " + name + " as a marker",
+											"icon": "fas fa-map-marker-slash",
+											"type": "button",
+											"action": "ismarker"
+										});
+									}
 									break;
 								case "effect":
 									if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
@@ -484,6 +499,20 @@ rsSystem.component("sysInfoGeneral", {
 					this.universe.send("master:quick:set", {
 						"object": object.id,
 						"field": "is_locked",
+						"value": false
+					});
+					break;
+				case "ismarker":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_marker",
+						"value": true
+					});
+					break;
+				case "notmarker":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_marker",
 						"value": false
 					});
 					break;

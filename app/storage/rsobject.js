@@ -1632,7 +1632,10 @@ class RSObject {
 		
 		// Name added last for inheritted names
 		if(this.name) {
-			this._search += this.name.toLowerCase();
+			this._search += " ::: " + this.name.toLowerCase();
+		}
+		if(this._data.name) {
+			this._search += " ::: " + this._data.name.toLowerCase();
 		}
 
 		json.id = this.id;
