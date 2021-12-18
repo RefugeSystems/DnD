@@ -364,8 +364,30 @@ rsSystem.component("rsTable", {
 						if(buffer <= 20) {
 							value = buffer + " Rounds (" + value + ")";
 						}
-						break;
+						return value;
+					case "datetime":
+						if(field.type === "gametime") {
+							return this.universe.calendar.toDisplay(value, true, !!field.attribute.long_format);
+						} else {
+							buffer = new Date(value);
+							return buffer.toLocaleDateString() + " " + buffer.toLocaleTimeString();
+						}
+					case "time":
+						if(field.type === "gametime") {
+							return this.universe.calendar.toDisplay(value, true, !!field.attribute.long_format);
+						} else {
+							buffer = new Date(value);
+							return buffer.toLocaleTimeString();
+						}
 				}
+			}
+
+			switch(field.type) {
+				case "gametime":
+					return this.universe.calendar.toDisplay(value, true, field.attribute?!!field.attribute.long_format:false);
+				case "date":
+					buffer = new Date(value);
+					return buffer.toLocaleDateString();
 			}
 
 			return value;
