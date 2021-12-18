@@ -2154,7 +2154,6 @@
 				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && ((this.player.gm && this.storage.master_view === "master") || (object.owned && this.viewingEntity && rsSystem.utility.hasCommonKey(this.viewingEntity.owned, object.owned)) || ((!object.is_position_hidden || this.isVisibleTo(entity, object)) && ((this.player.gm && this.storage.master_view === "master") || !object.is_marker || !object.must_know || rsSystem.utility.isKnownBy(entity, object))));
 			},
 			"update": function(source) {
-				console.log("Update Source: ", source);
 				var now = Date.now();
 				if(source) {
 					if(source.id === "setting:meeting") {
