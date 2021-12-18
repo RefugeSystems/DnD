@@ -2141,7 +2141,8 @@
 			},
 			"updateTimeOfDay": function() {
 				Vue.set(this, "hourOfDay", this.universe.calendar.hour);
-				if((!this.activeMeeting || this.activeMeeting.is_sky_visible === undefined || this.activeMeeting.is_sky_visible === null || this.activeMeeting.is_sky_visible === true) && (this.location.is_sky_visible === undefined || this.location.is_sky_visible === null || this.location.is_sky_visible === true) && this.viewingEntity && this.location && this.viewingEntity.location === this.location.id) {
+				// if((!this.activeMeeting || this.activeMeeting.is_sky_visible === undefined || this.activeMeeting.is_sky_visible === null || this.activeMeeting.is_sky_visible === true) && (this.location.is_sky_visible === undefined || this.location.is_sky_visible === null || this.location.is_sky_visible === true) && this.viewingEntity && this.location && this.viewingEntity.location === this.location.id) {
+				if((!this.activeMeeting || this.activeMeeting.is_sky_visible === undefined || this.activeMeeting.is_sky_visible === null || this.activeMeeting.is_sky_visible === true) && (this.location.is_sky_visible === undefined || this.location.is_sky_visible === null || this.location.is_sky_visible === true)) {
 					Vue.set(this, "hourClassing", "time-hour-" + this.universe.calendar.hour);
 				} else {
 					Vue.set(this, "hourClassing", "");

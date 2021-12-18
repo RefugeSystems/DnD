@@ -6,9 +6,6 @@
  * @param {ClassManager} manager
  * @param {Object} details
  */
-
-const universe = require("../api/v1/universe");
-
 var valid = new RegExp("^[a-z][a-z0-9_]+:[a-z0-9:_]+$");
 
 /**
@@ -41,6 +38,7 @@ var fieldHasValue = function(value) {
 	return true;
 };
 
+var _ = require("lodash");
 require("../extensions/array");
 
 class RSObject {
@@ -122,6 +120,13 @@ class RSObject {
 		 * @type Object
 		 */
 		this._involved = {};
+		/**
+		 * Maps the previous field values from the last time this object was determined
+		 * to have changed. This is used for noise reduction in update events.
+		 * @propery _involved
+		 * @type Object
+		 */
+		this._previous = {};
 		/**
 		 * 
 		 * @property updated
@@ -906,9 +911,43 @@ class RSObject {
 		// console.log("Updated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushUpdated(this.id);
 
-		if(!suppress) {
+		if(!suppress && this.changed()) {
+			for(i=0; i<this._manager.fieldIDs.length; i++) {
+				field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
+				switch(typeof(this[field])) {
+					case "object":
+						if(this[field] === null) {
+							this._previous[field] = null;
+						} else {
+							this._previous[field] = RSObject.copyObjectValue(this[field]);
+						}
+						break;
+					default:
+						this._previous[field] = this[field];
+						break;
+				}
+			}
 			this._universe.emit("object-updated", this);
 		}
+	}
+
+	/**
+	 * 
+	 * @method changed
+	 * @return {Boolean}
+	 */
+	changed() {
+		var field,
+			i;
+
+		for(i=0; i<this._manager.fieldIDs.length; i++) {
+			field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
+			if(!_.isEqual(this._previous[field], this[field])) {
+			// if(!RSObject.isEqual(this._previous[field], this[field])) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -2158,6 +2197,56 @@ RSObject.checkCondition = function(from, op, to) {
 		default:
 			throw new Error("Invalid conditional operation: " + op);
 	}
+};
+
+/**
+ * 
+ * @method isEqual
+ * @static
+ * @param a 
+ * @param b
+ * @return {Boolean} 
+ */
+RSObject.isEqual = function(a, b) {
+	var type,
+		keys,
+		i;
+
+	if(a === b) {
+		return true;
+	}
+	if( (!a && b) || (!b && a) ) {
+		return false;
+	}
+	
+	if((type = typeof(a)) !== typeof(b)) {
+		return false;
+	}
+
+	if(a && b && type === "object") {
+		keys = Object.keys(a);
+		for(i=0; i<keys.length; i++) {
+			if(!RSObject.isEqual(a[keys[i]], b[keys[i]])) {
+				return false;
+			}
+		}
+	} else {
+		// All other cases should have been handled by the opening "===" by this point
+		return false;
+	}
+
+	return true;
+};
+
+/**
+ * 
+ * @method copyObjectValue
+ * @static
+ * @param {Object} object 
+ * @returns {Object}
+ */
+RSObject.copyObjectValue = function(object) {
+	return JSON.parse(JSON.stringify(object));
 };
 
 module.exports = RSObject;

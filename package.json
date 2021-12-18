@@ -35,6 +35,7 @@
 		"express": "^4.17.1",
 		"hammerjs": "^2.0.8",
 		"jquery": "^3.6.0",
+		"lodash": "^4.17.21",
 		"parse-data-url": "^4.0.1",
 		"passport": "^0.4.1",
 		"passport-bnet": "^2.0.0",
