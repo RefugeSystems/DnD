@@ -342,6 +342,7 @@ module.exports.initialize = function(universe) {
 		}
 
 		for(i=0; i<targets.length; i++) {
+			target = targets[i];
 			if(attacks && typeof(attacks[target.id]) !== "undefined") {
 				atk = attacks[target.id];
 			} else {

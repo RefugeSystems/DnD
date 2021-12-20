@@ -1191,9 +1191,49 @@ class RSUniverse extends EventEmitter {
 
 		return destination;
 	}
+
+	/**
+	 * Transcribe into an array ensuring that the IDs are only moved into the array once.
+	 * @method transcribeUniquely
+	 * @param {Array} source 
+	 * @param {Array} [destination]
+	 * @param {String} [classificaiton]
+	 * @return {Array} The destination parameter or a newly instantiated array
+	 * 		if that parameter was omited.
+	 */
+	transcribeUniquely(source, destination = [], classificaiton, filter) {
+		filter = (filter || "").toLowerCase();
+		var unique = {},
+			buffer,
+			i;
+
+		if(classificaiton && this.index[classificaiton]) {
+			for(i=0; i<source.length; i++) {
+				if(!unique[source[i]]) { // Save a cycle if possible
+					buffer = this.index[classificaiton][source[i]];
+					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+						unique[buffer.id] = true;
+						destination.push(buffer);
+					}
+				}
+			}
+		} else {
+			for(i=0; i<source.length; i++) {
+				if(!unique[source[i]]) { // Save a cycle if possible
+					buffer = this.getObject(source[i]);
+					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+						unique[buffer.id] = true;
+						destination.push(buffer);
+					}
+				}
+			}
+		}
+
+		return destination;
+	}
 	
 	checkVersion() {
-		if(this.version != rsSystem.version) {
+		if(!this.serviceWorkerIssues && !rsSystem.options.suppress_update_warning && this.version != rsSystem.version) {
 			var ui = rsSystem.version.split("."),
 				app = this.version.split(".");
 			
@@ -1242,6 +1282,11 @@ class RSUniverse extends EventEmitter {
 					}
 				});
 			} else {
+				this.serviceWorkerIssues = true;
+				// Not currently invoke this as this tends to happen when the page is ignored for awhile currently, the ignoring/timeout is expected
+				// and the control warning is aimed at when the user is actively trying to update. However if the page has been active for more than
+				// a day AND this issue comes up, the warning isprobably relevent.
+				//rsSystem.controls.serviceWorkerFault();
 				console.warn("Issues with Service Worker");
 			}
 		}

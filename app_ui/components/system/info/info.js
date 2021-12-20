@@ -91,7 +91,7 @@
 				var related = [];
 
 				if(this.main && this.info && this.main.knowledge_matrix && this.main.knowledge_matrix[this.info.id]) {
-					this.universe.transcribeInto(this.main.knowledge_matrix[this.info.id], related, "knowledge");
+					this.universe.transcribeUniquely(this.main.knowledge_matrix[this.info.id], related, "knowledge");
 				}
 
 				return related;

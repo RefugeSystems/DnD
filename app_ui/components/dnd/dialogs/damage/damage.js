@@ -883,6 +883,7 @@ rsSystem.component("dndDialogDamage", {
 					}
 
 					if(this.details.action === "channel:use" || this.isEmpty(event.damage)) {
+						console.log("Use Event: ", _p(event));
 						this.universe.send("channel:use", event);
 					} else {
 						if(this.channel && this.channel._class === "spell") {
@@ -909,6 +910,7 @@ rsSystem.component("dndDialogDamage", {
 				}
 
 				if(this.details.action === "channel:use" || this.isEmpty(sending.damage)) {
+					console.log("Use Send: ", _p(sending));
 					this.universe.send("channel:use", sending);
 				} else {
 					if(this.channel && this.channel._class === "spell") {

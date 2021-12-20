@@ -76,7 +76,6 @@ module.exports.initialize = function(universe) {
 								broad = check;
 							}
 						}
-						
 					}
 				}
 				combat.sendDamages(source, targets, channel, damage, broad, damage_checks);

@@ -17,17 +17,36 @@
 		}
 	};
 	
+	/**
+	 * 
+	 * @event app-update
+	 * @for rsSystem
+	 */
 	rsSystem.EventBus.$on("app-update", function() {
 		setTimeout(function() {
-			navigator.serviceWorker.controller.postMessage({
-				"action": "update"
-			});
-			// TODO: Stream-line this for better effect, or give a notification to complete by refreshing
-			//    reload doesn't seem to be availabe in the service worker?
-			setTimeout(function() {
-				location.reload();
-			}, 1000);
+			if(navigator.serviceWorker) {
+				navigator.serviceWorker.controller.postMessage({
+					"action": "update"
+				});
+				// TODO: Stream-line this for better effect, or give a notification to complete by refreshing
+				//    reload doesn't seem to be availabe in the service worker?
+				setTimeout(function() {
+					location.reload();
+				}, 1000);
+			} else {
+				rsSystem.controls.serviceWorkerFault();
+			}
 		}, 0);
+	});
+
+	/**
+	 * 
+	 * @event app-update:ignore
+	 * @for rsSystem
+	 */
+	rsSystem.EventBus.$on("app-update:ignore", function() {
+		rsSystem.options.suppress_update_warning = true;
+		rsSystem.EventBus.$emit("dialog:close");
 	});
 })();
 
