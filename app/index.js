@@ -34,6 +34,7 @@ var configuration = require("a-configuration"),
 // Setup basic defaults
 EventEmitter.defaultMaxListeners = 50;
 
+configuration.server.initialize_time = start;
 startup.configuration = configuration;
 startup.RSDatabase = RSDatabase;
 startup.RSObject = RSObject;

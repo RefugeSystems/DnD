@@ -667,10 +667,18 @@ module.exports = function(universe) {
 	 */
 	var trackUpdates = function(changing) {
 		setTimeout(function() {
+			var cascade = handler.retrieve(changing.queue[changing.index++]),
+				timing;
+
 			if(true || changing.debug) {
-				console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index]);
+				if(universe.configuration.server.startup_time) {
+					timing = " - " + (Date.now() - universe.configuration.server.startup_time) + "ms";
+				} else {
+					timing = " - [" + (Date.now() - universe.configuration.server.initialize_time) + "ms]";
+				}
+				console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index] + timing);
 			}
-			var cascade = handler.retrieve(changing.queue[changing.index++]);
+
 			if(cascade && !changing.origins[cascade.id]) {
 				// cascade.updateFieldValues();
 				// cascade.recalculateFieldValues();
