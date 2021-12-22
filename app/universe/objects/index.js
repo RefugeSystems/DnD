@@ -636,6 +636,7 @@ module.exports = function(universe) {
 	 * @param {String} id 
 	 */
 	this.pushUpdated = function(id, origins, debug) {
+		var changing;
 		// console.log("Update: ", inheritance[id]);
 		mark[id] = Date.now();
 		if(!origins) {
@@ -643,7 +644,7 @@ module.exports = function(universe) {
 		}
 		origins[id] = true;
 		if(inheritance[id] && inheritance[id]._list.length) {
-			var changing = {};
+			changing = {};
 			changing.origin = id;
 			changing.queue = inheritance[id]._list;
 			changing.index = 0;
@@ -674,7 +675,7 @@ module.exports = function(universe) {
 				if(universe.configuration.server.startup_time) {
 					timing = " - " + (Date.now() - universe.configuration.server.ready_mark) + "ms";
 				} else {
-					timing = " - [" + (Date.now() - universe.configuration.server.initialize_time) + "ms]";
+					timing = " - [" + (Date.now() - universe.configuration.server.initialize_mark) + "ms]";
 				}
 				console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index] + timing);
 			}
