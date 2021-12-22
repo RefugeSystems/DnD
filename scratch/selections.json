@@ -7,11 +7,11 @@
             "spell:heroism"
         ]
     }, {
-        "name": "Sneak Attack",
+        "name": "Patron Feature",
         "field": "feats",
         "limit": 1,
         "choices": [
-        "feat:sneakattack"
+        "feat:entropicward"
 		]
     }, {
         "name": "Forect Gnome Spells",

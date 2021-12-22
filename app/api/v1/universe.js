@@ -117,6 +117,15 @@ module.exports = new (function() {
 				});
 			});
 			
+			this.router.post("/debug/:flag", (req, res, next) => {
+				res.result = {
+					"message": "Debug flag set",
+					"flag": req.params.flag === "true"
+				};
+				api.universe.configuration.universe.debug = res.result.flag;
+
+			});
+			
 			this.router.post("/import", (req, res, next) => {
 				var importing = req.body.import || req.body.export;
 				// console.log("Body: ", req.body);
