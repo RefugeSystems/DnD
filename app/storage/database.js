@@ -138,7 +138,7 @@ mapping._toCommand = function(fields) {
 			command += ", " + fields[x].id + " " + mapping[fields[x].type].type;
 		} else {
 			// TODO: Warning or thrown?
-			throw new Error("Unknown Field Type: " + (fields[x].id || fields[x]));
+			throw new Error("Field Specification[" + (fields[x].id || fields[x]) + "] has an invalid type[" + Object.keys(mapping).join(", ") + "]: " + JSON.stringify(fields[x], null, 4));
 		}
 	}
 	return command;

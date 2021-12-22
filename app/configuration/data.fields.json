@@ -1601,7 +1601,7 @@
 		"name": "Gold",
 		"icon": "fas fa-coins",
 		"description": "The amount of gold on or in this entity or object",
-		"type": "float",
+		"type": "number",
 		"attribute": {
 			"fixed": 2,
 			"bound_max": "gold_max",

@@ -169,18 +169,21 @@ module.exports = function(universe) {
 			}
 		}
 
-		// return calculate(processed);
-		if(source && processed !== expression && depth < maxDepth) {
-			// Rerun until we "stabilize" to detect arbitrary depth in referencing
-			// console.trace("Depth: " + depth);
-			if(depth > 2) {
-				console.log(" [" + source.id + "]: " + processed + " <--> " + expression);
+		if(universe.configuration.universe.deep_calculations) {
+			if(source && processed !== expression && depth < maxDepth) {
+				// Rerun until we "stabilize" to detect arbitrary depth in referencing
+				// console.trace("Depth: " + depth);
+				if(depth > 2) {
+					console.log(" [" + source.id + "]: " + processed + " <--> " + expression);
+				}
+				return this.compute(processed, source, referenced, depth + 1);
+			} else {
+				if(depth > 2) {
+					console.log("Good");
+				}
+				return calculate(processed);
 			}
-			return this.compute(processed, source, referenced, depth + 1);
 		} else {
-			if(depth > 2) {
-				console.log("Good");
-			}
 			return calculate(processed);
 		}
 	};

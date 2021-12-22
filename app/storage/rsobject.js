@@ -209,7 +209,7 @@ class RSObject {
 	 * @param {Boolean} [force] When true, ignores the _linkMask check. This is primarily used for universe initialization.
 	 * @return {Promise} 
 	 */
-	linkFieldValues(force) {
+	linkFieldValues(force, debug) {
 		// console.log("Link: " + this.id);
 		return new Promise((done, fail) => {
 			var relink = false,
@@ -229,7 +229,9 @@ class RSObject {
 			// console.log("scan fin");
 			 
 			if(relink) {
-				// console.log("relink");
+				if(debug) {
+					console.log("RSObject Relinking[" + this.id + "]: " + unlink);
+				}
 				this._universe.objectHandler.trackInheritance(this, this._manager.inheritableFields)
 				.then(() => {
 					// console.log("fin: ", unlink);
@@ -341,23 +343,23 @@ class RSObject {
 							switch(field.inheritance[field.inheritanceFields[i]]) {
 								case "+=":
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
-									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
-									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
+									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									break;
 								case "+":
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]]);
-									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "-":
 									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]]);
-									this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									// this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.subValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "=":
 									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]]);
-									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
-									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
+									// this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type);
+									this._calculated[field.inheritanceFields[i]] = RSObject.setValues(this._calculated[field.inheritanceFields[i]], source[field.inheritanceFields[i]], ifield.type);
 									break;
 								case "~":
 									if(this._calculated[field.inheritanceFields[i]] === undefined || this._calculated[field.inheritanceFields[i]] === null) {

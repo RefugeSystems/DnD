@@ -602,7 +602,7 @@ module.exports = function(universe) {
 	 */
 	var trackCalculations = function(changing) {
 		setTimeout(function() {
-			if(changing.debug) {
+			if(true || changing.debug) {
 				console.log(" - Recalculate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index++]);
 			}
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
@@ -667,15 +667,16 @@ module.exports = function(universe) {
 	 */
 	var trackUpdates = function(changing) {
 		setTimeout(function() {
-			if(changing.debug) {
+			if(true || changing.debug) {
 				console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index]);
 			}
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
 			if(cascade && !changing.origins[cascade.id]) {
 				// cascade.updateFieldValues();
 				// cascade.recalculateFieldValues();
-				cascade.calculateFieldValues(changing.origins);
-				cascade.updateFieldValues(changing.origins);
+				cascade.linkFieldValues(false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+				cascade.calculateFieldValues(changing.origins, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+				cascade.updateFieldValues(changing.origins, false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
 				if(changing.index < changing.queue.length) {
 					trackUpdates(changing);
 				} else {
