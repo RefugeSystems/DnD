@@ -672,7 +672,7 @@ module.exports = function(universe) {
 
 			if(true || changing.debug) {
 				if(universe.configuration.server.startup_time) {
-					timing = " - " + (Date.now() - universe.configuration.server.startup_time) + "ms";
+					timing = " - " + (Date.now() - universe.configuration.server.ready_mark) + "ms";
 				} else {
 					timing = " - [" + (Date.now() - universe.configuration.server.initialize_time) + "ms]";
 				}

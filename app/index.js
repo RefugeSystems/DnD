@@ -34,7 +34,7 @@ var configuration = require("a-configuration"),
 // Setup basic defaults
 EventEmitter.defaultMaxListeners = 50;
 
-configuration.server.initialize_time = start;
+configuration.server.initialize_mark = start;
 startup.configuration = configuration;
 startup.RSDatabase = RSDatabase;
 startup.RSObject = RSObject;
@@ -91,7 +91,8 @@ verify(configuration)
 	
 	return api.initialize(startup);
 }).then(function() {
-	configuration.server.startup_time = Date.now() - start;
+	configuration.server.ready_mark = Date.now();
+	configuration.server.startup_time = configuration.server.ready_mark - start;
 	console.log("...Load Complete: " + configuration.server.startup_time + "ms");
 	logging.entry(new Anomaly("app:startup:online","System Online", 30, configuration.server, null, componentID));
 }).catch(function(error) {
