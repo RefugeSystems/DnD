@@ -215,22 +215,22 @@ class Universe extends EventEmitter {
 						loading[x].updateFieldValues();
 					}
 				}
-				console.log(" + Updated: " + (Date.now() - start) + "ms");
+				console.log(" + Initialize: " + (Date.now() - start) + "ms");
 				mark = Date.now();
-				for(x=0; x<loading.length; x++) {
-					if(loading[x]) {
-						loading[x].calculateFieldValues();
-					}
-				}
-				console.log(" + Calculated: " + (Date.now() - mark) + "ms");
-				mark = Date.now();
-				for(x=0; x<loading.length; x++) {
-					if(loading[x]) {
-						loading[x].updateFieldValues();
-					}
-				}
-				console.log(" + Reupdated: " + (Date.now() - mark) + "ms");
-				console.log("...Total Time: " + (Date.now() - start) + "ms");
+				// for(x=0; x<loading.length; x++) {
+				// 	if(loading[x]) {
+				// 		loading[x].calculateFieldValues();
+				// 	}
+				// }
+				// console.log(" + Calculated: " + (Date.now() - mark) + "ms");
+				// mark = Date.now();
+				// for(x=0; x<loading.length; x++) {
+				// 	if(loading[x]) {
+				// 		loading[x].updateFieldValues();
+				// 	}
+				// }
+				// console.log(" + Re-Updated: " + (Date.now() - mark) + "ms");
+				// console.log("...Total Time: " + (Date.now() - start) + "ms [Traces Still Running]");
 				
 				return this.chronicle.initialize(this.objectHandler);
 			})

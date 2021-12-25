@@ -767,12 +767,19 @@ class RSObject {
 						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
 					}
 					*/
+					
+					if(!this._involved[field.id]) {
+						this._involved[field.id] = {};
+					}
 					if(conditional.adds && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
+						this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "+");
 					} else if(conditional.subs && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
+						this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "-");
 					} else if(conditional.sets && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
+						this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "=");
 					}
 				}
 			}
@@ -1622,6 +1629,7 @@ class RSObject {
 		delta.id = this.id;
 		delta._class = this._class;
 		delta._invloved = this._invloved;
+		delta._calculated = this._calculated;
 		return delta;
 	}
 	

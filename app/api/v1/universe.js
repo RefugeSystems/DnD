@@ -122,7 +122,7 @@ module.exports = new (function() {
 					"message": "Debug flag set",
 					"flag": req.params.flag === "true"
 				};
-				api.universe.configuration.universe.debug = res.result.flag;
+				api.universe.configuration.universe.debug = res.result.flag === "true";
 
 			});
 			

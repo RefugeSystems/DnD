@@ -17,13 +17,13 @@
 		<button class="flat action fas fa-info-circle display-info rs-blue" v-if="fieldData.inheritable && fieldData.type === 'string'" v-on:click="info(object[field])" v-linkable="object[field]"></button>
 		<button class="flat action fas rs-chevron-circle-down" :class="valuesContainerClass()" v-if="canToggleField" v-on:click="toggleField()"></button>
 		<button class="flat action fad rs-purple" :class="viewInvolved?'fa-layer-minus':'fa-layer-plus'" v-if="hasInvolved()" v-on:click="toggleInvolved()"></button>
-		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula && realType !== 'object'" :title="object._calculated[field]" v-on:click="toggleFormula()"></button>
+		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula && realType !== 'object'" :title="object._formula[field]" v-on:click="toggleFormula()"></button>
 	</div>
 	<div class="markdown" v-if="fieldData.type === 'markdown'" v-html="rsshowdown(object[field])"></div>
 	<div class="formula" v-if="viewFormula">
 		<span class="formula-value">
 			<span class="fas fa-function rs-blue"></span>
-			<span>{{object._calculated[field] || object._formula[field]}}</span>
+			<span>{{object._formula[field] || object._formula[field]}}</span>
 		</span>
 	</div>
 	<div class="pointed" v-if="!image">

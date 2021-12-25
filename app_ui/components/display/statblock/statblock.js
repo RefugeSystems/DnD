@@ -109,6 +109,14 @@ rsSystem.component("rsStatBlock", {
 			// fields.sort(rsSystem.utility.sortData);
 			
 			return fields;
+		},
+		"filters": function() {
+			var filters = this.filtering.split(","),
+				i;
+			for(i=0; i<filters.length; i++) {
+				filters[i] = filters[i].trim().toLowerCase();
+			}
+			return filters;
 		}
 	},
 	"data": function() {
@@ -128,7 +136,25 @@ rsSystem.component("rsStatBlock", {
 			});
 		},
 		"isVisible": function(field) {
-			return field && field.attribute && (!field.attribute || !field.attribute.private || this.shown) && field.attribute.displayed !== false && (!field.attribute.display_size || field.attribute.display_size <= this.size) && (!this.filtering || (field._search && field._search.indexOf(this.filtering) !== -1));
+			var filters,
+				i;
+			if(field && field.attribute && (!field.attribute || !field.attribute.private || this.shown) && field.attribute.displayed !== false && (!field.attribute.display_size || field.attribute.display_size <= this.size)) {
+				if(this.filters.length && this.filters[0] !== "") {
+					if(field._search) {
+						for(i=0; i<this.filters.length; i++) {
+							if(field._search.indexOf(this.filters[i]) !== -1) {
+								return true;
+							}
+						}
+					} else {
+						return false;
+					}
+				} else {
+					return true;
+				}
+			}
+			return false;
+			// return field && field.attribute && (!field.attribute || !field.attribute.private || this.shown) && field.attribute.displayed !== false && (!field.attribute.display_size || field.attribute.display_size <= this.size) && (!this.filtering || (field._search && field._search.indexOf(this.filtering) !== -1));
 		}
 	},
 	"template": Vue.templified("components/display/statblock.html")

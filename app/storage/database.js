@@ -819,7 +819,7 @@ class ClassManager extends EventEmitter {
 			var loading,
 				x;
 				
-			reference.inheritableFields.push("parent");
+			// reference.inheritableFields.push("parent");
 			for(x=0; x<reference.fieldIDs.length; x++) {
 				loading = reference.database.field[reference.fieldIDs[x]];
 				if(loading) {

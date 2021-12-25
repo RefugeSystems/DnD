@@ -171,10 +171,6 @@ module.exports = function(universe) {
 			var promised = [];
 				
 			// console.log("Tracking")
-			
-			if(consumer.parent) {
-				source_fields.push("parent");
-			}
 			traceDependency(inheritance, consumer, source_fields, promised);
 			
 			// console.log("Tracked")
@@ -319,6 +315,9 @@ module.exports = function(universe) {
 					inherit(consumer._data[source_fields[x]]);
 				}
 			}
+		}
+		if(consumer._data.parent) {
+			inherit(consumer._data.parent);
 		}
 		
 		return loading;
@@ -677,7 +676,9 @@ module.exports = function(universe) {
 				} else {
 					timing = " - [" + (Date.now() - universe.configuration.server.initialize_mark) + "ms]";
 				}
-				console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index] + timing);
+				if(universe.configuration.universe.debug || universe.configuration.universe.debug_traces) {
+					console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index] + timing);
+				}
 			}
 
 			if(cascade && !changing.origins[cascade.id]) {

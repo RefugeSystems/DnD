@@ -52,7 +52,7 @@ rsSystem.component("rsDisplayField", {
 			return this.universe.index.fields[this.field];
 		},
 		"hasFormula": function() {
-			return (this.object._calculated && this.fieldData && this.fieldData.type === "calculated" && this.object._calculated[this.field] !== undefined && this.object._calculated[this.field] !== null && isNaN(this.object._calculated[this.field])) ||
+			return (this.object._formula && this.fieldData && this.fieldData.type === "calculated" && this.object._formula[this.field] !== undefined && this.object._formula[this.field] !== null && isNaN(this.object._formula[this.field])) ||
 					(this.object._formula && this.fieldData && this.object._formula[this.field] !== undefined && this.object._formula[this.field] !== null && isNaN(this.object._formula[this.field]));
 		},
 		"displayed": function() {
