@@ -74,11 +74,11 @@ rsSystem.component("dndChronicleReadout", {
 	},
 	"methods": {
 		"receiveEvent": function(event) {
-			console.log("Received Chronice: ", event);
+			// console.log("Received Chronice: ", event);
 			if(event) {
 				switch(event.type) {
 					case "entity:saved":
-						console.log("Entity Save: ", event);
+						// console.log("Entity Save: ", event);
 						this.witnessEvent("roll", "dndChronicleReadoutRoll", {
 							"entity": event.target,
 							"source": event.source,

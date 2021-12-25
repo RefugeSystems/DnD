@@ -485,7 +485,7 @@
 					}
 				}
 
-				console.log("Saving: ", saving);
+				// console.log("Saving: ", saving);
 				this.universe.send("create:object", {
 					"classification": this.storage.classification,
 					"details": saving
@@ -496,7 +496,7 @@
 			 * @method dropObject
 			 */
 			"dropObject": function() {
-				console.log("Drop: " + this.details.id);
+				// console.log("Drop: " + this.details.id);
 				this.universe.send("delete:object", {
 					"classification": this.storage.classification,
 					"id": this.details.id

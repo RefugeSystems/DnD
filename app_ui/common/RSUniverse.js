@@ -230,7 +230,7 @@ class RSUniverse extends EventEmitter {
 			});
 		};
 		this.processEvent["dismiss-message"] = (event) => {
-			console.log("Dismiss: ", event.data);
+			// console.log("Dismiss: ", event.data);
 			this.$emit("dismiss-message", {
 				"id": event.data.mid || event.data.id
 			});

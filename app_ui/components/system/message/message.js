@@ -110,7 +110,7 @@
 			 * @param {Object} event
 			 */
 			"receiveMessage": function(event) {
-				console.log("Received: ", event);
+				// console.log("Received: ", event);
 				if(this.identified[event.id]) {
 					this.dismissMessage(this.identified[event.id]);
 				}
