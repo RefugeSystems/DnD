@@ -117,13 +117,20 @@ module.exports = new (function() {
 				});
 			});
 			
-			this.router.post("/debug/:flag", (req, res, next) => {
+			this.router.post("/debug/core/:flag", (req, res, next) => {
 				res.result = {
 					"message": "Debug flag set",
 					"flag": req.params.flag === "true"
 				};
 				api.universe.configuration.universe.debug = res.result.flag === "true";
-
+			});
+			
+			this.router.post("/debug/trace/:flag", (req, res, next) => {
+				res.result = {
+					"message": "Debug flag set",
+					"flag": req.params.flag === "true"
+				};
+				api.universe.configuration.universe.debug_traces = res.result.flag === "true";
 			});
 			
 			this.router.post("/import", (req, res, next) => {
