@@ -292,7 +292,12 @@ rsSystem.component("rsTimeline", {
 		},
 		"renderMouseBar": function(context) {
 			if(this.render_mouse !== null && this.render_velocity === 0) {
-				var time = this.pointToTime(this.render_mouse);
+				var time = this.pointToTime(this.render_mouse),
+					text = this.render_mouse-5;
+
+				if(context.canvas.width <= text + 225) {
+					text = context.canvas.width - 225;
+				}
 
 				context.strokeStyle = "#cc5533";
 				context.fillStyle = "#cc5533";
@@ -305,7 +310,7 @@ rsSystem.component("rsTimeline", {
 				context.strokeStyle = "#ffffff";
 				context.fillStyle = "#ffffff";
 				context.lineWidth = "1";
-				context.roundRect(this.render_mouse-5, 137, 220, 26, 5);
+				context.roundRect(text, 137, 220, 26, 5);
 				// this.drawRoundedRectangle(context, this.render_mouse-5, 137, 220, 26, 5);
 				context.fill();
 
@@ -314,7 +319,7 @@ rsSystem.component("rsTimeline", {
 				context.font = "20px \"Times New Roman\", serif";
 				context.textBaseline = "middle";
 
-				context.fillText(this.universe.calendar.toDisplay(time, false), this.render_mouse, 150, 200);
+				context.fillText(this.universe.calendar.toDisplay(time, false), text + 5, 150, 200);
 				Vue.set(this, "age", Math.floor((this.universe.time - time)/this.universe.calendar.CONSTANTS.day));
 			}
 		},
