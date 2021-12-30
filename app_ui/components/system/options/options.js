@@ -295,8 +295,15 @@ rsSystem.component("systemOptionsDialog", {
 			data.pages.system.options.push({
 				"id": "app-update",
 				"action": "emit",
-				"icon": "fas fa-download",
+				"icon": "fas fa-download rs-light-orange",
 				"label": "Update"
+			});
+		} else {
+			data.pages.system.options.push({
+				"id": "app-update",
+				"action": "emit",
+				"icon": "fas fa-download",
+				"label": "Refresh App"
 			});
 		}
 		if(!this.universe.connection.socket) {
