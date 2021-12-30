@@ -1,5 +1,5 @@
 <div class="rs-timeline system-component">
-	<div class="timeline-container" v-swipe.left="panTimeline" v-swipe.right="panTimeline">
+	<div class="timeline-container" v-swipe.left="panTimeline" v-swipe.right="panTimeline" v-resize="resized">
 		<canvas class="timeline-render" v-on:mousedown="tracked($event)" v-on:mouseup="clicked($event)"></canvas>
 		<div class="timeline-today flex h" v-if="age">
 			<span class="rs-white">{{age}} Days Ago</span>

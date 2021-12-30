@@ -1468,6 +1468,20 @@
 					// console.log(" - Measuring: " + measureTiming);
 				}
 			},
+			"distanceToPixels": function(distance) {
+				if(this.location.map_distance) {
+					distance *= (1 + .1 * this.image.zoom);
+					return Math.ceil(distance / this.location.map_distance);
+				}
+				return null;
+			},
+			"pixelsToDistance": function(distance) {
+				if(this.location.map_distance) {
+					distance /= (1 + .1 * this.image.zoom);
+					return Math.ceil(this.location.map_distance * distance);
+				}
+				return null;
+			},
 			"redrawPaths": function() {
 				var buffer,
 					path,
@@ -1654,7 +1668,7 @@
 					for(i=0; i<this.storage.boundry_keys.length; i++) {
 						object = this.universe.getObject(this.storage.boundry_keys[i]);
 						field = this.storage.boundries[object.id].field;
-						console.log("Boundry Render[" + field + "]: " + (object?object[field]:null), object);
+						// console.log("Boundry Render[" + field + "]: " + (object?object[field]:null), object);
 						if(object && object.location === this.location.id && typeof(object[field]) === "number") {
 							this.renderRadial(object, object[field], null, null, "");
 						}
@@ -1932,6 +1946,40 @@
 				if(!this.elementVisible(locale)) {
 					return false;
 				}
+			},
+			"poiStylingString": function(link) {
+				var string,
+					height,
+					width;
+
+				if(link.token_image) {
+					height = this.distanceToPixels(link.token_height || 4);
+					width =  this.distanceToPixels(link.token_width || 4);
+					string = "left: calc(" + link.x + "% - " + (width/2) + "px);";
+					string += "top: calc(" + link.y + "% - " + (height/2) + "px);";
+					string += "background-image: url(\"" + this.universe.getImagePath(link.token_image) + "\");";
+					string += "height: " + height + "px;";
+					string += "width: " + width + "px;";
+					string += "min-width: 0px; margin: 0px;";
+					if(link.color_flag === "transparent") {
+						string += "border-color: transparent;";
+					}
+					if(link.token_rotation) {
+						string += "; transform: rotate(" + link.token_rotation + "deg);";
+					}
+					if(link.token_square) {
+						string += "; border-radius: 0px";
+					} else {
+						string += "; border-radius: " + (height) + "px;";
+					}
+				} else {
+					string = "left: ";
+					string += link.x;
+					string += "%; top: ";
+					string += link.y;
+					string += "%;";
+				}
+				return string;
 			},
 			"poiStyling": function(link) {
 				if(!link) {

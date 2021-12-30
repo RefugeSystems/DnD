@@ -218,12 +218,31 @@ rsSystem.component("DNDKnowledge", {
 			Vue.set(this.storage, "type_known", "");
 		}
 
+		this.sizeKnownList();
 		this.buildEvents();
 		this.update();
 	},
 	"methods": {
 		"toggleTimeline": function() {
 			Vue.set(this.storage, "hide_timeline", !this.storage.hide_timeline);
+			this.sizeKnownList();
+		},
+		"sizeKnownList": function() {
+			setTimeout(() => {
+				var controls = this.$el.getElementsByClassName("known-listing-type")[0],
+					table = this.$el.getElementsByClassName("knowledge-table")[0],
+					listing = this.$el.getElementsByClassName("known-list")[0],
+					timeline;
+
+				if(this.storage.hide_timeline) {
+					listing.style = "max-height: calc(100vh - " + (controls.clientHeight + 2) + "px);";
+					table.style = "max-height: calc(100vh);";
+				} else {
+					timeline = this.$el.getElementsByClassName("rs-timeline")[0];
+					listing.style = "max-height: calc(100vh - " + (controls.clientHeight + timeline.clientHeight + 2) + "px);";
+					table.style = "max-height: calc(100vh - " + (timeline.clientHeight) + "px);";
+				}
+			});
 		},
 		"fillKnowns": function() {
 			var matrix = Object.keys(this.entity.knowledge_matrix),

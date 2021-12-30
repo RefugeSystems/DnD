@@ -134,19 +134,19 @@
 			z-index: 5;
 			width: 100%;
 			height: 100%;
-			background: black;
+			background-color: black;
 			font-size: inherit;
 
 			.coordinates {
 				position: absolute;
-				background: transparent;
+				background-color: transparent;
 				z-index: 3;
 				height: 100%;
 				width: 100%;
 
 				.coordinate {
 					position: absolute;
-					background: transparent;
+					background-color: transparent;
 
 					&.top {
 						top: 0px;
@@ -172,7 +172,7 @@
 
 			.coordinate-dots {
 				position: absolute;
-				background: transparent;
+				background-color: transparent;
 				height: 100%;
 				width: 100%;
 				z-index: 15;
@@ -190,7 +190,7 @@
 
 			.crosshair {
 				position: absolute;
-				background: transparent;
+				background-color: transparent;
 				z-index: 3;
 				font-size: inherit;
 
@@ -263,7 +263,10 @@
 					color: @rsOrange;
 					text-align: center;
 
+					transition: left .5s, top .5s, width .5s, height .5s;
+					background-repeat: no-repeat;
 					background-color: @rsBlack;
+					background-size: contain;
 
 					> * {
 						color: inherit;
@@ -282,7 +285,7 @@
 					&:active,
 					&:focus,
 					&:hover {
-						background: rgba(18, 33, 146, 0.6);
+						background-color: rgba(18, 33, 146, 0.6);
 						/*opacity: .5;*/
 						z-index: 55;
 					}
@@ -534,11 +537,11 @@
 
 		border: 1px solid @rsWhite;
 		border-radius: 5px;
-		background: @rsBlack;
+		background-color: @rsBlack;
 		color: @rsWhite;
 
 		button.control {
-			background: transparent;
+			background-color: transparent;
 			border: 0px;
 			padding: 0px;
 			margin: 0px;
@@ -612,7 +615,7 @@
 
 		border: 1px solid @rsWhite;
 		border-radius: 5px;
-		background: @rsBlack;
+		background-color: @rsBlack;
 		color: @rsWhite;
 
 		.legend-list {
@@ -633,7 +636,7 @@
 		}
 
 		button.control {
-			background: transparent;
+			background-color: transparent;
 			border: 0px;
 			padding: 0px;
 			margin: 0px;
@@ -695,11 +698,11 @@
 
 		border: 1px solid @rsWhite;
 		border-radius: 5px;
-		background: @rsBlack;
+		background-color: @rsBlack;
 		color: @rsWhite;
 
 		button.control {
-			background: transparent;
+			background-color: transparent;
 			border: 0px;
 			padding: 0px;
 			margin: 0px;

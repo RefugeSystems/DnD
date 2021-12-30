@@ -1,5 +1,9 @@
 .dnd-page.dnd-knowledge {
 
+	.main-container {
+		height: 100%;
+	}
+
 	.timeline.control {
 		position: relative;
 
@@ -39,15 +43,38 @@
 
 	.overview {
 		position: relative;
+		flex-grow: 5;
 		
 		.known-listing {
-			padding: 2px 2px 2px 0px;
+			padding: 2px 2px 0px 0px;
 		}
 
 		.known-list {
 			overflow: auto;
-			max-height: 500px;
+			// max-height: 500px;
 			max-width: 200px;
+		}
+
+		.knowledge-table {
+			position: relative;
+			overflow: auto;
+			flex-grow: 5;
+
+			.table-controls {
+				position: sticky;
+				z-index: 5;
+				top: 0px;
+			}
+
+			.table-container {
+				z-index: 3;
+			}
+
+			.table-paging {
+				position: sticky;
+				z-index: 5;
+				bottom: 0px;
+			}
 		}
 
 		.known-item {

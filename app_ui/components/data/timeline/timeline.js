@@ -138,6 +138,8 @@ rsSystem.component("rsTimeline", {
 		data.jump = 0;
 		data.age = 0;
 
+		data.printIconWarning = true;
+
 		return data;
 	},
 	"mounted": function() {
@@ -402,28 +404,36 @@ rsSystem.component("rsTimeline", {
 
 
 		"setIconography": function(event) {
-			const i = document.createElement("i");
-			i.setAttribute("class", event.icon);
-			this.pouch.appendChild(i);
-	
-			// get the styles for the icon you just made
-			const iStyles = window.getComputedStyle(i),
-				iBeforeStyles = window.getComputedStyle(i, ":before"),
-				iAfterStyles = window.getComputedStyle(i, ":after"),
-	
-				fontFamily = iStyles.getPropertyValue("font-family"),
-				fontWeight = iStyles.getPropertyValue("font-weight"),
-				fontSize = "16px", // just to make things a little bigger...
-	
-				canvasFont = `${fontWeight} ${fontSize} ${fontFamily}`, // should be something like: '900 40px "Font Awesome 5 Pro"'
-				icon = String.fromCodePoint(iBeforeStyles.getPropertyValue("content").codePointAt(1)); // codePointAt(1) because the first character is a double quote
-	
-			// TODO: Handle content from all the rendered in order: After, Content, Before - To maintain layering for things like font-awesome dual fonts
-			//    Also need to investigate if fill carries over
-			console.log("Debug Iconography: ", iStyles, iBeforeStyles, iAfterStyles);
-			event._icon_font = canvasFont;
-			event._icon_text = icon;
-			this.pouch.removeChild(i);
+			try {
+				const i = document.createElement("i");
+				i.setAttribute("class", event.icon);
+				this.pouch.appendChild(i);
+		
+				// get the styles for the icon you just made
+				const iStyles = window.getComputedStyle(i),
+					iBeforeStyles = window.getComputedStyle(i, ":before"),
+					iAfterStyles = window.getComputedStyle(i, ":after"),
+		
+					fontFamily = iStyles.getPropertyValue("font-family"),
+					fontWeight = iStyles.getPropertyValue("font-weight"),
+					fontSize = "16px", // just to make things a little bigger...
+		
+					canvasFont = `${fontWeight} ${fontSize} ${fontFamily}`, // should be something like: '900 40px "Font Awesome 5 Pro"'
+					icon = String.fromCodePoint(iBeforeStyles.getPropertyValue("content").codePointAt(1)); // codePointAt(1) because the first character is a double quote
+		
+				// TODO: Handle content from all the rendered in order: After, Content, Before - To maintain layering for things like font-awesome dual fonts
+				//    Also need to investigate if fill carries over
+				// console.log("Debug Iconography: ", iStyles, iBeforeStyles, iAfterStyles);
+				event._icon_font = canvasFont;
+				event._icon_text = icon;
+				this.pouch.removeChild(i);
+			} catch(renderFault) {
+				// Seems to normally be related to `fromCodePoint` failing
+				if(this.printIconWarning) {
+					console.warn("Timeline Iconography Error: ", renderFault);
+					this.printIconWarning = false;
+				}
+			}
 		},
 		"drawEventIcon": function(context, event, x, y) {
 			context.font = event._icon_font;

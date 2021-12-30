@@ -8,9 +8,9 @@
 					<!--
 					<button class="scaled poi" :class="poiStyling(link)" v-if="poiNamed(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%; font-size: ' + ((link.label_sizing || baseFontSize) + image.zoom) + 'px;'" :key="link.id" v-on:click.stop.prevent="poiMenu(link)">
 					-->
-					<button class="scaled poi" :class="poiStyling(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="'left:' + link.x + '%; top:' + link.y + '%;'" :key="link.id" v-on:click="openLink(link)" v-on:click.stop.prevent="poiMenu(link)">
-						<span class="poi-icon scaled" :class="poiClass(link)"></span>
-						<span class="labeling scaled" v-if="link.label" :class="link.label && storage.labels?'shown':'hidden'">{{link.label || link.nickname || link.name}}</span>
+					<button class="scaled poi" :class="poiStyling(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="poiStylingString(link)" :key="link.id" v-on:click="openLink(link)" v-on:click.stop.prevent="poiMenu(link)">
+						<span class="poi-icon scaled" v-if="!link.token_image" :class="poiClass(link)"></span>
+						<span class="labeling scaled" v-if="link.label && !link.token_image" :class="link.label && storage.labels?'shown':'hidden'">{{link.label || link.nickname || link.name}}</span>
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in location.coordinates" v-if="!coordinate.standalone">

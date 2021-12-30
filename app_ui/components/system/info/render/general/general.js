@@ -244,21 +244,45 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 								}
-								if(this.info.is_minion || this.info.is_npc || rsSystem.utility.isEmpty(this.info.owned)) {
-									loading = {
-										"title": "Color Code",
-										"icon": "fas fa-palette",
-										"action": "color",
-										"property": "color_flag",
-										"type": "select",
-										"_value": this.info.color_flag,
-										"options": ["", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white"]
-									};
-									if(loading.options.indexOf[loading._value] === -1) {
-										loading._missing = loading._value;
-									}
-									this.controls.push(loading);
+								loading = {
+									"title": "Color Code",
+									"icon": "fas fa-palette",
+									"action": "color",
+									"property": "color_flag",
+									"type": "select",
+									"_value": this.info.color_flag,
+									"options": ["", "transparent", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white", "gray"]
+								};
+								if(loading.options.indexOf[loading._value] === -1) {
+									loading._missing = loading._value;
 								}
+								this.controls.push(loading);
+								if(this.info.token_image) {
+									this.controls.push({
+										"title": "Rotation",
+										"icon": "fas fa-palette",
+										"action": "rotate",
+										"property": "token_rotation",
+										"type": "select",
+										"_value": this.info.token_rotation,
+										"options": [0, 45, 60, 90, 120, 135, 180, 225, 240, 270, 300, 315]
+									});
+								}
+								// if(this.info.is_minion || this.info.is_npc || rsSystem.utility.isEmpty(this.info.owned)) {
+								// 	loading = {
+								// 		"title": "Color Code",
+								// 		"icon": "fas fa-palette",
+								// 		"action": "color",
+								// 		"property": "color_flag",
+								// 		"type": "select",
+								// 		"_value": this.info.color_flag,
+								// 		"options": ["", "transparent", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white", "gray"]
+								// 	};
+								// 	if(loading.options.indexOf[loading._value] === -1) {
+								// 		loading._missing = loading._value;
+								// 	}
+								// 	this.controls.push(loading);
+								// }
 								switch(this.info._class) {
 									case "entity":
 										if(this.info.hp === 0 && this.info.types.indexOf("type:dead") === -1) {
@@ -570,6 +594,13 @@ rsSystem.component("sysInfoGeneral", {
 						"object": object.id,
 						"field": "is_position_hidden",
 						"value": false
+					});
+					break;
+				case "rotate":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "token_rotation",
+						"value": control._value
 					});
 					break;
 				case "power":
