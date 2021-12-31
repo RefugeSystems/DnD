@@ -65,7 +65,7 @@
 				if(details) {
 					var current = this.details?this.details.id || this.details.component:undefined,
 						id = details.id || details.component;
-					if(current === id) {
+					if(id && current === id) {
 						this.closeDialog();
 					} else {
 						if(this.timeout) {
