@@ -855,7 +855,13 @@
 					if(point && !this.localeInfo.id) {
 						this.localeInfo.id = point.id;
 						this.localeInfo.text = point.name;
-						this.localeInfo.location = point;
+						if(point.interior) {
+							this.localeInfo.location = this.universe.index.location[point.interior];
+						} else if(point.links_to) {
+							this.localeInfo.location = this.universe.index.location[point.links_to];
+						} else {
+							this.localeInfo.location = point;
+						}
 					}
 
 //					console.log("Test: ", this.localeInfo.id);
@@ -1961,6 +1967,9 @@
 					string += "height: " + height + "px;";
 					string += "width: " + width + "px;";
 					string += "min-width: 0px; margin: 0px;";
+					if(link.token_z || link.z) {
+						string += "z-index: " + (link.token_z || link.z) + ";";
+					}
 					if(link.color_flag === "transparent") {
 						string += "border-color: transparent;";
 					}
