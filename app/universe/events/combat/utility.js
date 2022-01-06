@@ -327,7 +327,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Array | RSObject} targets 
 	 * @param {RSObject | String} [channel] 
 	 * @param {Object} damage 
-	 * @param {Object} [attack] Rolled attack value, if any
+	 * @param {Integer} [attack] Rolled attack value, if any
 	 * @param {Object} [attacks] Rolled attack value per target, if any
 	 */
 	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks) {

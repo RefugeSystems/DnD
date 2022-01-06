@@ -1,6 +1,7 @@
 
 module.exports.initialize = function(universe) {
-	var manager = universe.manager.action;
+	var combatUtility = require("../combat/utility"),
+		manager = universe.manager.action;
 
 	/**
 	 * 
@@ -43,6 +44,8 @@ module.exports.initialize = function(universe) {
 	 * General action bindings processed here.
 	 * 
 	 * This currently specifically applies to entity responses.
+	 * 
+	 * TODO: Expand processing to bind more dynamically to actions to allow creation and deletion while running.
 	 * @event action
 	 */
 	manager.objectIDs.forEach(function(id) {
@@ -65,35 +68,52 @@ module.exports.initialize = function(universe) {
 				for(i=0; i<entity.response[id].length; i++) {
 					response = entity.response[id][i];
 					if(response && !response.ui && !response.is_display) {
-						if(response.add) {
-							entity.addValues(response.add);
-						}
-						if(response.sub) {
-							entity.subValues(response.sub);
-						}
-						if(response.set) {
-							entity.setValues(response.set);
-						}
-						if(response.add_roll) {
-							rolls = Object.keys(response.add_roll);
-							rolled = {};
-							ref = [];
-							for(j=0; j<rolls.length; j++) {
-								rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.add_roll[rolls[j]], entity, ref);
+						if(response.event) {
+							switch(response.event) {
+								case "damage_recur":
+									combatUtility.sendDamages(entity.id, [entity.id], response.channel || null, response.damage);
+									break;
+								case "notice":
+									universe.messagePlayers(entity.owned, response.message, response.icon);
+									break;
+								default:
+									universe.warnMasters("Response with unknown event descriptor in entity " + entity.name, {
+										"entity": entity,
+										"response": response,
+										"time": Date.now()
+									});
 							}
-							entity.addValues(rolled);
-						}
-						if(response.sub_roll) {
-							rolls = Object.keys(response.sub_roll);
-							rolled = {};
-							ref = [];
-							for(j=0; j<rolls.length; j++) {
-								rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.sub_roll[rolls[j]], entity, ref);
+						} else {
+							if(response.add) {
+								entity.addValues(response.add);
 							}
-							entity.subValues(rolled);
-						}
-						if(response.announced) {
-							universe.messagePlayers(entity.owned, (response.name || "An event") + " happened to " + (entity.name || "a creature of yours"), response.icon);
+							if(response.sub) {
+								entity.subValues(response.sub);
+							}
+							if(response.set) {
+								entity.setValues(response.set);
+							}
+							if(response.add_roll) {
+								rolls = Object.keys(response.add_roll);
+								rolled = {};
+								ref = [];
+								for(j=0; j<rolls.length; j++) {
+									rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.add_roll[rolls[j]], entity, ref);
+								}
+								entity.addValues(rolled);
+							}
+							if(response.sub_roll) {
+								rolls = Object.keys(response.sub_roll);
+								rolled = {};
+								ref = [];
+								for(j=0; j<rolls.length; j++) {
+									rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.sub_roll[rolls[j]], entity, ref);
+								}
+								entity.subValues(rolled);
+							}
+							if(response.announced) {
+								universe.messagePlayers(entity.owned, (response.name || "An event") + " happened to " + (entity.name || "a creature of yours"), response.icon);
+							}
 						}
 					}
 				}
