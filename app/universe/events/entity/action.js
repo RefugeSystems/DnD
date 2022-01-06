@@ -71,7 +71,12 @@ module.exports.initialize = function(universe) {
 						if(response.event) {
 							switch(response.event) {
 								case "damage_recur":
-									combatUtility.sendDamages(entity.id, [entity.id], response.channel || null, response.damage);
+									rolls = Object.keys(response.damage);
+									rolled = {};
+									for(j=0; j<rolls.length; j++) {
+										rolled[rolls[j]] = universe.calculator.computedDiceRoll(response.damage[rolls[j]], entity);
+									}
+									combatUtility.sendDamages(entity, [entity], response.channel || null, rolled);
 									break;
 								case "notice":
 									universe.messagePlayers(entity.owned, response.message, response.icon);
