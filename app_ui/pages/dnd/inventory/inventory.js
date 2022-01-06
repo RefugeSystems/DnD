@@ -290,12 +290,18 @@ rsSystem.component("DNDInventory", {
 			}
 			return 0;
 		};
-		data.sorts.held_by = (a, b) => {
-			a = this.universe.getObject(a) || {};
-			b = this.universe.getObject(b) || {};
-			if(a.name < b.name) {
+		data.sorts.held_by = (va, vb, a, b) => {
+			a = this.held_by[a.id] || "";
+			b = this.held_by[b.id] || "";
+			if(a && !b) {
 				return -1;
-			} else if(a.name > b.name) {
+			} else if(!a && b) {
+				return 1;
+			} else if(!a && !b) {
+				return 0;
+			} else if(a < b) {
+				return -1;
+			} else if(a > b) {
 				return 1;
 			}
 			return 0;

@@ -275,12 +275,14 @@ rsSystem.component("rsTable", {
 	"methods": {
 		"sortRows": function(a, b) {
 			var va = a[this.storage.key || "id"],
-				vb = b[this.storage.key || "id"];
+				vb = b[this.storage.key || "id"],
+				sort;
 
 			if(this.sorts[this.storage.key]) {
-				if(this.sorts[this.storage.key](va, vb) < 0) {
+				sort = this.sorts[this.storage.key](va, vb, a, b);
+				if(sort < 0) {
 					return this.storage.reverse;
-				} else if(this.sorts[this.storage.key](va, vb) > 0) {
+				} else if(sort > 0) {
 					return this.storage.order;
 				}
 				return 0;
