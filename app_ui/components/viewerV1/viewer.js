@@ -328,7 +328,14 @@
 				"action": "up",
 				"text": "Up",
 				"conditional": () => {
-					return !!this.location.location;
+					var reference;
+					if(this.location.location) {
+						return true;
+					}
+					if(this.location.interior_of && (reference = this.universe.getObject(this.location.interior_of)) && reference.location) {
+						return true;
+					}
+					return false;
 				},
 				"icon": "far fa-arrow-alt-square-up"
 			}, {
@@ -798,18 +805,23 @@
 						break;
 					case "up":
 						if(this.location.location) {
-							buffer = this.universe.index.location[this.location.location];
-							if(buffer) {
-								if(buffer.rendering_has_path) {
-									// Skip over routes/paths to their parent where an image shoould be present
-									if(buffer.location) {
-										this.$router.push("/map/" + buffer.location);
-									}
-								} else {
-									this.$router.push("/map/" + buffer.id);
+							buffer = this.location.location;
+						} else if(this.location.interior_of && (buffer = this.universe.getObject(this.location.interior_of)) && buffer.location) {
+							buffer = buffer.location;
+						} else {
+							buffer = null;
+						}
+						if(buffer && (buffer = this.universe.index.location[buffer])) {
+							if(buffer.rendering_has_path) {
+								// Skip over routes/paths to their parent where an image should be present
+								if(buffer.location) {
+									this.$router.push("/map/" + buffer.location);
 								}
+							} else {
+								this.$router.push("/map/" + buffer.id);
 							}
 						}
+
 						break;
 					case "fullscreen":
 						Vue.set(this.storage, "fullscreen", !this.storage.fullscreen);
@@ -1953,17 +1965,39 @@
 					return false;
 				}
 			},
+			"getPOIToken": function(link) {
+				var reference;
+
+				if(link.token_image) {
+					return link.token_image;
+				}
+				
+				if(link.token_map) {
+					if(link.interior) {
+						reference = this.universe.getObject(link.interior);
+						if(reference) {
+							return reference.map;
+						}
+					}
+					if(link.map) {
+						return link.map;
+					}
+				}
+				
+				return null;
+			},
 			"poiStylingString": function(link) {
-				var string,
+				var token = this.getPOIToken(link),
+					string,
 					height,
 					width;
 
-				if(link.token_image) {
+				if(token) {
 					height = this.distanceToPixels(link.token_height || 4);
 					width =  this.distanceToPixels(link.token_width || 4);
 					string = "left: calc(" + link.x + "% - " + (width/2) + "px);";
 					string += "top: calc(" + link.y + "% - " + (height/2) + "px);";
-					string += "background-image: url(\"" + this.universe.getImagePath(link.token_image) + "\");";
+					string += "background-image: url(\"" + this.universe.getImagePath(token) + "\");";
 					string += "height: " + height + "px;";
 					string += "width: " + width + "px;";
 					string += "min-width: 0px; margin: 0px;";
@@ -2104,6 +2138,12 @@
 				if(this.localeInfo.shown) {
 					// console.log("Locale: ", _p(this.localeInfo));
 					this.actions.options.push(this.localeInfo);
+					if(this.localeInfo.location.map || this.localeInfo.location.interior) {
+						this.localeInfo.icon = "fas fa-location-circle";
+					} else {
+						this.localeInfo.icon = "fas fa-info-circle";
+					}
+
 					if(this.player.gm) {
 						if(this.storage.hide[this.localeInfo.id]) {
 							this.actions.options.push({

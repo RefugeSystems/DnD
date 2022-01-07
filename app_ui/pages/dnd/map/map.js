@@ -45,6 +45,13 @@ rsSystem.component("DNDMap", {
 				}
 			}
 		},
+		"flyoutClass": function() {
+			var classes = "";
+			if(this.displayCharacter) {
+				classes += "open ";
+			}
+			return classes;
+		},
 		"playerCharacter": function() {
 			var entity;
 			if(this.$route.params.entity) {
@@ -92,13 +99,6 @@ rsSystem.component("DNDMap", {
 				}
 				Vue.set(this.storage, "boundry_keys", Object.keys(this.storage.boundries));
 			}
-		},
-		"flyoutClass": function() {
-			var classes = "";
-			if(this.displayCharacter) {
-				classes += "open ";
-			}
-			return classes;
 		},
 		"toggleCharacter": function() {
 			Vue.set(this, "displayCharacter", !this.displayCharacter);

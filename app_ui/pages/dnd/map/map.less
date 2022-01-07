@@ -6,14 +6,14 @@
 		top: 0px;
 		right: 0px;
 		height: 100%;
-		width: 420px;
-		max-width: 0px;
-		transition: max-width .3s;
+		// width: 420px;
+		// max-width: 0px;
+		// transition: max-width .3s;
 		background-color: @rsBlack;
 		z-index: 20;
 
 		&.open {
-			max-width: 420px;
+			// max-width: 420px;
 
 			.indicator {
 				transform: rotate(180deg);
@@ -44,6 +44,20 @@
 			}
 		}
 
+		.flyout-container {
+			position: relative;
+			height: 100%;
+			top: 0px;
+			right: 0px;
+			width: 0px;
+			transition: width .5s;
+			overflow: hidden;
+
+			&.open {
+				width: 420px;
+			}
+		}
+
 		.character-container {
 			position: relative;
 			height: 100%;
@@ -51,6 +65,10 @@
 			right: 0px;
 			width: 420px;
 			overflow: auto;
+
+			&.open {
+				width: 420px;
+			}
 		}
 	}
 }
