@@ -73,7 +73,7 @@ rsSystem.component("dndDialogShop", {
 			for(i=0; i<selected.length; i++) {
 				item = this.universe.index.item[selected[i]];
 				if(item && typeof(item.cost) === "number") {
-					cost += item.cost;
+					cost += item.cost * this.table.selected[selected[i]];
 				}
 			}
 
