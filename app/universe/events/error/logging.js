@@ -15,7 +15,7 @@
 
 module.exports.initialize = function(universe) {
 	universe.on("player:event:log", function(event) {
-		console.log("Player Logging Event: ", event);
+		// console.log("Player Logging Event: ", event);
 		var component;
 		if(event.message && event.message.data && event.message.data.component) {
 			component = event.message.data.component.id || event.message.data.component;

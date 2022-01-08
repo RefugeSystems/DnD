@@ -299,13 +299,22 @@ var addPortrait = function(data) {
 
 var finish = function(data) {
 	return new Promise(function(done, fail) {
-		var attributes = Object.assign({}, data.event.player.attribute);
+		var attributes = Object.assign({}, data.event.player.attribute),
+			maxHP;
 		attributes.playing_as = data.character.id;
 		attributes = {
 			"attribute": attributes
 		};
 		data.event.player.setValues(attributes, function(p_err) {
-			data.sets.hp = data.character.hp_max;
+			if(typeof(data.character.hit_dice_max) === "object" && (maxHP = Object.keys(data.character.hit_dice_max)) && maxHP.length) {
+				maxHP = parseInt(maxHP[0].substring(1)) || 6;
+			} else {
+				maxHP = 6;
+			}
+			data.sets.parent = "entity:character:parent";
+			data.sets.hp_rolled = maxHP;
+			data.sets.hp = maxHP + 4;
+			data.sets.hp_temp = 0;
 			console.log("Create Sets: ", data.sets);
 			data.character.setValues(data.sets, function(err) {
 				data.universe.chronicle.addOccurrence("character:created", data.event.message.data, Date.now(), null, data.event.player?data.event.player.id:null);
