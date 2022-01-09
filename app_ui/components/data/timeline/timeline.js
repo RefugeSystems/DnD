@@ -361,7 +361,7 @@ rsSystem.component("rsTimeline", {
 			context.moveTo(x, 150);
 			event._renderTop = this.swap;
 			if(this.swap) {
-				event._renderTag = 150 + this.distTop * segment;
+				event._renderTag = 150 + this.distTop * segment - 5 * (segment - 1);
 				event._y = event._renderTag - 15;
 				this.lastTop.unshift(x);
 				event._renderSide = 1;
@@ -369,7 +369,7 @@ rsSystem.component("rsTimeline", {
 					this.lastTop.pop();
 				}
 			} else {
-				event._renderTag = 150 + this.distBot * segment;
+				event._renderTag = 150 + this.distBot * segment + 5 * (segment - 1);
 				event._y = event._renderTag + 15;
 				this.lastBot.unshift(x);
 				if(this.lastBot.length > 3) {
