@@ -189,6 +189,13 @@ rsSystem.component("DNDKnowledge", {
 			return "";
 		};
 
+		data.segmentDistance = function(event) {
+			if(event && event.point && event.point._class === "knowledge") {
+				return 1;
+			}
+			return 2;
+		};
+
 		data.available_types = [];
 		data.selections = [];
 		data.renderedKnowns = [];

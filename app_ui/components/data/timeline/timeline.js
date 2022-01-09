@@ -27,6 +27,8 @@ rsSystem.component("rsTimeline", {
 			"required": true,
 			"type": Array
 		},
+		"segmentDistance": {
+		},
 		"activeTags": {
 			"required": false,
 			"type": Object,
@@ -340,15 +342,26 @@ rsSystem.component("rsTimeline", {
 			}
 		},
 		"renderEventTag": function(context, event) {
-			var x = this.timeToPoint(event.time);
+			var x = this.timeToPoint(event.time),
+				segment;
 			context.lineWidth = "1";
 			// console.log(" ! Rendering: " + event.time, event);
+			if(this.segmentDistance) {
+				segment = this.segmentDistance(event) || 1;
+			} else {
+				segment = 1;
+			}
+			if(segment < 1) {
+				segment = 1;
+			} else if(segment > 5) {
+				segment = 5;
+			}
 			
 			context.beginPath();
 			context.moveTo(x, 150);
 			event._renderTop = this.swap;
 			if(this.swap) {
-				event._renderTag = 150 + this.distTop;
+				event._renderTag = 150 + this.distTop * segment;
 				event._y = event._renderTag - 15;
 				this.lastTop.unshift(x);
 				event._renderSide = 1;
@@ -356,7 +369,7 @@ rsSystem.component("rsTimeline", {
 					this.lastTop.pop();
 				}
 			} else {
-				event._renderTag = 150 + this.distBot;
+				event._renderTag = 150 + this.distBot * segment;
 				event._y = event._renderTag + 15;
 				this.lastBot.unshift(x);
 				if(this.lastBot.length > 3) {

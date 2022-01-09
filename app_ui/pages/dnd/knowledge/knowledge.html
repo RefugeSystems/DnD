@@ -5,7 +5,7 @@
 				<span class="fa-solid fa-timeline-arrow action-icon"></span>
 			</button>
 		</div>
-		<rs-timeline v-if="!storage.hide_timeline" :universe="universe" :events="timeline.events" :active-tags="timeline.tags" :storage-container="storage"></rs-timeline>
+		<rs-timeline v-if="!storage.hide_timeline" :universe="universe" :events="timeline.events" :active-tags="timeline.tags" :segment-distance="segmentDistance" :storage-container="storage"></rs-timeline>
 		<div class="overview flex h">
 			<div class="known-listing" v-lockto>
 				<div class="known-listing-type flex v">
