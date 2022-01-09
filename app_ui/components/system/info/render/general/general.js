@@ -1,4 +1,3 @@
-
 /**
  *
  *
@@ -31,6 +30,9 @@ rsSystem.component("sysInfoGeneral", {
 	"computed": {
 		"description": function() {
 			return this.rsshowdown(this.info.description || "", this.info, this.profile?this.profile.inline_javascript:false);
+		},
+		"activeMeeting": function() {
+			return this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value] || null;
 		},
 		"note": function() {
 			if(this.player.gm) {
@@ -300,6 +302,24 @@ rsSystem.component("sysInfoGeneral", {
 												"action": "notdead"
 											});
 										}
+								}
+							} else if(this.info._class === "location") {
+								if(this.activeMeeting) {
+									if(this.activeMeeting.location !== this.info.id) {
+										this.controls.push({
+											"title": "Set Meeting Location",
+											"icon": "fa-solid fa-map-pin",
+											"type": "button",
+											"action": "meeting-location"
+										});
+									} else {
+										this.controls.push({
+											"title": "Unset as Meeting Location",
+											"icon": "fa-solid fa-map-pin rs-light-red",
+											"type": "button",
+											"action": "meeting-unlocation"
+										});
+									}
 								}
 							}
 						// } else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id] && this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
@@ -644,6 +664,24 @@ rsSystem.component("sysInfoGeneral", {
 						"field": "types",
 						"value": ["type:dead"]
 					});
+					break;
+				case "meeting-location":
+					if(this.activeMeeting) {
+						this.universe.send("master:quick:set", {
+							"object": this.activeMeeting.id,
+							"field": "location",
+							"value": object.id
+						});
+					}
+					break;
+				case "meeting-unlocation":
+					if(this.activeMeeting) {
+						this.universe.send("master:quick:set", {
+							"object": this.activeMeeting.id,
+							"field": "location",
+							"value": null
+						});
+					}
 					break;
 				case "revoke":
 					this.universe.send("effect:revoke", {

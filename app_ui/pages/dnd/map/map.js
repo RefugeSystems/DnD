@@ -38,12 +38,19 @@ rsSystem.component("DNDMap", {
 				return this.universe.index.location[this.$route.params.location];
 			}
 
+			if(this.activeMeeting && this.activeMeeting.location && this.activeMeeting.is_active && (location = this.universe.index.location[this.activeMeeting.location])) {
+				return location;
+			}
+
 			for(i=0; i<this.universe.listing.location.length; i++) {
 				location = this.universe.listing.location[i];
-				if(location && !location.disabled && !location.is_preview && location.is_default) {
+				if(location && !location.disabled && !location.is_disabled && !location.is_preview && location.is_default) {
 					return location;
 				}
 			}
+		},
+		"activeMeeting": function() {
+			return this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value] || null;
 		},
 		"flyoutClass": function() {
 			var classes = "";
