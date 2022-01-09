@@ -69,7 +69,7 @@
 			 * @type Integer
 			 * @default 7 Days
 			 */
-			this.CONSTANTS.week = this.CONSTANTS.day * 7;
+			this.CONSTANTS.week = this.CONSTANTS.day * 5;
 			/**
 			 * Should generally be avoided or used as a guide, but
 			 * can be set.
