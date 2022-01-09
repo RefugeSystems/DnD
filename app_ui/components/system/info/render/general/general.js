@@ -251,7 +251,7 @@ rsSystem.component("sysInfoGeneral", {
 									"property": "color_flag",
 									"type": "select",
 									"_value": this.info.color_flag,
-									"options": ["", "transparent", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white", "gray"]
+									"options": ["", "transparent", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white", "gray", "bordered-red", "bordered-yellow", "bordered-green", "bordered-purple", "bordered-blue", "bordered-cyan", "bordered-white", "bordered-gray", "bordered-black"]
 								};
 								if(loading.options.indexOf[loading._value] === -1) {
 									loading._missing = loading._value;

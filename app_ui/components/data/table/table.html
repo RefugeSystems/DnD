@@ -73,6 +73,6 @@
 			</tbody>
 		</table>
 	</div>
-	<component :is="paging" :storage="storage" :source="source" :filtered="filtered" :corpus="corpus" :last-page="lastPage" v-on:info="info($event)"/>
+	<component class="table-paging" :is="paging" :storage="storage" :source="source" :filtered="filtered" :corpus="corpus" :last-page="lastPage" v-on:info="info($event)"/>
 	<div class="dlanchors"></div>
 </div>

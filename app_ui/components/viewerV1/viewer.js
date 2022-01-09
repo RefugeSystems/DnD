@@ -2004,8 +2004,13 @@
 					if(link.token_z || link.z) {
 						string += "z-index: " + (link.token_z || link.z) + ";";
 					}
-					if(link.color_flag === "transparent") {
-						string += "border-color: transparent;";
+					if(link.color_flag) {
+						if(link.color_flag === "transparent") {
+							string += "border-color: transparent;";
+						} else if(link.color_flag.startsWith("bordered-")) {
+							string += "border-color: " + link.color_flag.substring(9) + ";";
+							string += "background-color: transparent;";
+						}
 					}
 					if(link.token_rotation) {
 						string += "; transform: rotate(" + link.token_rotation + "deg);";
