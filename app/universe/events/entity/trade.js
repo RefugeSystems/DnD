@@ -116,6 +116,7 @@ module.exports.initialize = function(universe) {
 		var entity = event.message.data.entity,
 			items = event.message.data.items,
 			exchanging = [],
+			meeting,
 			update,
 			item,
 			i;
@@ -162,6 +163,17 @@ module.exports.initialize = function(universe) {
 				"message": "Dropped " + exchanging.length + " items",
 				"timeout": 5000
 			});
+			meeting = universe.manager.meeting.object[universe.manager.setting.object["setting:meeting"].value];
+			if(meeting)  {
+				console.log("Meeting: " + meeting.id + " | " + meeting.is_active);
+			} else {
+				console.log("No Meeting");
+			}
+			if(meeting && meeting.is_active) {
+				meeting.addValues({
+					"items": exchanging
+				});
+			}
 		}
 	});
 };

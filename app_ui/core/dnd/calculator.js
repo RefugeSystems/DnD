@@ -10,14 +10,14 @@
 	rsSystem.dnd = rsSystem.dnd || {};
 	rsSystem.dnd.Calculator = {};
 
-	var diceReductionRegEx = new RegExp("\\+?(-?[0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\. ]+?\\))(d[0-9]+|%)", "g"),
-		calculateSecurityRegEx = new RegExp("^([<>a-zA-Z0-9\\(\\)+-\\/\\* ]+|Math\\.[a-zA-Z]+)$"),
+	var diceReductionRegEx = new RegExp("\\+?(-?[0-9a-z\\.]+|\\([0-9+-\\/\\*\\(\\)a-z\\., ]+?\\))(d[0-9]+|%)", "g"),
+		calculateSecurityRegEx = new RegExp("^([<>a-zA-Z0-9\\(\\)+-\\/\\*, ]+|Math\\.[a-zA-Z]+)$"),
 		variableExpression = new RegExp("([a-z_]+)(\\.?[a-z:_]+)*", "gi"),
 		diceExpression = new RegExp("(\\([^\\)]+\\))?d([0-9]+)"),
 		spaces = new RegExp(" ", "g"),
 		dots = new RegExp("\\.", "g"),
 		zeros = new RegExp("(null|undefined)", "g"),
-		maths = new RegExp("([^a-zA-Z_.])?(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g"),
+		maths = new RegExp("([^a-zA-Z_.,])?(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g"),
 		doubled = new RegExp("Math.Math.", "g"); // TODO: Ajust maths regex to accoutn for this AS WELL AS starting a line, which seems to be the issue with the leading "." check
 
 	var debug = false,

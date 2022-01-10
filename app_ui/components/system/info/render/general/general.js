@@ -304,7 +304,7 @@ rsSystem.component("sysInfoGeneral", {
 										}
 								}
 							} else if(this.info._class === "location") {
-								if(this.activeMeeting) {
+								if(this.activeMeeting && this.info.map) {
 									if(this.activeMeeting.location !== this.info.id) {
 										this.controls.push({
 											"title": "Set Meeting Location",
