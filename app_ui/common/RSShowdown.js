@@ -186,6 +186,9 @@
 					// ID Reference
 					value = value.substring(1).trim();
 					buffer = universe.getObject(value);
+					if(!buffer) {
+						buffer = universe.getObject(entity[value]);
+					}
 					if(buffer) {
 						element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + buffer.id + "\">" + buffer.name + "</a>");
 					} else {
