@@ -1133,7 +1133,7 @@
 						// console.log("Show Info: ", option);
 						// this.info(option.location);
 						if(option.location) {
-							if(option.location.links_to || option.location.map) {
+							if((option.location.links_to || option.location.map) && (option.location.is_open === null || option.location.is_open === undefined || option.location.is_open === true)) {
 								this.$router.push("/map/" + (option.location.links_to || option.location.id));
 							} else {
 								this.info(option.location);
@@ -2143,10 +2143,12 @@
 				if(this.localeInfo.shown) {
 					// console.log("Locale: ", _p(this.localeInfo));
 					this.actions.options.push(this.localeInfo);
-					if(this.localeInfo.location.map || this.localeInfo.location.interior) {
+					if((this.localeInfo.location.map || this.localeInfo.location.interior) && (this.localeInfo.location.is_open === null || this.localeInfo.location.is_open === undefined || this.localeInfo.location.is_open === true)) {
 						this.localeInfo.icon = "fas fa-location-circle";
+						this.localeInfo.subaction = "nav";
 					} else {
 						this.localeInfo.icon = "fas fa-info-circle";
+						this.localeInfo.subaction = "info";
 					}
 
 					if(this.player.gm) {

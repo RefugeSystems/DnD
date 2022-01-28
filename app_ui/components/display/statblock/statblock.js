@@ -55,7 +55,7 @@ rsSystem.component("rsStatBlock", {
 			entity = this.universe.index.entity[this.player.attribute.playing_as];
 			// return !this.player || (!this.player.gm && (!this.player.attribute || !(entity = this.universe.index.entity[this.player.attribute.playing_as]) || !entity.knowledges || (entity.knowledges.indexOf(this.object.must_know) === -1 && (!entity.knowledge_matrix || !entity.knowledge_matrix[this.object.id]))));
 			if(typeof(this.object.must_know) === "string") {
-				return entity.knowledges && entity.knowledges.indexOf(this.object.must_know) === -1;
+				return entity.knowledges && entity.knowledges.indexOf(this.object.must_know) !== -1;
 			 } else if(typeof(this.object.must_know) === "number") {
 				return entity.knowledge_matrix[this.object.id] && this.object.must_know < entity.knowledge_matrix[this.object.id].length;
 			 } else {
