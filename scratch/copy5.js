@@ -1,17 +1,70 @@
-var app = new GlideRecord("sysapproval_approver"), //set up variable to retrieve approvals that are pending
-	arrUtil = new ArrayUtil(), //set up array to find all pending approvals for users
-	answer = [];
-	
-app.addQuery("state", "requested"); //only retrieve approvals if they are pending (in requested state)
-app.addQuery("sysapproval.sys_class_name", "change_request"); //only retrieve approvals for change records
-app.orderBy("approver");
-app.query(); //retrieve all approvals that meet our query
-while(app.next()) { // step through the approvals one by one
-	if(arrUtil.indexOf(answer, app.approver.sys_id) == -1) { //if the approver is not currently in our list, add them (next line adds them)
-		answer.push(app.approver.sys_id);
-	}
-}
+var universe = rsSystem.lookup().universe,
+	knowledgeMap = {},
+	acquiredMap = {},
+	sessionMap = {},
+	acquireds = [],
+    quickSet,
+	getSession,
+	getTime,
+	i,
+	j,
+	k;
 
-for(var i = 0; i < answer.length; i++) { //have array that lists each user who has open change approvals We"ll step through each
-	gs.eventQueue("open.approval.reminders", app, answer[i]); //and fire off the event for each user, passing their sys_id as parm1
-}
+getSession = function(acquired) {
+	if(acquired) {
+		var parts = acquired.split(".");
+		return parseInt(parts[0]);
+	}
+	return 0;
+};
+
+getTime = function(acquired) {
+	if(acquired) {
+		var parts = acquired.split(".");
+		return parseInt(parts[1]);
+	}
+	return 0;
+};
+
+quickSet = function(id, field, value) {
+    universe.send("master:quick:set", {
+        "object": id,
+        "field": field,
+        "value": value
+    });
+};
+
+knowers.forEach(function(character) {
+	var keys = Object.keys(character.acquired),
+		time,
+		key,
+		i;
+	for(i=0; i<keys.length; i++) {
+		key = keys[i];
+		time = getTime(character.acquired[key]);
+		if(!acquiredMap[key]) {
+			acquireds.push(key);
+		}
+		if(!acquiredMap[key] || time < acquiredMap[key]) {
+			sessionMap[key] = getSession(character.acquired[key]);
+			acquiredMap[key] = time;
+		}
+	}
+});
+
+knowledges.forEach(function(knowledge) {
+	if(knowledge && knowledge.id) {
+		knowledgeMap[knowledge.id] = knowledge;
+	}
+});
+
+acquireds.forEach(function(id) {
+	if(knowledgeMap[id] && acquiredMap[id]) {
+		if(sessionMap[id] < 10) {
+			quickSet(id, "acquired_in", "meeting:label:000" + sessionMap[id]);
+		} else {
+			quickSet(id, "acquired_in", "meeting:label:00" + sessionMap[id]);
+		}
+		quickSet(id, "acquired", acquiredMap[id] - 17280000);
+	}
+});

@@ -28,7 +28,7 @@ module.exports.initialize = function(universe) {
 
 	/**
 	 * 
-	 * @event player:skirmish:create
+	 * @event player:skirmish:finish
 	 * @for Universe
 	 * @param {Object} event With data from the system
 	 * @param {String} event.type The event name being fired, should match this event's name
@@ -58,7 +58,7 @@ module.exports.initialize = function(universe) {
 
 			if(skirmish.entities && skirmish.entities.length) {
 				for(i=0; i<skirmish.entities.length; i++) {
-					entity = skirmish = universe.manager.entity.object[skirmish.entities[i]];
+					entity = universe.manager.entity.object[skirmish.entities[i]];
 					if(entity) {
 						entity.setValues({
 							"initiative": null

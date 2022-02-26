@@ -573,7 +573,7 @@ class RSObject {
 	 * 		update such as a delta.
 	 */
 	updateFieldValues(origins, suppress, debug) {
-		// console.trace(" > Update: " + this._data.id);
+		console.trace(" > Update: " + this._data.id);
 		if(debug) {
 			console.log(" > Update: " + this._data.id);
 		}
