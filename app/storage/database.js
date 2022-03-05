@@ -8,7 +8,8 @@
 var appPackage = require("../../package.json"),
 	EventEmitter = require("events").EventEmitter,
 	Anomaly = require("../management/anomaly"),
-	sqlite3 = require("sqlite3").verbose(),
+	// sqlite3 = require("sqlite3").verbose(),
+	sqlite3 = require("sqlite3"),
 	emptyArray = [],
 	mapping = {};
 	
@@ -309,6 +310,18 @@ class RSDatabase extends EventEmitter {
 		this.constructor._general = RSObject;
 		return new Promise((done, fail) => {
 			this.connection = new sqlite3.Database(this.specification.file, sqlite3[this.specification.mode]);
+			this.connection.on("error", function(error) {
+				console.log("DB Error : ", error);
+			});
+			this.connection.on("open", function() {
+				console.log("DB Open");
+			});
+			// this.connection.on("trace", function(statement) {
+			// 	console.log("DB Trace: ", statement);
+			// });
+			// this.connection.on("profile", function(statement, duration) {
+			// 	console.log("DB Profile[" + duration + "ms]: ", statement);
+			// });
 			
 			var loadFields,
 				loadClasses,
@@ -325,6 +338,7 @@ class RSDatabase extends EventEmitter {
 								if(err) {
 									fail(err);
 								} else {
+									// console.log(" - Fields Loaded......");
 									loadClasses();
 								}
 							});
@@ -336,6 +350,7 @@ class RSDatabase extends EventEmitter {
 							rows[x] = new RSField(rows[x]);
 							this.field[rows[x].id] = rows[x];
 						}
+						// console.log(" - Fields Loaded...");
 						loadClasses();
 					}
 				});
@@ -350,6 +365,7 @@ class RSDatabase extends EventEmitter {
 								if(err) {
 									fail(err);
 								} else {
+									// console.log(" - Classes Loaded......");
 									done();
 								}
 							});
@@ -366,6 +382,7 @@ class RSDatabase extends EventEmitter {
 						}
 						Promise.all(loading)
 						.then(() => {
+							// console.log(" - Classes Loaded...");
 							done();
 						})
 						.catch(fail);

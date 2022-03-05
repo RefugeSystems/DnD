@@ -39,7 +39,59 @@ module.exports = function(universe) {
 		dots = new RegExp("\\.", "g"),
 		zeros = new RegExp("(null|undefined)", "g"),
 		maths = new RegExp("([^a-zA-Z_.])?(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g"),
-		doubled = new RegExp("Math.Math.", "g"); // TODO: Ajust maths regex to accoutn for this AS WELL AS starting a line, which seems to be the issue with the leading "." check
+		doubled = new RegExp("Math.Math.", "g"), // TODO: Ajust maths regex to accoutn for this AS WELL AS starting a line, which seems to be the issue with the leading "." check
+		allowedCharacters = {},
+		buildChars;
+
+	allowedCharacters["<"] = true;
+	allowedCharacters[">"] = true;
+	allowedCharacters["'"] = true;
+	allowedCharacters["("] = true;
+	allowedCharacters[")"] = true;
+	allowedCharacters["+"] = true;
+	allowedCharacters["_"] = true;
+	allowedCharacters["-"] = true;
+	allowedCharacters["/"] = true;
+	allowedCharacters["*"] = true;
+	allowedCharacters["."] = true;
+	allowedCharacters[","] = true;
+	allowedCharacters[":"] = true;
+	allowedCharacters[" "] = true;
+	for(buildChars=48; buildChars<58; buildChars++) {
+		allowedCharacters[String.fromCharCode(buildChars)] = true;
+	}
+	for(buildChars=65; buildChars<91; buildChars++) {
+		allowedCharacters[String.fromCharCode(buildChars)] = true;
+	}
+	for(buildChars=97; buildChars<123; buildChars++) {
+		allowedCharacters[String.fromCharCode(buildChars)] = true;
+	}
+
+	/**
+	 * 
+	 * Prior:
+	 * calculateSecurityRegEx = new RegExp("^(([<>'a-zA-Z0-9\\(\\)+-\\/\\*: ]+|==)+|Math\\.[a-zA-Z]+)$")
+	 * 
+	 * Due to issues with regular expression evaluation causing hangs with long chains, this function was
+	 * adopted instead as the general goal is quite easy.
+	 * @method isEvaluatable
+	 */
+	var isEvaluatable = function(text) {
+		var i;
+
+		if(typeof(text) !== "string") {
+			return false;
+		}
+
+		for(i=0; i<text.length; i++) {
+			// if(!allowedCharacters[text[i]] && (text[i] !== "." || text[i-4] !== "M" || text[i-3] !== "a" || text[i-2] !== "t" || text[i-1] !== "h") && (text[i] !== "=" || (text[i-1] !== "=" && text[i+1] !== "="))) {
+			if(!allowedCharacters[text[i]] && (text[i] !== "=" || (text[i-1] !== "=" && text[i+1] !== "="))) {
+				return false;
+			}
+		}
+
+		return true;
+	};
 
 	var calculate = function(original) {
 		if(original && original[0] === "+") { // Other operators would expressly be an issue
@@ -54,7 +106,8 @@ module.exports = function(universe) {
 			console.log(" > Expanded: " + expression);
 		}
 
-		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+		// if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+		if(expression && expression.length < 150 && isEvaluatable(expression)) {
 			// console.log("Valid Expression");
 			try {
 				if(debug) {
@@ -66,11 +119,15 @@ module.exports = function(universe) {
 				}
 				return expression;
 			} catch(ignored) {
-				// console.log("Bad Expression: ", ignored);
+				if(debug) {
+					console.log("Bad Expression: " + expression + " | ", ignored);
+				} else {
+					// console.log("Bad Expression[" + ignored.getMessage + "]: " + expression);
+				}
 				return original;
 			}
 		} else {
-			// console.log("Invalid Expression");
+			// console.log("Invalid Expression: " + expression);
 			return original;
 		}
 	};
@@ -280,6 +337,9 @@ module.exports = function(universe) {
 	 * 		The non-dice portion is returned under `remainder`.
 	 */
 	this.parseDiceRoll = function(expression) {
+		if(debug) {
+			console.log("Parsing: ", expression);
+		}
 		var buffer = [],
 			dice = {},
 			x;
@@ -300,6 +360,9 @@ module.exports = function(universe) {
 				expression = expression.replace(buffer[x], "");
 			}
 			dice.remainder = expression;
+			if(debug) {
+				console.log(" - Parsed: ", dice);
+			}
 			return dice;
 		} else {
 			return {

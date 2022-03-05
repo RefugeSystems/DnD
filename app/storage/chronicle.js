@@ -51,16 +51,22 @@ class Chronicle extends EventEmitter {
 	 * @return {Promise}
 	 */
 	initialize(objectHandler) {
+		// console.log("   - Chronicle Initialize");
 		this.database = objectHandler.getDatabase();
 		return new Promise((done, fail) => {
-			this.database.connection.all("select id from chronicle where id = 0;", emptyArray, (err, rows) => {
+			// console.log("     - Chronicle Check");
+			/* *
+			this.database.connection.run("select id from chronicle where id = 0 limit 1;", emptyArray, (err, rows) => {
 				if(err) {
+					console.log("     - Chronicle Create");
 					if(err.message && err.message.indexOf("no such table") !== -1) {
 						this.database.connection
 						.run("create table chronicle (id text NOT NULL PRIMARY KEY, type text, emit text, source text, target text, involved text, time bigint, timeline integer, event text, updated bigint, created bigint);", [], (err) => {
 							if(err) {
 								fail(err);
 							} else {
+								this.database.connection.run("create unique index \"chronicleid\" ON \"chronicle\" (\"id\")");
+								console.log("     - Chronicle Made | Pass");
 								done(this);
 							}
 						});
@@ -68,9 +74,22 @@ class Chronicle extends EventEmitter {
 						fail(err);
 					}
 				} else {
+					console.log("     - Chronicle Pass");
 					done(this);
 				}
 			});
+			/* */
+			this.database.connection
+			.run("create table if not exists chronicle (id text NOT NULL PRIMARY KEY, type text, emit text, source text, target text, involved text, time bigint, timeline integer, event text, updated bigint, created bigint);", [], (err) => {
+				if(err) {
+					// console.log("     - Chronicle Fail |", err);
+					fail(err);
+				} else {
+					// console.log("     - Chronicle Made | Pass");
+					done(this);
+				}
+			});
+			/* */
 		});
 	}
 	
