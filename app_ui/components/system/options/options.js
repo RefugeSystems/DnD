@@ -316,6 +316,12 @@ rsSystem.component("systemOptionsDialog", {
 		}
 		if(this.player.gm) {
 			data.pages.profile.options.push({
+				"id": "overide_must_know",
+				"label": "When viewing info for an obscured or knowledge required object, display anyway",
+				"base": this.profile,
+				"type": "toggle"
+			});
+			data.pages.profile.options.push({
 				"id": "edit_new_window",
 				"label": "Edit to New Window",
 				"base": this.profile,

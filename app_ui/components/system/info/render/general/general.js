@@ -173,14 +173,29 @@ rsSystem.component("sysInfoGeneral", {
 							}
 							if(this.info.must_know) {
 								this.controls.push({
-									"title": "Public Knowledge",
+									"title": "Change to Public Knowledge",
 									"icon": "fa-solid fa-cloud-slash",
 									"type": "button",
 									"action": "public"
 								});
+								if(this.profile.override_must_know) {
+									this.controls.push({
+										"title": "Unset profile control for knowledge override",
+										"icon": "game-icon game-icon-clover-spiked",
+										"type": "button",
+										"action": "unoverrideknow"
+									});
+								} else {
+									this.controls.push({
+										"title": "Set profile control for knowledge override",
+										"icon": "game-icon game-icon-clover",
+										"type": "button",
+										"action": "overrideknow"
+									});
+								}
 							} else {
 								this.controls.push({
-									"title": "Must be known",
+									"title": "Change to must be known",
 									"icon": "fa-solid fa-cloud",
 									"type": "button",
 									"action": "private"
@@ -778,6 +793,14 @@ rsSystem.component("sysInfoGeneral", {
 					break;
 				case "drop":
 					this.dropItem(object.id, entity);
+					break;
+				case "unoverrideknow":
+					Vue.set(this.profile, "override_must_know", false);
+					this.populateControls();
+					break;
+				case "overrideknow":
+					Vue.set(this.profile, "override_must_know", true);
+					this.populateControls();
 					break;
 				case "color":
 					this.universe.send("master:recolor", {

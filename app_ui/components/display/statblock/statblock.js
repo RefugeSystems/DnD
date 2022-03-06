@@ -27,6 +27,9 @@ rsSystem.component("rsStatBlock", {
 		"player": {
 			"type": Object
 		},
+		"profile": {
+			"type": Object
+		},
 		"size": {
 			"default": 5,
 			"type": Number
@@ -69,11 +72,13 @@ rsSystem.component("rsStatBlock", {
 				field,
 				x;
 
-			if(this.object.concealed && this.size <= 150) {
-				return fields;
-			} else if(this.object.must_know && !this.isKnown) {
-				// TODO: Implement "Known" filtering
-				return fields;
+			if(!this.player.gm || !this.profile.override_must_know) {
+				if(this.object.concealed && this.size <= 150) {
+					return fields;
+				} else if(this.object.must_know && !this.isKnown) {
+					// TODO: Implement "Known" filtering
+					return fields;
+				}
 			}
 			
 			if(this.object._class) {
