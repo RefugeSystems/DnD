@@ -148,21 +148,39 @@
 				} else if(value[0] === "~") {
 					// Walked Reference
 					value = value.substring(1).split(".");
-					if(value.length === 2) {
-						switch(value[0]) {
-							case "base":
-								value = base[value[1]] || "";
-								break;
-							case "target":
-								value = targetObject[value[1]] || "";
-								break;
-							default:
-								value = entity[value[1]] || "";
-								break;
-						}
+					if(value.length < 2) {
+						value = entity[value[0]];
 					} else {
-						value = entity[value[0]] || "";
+						buffer = universe.getObject(entity[value[0]]);
+						for(x=1; buffer && x<value.length; x++) {
+							buffer = universe.getObject(buffer[value[x]]);
+						}
+						if(buffer) {
+							value = buffer.name || buffer.id;
+						} else {
+							console.error("Failed to get referenced field: ", value, entity);
+						}
+						// tracking = universe.getObject(entity[value[0]]);
+						// for(x=1; x<value.length; x++) {
+						// 	tracking = universe.getObject(tracking[value[x]]);
+						// }
+						// value = tracking.name || tracking.id;
 					}
+					// if(value.length === 2) {
+					// 	switch(value[0]) {
+					// 		case "base":
+					// 			value = base[value[1]] || "";
+					// 			break;
+					// 		case "target":
+					// 			value = targetObject[value[1]] || "";
+					// 			break;
+					// 		default:
+					// 			value = entity[value[1]] || "";
+					// 			break;
+					// 	}
+					// } else {
+					// 	value = entity[value[0]] || "";
+					// }
 					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
 				} else if(value[0] === "?") {
 					// Formulas
@@ -207,7 +225,21 @@
 					}
 					element = $("<a class=\"" + value.icon + "\" data-id=\"" + (value.id) + "\"></a>");
 				} else if(value[0] === "\"") {
-					value = value.substring(1).trim();
+					// value = value.substring(1).trim();
+					value = value.substring(1).trim().split(".");
+					if(value.length < 2) {
+						value = entity[value[0]];
+					} else {
+						buffer = universe.getObject(entity[value[0]]);
+						for(x=1; buffer && x<value.length-1; x++) {
+							buffer = universe.getObject(buffer[value[x]]);
+						}
+						if(buffer) {
+							value = buffer[value[value.length-1]];
+						} else {
+							console.error("Failed to get referenced field: ", value, entity);
+						}
+					}
 					element = $("<span class=\"\">" + value + "</span>");
 				} else {
 					// Linked

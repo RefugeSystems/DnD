@@ -202,6 +202,20 @@ class RSObject {
 		 * @type String
 		 */
 		this._class = manager.id;
+		/**
+		 * Stores reference keys and sync to clients for debugging inspection.
+		 * 
+		 * Do not depend on this for anything.
+		 * @property _debug
+		 * @type Object
+		 */
+		this._debug = {};
+		this._debug._conditionals_failed = [];
+		this._debug._conditionals_source = {};
+		this._debug.conditional_fill = {};
+		this._debug.conditionals = {};
+		this._debug.properties = {};
+		this._debug.times = {};
 	}
 	
 	/**
@@ -573,6 +587,12 @@ class RSObject {
 	 * 		update such as a delta.
 	 */
 	updateFieldValues(origins, suppress, debug) {
+		this._debug._conditionals_failed = [];
+		this._debug._conditionals_source = {};
+		this._debug.conditional_fill = {};
+		this._debug.conditionals = {};
+		this._debug.properties = {};
+		this._debug.times = {};
 		if(debug) {
 			console.log(" > Update: " + this._data.id);
 		}
@@ -732,6 +752,7 @@ class RSObject {
 		*/
 		
 		// Consider Conditional Values
+		// this._debug._conditionals_failed.splice(0);
 		if(this.conditionals) {
 			this._conditionals.splice(0);
 			for(x=0; x<this.conditionals.length; x++) {
@@ -739,6 +760,8 @@ class RSObject {
 				if(loading) {
 					if(this.checkConditional(loading)) {
 						this._conditionals.push(loading);
+					} else {
+						// this._debug._conditionals_failed.push(loading.name || loading.id);
 					}
 				} else {
 					loading = {};
@@ -770,15 +793,33 @@ class RSObject {
 					if(!this._involved[field.id]) {
 						this._involved[field.id] = {};
 					}
+					if(!this._debug.conditionals[conditional.id]) {
+						this._debug.conditionals[conditional.id] = [];
+					}
 					if(conditional.adds && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
-						this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "+");
+						// this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "+");
+						this._involved[field.id][conditional.id] = loading;
+						this._debug.conditionals[conditional.id].push({
+							"type": "add",
+							"data": loading
+						});
 					} else if(conditional.subs && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
-						this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "-");
+						// this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "-");
+						this._involved[field.id][conditional.id] = loading;
+						this._debug.conditionals[conditional.id].push({
+							"type": "sub",
+							"data": loading
+						});
 					} else if(conditional.sets && (loading = conditional.adds[field.id])) {
 						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
-						this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "=");
+						// this._involved[field.id][conditional.id] = RSObject.addValues(this._involved[field.id][conditional.id], loading, "=");
+						this._involved[field.id][conditional.id] = loading;
+						this._debug.conditionals[conditional.id].push({
+							"type": "set",
+							"data": loading
+						});
 					}
 				}
 			}
@@ -1195,9 +1236,10 @@ class RSObject {
 					this._universe.objectHandler.untrackReference(this, this._calcRef[field].split(","));
 					// this._universe.objectHandler.untrackInheritance(this, this._calcRef[field].split(","));
 				}
+				// TODO: Review _involved additions
 				// console.log(" [T]> ", referenced);
 				if(!this._involved[field]) {
-					this._involved[field] = [];
+					this._involved[field] = {};
 				}
 				// this._involved[field] = this._involved[field].concat(referenced);
 				for(i=0; i<referenced.length; i++) {
@@ -1525,10 +1567,29 @@ class RSObject {
 			ref,
 			x;
 		
+		// TODO: Debugging
+		// if(!this._debug.conditionals[conditional.id]) {
+		// 	this._debug.conditionals[conditional.id] = [];
+		// }
+		// this._debug.conditionals[conditional.id].push({
+		// 	"message": "New calculation",
+		// 	"conditional": conditional.name || conditional.id,
+		// 	"date": (new Date()).toString(),
+		// 	"time": Date.now()
+		// });
+		// --
+
 		if(conditional.conditions) {
 			for(x=0; x<conditional.conditions.length; x++) {
 				ref = [];
 				result = this._universe.calculator.computedDiceRoll(conditional.conditions[x], this, ref);
+				// TODO: Debugging
+				// this._debug.conditionals[conditional.id].push({
+				// 	"test": "!number || 0 -> false",
+				// 	"condition": conditional.conditions[x],
+				// 	"result": result
+				// });
+				// --
 				if(typeof(result) !== "number" || result === 0) {
 					return false;
 				}
@@ -1538,12 +1599,25 @@ class RSObject {
 			for(x=0; x<conditional._fields_condition.length; x++) {
 				field = conditional._fields_condition[x];
 				value = this.fetchValue(conditional.condition[field]) || conditional.condition[field];
+				// TODO: Debugging
+				// this._debug.conditionals[conditional.id].push({
+				// 	"condition": conditional.condition[field],
+				// 	"field": field,
+				// 	"value": value
+				// });
+				// --
 				if(!RSObject.checkCondition(this[field], conditional.ifop[field], value)) {
 					return false;
 				}
 			}
 		}
 		
+		// TODO: Debugging
+		// if(30 < this._debug.conditionals[conditional.id].length) {
+		// 	this._debug.conditionals[conditional.id].splice(30);
+		// }
+		// --
+
 		return true;
 	}
 	
@@ -1555,6 +1629,7 @@ class RSObject {
 	 * To control, the results are calculated for all valid conditionals and stored
 	 * to `_conditionals` to be applied after.
 	 * @method fillConditional
+	 * @deprecated This is handled directly in the updateValues method
 	 * @return {Object} With computed values filled in for the various keys.
 	 */
 	fillConditional(conditional) {
@@ -1562,15 +1637,29 @@ class RSObject {
 			field,
 			x;
 			
+		
+		// TODO: Debugging
+		// if(!this._debug.conditional_fill[conditional.id]) {
+		// 	this._debug.conditional_fill[conditional.id] = [];
+		// }
+		// this._debug.conditional_fill[conditional.id].push({
+		// 	"message": "New Fill",
+		// 	"conditional": conditional.name || conditional.id,
+		// 	"date": (new Date()).toString(),
+		// 	"time": Date.now()
+		// });
+		// --
+
+		// TODO: _involved usage is incorrect, need to flag field with the resultant object
 		result.add = {};
 		if(conditional.add) {
 			result.add = {};
 			for(x=0; x<conditional._fields_add.length; x++) {
 				field = conditional._fields_add[x];
-				if(!this._involved[field]) {
-					this._involved[field] = [];
-				}
-				this._involved[field].push(conditional.id);
+				// if(!this._involved[field]) {
+				// 	this._involved[field] = [];
+				// }
+				// this._involved[field].push(conditional.id);
 				// result.add[field] = this._universe.calculator.compute(conditional.add[field], this);
 				result.add[field] = conditional.add[field];
 			}
@@ -1580,10 +1669,10 @@ class RSObject {
 		if(conditional.sub) {
 			for(x=0; x<conditional._fields_sub.length; x++) {
 				field = conditional._fields_sub[x];
-				if(!this._involved[field]) {
-					this._involved[field] = [];
-				}
-				this._involved[field].push(conditional.id);
+				// if(!this._involved[field]) {
+				// 	this._involved[field] = [];
+				// }
+				// this._involved[field].push(conditional.id);
 				// result.sub[field] = this._universe.calculator.compute(conditional.sub[field], this);
 				result.sub[field] = conditional.sub[field];
 			}
@@ -1593,14 +1682,26 @@ class RSObject {
 		if(conditional.set) {
 			for(x=0; x<conditional._fields_set.length; x++) {
 				field = conditional._fields_set[x];
-				if(!this._involved[field]) {
-					this._involved[field] = [];
-				}
-				this._involved[field].push(conditional.id);
+				// if(!this._involved[field]) {
+				// 	this._involved[field] = [];
+				// }
+				// this._involved[field].push(conditional.id);
 				// result.set[field] = this._universe.calculator.compute(conditional.set[field], this);
 				result.set[field] = conditional.set[field];
 			}
 		}
+		// TODO: Debugging
+		// this._debug.conditionals[conditional.id].push({
+		// 	"result": result
+		// });
+		// --
+		
+		// TODO: Debugging
+		// if(30 < this._debug.conditional_fill[conditional.id].length) {
+		// 	this._debug.conditional_fill[conditional.id].splice(30);
+		// }
+		// --
+
 		return result;
 	}
 	
@@ -1686,6 +1787,7 @@ class RSObject {
 		json._data = data;
 		json._stackable = this._stackable;
 		json._conditionals = this._conditionals;
+		json._debug = this._debug;
 		if(include) {
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
@@ -1804,7 +1906,11 @@ RSObject.addValues = function(a, b, type, op) {
 				}
 			case "array":
 				try {
-					return a.concat(b);
+					if(typeof(a) === "object") {
+						return a.concat(b);
+					} else {
+						return [a].concat(b);
+					}
 				} catch(e) {
 					// console.log("A: ", a, JSON.stringify(a), e);
 					throw e;
