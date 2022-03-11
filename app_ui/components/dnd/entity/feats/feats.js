@@ -58,6 +58,9 @@ rsSystem.component("dndEntityFeats", {
 		}
 	},
 	"methods": {
+		"toggle": function() {
+
+		},
 		"toggleHide": function(feat) {
 			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);
 		},

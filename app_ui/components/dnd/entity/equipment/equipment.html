@@ -1,5 +1,58 @@
 <div class="rs-component dnd-component entity-equipment">
 	<div class="divider" v-if="equipment.shown.length || equipment.hidden.length"></div>
+	<div class="section-name flex h justified">
+		<div class="name flex h">
+			<button class="property" v-on:click="toggle()">
+				<span class="fal" :class="storage && storage.is_open?'fa-plus':'fa-minus'"></span>
+			</button>
+			<div class="property rsbg-lightBlue">
+				<span>Equipment</span>
+			</div>
+		</div>
+		<!-- <div class="filter flex v">
+			<input v-if="storage && $index === 0" class="grow-1" type="text" placeholder="Filter Skills..." v-model="storage.filter" />
+		</div> -->
+	</div>
+	<div class="weapons">
+		<div class="weapon slot">Main Hand</div>
+		<div class="weapon main flex h v-center" v-if="mainhand" v-linkable="mainhand.id" :title="mainhand.name">
+			<button class="quick rounded general action" v-on:click="open(mainhand)" v-on:click.right.prevent.stop="attack(mainhand)">
+				<span class="action-icon" :class="mainhand.icon"></span>
+				<span class="action-count" v-if="showCharges(mainhand)">{{mainhand.charges || 0}}</span>
+			</button>
+			<div class="weapon name">{{mainhand.name}}</div>
+		</div>
+		<div class="weapon main flex h v-center" v-if="!mainhand">
+			<button class="quick rounded general action" v-on:click="open('knowledge:rules:mainhand')">
+				<span class="action-icon fa-solid fa-exclamation-triangle rs-light-red"></span>
+			</button>
+			<div class="weapon name">No Main Hand Equipped</div>
+		</div>
+		<div class="weapon slot" v-if="weapons.length">Off Hand</div>
+		<div class="weapon main flex h v-center" v-for="weapon in weapons" v-linkable="weapon.id" :title="weapon.name">
+			<button class="quick rounded general action" v-on:click="open(weapon)" v-on:click.right.prevent.stop="attack(weapon)">
+				<span class="action-icon" :class="weapon.icon"></span>
+				<span class="action-count" v-if="showCharges(weapon)">{{weapon.charges || 0}}</span>
+			</button>
+			<div class="weapon name">{{weapon.name}}</div>
+		</div>
+	</div>
+	<div class="items flex h wrap">
+		<button class="rounded general quick action" v-if="equipment.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden equipment. Toggle hide by right clicking.">
+			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
+		</button>
+		<div class="otems flex h wrap hidden-list" v-if="storage && storage.show_hidden">
+			<button class="feat rounded general quick action hidden-shadow" v-for="item in equipment.hidden" v-on:click="open(item)" v-on:click.right.prevent.stop="toggleHide(item)" v-linkable="item.id" :title="item.name">
+				<span class="action-icon" :class="item.icon"></span>
+				<span class="action-count" v-if="showCharges(item)">{{item.charges || 0}}</span>
+			</button>
+		</div>
+		<button class="item rounded general quick action" v-for="item in equipment.shown" v-on:click.left="open(item)" v-on:click.right.stop.prevent="toggleHide(item)" v-linkable="item.id" v-on:mouseover="hoveredItem(item)" v-on:mouseleave="hoveredItem(null)" :title="item.name">
+			<span class="action-icon" :class="item.icon || 'fas fa-cube'"></span>
+			<span class="action-count" v-if="showCharges(item)">{{item.charges || 0}}</span>
+		</button>
+	</div>
+	<!--
 	<div class="items flex h wrap">
 		<button class="rounded general quick action" v-if="equipment.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden equipment. Toggle hide by right clicking.">
 			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
@@ -15,4 +68,5 @@
 			<span class="action-count" v-if="showCharges(item)">{{item.charges || 0}}</span>
 		</button>
 	</div>
+	
 </div>
