@@ -341,6 +341,12 @@ module.exports.initialize = function(universe) {
 			channel = universe.get(channel);
 		}
 
+		if(!targets) {
+			console.log("[!] No Targets for Sending Damage: " + (source?source.id || source:"No Source"), (channel?channel.id || channel:"No Source"));
+			targets = [];
+		}
+
+		console.log(" > Process Damages to Send: " + targets.join());
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
 			if(attacks && typeof(attacks[target.id]) !== "undefined") {
@@ -601,7 +607,7 @@ module.exports.initialize = function(universe) {
 	 * 		Null source requires Game Master player.
 	 */
 	universe.on("player:action:damage:send", function(event) {
-		console.log("Sending Damage: ", event.message.data);
+		console.log("Sending Damage[utility]: ", event.message.data);
 		var damage = event.message.data.damage,
 			targets = [],
 			channel,
@@ -635,10 +641,12 @@ module.exports.initialize = function(universe) {
 
 		if(damage) {
 			if(targets.length) {
-				if(source && (source.owned[event.player] || event.player.gm)) {
+				if(source && (source.owned[event.player.id] || event.player.gm)) {
 					sendDamages(source, targets, channel, damage);
 				} else if(!source && event.player.gm) {
 					sendDamages(null, targets, channel, damage);
+				} else {
+					console.log("Source Authorization Issue[" + event.player.id + "]: ", (source?source.owned:"No Source"), event.message.data);
 				}
 			} else {
 				// TODO: Log bad event

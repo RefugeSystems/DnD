@@ -52,6 +52,7 @@ module.exports.initialize = function(universe) {
 			} else if(spell.cast_attack) {
 				utility.sendDamages(source, targets, spell, damage, attack);
 			} else {
+				utility.sendDamages(source, targets, spell, damage, attack);
 				console.log("Unclassed spell? " + spell.id);
 			}
 			
