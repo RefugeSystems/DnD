@@ -8,15 +8,18 @@ module.exports.initialize = function(universe) {
 		var spell = universe.get(event.message.data.spell),
 			damage = event.message.data.result || {},
 			level = parseInt(event.message.data.spell_level),
-			attack = event.message.data.attack,
 			targets = [],
 			difficulty,
+			attack,
 			source,
 			load,
 			i;
 
 		if(isNaN(level)) {
 			level = spell.level || null;
+		}
+		if(event.message.data.checks && event.message.data.checks.length) {
+			attack = event.message.data.checks[0].result;
 		}
 
 		source = event.message.data.source || event.message.data.entity;
@@ -50,9 +53,9 @@ module.exports.initialize = function(universe) {
 			if(spell.cast_save) {
 				utility.sendSaves(source, targets, level, spell, spell.cast_save, difficulty, damage);
 			} else if(spell.cast_attack) {
-				utility.sendDamages(source, targets, spell, damage, attack);
+				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks);
 			} else {
-				utility.sendDamages(source, targets, spell, damage, attack);
+				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks);
 				console.log("Unclassed spell? " + spell.id);
 			}
 			
@@ -111,6 +114,25 @@ module.exports.initialize = function(universe) {
 		 * @param {Object} event.message.data.attack Roll value
 		 */
 		universe.on("player:action:cast:spell", function(event) {
+			cast(event);
+		});
+		
+		/**
+		 * 
+		 * @event player:action:reaction:spell
+		 * @for Universe
+		 * @param {Object} event With data from the system
+		 * @param {String} event.type The event name being fired, should match this event's name
+		 * @param {Integer} event.received Timestamp of when the server received the event
+		 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+		 * @param {RSObject} event.player That triggered the event
+		 * @param {Object} event.message The payload from the UI
+		 * @param {Object} event.message.type Original event type indicated by the UI
+		 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+		 * @param {Object} event.message.data Typical location of data from the UI
+		 * @param {Object} event.message.data.attack Roll value
+		 */
+		universe.on("player:action:reaction:spell", function(event) {
 			cast(event);
 		});
 		

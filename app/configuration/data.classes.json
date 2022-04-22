@@ -5,6 +5,16 @@
 		"description": "An event in the universe such as a fight, important discussion, or world happening",
 		"fields": ["parent", "name", "icon", "category", "description", "time", "location", "associations", "is_preview", "review", "attribute"]
 	}, {
+		"id": "handler",
+		"name": "Handler",
+		"description": "Definition to handle an occurrence of an event or other action within the universe",
+		"fields": ["parent", "name", "icon", "category", "description", "occurrences", "processor", "is_preview", "review", "attribute"]
+	}, {
+		"id": "occurrence",
+		"name": "Occurrence",
+		"description": "Mapping for Universe simulation event emissions",
+		"fields": ["parent", "name", "icon", "category", "description", "uevent"]
+	}, {
 		"id": "meeting",
 		"name": "Meeting",
 		"description": "Stores data for a game meeting",

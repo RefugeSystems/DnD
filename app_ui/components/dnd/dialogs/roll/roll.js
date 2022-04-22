@@ -267,7 +267,7 @@ rsSystem.component("dndDialogRoll", {
 		data.hideFormula = this.details.hideFormula;
 		data.hideHistory = this.details.hideHistory;
 		data.ready = !this.profile.auto_roll;
-		data.canMiss = true;
+		data.canMiss = !!this.details.damage;
 
 		data.skills = [];
 		if(this.details.skill) {

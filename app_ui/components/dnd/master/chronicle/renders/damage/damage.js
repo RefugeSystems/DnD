@@ -2,11 +2,11 @@
 /**
  *
  *
- * @class dndChronicleReadoutRoll
+ * @class dndChronicleReadoutDamage
  * @constructor
  * @module Components
  */
-rsSystem.component("dndChronicleReadoutRoll", {
+rsSystem.component("dndChronicleReadoutDamage", {
 	"props": {
 		"universe": {
 			"required": true,
@@ -40,6 +40,37 @@ rsSystem.component("dndChronicleReadoutRoll", {
 			}
 			return null;
 		},
+		"classing": function() {
+			if(this.occurred.data.critical) {
+				return "critical success";
+			} else if(this.occurred.data.failure) {
+				return "critical failure";
+			}
+
+			if(this.occurred.data.dice && this.occurred.data.dice.d20) {
+				if(this.occurred.data.dice.d20[0] === 1) {
+					return "critical failure";
+				} else if(this.occurred.data.dice.d20[0] === 20) {
+					return "critical success";
+				}
+			}
+
+			if(this.occurred.data.succeeded === true) {
+				return "success";
+			} else if(this.occurred.data.succeeded === false) {
+				return "failure";
+			}
+
+			if(this.occurred.data.attack && this.target) {
+				if(!this.target.armor || this.target.armor < this.occurred.data.attack) {
+					return "success";
+				} else {
+					return "failure";
+				}
+			}
+
+			return "";
+		},
 		"damages": function() {
 			var damages = [],
 				keys,
@@ -63,29 +94,6 @@ rsSystem.component("dndChronicleReadoutRoll", {
 			}
 
 			return resists;
-		},
-		"classing": function() {
-			if(this.occurred.data.critical) {
-				return "critical success";
-			} else if(this.occurred.data.failure) {
-				return "critical failure";
-			}
-
-			if(this.occurred.data.dice && this.occurred.data.dice.d20) {
-				if(this.occurred.data.dice.d20[0] === 1) {
-					return "critical failure";
-				} else if(this.occurred.data.dice.d20[0] === 20) {
-					return "critical success";
-				}
-			}
-
-			if(this.occurred.data.succeeded === true) {
-				return "success";
-			} else if(this.occurred.data.succeeded === false) {
-				return "failure";
-			}
-
-			return "";
 		}
 	},
 	"data": function() {
@@ -97,22 +105,20 @@ rsSystem.component("dndChronicleReadoutRoll", {
 		rsSystem.register(this);
 	},
 	"methods": {
-		"joinRolls": function(rolls) {
-			if(rolls) {
-				return rolls.join(", ");
-			}
-			return "";
-		},
 		"getNet": function(damage) {
-			if(this.occurred.data.resist) {
-				return Math.max(this.occurred.data.damage[damage.id] - (this.occurred.data.resist[damage.id] || 0), 0);
+			if(this.occurred.data.damage) {
+				if(this.occurred.data.resist) {
+					return Math.max(this.occurred.data.damage[damage.id] - (this.occurred.data.resist[damage.id] || 0), 0);
+				}
+				return this.occurred.data.damage[damage.id];
 			}
-			return this.occurred.data.damage[damage.id];
+			return 0;
 		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record
 			});
+			console.log(this);
 		}
 	},
 	"beforeDestroy": function() {
@@ -121,5 +127,5 @@ rsSystem.component("dndChronicleReadoutRoll", {
 		rsSystem.EventBus.$off("key:escape", this.closeInfo);
 		*/
 	},
-	"template": Vue.templified("components/dnd/master/chronicle/renders/roll.html")
+	"template": Vue.templified("components/dnd/master/chronicle/renders/damage.html")
 });

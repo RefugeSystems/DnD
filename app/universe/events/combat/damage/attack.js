@@ -19,6 +19,8 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} [event.message.data.source] Required unless the player is the Game Master
 	 * @param {String} [event.message.data.target] Either a target or targets must be specified
+	 * @param {String} [event.message.data.attack] The rolled attack check
+	 * @param {String} [event.message.data.attack_skill] The skill used for the attack
 	 * @param {String} [event.message.data.targets] Either a target or targets must be specified
 	 * @param {String} event.message.data.damage damage_Type keys to value mapping
 	 * @param {String} [event.message.data.channel] Item, Spell, or other ID for the cause of the damage if any.
@@ -27,7 +29,9 @@ module.exports.initialize = function(universe) {
 	universe.on("player:action:main:attack", function(event) {
 		console.log("Player Attack: ", event.message.data);
 		var channel = event.message.data.item || event.message.data.using || event.message.data.spell || event.message.data.channel,
+			attack_skill = event.message.data.attack_skill,
 			damage = event.message.data.result,
+			attack = event.message.data.attack,
 			targets = [],
 			channel,
 			target,

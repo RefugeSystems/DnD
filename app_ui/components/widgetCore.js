@@ -232,6 +232,7 @@ rsSystem.component("DNDWidgetCore", {
 					action = this.universe.index.action["action:reaction:spell"];
 				}
 			}
+			action = undefined;
 
 			if(spell.damage) {
 				keys = Object.keys(spell.damage);

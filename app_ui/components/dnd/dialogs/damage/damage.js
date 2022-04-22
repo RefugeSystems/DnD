@@ -117,11 +117,13 @@ rsSystem.component("dndDialogDamage", {
 				if(rsSystem.utility.isValid(target) && !filter[target.id]) {
 					filter[target.id] = true;
 					if(skip || !types || any || rsSystem.utility.hasCommonKey(types, target.types)) {
-						this.ranging[target.id] = this.distanceTo(this.entity, target);
-						if(this.ranging[target.id]) {
-							this.ranging[target.id] = this.ranging[target.id];
+						if(target.obscured || target.is_obscured) {
+							delete(this.ranging[target.id]);
 						} else {
-							this.ranging[target.id] = "";
+							this.ranging[target.id] = this.distanceTo(this.entity, target);
+							if(typeof(this.ranging[target.id]) !== "number") {
+								this.ranging[target.id] = "";
+							}
 						}
 						targets.push(target);
 					}
@@ -549,7 +551,14 @@ rsSystem.component("dndDialogDamage", {
 					if(this.entity.main_weapon === this.channel.id) {
 						skill = this.universe.index.skill["skill:mainhand"];
 					} else {
-						skill = this.universe.index.skill[this.channel.skill] || this.universe.index.skill["skill:offhand"];
+						skill = this.universe.index.skill[this.channel.skill];
+						if(!skill) {
+							if(this.channel.cast_attack) {
+								skill = this.universe.index.skill["skill:spellattack"];
+							} else {
+								skill = this.universe.index.skill["skill:offhand"];
+							}
+						}
 					}
 					if(skill) {
 						for(i=0; i<targets.length; i++) {
@@ -820,6 +829,7 @@ rsSystem.component("dndDialogDamage", {
 				i;
 			
 			// Send Skill Checks
+			sending.targeted_checks = {};
 			sending.target_checks = {};
 			sending.checks = [];
 			check = {};
@@ -831,6 +841,7 @@ rsSystem.component("dndDialogDamage", {
 						buffer = sending.target_checks[load.target.id || load.target] = {};
 					}
 					buffer[load.skill.id] = parseInt(load.roll.computed) || 0;
+					sending.targeted_checks[load.target.id] = buffer[load.skill.id];
 					check.target = load.target.id;
 				}
 				sending.checks.push(check);
@@ -847,7 +858,6 @@ rsSystem.component("dndDialogDamage", {
 			}
 
 			// Send Damage
-			sending = {};
 			if(this.channel) {
 				sending.channel = this.channel.id;
 				sending.using = this.channel.id;

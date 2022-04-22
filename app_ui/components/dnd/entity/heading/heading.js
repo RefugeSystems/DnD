@@ -47,6 +47,9 @@ rsSystem.component("dndEntityHeading", {
 				console.warn("Player has no attribute property from which to read character: ", this.player);
 			}
 		},
+		"displayHat": function() {
+			return this.entity.color_flag && !this.entity.color_flag.startsWith("bordered-");
+		},
 		"getHatColor": function() {
 			return "rs-" + this.entity.color_flag;
 		}

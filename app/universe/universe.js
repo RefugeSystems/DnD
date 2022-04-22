@@ -659,6 +659,15 @@ class Universe extends EventEmitter {
 				details.playable = false;
 				details.is_copy = true;
 				details.parent = id;
+				if(source.hp) {
+					details.hp = source.hp;
+				}
+				if(source.mp) {
+					details.mp = source.mp;
+				}
+				if(source.spell_slots) {
+					details.spell_slots = JSON.parse(JSON.stringify(source.spell_slots));
+				}
 				this.createObject(details, callback);
 			}
 		} else {
@@ -1211,14 +1220,17 @@ class Universe extends EventEmitter {
 	 * @method messagePlayers
 	 * @param {Object} players IDs
 	 * @param {String} message Text
+	 * @param {String} icon Text
+	 * @param {Object} emission Event for UI
 	 */
-	messagePlayers(players, message, icon) {
+	messagePlayers(players, message, icon, emission) {
 		this.emit("send", {
 			"type": "notice",
 			"recipients": players,
 			"message": message,
 			"icon": icon,
-			"anchored": true
+			"anchored": true,
+			"emission": emission
 		});
 	}
 
@@ -1253,6 +1265,21 @@ class Universe extends EventEmitter {
 			"data": data,
 			"anchored": true
 		});
+	}
+
+	/**
+	 * 
+	 * @method objectHasKey
+	 * @param {Object} object 
+	 * @return {Boolean} True if the object exists and has at least one key
+	 */
+	objectHasKey(object) {
+		if(typeof(object) === "object") {
+			for(var test in object) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

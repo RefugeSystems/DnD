@@ -44,6 +44,13 @@ rsSystem.component("rsStatBlock", {
 			"type": String
 		}
 	},
+	"watch": {
+		"object._class": function(nV, oV) {
+			if(nV !== oV) {
+				this.clearFilter();
+			}
+		}
+	},
 	"computed": {
 		"isKnown": function() {
 			var entity;
@@ -116,12 +123,17 @@ rsSystem.component("rsStatBlock", {
 			return fields;
 		},
 		"filters": function() {
-			var filters = this.filtering.split(","),
+			var filtering = this.filtering,
+				filters,
 				i;
-			for(i=0; i<filters.length; i++) {
-				filters[i] = filters[i].trim().toLowerCase();
+			if(filtering) {
+				filters = filtering.split(",");
+				for(i=0; i<filters.length; i++) {
+					filters[i] = filters[i].trim().toLowerCase();
+				}
+				return filters;
 			}
-			return filters;
+			return [];
 		}
 	},
 	"data": function() {
@@ -139,6 +151,9 @@ rsSystem.component("rsStatBlock", {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": id
 			});
+		},
+		"clearFilter": function() {
+			Vue.set(this, "filtering", "");
 		},
 		"isVisible": function(field) {
 			var filters,

@@ -15,6 +15,7 @@
 			</button>
 			<button class="bucket general quick rounded action" v-for="bucket in activeEntities._keys" v-on:click="switchEntityBucket(bucket)" :class="bucketClass(bucket)" :title="bucket">
 				<span :class="bucketIcon[bucket] || 'fas fa-users'"></span>
+				<span class="action-count">{{activeEntities[bucket].length}}</span>
 			</button>
 		</div>
 		<div class="screen-column large" v-if="viewedEntity">

@@ -3,29 +3,54 @@
 	<div class="section-name flex h justified">
 		<div class="name flex h">
 			<button class="property" v-on:click="toggle()">
-				<span class="fal" :class="storage && storage.is_open?'fa-plus':'fa-minus'"></span>
+				<span class="fal" :class="storage && storage.is_open?'fa-minus':'fa-plus'"></span>
 			</button>
 			<div class="property rsbg-lightBlue">
 				<span>Feats</span>
 			</div>
+			<button class="property" v-on:click="toggleFormat()">
+				<span class="fal" :class="storage && storage.is_view_list?'fa-ellipsis':'fa-list'"></span>
+			</button>
 		</div>
 		<!-- <div class="filter flex v">
 			<input v-if="storage && $index === 0" class="grow-1" type="text" placeholder="Filter Skills..." v-model="storage.filter" />
 		</div> -->
 	</div>
-	<div class="feats flex h wrap">
-		<button class="rounded general quick action" v-if="feats.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden feats. Toggle hide by right clicking.">
+	<div class="feats flex h wrap" v-if="storage.is_open && !storage.is_view_list">
+		<button class="rounded general quick action hidden-shadow" v-if="feats.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden feats. Toggle hide by right clicking.">
 			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
 		</button>
-		<div class="feats flex h wrap hidden-list" v-if="storage && storage.show_hidden">
-			<button class="feat rounded general quick action hidden-shadow" v-for="feat in feats.hidden" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
-				<span class="action-icon" :class="feat.icon"></span>
-				<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
-			</button>
-		</div>
+		<button class="feat rounded general quick action hidden-shadow" v-for="feat in renderedHidden" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+			<span class="action-icon" :class="feat.icon"></span>
+			<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
+		</button>
 		<button class="feat rounded general quick action" v-for="feat in feats.shown" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
 			<span class="action-icon" :class="feat.icon"></span>
 			<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
 		</button>
+	</div>
+	<div class="feats flex v" v-if="storage.is_open && storage.is_view_list">
+		<div class="flex h v-center" v-if="feats.hidden.length">
+			<button class="rounded general quick action hidden-shadow" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden feats. Toggle hide by right clicking.">
+				<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
+			</button>
+			<span class="displayed-name">{{storage.show_hidden?"Hide Tucked Feats":"Show Tucked Feats"}}</span>
+		</div>
+		<div class="flex h v-center"  v-for="feat in renderedHidden">
+			<button class="feat rounded general quick action hidden-shadow" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+				<span class="action-icon" :class="feat.icon"></span>
+				<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
+			</button>
+			<dnd-object-charges class="general rounded" v-if="showCharges(feat)" :object="feat" :universe="universe" :no-details="true"></dnd-object-charges>
+			<span class="displayed-name">{{feat.name}}</span>
+		</div>
+		<div class="flex h v-center" v-for="feat in feats.shown">
+			<button class="feat rounded general quick action" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+				<span class="action-icon" :class="feat.icon"></span>
+				<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
+			</button>
+			<dnd-object-charges class="general rounded" v-if="showCharges(feat)" :object="feat" :universe="universe" :no-details="true"></dnd-object-charges>
+			<span class="displayed-name">{{feat.name}}</span>
+		</div>
 	</div>
 </div>

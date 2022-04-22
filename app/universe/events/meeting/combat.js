@@ -20,6 +20,7 @@ module.exports.initialize = function(universe) {
 	universe.on("player:meeting:combat", function(event) {
 		var meeting = event.message.data.meeting,
 			details = {},
+			notify = [],
 			location,
 			entity,
 			i;
@@ -43,6 +44,9 @@ module.exports.initialize = function(universe) {
 						entity.setValues({
 							"initiative": null
 						});
+						if(universe.objectHasKey(entity.owned)) {
+							notify.push(entity);
+						}
 					}
 					if(!details.location && entity.location) {
 						details.location = entity.location;
@@ -64,6 +68,19 @@ module.exports.initialize = function(universe) {
 				if(err) {
 					universe.handleError("meeting:combat:start", "Failed to start a skirmish", err);
 				} else {
+					for(i=0; i<notify.length; i++) {
+						entity = notify[i];
+						universe.messagePlayers(entity.owned, "Roll Initiative for " + entity.name, "fa-solid fa-dice", {
+							"type": "dialog-open",
+							"component": "dndDialogCheck",
+							"storageKey": "store:roll:" + entity.id,
+							"entity": entity.id,
+							"skill": "skill:initiative",
+							"hideFormula": true,
+							"hideHistory": true,
+							"closeAfterCheck": true
+						});
+					}
 					meeting.addValues({
 						"skirmishes": [skirmish]
 					});

@@ -24,6 +24,10 @@ var stackRestricted = [
 	"attribute"
 ];
 
+
+var noOpFunction = function() {};
+
+
 var fieldHasValue = function(value) {
 	if(value === null || value === undefined) {
 		return false;
@@ -38,8 +42,10 @@ var fieldHasValue = function(value) {
 	return true;
 };
 
+
 var _ = require("lodash");
 require("../extensions/array");
+
 
 class RSObject {
 	constructor(universe, manager, details) {
@@ -845,7 +851,7 @@ class RSObject {
 						this[field.id] = this._universe.calculator.reducedDiceRoll(this[field.id], this);
 					}
 				}
-				// Normalize Numeric Fields
+				// Normalize Field Types
 				if(field.type === "number") {
 					if(isNaN(this[field.id])) {
 						this[field.id] = parseFloat(this[field.id]);
@@ -871,6 +877,12 @@ class RSObject {
 					for(i=0; i<keys.length; i++) {
 						this[field.id][keys[i]] = parseInt(this[field.id][keys[i]]);
 					}
+				} else if(this[field.id] && (field.type === "function" || field.type === "method") && !this.preview && !this.is_preview && this[field.id] !== this._previous[field.id]) {
+					try {
+						this[field.id] = new Function("event", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", this[field.id]);
+					} catch(initializationException) {
+						console.log("Function Initialization Err: ", initializationException);
+					}
 				} else if(field.type === "calculated" && isNaN(this[field.id])) {
 					this._formula[field.id] = this[field.id];
 					this[field.id] = this._universe.calculator.computedDiceRoll(this[field.id], this);
@@ -888,6 +900,8 @@ class RSObject {
 						this[field.id] = field.attribute.default;
 					} else if(field.type === "object" || field.type === "object:dice") {
 						this[field.id] = {};
+					} else if(field.type === "function" || field.type === "method") {
+						this[field.id] = noOpFunction;
 					} else if(field.type === "array") {
 						this[field.id] = [];
 					}
@@ -1764,6 +1778,8 @@ class RSObject {
 						}
 						if(field.type === "calculated" || field.type === "dice" || field.type === "object:dice" || field.type === "object:calculated") {
 							formulas[field.id] = this._calculated[field.id];
+						} else if(field.type === "method" || field.type === "function") {
+							json[field.id] = this._data[field.id];
 						}
 					} else {
 						delete(calculated[field.id]);

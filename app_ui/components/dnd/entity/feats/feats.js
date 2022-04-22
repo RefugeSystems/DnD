@@ -44,6 +44,13 @@ rsSystem.component("dndEntityFeats", {
 			}
 
 			return feats;
+		},
+		"renderedHidden": function() {
+			if(this.storage.show_hidden) {
+				return this.feats.hidden;
+			} else {
+				return [];
+			}
 		}
 	},
 	"data": function() {
@@ -56,10 +63,16 @@ rsSystem.component("dndEntityFeats", {
 		if(!this.storage.hide) {
 			Vue.set(this.storage, "hide", {});
 		}
+		if(this.storage.is_open === undefined) {
+			Vue.set(this.storage, "is_open", true);
+		}
 	},
 	"methods": {
 		"toggle": function() {
-
+			Vue.set(this.storage, "is_open", !this.storage.is_open);
+		},
+		"toggleFormat": function() {
+			Vue.set(this.storage, "is_view_list", !this.storage.is_view_list);
 		},
 		"toggleHide": function(feat) {
 			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);

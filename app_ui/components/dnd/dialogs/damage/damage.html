@@ -5,9 +5,16 @@
 			<span>{{section.name}}</span>
 			<span class="section-tab-icon fa-solid fa-chevron-right" v-if="sections[section.index + 1] && section.index !== activeSection.index"></span>
 		</button>
+		<!--
 		<button class="general rounded quick action" v-on:click="finishSection(activeSection)">
+			<span class="">{{sections[activeSection.index + 1]?'Next':'Finish'}}</span>
 			<span class="action-icon fa-solid" :class="sections[activeSection.index + 1]?'fa-chevrons-right':'fa-upload'"></span>
 		</button>
+		-->
+		<rs-shiny-button class="general rounded action" v-on:click="finishSection(activeSection)" :active="true" color="yellow">
+			<span class="">{{sections[activeSection.index + 1]?'Next':'Finish'}}</span>
+			<span class="action-icon fa-solid" :class="sections[activeSection.index + 1]?'fa-chevrons-right':'fa-upload'"></span>
+		</rs-shiny-button>
 	</div>
 	<div class="declaring">
 		<div class="declaration-slider flex h" :class="activeSection.classing">
@@ -109,12 +116,17 @@
 							<button class="general rounded quick action spells" v-on:click="toggleSplitDamage()">
 								<span class="action-icon fal" :class="splitDamage?'fa-check-square':'fa-square'"></span>
 							</button>
-							<button class="general rounded selection action" v-on:click="info('knowledge:operation:damage:split')">
+							<button class="general rounded quick action icon" v-on:click="info('knowledge:operation:damage:split')">
 								<span class="action-icon fas fa-info-circle rs-light-blue"></span>
+							</button>
+							<button class="general rounded selection action" v-on:click="toggleSplitDamage()">
 								<span class="action-text">Individal Target Damage</span>
 							</button>
 						</div>
 						<div class="spaced target flex h" v-for="target in available_targets" :class="getTargetClasses(target)">
+							<button class="general rounded quick action icon" v-on:click="toggleTarget(target)">
+								<span class="action-icon fal" :class="targeting[target.id]?'fa-check-square':'fa-square'"></span>
+							</button>
 							<button class="general rounded quick action icon" v-on:click="info(target)">
 								<span class="action-icon" :class="target.icon"></span>
 							</button>

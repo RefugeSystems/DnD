@@ -1,5 +1,5 @@
 <div class="system-component rs-component chat-panel" :class="storage.collapsed?'collapsed':'displayed'">
-	<chat-window :universe="universe" :player="player" :configuration="configuration" :profile="profile" :chat-core="chatCore" force-channel="all" :storage-container="storage" v-on:altsend="hide()"/>
+	<chat-window :universe="universe" :player="player" :configuration="configuration" :profile="profile" :chat-core="chatCore" force-channel="all" :storage-container="storage" v-on:altsend="hide()" v-on:minimize="hide()"/>
 	<button class="general rounded quick action uncollapse" v-if="storage.collapsed" v-on:click="display()">
 		<span class="action-icon fas fa-comment-lines rs-light-gray"></span>
 	</button>

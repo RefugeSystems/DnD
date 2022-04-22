@@ -53,7 +53,7 @@ rsSystem.component("dndEntityEquipment", {
 
 				for(i=0; i<this.entity.equipped.length; i++) {
 					item = this.universe.index.item[this.entity.equipped[i]];
-					if(item) {
+					if(item && !item.melee && !item.ranged && !item.thrown && !item.is_weapon && item.id !== this.entity.main_weapon) {
 						if(this.storage && this.storage.hide && this.storage.hide[item.id]) {
 							equipment.shown.push(item);
 						} else if(!item.concealed) {
@@ -85,6 +85,13 @@ rsSystem.component("dndEntityEquipment", {
 					"shown": []
 				};
 			}
+		},
+		"renderedHidden": function() {
+			if(this.storage.show_hidden) {
+				return this.equipment.hidden;
+			} else {
+				return [];
+			}
 		}
 	},
 	"data": function() {
@@ -97,13 +104,19 @@ rsSystem.component("dndEntityEquipment", {
 		if(!this.storage.hide) {
 			Vue.set(this.storage, "hide", {});
 		}
+		if(this.storage.is_open === undefined) {
+			Vue.set(this.storage, "is_open", true);
+		}
 	},
 	"methods": {
 		"hoveredItem": function(item) {
 			this.$emit("hovered-object", item);
 		},
 		"toggle": function() {
-
+			Vue.set(this.storage, "is_open", !this.storage.is_open);
+		},
+		"toggleFormat": function() {
+			Vue.set(this.storage, "is_view_list", !this.storage.is_view_list);
 		},
 		"toggleHide": function(item) {
 			Vue.set(this.storage.hide, item.id, !this.storage.hide[item.id]);

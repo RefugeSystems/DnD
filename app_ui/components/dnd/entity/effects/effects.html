@@ -1,18 +1,61 @@
 <div class="rs-component dnd-component entity-effects">
 	<div class="divider" v-if="effects.hidden.length || effects.shown.length"></div>
-	<div class="effects flex h wrap">
-		<button class="rounded general quick action" v-if="effects.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden effects. Toggle hide by right clicking.">
-			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
-		</button>
-		<div class="feats flex h wrap hidden-list" v-if="storage && storage.show_hidden">
-			<button class="feat rounded general quick action hidden-shadow" v-for="effect in effects.hidden" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
-				<span class="action-icon" :class="effectClasses(effect)"></span>
-				<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
+	<div class="section-name flex h justified">
+		<div class="name flex h">
+			<button class="property" v-on:click="toggle()">
+				<span class="fal" :class="storage && storage.is_open?'fa-minus':'fa-plus'"></span>
+			</button>
+			<div class="property rsbg-lightBlue">
+				<span>Effects</span>
+				<span v-if="entity.effects.length"> ( {{entity.effects.length}} )</span>
+			</div>
+			<button class="property" v-on:click="toggleFormat()">
+				<span class="fal" :class="storage && storage.is_view_list?'fa-ellipsis':'fa-list'"></span>
+			</button>
+			<button class="action property rsbg-light-red" v-if="effects.negative.length" v-on:click="info('knowledge:rules:effects:negative')">
+				<span class="action-icon fa-solid fa-exclamation-triangle rs-dark-red"></span>
+				<span class="action-count rs-white">{{effects.negative.length}}</span>
 			</button>
 		</div>
+		<!-- <div class="filter flex v">
+			<input v-if="storage && $index === 0" class="grow-1" type="text" placeholder="Filter Skills..." v-model="storage.filter" />
+		</div> -->
+	</div>
+	<div class="effects flex h wrap" v-if="storage.is_open && !storage.is_view_list">
+		<button class="rounded general quick action hidden-shadow" v-if="effects.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden effects. Toggle hide by right clicking.">
+			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
+		</button>
+		<button class="feat rounded general quick action hidden-shadow" v-for="effect in renderedHidden" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+			<span class="action-icon" :class="effectClasses(effect)"></span>
+			<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
+		</button>
 		<button class="effect rounded general quick action" v-for="effect in effects.shown" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
 			<span class="action-icon" :class="effectClasses(effect)"></span>
 			<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 		</button>
+	</div>
+	<div class="effects flex v" v-if="storage.is_open && storage.is_view_list">
+		<div class="flex h v-center" v-if="effects.hidden.length">
+			<button class="rounded general quick action hidden-shadow" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden effects. Toggle hide by right clicking.">
+				<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
+			</button>
+			<span class="displayed-name">{{storage.show_hidden?"Hide Tucked Effects":"Show Tucked Effects"}}</span>
+		</div>
+		<div class="flex h v-center"  v-for="effect in renderedHidden">
+			<button class="effect rounded general quick action hidden-shadow" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+				<span class="action-icon" :class="effect.icon"></span>
+				<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
+			</button>
+			<dnd-object-charges class="general rounded" v-if="showCharges(effect)" :object="effect" :universe="universe" :no-details="true"></dnd-object-charges>
+			<span class="displayed-name">{{effect.name}}</span>
+		</div>
+		<div class="flex h v-center" v-for="effect in effects.shown">
+			<button class="effect rounded general quick action" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+				<span class="action-icon" :class="effectClasses(effect)"></span>
+				<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
+			</button>
+			<dnd-object-charges class="general rounded" v-if="showCharges(effect)" :object="effect" :universe="universe" :no-details="true"></dnd-object-charges>
+			<span class="displayed-name">{{effect.name}}</span>
+		</div>
 	</div>
 </div>

@@ -3235,6 +3235,36 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "processor",
+		"name": "Processor",
+		"description": "An event response function to process event data within the context of the universe; function(event, universe, utility) { ... }",
+		"type": "method",
+		"attribute": {}
+	}, {
+		"id": "uevent",
+		"name": "Universe Event",
+		"description": "The string for the Event emitted within the Universe as part of the simulation",
+		"type": "string",
+		"attribute": {}
+	}, {
+		"id": "occurrences",
+		"name": "Universe Events",
+		"description": "List of Universe Event bindings through Occurrences for the object",
+		"type": "array",
+		"inheritable": [
+			"occurrence"
+		],
+		"attribute": {}
+	}, {
+		"id": "event",
+		"name": "Event",
+		"description": "The event to which the object is related.",
+		"type": "string",
+		"inheritable": [
+			"event"
+		],
+		"attribute": {}
+	}, {
 		"id": "attachments",
 		"name": "Attchments",
 		"description": "List of item IDs considered attached to this object.",

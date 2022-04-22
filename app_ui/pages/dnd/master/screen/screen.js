@@ -125,6 +125,7 @@ rsSystem.component("DNDMasterScreen", {
 			entities.npcs = npcs;
 			entities.meeting = [];
 			entities.combat = [];
+			entities.nocombat = [];
 
 			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
@@ -230,6 +231,16 @@ rsSystem.component("DNDMasterScreen", {
 				this.universe.transcribeInto(this.skirmish.entities, entities.combat, "entity");
 			}
 
+			// No Initiative
+			if(this.skirmish) {
+				for(i=0; i<this.skirmish.entities.length; i++) {
+					entity = this.universe.getObject(this.skirmish.entities[i]);
+					if(entity && typeof(entity.initiative) !== "number") {
+						entities.nocombat.push(entity);
+					}
+				}
+			}
+
 			entities.combat.sort(rsSystem.utility.sortByInitiative);
 			entities.list = mains.concat(minions, npcs, foes);
 			entities.list.sort(rsSystem.utility.sortByInitiative);
@@ -266,6 +277,7 @@ rsSystem.component("DNDMasterScreen", {
 			"npcs": "game-icon game-icon-character",
 			"meeting": "fas fa-calendar",
 			"combat": "fas fa-swords",
+			"nocombat": "fa-regular fa-peace",
 			"minions": "fas fa-dog"
 		};
 
@@ -700,8 +712,7 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"beforeDestroy": function() {
-		this.universe.$off("entity:roll", this
-		.entityRolled);
+		this.universe.$off("entity:roll", this.entityRolled);
 	},
 	"template": Vue.templified("pages/dnd/master/screen.html")
 });

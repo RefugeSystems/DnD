@@ -30,11 +30,19 @@
 	}
 
 	.send-button {
-		height: 100%;
+		// height: 100%;
+		height: 100%; // Accomodate new close/minimize button
 
 		button {
-			border-radius: 0px 5px 5px 0px;
-			height: 100%;
+			height: 50%;
+		}
+
+		button.send {
+			border-radius: 0px 5px 0px 0px;
+		}
+
+		button.close {
+			border-radius: 0px 0px 5px 0px;
 		}
 	}
 }

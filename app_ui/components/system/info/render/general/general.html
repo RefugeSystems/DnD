@@ -25,7 +25,7 @@
 				<option v-for="option in control.options" :value="option">{{option}}</option>
 			</select>
 		</div>
-		<dnd-object-charges v-if="info.charges_max" :object="info" :universe="universe"></dnd-object-charges>
+		<dnd-object-charges class="flat" v-if="info.charges_max" :object="info" :universe="universe"></dnd-object-charges>
 	</div>
 	<rs-stat-block :universe="universe" :object="info" :player="player" :profile="profile" :size="size" :empties="false" :filterable="true" marking="fad fa-dot-circle rs-secondary-transparent"/>
 </div>

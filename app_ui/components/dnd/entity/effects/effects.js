@@ -35,10 +35,10 @@ rsSystem.component("dndEntityEffects", {
 				for(i=0; i<this.entity.effects.length; i++) {
 					effect = this.universe.index.effect[this.entity.effects[i]];
 					if(effect && !effect.obscured && !effect.is_obscured) {
-						if(this.storage && this.storage.hide && this.storage.hide[effect.id]) {
-							hidden.push(effect);
-						} else if(effect.debuff) {
+						if(effect.debuff) {
 							negative.push(effect);
+						} else if(this.storage && this.storage.hide && this.storage.hide[effect.id]) {
+							hidden.push(effect);
 						} else {
 							positive.push(effect);
 						}
@@ -47,13 +47,22 @@ rsSystem.component("dndEntityEffects", {
 
 				return {
 					"shown": positive.concat(negative),
+					"negative": negative,
 					"hidden": hidden
 				};
 			} else {
 				return {
 					"hidden": [],
+					"negative": [],
 					"shown": []
 				};
+			}
+		},
+		"renderedHidden": function() {
+			if(this.storage.show_hidden) {
+				return this.effects.hidden;
+			} else {
+				return [];
 			}
 		}
 	},
@@ -118,8 +127,14 @@ rsSystem.component("dndEntityEffects", {
 			// };
 			// rsSystem.EventBus.$emit("dialog-open", details);
 		},
-		"toggleHide": function(feat) {
-			Vue.set(this.storage.hide, feat.id, !this.storage.hide[feat.id]);
+		"toggle": function() {
+			Vue.set(this.storage, "is_open", !this.storage.is_open);
+		},
+		"toggleHide": function(effect) {
+			Vue.set(this.storage.hide, effect.id, !this.storage.hide[effect.id]);
+		},
+		"toggleFormat": function() {
+			Vue.set(this.storage, "is_view_list", !this.storage.is_view_list);
 		},
 		"toggleHidden": function() {
 			Vue.set(this.storage, "show_hidden", !this.storage.show_hidden);

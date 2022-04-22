@@ -1,7 +1,12 @@
 <div class="rs-component dnd-component chronicle-readout">
-	<div class="filter flex h">
-		<span class="waiting rs-black fas fa-spinner fa-pulse"></span>
-		<input type="text" class="grow-1" v-delayed:400.lower="storage.chronicle_filter" />
+	<div class="controls flex h">
+		<div class="filter flex h">
+			<span class="waiting rs-black fas fa-spinner fa-pulse"></span>
+			<input type="text" class="grow-1" v-delayed:400.lower="storage.chronicle_filter" />
+		</div>
+		<button class="quick general rounded action clear" v-on:click="clearHistory()">
+			<span class="fa-solid fa-trash-can"></span>
+		</button>
 	</div>
 	<div class="occurrence" v-for="(occurred,$index) in storage.witnessed" v-if="isVisible(occurred)" :class="occurred.type" v-on:click.right.stop.prevent="dismiss($index)">
 		<component :is="occurred.component" :occurred="occurred" :universe="universe" :configuration="configuration"></component>

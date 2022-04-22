@@ -110,6 +110,9 @@ rsSystem.component("chatWindow", {
 		"altSend": function() {
 			this.$emit("altsend", this.storage.message);
 		},
+		"minimize": function() {
+			this.$emit("minimize", this.storage.message);
+		},
 		"processDrop": function(event) {
 			var data = rsSystem.dragndrop.general.drop();
 			// if(data && (data = this.universe.getObject(data))) {

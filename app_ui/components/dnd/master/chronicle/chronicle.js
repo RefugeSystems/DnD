@@ -39,6 +39,8 @@ rsSystem.component("dndChronicleReadout", {
 	"data": function() {
 		var data = {};
 
+		data.activityLookup = {};
+
 		data.searchables = {
 			"entity": "name",
 			"source": "name",
@@ -71,15 +73,63 @@ rsSystem.component("dndChronicleReadout", {
 		if(!this.storage.chronicle_filter) {
 			Vue.set(this.storage, "chronicle_filter", "");
 		}
+		if(typeof(this.storage.activityLookup) !== "object") {
+			Vue.set(this.storage, "activityLookup", {});
+		}
 	},
 	"methods": {
+		"clearHistory": function() {
+			var event,
+				i;
+			for(i=0; i<this.storage.witnessed.length; i++) {
+				event = this.storage.witnessed[i];
+				if(event.activity) {
+					Vue.delete(this.storage.activityLookup, event.activity);
+				}
+			}
+			this.storage.witnessed.splice(0);
+		},
 		"receiveEvent": function(event) {
-			// console.log("Received Chronice: ", event);
+			console.log("Received Chronice: ", event);
+			var update;
 			if(event) {
 				switch(event.type) {
+					case "entity:saving":
+						this.witnessEvent("roll", "dndChronicleReadoutRoll", {
+							"activity": event.activity,
+							"entity": event.target,
+							"source": event.source,
+							"skill": event.skill,
+							"result": event.save,
+							"damage": event.damage,
+							"difficulty": event.difficulty,
+							"channel": event.channel,
+							"gametime": this.universe.calendar.toDisplay(event.gametime, true, false),
+							"timeline": event.timeline,
+							"level": event.level,
+							"dice": {
+								"d20": []
+							}
+						});
+						break;
 					case "entity:saved":
 						// console.log("Entity Save: ", event);
+						update = {
+							"save": event.save,
+							"critical": event.critical,
+							"failure": event.failure,
+							"succeeded": event.succeeded,
+							"resist": event.resist,
+							"resist_source": event.resist_source
+						};
+						if(event.damage_source) {
+							update.damage_source = event.damage_source;
+							update.damage = event.damage;
+						}
+						this.updateEvent(event.activity, update);
+						/*
 						this.witnessEvent("roll", "dndChronicleReadoutRoll", {
+							"activity": event.activity,
 							"entity": event.target,
 							"source": event.source,
 							"skill": event.skill,
@@ -87,6 +137,7 @@ rsSystem.component("dndChronicleReadout", {
 							"difficulty": event.difficulty,
 							"channel": event.channel,
 							"gametime": this.universe.calendar.toDisplay(event.gametime, true, false),
+							"timeline": event.timeline,
 							"level": event.level,
 							"critical": event.critical,
 							"failure": event.failure,
@@ -95,6 +146,33 @@ rsSystem.component("dndChronicleReadout", {
 								"d20": []
 							}
 						});
+						*/
+						break;
+					case "entity:damaging":
+						this.witnessEvent("roll", "dndChronicleReadoutDamage", {
+							"phase": "initial",
+							"activity": event.activity,
+							"entity": event.target,
+							"source": event.source,
+							"attack": event.attack,
+							"skill": event.skill,
+							"gametime": this.universe.calendar.toDisplay(event.gametime, true, false),
+							"timeline": event.timeline,
+							"level": event.level,
+							"channel": event.channel,
+							"damage": event.damage
+						});
+						break;
+					case "entity:damaged":
+						update = {
+							"resist_source": event.resist_source,
+							"resist": event.resist
+						};
+						if(event.damage_source) {
+							update.damage_source = event.damage_source;
+							update.damage = event.damage;
+						}
+						this.updateEvent(event.activity, update);
 						break;
 				}
 			}
@@ -141,17 +219,39 @@ rsSystem.component("dndChronicleReadout", {
 		"dismiss": function(index) {
 			this.storage.witnessed.splice(index, 1);
 		},
+		"updateEvent": function(activity, data) {
+			var activity = this.storage.activityLookup[activity],
+				keys,
+				i;
+			if(activity) {
+				keys = Object.keys(data);
+				for(i=0; i<keys.length; i++) {
+					Vue.set(activity.data, keys[i], data[keys[i]]);
+				}
+				
+				Vue.set(activity, "_updated_date", (new Date()).toLocaleTimeString());
+				Vue.set(activity, "_updated", Date.now());
+			}
+		},
 		"witnessEvent": function(type, component, data) {
-			this.storage.witnessed.unshift({
+			data = {
+				"activity": data.activity,
 				"type": type,
 				"component": component,
 				"data": data,
 				"received": Date.now(),
 				"date": (new Date()).toLocaleTimeString(),
 				"search": this.makeSearchKey(data)
-			});
+			};
+			this.storage.witnessed.unshift(data);
+			if(data.activity) {
+				Vue.set(this.storage.activityLookup, data.activity, data);
+			}
 			if(this.storage.witnessed.length > this.storage.witnessed_limit) {
-				this.storage.witnessed.pop();
+				data = this.storage.witnessed.pop();
+				if(data.activity) {
+					Vue.delete(this.storage.activityLookup, data.activity);
+				}
 			}
 		},
 		"isVisible": function(occurred) {

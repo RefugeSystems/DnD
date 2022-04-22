@@ -46,6 +46,7 @@ module.exports.initialize = function(universe) {
 	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}) {
 		var tracked = tracking[activity],
 			log = logged[activity],
+			resisted = {},
 			waiting = [],
 			was_damaged,
 			adding,
@@ -57,7 +58,6 @@ module.exports.initialize = function(universe) {
 		if(tracked) {
 			clearTimeout(alarms[activity]);
 			delete(tracking[activity]);
-			log.resist = resist;
 			if(tracked.target.owned && Object.keys(tracked.target.owned).length) {
 				notify = tracked.target.owned;
 			} else {
@@ -70,14 +70,16 @@ module.exports.initialize = function(universe) {
 			});
 		} else {
 			log = {};
+			log.activity = activity;
 			log.target = entity.id;
 			log.source = null;
 			log.damage = damage;
-			log.resist = resist;
 		}
 		if(damage) {
+			log.resist_source = resist;
+			was_damaged = resolveDamage(entity, damage, resist, resisted);
+			log.resist = resisted;
 			universe.chronicle.addOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
-			was_damaged = resolveDamage(entity, damage, resist);
 			if(tracked && tracked.source && tracked.target) {
 				if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 					for(i=0; i<tracked.channel.instilled.length; i++) {
@@ -145,9 +147,11 @@ module.exports.initialize = function(universe) {
 	finishSave = module.exports.finishSave = function(activity, entity, save, resist, critical, failure) {
 		var tracked = tracking[activity],
 			log = logged[activity],
+			resisted = {},
 			was_damaged,
 			succeeded,
 			castMask,
+			damage,
 			buffer,
 			notify,
 			keys,
@@ -185,7 +189,7 @@ module.exports.initialize = function(universe) {
 			log.critical = critical;
 			log.failure = failure;
 		}
-		universe.chronicle.addOccurrence("entity:saved", log, universe.time, log.source, entity.id);
+		
 		if(tracked && tracked.target) {
 			castMask = {};
 			castMask.caster = log.source;
@@ -196,8 +200,24 @@ module.exports.initialize = function(universe) {
 
 			if(!failure && (critical || succeeded)) {
 				console.log("Succeed [" + save + " vs. DC" + tracked.difficulty + "]");
+				succeeded = true;
 				if(tracked.damage) {
 					// TODO: Improve logic for spell damage reduction as cantrip vs. full spell []
+					damage = log.damage = {};
+					log.damage_source = {};
+					keys = Object.keys(tracked.damage);
+					if(log.level) {
+						for(i=0; i<keys.length; i++) {
+							log.damage_source[keys[i]] = tracked.damage[keys[i]] || 0;
+							damage[keys[i]] = Math.ceil((tracked.damage[keys[i]] || 0)/2);
+						}
+					} else {
+						for(i=0; i<keys.length; i++) {
+							log.damage_source[keys[i]] = tracked.damage[keys[i]] || 0;
+							damage[keys[i]] = 0;
+						}
+					}
+					/*
 					tracked.resist = tracked.resist || {};
 					if(log.level) {
 						keys = Object.keys(tracked.damage);
@@ -211,11 +231,17 @@ module.exports.initialize = function(universe) {
 					} else {
 						tracked.damage = {};
 					}
+					*/
 				}
 			} else {
 				console.log("Failure [" + save + " vs. DC" + tracked.difficulty + "]");
+				damage = tracked.damage;
 			}
-			was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
+			log.resist_source = resist;
+			was_damaged = resolveDamage(entity, damage, resist, resisted);
+			// was_damaged = resolveDamage(entity, damage, resist, resisted);
+			log.resist = resisted;
+			// was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
 			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 				for(i=0; i<tracked.channel.instilled.length; i++) {
 					buffer = universe.get(tracked.channel.instilled[i]);
@@ -232,11 +258,10 @@ module.exports.initialize = function(universe) {
 					}
 				}
 			}
-
-
 		} else {
 			// No auto, just log to chronicle
 		}
+		universe.chronicle.addOccurrence("entity:saved", log, universe.time, log.source, entity.id);
 		console.log("Finishing Save: ", log);
 	 };
 
@@ -249,7 +274,7 @@ module.exports.initialize = function(universe) {
 	 * @returns {Boolean} True if damage was taken, false otherwise. If healing occurs, this will
 	 * 		return true that "healing" "damage" was taken. Merely indicates HP changed.
 	 */
-	var resolveDamage = function(entity, damage, resist = {}) {
+	var resolveDamage = function(entity, damage, resist = {}, resisted = {}) {
 		if(!damage) {
 			universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received");
 			return false;
@@ -265,9 +290,11 @@ module.exports.initialize = function(universe) {
 		add.hp = 0; //entity.hp;
 		for(i = 0; i < keys.length; i++) {
 			if(typeof(resist[keys[i]]) === "string") {
-				resist[keys[i]] = universe.calculator.computedDiceRoll(resist[keys[i]], entity, undefined, damage[keys[i]]);
+				resisted[keys[i]] = universe.calculator.computedDiceRoll(resist[keys[i]], entity, undefined, damage[keys[i]]) || 0;
+			} else {
+				resisted[keys[i]] = resist[keys[i]] || 0;
 			}
-			received = damage[keys[i]] - (resist[keys[i]] || 0);
+			received = damage[keys[i]] - resisted[keys[i]];
 			// TODO: Handle feats/effects that allow heal on damage type over-resist
 			if(received < 0) {
 				received = 0;
@@ -280,6 +307,7 @@ module.exports.initialize = function(universe) {
 				add.hp -= received;
 			}
 		}
+		console.log("Resisted: ", resisted);
 
 		// if(add.hp < 0) {
 		// 	add.hp = 0;
@@ -329,8 +357,9 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} damage 
 	 * @param {Integer} [attack] Rolled attack value, if any
 	 * @param {Object} [attacks] Rolled attack value per target, if any
+	 * @param {String} [attack_skill] Skill ID for how the attack was performed (Main Hand, Off Hand, Spell Attack)
 	 */
-	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks) {
+	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill) {
 		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
 			target,
@@ -358,21 +387,25 @@ module.exports.initialize = function(universe) {
 			console.log("Multi - Sending: " + (target?target.id || target:"No Target"), "Source: " + (source?source.id || source:"No Source"));
 			activity = id + ":" + target.id;
 			tracking[activity] = {
+				"activity": activity,
 				"gametime": universe.time,
 				"time": Date.now(),
 				"source": source,
 				"target": target,
 				"channel": channel,
 				"attack": atk,
-				"damage": damage
+				"damage": damage,
+				"skill": attack_skill?attack_skill.id || attack_skill:undefined
 			};
 			logged[activity] = {
+				"activity": activity,
 				"gametime": universe.time,
 				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
 				"attack": atk,
-				"damage": damage
+				"damage": damage,
+				"skill": attack_skill?attack_skill.id || attack_skill:undefined
 			};
 
 			universe.chronicle.addOccurrence("entity:damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
@@ -441,6 +474,7 @@ module.exports.initialize = function(universe) {
 						"action": "action:damage:recv",
 						"activity": activity,
 						"source": source?source.id:null,
+						"attack": tracked.attack,
 						"entity": target.id,
 						"channel": channel,
 						"damage": damage,
@@ -500,6 +534,7 @@ module.exports.initialize = function(universe) {
 			target = targets[i];
 			activity = id + ":" + target.id;
 			tracking[activity] = {
+				"activity": activity,
 				"gametime": universe.time,
 				"time": Date.now(),
 				"source": source,
@@ -511,6 +546,7 @@ module.exports.initialize = function(universe) {
 				"level": level
 			};
 			logged[activity] = {
+				"activity": activity,
 				"gametime": universe.time,
 				"source": source?source.id:null,
 				"target": target.id,
@@ -611,6 +647,7 @@ module.exports.initialize = function(universe) {
 		var damage = event.message.data.damage,
 			targets = [],
 			channel,
+			attack,
 			target,
 			source,
 			i;
@@ -638,13 +675,16 @@ module.exports.initialize = function(universe) {
 				}
 			}
 		}
+		if(event.message.data.checks && event.message.data.checks.length) {
+			attack = event.message.data.checks[0].result;
+		}
 
 		if(damage) {
 			if(targets.length) {
 				if(source && (source.owned[event.player.id] || event.player.gm)) {
-					sendDamages(source, targets, channel, damage);
+					sendDamages(source, targets, channel, damage, attack, event.message.data.targeted_checks);
 				} else if(!source && event.player.gm) {
-					sendDamages(null, targets, channel, damage);
+					sendDamages(null, targets, channel, damage, attack, event.message.data.targeted_checks);
 				} else {
 					console.log("Source Authorization Issue[" + event.player.id + "]: ", (source?source.owned:"No Source"), event.message.data);
 				}
@@ -710,6 +750,11 @@ module.exports.initialize = function(universe) {
 			activity = event.message.data.activity,
 			resist = event.message.data.resist,
 			save = event.message.data.check?event.message.data.check.computed:null;
+
+		if(event.message.data.check) {
+			critical = event.message.data.check.is_critical || critical;
+			failure = event.message.data.check.is_failure || failure;
+		}
 		
 		if(entity && activity) {
 			finishSave(activity, entity, save, resist, critical, failure);

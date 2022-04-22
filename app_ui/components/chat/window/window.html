@@ -18,6 +18,9 @@
 					<button class="rounded general quick action send grow-1" v-on:click="send()" v-on:click.right.stop.prevent="altSend()">
 						<span class="fas fa-comment-lines"></span>
 					</button>
+					<button class="rounded general quick action close grow-1" v-on:click="minimize()" v-on:click.right.stop.prevent="minimize()">
+						<span class="fas fa-times rs-light-red"></span>
+					</button>
 				</div>
 			</div>
 		</div>

@@ -1,20 +1,20 @@
-<button class="flat action rs-component dnd-component object-charges flex h" v-on:click="use()" v-on:click.right.stop.prevent="restore()" title="Charges on this object. Left click to decrement. Right click to increment. Usage through other parts of the UI may have more automated handling, usage here is simply a tracker.">
+<button class="action rs-component dnd-component object-charges flex h" v-on:click="use()" v-on:click.right.stop.prevent="restore()" title="Charges on this object. Left click to decrement. Right click to increment. Usage through other parts of the UI may have more automated handling, usage here is simply a tracker.">
 	<span>{{object.charges}}</span>
 	<span class="balanced-seperator">/</span>
 	<span>{{object.charges_max}}</span>
-	<span class="recharge flex h" v-if="object.recharges_at_short && object.recharges_at_long" title="Gains a charge after (Short|Long) rests">
+	<span class="recharge flex h" v-if="object.recharges_at_short && object.recharges_at_long && !noDetails" title="Gains a charge after (Short|Long) rests">
 		<span class="balanced-seperator">(</span>
 		<span class="short-rests">{{object.recharges_at_short}}</span>
 		<span class="balanced-seperator">/</span>
 		<span class="long-rests">{{object.recharges_at_long}} Short</span>
 		<span class="balanced-seperator">)</span>
 	</span>
-	<span class="recharge flex h" v-else-if="object.recharges_at_long" title="Gains a charge after song rests">
+	<span class="recharge flex h" v-else-if="object.recharges_at_long && !noDetails" title="Gains a charge after song rests">
 		<span class="balanced-seperator">(</span>
 		<span class="long-rests">{{object.recharges_at_long}} Long</span>
 		<span class="balanced-seperator">)</span>
 	</span>
-	<span class="recharge flex h" v-else-if="object.recharges_at_short" title="Gains a charge after short rests">
+	<span class="recharge flex h" v-else-if="object.recharges_at_short && !noDetails" title="Gains a charge after short rests">
 		<span class="balanced-seperator">(</span>
 		<span class="short-rests">{{object.recharges_at_short}}</span>
 		<span class="balanced-seperator">/</span>

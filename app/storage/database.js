@@ -32,6 +32,9 @@ mapping.integer = {
 mapping.calculated = mapping.computed = {
 	"type": "text"
 };
+mapping.function = mapping.method = {
+	"type": "text"
+};
 mapping.icon = {
 	"type": "text"
 };

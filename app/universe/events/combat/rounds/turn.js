@@ -1,4 +1,19 @@
+/**
+ * 
+ * @class CombatRoundTurn
+ * @constructor
+ */
 
+const Universe = require("../../../universe");
+
+/**
+ * Sorting function to sort objects by initiative with rules for negotiating ties.
+ * @method sortByInitiative
+ * @static
+ * @param {RSObject} a 
+ * @param {RSObject} b 
+ * @returns {Number}
+ */
 var sortByInitiative = function(a, b) {
 	if((a.initiative === undefined || a.initiative === null) && b.initiative !== undefined && b.initiative !== null) {
 		return 1;
@@ -13,6 +28,12 @@ var sortByInitiative = function(a, b) {
 		}
 	}
 
+	if(a.dexterity > b.dexterity) {
+		return -1;
+	} else if(a.dexterity < b.dexterity) {
+		return 1;
+	}
+
 	if(a.name < b.name) {
 		return -1;
 	} else if(a.name > b.name) {
@@ -22,11 +43,18 @@ var sortByInitiative = function(a, b) {
 	return 0;
 };
 
+/**
+ * 
+ * @method initialize
+ * @param {Universe} universe 
+ */
 module.exports.initialize = function(universe) {
+
 	/**
 	 * 
 	 * @event player:skimish:turn
 	 * @for Universe
+	 * @deprecated USe the "player:skimish:turn:end" event
 	 * @param {Object} event With data from the system
 	 * @param {String} event.type The event name being fired, should match this event's name
 	 * @param {Integer} event.received Timestamp of when the server received the event
@@ -51,6 +79,7 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(entity && skirmish && skirmish.entities && skirmish.entities.indexOf(entity.id) !== -1 && event.player.gm) {
+			/*
 			universe.emit("action:combat:turn:end", {
 				"action": "action:combat:turn:end",
 				"entity": skirmish.combat_turn
@@ -66,6 +95,7 @@ module.exports.initialize = function(universe) {
 			skirmish.setValues({
 				"combat_turn": entity.id
 			});
+			*/
 		} else {
 			// TODO: Error handling and integrity warnings
 		}
@@ -135,11 +165,18 @@ module.exports.initialize = function(universe) {
 		}
 	});
 
+	/**
+	 * 
+	 * @method nextTurn
+	 * @param {Skirmish} skirmish 
+	 */
 	var nextTurn = function(skirmish) {
-		var entities = [],
+		var up = universe.manager.entity.object[skirmish.combat_turn],
+			entities = [],
 			current,
 			entity,
 			next,
+			up,
 			i;
 
 		for(i=0; i<skirmish.entities.length; i++) {
@@ -147,12 +184,58 @@ module.exports.initialize = function(universe) {
 			if(typeof(entity) === "string") {
 				entity = universe.manager.entity.object[entity];
 			}
-			if(entity && typeof(entity.initiative) === "number") {
-				entities.push(entity);
+			if(entity) {
+				if(typeof(entity.initiative) === "number") {
+					entities.push(entity);
+				} else if(!entity.is_npc && entity.owned && entity.id !== skirmish.combat_turn) {
+					if(up) {
+						universe.warnMasters("Initiative roll for " + entity.name, {
+							"skill": "skill:initiative",
+							"entity": entity.id
+						});
+					}
+					universe.messagePlayers(entity.owned, "Roll Initiative for " + entity.name, "fa-solid fa-dice", {
+						// ToMay: Add flags to sync back?
+						"type": "dialog-open",
+						"component": "dndDialogCheck",
+						"storageKey": "store:roll:" + entity.id,
+						"entity": entity.id,
+						"skill": "skill:initiative",
+						"hideFormula": true,
+						"hideHistory": true,
+						"closeAfterCheck": true
+					});
+				}
 			}
 		}
 
-		if(entities.length) {
+		if(up && entities.indexOf(up) === -1) {
+			// BLOCKED: Need event for "Request Roll"
+			// TODO: Request Initiative Roll for Current Entity
+			if(up.is_npc) {
+				up.setValues({
+					"initiative": universe.calculator.compute("1d20 + " + (up.skill_check["skill:initiaitive"] || 0), up)
+				});
+				entities.push(up);
+			}
+		}
+		if(up && entities.indexOf(up) === -1) {
+			universe.warnMasters("Need initiative roll for " + up.name, {
+				"skill": "skill:initiative",
+				"entity": up.id
+			});
+			universe.messagePlayers(up.owned, "Roll Initiative for " + up.name + " to end your turn", "fa-solid fa-dice", {
+				// ToMay: Add flags to sync back?
+				"type": "dialog-open",
+				"component": "dndDialogCheck",
+				"storageKey": "store:roll:" + up.id,
+				"entity": up.id,
+				"skill": "skill:initiative",
+				"hideFormula": true,
+				"hideHistory": true,
+				"closeAfterCheck": true
+			});
+		} else if(entities.length) {
 			entities.sort(sortByInitiative);
 			if(skirmish.combat_turn) {
 				for(i=0; i<entities.length; i++) {

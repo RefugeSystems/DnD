@@ -95,10 +95,16 @@ rsSystem.component("dndDisplayRoll", {
 			}
 		},
 		"toggleCritical": function() {
-			Vue.set(this.roll, "is_critical", !this.roll.is_critical); // Due to Vue update cycle issues with usage within the Roll class, 
+			Vue.set(this.roll, "is_critical", !this.roll.is_critical); // Due to Vue update cycle issues with usage within the Roll class
+			if(this.roll.is_failure) {
+				Vue.set(this.roll, "is_failure", false);
+			}
 		},
 		"toggleFailure": function() {
 			Vue.set(this.roll, "is_failure", !this.roll.is_failure); // Due to Vue update cycle issues with usage within the Roll class, 
+			if(this.roll.is_critical) {
+				Vue.set(this.roll, "is_critical", false);
+			}
 		},
 		"advantage": function() {
 			if(!this.roll.dice_rolls.d20 || !this.roll.dice_rolls.d20.length) {

@@ -2,6 +2,7 @@
 	<h1>
 		<span>{{entity.name}}</span>
 		<span v-if="details.action">: {{details.action.name}}</span>
+		<span v-if="details.attack">({{details.attack}} vs {{entity.armor}}AC)</span>
 	</h1>
 	<div class="rolling spell-level" v-if="details.spell && spellLevel !== null">
 		<div class="roll-label flex h">

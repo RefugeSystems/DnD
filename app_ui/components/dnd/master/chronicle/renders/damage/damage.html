@@ -27,8 +27,15 @@
 			<span>)</span>
 		</span>
 	</div>
+	<div class="origin">
+		<button class="flat rs-white action channel" v-if="skill" v-on:click="info(skill)">
+			<span class="fas fa-info-circle"></span>
+			<span>{{skill.name}}</span>
+		</button>
+		<span>{{occurred.data.attack}} vs. {{entity.armor}}AC</span>
+	</div>
 	<div class="details">
-		<div class="damages flex v" v-if="damages.length">
+		<div class="damages flex v">
 			<span>Damage:</span>
 			<ul>
 				<li v-for="damage in damages">
@@ -36,13 +43,13 @@
 						<span class="">{{damage.name}}</span>
 					</button>
 					<span v-if="occurred.data.damage && occurred.data.damage[damage.id]" class="">: {{occurred.data.damage[damage.id]}}</span>
-					<span v-if="occurred.data.damage_source && occurred.data.damage_source[damage.id]" class="">({{occurred.data.damage_source[damage.id]}})</span>
+					<span v-if="occurred.data.resist_source && occurred.data.damage_source[damage.id]" class="">({{occurred.data.damage_source[damage.id]}})</span>
 					<span v-if="occurred.data.resist && occurred.data.resist[damage.id]" class=""> - {{occurred.data.resist[damage.id]}}</span>
 					<span v-if="occurred.data.resist_source && occurred.data.resist_source[damage.id]" class="">({{occurred.data.resist_source[damage.id]}})</span>
 				</li>
 			</ul>
 		</div>
-		<div class="resists flex v" v-if="damages.length && occurred._updated">
+		<div class="resists flex v" v-if="occurred._updated">
 			<span>Net:</span>
 			<ul>
 				<li v-for="damage in damages">
@@ -53,37 +60,12 @@
 				</li>
 			</ul>
 		</div>
-		<span class="skill" v-if="skill">
-			<span :class="skill.icon"></span>
-			<span class="name">{{skill.name}}:</span>
-		</span>
-		<span class="check" v-else="skill">
-			<span class="name">Check:</span>
-		</span>
-		<span class="result">{{occurred.data.result || occurred.data.save}}</span>
-		<span class="result" v-if="occurred.data.difficulty">(vs DC{{occurred.data.difficulty}})</span>
-		<span class="dice">
-			<span class="type" v-for="(rolled, type) in occurred.data.dice" v-if="rolled.length">
-				<span v-if="type !== 'vantage'">
-					<span :class="'fas fa-dice-' + type"></span>
-					<span class="rolls">{{joinRolls(rolled)}}</span>
-				</span>
-			</span>
-			<span v-if="occurred.data.dice && occurred.data.dice.vantage">
-				<span class="rolls">(From: {{joinRolls(occurred.data.dice.vantage)}})</span>
-			</span>
-		</span>
 	</div>
 	<div class="date">
-		<span v-if="damages.length && !occurred._updated" class="fa-solid fa-spinner fa-pulse"></span>
-		<span v-if="!damages.length || occurred._updated" class="fas fa-clock"></span>
+		<span v-if="!occurred._updated" class="fa-solid fa-spinner fa-pulse"></span>
+		<span v-if="occurred._updated" class="fas fa-clock"></span>
 		<span>{{occurred.data.gametime}}</span>
 		<span v-if="!occurred._updated"> ( {{occurred.date}} )</span>
 		<span v-if="occurred._updated"> ( {{occurred.date}} <span class="fa-solid fa-arrow-right"></span> {{occurred._updated_date}} )</span>
-		<!--
-		<span class="fas fa-clock"></span>
-		<span>{{occurred.data.gametime}}</span>
-		<span> ( {{occurred.date}} )</span>
-		-->
 	</div>
 </div>

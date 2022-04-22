@@ -1,7 +1,7 @@
 <div class="rs-component rs-stat-block">
 	<div class="filter-container" v-if="filterable">
 		<span class="filter-indicator fas fa-spinner fa-pulse"></span>
-		<input type="text" v-delayed:200.lower="filtering" v-on:keydown.esc.stop="filtering = ''" placeholder="Filter Information List..." />
+		<input type="text" v-delayed:200.lower="filtering" v-on:keydown.esc.stop="clearFilter()" v-on:click.right.prevent.stop="clearFilter()" placeholder="Filter Information List..." />
 	</div>
 	<div class="message-box warning dark" v-if="object.must_know">
 		<button class="message-icon" v-on:click="info('knowledge:process:unknowns')">

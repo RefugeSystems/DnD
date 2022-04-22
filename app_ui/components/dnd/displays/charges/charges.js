@@ -23,6 +23,9 @@ rsSystem.component("dndObjectCharges", {
 		},
 		"entity": {
 			"type": Object
+		},
+		"noDetails": {
+			"type": Boolean
 		}
 	},
 	"mounted": function() {
