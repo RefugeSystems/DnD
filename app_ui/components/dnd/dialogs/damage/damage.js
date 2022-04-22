@@ -770,9 +770,18 @@ rsSystem.component("dndDialogDamage", {
 			}
 
 			// Build New Rolls objects for damage
-			if(channel && (channel.skill_damage || channel.damage)) {
+			if(channel && ((channel.skill_damage && rsSystem.utility.isNotEmpty(channel.skill_damage)) || (channel.damage && rsSystem.utility.isNotEmpty(channel.damage)))) {
 				map = channel._formula || {};
-				keys = Object.keys(map = map.skill_damage || map.damage || channel.skill_damage || channel.damage);
+				if(map.skill_damage && rsSystem.utility.isNotEmpty(map.skill_damage)) {
+					map = map.skill_damage;
+				} else if(map.damage && rsSystem.utility.isNotEmpty(map.damage)) {
+					map = map.damage;
+				} else if(channel.skill_damage && rsSystem.utility.isNotEmpty(channel.skill_damage)) {
+					map = channel.skill_damage;
+				} else if(channel.damage && rsSystem.utility.isNotEmpty(channel.damage)) {
+					map = channel.damage;
+				}
+				keys = Object.keys(map);
 				for(i=0; i<keys.length; i++) {
 					dmg = keys[i];
 					this.roll_damage[null][dmg].setFormula(rsSystem.dnd.reducedDiceRoll(map[dmg], channel));

@@ -43,7 +43,7 @@ rsSystem.component("dndDisplayRoll", {
 	"data": function() {
 		var data = {};
 
-		data.skill_check = this.roll && this.roll.formula && this.roll.formula.indexOf("d20") !== -1;
+		data.skill_check = this.roll && this.roll.formula && typeof(this.roll.formula) == "string" && this.roll.formula.indexOf("d20") !== -1;
 		this.autoRoll(false);
 		data.is_critical = this.roll.is_critical;
 		data.is_failure = this.roll.is_failure;
