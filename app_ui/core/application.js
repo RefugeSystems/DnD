@@ -255,3 +255,12 @@ rsSystem.getBrowserName = function() {
 		"version": fullVersion
 	};
 };
+
+rsSystem.initializations = rsSystem.initializations || [];
+rsSystem.addInitialization = function(initialization) {
+	if(typeof(initialization) === "function") {
+		rsSystem.initializations.push(initialization);
+	} else {
+		console.log("Failed to load non-function initialization");
+	}
+};

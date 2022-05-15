@@ -9,11 +9,17 @@
 				</div>
 				<div class="section entity-cantrips" :class="prepared_cantrips.length>entity.cantrips_maximum?'error':'nominal'">Cantrips: {{prepared_cantrips.length}}/{{entity.cantrips_maximum}}</div>
 				<ul>
-					<li v-for="cantrip in prepared_cantrips">{{cantrip.name}}</li>
+					<li v-for="spell in prepared_cantrips">
+						<span class="">{{spell.name}}</span>
+						<button class="flat action fa-solid fa-info-circle" v-on:click="info(spell)"></button>
+					</li>
 				</ul>
 				<div class="section entity-spells" :class="prepared_spells.length>entity.spells_maximum?'error':'nominal'">Spells: {{prepared_spells.length}}/{{entity.spells_maximum}}</div>
 				<ul>
-					<li v-for="spell in prepared_spells">{{spell.name}}</li>
+					<li v-for="spell in prepared_spells">
+						<span class="">{{spell.name}}</span>
+						<button class="flat action fa-solid fa-info-circle" v-on:click="info(spell)"></button>
+					</li>
 				</ul>
 			</div>
 		</div>

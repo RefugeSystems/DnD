@@ -557,6 +557,13 @@ rsSystem.component("dndDialogRoll", {
 				"cbid": cb
 			});
 		},
+		/**
+		 * Determine what dice are involved and roll the missing dice.
+		 * @method fillRoll
+		 */
+		"fillRoll": function() {
+			
+		},
 		"autoRoll": function() {
 			var roll,
 				cb,

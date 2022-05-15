@@ -35,6 +35,31 @@
 		"description": "Images to tie to objects for display",
 		"fields": ["parent", "name", "description", "content_type", "disabled", "data", "url", "auto_refresh", "is_preview", "review", "attribute"]
 	}, {
+		"id": "roomctrl",
+		"name": "Room Control",
+		"description": "Stores data for a room where the game is being played for control points, such as house controlled light devices and audio endpoints.",
+		"fields": ["parent", "name", "description", "control_point", "control_device", "control_type", "control_search", "disabled", "is_preview", "review", "attribute"]
+	}, {
+		"id": "device",
+		"name": "Device",
+		"description": "A physical point on the network. This is primarily a loading point for discovery processes.",
+		"fields": ["parent", "name", "description", "ip", "capability", "discovery", "is_discovered", "last_seen", "model", "errors", "is_preview", "review", "attribute"]
+	}, {
+		"id": "capability",
+		"name": "Capability",
+		"description": "Tracks a performable action for a device or similar physical control. Aimed at tracking thigns such as 'capability:audio' and 'capability:audio:sonos'.",
+		"fields": ["parent", "name", "description", "disabled", "is_preview", "review", "attribute"]
+	}, {
+		"id": "discovery",
+		"name": "Discovery",
+		"description": "Represents an internal process that handles locating physical assets and either loading devices or updating existing devices based on IDs and the process that discovery uses to generate the IDs.",
+		"fields": ["parent", "name", "description", "capability", "disabled", "model", "errors", "is_preview", "review", "attribute"]
+	}, {
+		"id": "error",
+		"name": "Error",
+		"description": "Error representation",
+		"fields": ["parent", "name", "description", "is_preview", "review", "attribute"]
+	}, {
 		"id": "playlist",
 		"name": "Playlist",
 		"description": "Collection of ",

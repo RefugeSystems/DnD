@@ -20,6 +20,30 @@
 			&:first-child {
 				margin: 0px;
 			}
+
+		}
+	}
+
+	.additives {
+		border: 1px solid @rsWhite;
+		padding: 5px;
+		border-radius: 5px;
+		margin: 5px;
+
+		button {
+			transition: border-color .5s, color .5s, background-color .5s;
+			line-height: 22px;
+
+			.content {
+				width: 22px;
+			}
+		}
+
+		.selected {
+			box-shadow: inset 0px 0px 10px @rsGreen;
+			border-color: @rsDarkGreen;
+			color: @rsLightGreen;
+			// background-color: @rsDarkGreen;
 		}
 	}
 

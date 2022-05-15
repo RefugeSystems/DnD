@@ -53,9 +53,9 @@ var sortByOrdering = function(a, b) {
 
 // Security
 omittedFromSync.session = true;
-// Data APIs for data separation
+// Data APIs for data separation | Replaced by data field being flagged with new "Server Only" field
 // omittedFromSync.image = true;
-omittedFromSync.audio = true;
+// omittedFromSync.audio = true;
 
 
 class Universe extends EventEmitter {
@@ -318,6 +318,60 @@ class Universe extends EventEmitter {
 				return Promise.all(loading);
 			}).then(() => {
 				return new Promise((done, fail) => {
+					var clean = new RegExp("^/?app/universe/discovery", "i"),
+						start = Date.now(),
+						initializing = [],
+						errors = [],
+						queue = [],
+						loadDirectory,
+						cleaned,
+						loading,
+						stat,
+						x,
+						y;
+						
+					loadDirectory = (path) => {
+						fs.readdir(path, (err, paths) => {
+							for(x=0; x<paths.length; x++) {
+								cleaned = path.replace(clean, "");
+								console.log(" [Disc]> Path[" + path + " -> " + cleaned + "]: " + paths[x]);
+								stat = fs.lstatSync(path + "/" + paths[x]);
+								if(paths[x][0] !== "_" && paths[x].endsWith(".js") && stat.isFile()) {
+									loading = require("./discovery" + cleaned + "/" + paths[x]);
+									if(typeof(loading.initialize) === "function" && loading.type) {
+										this.chronicler[loading.type] = loading;
+										loading = loading.initialize(this);
+										if(loading instanceof Promise) {
+											initializing.push(loading);
+										}
+									}
+								} else if(stat.isDirectory()) {
+									queue.push(path + "/" + paths[x]);
+								}
+							}
+							
+							if(queue.length) {
+								loadDirectory(queue.shift());
+							} else {
+								if(errors.length) {
+									console.log("Event Directory Loading Errors: ", errors);
+									fail(errors);
+								} else {
+									Promise.all(initializing)
+									.then(function() {
+										console.log("[Disc] Initialization Complete in " + (Date.now() - start) + "ms");
+									})
+									.then(done)
+									.catch(fail);
+								}
+							}
+						});
+					};
+					
+					loadDirectory("app/universe/discovery");
+				});
+			}).then(() => {
+				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/events", "i"),
 						start = Date.now(),
 						initializing = [],
@@ -358,7 +412,7 @@ class Universe extends EventEmitter {
 								} else {
 									Promise.all(initializing)
 									.then(function() {
-										console.log("[Events] Complete in " + (Date.now() - start) + "ms");
+										console.log("[Events] Initialization Complete in " + (Date.now() - start) + "ms");
 									})
 									.then(done)
 									.catch(fail);
@@ -412,7 +466,7 @@ class Universe extends EventEmitter {
 								} else {
 									Promise.all(initializing)
 									.then(function() {
-										console.log("[Sim] Complete in " + (Date.now() - start) + "ms");
+										console.log("[Sim] Initialization Complete in " + (Date.now() - start) + "ms");
 									})
 									.then(done)
 									.catch(fail);
@@ -426,6 +480,7 @@ class Universe extends EventEmitter {
 			}).then(() => {
 				this.initialized = true;
 				console.log("Universe Loaded: ", Object.keys(this.manager));
+				this.emit("initialized", this);
 				done();
 			})
 			.catch(fail);
@@ -879,7 +934,6 @@ class Universe extends EventEmitter {
 			m,
 			x;
 		
-		// TODO: Investigate time commitment here, may need broken up to prevent bad lockups
 		state.classes = [];
 		state.fields = [];
 		state._timeline = this.timeline;
@@ -901,7 +955,7 @@ class Universe extends EventEmitter {
 				}
 				for(x=0; x<manager.objectIDs.length; x++) {
 					sync = manager.object[manager.objectIDs[x]];
-					if(sync) { // Skip unloaded data
+					if(sync && (player.gm || !sync.unsyncable)) { // Skip unloaded data && Sync-Blocked objects
 						sync = sync.toJSON(); // Convert to sync format and separate object
 						if((!time || time <= sync.updated) && (!sync.attribute.master_only || player.gm) && !sync.attribute.no_sync) {
 							if(!player.gm) {

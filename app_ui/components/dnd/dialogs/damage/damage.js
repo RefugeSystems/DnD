@@ -96,6 +96,45 @@ rsSystem.component("dndDialogDamage", {
 
 			return effects;
 		},
+		"available_additives": function() {
+			var additives = [],
+				search,
+				check,
+				i;
+			
+			if(this.entity) {
+				search = this.universe.transcribeInto(this.entity.feats);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+						additives.push(check);
+					}
+				}
+				search = this.universe.transcribeInto(this.entity.equipped);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+						additives.push(check);
+					}
+				}
+				search = this.universe.transcribeInto(this.entity.spells);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+						additives.push(check);
+					}
+				}
+				search = this.universe.transcribeInto(this.entity.effects);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+						additives.push(check);
+					}
+				}
+			}
+
+			return additives;
+		},
 		"available_feats": function() {
 			return this.buildAvailableChannel(this.entity.feats);
 		},
@@ -196,28 +235,6 @@ rsSystem.component("dndDialogDamage", {
 
 			return checks;
 		},
-		"available_damages": function() {
-			var damages = [],
-				source,
-				damage,
-				i;
-			if(this.channel) {
-				source = [];
-				if(this.channel.damage || this.channel.skill_damage) {
-					this.universe.transcribeInto(Object.keys(this.channel.damage || this.channel.skill_damage), source);
-				}
-			} else {
-				source = this.universe.listing.damage_type;
-			}
-			for(i=0; i<source.length; i++) {
-				damage = source[i];
-				if(rsSystem.utility.isValid(damage)) {
-					damages.push(damage);
-				}
-			}
-			damages.sort(rsSystem.utility.sortData);
-			return damages;
-		},
 		"available_effects": function() {
 			var effects = [],
 				effect,
@@ -250,11 +267,15 @@ rsSystem.component("dndDialogDamage", {
 			"description": "Select how you are dealing the damage or healing, such as a spell, weapon, or through a feat.",
 			"id": "channel"
 		}, {
+			"name": "Adds",
+			"description": "Select abilities from which to add effects",
+			"id": "additives"
+		}, {
 			"name": "Targets",
 			"description": "Select the targets of your damage",
 			"id": "targets"
 		}, {
-			"name": "Skill Checks",
+			"name": "Skills",
 			"description": "Indicate skills that are being performed and enter the values you rolled",
 			"id": "checks"
 		}, {
@@ -304,6 +325,7 @@ rsSystem.component("dndDialogDamage", {
 			data.cast_level = 0;
 		}
 
+		data.target_limit = 0;
 		data.channel = this.details.channel || null;
 		data.action = this.details.action || null;
 		data.action_cost = null;
@@ -312,6 +334,9 @@ rsSystem.component("dndDialogDamage", {
 		data.roll_damage = this.details.roll_damage || {};
 		data.send_damage = this.details.send_damage || {};
 		data.raw_damage = this.details.raw_damage || {};
+		data.quick_adds = false;
+		data.additives_locked = false;
+		data.available_damages = [];
 		data.damage_targets = [];
 		data.active_targets = [];
 		data.target_check = {};
@@ -322,6 +347,9 @@ rsSystem.component("dndDialogDamage", {
 		data.channel_changed = false;
 		data.targets_changed = false;
 		data.splitDamage = this.details.splitDamage === undefined?false:!!this.details.splitDamage;
+		data.skill_add = {};
+		data.additives = [];
+		data.adding = {};
 
 		data.roll_damage[null] = {};
 		for(i=0; i<this.universe.listing.damage_type.length; i++) {
@@ -405,6 +433,16 @@ rsSystem.component("dndDialogDamage", {
 			}
 			return classes;
 		},
+		"getAdditiveClasses": function(additive) {
+			var classes = "additive";
+			if(this.adding[additive.id]) {
+				classes += " selected";
+			}
+			if(this.additives_locked) {
+				classes += " locked";
+			}
+			return classes;
+		},
 		"setFocus": function(roll) {
 			console.log("Focus Roll: ", roll);
 			if(this.focused_roll && this.focused_roll !== roll) {
@@ -453,18 +491,87 @@ rsSystem.component("dndDialogDamage", {
 				Vue.set(this.targeting, target.id, target);
 			}
 			Vue.set(this, "targets_changed", true);
+			if(this.activeSection.id === "targets" && !this.autoskipped[this.activeSection.id] && this.target_limit && Object.keys(this.targeting).length === this.target_limit) {
+				this.autoskipped[this.activeSection.id] = true;
+				this.finishSection(this.activeSection);
+			}
+		},
+		"toggleAdditive": function(additive) {
+			if(!this.additives_locked) {
+				if(this.adding[additive.id]) {
+					Vue.delete(this.adding, additive.id);
+					if(this.skill_add[additive.id]) {
+						Vue.delete(this.adding, additive.id);
+					}
+				} else {
+					Vue.set(this.adding, additive.id, additive);
+					if(!this.skill_add[additive.id] && rsSystem.utility.isNotEmpty(additive.additive_skill)) {
+						Vue.set(this.skill_add, additive.id, additive);
+					}
+				}
+			}
 		},
 		"completeRoll": function(section, id, formula) {
 			
 		},
 		"finishSection": function(section) {
 			// TODO: Validate Current
-			var targets,
+			var additives,
+				additive,
+				damages,
+				targets,
+				damage,
+				source,
+				target,
 				check,
+				type,
+				a,
 				i,
 				j;
 
 			switch(this.activeSection.id) {
+				case "additives":
+					additives = Object.keys(this.adding);
+					if(additives.length && !this.additives_locked) {
+						Vue.set(this, "additives_locked", true);
+						for(a=0; a<additives.length; a++) {
+							additive = this.adding[additives[a]];
+							// Checks that the additive applies are handled in the channel selection
+							if(this.channel.damage_type && additive.damage_bonus_weapon) {
+								type = this.universe.index.damage_type[this.channel.damage_type];
+								if(type) {
+									for(j=0; j<this.available_targets.length; j++) {
+										target = this.available_targets[j].id;
+										this.roll_damage[target][this.channel.damage_type].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][this.channel.damage_type].formula + " + " + additive.damage_bonus_weapon));
+									}
+									this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_weapon));
+									if(this.available_damages.indexOf(type) === -1) {
+										this.available_damages.push(type);
+									}
+								} else {
+									console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
+								}
+							}
+							if(additive.damage_bonus_spell) {
+								damages = Object.keys(additive.damage_bonus_spell);
+								for(i=0; i<damages.length; i++) {
+									damage = damages[i];
+									type = this.universe.index.damage_type[damage];
+									if(type) {
+										for(j=0; j<this.available_targets.length; j++) {
+											target = this.available_targets[j].id;
+											this.roll_damage[target][damage].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][damage].formula + " + " + additive.damage_bonus_spell[damage]));
+										}
+										this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_spell[type.id]));
+										if(this.available_damages.indexOf(type) === -1) {
+											this.available_damages.push(type);
+										}
+									}
+								}
+							}
+						}
+					}
+					break;
 				case "checks":
 					for(i=0; i<this.skill_checks.length; i++) {
 						check = this.skill_checks[i];
@@ -527,8 +634,11 @@ rsSystem.component("dndDialogDamage", {
 			return true;
 		},
 		"buildSkillChecks": function() {
-			var targets,
+			console.log("Build Skills: ", this.skill_add);
+			var formula,
+				targets,
 				skill,
+				add,
 				i;
 
 			this.skill_checks.splice(0);
@@ -561,10 +671,19 @@ rsSystem.component("dndDialogDamage", {
 						}
 					}
 					if(skill) {
+						formula = "";
+						if(rsSystem.utility.isNotEmpty(this.skill_add)) {
+							for(i in this.skill_add) {
+								add = this.skill_add[i];
+								if(add.additive_skill[skill.id]) {
+									formula += " + " + add.additive_skill[skill.id];
+								}
+							}
+						}
 						for(i=0; i<targets.length; i++) {
 							this.skill_checks.push({
 								"roll": new Roll({
-									"formula": "1d20 + " + (this.entity.skill_check[skill.id] || 0),
+									"formula": "1d20 + " + rsSystem.dnd.reducedDiceRoll((this.entity.skill_check[skill.id] || 0) + formula),
 									"entity": this.entity
 								}),
 								"target": this.universe.getObject(targets[i]) || targets[i],
@@ -607,6 +726,19 @@ rsSystem.component("dndDialogDamage", {
 								this.available_levels.push(slot);
 							}
 						}
+					}
+					break;
+				case "additives":
+					if(this.additives.length === 0 && !this.autoskipped[this.activeSection.id]) {
+						this.autoskipped[this.activeSection.id] = true;
+						setTimeout(() => {
+							this.goToNextSection();
+						});
+					} else if(this.quick_adds && this.profile.auto_submit && !this.autoskipped[this.activeSection.id]) {
+						this.autoskipped[this.activeSection.id] = true;
+						setTimeout(() => {
+							this.goToNextSection();
+						});
 					}
 					break;
 				case "checks":
@@ -744,14 +876,49 @@ rsSystem.component("dndDialogDamage", {
 
 			return classes;
 		},
+		"buildAdditives": function() {
+			var always = 0,
+				additive,
+				keys,
+				i;
+
+			this.autoskipped.additives = false;
+			this.additives.splice(0);
+			keys = Object.keys(this.adding);
+			for(i=0; i<keys.length; i++) {
+				Vue.delete(this.adding, keys[i]);
+			}
+
+			for(i=0; i<this.available_additives.length; i++) {
+				additive = this.available_additives[i];
+				if(additive.additive_attack || (!additive.additive_attack_melee && !additive.additive_attack_range && !additive.additive_attack_spell) || (this.channel && ((additive.additive_attack_spell && this.channel._class === "spell") || (additive.additive_attack_melee && this.channel.melee) || (additive.additive_attack_range && this.channel.ranged)))) {
+					if(!additive.additive_attack_charged || additive.charges > 0) {
+						this.additives.push(additive);
+						if(additive.additive_attack_always) {
+							this.adding[additive.id] = additive;
+							always++;
+						}
+					}
+				}
+			}
+
+			if(always === this.additives.length) {
+				Vue.set(this, "quick_adds", true);
+			} else {
+				Vue.set(this, "quick_adds", false);
+			}
+		},
 		"selectChannel": function(channel) {
 			var target,
+				source,
 				keys,
 				map,
 				dmg,
 				i,
 				j;
 			
+				
+			Vue.set(this, "additives_locked", false);
 			Vue.set(this, "channel_changed", true);
 			if(channel && channel._class === "spell" && (!channel || channel.level !== this.cast_level)) {
 				channel = Object.assign({}, channel);
@@ -811,13 +978,39 @@ rsSystem.component("dndDialogDamage", {
 				Vue.set(this, "action_cost", this.action.action_cost);
 			}
 			
+			this.available_damages.splice(0);
 			if(channel) {
 				if(channel.split_damage !== undefined && channel.split_damage !== null) {
 					Vue.set(this, "splitDamage", !!channel.split_damage);
 				} else if(channel.is_damage_split !== undefined && channel.is_damage_split !== null) {
 					Vue.set(this, "splitDamage", !!channel.is_damage_split);
 				}
+				if(typeof(channel.target_limit) === "number") {
+					Vue.set(this, "target_limit", channel.target_limit);
+				} else {
+					Vue.set(this, "target_limit", 0);
+				}
+				source = [];
+				if(rsSystem.utility.isNotEmpty(channel.damage)) {
+					this.universe.transcribeInto(Object.keys(channel.damage), source);
+				} else if(rsSystem.utility.isNotEmpty(channel.skill_damage)) {
+					this.universe.transcribeInto(Object.keys(channel.skill_damage), source);
+				} else {
+					// This channel does no damage, likely simply passing on effects or noting a spell slot consumption
+				}
+			} else {
+				source = this.universe.listing.damage_type;
 			}
+
+			for(i=0; i<source.length; i++) {
+				dmg = source[i];
+				if(rsSystem.utility.isValid(dmg)) {
+					this.available_damages.push(dmg);
+				}
+			}
+
+			this.available_damages.sort(rsSystem.utility.sortData);
+			this.buildAdditives();
 			this.goToNextSection();
 		},
 		"skillVantage": function(skill) {
@@ -867,6 +1060,7 @@ rsSystem.component("dndDialogDamage", {
 			}
 
 			// Send Damage
+			sending.additives = Object.keys(this.adding);
 			if(this.channel) {
 				sending.channel = this.channel.id;
 				sending.using = this.channel.id;

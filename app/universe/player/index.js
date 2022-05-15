@@ -79,6 +79,10 @@ class PlayerConnection extends EventEmitter {
 		universe.on("error", masterLogEvent);
 		universe.on("master:control", forwardControlMessage);
 
+		universe.on("action:combat:round:start", forwardMessage);
+		universe.on("combat:round", forwardMessage);
+		universe.on("combat:turn", forwardMessage);
+		
 		universe.chronicle.on("added", chronicled);
 	}
 
@@ -255,7 +259,7 @@ class PlayerConnection extends EventEmitter {
 				send = {},
 				field,
 				x;
-			if(manager) {
+			if(manager && (this.player.gm || !change.unsyncable)) {
 				if(change._computed) {
 					
 				}
@@ -286,6 +290,9 @@ class PlayerConnection extends EventEmitter {
 				}
 
 				send.id = change.id;
+				if(this.player.gm) {
+					send._search += " ::: " + send.id;
+				}
 				this.send("object", send);
 			} else {
 				this.emit("error", new this.universe.Anomaly("player:connection:object", "Failed to locate manager for object change class", 40, change, null, this));

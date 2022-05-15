@@ -3265,6 +3265,112 @@
 		],
 		"attribute": {}
 	}, {
+		"name": "Capability",
+		"id": "capability",
+		"description": "Maps a control capability to a truthy or falsy value. Mapping is used for fast comparisons instead of an array",
+		"type": "object",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": [
+			"capability"
+		],
+		"attribute": {
+			"inherited_key": "capability",
+			"display_size": 30,
+			"metadata": ""
+		}
+	},
+	{
+		"name": "Control Device",
+		"id": "control_device",
+		"description": "The underlying device for this object.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": [
+			"device"
+		],
+		"attribute": {
+			"display_size": 50,
+			"metadata": ""
+		}
+	},
+	{
+		"name": "Model",
+		"id": "model",
+		"description": "Model ID",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 30,
+			"metadata": ""
+		}
+	}, {
+		"name": "Last Seen",
+		"id": "last_seen",
+		"description": "The timestamp for when this was last seen",
+		"type": "date",
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 100,
+			"metadata": ""
+		}
+	}, {
+		"name": "IP Address",
+		"id": "ip",
+		"description": "The IP address of the object on the network",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 30,
+			"metadata": ""
+		}
+	},
+	{
+		"name": "Is Discovered",
+		"id": "is_discovered",
+		"description": "Indicates that the object has been found by a relevent discovery process recently. May switch to false if a discovery process runs and this object is not found when expected.",
+		"type": "boolean",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 30,
+			"metadata": ""
+		}
+	},
+	{
+		"name": "Errors",
+		"id": "errors",
+		"description": "Array of objects describing relevent errors for the object. Used for display sync and investigation. Logs shouold still be consulted for more in-depth analysis.",
+		"type": "array",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"master_only": true,
+			"display_size": 100,
+			"metadata": ""
+		}
+	},
+	{
+		"name": "Discovery",
+		"id": "discovery",
+		"description": "Indicates the discovery process that is responsible for this object, if any.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": ["discovery"],
+		"attribute": {
+			"display_size": 100,
+			"metadata": ""
+		}
+	}, {
 		"id": "attachments",
 		"name": "Attchments",
 		"description": "List of item IDs considered attached to this object.",

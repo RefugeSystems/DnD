@@ -320,9 +320,12 @@ class Roll {
 	 * 
 	 * @method remove
 	 * @param {String} dice Which die to remove
-	 * @param {Integer} index From the dice_rolls list to remove
+	 * @param {Integer} [index] From the dice_rolls list to remove
 	 */
 	 remove(dice, index) {
+		if(index === undefined) {
+			index = this.dice_rolls[dice].length - 1;
+		}
 		if(this.dice_rolls[dice] && index < this.dice_rolls[dice].length) {
 			var result = this.dice_rolls[dice][index],
 				parsed;

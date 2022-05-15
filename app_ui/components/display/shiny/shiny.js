@@ -5,6 +5,9 @@
  * @class rsShinyButton
  * @constructor
  * @module Components
+ * @param {Boolean} active
+ * @param {String} shine Describes how the "shine" effect is rendered. Choices: siren, cascade
+ * @param {String} color
  */
 rsSystem.component("rsShinyButton", {
 	"inherit": true,

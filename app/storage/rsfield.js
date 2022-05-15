@@ -16,6 +16,8 @@ var EventEmitter = require("events").EventEmitter,
 	validTypeValue = new RegExp("^[a-z:]+$"),
 	valid = new RegExp("^[a-z][a-z:_]*$");
 
+const staticEmptyObject = {};
+
 class RSField extends EventEmitter {
 	constructor(specification) {
 		super();
@@ -119,6 +121,22 @@ class RSField extends EventEmitter {
 		 * @type Boolean
 		 */
 		this.obscured = specification.obscured || false;
+		/**
+		 * When true, all events cause this field to be checked for relevent handlers in the referenced
+		 * objects.
+		 * @property propogate_all
+		 * @type Boolean
+		 * @default false
+		 */
+		this.propogate_all = specification.propogate_all || false;
+		/**
+		 * Maps universe event names to true or false to indicate if that event should propogate through the
+		 * objects referenced in this field. Undefined, null, 0, and false are all treated as no.
+		 * @property propogate
+		 * @type Object
+		 * @default {}
+		 */
+		this.propogate = specification.propogate || staticEmptyObject;
 		/**
 		 * 
 		 * @property attribute
@@ -249,6 +267,10 @@ class RSField extends EventEmitter {
 			this.attribute = JSON.parse(this.attribute);
 		}
 		
+		this.propogate_all = this.propogate_all || false;
+
+		this.propogate = this.propogate || staticEmptyObject;
+
 		if(typeof(this.attribute) === "string") {
 			try {
 				this.attribute = JSON.parse(this.attribute);

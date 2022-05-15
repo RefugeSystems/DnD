@@ -1,0 +1,91 @@
+<div class="rs-page dnd-page master-soundboard" v-on:click.right.stop.prevent="checkToEditRecord($event)">
+	<div class="soundboard-panel">
+		<div class="soundboard-controls">
+			<!--
+			Play Order:
+				Cascade Left
+				Cascade Right
+				Out
+				In
+			Discovery: (TODO: Use Discovery Objects)
+				Sonos 
+			-->
+			<div class="soundboard-options">
+
+			</div>
+			<div class="soundboard-controls">
+				<button class="primary general rounded action" v-on:click="toggleAll()">
+					<span class="action-icon" :class="storage.show_all?'fa-solid fa-square-check':'fa-light fa-square'"></span>
+					<span class="action-text">Show All</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="discoverySonos()">
+					<span class="action-icon fa-solid fa-mobile-signal-out"></span>
+					<span class="action-text">Discovery</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="controllersReport()">
+					<span class="action-icon fa-solid fa-print"></span>
+					<span class="action-text">Reports</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="controllersCreate()">
+					<span class="action-icon fa-solid fa-waveform"></span>
+					<span class="action-text">Create</span>
+				</button>
+			</div>
+		</div>
+		<div class="soundboard-destinations">
+			<h3>Room Controllers</h3>
+			<div class="soundboard-roomcontrols">
+				<div class="soundboard-room-volume">
+					<input v-model.number="storage.volume" v-on:change="setVolume()" type="range" min="1" max="100" class="slider">
+				</div>
+				<div class="soundboard-roomcontrol" v-for="ctrl in available.roomctrl" v-on:click="toggleDestination(ctrl)">
+					<button class="primary general rounded action">
+						<span class="action-icon" :class="classTargetted(ctrl)"></span>
+						<span class="action-text">{{ctrl.name}}</span>
+					</button>
+				</div>
+			</div>
+			<h3>Players</h3>
+			<div class="soundboard-players">
+				<div class="soundboard-player" v-for="player in available.player" v-on:click="toggleDestination(player)">
+					<button class="primary general rounded action">
+						<span class="action-icon" :class="classTargetted(player)"></span>
+						<span class="action-text">{{player.name}}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="soundboard-selections">
+		<h3>Playlists</h3>
+		<div class="soundboard-playlists flex h wrap">
+			<div class="soundboard-sound soundboard-playlist" v-for="playlist in playlists">
+				<button class="general rounded action quick" v-on:click="start(playlist)">
+					<span class="action-icon fa-solid fa-play"></span>
+				</button>
+				<button class="general rounded action quick" v-on:click="stop()">
+					<span class="action-icon fa-solid fa-stop"></span>
+				</button>
+				<span class="action-text">{{playlist.name}}</span>
+				<button class="action flat rs-light-blue" v-on:click="info(playlist)">
+					<span class="action-icon fa-solid fa-info-circle"></span>
+				</button>
+			</div>
+		</div>
+		<h3>Audios</h3>
+		<div class="soundboard-audios flex h wrap">
+			<div class="soundboard-sound soundboard-audio" v-for="audio in audios">
+				<button class="general rounded action quick" v-on:click="play(audio)">
+					<span class="action-icon fa-solid fa-play"></span>
+				</button>
+				<button class="general rounded action quick" v-on:click="stop(audio)">
+					<span class="action-icon fa-solid fa-stop"></span>
+				</button>
+				<span class="action-text">{{audio.name}}</span>
+				<button class="action flat rs-light-blue" v-on:click="info(audio)">
+					<span class="action-icon fa-solid fa-info-circle"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

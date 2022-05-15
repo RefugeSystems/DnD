@@ -26,6 +26,17 @@ rsSystem.component("dndDisplayRoll", {
 			"type": Object
 		}
 	},
+	"watch": {
+		"roll.formula": function(nV, oV) {
+			console.log("Roll Forumula Changed: " + oV + " -> " + nV);
+			// this.autoRoll(true, true);
+			if(this.roll.computed === undefined || this.roll.computed === null) {
+				this.autoRoll(true);
+			} else {
+				this.autoFill();
+			}
+		}
+	},
 	"computed": {
 		"autoRollBinding": function() {
 			this.autoRoll(true);
@@ -64,8 +75,8 @@ rsSystem.component("dndDisplayRoll", {
 		}
 	},
 	"methods": {
-		"autoRoll": function(set) {
-			if(this.roll.formula && this.profile && this.profile.auto_roll && (this.roll.computed === undefined || this.roll.computed === null)) {
+		"autoRoll": function(set, forced) {
+			if(this.roll.formula && this.profile && this.profile.auto_roll && (forced || this.roll.computed === undefined || this.roll.computed === null)) {
 				if(this.source && this.skill && this.source.skill_advantage && this.source.skill_advantage[this.skill.id]) {
 					if(this.source.skill_advantage[this.skill.id] < 0) {
 						this.disadvantage();
@@ -82,6 +93,37 @@ rsSystem.component("dndDisplayRoll", {
 					Vue.set(this, "is_failure", this.roll.is_failure);
 					this.setClasses();
 				}
+				this.$emit("rolled");
+			}
+		},
+		/**
+		 * This is meant to handle corrections for minor additions to skill rolls or dice count changes in general rolls, such as damage.
+		 * As such, no considerations of "Critical" are considered here.
+		 * @method autoFill
+		 */
+		"autoFill": function() {
+			if(this.roll.formula && this.profile && this.profile.auto_roll) {
+				var pending = rsSystem.dnd.parseDiceRoll(this.roll.formula),
+					keys = Object.keys(pending).concat(Object.keys(this.roll.dice_rolls)),
+					checked = {},
+					key,
+					i;
+				
+				for(i=0; i<keys.length; i++) {
+					if(!checked[key = keys[i]] && key !== "remainder") {
+						pending[key] = parseInt(pending[key]) || 0;
+						checked[key] = true;
+						if(typeof(pending[key]) === "number") {
+							while(!this.roll.dice_rolls[key] || this.roll.dice_rolls[key].length < pending[key]) {
+								this.roll.add(key);
+							}
+							while(this.roll.dice_rolls[key] && this.roll.dice_rolls[key].length > pending[key]) {
+								this.roll.remove(key);
+							}
+						}
+					}
+				}
+
 				this.$emit("rolled");
 			}
 		},

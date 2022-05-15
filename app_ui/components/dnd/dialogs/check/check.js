@@ -13,6 +13,7 @@ rsSystem.component("dndDialogCheck", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
+		rsSystem.components.DNDEntityCore,
 		rsSystem.components.RSShowdown
 	],
 	"props": {
@@ -28,11 +29,52 @@ rsSystem.component("dndDialogCheck", {
 		}
 	},
 	"computed": {
+		"additives": function() {
+			var additives = [],
+				search,
+				check,
+				i;
 
+			
+			if(this.entity) {
+				search = this.universe.transcribeInto(this.entity.feats);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+						additives.push(check);
+					}
+				}
+				search = this.universe.transcribeInto(this.entity.equipped);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+						additives.push(check);
+					}
+				}
+				search = this.universe.transcribeInto(this.entity.spells);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+						additives.push(check);
+					}
+				}
+				search = this.universe.transcribeInto(this.entity.effects);
+				for(i=0; i<search.length; i++) {
+					check = search[i];
+					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+						additives.push(check);
+					}
+				}
+			}
+
+			return additives;
+		}
 	},
 	"data": function () {
 		var data = {},
 			formula;
+
+		data.active_additives = {};
 
 		data.entity = this.details.entity;
 		if(typeof(data.entity) === "string") {
@@ -75,6 +117,44 @@ rsSystem.component("dndDialogCheck", {
 		}
 	},
 	"methods": {
+		"toggleAdditive": function(additive) {
+			if(this.active_additives[additive.id]) {
+				this.removeAdditive(additive);
+			} else {
+				this.addAdditive(additive);
+			}
+		},
+		"addAdditive": function(additive) {
+			Vue.set(this.active_additives, additive.id, additive);
+			console.log("Adding: ", additive);
+			this.recalculateFormula();
+		},
+		"removeAdditive": function(additive) {
+			Vue.delete(this.active_additives, additive.id);
+			console.log("Removing: ", additive);
+			this.recalculateFormula();
+		},
+		"classAdditive": function(additive) {
+			// var classes = additive.icon || "game-icon game-icon-abstract-041";
+
+			if(this.active_additives[additive.id]) {
+				return "selected";
+				// classes += " selected";
+			}
+			return "";
+			// return classes;
+		},
+		"recalculateFormula": function() {
+			var formula = "1d20 + " + this.entity.skill_check[this.skill.id],
+				adds = Object.keys(this.active_additives),
+				i;
+
+			for(i=0; i<adds.length; i++) {
+				formula += " + " + this.active_additives[adds[i]].additive_skill[this.skill.id];
+			}
+
+			this.roll.setFormula(formula);
+		},
 		"autoSubmit": function() {
 			if(this.profile && this.profile.auto_submit) {
 				this.send();
@@ -99,6 +179,7 @@ rsSystem.component("dndDialogCheck", {
 				check.skill = this.skill?this.skill.id:null;
 				check.dice = this.roll.dice_rolls; // Legacy Support;
 				check.roll = this.roll; // Future Support
+				check.additives = Object.keys(this.active_additives);
 				check.critical = this.roll.is_critical;
 				check.failure = this.roll.is_failure;
 				check.target = this.details.target;

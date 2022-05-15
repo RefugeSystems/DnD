@@ -389,6 +389,9 @@ class RSUniverse extends EventEmitter {
 				
 				this.state.synchronizing = false;
 				this.$emit("loaded", this);
+				if(rsSystem.audio.initialize) {
+					rsSystem.audio.initialize(this);
+				}
 				console.log("Ready: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
 				rsSystem.diagnostics.at.finish = Date.now();
 				console.log("Load Time: " + (rsSystem.diagnostics.at.finish - rsSystem.diagnostics.at.start) + "ms");
@@ -492,6 +495,22 @@ class RSUniverse extends EventEmitter {
 	 */
 	getImagePath(image) {
 		return  location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (image.id || image);
+	}
+
+	/**
+	 * 
+	 * @method getObjectPath
+	 * @param {Object || String} object 
+	 * @param {Object || String} [classification] 
+	 */
+	getObjectPath(object, classification) {
+		if(typeof(object) === "object") {
+			classification = object._class;
+			object = object.id;
+		} else {
+			classification = classification || "entity";
+		}
+		return  location.protocol + "//" + rsSystem.configuration.address + "/api/v1/" + classification + "/" + object;
 	}
 
 	/**

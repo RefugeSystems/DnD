@@ -83,6 +83,13 @@
 			});
 			location.reload();
 		},
+		/**
+		 * 
+		 * @method isOwner
+		 * @param {RSObject} record 
+		 * @param {RSPlayer} player 
+		 * @returns {Boolean}
+		 */
 		"isOwner": function(record, player) {
 			player = this.player || player;
 
@@ -469,13 +476,16 @@
 					return -1;
 				}
 			}
-
+			if(a.dexterity < b.dexterity) {
+				return 1;
+			} else if(a.dexterity > b.dexterity) {
+				return -1;
+			}
 			if(a.name < b.name) {
 				return -1;
 			} else if(a.name > b.name) {
 				return 1;
 			}
-			
 			return 0;
 		},
 		/**

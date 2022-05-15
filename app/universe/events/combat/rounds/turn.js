@@ -219,7 +219,7 @@ module.exports.initialize = function(universe) {
 				entities.push(up);
 			}
 		}
-		if(up && entities.indexOf(up) === -1) {
+		if(up && entities.indexOf(up) === -1 && up.played_by) {
 			universe.warnMasters("Need initiative roll for " + up.name, {
 				"skill": "skill:initiative",
 				"entity": up.id
@@ -279,6 +279,12 @@ module.exports.initialize = function(universe) {
 			universe.emit("combat:turn", {
 				"skirmish": skirmish.id,
 				"turn": entity.id
+			});
+			universe.emit("send", {
+				"type": "audio:queue",
+				"audio": "audio:combat:turn",
+				"control": "audio:play",
+				"recipients": entity.played_by?entity.owned:universe.getMasters()
 			});
 			skirmish.setValues({
 				"combat_turn": entity.id

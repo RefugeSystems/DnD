@@ -102,6 +102,36 @@
 					</div>
 				</div>
 			</section>
+			<section class="page additives">
+				<div class="page-contents">
+					<!-- This may be passed in as an array of IDs "targets" -->
+					<div class="message additives" v-if="additives.length === 0">
+						<span class="action-icon fas fa-empty-set rs-light-yellow"></span>
+						<span class="action-text">No Additives Avaialble</span>
+					</div>
+					<!-- Additives currently lock due to roll modifications -->
+					<div class="message additives" v-if="additives_locked">
+						<span class="action-icon fas fa-exclamation-triangle rs-light-red"></span>
+						<span class="action-text">Addives locked. Select new channel or close and restart.</span>
+					</div>
+
+					<!-- Select from entities, items, spells, effects, etc. in shared location (Togglable type limited from method when known, starts as true on dialog open) -->
+					<div class="additives-list">
+						<div class="spaced target flex h" v-for="additive in additives" :class="getAdditiveClasses(additive)">
+							<rs-shiny-button class="general rounded action" :active="!!additive.expiration && !adding[additive.id]" color="blue" v-on:click="toggleAdditive(additive)" :title="additive.name">
+								<span class="action-icon fa-solid shiny-toggle" :class="adding[additive.id]?'fa-check rs-light-green':'fa-times rs-light-red'"></span>
+								<span class="action-count" v-if="additive.charges_max">{{additive.charges || 0}}</span>
+							</rs-shiny-button>
+							<button class="general rounded quick action icon" v-on:click="info(additive)">
+								<span class="action-icon" :class="additive.icon"></span>
+							</button>
+							<button class="general rounded action selection target-select" v-on:click="toggleAdditive(additive)">
+								<span class="action-text">{{additive.name}}</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
 			<section class="page targets">
 				<div class="page-contents">
 					<!-- This may be passed in as an array of IDs "targets" -->
@@ -184,6 +214,12 @@
 								<span class="action-icon" :class="dmg.icon"></span>
 							</rs-shiny-button>
 							<dnd-display-roll :roll="roll_damage[target][dmg.id]" :source="entity" :profile="profile" v-on:rollfocused="setFocus($event)"></dnd-display-roll>
+						</div>
+					</div>
+					<div class="additive-notes">
+						<div class="" v-for="(additive, id) in adding" v-if="additive.additive_attack_note">
+							<div>Note for <button class="flat action" v-on:click="info(additive)"><span :class="additive.icon"></span> {{additive.name}} <span class="fa-solid fa-info-circle rs-light-blue"></span></button>: </div>
+							<rs-text-block :universe="universe" :text="additive.additive_attack_note" :record="additive" :profile="profile"></rs-text-block>
 						</div>
 					</div>
 				</div>

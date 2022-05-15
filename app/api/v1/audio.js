@@ -38,13 +38,16 @@ module.exports = new (function() {
 							}
 							res.end(parsed.toBuffer());
 						} else {
+							console.log("Not Parsed");
 							next();
 						}
 					} else {
+						console.log("Not Audio");
 						next();
 					}
 				} else {
 					// No manager or no audio, use normal 404 process
+					console.log("Not Found");
 					next();
 				}
 			});

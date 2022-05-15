@@ -12,6 +12,19 @@
 			<span class="action-count">{{roll.dice_rolls[die.id]?roll.dice_rolls[die.id].length:0}}</span>
 		</button>
 	</div>
+	<div class="dice additives" v-if="additives.length">
+		<div>Optional Additions:</div>
+		<rs-shiny-button class="general rounded action" v-for="additive in additives" :key="additive.id" :active="!!additive.expiration && !active_additives[additive.id]" :class="classAdditive(additive)" color="blue" v-on:click="toggleAdditive(additive)" :title="additive.name">
+			<span class="action-icon" :class="additive.icon"></span>
+			<span class="action-count" v-if="additive.charges_max">{{additive.charges || 0}}</span>
+		</rs-shiny-button>
+		<!--
+		<button class="general rounded quick action roll-add additive" v-for="additive in additives" :class="classAdditive(additive)" v-on:click="toggleAdditive(additive)" :title="additive.name">
+			<span class="action-icon" :class="additive.icon"></span>
+			<span class="action-count" v-if="additive.charges_max">{{additive.charges || 0}}</span>
+		</button>
+		-->
+	</div>
 	<div class="controls">
 		<button class="general rounded action" v-on:click="send()">
 			<span class="fas fa-share-square"></span>
