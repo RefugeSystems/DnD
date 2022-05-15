@@ -42,7 +42,9 @@ module.exports.initialize = function(universe) {
 			return new type.AudioController(controller);
 		} else {
 			console.log("Failed to Build Controller: ", controller);
-			throw new Error("Invalid or Unsupported Room Control Type for Audio Point: " + controller.control_type);
+			universe.warnMasters("Invalid or Unsupported Room Control Type for Audio Point: " + controller.control_type);
+			return null;
+			// throw new Error("Invalid or Unsupported Room Control Type for Audio Point: " + controller.control_type);
 		}
 	};
 

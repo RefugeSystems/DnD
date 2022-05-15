@@ -3319,6 +3319,49 @@
 			"metadata": ""
 		}
 	}, {
+		"name": "Control Point",
+		"id": "control_point",
+		"description": "The address to which to send control requests, such as the main Sonos device IP or the IP of the DLink Light. This leverages the control_type field on the server for how to handle requests.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 90,
+			"metadata": "",
+			"version_since": "0.9.61",
+			"version_update": "0.9.61"
+		}
+	}, {
+		"name": "Control Search",
+		"id": "control_search",
+		"description": "Search parameters for the server to locate this device with discovery protocols.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 90,
+			"metadata": "",
+			"version_since": "0.9.61",
+			"version_update": "0.9.61"
+		}
+	}, {
+		"name": "Control Type",
+		"id": "control_type",
+		"description": "Identifies the type of equipment in the room that the system can leverage for this object's purposes, such as 'light:dlink' or 'audio:sonos'.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"default": "light:dlink",
+			"version_since": "0.9.61",
+			"version_update": "0.9.61",
+			"display_size": 90,
+			"metadata": ""
+		}
+	}, {
 		"name": "IP Address",
 		"id": "ip",
 		"description": "The IP address of the object on the network",
