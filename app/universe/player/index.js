@@ -259,43 +259,45 @@ class PlayerConnection extends EventEmitter {
 				send = {},
 				field,
 				x;
-			if(manager && (this.player.gm || !change.unsyncable)) {
-				if(change._computed) {
+			if(this.player.gm || !change.unsyncable) {
+				if(manager) {
+					if(change._computed) {
+						
+					}
 					
-				}
-				
-				send._class = change._class;
-				if(change._search) {
-					send._search = change._search;
-				}
-				if(change._involved) {
-					send._involved = change._involved;
-				}
-				if(change._data) {
-					send._data = change._data;
-				}
+					send._class = change._class;
+					if(change._search) {
+						send._search = change._search;
+					}
+					if(change._involved) {
+						send._involved = change._involved;
+					}
+					if(change._data) {
+						send._data = change._data;
+					}
 
-				for(x=0; x<manager.fields.length; x++) {
-					field = manager.fields[x];
-					if(change[field.id] !== undefined && (!field.attribute.master_only || this.player.gm) && !field.attribute.server_only) {
-						send[field.id] = change[field.id];
-					} else {
-						if(send._calculated) {
-							delete(send._calculated[field.id]);
-						}
-						if(send._data) {
-							delete(send._data[field.id]);
+					for(x=0; x<manager.fields.length; x++) {
+						field = manager.fields[x];
+						if(change[field.id] !== undefined && (!field.attribute.master_only || this.player.gm) && !field.attribute.server_only) {
+							send[field.id] = change[field.id];
+						} else {
+							if(send._calculated) {
+								delete(send._calculated[field.id]);
+							}
+							if(send._data) {
+								delete(send._data[field.id]);
+							}
 						}
 					}
-				}
 
-				send.id = change.id;
-				if(this.player.gm) {
-					send._search += " ::: " + send.id;
+					send.id = change.id;
+					if(this.player.gm) {
+						send._search += " ::: " + send.id;
+					}
+					this.send("object", send);
+				} else {
+					this.universe.emit("error", new this.universe.Anomaly("player:connection:object", "Failed to locate manager for object change class", 40, change, null, this));
 				}
-				this.send("object", send);
-			} else {
-				this.emit("error", new this.universe.Anomaly("player:connection:object", "Failed to locate manager for object change class", 40, change, null, this));
 			}
 		} else {
 			// Non-object event sending is handled by other processors
