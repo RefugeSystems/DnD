@@ -56,6 +56,9 @@ rsSystem.audio = rsSystem.audio || {};
 					case "audio:stop":
 						rsSystem.audio.stop(audio, delay);
 						break;
+					case "audio:stop:all":
+						rsSystem.audio.stopAll();
+						break;
 				}
 			}
 		});
@@ -138,6 +141,8 @@ rsSystem.audio = rsSystem.audio || {};
 							if(object.is_looped) {
 								audio.loop = true;
 							}
+							rsSystem.log.warn("Playing Audio: " + id);
+							// audio.currentTime = 0;
 							audio.play()
 							.then(function() {
 								rsSystem.audio.active[id] = audio;
@@ -152,6 +157,7 @@ rsSystem.audio = rsSystem.audio || {};
 				};
 
 				if(!audio) {
+					// rsSystem.log.warn("Making Audio: " + id);
 					if(object.url) {
 						audio = new Audio(object.url);
 					} else {
@@ -159,10 +165,16 @@ rsSystem.audio = rsSystem.audio || {};
 					}
 					audio.oncanplay = play;
 					audio.onended = function() {
+						// rsSystem.log.warn("Audio Finished: " + id);
 						delete(rsSystem.audio.active[id]);
 					};
 				} else {
-					play();
+					// rsSystem.log.warn("Found Audio: " + id);
+					if(audio.readyState === 4) {
+						audio.currentTime = 0;
+					} else {
+						play();
+					}
 				}
 			} else {
 				rsSystem.log.info("Audio[Enabled?" + rsSystem.universe.profile.disable_sounds + "] Skipping play for ", object);
@@ -185,14 +197,9 @@ rsSystem.audio = rsSystem.audio || {};
 		
 		audio = rsSystem.audio.active[id];
 		if(audio) {
-			setTimeout(function() {
-				audio.pause();
-				audio.currentTime = audio.duration + 1;
-				setTimeout(function() {
-					audio.pause();
-					audio.currentTime = 0;
-				});
-			}, delay);
+			// audio.currentTime = 0;
+			delete(rsSystem.audio.active[id]);
+			audio.pause();
 		}
 	};
 
@@ -203,6 +210,12 @@ rsSystem.audio = rsSystem.audio || {};
 	 * @param {Integer} [delay]
 	 */
 	rsSystem.audio.stopAll = function(delay) {
-
+		var audios,
+			audio,
+			id;
+		for(id in rsSystem.audio.active) {
+			audio = rsSystem.audio.active[id];
+			rsSystem.audio.stop(audio);
+		}
 	};
 })();

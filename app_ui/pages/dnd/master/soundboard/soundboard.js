@@ -94,6 +94,8 @@ rsSystem.component("DNDMasterSoundboard", {
 		data.selected.playlist = {};
 		data.selected.audio = {};
 
+		data.activations = {};
+
 		return data;
 	},
 	"mounted": function() {
@@ -114,6 +116,13 @@ rsSystem.component("DNDMasterSoundboard", {
 		this.refreshAvailable();
 	},
 	"methods": {
+		"audioClass": function(audio) {
+			var styling = "";
+			if(audio && this.activations[audio.id]) {
+				styling += " audio-playing ";
+			}
+			return styling;
+		},
 		"toggleAll": function() {
 			Vue.set(this.storage, "show_all", !this.storage.show_all);
 		},
@@ -194,6 +203,9 @@ rsSystem.component("DNDMasterSoundboard", {
 				i;
 
 			if(audio && !audio.is_preview && !audio.disabled && rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
+				if(audio.is_looped) {
+					Vue.set(this.activations, audio.id, (this.activations[audio.id] || 0) + 1);
+				}
 				this.playPlayerAudio(this.storage.destination.player, audio.id);
 			}
 			if(rsSystem.utility.isNotEmpty(this.storage.destination.roomctrl)) {
@@ -205,12 +217,21 @@ rsSystem.component("DNDMasterSoundboard", {
 		},
 		"stop": function(audio) {
 			if(audio && !audio.is_preview && !audio.disabled && rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
+				Vue.set(this.activations, audio.id, (this.activations[audio.id] || 0) - 1);
 				this.stopPlayerAudio(this.storage.destination.player, audio.id);
+				if(this.activations[audio.id] < 0) {
+					Vue.set(this.activations, audio.id, 0);
+				}
 			}
 			if(rsSystem.utility.isNotEmpty(this.storage.destination.roomctrl)) {
 				for(var controller in this.storage.destination.roomctrl) {
 					this.stopRoomControl(controller);
 				}
+			}
+		},
+		"stopAll": function() {
+			if(rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
+				this.stopPlayerAllAudio(this.storage.destination.player);
 			}
 		},
 		"start": function(playlist) {
@@ -285,6 +306,18 @@ rsSystem.component("DNDMasterSoundboard", {
 		 */
 		"stopPlayerAudio": function(playerMap, audio) {
 			rsSystem.universe.send("master:control:audio:stop", {
+				"recipients": playerMap,
+				"audio": audio
+			});
+		},
+		/**
+		 * 
+		 * @method stopPlayerAllAudio
+		 * @param {Object} playerMap 
+		 * @param {String} audio ID
+		 */
+		"stopPlayerAllAudio": function(playerMap, audio) {
+			rsSystem.universe.send("master:control:audio:stop:all", {
 				"recipients": playerMap,
 				"audio": audio
 			});

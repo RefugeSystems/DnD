@@ -18,6 +18,10 @@
 					<span class="action-icon" :class="storage.show_all?'fa-solid fa-square-check':'fa-light fa-square'"></span>
 					<span class="action-text">Show All</span>
 				</button>
+				<button class="primary general rounded action" v-on:click="stopAll()">
+					<span class="action-icon fa-solid fa-volume-xmark"></span>
+					<span class="action-text">Stop All</span>
+				</button>
 				<button class="primary general rounded action" v-on:click="discoverySonos()">
 					<span class="action-icon fa-solid fa-mobile-signal-out"></span>
 					<span class="action-text">Discovery</span>
@@ -60,10 +64,10 @@
 		<h3>Playlists</h3>
 		<div class="soundboard-playlists flex h wrap">
 			<div class="soundboard-sound soundboard-playlist" v-for="playlist in playlists">
-				<button class="general rounded action quick" v-on:click="start(playlist)">
+				<button class="general rounded action quick play" v-on:click="start(playlist)">
 					<span class="action-icon fa-solid fa-play"></span>
 				</button>
-				<button class="general rounded action quick" v-on:click="stop()">
+				<button class="general rounded action quick stop" v-on:click="stop()">
 					<span class="action-icon fa-solid fa-stop"></span>
 				</button>
 				<span class="action-text">{{playlist.name}}</span>
@@ -74,14 +78,17 @@
 		</div>
 		<h3>Audios</h3>
 		<div class="soundboard-audios flex h wrap">
-			<div class="soundboard-sound soundboard-audio" v-for="audio in audios">
-				<button class="general rounded action quick" v-on:click="play(audio)">
+			<div class="soundboard-sound soundboard-audio" v-for="audio in audios" :class="audioClass(audio)">
+				<button class="general rounded action quick play" v-on:click="play(audio)">
 					<span class="action-icon fa-solid fa-play"></span>
 				</button>
-				<button class="general rounded action quick" v-on:click="stop(audio)">
+				<button class="general rounded action quick stop" v-on:click="stop(audio)">
 					<span class="action-icon fa-solid fa-stop"></span>
 				</button>
 				<span class="action-text">{{audio.name}}</span>
+				<button class="action flat rs-light-blue" v-if="audio.is_looped" v-on:click="info('knowledge:master:looped')">
+					<span class="action-icon fa-solid fa-repeat"></span>
+				</button>
 				<button class="action flat rs-light-blue" v-on:click="info(audio)">
 					<span class="action-icon fa-solid fa-info-circle"></span>
 				</button>
