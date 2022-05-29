@@ -67,12 +67,14 @@ rsSystem.component("StorageController", {
 			navigator.clipboard.writeText(text);
 		},
 		"editNoun": function(event, record) {
-			var player = this.player;
+			var player = this.player,
+				path;
 
 			if(event instanceof MouseEvent) {
+				path = event.composedPath();
 				if(!record) {
-					for(var i=0; i<event.path.length; i++) {
-						if(event.path[i] && event.path[i] && event.path[i].attributes && (record = event.path[i].getAttribute("data-id"))) {
+					for(var i=0; i<path.length; i++) {
+						if(path[i] && path[i] && path[i].attributes && (record = path[i].getAttribute("data-id"))) {
 							record = this.universe.getObject(record);
 							if(record) {
 								event.stopPropagation();

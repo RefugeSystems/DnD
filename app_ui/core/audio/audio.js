@@ -186,7 +186,12 @@ rsSystem.audio = rsSystem.audio || {};
 		audio = rsSystem.audio.active[id];
 		if(audio) {
 			setTimeout(function() {
+				audio.pause();
 				audio.currentTime = audio.duration + 1;
+				setTimeout(function() {
+					audio.pause();
+					audio.currentTime = 0;
+				});
 			}, delay);
 		}
 	};

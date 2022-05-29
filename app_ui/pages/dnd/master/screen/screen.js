@@ -628,11 +628,12 @@ rsSystem.component("DNDMasterScreen", {
 			});
 		},
 		"checkToEditRecord": function(event) {
-			var follow,
+			var path = event.composedPath(),
+				follow,
 				i;
 				
-			for(i=0; i<event.path.length; i++) {
-				if(event.path[i] && event.path[i] && event.path[i].attributes && (follow = event.path[i].getAttribute("data-id"))) {
+			for(i=0; i<path.length; i++) {
+				if(path[i] && path[i] && path[i].attributes && (follow = path[i].getAttribute("data-id"))) {
 					if(event.ctrlKey) {
 						console.log("Copy...", follow);
 						navigator.clipboard.writeText(follow);
