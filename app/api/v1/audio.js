@@ -7,9 +7,11 @@ module.exports = new (function() {
 
 	var cacheDuration = 60 * 60 * 24 * 31,
 		typeShort = {},
+		semicolonSet,
 		cacheString;
 
 	cacheString = "public, max-age=" + cacheDuration;
+	semicolonSet = new RegExp("__", "g");
 	
 	typeShort["mp3"] = "audio/mp3";
 	typeShort["mid"] = "audio/midi";
@@ -23,10 +25,15 @@ module.exports = new (function() {
 			
 			this.router.get("/:id", (req, res, next) => {
 				// Handles sending an Image entry as the appropriate file type
-				var parsed,
+				var id = req.params.id,
+					parsed,
 					audio;
+
+				if(typeof(id) === "string") {
+					id = id.replace(semicolonSet, ":");
+				}
 					
-				if(manager && (audio = manager.object[req.params.id])) {
+				if(manager && (audio = manager.object[id])) {
 					if(audio.data.startsWith("data:audio")) {
 						parsed = parseDataUrl(audio.data);
 						if(parsed) {

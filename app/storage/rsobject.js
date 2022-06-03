@@ -853,24 +853,20 @@ class RSObject {
 				}
 				// Normalize Field Types
 				if(field.type === "number") {
-					if(isNaN(this[field.id])) {
+					if(isNaN(this[field.id]) || typeof(this[field.id]) !== "number") {
 						this[field.id] = parseFloat(this[field.id]);
-						if(isNaN(this[field.id]) && field.attribute) {
-							this[field.id] = field.attribute.default || 0;
-						} else {
-							this[field.id] = 0;
+						if(isNaN(this[field.id]) && field.attribute && typeof(field.attribute.default) === "number") {
+							this[field.id] = field.attribute.default;
 						}
 					} else if(typeof(this[field.id]) === "number") {
 						if(typeof(field.attribute.fixed) === "number") {
 							this[field.id] = parseFloat(this[field.id].toFixed(field.attribute.fixed));
 						}
 					}
-				} else if(field.type === "integer" && isNaN(this[field.id])) {
+				} else if(field.type === "integer" && (isNaN(this[field.id]) || typeof(this[field.id]) !== "number")) {
 					this[field.id] = parseInt(this[field.id]);
-					if(isNaN(this[field.id]) && field.attribute) {
-						this[field.id] = field.attribute.default || 0;
-					} else {
-						this[field.id] = 0;
+					if(isNaN(this[field.id]) && field.attribute && typeof(field.attribute.default) === "number") {
+						this[field.id] = field.attribute.default;
 					}
 				} else if((field.type === "object" && field.attribute && field.attribute.values === "integer") || field.type === "object:integer") {
 					keys = Object.keys(this[field.id]);
@@ -910,7 +906,7 @@ class RSObject {
 				} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
 					this[field.id] = field.attribute.max;
 				}
-
+				
 				/* Check if an object HAS a deprecated value. Shifted to only warn on PROVIDING deprecated values during calculation
 				if(field.attribute.deprecated && this[field.id] !== null && this[field.id] !== undefined && !this._deprecation[field.id] && fieldHasValue()) {
 					console.warn("Deprecated field[" + field.id + "] has value for object[" + this.id + "]");

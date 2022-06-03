@@ -4,6 +4,8 @@
 			<span v-if="field.id === 'icon' || field.type === 'icon'" :class="details[field.id]"></span>
 			<button class="clear-link ctrl-link flat fas fa-info-circle" v-if="field.id === 'parent' && details.parent" v-on:click="info(details.parent)" tabindex=2>
 			</button>
+			<button class="clear-link ctrl-link flat fas fa-info-circle" v-if="field.inheritable && details[field.id]" v-on:click="info(details[field.id])" tabindex=2>
+			</button>
 			<button class="clear-link ctrl-link flat fas fa-clock" v-if="field.type === 'gametime'" v-on:click="setTimeToNow(field)" tabindex=2>
 			</button>
 			<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearData(field)" tabindex=2>

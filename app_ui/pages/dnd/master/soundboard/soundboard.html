@@ -42,15 +42,30 @@
 				<div class="soundboard-room-volume">
 					<input v-model.number="storage.volume" v-on:change="setVolume()" type="range" min="1" max="100" class="slider">
 				</div>
-				<div class="soundboard-roomcontrol" v-for="ctrl in available.roomctrl" v-on:click="toggleDestination(ctrl)">
-					<button class="primary general rounded action">
+				<div class="soundboard-roomcontrol" v-for="ctrl in available.roomctrl">
+					<button class="primary general rounded action" v-on:click="toggleDestination(ctrl)">
 						<span class="action-icon" :class="classTargetted(ctrl)"></span>
 						<span class="action-text">{{ctrl.name}}</span>
 					</button>
+					<button class="flat action fa-solid fa-info-circle rs-light-blue" v-on:click="info(ctrl)"></button>
 				</div>
 			</div>
 			<h3>Players</h3>
 			<div class="soundboard-players">
+				<div class="swap">
+					<button class="primary general quick rounded action" v-on:click="savePlayerSelection()">
+						<span class="action-icon" :class="classPlayerSave()"></span>
+					</button>
+					<button class="primary general quick rounded action" v-on:click="applyPlayerSelection()">
+						<span class="action-icon fa-solid fa-floppy-disk-circle-arrow-right"></span>
+					</button>
+					<button class="primary general quick rounded action" v-on:click="swapPlayerSelection()">
+						<span class="action-icon" :class="classPlayerSwap()"></span>
+					</button>
+					<button class="primary general quick rounded action" v-on:click="clearPlayerSelection()">
+						<span class="action-icon fa-solid fa-empty-set"></span>
+					</button>
+				</div>
 				<div class="soundboard-player" v-for="player in available.player" v-on:click="toggleDestination(player)">
 					<button class="primary general rounded action">
 						<span class="action-icon" :class="classTargetted(player)"></span>

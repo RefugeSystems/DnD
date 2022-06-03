@@ -96,6 +96,16 @@ rsSystem.component("DNDMasterSoundboard", {
 
 		data.activations = {};
 
+		data.activePatterns = {};
+
+		data.field = {};
+		data.field.arrangeRight = {
+
+		};
+		data.field.arrangeLeft = {
+
+		};
+
 		return data;
 	},
 	"mounted": function() {
@@ -113,6 +123,21 @@ rsSystem.component("DNDMasterSoundboard", {
 		if(!this.storage.destination.player) {
 			Vue.set(this.storage.destination, "player", {});
 		}
+		if(!this.storage.swap) {
+			Vue.set(this.storage, "swap", {});
+		}
+		if(!this.storage.saved) {
+			Vue.set(this.storage, "saved", {});
+		}
+		if(!this.storage.arrangement) {
+			Vue.set(this.storage, "arrangement", {});
+		}
+		if(!this.storage.arrangement.left) {
+			Vue.set(this.storage.arrangement, "left", []);
+		}
+		if(!this.storage.arrangement.right) {
+			Vue.set(this.storage.arrangement, "right", []);
+		}
 		this.refreshAvailable();
 	},
 	"methods": {
@@ -122,6 +147,66 @@ rsSystem.component("DNDMasterSoundboard", {
 				styling += " audio-playing ";
 			}
 			return styling;
+		},
+		"applyPlayerSelection": function() {
+			this.clearObject(this.storage.swap);
+			this.setToObject(this.storage.destination.player, this.storage.swap);
+			this.clearObject(this.storage.destination.player);
+			this.setToObject(this.storage.saved, this.storage.destination.player);
+			Vue.set(this.storage, "swapped", true);
+		},
+		"swapPlayerSelection": function() {
+			if(this.storage.swapped) {
+				this.clearObject(this.storage.destination.player);
+				this.setToObject(this.storage.swap, this.storage.destination.player);
+			} else {
+				this.clearObject(this.storage.swap);
+				this.setToObject(this.storage.destination.player, this.storage.swap);
+				this.clearObject(this.storage.destination.player);
+				this.setToObject(this.storage.saved, this.storage.destination.player);
+			}
+			Vue.set(this.storage, "swapped", !this.storage.swapped);
+		},
+		"classPlayerSwap": function() {
+			var classes = "fa-solid ";
+			if(this.storage.swapped) {
+				classes += "fa-arrow-rotate-left ";
+			} else {
+				classes += "fa-arrow-rotate-right ";
+			}
+			return classes;
+		},
+		"savePlayerSelection": function() {
+			Vue.set(this.storage, "swapped", false);
+			this.clearObject(this.storage.saved);
+			this.setToObject(this.storage.destination.player, this.storage.saved);
+		},
+		"classPlayerSave": function() {
+			var classes = "fa-solid fa-floppy-disk";
+			return classes;
+		},
+		"clearPlayerSelection": function() {
+			this.clearObject(this.storage.destination.player);
+		},
+		"clearObject": function(object) {
+			var keys = Object.keys(object),
+				i;
+			for(i=0; i<keys.length; i++) {
+				Vue.delete(object, keys[i]);
+			}
+		},
+		"setToObject": function(source, object) {
+			var keys = Object.keys(source),
+				i;
+			for(i=0; i<keys.length; i++) {
+				Vue.set(object, keys[i], source[keys[i]]);
+			}
+		},
+		"setArrangement": function(left, right) {
+			this.storage.arrangement.right.splice(0);
+			this.storage.arrangement.left.splice(0);
+			this.storage.arrangement.right.push.apply(this.storage.arrangement.right, right);
+			this.storage.arrangement.left.push.apply(this.storage.arrangement.left, left);
 		},
 		"toggleAll": function() {
 			Vue.set(this.storage, "show_all", !this.storage.show_all);
@@ -160,6 +245,12 @@ rsSystem.component("DNDMasterSoundboard", {
 					this.available[loading._class].push(loading);
 				}
 			}
+		},
+		"playPattern": function(pattern) {
+
+		},
+		"stopPattern": function(pattern) {
+
 		},
 		"toggleDestination": function(destination) {
 			if(this.storage.destination[destination._class]) {

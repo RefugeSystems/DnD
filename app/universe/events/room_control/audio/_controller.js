@@ -7,7 +7,9 @@
  */
 
 var configuration = require("a-configuration"),
-	idReplacements = /[^a-z0-9]/ig;
+	idReplacements = /[^a-z0-9]/ig,
+	semicolonSet = /__/g,
+	colonSet = /:/g;
 
 class AudioController {
 	constructor(controller) {
@@ -24,8 +26,9 @@ class AudioController {
 		if(audio.url) {
 			return audio.url;
 		}
-		if(configuration && configuration.server && configuration.server.public) {
-			return configuration.server.public + "/api/v1/audio/" + audio.id;
+		if(configuration && configuration.server && (configuration.server.public_api || configuration.server.public)) {
+			console.log("Audio URL: " + (configuration.server.public_api || configuration.server.public) + "api/v1/audio/" + audio.id.replace(colonSet, "__"));
+			return (configuration.server.public_api || configuration.server.public) + "api/v1/audio/" + audio.id.replace(colonSet, "__");
 		}
 		return null;
 	}

@@ -57,6 +57,7 @@ module.exports.initialize = function(universe) {
 		}).then((groups) => {
 			seen = Date.now();
 			groups.forEach(function(group) {
+				console.log("Discovery Group: " + group.ID);
 				id = "device:" + getIDString(group.ID);
 				device = universe.get(id);
 				if(device) {
