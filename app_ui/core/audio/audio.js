@@ -147,6 +147,7 @@ rsSystem.audio = rsSystem.audio || {};
 					audio.oncanplay = null;
 					setTimeout(function() {
 						if(audio.readyState === 4) {
+							audio._retried = 0;
 							if(object.is_looped) {
 								audio.loop = true;
 							}
@@ -161,6 +162,9 @@ rsSystem.audio = rsSystem.audio || {};
 							});
 						} else {
 							rsSystem.log.warn("Audio " + id + " in invalid ready state: " + audio.readyState);
+							if(audio.readyState === 3 && audio._retried++ < 5) {
+								setTimeout(play, 100);
+							}
 						}
 					}, delay);
 				};
@@ -172,6 +176,7 @@ rsSystem.audio = rsSystem.audio || {};
 					} else {
 						audio = new Audio(rsSystem.universe.getObjectPath(id, "audio"));
 					}
+					audio._retried = 0;
 					audio.oncanplay = play;
 					audio.onended = function() {
 						// rsSystem.log.warn("Audio Finished: " + id);
