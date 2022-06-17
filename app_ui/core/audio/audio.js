@@ -114,6 +114,14 @@ rsSystem.audio = rsSystem.audio || {};
 	};
 
 	/**
+	 * Play time to use as a buffer to loop for smoother shifts.
+	 * @property loop_buffer
+	 * @type Number
+	 * @default .44
+	 */
+	rsSystem.audio.loop_buffer = .1;
+
+	/**
 	 * Play an audio object locally.
 	 * @method play
 	 * @param {RSAudio} object
@@ -136,6 +144,7 @@ rsSystem.audio = rsSystem.audio || {};
 				delay = delay || 0;
 
 				play = function() {
+					audio.oncanplay = null;
 					setTimeout(function() {
 						if(audio.readyState === 4) {
 							if(object.is_looped) {
@@ -168,6 +177,22 @@ rsSystem.audio = rsSystem.audio || {};
 						// rsSystem.log.warn("Audio Finished: " + id);
 						delete(rsSystem.audio.active[id]);
 					};
+					if(object.is_looped) {
+						// See: https://stackoverflow.com/questions/7330023/gapless-looping-audio-html5
+						audio.addEventListener("timeupdate", function() {
+							if(typeof(object.loop_buffer) === "number") {
+								if(this.currentTime > this.duration - object.loop_buffer) {
+									this.currentTime = 0;
+									this.play();
+								}
+							} else {
+								if(this.currentTime > this.duration - rsSystem.audio.loop_buffer) {
+									this.currentTime = 0;
+									this.play();
+								}
+							}
+						});
+					}
 				} else {
 					// rsSystem.log.warn("Found Audio: " + id);
 					if(audio.readyState === 4) {
