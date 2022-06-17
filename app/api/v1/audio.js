@@ -13,7 +13,7 @@ module.exports = new (function() {
 	cacheString = "public, max-age=" + cacheDuration;
 	semicolonSet = new RegExp("__", "g");
 	
-	typeShort["mp3"] = "audio/mp3";
+	typeShort["mp3"] = "audio/mpeg";
 	typeShort["mid"] = "audio/midi";
 	typeShort["midi"] = "audio/midi";
 	typeShort["oga"] = "audio/ogg";

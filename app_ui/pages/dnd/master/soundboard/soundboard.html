@@ -62,8 +62,8 @@
 					<button class="primary general quick rounded action" v-on:click="swapPlayerSelection()">
 						<span class="action-icon" :class="classPlayerSwap()"></span>
 					</button>
-					<button class="primary general quick rounded action" v-on:click="clearPlayerSelection()">
-						<span class="action-icon fa-solid fa-empty-set"></span>
+					<button class="primary general quick rounded action" v-on:click="togglePlayerSelection()">
+						<span class="action-icon fa-solid" :class="clearIcon"></span>
 					</button>
 				</div>
 				<div class="soundboard-player" v-for="player in available.player" v-on:click="toggleDestination(player)">
@@ -92,21 +92,30 @@
 			</div>
 		</div>
 		<h3>Audios</h3>
+		<rs-input type="text" v-model="storage.filter" placeholder="Filter items..."></rs-input>
 		<div class="soundboard-audios flex h wrap">
-			<div class="soundboard-sound soundboard-audio" v-for="audio in audios" :class="audioClass(audio)">
-				<button class="general rounded action quick play" v-on:click="play(audio)">
-					<span class="action-icon fa-solid fa-play"></span>
-				</button>
-				<button class="general rounded action quick stop" v-on:click="stop(audio)">
-					<span class="action-icon fa-solid fa-stop"></span>
-				</button>
-				<span class="action-text">{{audio.name}}</span>
-				<button class="action flat rs-light-blue" v-if="audio.is_looped" v-on:click="info('knowledge:master:looped')">
-					<span class="action-icon fa-solid fa-repeat"></span>
-				</button>
-				<button class="action flat rs-light-blue" v-on:click="info(audio)">
-					<span class="action-icon fa-solid fa-info-circle"></span>
-				</button>
+			<div class="soundboard-sound soundboard-category flex v fill" v-for="(audios, id) in categories" v-if="!storage.focused || id === storage.focused">
+				<div class="soundboard-title rs-light-yellow">
+					<span>{{getCategoryName(id)}}</span>
+					<button class="quick flat action fa-solid rs-white" :class="id === storage.focused?'fa-eye-slash':'fa-eye'" v-on:click="focusCategory(id)"></button>
+				</div>
+				<div class="flex h wrap">
+					<div class="soundboard-sound soundboard-audio" v-for="audio in audios" :class="audioClass(audio)">
+						<button class="general rounded action quick play" v-on:click="play(audio)">
+							<span class="action-icon fa-solid fa-play"></span>
+						</button>
+						<button class="general rounded action quick stop" v-on:click="stop(audio)">
+							<span class="action-icon fa-solid fa-stop"></span>
+						</button>
+						<span class="action-text">{{audio.name}}</span>
+						<button class="action flat rs-light-blue" v-if="audio.is_looped" v-on:click="info('knowledge:master:looped')">
+							<span class="action-icon fa-solid fa-repeat"></span>
+						</button>
+						<button class="action flat rs-light-blue" v-on:click="info(audio)">
+							<span class="action-icon fa-solid fa-info-circle"></span>
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -51,15 +51,30 @@ rsSystem.component("DNDMasterSoundboard", {
 				}
 			}
 		},
-		"audios": function() {
-			var audios = this.location.audios;
+		"categories": function() {
+			var locale = this.location.audios,
+				categories = {},
+				audios,
+				audio,
+				i;
+
 			if(this.storage.show_all) {
-				return this.universe.listing.audio;
+				audios = this.universe.listing.audio;
+			} else if(locale && locale.length) {
+				audios = this.universe.transcribeInto(locale);
 			}
-			if(audios) {
-				return this.universe.transcribeInto(audios);
+
+			for(i=0; i<audios.length; i++) {
+				audio = audios[i];
+				if(!this.storage.filter || audio._search.indexOf(this.storage.filter) !== -1) {
+					if(!categories[audio.category]) {
+						categories[audio.category] = [];
+					}
+					categories[audio.category].push(audio);
+				}
 			}
-			return [];
+
+			return categories;
 		},
 		"playlists": function() {
 			var playlists = this.location.playlists;
@@ -79,6 +94,8 @@ rsSystem.component("DNDMasterSoundboard", {
 		var data = {},
 			i;
 
+		data.clearIcon = "fa-empty-set";
+		data.toggledSelection = "";
 		data.available = {};
 		data.available.roomctrl = [];
 		data.available.player = [];
@@ -138,9 +155,32 @@ rsSystem.component("DNDMasterSoundboard", {
 		if(!this.storage.arrangement.right) {
 			Vue.set(this.storage.arrangement, "right", []);
 		}
+
+		if(rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
+			Vue.set(this, "clearIcon", "fa-empty-set");
+			Vue.set(this, "toggledSelection", "clear");
+		} else {
+			Vue.set(this, "clearIcon", "fa-check");
+			Vue.set(this, "toggledSelection", "select");
+		}
+
 		this.refreshAvailable();
 	},
 	"methods": {
+		"getCategoryName": function(category) {
+			category = this.universe.index.category[category];
+			if(category) {
+				return category.name;
+			}
+			return "None";
+		},
+		"focusCategory": function(category) {
+			if(this.storage.focused === category) {
+				Vue.delete(this.storage, "focused");
+			} else {
+				Vue.set(this.storage, "focused", category);
+			}
+		},
 		"audioClass": function(audio) {
 			var styling = "";
 			if(audio && this.activations[audio.id]) {
@@ -185,8 +225,27 @@ rsSystem.component("DNDMasterSoundboard", {
 			var classes = "fa-solid fa-floppy-disk";
 			return classes;
 		},
-		"clearPlayerSelection": function() {
-			this.clearObject(this.storage.destination.player);
+		"togglePlayerSelection": function() {
+			var i;
+			switch(this.toggledSelection) {
+				case "clear":
+					this.clearObject(this.storage.destination.player);
+					break;
+				case "select":
+					for(i=0; i<this.available.player.length; i++) {
+						if(!this.available.player[i].gm) {
+							this.toggleDestination(this.available.player[i]);
+						}
+					}
+					break;
+			}
+			if(rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
+				Vue.set(this, "clearIcon", "fa-empty-set");
+				Vue.set(this, "toggledSelection", "clear");
+			} else {
+				Vue.set(this, "clearIcon", "fa-check");
+				Vue.set(this, "toggledSelection", "select");
+			}
 		},
 		"clearObject": function(object) {
 			var keys = Object.keys(object),
@@ -258,6 +317,13 @@ rsSystem.component("DNDMasterSoundboard", {
 					Vue.delete(this.storage.destination[destination._class], destination.id);
 				} else {
 					Vue.set(this.storage.destination[destination._class], destination.id, true);
+				}
+				if(rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
+					Vue.set(this, "clearIcon", "fa-empty-set");
+					Vue.set(this, "toggledSelection", "clear");
+				} else {
+					Vue.set(this, "clearIcon", "fa-check");
+					Vue.set(this, "toggledSelection", "select");
 				}
 			} else {
 				console.warn("Unknown destination class: " + destination._class, destination);

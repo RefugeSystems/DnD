@@ -6,7 +6,7 @@
  */
 var storageKey = "_rs_connectComponentKey",
 	// TODO: Centralize ServiceWorker versioning for app control (Align with package version?)
-	version = "0.9.26",
+	version = "0.9.73",
 	cacheID = "rsdnd_" + version,
 	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
 	processAction,
@@ -78,7 +78,7 @@ self.addEventListener("install", function(event) {
 		return cache.addAll([
 			"./",
 			"./index.html",
-			"./configuration.json",
+			// "./configuration.json",
 
 			"./images/rook.blue.png",
 			"./images/rook.green.png",
@@ -154,9 +154,11 @@ self.addEventListener("testing", function(event) {
 	console.log("Test Event: ", event);
 });
 
+/*
 followUp = function() {
 	//	console.log("Following Up...");
 	setTimeout(followUp, 1000000);
 };
 
 followUp();
+*/
