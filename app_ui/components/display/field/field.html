@@ -10,7 +10,7 @@
 		<div>
 			<span class="seperator">:</span>
 		</div>
-		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object' && fieldData.type !== 'object:dice' && fieldData.type !== 'markdown'">
+		<div class="value flat" v-if="fieldData.type !== 'array' && fieldData.type !== 'object' && fieldData.type !== 'object:dice' && fieldData.type !== 'markdown' && fieldData.type !== 'method'">
 			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
 			<span v-else class="text">{{getValue()}}</span>
 		</div>
@@ -20,6 +20,9 @@
 		<button class="flat action fas fa-sigma display-info rs-blue" v-if="hasFormula && realType !== 'object'" :title="object._formula[field]" v-on:click="toggleFormula()"></button>
 	</div>
 	<div class="markdown" v-if="fieldData.type === 'markdown'" v-html="rsshowdown(object[field])"></div>
+	<pre class="method" v-if="fieldData.type === 'method'">
+		{{object[field]}}
+	</pre>
 	<div class="formula" v-if="viewFormula">
 		<span class="formula-value">
 			<span class="fas fa-function rs-blue"></span>

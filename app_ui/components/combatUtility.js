@@ -19,6 +19,9 @@ rsSystem.component("DNDCombatUtility", {
 		}
 	},
 	"computed": {
+		"myTurn": function() {
+			return this.entity && this.skirmish && this.skirmish.combat_turn === this.entity.id || false;
+		},
 		"skirmish": function() {
 			var skirmish,
 				i;
@@ -43,11 +46,18 @@ rsSystem.component("DNDCombatUtility", {
 			skirmish = skirmish || this.skirmish;
 			entity = entity || this.entity;
 			if(skirmish && entity) {
-				rsSystem.EventBus.$emit("dialog-open", {
-					"component": "dndEndTurn",
-					"entity": entity.id,
-					"skirmish": this.skirmish.id
-				});
+				if(this.profile && this.profile.skip_turn_prompt) {
+					this.universe.send("skimish:turn:end", {
+						"skirmish": skirmish.id,
+						"entity": entity.id
+					});
+				} else {
+					rsSystem.EventBus.$emit("dialog-open", {
+						"component": "dndEndTurn",
+						"entity": entity.id,
+						"skirmish": skirmish.id
+					});
+				}
 			} else {
 				console.warn("Can not end turn, missing data: ", {skirmish, entity, "component": this});
 			}

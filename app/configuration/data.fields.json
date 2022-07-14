@@ -168,6 +168,12 @@
 		"type": "gametime",
 		"attribute": {}
 	}, {
+		"id": "time_start",
+		"name": "Start Time",
+		"description": "When this started",
+		"type": "gametime",
+		"attribute": {}
+	}, {
 		"id": "loyal_to",
 		"name": "Loyal To",
 		"description": "Indicates who this entity is loyal to, used for summons and minions and the like",
@@ -1833,6 +1839,28 @@
 		"type": "integer",
 		"attribute": {}
 	}, {
+		"id": "is_positive",
+		"name": "Is Positive",
+		"description": "Indicates that the object is a good effect.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "is_negative",
+		"name": "Is Negative",
+		"description": "Indicates that the object is a good effect.",
+		"type": "boolean",
+		"attribute": {}
+	}, {
+		"id": "handlers",
+		"name": "Handlers",
+		"description": "List of handlers to respond to the object.",
+		"type": "array",
+		"inheritance": {},
+		"inheritable": [
+			"handler"
+		],
+		"attribute": {}
+	}, {
 		"id": "race",
 		"name": "Race",
 		"description": "Race of this entity",
@@ -1857,6 +1885,7 @@
 			"movement_swim": "+",
 			"movement_fly": "+",
 			"response": "+",
+			"handler": "+",
 			"hp_max": "+",
 			"view": "+",
 			"armor": "+",
@@ -1915,6 +1944,7 @@
 			"damage": "+=",
 			"encumberance_max": "+",
 			"weight_max": "+",
+			"handler": "+",
 
 			"spell_slot_max": "+",
 			"skill_advantage": "+",
@@ -2064,6 +2094,7 @@
 			"sorcerer": "+",
 			"warlock": "+",
 			"wizard": "+",
+			"handler": "+",
 			"encumberance_max": "+",
 			"response": "+",
 			"weight_max": "+",
@@ -2122,6 +2153,7 @@
 			"mobility": "+",
 			"feats": "+",
 			"weight": "+",
+			"handler": "+",
 			"encumberance_max": "+",
 			"response": "+",
 			"weight_max": "+",
@@ -3241,10 +3273,10 @@
 		"type": "method",
 		"attribute": {}
 	}, {
-		"id": "uevent",
-		"name": "Universe Event",
-		"description": "The string for the Event emitted within the Universe as part of the simulation",
-		"type": "string",
+		"id": "script",
+		"name": "Script",
+		"description": "Describes a piece of code to handle determining what should be performed.",
+		"type": "method",
 		"attribute": {}
 	}, {
 		"id": "occurrences",
@@ -3256,6 +3288,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "activities",
+		"name": "Activities",
+		"description": "Activities associated with this object.",
+		"type": "string",
+		"inheritable": [
+			"activity"
+		],
+		"attribute": {}
+	}, {
 		"id": "event",
 		"name": "Event",
 		"description": "The event to which the object is related.",
@@ -3264,6 +3305,34 @@
 			"event"
 		],
 		"attribute": {}
+	}, {
+		"id": "uevent",
+		"name": "Universe Event",
+		"description": "The string for the Event emitted within the Universe as part of the simulation",
+		"type": "string",
+		"attribute": {
+			"deprecated": "Use negative event_universe"
+		}
+	}, {
+		"id": "event_universe",
+		"name": "Universe Event",
+		"description": "The string for the Event emitted within the Universe as part of the simulation",
+		"type": "string",
+		"inheritable": [
+			"event"
+		],
+		"attribute": {}
+	}, {
+		"name": "Scape",
+		"id": "scape",
+		"description": "Describes what audio objects to play and to which destinations in the audio arrangement from the soundboard. Each object in the array describes a 'destination' as an integer index, either positive or negative, from the 'master' position designated by the soundscape arrangement with +10 and -10 being special designations for room and auxillary room play. A 'delay' field indicates how many milliseconds the destination should wait before playing the sound. An 'audio' field denotes the audio object ID to be played.",
+		"type": "array",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 110
+		}
 	}, {
 		"name": "Capability",
 		"id": "capability",

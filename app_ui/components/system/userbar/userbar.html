@@ -1,0 +1,26 @@
+<div class="system-component rs-component user-bar flex h" :class="getBarClasses()" v-wheel="wheelIcons" v-on:drop.stop.prevent="addButton()" v-on:dragover.prevent="">
+	<div class="button-container" v-on:drop.stop.prevent="blockButton()" v-on:dragover.prevent="">
+		<button class="quick action" v-on:click="inspect?info(userbar):closeBar()" v-on:click.right.prevent.stop="toggleInspect()">
+			<span v-if="inspect" class="action-icon fa-solid fa-circle-info rs-blue"></span>
+			<span v-if="!inspect" class="action-icon fa-solid fa-times rs-red"></span>
+		</button>
+	</div>
+	<div class="button-container" v-on:drop.stop.prevent="blockButton()" v-on:dragover.prevent="">
+		<button class="quick action" v-on:click="inspect?info(entity):nextBar()" v-wheel="wheelBar">
+			<span v-if="inspect" class="action-icon" :class="entity.icon || 'fa-solid fa-user'"></span>
+			<span v-if="!inspect" class="action-icon" :class="icon"></span>
+			<span v-if="!inspect" class="action-icon fa-solid fa-sort"></span>
+		</button>
+	</div>
+	<div class="action-container flex h" ref="buttons">
+		<div class="button-container" v-for="(button, i) in bar" v-on:drop.stop.prevent="loadButton(i)" v-on:dragover.prevent="" :id="'bar-button-' + i" :title="button.name" v-linkable="button.id">
+			<button class="quick action" v-if="button" v-on:click="fireButton(button)" v-on:click.right.prevent.stop="clearButton(button, i)">
+				<span class="action-icon" :class="buttonIcon(button)"></span>
+				<span class="action-count" v-if="button.object && hasCharges(button.object)">{{button.object.charges || 0}}/{{button.object.charges_max}}</span>
+				<span class="action-status" :class="button.status"></span>
+				<span class="action-label" v-if="button.channel" :class="button.channel.icon"></span>
+				<span class="action-label" v-if="!button.channel && button.level">{{button.level}}</span>
+			</button>
+		</div>
+	</div>
+</div>

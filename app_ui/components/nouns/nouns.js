@@ -265,6 +265,9 @@
 							}
 						}
 						this.previewObject();
+						// setTimeout(function() {
+						// 	rsSystem.EventBus.$emit("noun-sync");
+						// },0);
 					}
 					Vue.set(this, "copy", null);
 				}
@@ -379,6 +382,9 @@
 					"classification": this.storage.classification,
 					"details": previewing
 				});
+				setTimeout(function() {
+					rsSystem.EventBus.$emit("noun-sync");
+				},0);
 			},
 			"sync": function(event) {
 				this.previewObject();
@@ -457,6 +463,10 @@
 				for(i=0; i<keys.length; i++) {
 					Vue.delete(this.details, keys[i]);
 				}
+
+				// setTimeout(function() {
+				// 	rsSystem.EventBus.$emit("noun-sync");
+				// },0);
 			},
 			/**
 			 * Save the current specifications to an object (either making new or updating based

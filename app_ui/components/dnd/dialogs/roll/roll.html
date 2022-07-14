@@ -261,7 +261,7 @@
 					<span class="action-count" v-if="active && active.dice_rolls && active.dice_rolls[dice.id] && active.dice_rolls[dice.id].length">{{active.dice_rolls[dice.id].length}}</span>
 				</button>
 			</div>
-			<div class="flex h formula-bar" v-if="!hideFormula">
+			<div class="flex h formula-bar" v-if="!details.damage && !hideFormula">
 				<input type="text" v-model="storage.formula" v-on:keydown.enter="roll(storage.formula)" v-on:keydown.esc.prevent.stop="clearHistory()" v-on:keyup.esc.prevent.stop="" v-on:keypress.esc.prevent.stop="" v-on:focus="setTracking(null)" />
 				<button class="rounded general quick action dice" v-on:click="roll(storage.formula)">
 					<span class="fas fa-dice"></span>

@@ -2,7 +2,7 @@ module.exports.initialize = function(universe) {
 	/**
 	 * 
 	 * Requires GameMaster
-	 * @event player:give:copy
+	 * @event player:effect:revoke
 	 * @for Universe
 	 * @param {Object} event With data from the system
 	 * @param {String} event.type The event name being fired, should match this event's name
@@ -48,11 +48,12 @@ module.exports.initialize = function(universe) {
 							characters.push(character.id);
 						}
 						subtractions[character.id].push(effect.id);
+						effect.setValues({
+							"revoked": universe.time,
+							"unsyncable": true,
+							"is_deletable": true
+						});
 					}
-					effect.setValues({
-						"revoked": universe.time,
-						"is_deletable": true
-					});
 				}
 			}
 		}

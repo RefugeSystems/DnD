@@ -78,6 +78,17 @@ module.exports.initialize = function(universe) {
 						"main_weapon": main
 					});
 				}
+				/**
+				 * 
+				 * @event entity:equipped
+				 * @for RSObject
+				 * @param {Array} equipment
+				 * @param {Number} time
+				 * @param {Number} date
+				 */
+				entity.fireHandlers("entity:equipped", {
+					"equipment": equip
+				});
 			} else {
 				console.log("nothing to equi[p");
 			}
@@ -135,6 +146,17 @@ module.exports.initialize = function(universe) {
 						"main_weapon": null
 					});
 				}
+				/**
+				 * 
+				 * @event entity:unequipped
+				 * @for RSObject
+				 * @param {Array} equipment
+				 * @param {Number} time
+				 * @param {Number} date
+				 */
+				entity.fireHandlers("entity:unequipped", {
+					"equipment": equip
+				});
 			}
 		}
 	});
@@ -279,6 +301,17 @@ module.exports.initialize = function(universe) {
 						"message": item?entity.name + " equip " + item.name + " to their main hand":"Main hand unequipped",
 						"data": event.message.data,
 						"anchored": true
+					});
+					/**
+					 * 
+					 * @event entity:mainhand
+					 * @for RSObject
+					 * @param {Array} equipment
+					 * @param {Number} time
+					 * @param {Number} date
+					 */
+					entity.fireHandlers("entity:equipped:mainhand", {
+						"item": id
 					});
 				}
 			} else {

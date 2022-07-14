@@ -19,6 +19,16 @@ rsSystem.component("RSHome", {
 			"type": Object
 		}
 	},
+	"computed": {
+		"main": function() {
+			if(this.player.gm && this.$route.query.entity) {
+				return this.universe.index.entity[this.$route.query.entity];
+			} else if(this.player.attribute.playing_as && this.universe.index.entity[this.player.attribute.playing_as]) {
+				return this.universe.index.entity[this.player.attribute.playing_as];
+			}
+			return null;
+		}
+	},
 	"data": function() {
 		var data = {};
 		
@@ -115,8 +125,10 @@ rsSystem.component("RSHome", {
 		},
 		"storage.profile.screen_wake": function() {
 			if(this.storage.profile.screen_wake) {
+				console.warn("Lock Screen Wake");
 				this.acquireScreenLock();
 			} else if(this.screenLock) {
+				console.warn("Release Lock Screen");
 				this.screenLock.release();
 			}
 		}
@@ -206,6 +218,24 @@ rsSystem.component("RSHome", {
 		this.setActive();
 	},
 	"methods": {
+		"getLockClasses": function() {
+			if(this.storage.profile.navigation_collapsed) {
+				return "collapsed";
+			} else {
+				return "extended";
+			}
+		},
+		"getViewClasses": function() {
+			if(this.storage.profile.lock_character) {
+				return "";
+			} else {
+				if(this.storage.profile.navigation_collapsed) {
+					return "collapsed";
+				} else {
+					return "extended";
+				}
+			}
+		},
 		"styleSplash": function() {
 			if(this.universe && this.universe.connection && this.universe.connection.socket) {
 				return "";
@@ -241,6 +271,7 @@ rsSystem.component("RSHome", {
 				.then((lock) => {
 					Vue.set(this, "screenLock", lock);
 					lock.onrelease = (event) => {
+						console.warn("Screen Lock Release Event");
 						Vue.set(this, "screenLock", null);
 						if(this.storage.profile.screen_wake) {
 							this.acquireScreenLock();

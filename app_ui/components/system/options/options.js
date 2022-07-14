@@ -100,8 +100,23 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "auto_submit_minion",
+					"label": "Minions Quick Submit Rolls",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "auto_submit",
 					"label": "Quick Submit Rolls",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "lock_character",
+					"label": "Lock Character Column",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "skip_turn_prompt",
+					"label": "Skip End of Turn Prompt",
 					"base": this.profile,
 					"type": "toggle"
 				}, {

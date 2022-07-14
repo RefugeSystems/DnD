@@ -97,6 +97,18 @@ module.exports.initialize = function(universe) {
 			if(action_cost) {
 				source.subValues(action_cost);
 			}
+			
+			/**
+			 * @event item:used
+			 * @param {String} item
+			 * @param {String} consume
+			 * @param {Array | String} yields
+			 */
+			source.fireHandlers("item:used", {
+				"item": channel.id,
+				"consumed": channel.consume,
+				"yields": channel.yields
+			});
 		} else {
 			// Authorization issue
 		}

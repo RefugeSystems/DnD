@@ -708,7 +708,9 @@ rsSystem.component("dndDialogDamage", {
 			}
 		},
 		"goToSection": function(section) {
-			var targets,
+			var auto_submit = this.profile.auto_submit || (this.entity.is_minion && this.profile.auto_submit_minion),
+				auto = this.profile.auto_roll && auto_submit,
+				targets,
 				entity,
 				effect,
 				skill,
@@ -734,7 +736,7 @@ rsSystem.component("dndDialogDamage", {
 						setTimeout(() => {
 							this.goToNextSection();
 						});
-					} else if(this.quick_adds && this.profile.auto_submit && !this.autoskipped[this.activeSection.id]) {
+					} else if(this.quick_adds && auto_submit && !this.autoskipped[this.activeSection.id]) {
 						this.autoskipped[this.activeSection.id] = true;
 						setTimeout(() => {
 							this.goToNextSection();
@@ -747,7 +749,7 @@ rsSystem.component("dndDialogDamage", {
 						setTimeout(() => {
 							this.goToNextSection();
 						});
-					} else if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+					} else if(this.profile && auto) {
 						setTimeout(() => {
 							this.goToNextSection();
 						});
@@ -768,7 +770,7 @@ rsSystem.component("dndDialogDamage", {
 							setTimeout(() => {
 								this.goToNextSection();
 							});
-						} else if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+						} else if(this.profile && auto) {
 							setTimeout(() => {
 								this.goToNextSection();
 							});
@@ -818,14 +820,14 @@ rsSystem.component("dndDialogDamage", {
 						setTimeout(() => {
 							this.goToNextSection();
 						});
-					} else if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+					} else if(this.profile && auto) {
 						setTimeout(() => {
 							this.goToNextSection();
 						});
 					}
 					break;
 				case "review":
-					if(this.profile && this.profile.auto_submit) {
+					if(this.profile && auto_submit) {
 						this.send();
 					}
 					break;
@@ -1132,6 +1134,9 @@ rsSystem.component("dndDialogDamage", {
 						this.universe.send("action:damage:send", sending);
 					}
 				}
+			}
+			if(typeof(this.details.finished) === "function") {
+				this.details.finished(sending);
 			}
 			this.closeDialog();
 		},

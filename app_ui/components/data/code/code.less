@@ -1,0 +1,26 @@
+.rs-component.rs-code {
+
+	.error-block {
+		position: relative;
+	}
+
+	.error-marker {
+		color: @rsLightRed;
+	}
+
+	.error-message {
+		display: none;
+		position: absolute;
+		background-color: @rsWhite;
+		border: 1px solid @rsGray;
+		color: @rsBlack;
+		padding: 6px;
+		width: 140px;
+		left: 15px;
+		top: -1em;
+	}
+
+	.error-block:hover .error-message {
+		display: block;
+	}
+}

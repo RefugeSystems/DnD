@@ -32,6 +32,13 @@ class Chronicle extends EventEmitter {
 		super();
 		this.id = "chronicle:controller";
 		this.universe = universe;
+
+		/**
+		 * Chronicle events that are in-flight and thus not complete.
+		 * @property tracking
+		 * @type Object
+		 */
+		this.tracking = {};
 		
 		var receiveObjectData = (delta) => {
 			if(universe.initialized && universe.manager[delta._class] && !universe.manager[delta._class].attribute.server_only) {
@@ -114,6 +121,16 @@ class Chronicle extends EventEmitter {
 			});
 		});
 	}
+
+	generateID(event) {
+		if(10000000 < count) {
+			count = 0;
+		}
+		if(event) {
+			return "chronicle:" + Date.now() + ":" + (count++) + ":" + (event.id || event.name || RSRandom.string(32));
+		}
+		return "chronicle:" + Date.now() + ":" + (count++) + ":" + RSRandom.string(32);
+	}
 	
 	/**
 	 * 
@@ -137,17 +154,19 @@ class Chronicle extends EventEmitter {
 	 */
 	addOccurrence(type, event, time, source, target, timeline, emit, involved) {
 		var values = {};
-		values["$id"] = "chronicle:" + Date.now() + ":" + (count++) + ":" + (event.id || RSRandom.string(32));
+		values["$id"] = event.chronicle || this.generateID(); // "chronicle:" + Date.now() + ":" + (count++) + ":" + (event.id || RSRandom.string(32));
 		values["$timeline"] = timeline || event.timeline || this.universe.timeline || null;
 		values["$time"] = time || event.time || this.universe.time || null;
 		values["$source"] = source || event.source || null;
-		console.log(" > Insert Source: " + values["$source"]);
 		values["$target"] = target || event.target || null;
-		values["$event"] = JSON.stringify(event);
-		values["$type"] = type;
-		values["$emit"] = emit || null;
+		// values["$invloved"] = JSON.stringify(involved || event.involved || []);
+		values["$type"] = type || event.name;
+		values["$emit"] = emit || event.name || null;
 		values["$updated"] = Date.now();
 		values["$created"] = values["$updated"];
+
+		event.chronicle = values.$id;
+		values["$event"] = JSON.stringify(event);
 		this.database.connection.run("insert into chronicle(id, type, emit, source, target, time, timeline, event, updated, created) values($id, $type, $emit, $source, $target, $time, $timeline, $event, $updated, $created);", values, (err) => {
 			if(err) {
 				this.emit("error", {
@@ -167,9 +186,6 @@ class Chronicle extends EventEmitter {
 		event.id = values["$id"];
 		event.type = type;
 		this.emit("added", event);
-		if(count > 1000) {
-			count = 0;
-		}
 
 		return values["$id"];
 	}
@@ -252,7 +268,26 @@ class Chronicle extends EventEmitter {
 	 * @param {Function} callback  [description]
 	 */
 	getOccurrence(id, callback) {
-		this.database.connection.all("select * from chronicle where id = $id;", {"$id": id}, callback);
+		if(this.tracking[id]) {
+			callback(null, this.tracking[id]);
+		} else {
+			this.database.connection.all("select * from chronicle where id = $id;", {"$id": id}, function(error, stored) {
+				var occurrence;
+				if(error) {
+					callback(error, null);
+				} else {
+					occurrence = JSON.parse(stored.exent);
+					occurrence.chronicle = stored.id;
+					occurrence.emit = stored.emit;
+					occurrence.involved = stored.involved;
+					occurrence.source = stored.source;
+					occurrence.target = stored.target;
+					occurrence.timeline = stored.timeline;
+					occurrence.time = stored.time;
+					callback(null, occurrence);
+				}
+			});
+		}
 	}
 	
 	/**
@@ -321,6 +356,19 @@ class Chronicle extends EventEmitter {
 		statement += suffix + ";";
 		
 		this.database.connection.all(statement, values, callback);
+	}
+
+
+	trackOccurrence(event) {
+		event.chronicle = this.generateID(event);
+		this.tracking[event.chronicle] = event;
+	}
+
+
+	commitOccurrence(id) {
+		if(this.tracking[id]) {
+			this.addOccurrence(this.tracking[id].name, this.tracking[id]);
+		}
 	}
 }
 

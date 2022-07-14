@@ -91,9 +91,20 @@
 		<input :id="fid + ':file'" type="file" :accept="field.accept || '*'" v-on:change="selectFile($event)" v-on:focus="focusing()" v-on:blur="blurring()" />
 	</div>
 
+	<!--
 	<div v-if="field.type === 'markdown' || field.type === 'method' || field.type === 'function' || field.attribute.long_text" class="textarea">
 		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.attribute.placeholder" v-on:input="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()">
 		</textarea>
+	</div>
+	-->
+
+	<div v-if="field.type === 'markdown' || field.attribute.long_text" class="textarea">
+		<textarea :id="fid" v-model="buffer" v-tab :placeholder="field.attribute.placeholder" v-on:input="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()">
+		</textarea>
+	</div>
+
+	<div v-if="field.type === 'method' || field.type === 'function'" class="codearea">
+		<rs-code ref="code" :id="fid" v-model="root[field.id]" v-on:focus="focusing()"></rs-code>
 	</div>
 
 	<div v-if="field.type === 'array'" class="multireference">

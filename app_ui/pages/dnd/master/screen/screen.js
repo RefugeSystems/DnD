@@ -96,6 +96,8 @@ rsSystem.component("DNDMasterScreen", {
 		"viewedEntity": function() {
 			if(this.$route.query.entity) {
 				return this.universe.index.entity[this.$route.query.entity];
+			} else if(this.skirmish) {
+				return this.universe.index.entity[this.skirmish.combat_turn];
 			} else {
 				return null;
 			}

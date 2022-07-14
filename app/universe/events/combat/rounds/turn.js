@@ -118,13 +118,32 @@ module.exports.initialize = function(universe) {
 	 * @param {String} event.message.data.skirmish
 	 */
 	 universe.on("player:skimish:turn:next", function(event) {
-		var skirmish = event.message.data.skirmish;
+		var skirmish = event.message.data.skirmish,
+			time = universe.time,
+			date = Date.now(),
+			entity;
 
 		if(typeof(skirmish) === "string") {
 			skirmish = universe.manager.skirmish.object[skirmish];
 		}
 
 		if(skirmish && skirmish.entities && event.player.gm) {
+			entity = universe.get(skirmish.combat_turn);
+			if(entity) {
+				/**
+				 * 
+				 * @event entity:combat:turn:end
+				 * @for RSObject
+				 * @param {String} skirmish
+				 * @param {Number} time
+				 * @param {Number} date
+				 */
+				entity.fireHandlers("entity:combat:turn:end", {
+					"skirmish": skirmish.id,
+					"time": time,
+					"date": date
+				});
+			}
 			nextTurn(skirmish);
 		} else {
 			// TODO: Error handling and integrity warnings
@@ -149,7 +168,9 @@ module.exports.initialize = function(universe) {
 	 */
 	 universe.on("player:skimish:turn:end", function(event) {
 		var skirmish = event.message.data.skirmish,
-			entity = event.message.data.entity;
+			entity = event.message.data.entity,
+			time = universe.time,
+			date = Date.now();
 
 		if(typeof(skirmish) === "string") {
 			skirmish = universe.manager.skirmish.object[skirmish];
@@ -159,6 +180,19 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(skirmish && entity && skirmish.combat_turn === entity.id && (event.player.gm || entity.owned[event.player.id])) {
+			/**
+			 * 
+			 * @event entity:combat:turn:end
+			 * @for RSObject
+			 * @param {String} skirmish
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			entity.fireHandlers("entity:combat:turn:end", {
+				"skirmish": skirmish.id,
+				"time": time,
+				"date": date
+			});
 			nextTurn(skirmish);
 		} else {
 			// TODO: Error handling and integrity warnings
@@ -172,6 +206,8 @@ module.exports.initialize = function(universe) {
 	 */
 	var nextTurn = function(skirmish) {
 		var up = universe.manager.entity.object[skirmish.combat_turn],
+			time = universe.time,
+			date = Date.now(),
 			entities = [],
 			current,
 			entity,
@@ -262,6 +298,19 @@ module.exports.initialize = function(universe) {
 						"action": "action:combat:round:start",
 						"entity": entities[i]
 					});
+					/**
+					 * 
+					 * @event entity:combat:round:start
+					 * @for RSObject
+					 * @param {String} skirmish
+					 * @param {Number} time
+					 * @param {Number} date
+					 */
+					entities[i].fireHandlers("entity:combat:round:start", {
+						"skirmish": skirmish.id,
+						"time": time,
+						"date": date
+					});
 				}
 				universe.emit("combat:round", {
 					"skirmish": skirmish.id,
@@ -284,7 +333,20 @@ module.exports.initialize = function(universe) {
 				"type": "audio:queue",
 				"audio": "audio:combat:turn",
 				"control": "audio:play",
-				"recipients": entity.played_by?entity.owned:universe.getMasters()
+				"recipients": entity.played_by?entity.owned:null
+			});
+			/**
+			 * 
+			 * @event entity:combat:turn:start
+			 * @for RSObject
+			 * @param {String} skirmish
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			entity.fireHandlers("entity:combat:turn:start", {
+				"skirmish": skirmish.id,
+				"time": time,
+				"date": date
 			});
 			skirmish.setValues({
 				"combat_turn": entity.id

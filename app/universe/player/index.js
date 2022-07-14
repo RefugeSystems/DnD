@@ -118,7 +118,8 @@ class PlayerConnection extends EventEmitter {
 						"type": "ping",
 						"pong": now,
 						"version": appPackage.version,
-						"sent": message.sent
+						"sent": message.sent,
+						"socket": id
 					}));
 					break;
 				case "sync":
@@ -132,9 +133,19 @@ class PlayerConnection extends EventEmitter {
 						"players": this.universe.getPlayerState(),
 						"data": message,
 						"version": appPackage.version,
-						"sent": Date.now()
+						"sent": Date.now(),
+						"socket": id
 					};
 					socket.send(JSON.stringify(message));
+					break;
+				case "universe:script":
+					this.universe.processScript({
+						"player": this.player,
+						"code": message.data && message.data.code?message.data.code:null,
+						"version": appPackage.version,
+						"received": Date.now(),
+						"socket": id
+					});
 					break;
 				default:
 					message = {
@@ -142,7 +153,8 @@ class PlayerConnection extends EventEmitter {
 						"received": Date.now(),
 						"player": this.player,
 						"sent": message.sent,
-						"message": message
+						"message": message,
+						"socket": id
 					};
 					
 					try {
@@ -152,7 +164,8 @@ class PlayerConnection extends EventEmitter {
 						this.emit("error", {
 							"received": now,
 							"error": violation,
-							"cause": message
+							"cause": message,
+							"socket": id
 						});
 					}
 			}
@@ -183,7 +196,8 @@ class PlayerConnection extends EventEmitter {
 				this.universe.emit("send", {
 					"type": "player-disconnected",
 					"player": this.player.id,
-					"username": this.player.username
+					"username": this.player.username,
+					"socket": id
 				});
 			}
 		};
@@ -196,7 +210,8 @@ class PlayerConnection extends EventEmitter {
 			this.player.leaves++;
 			this.player.subValues({
 				"sessions": session.id,
-				"connections": 1
+				"connections": 1,
+				"socket": id
 			});
 
 			var event = {};
@@ -231,8 +246,9 @@ class PlayerConnection extends EventEmitter {
 	 * @param {String} type [description]
 	 * @param {Object} data [description]
 	 * @param {String} [source] For the send if applicable.
+	 * @param {String} [socket] ID for direct send
 	 */
-	send(type, data, source) {
+	send(type, data, source, socket) {
 		var message = {},
 			x;
 			
@@ -243,8 +259,12 @@ class PlayerConnection extends EventEmitter {
 		message.source = source;
 		message = JSON.stringify(message);
 		
-		for(x=0; x<this.socketIDs.length; x++) {
-			this.connection[this.socketIDs[x]].send(message);
+		if(socket && this.connection[socket]) {
+			this.connection[socket].send(message);
+		} else {
+			for(x=0; x<this.socketIDs.length; x++) {
+				this.connection[this.socketIDs[x]].send(message);
+			}
 		}
 	}
 	
@@ -324,7 +344,7 @@ class PlayerConnection extends EventEmitter {
 		// TODO: Implement better/additional recipient restrictions
 		if((!message.recipient && !message.recipients) || (message.recipient && message.recipient === this.player.id) || (message.recipients && message.recipients[this.player.id])) {
 			// TODO: Implement additional general filtering
-			this.send(message.type, message);
+			this.send(message.type, message, null, message.socket);
 		}
 	}
 	

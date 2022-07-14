@@ -134,6 +134,12 @@ class RSObject {
 		 */
 		this._previous = {};
 		/**
+		 * Maps universe event IDs to booleans to flag processing or handling for that event
+		 * @propery _occurrences
+		 * @type Object
+		 */
+		this._occurrence = {};
+		/**
 		 * 
 		 * @property updated
 		 * @type String
@@ -615,6 +621,7 @@ class RSObject {
 			field,
 			keys,
 			i,
+			j,
 			x;
 
 		this._search = "";
@@ -875,7 +882,7 @@ class RSObject {
 					}
 				} else if(this[field.id] && (field.type === "function" || field.type === "method") && !this.preview && !this.is_preview && this[field.id] !== this._previous[field.id]) {
 					try {
-						this[field.id] = new Function("event", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", this[field.id]);
+						this[field.id] = new Function("source", "event", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", this[field.id]);
 					} catch(initializationException) {
 						console.log("Function Initialization Err: ", initializationException);
 					}
@@ -971,23 +978,79 @@ class RSObject {
 		// console.log("Updated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushUpdated(this.id);
 
-		if(!suppress && this.changed()) {
-			for(i=0; i<this._manager.fieldIDs.length; i++) {
-				field = this._manager.fieldIDs[i];
-				switch(typeof(this[field])) {
-					case "object":
-						if(this[field] === null) {
-							this._previous[field] = null;
-						} else {
-							this._previous[field] = RSObject.copyObjectValue(this[field]);
-						}
-						break;
-					default:
-						this._previous[field] = this[field];
-						break;
+		if(this.occurrences instanceof Array) {
+			keys = Object.keys(this._occurrence);
+			for(i=0; i<keys.length; i++) {
+				this._occurrence[keys[i]] = false;
+			}
+			// for(i=0; i<this._universe.manager.occurrence.length; i++) {
+			for(i=0; i<this.occurrences.length; i++) {
+				loading = this._universe.manager.occurrence.object[this.occurrences[i]];
+				if(loading) {
+					// console.log(" - Mapping Occurrence[" + loading.id + "]: " + JSON.stringify(loading, null, 4));
+					this._occurrence[loading.uevent || loading.event_universe] = true;
 				}
 			}
-			this._universe.emit("object-updated", this);
+		}
+		
+		if(this.changed()) {
+			/*
+			if(this.handlers instanceof Array) {
+				for(i=0; i<this._universe.manager.occurrence.length; i++) {
+					loading = this._universe.manager.occurrence[i];
+					this._occurrences.push(loading.name);
+				}
+			} else if(this._occurrences.length) {
+				this._occurrences.splice(0);
+			}
+			*/
+
+			if(!suppress) {
+				for(i=0; i<this._manager.fieldIDs.length; i++) {
+					field = this._manager.fieldIDs[i];
+					switch(typeof(this[field])) {
+						case "object":
+							if(this[field] === null) {
+								this._previous[field] = null;
+							} else {
+								this._previous[field] = RSObject.copyObjectValue(this[field]);
+							}
+							break;
+						default:
+							this._previous[field] = this[field];
+							break;
+					}
+				}
+				this._universe.emit("object-updated", this);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @method fireHandlers
+	 * @param {String} name 
+	 * @param {Object} event 
+	 */
+	fireHandlers(name, event) {
+		console.log("Fireing Handlers: " + name);
+		var handler,
+			i;
+
+		if(this.handlers instanceof Array) {
+			if(typeof(event.time) !== "number") {
+				event.time = this._universe.time;
+			}
+			if(typeof(event.date) !== "number") {
+				event.date = Date.now();
+			}
+			for(i=0; i<this.handlers.length; i++) {
+				handler = this._universe.manager.handler.object[this.handlers[i]];
+				console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
+				if(handler && handler._occurrence[name]) {
+					this._universe.processEvent(this, name, event, handler);
+				}
+			}
 		}
 	}
 
@@ -1301,7 +1364,7 @@ class RSObject {
 		for(x=0; x<this._manager.fieldIDs.length; x++) {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
-				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type);
+				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type, undefined, field.attribute.max);
 				// console.log(" - Adding: ", result[field.id]);
 				if(field.attribute) {
 					this.levelField(field, result);
@@ -1801,6 +1864,7 @@ class RSObject {
 		json._conditionals = this._conditionals;
 		json._debug = this._debug;
 		if(include) {
+			json._occurrence = this._occurrence;
 			json._linkMask = this._linkMask;
 			json._combined = this._combined;
 			json._previous = this._previous;

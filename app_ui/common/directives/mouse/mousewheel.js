@@ -7,7 +7,7 @@
  */
 Vue.directive("wheel", {
 	"bind": function(el, binding) {
-		console.log("Wheel Binding: ", binding);
+		// console.log("Wheel Binding: ", binding);
 		if (typeof(binding.value) === "function") {
 			if(binding.modifiers.passive) {
 

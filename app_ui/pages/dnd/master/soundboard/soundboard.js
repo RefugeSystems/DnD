@@ -62,11 +62,13 @@ rsSystem.component("DNDMasterSoundboard", {
 				audios = this.universe.listing.audio;
 			} else if(locale && locale.length) {
 				audios = this.universe.transcribeInto(locale);
+			} else {
+				audios = [];
 			}
 
 			for(i=0; i<audios.length; i++) {
 				audio = audios[i];
-				if(!this.storage.filter || audio._search.indexOf(this.storage.filter) !== -1) {
+				if(rsSystem.utility.isValid(audio) && (!this.storage.filter || audio._search.indexOf(this.storage.filter) !== -1)) {
 					if(!categories[audio.category]) {
 						categories[audio.category] = [];
 					}
@@ -86,6 +88,16 @@ rsSystem.component("DNDMasterSoundboard", {
 			}
 			return [];
 		},
+		"soundscapes": function() {
+			var soundscapes = this.location.soundscapes;
+			if(this.storage.show_all) {
+				return this.universe.listing.soundscape;
+			}
+			if(soundscapes) {
+				return this.universe.transcribeInto(soundscapes);
+			}
+			return [];
+		},
 		"controls": function() {
 			return this.universe.listing.roomctrl;
 		}
@@ -94,6 +106,7 @@ rsSystem.component("DNDMasterSoundboard", {
 		var data = {},
 			i;
 
+		data.soundscape = null;
 		data.clearIcon = "fa-empty-set";
 		data.toggledSelection = "";
 		data.available = {};
@@ -146,15 +159,6 @@ rsSystem.component("DNDMasterSoundboard", {
 		if(!this.storage.saved) {
 			Vue.set(this.storage, "saved", {});
 		}
-		if(!this.storage.arrangement) {
-			Vue.set(this.storage, "arrangement", {});
-		}
-		if(!this.storage.arrangement.left) {
-			Vue.set(this.storage.arrangement, "left", []);
-		}
-		if(!this.storage.arrangement.right) {
-			Vue.set(this.storage.arrangement, "right", []);
-		}
 
 		if(rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
 			Vue.set(this, "clearIcon", "fa-empty-set");
@@ -164,9 +168,26 @@ rsSystem.component("DNDMasterSoundboard", {
 			Vue.set(this, "toggledSelection", "select");
 		}
 
+		if(typeof(this.storage.soundscape) !== "object") {
+			Vue.set(this.storage, "soundscape", {}); 
+		}
+		
+		this.soundscape = new Soundscape(this, this.storage.soundscape);
+		this.universe.$on("session:encounter:type", this.respondEncounterType);
+		this.universe.$on("session:weather", this.respondWeather);
+
 		this.refreshAvailable();
 	},
 	"methods": {
+		"toggleAction": function(action) {
+			Vue.set(this.storage, action, !this.storage[action]);
+			switch(action) {
+				case "follow_weather":
+					break;
+				case "follow_type":
+					break;
+			}
+		},
 		"getCategoryName": function(category) {
 			category = this.universe.index.category[category];
 			if(category) {
@@ -187,6 +208,12 @@ rsSystem.component("DNDMasterSoundboard", {
 				styling += " audio-playing ";
 			}
 			return styling;
+		},
+		"soundscapeClass": function(soundscape) {
+			if(this.soundscape && this.soundscape.active && this.soundscape.active.id === soundscape.id) {
+				return "active";
+			}
+			return "inactive";
 		},
 		"applyPlayerSelection": function() {
 			this.clearObject(this.storage.swap);
@@ -262,10 +289,10 @@ rsSystem.component("DNDMasterSoundboard", {
 			}
 		},
 		"setArrangement": function(left, right) {
-			this.storage.arrangement.right.splice(0);
-			this.storage.arrangement.left.splice(0);
-			this.storage.arrangement.right.push.apply(this.storage.arrangement.right, right);
-			this.storage.arrangement.left.push.apply(this.storage.arrangement.left, left);
+			// this.storage.arrangement.right.splice(0);
+			// this.storage.arrangement.left.splice(0);
+			// this.storage.arrangement.right.push.apply(this.storage.arrangement.right, right);
+			// this.storage.arrangement.left.push.apply(this.storage.arrangement.left, left);
 		},
 		"toggleAll": function() {
 			Vue.set(this.storage, "show_all", !this.storage.show_all);
@@ -305,11 +332,11 @@ rsSystem.component("DNDMasterSoundboard", {
 				}
 			}
 		},
-		"playPattern": function(pattern) {
-
+		"playSoundscape": function(soundscape) {
+			this.soundscape.playSoundscape(soundscape);
 		},
-		"stopPattern": function(pattern) {
-
+		"stopSoundscape": function(pattern) {
+			this.soundscape.stopSoundscape();
 		},
 		"toggleDestination": function(destination) {
 			if(this.storage.destination[destination._class]) {
@@ -359,6 +386,10 @@ rsSystem.component("DNDMasterSoundboard", {
 			var keys,
 				i;
 
+			if(typeof(audio) === "string") {
+				audio = this.universe.index.audio[audio];
+			}
+
 			if(audio && !audio.is_preview && !audio.disabled && rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
 				if(audio.is_looped) {
 					Vue.set(this.activations, audio.id, (this.activations[audio.id] || 0) + 1);
@@ -373,6 +404,10 @@ rsSystem.component("DNDMasterSoundboard", {
 			}
 		},
 		"stop": function(audio) {
+			if(typeof(audio) === "string") {
+				audio = this.universe.index.audio[audio];
+			}
+
 			if(audio && !audio.is_preview && !audio.disabled && rsSystem.utility.isNotEmpty(this.storage.destination.player)) {
 				Vue.set(this.activations, audio.id, (this.activations[audio.id] || 0) - 1);
 				this.stopPlayerAudio(this.storage.destination.player, audio.id);
@@ -400,6 +435,34 @@ rsSystem.component("DNDMasterSoundboard", {
 				});
 			}
 		},
+		
+		"respondEncounterType": function(event) {
+			var type = event.encounter,
+				playlist,
+				i;
+			if(this.storage.follow_type) {
+				for(i=0; i<this.playlists.length; i++) {
+					playlist = this.playlists[i];
+					if(playlist.type === type) {
+						this.start(playlist);
+						break;
+					}
+				}
+			}
+		},
+		"respondWeather": function(event) {
+			var weather = this.universe.getObject(event.current || event.weather),
+				soundscape,
+				i;
+			
+			if(this.soundscape.active) {
+				this.soundscape.stopSoundscape();
+			}
+			if(this.storage.follow_weather && weather && (soundscape = this.universe.getObject(weather.soundscape))) {
+				this.soundscape.playSoundscape(soundscape);
+			}
+		},
+
 		"clear": function() {
 
 		},
@@ -418,6 +481,13 @@ rsSystem.component("DNDMasterSoundboard", {
 					"control": controller
 				});
 			}
+		},
+		"playPlaylist": function(controller, playlist, volume) {
+			rsSystem.universe.send("master:roomctrl:play", {
+				"control": controller,
+				"playlist": playlist,
+				"volume": volume
+			});
 		},
 		/**
 		 * 
@@ -449,10 +519,11 @@ rsSystem.component("DNDMasterSoundboard", {
 		 * @param {Object} playerMap 
 		 * @param {String} audio ID
 		 */
-		"playPlayerAudio": function(playerMap, audio) {
+		"playPlayerAudio": function(playerMap, audio, volume) {
 			rsSystem.universe.send("master:control:audio:play", {
 				"recipients": playerMap,
-				"audio": audio
+				"audio": audio,
+				"volume": volume
 			});
 		},
 		/**
@@ -482,6 +553,12 @@ rsSystem.component("DNDMasterSoundboard", {
 	},
 	"beforeDestroy": function() {
 		// this.universe.$off("entity:roll", this.entityRolled);
+		this.universe.$off("session:encounter:type", this.respondEncounterType);
+		this.universe.$off("session:weather", this.respondWeather);
+		if(this.soundscape) {
+			this.soundscape.destroy();
+		}
+		this.soundscape = null;
 	},
 	"template": Vue.templified("pages/dnd/master/soundboard.html")
 });

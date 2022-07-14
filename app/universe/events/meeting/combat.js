@@ -62,6 +62,7 @@ module.exports.initialize = function(universe) {
 			details.start = universe.time;
 			details.entities = meeting.entities;
 			details.time = universe.time;
+			details.date = Date.now();
 			details.icon = "fas fa-swords";
 			details.name = "Skirmish" + (location?" in " + location.name:"");
 			universe.createObject(details, function(err, skirmish) {

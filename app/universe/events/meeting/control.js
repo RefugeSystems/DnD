@@ -1,4 +1,5 @@
 
+const { transform } = require("lodash");
 var Random = require("rs-random");
 
 module.exports.initialize = function(universe) {
@@ -114,6 +115,7 @@ module.exports.initialize = function(universe) {
 				generate.date = meeting.date + 2 * week;
 				generate.meeting_previous = meeting.id;
 				generate.location = meeting.location;
+				generate.weather = meeting.weather;
 				generate.time = universe.time;
 				generate.is_sky_visible = meeting.is_sky_visible;
 				universe.createObject(generate, function(error, meet) {
@@ -149,5 +151,156 @@ module.exports.initialize = function(universe) {
 				"anchored": true
 			});
 		}
+	});
+
+	/**
+	 * 
+	 * @event player:meeting:type
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
+	 * @param {String} event.message.data.type
+	 */
+	/**
+	 * 
+	 * @event session:encounter:type
+	 * @for Chronicle
+	 * @param {String} type Event type classifier
+	 * @param {String} location
+	 * @param {String} meeting
+	 * @param {Number} time Simulation
+	 * @param {Number} date Reality
+	 */
+	universe.on("player:meeting:type", function(event) {
+		var meeting = event.message.data.meeting,
+			type = event.message.data.type || event.message.data.encounter,
+			transition;
+
+		meeting = universe.get(meeting);
+		if(meeting && (type = universe.get(type))) {
+			transition = {	
+				"type": "session:encounter:type",
+				"name": "Transition to " + type.name,
+				"encounter": type.id,
+				"meeting": meeting.id,
+				"time": universe.time,
+				"date": Date.now()
+			};
+			meeting.setValues({
+				"type": type.id
+			});
+			meeting.addValues({
+				"historical_events": [transition]
+			});
+			universe.emit("send", transition);
+		}
+	});
+
+	/**
+	 * 
+	 * @event player:meeting:location
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
+	 * @param {String} event.message.data.location
+	 * @param {Number} event.message.data.distance
+	 */
+	/**
+	 * 
+	 * @event session:travel:location
+	 * @for Chronicle
+	 * @param {String} type Event type classifier
+	 * @param {String} location
+	 * @param {Number} distance 0 is used if no distance is specified to support multiplicative calculations,
+	 * 		though divisions will need to be cautious.
+	 * @param {String} meeting
+	 * @param {Number} time Simulation
+	 * @param {Number} date Reality
+	 */
+	universe.on("player:meeting:location", function(event) {
+		var meeting = event.message.data.meeting,
+			location = event.message.data.location,
+			distance = event.message.data.distance || 0,
+			transition,
+			entity,
+			i;
+
+		meeting = universe.get(meeting);
+		if(meeting && (location = universe.get(location))) {
+			transition = {	
+				"type": "session:travel:location",
+				"name": "Travel to " + location.name,
+				"location": location.id,
+				"distance": distance,
+				"meeting": meeting.id,
+				"time": universe.time,
+				"date": Date.now()
+			};
+			meeting.setValues({
+				"location": location.id
+			});
+			meeting.addValues({
+				"historical_events": [transition]
+			});
+			universe.emit("send", transition);
+
+			if(meeting.entities && meeting.entities.length) {
+				for(i=0; i<meeting.entities.length; i++) {
+					entity = universe.get(meeting.entities[i]);
+					if(entity) {
+						entity.fireHandler(transition.type, transition);
+					}
+				}
+			}
+		}
+	});
+
+	/**
+	 * 
+	 * @event player:meeting:weather
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
+	 * @param {String} event.message.data.weather
+	 */
+	/**
+	 * 
+	 * @event session:weather
+	 * @for Chronicle
+	 * @param {String} type Event type classifier
+	 * @param {String} weather
+	 * @param {String} meeting
+	 * @param {Number} time Simulation
+	 * @param {Number} date Reality
+	 */
+	universe.on("player:meeting:weather", function(event) {
+		var meeting = event.message.data.meeting,
+			weather = event.message.data.weather;
+
+		universe.utility.applyWeather(weather, meeting);
 	});
 };

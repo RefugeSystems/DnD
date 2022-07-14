@@ -18,6 +18,21 @@ rsSystem.component("DNDControlEquipment", {
 		}
 	},
 	"methods": {
+		"isWeapon": function(item) {
+			return item.ranged || item.melee || item.thrown || item.is_ranged || item.is_melee || item.is_thrown;
+		},
+		"consumeItem": function(item, entity) {
+			entity = entity || this.entity;
+			if(item && entity) {
+				rsSystem.EventBus.$emit("dialog-open", {
+					"title": this.entity.name + " Actions",
+					"component": "dndDialogDamage",
+					"action": "channel:use",
+					"entity": entity,
+					"channel": item
+				});
+			}
+		},
 		"giveItem": function(item, to, from) {
 			this.sendEquipmentControl("inventory:give", item, from, to);
 		},
@@ -108,7 +123,7 @@ rsSystem.component("DNDControlEquipment", {
 				entity = this.getPlayerCharacter();
 			}
 			var send = {
-				"item": item,
+				"item": item.id || item,
 				"entity": entity.id || entity
 			};
 			if(target) {

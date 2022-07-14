@@ -209,8 +209,14 @@
 			if(this.field.type === "object") {
 				// this.resyncFromObject();
 			}
+			// rsSystem.EventBus.$on("noun-sync",this.reloadData);
 		},
 		"methods": {
+			"reloadData": function() {
+				if(this.$refs.code) {
+					this.$refs.code.reloadData();
+				}
+			},
 			"fieldInfo": function(field) {
 				rsSystem.EventBus.$emit("display-info", {
 					"info": "fields:" + field
@@ -701,6 +707,9 @@
 
 				return 0;
 			}
+		},
+		"beforeDestroy": function () {
+			// rsSystem.EventBus.$off("noun-sync",this.reloadData);
 		},
 		"template": Vue.templified("components/data/field.html")
 	});

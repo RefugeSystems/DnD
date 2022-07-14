@@ -54,6 +54,34 @@
 
 				return meetings;
 			},
+			"weathers": function() {
+				var weathers = [],
+					weather,
+					i;
+				
+				for(i=0; i<this.universe.listing.weather.length; i++) {
+					weather = this.universe.listing.weather[i];
+					if(rsSystem.utility.isValid(weather)) {
+						weathers.push(weather);
+					}
+				}
+
+				return weathers;
+			},
+			"types": function() {
+				var types = [],
+					type,
+					i;
+				
+				for(i=0; i<this.universe.listing.type.length; i++) {
+					type = this.universe.listing.type[i];
+					if(rsSystem.utility.isValid(type)) {
+						types.push(type);
+					}
+				}
+
+				return types;
+			},
 			"active": function() {
 				var meet,
 					i;
@@ -62,6 +90,8 @@
 					meet = this.universe.listing.meeting[i];
 					if(meet.is_active && !meet.disabled && !meet.is_preview) {
 						Vue.set(this, "description", meet.description || "");
+						Vue.set(this, "weather", meet.weather || "");
+						Vue.set(this, "type", meet.type || "");
 						if(!meet.name) {
 							Vue.set(this, "editName", true);
 						} else {
@@ -103,6 +133,24 @@
 					Vue.set(this, "id", newValue);
 				}
 			},
+			"weather": function(newValue, oldValue) {
+				console.log("New Weather: ", newValue, oldValue);
+				if(newValue) {
+					this.universe.send("meeting:weather", {
+						"meeting": this.active.id,
+						"weather": newValue
+					});
+				}
+			},
+			"type": function(newValue, oldValue) {
+				console.log("New Type: ", newValue, oldValue);
+				if(newValue) {
+					this.universe.send("meeting:type", {
+						"meeting": this.active.id,
+						"encounter": newValue
+					});
+				}
+			},
 			"id": function(newValue, oldValue) {
 				console.log("New ID: ", newValue, oldValue);
 				if(newValue && (!this.active || newValue !== this.active.id)) {
@@ -125,7 +173,9 @@
 			data.editName = false;
 			data.name = "";
 			data.description = this.active?this.active.description:"";
-			data.id = "";
+			data.id = this.active?this.active.id:"";
+			data.weather = "";
+			data.type = "";
 
 			return data;
 		},

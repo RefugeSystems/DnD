@@ -91,7 +91,10 @@ mapping.array = {
 	"read": function(data) {
 		return JSON.parse(data);
 	},
-	"write": function(data) {
+	"write": function(data, field) {
+		if(field.attribute && typeof(field.attribute.max) === "number") {
+			return JSON.stringify(data.slice(data.length - field.attribute.max));
+		}
 		return JSON.stringify(data);
 	}
 };
@@ -237,7 +240,7 @@ mapping._toObject = function(fields, write, create) {
 		field = fields[x];
 		if(field && !field.disabled && write[field.id] !== undefined) {
 			if(mapping[field.type] && typeof(mapping[field.type].write) === "function") {
-				mapped["$" + field.id] = mapping[field.type].write(write[field.id]);
+				mapped["$" + field.id] = mapping[field.type].write(write[field.id], field);
 			} else {
 				mapped["$" + field.id] = write[field.id];
 			}

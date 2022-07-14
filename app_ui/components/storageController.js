@@ -37,7 +37,9 @@ rsSystem.component("StorageController", {
 		"storage": {
 			"deep": true,
 			"handler": function() {
-				this.saveStorage();
+				if(!this.storageContainer) {
+					this.saveStorage();
+				}
 			}
 		}
 	},

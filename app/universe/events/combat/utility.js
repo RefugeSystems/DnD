@@ -52,11 +52,12 @@ module.exports.initialize = function(universe) {
 			adding,
 			effect,
 			notify,
+			events,
 			copy,
 			i;
 
 		if(tracked) {
-			clearTimeout(alarms[activity]);
+			// clearTimeout(alarms[activity]);
 			delete(tracking[activity]);
 			if(tracked.target.owned && Object.keys(tracked.target.owned).length) {
 				notify = tracked.target.owned;
@@ -74,12 +75,21 @@ module.exports.initialize = function(universe) {
 			log.target = entity.id;
 			log.source = null;
 			log.damage = damage;
+			tracked = {};
 		}
 		if(damage) {
 			log.resist_source = resist;
-			was_damaged = resolveDamage(entity, damage, resist, resisted);
+			was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source);
 			log.resist = resisted;
-			universe.chronicle.addOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
+
+			// events = entity.active_events || {};
+			// console.log("Delete Damage Activity[" + activity + "]: " + Object.keys(events).join());
+			// events[activity] = null;
+			// delete(events[activity]);
+			entity.subValues({
+				"active_events": [activity]
+			});
+			universe.chronicle.updateOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
 			if(tracked && tracked.source && tracked.target) {
 				if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 					for(i=0; i<tracked.channel.instilled.length; i++) {
@@ -153,6 +163,7 @@ module.exports.initialize = function(universe) {
 			castMask,
 			damage,
 			buffer,
+			events,
 			notify,
 			keys,
 			i;
@@ -161,7 +172,7 @@ module.exports.initialize = function(universe) {
 			save = 0;
 		}
 		if(tracked) {
-			clearTimeout(alarms[activity]);
+			// clearTimeout(alarms[activity]);
 			delete(tracking[activity]);
 			console.log("Cleared: " + activity);
 			log.activity = activity;
@@ -188,6 +199,7 @@ module.exports.initialize = function(universe) {
 			log.save = save;
 			log.critical = critical;
 			log.failure = failure;
+			tracked = {};
 		}
 		
 		if(tracked && tracked.target) {
@@ -238,9 +250,15 @@ module.exports.initialize = function(universe) {
 				damage = tracked.damage;
 			}
 			log.resist_source = resist;
-			was_damaged = resolveDamage(entity, damage, resist, resisted);
+			was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source);
 			// was_damaged = resolveDamage(entity, damage, resist, resisted);
 			log.resist = resisted;
+			// events = entity.active_events || {};
+			// console.log("Delete Save Activity[" + activity + "]: " + Object.keys(events).join());
+			// delete(events[activity]);
+			entity.subValues({
+				"active_events": [activity]
+			});
 			// was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
 			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 				for(i=0; i<tracked.channel.instilled.length; i++) {
@@ -261,7 +279,7 @@ module.exports.initialize = function(universe) {
 		} else {
 			// No auto, just log to chronicle
 		}
-		universe.chronicle.addOccurrence("entity:saved", log, universe.time, log.source, entity.id);
+		universe.chronicle.updateOccurrence("entity:saved", log, universe.time, log.source, entity.id);
 		console.log("Finishing Save: ", log);
 	 };
 
@@ -274,7 +292,7 @@ module.exports.initialize = function(universe) {
 	 * @returns {Boolean} True if damage was taken, false otherwise. If healing occurs, this will
 	 * 		return true that "healing" "damage" was taken. Merely indicates HP changed.
 	 */
-	var resolveDamage = function(entity, damage, resist = {}, resisted = {}) {
+	var resolveDamage = function(entity, damage, resist = {}, resisted = {}, source) {
 		if(!damage) {
 			universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received");
 			return false;
@@ -336,11 +354,23 @@ module.exports.initialize = function(universe) {
 				"death_fail": 0,
 				"death_save": 0
 			}); // TODO: Link with general error tracking for callback in universe, but if this fails, the latter ops will fail, so tracking there for now
+			entity.fireHandlers("entity:consciousness:gained", {
+			});
 		}
 
+		console.log("Damage Set");
 		entity.addValues(add, function(err) {
 			if(err) {
 				universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
+			} else {
+				console.log("Damage Handler Fire");
+				entity.fireHandlers("entity:damaged", {
+					"source": source,
+					"target": entity,
+					"amount": add.hp,
+					"damage": damage,
+					"resist": resisted
+				});
 			}
 		});
 
@@ -358,9 +388,12 @@ module.exports.initialize = function(universe) {
 	 * @param {Integer} [attack] Rolled attack value, if any
 	 * @param {Object} [attacks] Rolled attack value per target, if any
 	 * @param {String} [attack_skill] Skill ID for how the attack was performed (Main Hand, Off Hand, Spell Attack)
+	 * @param {String} [message]
 	 */
-	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill) {
+	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill, message) {
 		var id = Random.identifier(activityPrefix, 10, 32),
+			time = universe.time,
+			date = Date.now(),
 			activity,
 			target,
 			atk,
@@ -383,13 +416,12 @@ module.exports.initialize = function(universe) {
 			} else {
 				atk = attack;
 			}
-			target = targets[i];
 			console.log("Multi - Sending: " + (target?target.id || target:"No Target"), "Source: " + (source?source.id || source:"No Source"));
 			activity = id + ":" + target.id;
 			tracking[activity] = {
 				"activity": activity,
-				"gametime": universe.time,
-				"time": Date.now(),
+				"time": universe.time,
+				"date": Date.now(),
 				"source": source,
 				"target": target,
 				"channel": channel,
@@ -399,7 +431,7 @@ module.exports.initialize = function(universe) {
 			};
 			logged[activity] = {
 				"activity": activity,
-				"gametime": universe.time,
+				"time": universe.time,
 				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
@@ -407,9 +439,48 @@ module.exports.initialize = function(universe) {
 				"damage": damage,
 				"skill": attack_skill?attack_skill.id || attack_skill:undefined
 			};
+			/**
+			 * Fired for the creature attacking
+			 * @event entity:attacking
+			 * @for RSObject
+			 * @param {String} [source] Of the attack. Null for direct or environmental like events
+			 * @param {String} target Being attacked
+			 * @param {String} [channel]
+			 * @param {Object} damage
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			source.fireHandlers("entity:attacking", {
+				"source": source?source.id:null,
+				"target": target.id,
+				"channel": channel?channel.id:null,
+				"damage": damage,
+				"time": time,
+				"date": date
+			});
+			/**
+			 * Fired for the creature being attacked
+			 * @event entity:attacked
+			 * @for RSObject
+			 * @param {String} [source] Of the attack. Null for direct or environmental like events
+			 * @param {String} target Being attacked
+			 * @param {String} [channel]
+			 * @param {Object} damage
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			target.fireHandlers("entity:attacked", {
+				"source": source.id,
+				"target": target.id,
+				"channel": channel.id,
+				"damage": damage,
+				"time": time,
+				"date": date
+			});
+
 
 			universe.chronicle.addOccurrence("entity:damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
-			sendDamage(activity, source, target, logged[activity].channel, damage);
+			sendDamage(activity, source, target, logged[activity].channel, damage, message);
 		}
 	};
 
@@ -424,8 +495,9 @@ module.exports.initialize = function(universe) {
 	 * @param {RSObject} target Entity being hurt.
 	 * @param {String} [channel] ID for the Spell, Item, or other method through which the damage is being delt, if any.
 	 * @param {Object} damage Being dealth, with damage_type ID keys mapped to values
+	 * @param {String} [message]
 	 */
-	sendDamage = function(activity, source, target, channel, damage) {
+	sendDamage = function(activity, source, target, channel, damage, message) {
 		if(!damage) {
 			// TODO: Revise for better handling and update source calls to ensure damage is guarenteed
 			damage = {};
@@ -436,6 +508,40 @@ module.exports.initialize = function(universe) {
 				"channel": channel
 			});
 		}
+
+		// var events = target.active_events || {};
+
+		var emission = {
+			"id": activity,
+			"type": "dialog-open",
+			"component": "dndDialogRoll",
+			"storageKey": "store:roll:" + target,
+			"action": "action:damage:recv",
+			"activity": activity,
+			"source": source?source.id:null,
+			"attack": tracking[activity]?tracking[activity].attack:null,
+			"timeout": 7000,
+			"entity": target.id,
+			"time": universe.time,
+			"date": Date.now(),
+			"channel": channel,
+			"damage": damage,
+			"fill_damage": true,
+			"closeAfterAction": true,
+			"message": message
+		};
+
+		if(damage["damage_type:heal"] || damage["damage_type:temphp"]) {
+			emission.name = "Incoming Heal";
+		} else {
+			emission.name = "Incoming Attack";
+		}
+
+		// events[activity] = emission;
+		target.addValues({
+			"active_events": emission
+		});
+
 		var notify = function() {
 			var tracked = tracking[activity];
 			if(tracked && (!tracked.resend || tracked.resend < TRACKING_Limit)) {
@@ -460,6 +566,8 @@ module.exports.initialize = function(universe) {
 
 				console.log(" > Sending: " + (target?target.id || target:"No Target"), "Source: " + (source?source.id || source:"No Source"), "Recipients: ", recipients);
 
+
+
 				universe.emit("send", {
 					"type": "notice",
 					"mid": activityPrefix + activity,
@@ -467,24 +575,11 @@ module.exports.initialize = function(universe) {
 					"icon": icon,
 					"anchored": true,
 					"recipients": recipients,
-					"emission": {
-						"type": "dialog-open",
-						"component": "dndDialogRoll",
-						"storageKey": "store:roll:" + target,
-						"action": "action:damage:recv",
-						"activity": activity,
-						"source": source?source.id:null,
-						"attack": tracked.attack,
-						"entity": target.id,
-						"channel": channel,
-						"damage": damage,
-						"fill_damage": true,
-						"closeAfterAction": true
-					}
+					"emission": emission
 				});
 
 				// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
-				alarms[activity] = setTimeout(notify, 10000);
+				// alarms[activity] = setTimeout(notify, 10000);
 			} else {
 				console.log("Send Damage - No Track - ", target?target.id || target:"No Target?");
 			}
@@ -503,8 +598,9 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} skill 
 	 * @param {Integer} difficulty 
 	 * @param {Object} damage 
+	 * @param {String} [message]
 	 */
-	sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill, difficulty, damage) {
+	sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill, difficulty, damage, message) {
 		if(!skill) {
 			// TODO: better error
 			universe.emit("error", new Error("Save called with no skill passed"));
@@ -535,8 +631,8 @@ module.exports.initialize = function(universe) {
 			activity = id + ":" + target.id;
 			tracking[activity] = {
 				"activity": activity,
-				"gametime": universe.time,
-				"time": Date.now(),
+				"time": universe.time,
+				"date": Date.now(),
 				"source": source,
 				"target": target,
 				"channel": channel,
@@ -547,7 +643,7 @@ module.exports.initialize = function(universe) {
 			};
 			logged[activity] = {
 				"activity": activity,
-				"gametime": universe.time,
+				"time": universe.time,
 				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
@@ -558,7 +654,7 @@ module.exports.initialize = function(universe) {
 			};
 
 			universe.chronicle.addOccurrence("entity:saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
-			sendSave(activity, source, target, channel, skill, damage);
+			sendSave(activity, source, target, channel, skill, damage, message);
 		}
 	};
 
@@ -573,8 +669,38 @@ module.exports.initialize = function(universe) {
 	 * @param {RSObject} target Entity being hurt.
 	 * @param {Object} [channel] ID for the Spell, Item, or other method through which the damage is being delt, if any.
 	 * @param {String | Object} skill To use for the save
+	 * @param {String} [message]
 	 */
-	sendSave = function(activity, source, target, channel, skill, damage) {
+	sendSave = function(activity, source, target, channel, skill, damage, message) {
+
+		// var events = target.active_events || {};
+
+		var emission = {
+			"id": activity,
+			"name": "Spell Save",
+			"type": "dialog-open",
+			"component": "dndDialogRoll",
+			"storageKey": "store:roll:" + target,
+			"action": "action:save:send",
+			"activity": activity,
+			"source": source?source.id:null,
+			"entity": target.id,
+			"channel": channel.id,
+			"skill": skill?skill.id || skill:null,
+			"timeout": 7000,
+			"time": universe.time,
+			"date": Date.now(),
+			"damage": damage,
+			"fill_damage": true,
+			"closeAfterAction": true,
+			"message": message
+		};
+
+		// events[activity] = emission;
+		target.addValues({
+			"active_events": emission
+		});
+
 		var notify = function() {
 			var tracked = tracking[activity];
 			if(tracked && (!tracked.resend || tracked.resend < TRACKING_Limit)) {
@@ -599,24 +725,11 @@ module.exports.initialize = function(universe) {
 					"icon": icon,
 					"anchored": true,
 					"recipients": recipients,
-					"emission": {
-						"type": "dialog-open",
-						"component": "dndDialogRoll",
-						"storageKey": "store:roll:" + target,
-						"action": "action:save:send",
-						"activity": activity,
-						"source": source?source.id:null,
-						"entity": target.id,
-						"channel": channel.id,
-						"skill": skill?skill.id || skill:null,
-						"damage": damage,
-						"fill_damage": true,
-						"closeAfterAction": true
-					}
+					"emission": emission
 				});
 
 				// sendDamages(activity, tracking[activity].source, tracking[activity].target, tracking[activity].channel?tracking[activity].channel.id:null, tracking[activity].damage);
-				alarms[activity] = setTimeout(notify, 5000);
+				// alarms[activity] = setTimeout(notify, 5000);
 			}
 		};
 		notify();

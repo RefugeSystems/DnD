@@ -2,7 +2,7 @@
 /**
  * 
  * 
- * @class RSHome
+ * @class RSAbout
  * @constructor
  * @module Pages
  */

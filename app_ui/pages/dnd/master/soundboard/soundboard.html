@@ -11,9 +11,16 @@
 				Sonos 
 			-->
 			<div class="soundboard-options">
-
+				<button class="primary general rounded action" v-on:click="toggleAction('follow_type')">
+					<span class="action-icon" :class="storage.follow_type?'fa-solid fa-square-check':'fa-light fa-square'"></span>
+					<span class="action-text">Act: Type</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="toggleAction('follow_weather')">
+					<span class="action-icon" :class="storage.follow_weather?'fa-solid fa-square-check':'fa-light fa-square'"></span>
+					<span class="action-text">Act: Weather</span>
+				</button>
 			</div>
-			<div class="soundboard-controls">
+			<div class="soundboard-options soundboard-controls">
 				<button class="primary general rounded action" v-on:click="toggleAll()">
 					<span class="action-icon" :class="storage.show_all?'fa-solid fa-square-check':'fa-light fa-square'"></span>
 					<span class="action-text">Show All</span>
@@ -33,6 +40,10 @@
 				<button class="primary general rounded action" v-on:click="controllersCreate()">
 					<span class="action-icon fa-solid fa-waveform"></span>
 					<span class="action-text">Create</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="stopSoundscape()">
+					<span class="action-icon fa-solid fa-music-note-slash"></span>
+					<span class="action-text">Stop Scape</span>
 				</button>
 			</div>
 		</div>
@@ -78,7 +89,7 @@
 	<div class="soundboard-selections">
 		<h3>Playlists</h3>
 		<div class="soundboard-playlists flex h wrap">
-			<div class="soundboard-sound soundboard-playlist" v-for="playlist in playlists">
+			<div class="soundboard-sound soundboard-playlist" v-for="playlist in playlists" v-if="!playlist.is_preview">
 				<button class="general rounded action quick play" v-on:click="start(playlist)">
 					<span class="action-icon fa-solid fa-play"></span>
 				</button>
@@ -118,5 +129,98 @@
 				</div>
 			</div>
 		</div>
+		<h3>Soundscapes</h3>
+		<div class="soundboard-soundscapes flex h wrap">
+			<div class="soundboard-sound soundboard-soundscape" v-for="scape in soundscapes" :class="soundscapeClass(scape)" v-if="!scape.is_preview">
+				<button class="general rounded action quick play" v-on:click="playSoundscape(scape)">
+					<span class="action-icon fa-solid fa-play"></span>
+				</button>
+				<button class="general rounded action quick stop" v-on:click="stopSoundscape(scape)">
+					<span class="action-icon fa-solid fa-stop"></span>
+				</button>
+				<span class="action-text">{{scape.name}}</span>
+				<button class="action flat rs-light-blue" v-on:click="info(scape)">
+					<span class="action-icon fa-solid fa-info-circle"></span>
+				</button>
+			</div>
+		</div>
+		<h3>Tablescape</h3>
+		<table class="soundscape">
+			<tr>
+				<td>
+					<h4>Room Controller</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[0]">
+						<option v-for="ctrl in available.roomctrl" :value="ctrl.id">{{ctrl.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>-1</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[9]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>-2</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[8]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>-3</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[7]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>-4</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[6]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h4>Dungeon Master</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[10]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td colspan="4" class="align-center">
+					TABLE
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h4>Auxillery Controller</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[20]">
+						<option v-for="ctrl in available.roomctrl" :value="ctrl.id">{{ctrl.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>1</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[11]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>2</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[12]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>3</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[13]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+				<td>
+					<h4>4</h4>
+					<select class="soundboard-player" v-model="storage.soundscape.arrangement[14]">
+						<option v-for="player in available.player" :value="player.id">{{player.name}}</option>
+					</select>
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>

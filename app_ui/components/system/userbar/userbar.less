@@ -1,0 +1,59 @@
+.system-component.user-bar {
+	position: fixed;
+	display: flex;
+	flex-direction: row;
+    background-color: rgba(11,11,11,.5);
+	width: ~"calc( 100% - 168px )";
+	height: 48px;
+	bottom: 64px;
+	left: 84px;
+
+	max-width: ~"calc( 100% - 168px )";
+	border: 1px solid @rsBlack;
+	transition: max-width .5s, border-width .5s;
+	border-radius: 8px;
+	overflow: hidden;
+	z-index: 45;
+
+	&.collapsed {
+		border-width: 1px 0px 1px 0px;
+		max-width: 0px;
+	}
+
+	.action-container {
+		overflow-y: hidden;
+		overflow-x: scroll;
+	}
+
+	.button-container {
+		border-right: 1px solid @rsGray;
+
+		button {
+			height: 48px;
+			width: 64px;
+			background-color: @rsBlack;
+			color: @rsWhite;
+
+			.action-status,
+			.action-count {
+				bottom: 5px;
+			}
+		}
+
+		&:first-child {
+			button {
+				border-bottom-left-radius: 8px;
+				border-top-left-radius: 8px;
+			}
+		}
+
+		&:last-child {
+			border-right: 0px;
+			
+			button {
+				border-bottom-right-radius: 8px;
+				border-top-right-radius: 8px;
+			}
+		}
+	}
+}

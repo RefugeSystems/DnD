@@ -1,0 +1,41 @@
+<div class="rs-page page-admin">
+	<div class="administration flex h">
+		<div class="script flex v">
+			<div class="script-container" ref="container">
+				<rs-code v-model="storage.code"></rs-code>
+			</div>
+			<div class="commands">
+				<button class="primary action" v-on:click="sendCommand(storage.code)" :disabled="waiting">
+					<span class="action-icon fa-solid fa-terminal"></span>
+					<span class="action-text">Execute</Span>
+				</button>
+			</div>
+			<div class="settings">
+				
+			</div>
+		</div>
+		<div class="results">
+			<h3>
+				<button class="quick action" v-on:click="dismissResults()">
+					<span class="action-icon fa-solid fa-trash rs-dark-yellow"></span>
+				</button>
+				<span>Results</span>
+			</h3>
+			<div v-if="waiting" v-on:click="dismissWait()">
+				<button class="flat action">
+					<span class="action-icon fa-solid fa-pulse fa-spinner rs-dark-yellow"></span>
+				</button>
+				<span>Executing...</span>
+			</div>
+			<div class="result" v-for="result in results">
+				<button class="primary quick action" v-on:click="dismissResult(result)">
+					<span class="action-icon fa-solid fa-times rs-red"></span>
+				</button>
+				<button class="primary quick action" v-on:click="restoreResult(result)" :title="result.code">
+					<span class="action-icon fa-solid fa-trash-can-undo rs-yellow"></span>
+				</button>
+				<span :title="result.stack">{{getMessage(result)}}</span>
+			</div>
+		</div>
+	</div>
+</div>

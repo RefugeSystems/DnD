@@ -119,6 +119,17 @@
 			padding-left: 59px !important;
 		}
 	}
+
+	.dnd-entities-shiv {
+		& {
+			transition: padding-left .5s;
+			padding-left: 0px !important;
+		}
+		
+		&.extended {
+			padding-left: 59px !important;
+		}
+	}
 	
 	.display-page {
 		position: relative;
@@ -130,6 +141,15 @@
 		background-color: black;
 		padding: 0px 7px;
 		box-shadow: 0px 0px 10px black;
+
+		.display-contents {
+			width: 100%;
+			transition: width .5s;
+
+			&.content-adjusted {
+				width: ~"calc(100% - 420px)";
+			}
+		}
 	}
 	
 	.app-security-links {

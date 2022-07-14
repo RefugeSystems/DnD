@@ -22,7 +22,7 @@
 		<button class="pullout" v-on:click="toggleCharacter()">
 			<span class="far fa-chevron-left indicator"></span>
 		</button>
-		<div class="flyout-container" :class="flyoutClass">
+		<div class="flyout-container" :class="flyoutClass" v-if="!profile.lock_character">
 			<div class="character-container">
 				<dnd-entity-overview :entity="playerCharacter" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-key="'_dndeoc:' + playerCharacter.id" v-on:hovered-object="hoveredObject($event)" v-on:toggle-boundry="toggleBoundry($event)" />
 			</div>

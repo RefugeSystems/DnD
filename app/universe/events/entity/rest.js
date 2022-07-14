@@ -11,7 +11,9 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("action:rest:finish", function(event) {
 		// console.log("Finish long rest");
-		var entity,
+		var time = universe.time,
+			date = Date.now(),
+			entity,
 			item,
 			feat,
 			add,
@@ -92,6 +94,23 @@ module.exports.initialize = function(universe) {
 					}
 				}
 			}
+
+			/**
+			 * 
+			 * @event entity:rest:long
+			 * @for RSObject
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			entity.fireHandlers("entity:rest:long", {});
+			/**
+			 * 
+			 * @event entity:consciousness:gained
+			 * @for RSObject
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			entity.fireHandlers("entity:consciousness:gained", {});
 		}
 	});
 
@@ -107,7 +126,9 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("action:rest:short", function(event) {
 		// console.log("Short: ", event.entity.id);
-		var entity,
+		var time = universe.time,
+			date = Date.now(),
+			entity,
 			item,
 			feat,
 			need,
@@ -182,6 +203,15 @@ module.exports.initialize = function(universe) {
 					}
 				}
 			}
+
+			/**
+			 * 
+			 * @event entity:rest:short
+			 * @for RSObject
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			entity.fireHandlers("entity:rest:short", {});
 		}
 	});
 };

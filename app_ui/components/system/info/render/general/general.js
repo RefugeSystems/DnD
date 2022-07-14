@@ -72,7 +72,7 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"methods": {
 		"repopulateControls": function(event) {
-			if(event.id === this.info.id) {
+			if(event && this.info && (event.id === this.info.id || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id))) {
 				this.populateControls();
 			}
 		},
@@ -452,14 +452,14 @@ rsSystem.component("sysInfoGeneral", {
 												if(entity.main_weapon === object.id) {
 													this.controls.push({
 														"title": "Remove as Main Hand for " + entity.name,
-														"icon": "fal fa-hand-rock rot180",
+														"icon": "fa-light fa-hand-rock rot180",
 														"type": "button",
 														"action": "unmainhand"
 													});
 												} else {
 													this.controls.push({
 														"title": "Equip as Main Hand for " + entity.name,
-														"icon": "fas fa-hand-rock",
+														"icon": "fa-solid fa-hand-rock",
 														"type": "button",
 														"action": "mainhand"
 													});
@@ -682,19 +682,31 @@ rsSystem.component("sysInfoGeneral", {
 					break;
 				case "meeting-location":
 					if(this.activeMeeting) {
+						/*
 						this.universe.send("master:quick:set", {
 							"object": this.activeMeeting.id,
 							"field": "location",
 							"value": object.id
 						});
+						*/
+						this.universe.send("meeting:location", {
+							"meeting": this.activeMeeting.id,
+							"location": object.id
+						});
 					}
 					break;
 				case "meeting-unlocation":
 					if(this.activeMeeting) {
+						/*
 						this.universe.send("master:quick:set", {
 							"object": this.activeMeeting.id,
 							"field": "location",
 							"value": null
+						});
+						*/
+						this.universe.send("meeting:location", {
+							"meeting": this.activeMeeting.id,
+							"location": null
 						});
 					}
 					break;

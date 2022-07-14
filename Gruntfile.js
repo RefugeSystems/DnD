@@ -62,11 +62,13 @@ var config = {
 				"localStorage",
 				"_gazeVersion",
 				"FileReader",
+				"CodeMirror",
 				"cytoscape",
 				"location",
 				"document",
 				"angular",
 				"Promise",
+				"JSHINT",
 				"Hammer",
 				"Image",
 				"global",
@@ -98,6 +100,7 @@ var config = {
 				"NameGenerator",
 				"EventEmitter",
 				"SearchIndex",
+				"Soundscape",
 				"filterXSS",
 				"Component",
 				"Invasion",
@@ -332,6 +335,8 @@ var config = {
 				"sourceMap": true
 			},
 			"src": [
+				"node_libraries/codemirror.js",
+				"node_libraries/codemirror/*.js",
 				"node_libraries/cytoscape.js",
 				"node_libraries/cola.js",
 				"node_libraries/cytoscape-cola.js"
@@ -424,6 +429,8 @@ var config = {
 		"externals": {
 			"files": {
 				"deploy_web/externals.js": [
+					"node_libraries/codemirror.js",
+					"node_libraries/codemirror/*.js",
 					"node_libraries/cytoscape.js",
 					"node_libraries/cola.js",
 					"node_libraries/cytoscape-cola.js"

@@ -55,10 +55,20 @@ module.exports.initialize = function(universe) {
 	 * @param {String} event.message.data.meeting
 	 * @param {String} event.message.data.entities
 	 */
+	/**
+	 * 
+	 * @event session:nearby:coming
+	 * @param {String} type Event type classifier
+	 * @param {Array} entities
+	 * @param {String} meeting
+	 * @param {Number} time Simulation
+	 * @param {Number} date Reality
+	 */
 	universe.on("player:meeting:add:entities", function(event) {
 		var entities = event.message.data.entities,
 			meeting = event.message.data.meeting,
 			changing = [],
+			transition,
 			entity,
 			i;
 
@@ -77,9 +87,20 @@ module.exports.initialize = function(universe) {
 					}
 				}
 				if(changing.length) {
+					transition = {	
+						"type": "session:nearby:coming",
+						"entities": changing,
+						"meeting": meeting.id,
+						"time": universe.time,
+						"date": Date.now()
+					};
 					meeting.addValues({
 						"entities": changing
 					});
+					meeting.addValues({
+						"historical_events": [transition]
+					});
+					universe.emit("send", transition);
 				}
 			} else {
 				universe.warnMasters("Missing information: " + (!!meeting) + " | " + (entities?entities.length:"false"));
@@ -108,10 +129,20 @@ module.exports.initialize = function(universe) {
 	 * @param {String} event.message.data.meeting
 	 * @param {String} event.message.data.entities
 	 */
+	/**
+	 * 
+	 * @event session:nearby:going
+	 * @param {String} type Event type classifier
+	 * @param {Array} entities
+	 * @param {String} meeting
+	 * @param {Number} time Simulation
+	 * @param {Number} date Reality
+	 */
 	universe.on("player:meeting:remove:entities", function(event) {
 		var entities = event.message.data.entities,
 			meeting = event.message.data.meeting,
 			changing = [],
+			transition,
 			entity,
 			i;
 
@@ -132,9 +163,20 @@ module.exports.initialize = function(universe) {
 					}
 				}
 				if(changing.length) {
+					transition = {	
+						"type": "session:nearby:going",
+						"entities": changing,
+						"meeting": meeting.id,
+						"time": universe.time,
+						"date": Date.now()
+					};
 					meeting.subValues({
 						"entities": changing
 					});
+					meeting.addValues({
+						"historical_events": [transition]
+					});
+					universe.emit("send", transition);
 				}
 			} else {
 				universe.warnMasters("Missing information: " + (!!meeting) + " | " + (entities?entities.length:"false"));

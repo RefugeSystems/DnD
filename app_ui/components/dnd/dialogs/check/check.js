@@ -110,7 +110,7 @@ rsSystem.component("dndDialogCheck", {
 				event.preventDefault();
 			}
 		};
-		if(this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+		if(this.profile && this.profile.auto_roll && (this.profile.auto_submit || (this.entity.is_minion && this.profile.auto_submit_minion))) {
 			setTimeout(() => {
 				this.send();
 			}, 100);
@@ -156,7 +156,7 @@ rsSystem.component("dndDialogCheck", {
 			this.roll.setFormula(formula);
 		},
 		"autoSubmit": function() {
-			if(this.profile && this.profile.auto_submit) {
+			if(this.profile && (this.profile.auto_submit || (this.entity.is_minion && this.profile.auto_submit_minion))) {
 				this.send();
 			}
 		},

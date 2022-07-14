@@ -46,7 +46,7 @@ rsSystem.audio = rsSystem.audio || {};
 		
 		universe.$on("master:control", function(event) {
 			console.log("Play Audio? ", event);
-			if(event && event.data && event.data.audio) {
+			if(event && event.data) {
 				var audio = universe.index.audio[event.data.audio],
 					delay = event.data.delay;
 				switch(event.control) {
@@ -57,7 +57,8 @@ rsSystem.audio = rsSystem.audio || {};
 						rsSystem.audio.stop(audio, delay);
 						break;
 					case "audio:stop:all":
-						rsSystem.audio.stopAll();
+						console.log(" > Stop All");
+						rsSystem.audio.stopAll(delay);
 						break;
 				}
 			}
@@ -151,7 +152,7 @@ rsSystem.audio = rsSystem.audio || {};
 							if(object.is_looped) {
 								audio.loop = true;
 							}
-							rsSystem.log.warn("Playing Audio: " + id);
+							// rsSystem.log.warn("Playing Audio: " + id);
 							// audio.currentTime = 0;
 							audio.play()
 							.then(function() {
@@ -161,7 +162,7 @@ rsSystem.audio = rsSystem.audio || {};
 								rsSystem.log.warn("Audio " + id + " failed to play: " + err.message);
 							});
 						} else {
-							rsSystem.log.warn("Audio " + id + " in invalid ready state: " + audio.readyState);
+							rsSystem.log.warn("Audio " + id + " in invalid ready state: " + audio.readyState + ". Retrying...");
 							if(audio.readyState === 3 && audio._retried++ < 5) {
 								setTimeout(play, 100);
 							}
@@ -207,7 +208,7 @@ rsSystem.audio = rsSystem.audio || {};
 					}
 				}
 			} else {
-				rsSystem.log.info("Audio[Enabled?" + rsSystem.universe.profile.disable_sounds + "] Skipping play for ", object);
+				rsSystem.log.info("Audio[Enabled?" + (!rsSystem.universe.profile.disable_sounds) + "] Skipping play for ", object);
 			}
 		} else {
 			rsSystem.log.warn("Audio[" + id + "] Not found", object);
@@ -222,7 +223,7 @@ rsSystem.audio = rsSystem.audio || {};
 	 */
 	rsSystem.audio.stop = function(object, delay) {
 		delay = delay || 0;
-		var id = object.id,
+		var id = object.id || object,
 			audio;
 		
 		audio = rsSystem.audio.active[id];
@@ -236,16 +237,16 @@ rsSystem.audio = rsSystem.audio || {};
 	/**
 	 * 
 	 * @method stopAll
-	 * @param {RSAudio} object
 	 * @param {Integer} [delay]
 	 */
 	rsSystem.audio.stopAll = function(delay) {
-		var audios,
-			audio,
-			id;
-		for(id in rsSystem.audio.active) {
-			audio = rsSystem.audio.active[id];
-			rsSystem.audio.stop(audio);
+		if(delay) {
+			setTimeout(rsSystem.audio.stopAll, delay);
+		} else {
+			for(var id in rsSystem.audio.active) {
+				delete(rsSystem.audio.active[id]);
+				rsSystem.audio.stop(id);
+			}
 		}
 	};
 })();

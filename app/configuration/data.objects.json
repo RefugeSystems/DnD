@@ -6,5 +6,25 @@
 		"description": "Default master account for building up the Universe",
 		"last": 0,
 		"gm": true
+	}, {
+		"id": "type:roll:attack",
+		"name": "Roll: Attack",
+		"description": "Indicates a roll is to {{Attack}}."
+	}, {
+		"id": "type:roll:skill",
+		"name": "Roll: Skill",
+		"description": "Indicates a roll is for a {{Skill Check}}."
+	}, {
+		"id": "type:roll:save",
+		"name": "Roll: Save",
+		"description": "Indicates a roll is for a {{Save}}."
+	}, {
+		"id": "type:roll:environment",
+		"name": "Roll: Environment",
+		"description": "Indicates a roll is with regard to something in the environment or some abstract concept."
+	}, {
+		"id": "type:roll:basic",
+		"name": "Roll: Basic",
+		"description": "Indicates a roll is just a basic roll with no intrisic meaning or a meaning yet to be determined."
 	}]
 }

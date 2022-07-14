@@ -11,6 +11,8 @@
 			"event",
 			"handler",
 			"occurrence",
+			"userbar",
+			"activity",
 			
 			"dataset",
 			"image",
@@ -21,6 +23,7 @@
 			"capability",
 			"playlist",
 			"audio",
+			"soundscape",
 			"profile",
 			"widget",
 			"category",

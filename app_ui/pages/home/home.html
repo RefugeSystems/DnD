@@ -24,7 +24,28 @@
 	</div>
 	<div class="system-display active" v-if="state === 10 && player && configuration && !active">
 		<component class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
-		<router-view class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="$route.path === '/' || $route.path === '/home'?'maincomponentskey' + mainpage:'pathcomponentKey' + $route.path"></router-view>
+
+		<!-- Locked Player Character View -->
+		<div class="dnd-entities-shiv" v-if="storage.profile.lock_character" :class=getLockClasses()>
+			<div class="column">
+				<div class="column-content" v-if="!main || main.state === 'deceased'">
+					<button v-on:click="createPlayer()" class="general create">
+						<span class="icon fas fa-user-plus"></span>
+						<span class="text">Create Character</span>
+					</button>
+				</div>
+				<div class="player-entity column" v-if="main && main.state !== 'deceased'">
+					<div class="column-content">
+						<dnd-entity-overview :entity="main" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'_dndeoc:' + main.id" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Content Page -->
+		<router-view class="system-view" :class="getViewClasses()" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="$route.path === '/' || $route.path === '/home'?'maincomponentskey' + mainpage:'pathcomponentKey' + $route.path"></router-view>
+
+
+		<system-user-bar class="" :universe="universe" :player="player" :profile="storage.profile" storage-key="_key_sysbar"></system-user-bar>
 		<system-menu class="system-menu" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmenu"></system-menu>
 		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysinfo"></system-info>
 		<system-dialog class="system-dialog" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysdialog"></system-dialog>
@@ -32,7 +53,7 @@
 		<system-chat class="system-chat" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_syschat" :class="storage.profile.chat_top?'topped':''"></system-chat>
 	</div>
 	<div class="display-page" v-if="active">
-		<component :is="'page' + active"></component>
+		<component :is="'page' + active" class="display-contents"></component>
 	</div>
 	<div class="app-security-links" :class="state <= 0?'shown':'hidden'" v-if="state <= 0">
 		<button class="app-link general" v-on:click="view(page)" :class="page === active?'active':'inactive'" v-for="page in pages">

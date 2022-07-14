@@ -14,6 +14,7 @@ var appPackage = require("../../package.json"),
 	Random = require("rs-random"),
 	fs = require("fs"),
 
+	UniverseUtility = require("./utility.js"),
 	Chronicle = require("../storage/chronicle"),
 	Anomaly = require("../management/anomaly"),
 	
@@ -76,6 +77,10 @@ class Universe extends EventEmitter {
 		this.specification = configuration.universe;
 		this.classes = configuration.universe.classes?defaultClasses.concat(configuration.universe.classes):defaultClasses;
 		this.initialized = false;
+
+		this.chronicle.on("error", function(error) {
+			this.handleError("chronicle:general", error);
+		});
 		
 		/**
 		 * Maps a chronicle type to the ChronicleProcessor that handles it
@@ -124,6 +129,9 @@ class Universe extends EventEmitter {
 		 * @type Integer
 		 */
 		this.time = 0;
+
+
+		this.utility = new UniverseUtility(this);
 		
 		this.on("dump-configuration", () => {
 			console.log(configuration);
@@ -481,6 +489,7 @@ class Universe extends EventEmitter {
 				this.initialized = true;
 				console.log("Universe Loaded: ", Object.keys(this.manager));
 				this.emit("initialized", this);
+				this.utility.info("Test");
 				done();
 			})
 			.catch(fail);
@@ -1195,6 +1204,61 @@ class Universe extends EventEmitter {
 	 */
 	isValid(object) {
 		return object && !object.disabled && !object.is_disabled && !object.preview && !object.is_preview;
+	}
+
+
+	processEvent(source, name, event, handler) {
+		var universe = this;
+		setTimeout(function() {
+			event.name = name;
+			try {
+				handler.processor(source, event, universe, universe.utility);
+				console.log("Handler[" + handler.id + "]: Completed Successfully for " + source.id);
+				// TODO: Consider a result process
+			} catch(exception) {
+				// TODO: Expand logging
+				console.error(" ! Exception processing event " + name + " for object " + source.id + " with handler " + handler.id + ":\n", exception);
+			}
+		}, 0);
+	}
+
+
+	processScript(event) {
+		var universe = this;
+		setTimeout(function() {
+			var result = {},
+				method;
+			result.start = Date.now();
+			result.recipients = {};
+			result.recipients[event.player.id] = true;
+			result.type = "universe:script:result";
+			result.socket = event.socket;
+			try {
+				if(event && event.code) {
+					result.code = event.code;
+					if(event.player && event.player.gm && typeof(event.code) === "string") {
+						method = new Function("player", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", event.code),
+						result.returned = method(event.player, universe, universe.utility) || null;
+						result.message = "Execution complete";
+						result.status = 0;
+					} else {
+						result.message = "Access denied";
+						result.status = 4;
+					}
+				} else {
+					result.message = "No code specified";
+					result.status = 3;
+				}
+			} catch(exception) {
+				result.message = "Error processing script: " + exception.message;
+				result.stack = exception.stack;
+				result.error = exception;
+				result.status = 5;
+			}
+			result.duration = Date.now() - result.start;
+			console.log("Execution Result: ", result);
+			universe.emit("send", result);
+		}, 0);
 	}
 
 	/**

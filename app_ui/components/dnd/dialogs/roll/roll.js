@@ -332,7 +332,7 @@ rsSystem.component("dndDialogRoll", {
 				find[0].focus();
 			}
 		}
-		if(this.damages.length && this.profile && this.profile.auto_roll && this.profile.auto_submit) {
+		if(this.damages.length && this.profile && this.profile.auto_roll && (this.profile.auto_submit || (this.entity.is_minion && this.profile.auto_submit_minion))) {
 			setTimeout(() => {
 				this.sendResults();
 			}, 100);

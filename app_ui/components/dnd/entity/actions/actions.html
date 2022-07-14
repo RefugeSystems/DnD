@@ -1,5 +1,30 @@
-<div class="rs-component dnd-component entity-actions flex h center wrap" v-if="isVisible">
-	<button class="rounded general action" v-for="act in actions" v-on:click="useAction(act)" v-on:click.right.prevent.stop="useAction(act, 1)">
-		{{entity.action_count[act] || 0}}/{{entity.action_max[act]}} {{name(act)}}
-	</button>
+<div class="rs-component dnd-component entity-actions" v-if="isVisible">
+	<div class="action-counts flex h center wrap">
+		<button class="user-bar rounded general action" v-on:click="setActionBar()" title="View the action bars for this creature for use or configuration">
+			<span class="action-icon fa-duotone fa-mobile-button rot90"></span>
+		</button>
+		<button class="user-bar rounded general action" v-on:click="listActions()" title="View your available actions. Useful for setting up your action bar">
+			<span class="action-icon fa-solid fa-rectangle-history-circle-user"></span>
+		</button>
+		<rs-shiny-button class="general rounded action" v-if="myTurn" v-on:click="endTurn()" :active="true" color="yellow" title="End Turn">
+			<span class="action-icon fa-solid fa-rotate-right"></span>
+			<span class="">End Turn</span>
+		</rs-shiny-button>
+		<rs-shiny-button class="general rounded action" v-if="leveling" v-on:click="levelUp()" :active="true" color="yellow" title="Level Up">
+			<span class="action-icon fa-solid fa-arrow-up-from-arc"></span>
+			<span class="">Level Up</span>
+		</rs-shiny-button>
+		<button class="rounded general action" v-for="act in actions" v-on:click="useAction(act)" v-on:click.right.prevent.stop="useAction(act, 1)" :title="actionTitle(act)">
+			<span :class="actionIcon(act)">{{actionName(act)}}</span>
+			<span class="count">{{entity.action_count[act] || 0}}/{{entity.action_max[act]}}</span>
+		</button>
+	</div>
+	<div class="activities flex h wrap">
+		<div v-for="(event,i) in events" :key="event.id">
+			<rs-shiny-button class="general rounded action" :active="i===0" color="red" v-on:click="openActiveEvent(event)" :title="event.name">
+				<span v-if="event.icon" class="action-icon" :class="event.icon"></span>
+				<span class="action-text">{{event.name || event.id}}</span>
+			</rs-shiny-button>
+		</div>
+	</div>
 </div>

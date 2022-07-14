@@ -24,6 +24,9 @@ module.exports.initialize = function(universe) {
 					"entity": entity,
 					"item": items[i]
 				});
+				entity.fireHandlers("entity:attunement:gained", {
+					"item": items[i]
+				});
 			}
 		}
 	});
@@ -53,6 +56,9 @@ module.exports.initialize = function(universe) {
 			for(i=0; i<items.length; i++) {
 				universe.emit("action:item:unattune", {
 					"entity": entity,
+					"item": items[i]
+				});
+				entity.fireHandlers("entity:attunement:lost", {
 					"item": items[i]
 				});
 			}

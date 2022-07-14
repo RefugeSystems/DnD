@@ -32,3 +32,38 @@ module.exports.initialize = function(universe) {
 	});
 };
 */
+
+
+/**
+ * This tracks some piece of transitory data for something happening in the system
+ * such as an entity taking damage or creating a potion. This is the object that the
+ * event system passed around that has data for a specific piece.
+ * 
+ * This ties into a ChronicleEvent where a single ChronicleEvent may have several
+ * UniverseEvents underneath it to track activity, such as an attack will have multiple
+ * UniverseEvents:
+ * + Entity Attacks
+ * + General Broadcast of Attack to nearby
+ * + Entity Defends
+ * + General Broadcast of Defense to nearby
+ * 
+ * These events then tie back to the ChronicleEvent to denote and track the outcome.
+ * @class UniverseEvent
+ * @constructor
+ * @abstract
+ */
+
+/**
+ * The name of the event that fired, such as "entity:damaged".
+ * 
+ * This is the code name and not the abstract name used for the Occurrence name.
+ * @property name
+ * @type String
+ */
+
+/**
+ * The Chronicle ID for the event. This is used to retrieve the full "raw" event from
+ * the system for usage/cross checking.
+ * @property id
+ * @type String
+ */
