@@ -615,64 +615,66 @@
 				}
 			},
 			"updateBar": function(rebuild) {
-				var button,
-					i,
-					j;
+				if(this.entity) {
+					var button,
+						i,
+						j;
 
-				if(rebuild) {
-					this.bar.length = this.userbar.userbar_actions.length;
-					for(i=0; i<this.bar.length; i++) {
-						if(typeof(this.bar[i]) !== "object" || this.bar[i] === null) {
-							Vue.set(this.bar, i, {});
-						}
-						if(this.userbar.userbar_actions[i]) {
-							for(j=0; j<keys.length; j++) {
-								Vue.set(this.bar[i], keys[j], this.userbar.userbar_actions[i][keys[j]] || null);
+					if(rebuild) {
+						this.bar.length = this.userbar.userbar_actions.length;
+						for(i=0; i<this.bar.length; i++) {
+							if(typeof(this.bar[i]) !== "object" || this.bar[i] === null) {
+								Vue.set(this.bar, i, {});
 							}
-						} else {
-							for(j=0; j<keys.length; j++) {
-								Vue.delete(this.bar[i], keys[j]);
+							if(this.userbar.userbar_actions[i]) {
+								for(j=0; j<keys.length; j++) {
+									Vue.set(this.bar[i], keys[j], this.userbar.userbar_actions[i][keys[j]] || null);
+								}
+							} else {
+								for(j=0; j<keys.length; j++) {
+									Vue.delete(this.bar[i], keys[j]);
+								}
 							}
 						}
 					}
-				}
-				
-				for(i=0; i<this.bar.length; i++) {
-					button = this.bar[i];
-					button.index = i;
-					if(button.id) {
-						if(button.object !== false && (!button.object || button.object.id !== button.id)) {
-							button.object = this.universe.getObject(button.id);
-							button.type = button.object._class;
-						}
-						if(button.object) {
-							Vue.set(button, "status", this.statusIcon(button.object));
-						} else {
-							Vue.delete(button, "status");
-							Vue.delete(button, "icon");
-						}
-						if(button.use && (!button.channel || button.channel.id !== button.use)) {
-							Vue.set(button, "channel", this.universe.getObject(button.use));
-							if(!button.channel) {
-								// TODO: Warn Masters
-								console.warn("Button Channel Object " + button.use + " not found");
-								// TODO: Delete `use` property
+					
+					for(i=0; i<this.bar.length; i++) {
+						button = this.bar[i];
+						button.index = i;
+						if(button.id) {
+							if(button.object !== false && (!button.object || button.object.id !== button.id)) {
+								button.object = this.universe.getObject(button.id);
+								button.type = button.object._class;
 							}
-						} else {
-							Vue.delete(button, "channel");
-						}
-						if(!button.icon) {
-							if(default_icon[button.type]) {
-								button.icon = default_icon[button.type];
+							if(button.object) {
+								Vue.set(button, "status", this.statusIcon(button.object));
 							} else {
-								button.icon = default_icon;
+								Vue.delete(button, "status");
+								Vue.delete(button, "icon");
 							}
+							if(button.use && (!button.channel || button.channel.id !== button.use)) {
+								Vue.set(button, "channel", this.universe.getObject(button.use));
+								if(!button.channel) {
+									// TODO: Warn Masters
+									console.warn("Button Channel Object " + button.use + " not found");
+									// TODO: Delete `use` property
+								}
+							} else {
+								Vue.delete(button, "channel");
+							}
+							if(!button.icon) {
+								if(default_icon[button.type]) {
+									button.icon = default_icon[button.type];
+								} else {
+									button.icon = default_icon;
+								}
+							}
+						} else if(button.object) {
+							Vue.delete(button, "channel");
+							Vue.delete(button, "object");
+							Vue.delete(button, "status");
+							Vue.delete(button, "level");
 						}
-					} else if(button.object) {
-						Vue.delete(button, "channel");
-						Vue.delete(button, "object");
-						Vue.delete(button, "status");
-						Vue.delete(button, "level");
 					}
 				}
 			},
