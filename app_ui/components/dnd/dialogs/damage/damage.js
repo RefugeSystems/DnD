@@ -537,34 +537,36 @@ rsSystem.component("dndDialogDamage", {
 						for(a=0; a<additives.length; a++) {
 							additive = this.adding[additives[a]];
 							// Checks that the additive applies are handled in the channel selection
-							if(this.channel.damage_type && additive.damage_bonus_weapon) {
-								type = this.universe.index.damage_type[this.channel.damage_type];
-								if(type) {
-									for(j=0; j<this.available_targets.length; j++) {
-										target = this.available_targets[j].id;
-										this.roll_damage[target][this.channel.damage_type].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][this.channel.damage_type].formula + " + " + additive.damage_bonus_weapon));
-									}
-									this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_weapon));
-									if(this.available_damages.indexOf(type) === -1) {
-										this.available_damages.push(type);
-									}
-								} else {
-									console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
-								}
-							}
-							if(additive.damage_bonus_spell && (!additive.damage_bonus_type_lock || channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock])) {
-								damages = Object.keys(additive.damage_bonus_spell);
-								for(i=0; i<damages.length; i++) {
-									damage = damages[i];
-									type = this.universe.index.damage_type[damage];
+							if(!additive.damage_bonus_type_lock || channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]) {
+								if(this.channel.damage_type && additive.damage_bonus_weapon) {
+									type = this.universe.index.damage_type[this.channel.damage_type];
 									if(type) {
 										for(j=0; j<this.available_targets.length; j++) {
 											target = this.available_targets[j].id;
-											this.roll_damage[target][damage].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][damage].formula + " + " + additive.damage_bonus_spell[damage]));
+											this.roll_damage[target][this.channel.damage_type].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][this.channel.damage_type].formula + " + " + additive.damage_bonus_weapon));
 										}
-										this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_spell[type.id]));
+										this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_weapon));
 										if(this.available_damages.indexOf(type) === -1) {
 											this.available_damages.push(type);
+										}
+									} else {
+										console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
+									}
+								}
+								if(additive.damage_bonus_spell) {
+									damages = Object.keys(additive.damage_bonus_spell);
+									for(i=0; i<damages.length; i++) {
+										damage = damages[i];
+										type = this.universe.index.damage_type[damage];
+										if(type) {
+											for(j=0; j<this.available_targets.length; j++) {
+												target = this.available_targets[j].id;
+												this.roll_damage[target][damage].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][damage].formula + " + " + additive.damage_bonus_spell[damage]));
+											}
+											this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_spell[type.id]));
+											if(this.available_damages.indexOf(type) === -1) {
+												this.available_damages.push(type);
+											}
 										}
 									}
 								}
