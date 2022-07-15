@@ -552,7 +552,7 @@ rsSystem.component("dndDialogDamage", {
 									console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
 								}
 							}
-							if(additive.damage_bonus_spell && (!additive.damage_bonus_type_lock || channel.damage_type === additive.damage_bonus_type_lock)) {
+							if(additive.damage_bonus_spell && (!additive.damage_bonus_type_lock || channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock])) {
 								damages = Object.keys(additive.damage_bonus_spell);
 								for(i=0; i<damages.length; i++) {
 									damage = damages[i];
