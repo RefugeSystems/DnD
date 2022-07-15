@@ -219,41 +219,68 @@ class Chronicle extends EventEmitter {
 	 * @param {Array | String} [involved]
 	 */
 	updateOccurrence(id, event, type, time, source, target, timeline, emit, involved) {
+		console.log("Update: ", update);
 		var statement = "update chronicle set event = $event, updated = $updated",
+			update = Object.assign({}, event),
 			values = {};
-		values["$id"] = id;
+		update.id = values["$id"] = id;
 		values["$event"] = JSON.stringify(event);
-		values["$updated"] = Date.now();
+		update.updated = values["$updated"] = Date.now();
 		if(type) {
 			statement += ", type = $type";
 			values["$type"] = type;
+			update.type = values["$type"];
 		}
 		if(time || event.timeline) {
 			statement += ", timeline = $timeline";
 			values["$timeline"] = timeline || event.timeline;
+			update.timeline = values["$timeline"];
 		}
 		if(time || event.time) {
 			statement += ", time = $time";
 			values["$time"] = time || event.time;
+			update.time = values["$time"];
 		}
 		if(source || event.source) {
 			statement += ", source = $source";
 			values["$source"] = source || event.source;
+			update.source = values["$source"];
 		}
 		if(target || event.target) {
 			statement += ", target = $target";
 			values["$target"] = target || event.target;
+			update.target = values["$target"];
 		}
 		if(emit || event.emit) {
 			statement += ", emit = $emit";
 			values["$emit"] = emit || event.emit;
+			update.emit = values["$emit"];
 		}
 		if((involved || event.involved) instanceof Array) {
 			statement += ", involved = $involved";
 			values["$involved"] = involved || event.involved;
 			values["$involved"] = values["$involved"].join(",");
+			update.involved = values["$involved"];
 		}
 		statement += " where id = $id;";
+
+		console.log("Update: ", update);
+		if(!update.type) {
+			this.database.connection.run("select type from chronicle where id = $id;", {"$id":id}, (err, rows) => {
+				if(err) {
+					this.emit("error", new Anomaly("chronicle:event:update", "Failed to update event from Chronicle", 40, {values}, err, this));
+				} else if(rows && rows[0]) {
+					console.log("Updating: ", rows[0]);
+					update.type = rows[0];
+					this.emit("adjusted", update);
+				} else {
+					console.log("Update Missed: ", rows);
+				}
+			});
+		} else {
+			this.emit("adjusted", update);
+		}
+
 		this.database.connection.run(statement, values, (err) => {
 			if(err) {
 				this.emit("error", new Anomaly("chronicle:event:update", "Failed to update event from Chronicle", 40, {values}, err, this));

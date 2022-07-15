@@ -89,6 +89,17 @@ rsSystem.component("DNDWidgetCore", {
 		}
 	},
 	"methods": {
+		"declareAttack": function() {
+			var details = {},
+				i,
+				j;
+
+			details.title = this.entity.name + " Actions";
+			details.component = "dndDialogDamage";
+			details.entity = this.entity;
+
+			rsSystem.EventBus.$emit("dialog-open", details);
+		},
 		"showCharges": function(object) {
 			return typeof(object.charges_max) === "number" || typeof(object.charges_max) === "string";
 		},

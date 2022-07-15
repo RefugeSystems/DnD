@@ -12,6 +12,34 @@
 		width: fit-content;
 	}
 
+	&.fitted {
+		position: relative;
+		overflow: auto;
+		flex-grow: 5;
+		flex-direction: column;
+		display: flex;
+
+		.table-scroll-container {
+			width: 100%;
+			z-index: 3;
+			flex-grow: 5;
+			overflow: auto;
+
+			.table-container {
+				min-width: 100%;
+				
+				table {
+					min-width: 100%;
+				}
+			}
+		}
+	}
+
+	.table-scroll-container {
+		position: relative;
+		width: fit-content;
+	}
+
 	.dlanchors {
 		display: none;
 	}

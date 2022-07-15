@@ -1,4 +1,3 @@
-
 /**
  * 
  * 
@@ -21,7 +20,7 @@
 	var barSource = {
 		"name": "Device Bar",
 		"icon": "fa-regular fa-tablet-rugged",
-		"userbar_actions": [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
+		"userbar_actions": [{},{},{},{},{},{},{},{},{},{},{},{}]
 	};
 
 	var keys = [
@@ -161,7 +160,24 @@
 		},
 		"methods": {
 			"respondSessionEncounter": function(event) {
-				this.setBarByType(event.encounter);
+				if(!this.profile.encounter_ignore_type) {
+					this.setBarByType(event.encounter);
+				}
+			},
+			"getLink": function(index) {
+				if(false) {
+					if(this.bar && this.bar[index]) {
+						return this.bar[index].id;
+					}
+					return undefined;
+				} else {
+					return () => {
+						if(this.bar && this.bar[index]) {
+							return this.bar[index].id;
+						}
+						return undefined;
+					};
+				}
 			},
 			"setBarByType": function(type) {
 				var bar,
@@ -234,17 +250,15 @@
 							send.name = button.name;
 							send.icon = button.icon;
 							send.channel = dropped.id;
+							console.log("Add Channel: ", send);
 						} else if(button.id !== dropped.id) {
 							send.object = dropped.id;
 							send.type = dropped._class;
 							send.name = dropped.name;
 							send.icon = dropped.icon;
+							console.log("Set Button: ", send);
 						}
-						this.universe.send("userbar:button", {
-							"bar": this.userbar.id,
-							"object": dropped.id,
-							"index": index
-						});
+						this.universe.send("userbar:button", send);
 					}
 				}
 			},
@@ -293,11 +307,19 @@
 										switch(button.id) {
 											case "action:main:attack":
 												channel = button.channel || this.universe.index.item[this.entity.main_weapon];
-												this.actionDialog(this.universe.index.action["action:main:attack"], channel, [channel.damage]);
+												if(channel) {
+													this.actionDialog(this.universe.index.action["action:main:attack"], channel, [channel.damage]);
+												} else {
+													this.actionDialog(this.universe.index.action["action:main:attack"]);
+												}
 												break;
 											case "action:bonus:attack:main":
 												channel = button.channel || this.universe.index.item[this.entity.main_weapon];
-												this.actionDialog(this.universe.index.action["action:bonus:attack:main"], channel, [channel.damage]);
+												if(channel) {
+													this.actionDialog(this.universe.index.action["action:bonus:attack:main"], channel, [channel.damage]);
+												} else {
+													this.actionDialog(this.universe.index.action["action:bonus:attack:main"]);
+												}
 												break;
 											case "action:bonus:attack:light":
 												if(!button.channel) {
@@ -313,6 +335,8 @@
 												}
 												if(channel) {
 													this.actionDialog(this.universe.index.action["action:bonus:attack:light"], channel, [channel.damage]);
+												} else {
+													this.actionDialog(this.universe.index.action["action:bonus:attack:light"]);
 												}
 												break;
 											default:
@@ -520,10 +544,12 @@
 				}
 				if(this.storage) {
 					Vue.set(this.storage, "entity", this.entity?this.entity.id:null);
-					if(this.storage.index) {
+					if(typeof(this.storage.index) === "number") {
 						this.changeBar(this.storage.index);
 					} else if(this.storage.type) {
-						this.setBarByType(this.storage.type);
+						if(!this.setBarByType(this.storage.type)) {
+							this.changeBar(0);
+						}
 					} else {
 						this.changeBar(0);
 					}
@@ -542,50 +568,51 @@
 			},
 			"changeBar": function(index) {
 				var bar;
-				switch(typeof(index)) {
-					case "number":
-						if(this.entity && this.entity.userbars && this.entity.userbars.length) {
-							if(this.entity.userbars.length <= index) {
-								index = 0;
-							} else if(index < 0) {
-								index = this.entity.userbars.length - 1;
+				if(this.entity) {
+					switch(typeof(index)) {
+						case "number":
+							if(this.entity && this.entity.userbars && this.entity.userbars.length) {
+								if(this.entity.userbars.length <= index) {
+									index = 0;
+								} else if(index < 0) {
+									index = this.entity.userbars.length - 1;
+								}
+								bar = this.universe.getObject(this.entity.userbars[index]);
+								if(!bar) {
+									// TODO: Broadcast Important Warning
+									console.warn("Unable to find bar at index " + index + " for " + this.entity.id);
+								}
 							}
-							bar = this.universe.getObject(this.entity.userbars[index]);
-							if(!bar) {
-								// TODO: Broadcast Important Warning
-								console.warn("Unable to find bar at index " + index + " for " + this.entity.id);
-							}
+							break;
+						case "string":
+							bar = this.universe.index.userbar[index];
+							index = this.entity.userbars.indexOf(index);
+							break;
+						case "object":
+							bar = index;
+							index = this.entity.userbars.indexOf(bar.id);
+							break;
+					}
+
+					if(bar) {
+						if(this.storageBar) {
+							Vue.set(this, "storageBar", false);
 						}
-						break;
-					case "string":
-						bar = this.universe.index.userbar[index];
-						index = this.entity.userbars.indexOf(index);
-						break;
-					case "object":
-						bar = index;
-						index = this.entity.userbars.indexOf(bar.id);
-						break;
-				}
-
-				if(bar) {
-					if(this.storageBar) {
-						Vue.set(this, "storageBar", false);
-					}
-				} else {
-					bar = this.storage[this.entity.id];
-					Vue.set(this, "storageBar", true);
-					console.warn("Device Bar: ", _p(bar));
-					if(!bar) {
-						bar = Object.assign({}, barSource);
-						Vue.set(this.storage, this.entity.id, bar);
+					} else {
 						bar = this.storage[this.entity.id];
-						console.warn("Made New Device Bar: ", _p(bar));
+						Vue.set(this, "storageBar", true);
+						if(!bar) {
+							bar = Object.assign({}, barSource);
+							Vue.set(this.storage, this.entity.id, bar);
+							bar = this.storage[this.entity.id];
+							console.warn("Made New Device Bar: ", _p(bar));
+						}
 					}
-				}
 
-				Vue.set(this.storage, "index", index);
-				Vue.set(this, "userbar", bar);
-				this.updateBar(true);
+					Vue.set(this.storage, "index", index);
+					Vue.set(this, "userbar", bar);
+					this.updateBar(true);
+				}
 			},
 			"updateBar": function(rebuild) {
 				var button,
@@ -595,12 +622,12 @@
 				if(rebuild) {
 					this.bar.length = this.userbar.userbar_actions.length;
 					for(i=0; i<this.bar.length; i++) {
-						if(typeof(this.bar[i]) !== "object") {
+						if(typeof(this.bar[i]) !== "object" || this.bar[i] === null) {
 							Vue.set(this.bar, i, {});
 						}
 						if(this.userbar.userbar_actions[i]) {
 							for(j=0; j<keys.length; j++) {
-								Vue.set(this.bar[i], keys[j], this.userbar.userbar_actions[i][keys[j]]);
+								Vue.set(this.bar[i], keys[j], this.userbar.userbar_actions[i][keys[j]] || null);
 							}
 						} else {
 							for(j=0; j<keys.length; j++) {
@@ -625,10 +652,10 @@
 							Vue.delete(button, "icon");
 						}
 						if(button.use && (!button.channel || button.channel.id !== button.use)) {
-							Vue.set(button.channel, this.universe.getObject(button.channel));
+							Vue.set(button, "channel", this.universe.getObject(button.use));
 							if(!button.channel) {
 								// TODO: Warn Masters
-								console.warn("Button Channel Object " + button.channel + " not found");
+								console.warn("Button Channel Object " + button.use + " not found");
 								// TODO: Delete `use` property
 							}
 						} else {

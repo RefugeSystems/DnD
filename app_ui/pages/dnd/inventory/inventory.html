@@ -1,5 +1,5 @@
 <div class="rs-page dnd-page dnd-inventory">
-	<div class="flex v" v-if="entity">
+	<div class="inventory-container flex v" v-if="entity">
 		<div class="heading rs-component">
 			<span>{{entity.name}}</span>
 			<button class="flat action fas fa-info-circle rs-blue" v-on:click="info(entity)"></button>
@@ -7,12 +7,12 @@
 			<span :class="bag_weight_classing"></span>
 			<span class="rs-border weight" :class="bag_weight_color">{{displayNumber(bag_weight)}} / {{displayNumber(max_bag_weight)}}</span>
 			<button class="rounded general action" v-on:click="viewEquiped()">
-				<span class="action-icon game-icon game-icon master-of-arms"></span>
+				<span class="action-icon game-icon game-icon-master-of-arms"></span>
 				<span>View Equipped</span>
 			</button>
 			<span class="attunement rs-border weight" :class="attuned < entity.attune_max?'rsbd-green':(attuned === entity.attune_max?'rsbd-yellow':'rsbd-red')">Attunements: {{attuned}} / {{entity.attune_max}}</span>
 		</div>
-		<rs-table :universe="universe" :source="inventory" :storage-container="storage" label="Inventory" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
+		<rs-table class="flex v" :universe="universe" :source="inventory" :storage-container="storage" label="Inventory" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
 		<!-- <dnd-display-equiped :entity="entity" :universe="universe"></dnd-display-equiped> -->
 	</div>
 	<div class="general-warning" v-else>

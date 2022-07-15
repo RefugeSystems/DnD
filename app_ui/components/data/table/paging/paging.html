@@ -1,8 +1,17 @@
 <div class="system-component table-paging" v-if="lastPage >= 0" v-on:keyup.stop.prevent="keyPaging($event)">
-	<button class="index-page" :class="classPage(0)" v-on:click="toPage(0)">
+	<!-- <button class="index-page" :class="classPage(0)" v-on:click="toPage(0)">
 		<span>1</span>
-	</button>
-	<button v-for="page in lastPage" class="index-page" :class="classPage(page)" v-on:click="toPage(page)">
+	</button> -->
+	<!-- <button v-for="page in lastPage" class="index-page" :class="classPage(page)" v-on:click="toPage(page)">
 		<span>{{page + 1}}</span>
+	</button> -->
+	<button class="index-page" v-if="renderFirst()" v-on:click="toPage(0)">
+		<span class="fa-solid fa-arrow-left-to-line"></span>
+	</button>
+	<button v-for="page in renderedPages" class="index-page" :class="classPage(page)" v-on:click="toPage(page)">
+		<span>{{page + 1}}</span>
+	</button>
+	<button class="index-page" v-if="renderLast()" v-on:click="toPage(lastPage)">
+		<span class="fa-solid fa-arrow-right-to-line"></span>
 	</button>
 </div>

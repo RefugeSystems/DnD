@@ -6,7 +6,7 @@
  */
 var storageKey = "_rs_connectComponentKey",
 	// TODO: Centralize ServiceWorker versioning for app control (Align with package version?)
-	version = "0.9.73",
+	version = "0.9.8",
 	cacheID = "rsdnd_" + version,
 	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
 	processAction,
@@ -140,7 +140,7 @@ self.addEventListener("push", function(event) {
 	console.log("[Service Worker] Push Received.");
 	console.log("[Service Worker] Push had this data: ", event);
 
-	var title = "RSSWx";
+	var title = "RSDnD";
 	var options = {
 		"body": "Notification",
 		"icon": "images/rook.green.png",

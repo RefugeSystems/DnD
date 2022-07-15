@@ -54,7 +54,7 @@ class PlayerConnection extends EventEmitter {
 		};
 		
 		var chronicled = (event) => {
-			if(this.player.gm && event.type && event.type.indexOf(":") !== -1) {
+			if(this.player.gm) {
 				this.send("chronicled", event);
 			}
 		};
@@ -83,6 +83,7 @@ class PlayerConnection extends EventEmitter {
 		universe.on("combat:round", forwardMessage);
 		universe.on("combat:turn", forwardMessage);
 		
+		universe.chronicle.on("adjusted", chronicled);
 		universe.chronicle.on("added", chronicled);
 	}
 

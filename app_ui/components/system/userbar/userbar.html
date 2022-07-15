@@ -13,7 +13,7 @@
 		</button>
 	</div>
 	<div class="action-container flex h" ref="buttons">
-		<div class="button-container" v-for="(button, i) in bar" v-on:drop.stop.prevent="loadButton(i)" v-on:dragover.prevent="" :id="'bar-button-' + i" :title="button.name" v-linkable="button.id">
+		<div class="button-container" v-for="(button, i) in bar" v-on:drop.stop.prevent="loadButton(i)" v-on:dragover.prevent="" :id="'bar-button-' + i" :title="button.name" v-linkable="getLink(i)">
 			<button class="quick action" v-if="button" v-on:click="fireButton(button)" v-on:click.right.prevent.stop="clearButton(button, i)">
 				<span class="action-icon" :class="buttonIcon(button)"></span>
 				<span class="action-count" v-if="button.object && hasCharges(button.object)">{{button.object.charges || 0}}/{{button.object.charges_max}}</span>

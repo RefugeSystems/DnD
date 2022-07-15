@@ -48,6 +48,19 @@ rsSystem.component("rsTablePaging", {
 		// 	}
 		// 	return Math.floor(this.filtered.length/this.storage.rows);
 		// }
+		"renderedPages": function() {
+			var range = this.storage.render_range || 3,
+				start = this.storage.page,
+				end = this.lastPage,
+				pages = [],
+				i;
+			for(i=start - range; i<=start + range; i++) {
+				if(0<=i && i<=end) {
+					pages.push(i);
+				}
+			}
+			return pages;
+		}
 	},
 	"watch": {
 	},
@@ -62,6 +75,12 @@ rsSystem.component("rsTablePaging", {
 	"methods": {
 		"toPage": function(page) {
 			Vue.set(this.storage, "page", page);
+		},
+		"renderFirst": function() {
+			return this.renderedPages[0] !== 0;
+		},
+		"renderLast": function() {
+			return this.renderedPages[this.renderedPages.length - 1] !== this.lastPage;
 		},
 		"keyPaging": function(event) {
 			switch(event.key) {

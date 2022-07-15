@@ -12,7 +12,11 @@ Vue.directive("linkable", {
 			event.preventDefault();
 		});
 		el.addEventListener("drag", function(event) {
-			rsSystem.dragndrop.general.drag(binding.value);
+			if(typeof(binding.value) === "function") {
+				rsSystem.dragndrop.general.drag(binding.value());
+			} else {
+				rsSystem.dragndrop.general.drag(binding.value);
+			}
 			event.preventDefault();
 		});
 	}

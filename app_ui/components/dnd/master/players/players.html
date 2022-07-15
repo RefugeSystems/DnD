@@ -3,13 +3,13 @@
 
 	</div>
 	<div class="count flex h wrap">
+		<button class="rounded general quick action offline-toggle" v-on:click="toggleOffline()">
+			<span class="action-icon fa-users" :class="offline?'fas':'fal'"></span>
+		</button>
 		<div class="player-info inline flex h" v-for="play in players" v-if="displayed(play)" :title="play.id" v-on:click="info(play)" v-on:click.right.stop.prevent="editNoun($event,play)">
 			<span class="player-connections" :class="play.connections?'connected':''">{{play.connections || 0}}</span>
 			<button class="flat action player-name">{{play.name}}</button>
 		</div>
-		<button class="rounded general action offline-toggle" v-on:click="toggleOffline()">
-			<span class="fa-users" :class="offline?'fas':'fal'"></span>
-		</button>
 	</div>
 </div>
 

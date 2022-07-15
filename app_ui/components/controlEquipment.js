@@ -103,7 +103,7 @@ rsSystem.component("DNDControlEquipment", {
 				entity = this.getPlayerCharacter();
 			}
 			var send = {
-				"items": [item.id || item],
+				"items": [item?item.id || item:item],
 				"entity": entity.id || entity
 			};
 			if(target) {
@@ -123,7 +123,7 @@ rsSystem.component("DNDControlEquipment", {
 				entity = this.getPlayerCharacter();
 			}
 			var send = {
-				"item": item.id || item,
+				"item": item?item.id || item:item,
 				"entity": entity.id || entity
 			};
 			if(target) {

@@ -1,49 +1,52 @@
-<div class="rs-page dnd-page master-screen" v-on:click.right.stop.prevent="checkToEditRecord($event)">
-	<div class="screen-panel">
-		<div class="screen-column small">
-			<dnd-master-meeting :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterMeeting"></dnd-master-meeting>
-			<dnd-master-note :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterNote"></dnd-master-note>
-			<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
+<div class="rs-page dnd-page master-screen" :class="getScreenClasses()" v-on:click.right.stop.prevent="checkToEditRecord($event)" ref="view" v-wheel="scrollWheel" v-pan.left.right.stop.prevent="panScreen">
+	<!-- <div class="screen-container" ref="container" :style="'left:' + (-1 * panLeft) + 'px;'" v-pan.left.right.stop.prevent="touchSlide"> -->
+	<div class="screen-container" ref="container">
+		<div class="screen-panel" ref="panel">
+			<div class="screen-column small">
+				<dnd-master-meeting :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterMeeting"></dnd-master-meeting>
+				<dnd-master-note :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterNote"></dnd-master-note>
+				<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
+			</div>
+			<div class="screen-column large entities">
+				<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" v-on:removeentity="removeEntity(entity)" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
+			</div>
+			<div class="screen-action-column">
+				<button class="bucket general quick rounded action" v-on:click="witnessLimit(5)"  v-on:click.right.stop.prevent="witnessLimit(-5)">
+					<span class="fas fa-dice"></span>
+					<span class="action-count">{{storage.witnessed_limit}}</span>
+				</button>
+				<button class="bucket general quick rounded action" v-for="bucket in activeEntities._keys" v-on:click="switchEntityBucket(bucket)" :class="bucketClass(bucket)" :title="bucket">
+					<span :class="bucketIcon[bucket] || 'fas fa-users'"></span>
+					<span class="action-count">{{activeEntities[bucket].length}}</span>
+				</button>
+			</div>
+			<div class="screen-column large" v-if="viewedEntity">
+				<dnd-entity-overview :entity="viewedEntity" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-container="storage" />
+			</div>
+			<div class="screen-action-column">
+				<dnd-chronicle-readout :player="player" :universe="universe" :configuration="configuration" :profile="profile" :storage="storage"></dnd-chronicle-readout>
+			</div>
 		</div>
-		<div class="screen-column large entities">
-			<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" v-on:removeentity="removeEntity(entity)" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
+		<div class="screen-panel" v-if="storage && storage.itemTable && storage.entityTable">
+			<div class="screen-data-column">
+				<rs-table :universe="universe" :source="universe.listing.item" :headings="itemHeadings" :formatter="formatter" :controls="itemControls" :storage-container="storage.itemTable" :profile="profile"/>
+			</div>
+			<div class="screen-data-column">
+				<rs-table :universe="universe" :source="universe.listing.entity" :headings="entityHeadings" :formatter="formatter" :controls="entityControls" :storage-container="storage.entityTable" :profile="profile"/>
+			</div>
 		</div>
-		<div class="screen-action-column">
-			<button class="bucket general quick rounded action" v-on:click="witnessLimit(5)"  v-on:click.right.stop.prevent="witnessLimit(-5)">
-				<span class="fas fa-dice"></span>
-				<span class="action-count">{{storage.witnessed_limit}}</span>
-			</button>
-			<button class="bucket general quick rounded action" v-for="bucket in activeEntities._keys" v-on:click="switchEntityBucket(bucket)" :class="bucketClass(bucket)" :title="bucket">
-				<span :class="bucketIcon[bucket] || 'fas fa-users'"></span>
-				<span class="action-count">{{activeEntities[bucket].length}}</span>
-			</button>
+		<div class="screen-panel" v-if="storage && storage.spellTable && storage.knowledgeTable">
+			<div class="screen-data-column">
+				<rs-table :universe="universe" :source="availableSpells" :headings="spellHeadings" :formatter="formatter" :controls="spellControls" :storage-container="storage.spellTable" :profile="profile"/>
+			</div>
+			<div class="screen-data-column">
+				<rs-table :universe="universe" :source="availableKnowledge" :headings="knowledgeHeadings" :formatter="formatter" :controls="knowledgeControls" :storage-container="storage.knowledgeTable" :profile="profile"/>
+			</div>
 		</div>
-		<div class="screen-column large" v-if="viewedEntity">
-			<dnd-entity-overview :entity="viewedEntity" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-container="storage" />
-		</div>
-		<div class="screen-action-column">
-			<dnd-chronicle-readout :player="player" :universe="universe" :configuration="configuration" :profile="profile" :storage="storage"></dnd-chronicle-readout>
-		</div>
-	</div>
-	<div class="screen-panel" v-if="storage && storage.itemTable && storage.entityTable">
-		<div class="screen-data-column">
-			<rs-table :universe="universe" :source="universe.listing.item" :headings="itemHeadings" :formatter="formatter" :controls="itemControls" :storage-container="storage.itemTable" :profile="profile"/>
-		</div>
-		<div class="screen-data-column">
-			<rs-table :universe="universe" :source="universe.listing.entity" :headings="entityHeadings" :formatter="formatter" :controls="entityControls" :storage-container="storage.entityTable" :profile="profile"/>
-		</div>
-	</div>
-	<div class="screen-panel" v-if="storage && storage.spellTable && storage.knowledgeTable">
-		<div class="screen-data-column">
-			<rs-table :universe="universe" :source="availableSpells" :headings="spellHeadings" :formatter="formatter" :controls="spellControls" :storage-container="storage.spellTable" :profile="profile"/>
-		</div>
-		<div class="screen-data-column">
-			<rs-table :universe="universe" :source="availableKnowledge" :headings="knowledgeHeadings" :formatter="formatter" :controls="knowledgeControls" :storage-container="storage.knowledgeTable" :profile="profile"/>
-		</div>
-	</div>
-	<div class="screen-panel" v-if="storage && storage.itemTable && storage.dynamicTable">
-		<div class="screen-data-column">
-			<rs-table :universe="universe" :source="dynamicCorpus" :headings="dynamicHeadings" :formatter="formatter" :controls="dynamicControls" :selections="dynamicSelections" :storage-container="storage.dynamicTable" :profile="profile"/>
+		<div class="screen-panel" v-if="storage && storage.itemTable && storage.dynamicTable">
+			<div class="screen-data-column">
+				<rs-table :universe="universe" :source="dynamicCorpus" :headings="dynamicHeadings" :formatter="formatter" :controls="dynamicControls" :selections="dynamicSelections" :storage-container="storage.dynamicTable" :profile="profile"/>
+			</div>
 		</div>
 	</div>
 </div>

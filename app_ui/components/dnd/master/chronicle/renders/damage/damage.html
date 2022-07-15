@@ -43,7 +43,7 @@
 						<span class="">{{damage.name}}</span>
 					</button>
 					<span v-if="occurred.data.damage && occurred.data.damage[damage.id]" class="">: {{occurred.data.damage[damage.id]}}</span>
-					<span v-if="occurred.data.resist_source && occurred.data.damage_source[damage.id]" class="">({{occurred.data.damage_source[damage.id]}})</span>
+					<span v-if="occurred.data.damage_source && occurred.data.damage_source[damage.id]" class="">({{occurred.data.damage_source[damage.id]}})</span>
 					<span v-if="occurred.data.resist && occurred.data.resist[damage.id]" class=""> - {{occurred.data.resist[damage.id]}}</span>
 					<span v-if="occurred.data.resist_source && occurred.data.resist_source[damage.id]" class="">({{occurred.data.resist_source[damage.id]}})</span>
 				</li>

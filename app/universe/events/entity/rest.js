@@ -98,19 +98,27 @@ module.exports.initialize = function(universe) {
 			/**
 			 * 
 			 * @event entity:rest:long
-			 * @for RSObject
+			 * @for Chronicle
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
 			entity.fireHandlers("entity:rest:long", {});
 			/**
 			 * 
-			 * @event entity:consciousness:gained
-			 * @for RSObject
+			 * @event entity:consciousness:lost
+			 * @for Chronicle
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:consciousness:gained", {});
+			entity.fireHandlers("entity:consciousness:lost", {});
+			/**
+			 * 
+			 * @event entity:consciousness:gain
+			 * @for Chronicle
+			 * @param {Number} time
+			 * @param {Number} date
+			 */
+			entity.fireHandlers("entity:consciousness:gain", {});
 		}
 	});
 
@@ -207,7 +215,7 @@ module.exports.initialize = function(universe) {
 			/**
 			 * 
 			 * @event entity:rest:short
-			 * @for RSObject
+			 * @for Chronicle
 			 * @param {Number} time
 			 * @param {Number} date
 			 */

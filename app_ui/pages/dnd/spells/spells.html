@@ -1,6 +1,6 @@
 <div class="rs-page dnd-page dnd-widget dnd-spells">
-	<div class="entity-spells flex h wrap" v-if="entity">
-		<rs-table :universe="universe" :source="known" :storage-container="storage" label="Spells" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
+	<div class="entity-spells flex h" v-if="entity">
+		<rs-table class="fitted" :universe="universe" :source="known" :storage-container="storage" label="Spells" :headings="headings" :additional-headers="additionalHeaders" :actions="actions" :formatter="formatter" :sorts="sorts" :controls="controls" v-on:selected="buildControls()" v-on:deselected="buildControls()"/>
 		<div class="detail-container">
 			<div class="flex v entity-spells-details">
 				<div class="entity-name">

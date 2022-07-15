@@ -89,7 +89,7 @@ module.exports.initialize = function(universe) {
 			entity.subValues({
 				"active_events": [activity]
 			});
-			universe.chronicle.updateOccurrence("entity:damaged", log, universe.time, log.source, entity.id);
+			universe.chronicle.updateOccurrence(log.id, log, "entity:damaged", universe.time, log.source, entity.id);
 			if(tracked && tracked.source && tracked.target) {
 				if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 					for(i=0; i<tracked.channel.instilled.length; i++) {
@@ -279,7 +279,7 @@ module.exports.initialize = function(universe) {
 		} else {
 			// No auto, just log to chronicle
 		}
-		universe.chronicle.updateOccurrence("entity:saved", log, universe.time, log.source, entity.id);
+		universe.chronicle.updateOccurrence(log.id, log, "entity:saved", universe.time, log.source, entity.id);
 		console.log("Finishing Save: ", log);
 	 };
 
@@ -298,7 +298,8 @@ module.exports.initialize = function(universe) {
 			return false;
 		}
 		var keys = Object.keys(damage),
-			was_damaged = false,	
+			conscious = 0 < entity.hp,
+			was_damaged = false,
 			received,
 			add = {},
 			temp_cap,
@@ -364,6 +365,11 @@ module.exports.initialize = function(universe) {
 				universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
 			} else {
 				console.log("Damage Handler Fire");
+				if(conscious && entity.hp === 0) {
+					entity.fireHandlers("entity:consciousness:lost", {});
+				} else if(!conscious && entity.hp !== 0) {
+					entity.fireHandlers("entity:consciousness:gain", {});
+				}
 				entity.fireHandlers("entity:damaged", {
 					"source": source,
 					"target": entity,
@@ -442,7 +448,7 @@ module.exports.initialize = function(universe) {
 			/**
 			 * Fired for the creature attacking
 			 * @event entity:attacking
-			 * @for RSObject
+			 * @for Chronicle
 			 * @param {String} [source] Of the attack. Null for direct or environmental like events
 			 * @param {String} target Being attacked
 			 * @param {String} [channel]
@@ -461,7 +467,7 @@ module.exports.initialize = function(universe) {
 			/**
 			 * Fired for the creature being attacked
 			 * @event entity:attacked
-			 * @for RSObject
+			 * @for Chronicle
 			 * @param {String} [source] Of the attack. Null for direct or environmental like events
 			 * @param {String} target Being attacked
 			 * @param {String} [channel]
@@ -472,14 +478,14 @@ module.exports.initialize = function(universe) {
 			target.fireHandlers("entity:attacked", {
 				"source": source.id,
 				"target": target.id,
-				"channel": channel.id,
+				"channel": channel?channel.id:null,
 				"damage": damage,
 				"time": time,
 				"date": date
 			});
 
 
-			universe.chronicle.addOccurrence("entity:damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
+			logged[activity].id = universe.chronicle.addOccurrence("entity:damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
 			sendDamage(activity, source, target, logged[activity].channel, damage, message);
 		}
 	};
@@ -653,7 +659,7 @@ module.exports.initialize = function(universe) {
 				"level": level
 			};
 
-			universe.chronicle.addOccurrence("entity:saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
+			logged[activity].id = universe.chronicle.addOccurrence("entity:saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
 			sendSave(activity, source, target, channel, skill, damage, message);
 		}
 	};

@@ -1,77 +1,79 @@
 <div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editNoun($event)" v-if="storage.selected">
 	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" v-on:download="exportCorpus()" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
-	<div class="table-container" v-if="storage">
-		<table class="table-element" :class="storage.classes">
-			<thead>
-				<tr>
-					<th v-for="header in headers">
-						<button class="title actionable table-content" v-on:click="headerAction(header)" :class="header.thClass" v-if="!hidden[header.id]">
-							<span class="sort fas" v-if="storage.key === header.id" :class="{'fa-sort-down':storage.order === 1, 'fa-sort-up':storage.order === -1}"></span>
-							<span class="sort fas fa-sort" v-if="(!header.attribute || !header.attribute.no_sort || sorts[header.id]) && storage.key !== header.id"></span>
-							<span>{{header.name}}</span>
-						</button>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-if="corpus.length === 0 && source.length">
-					<td class="notification" :colspan="headers.length">
-						<span class="fas fa-exclamation-triangle warning"></span>
-						<span>All Items Filtered Out</span>
-					</td>
-				</tr>
-				<tr v-else-if="corpus.length === 0 && source.length === 0">
-					<td class="notification" :colspan="headers.length">
-						<span class="fas fa-exclamation-triangle warning"></span>
-						<span>No Items Available</span>
-					</td>
-				</tr>
-				<tr v-for="record in corpus" :key="record.id" :class="(!record.child_parent && storage.selected[record.id]) || (record.child_parent && storage.selected[record.child_parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id" v-linkable="record.id">
-					<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.child_parent" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
-						<!-- TODO: Field attribute Checks -->
-						<div v-if="!header.noCross" class="crosshair"></div>
-						<div v-if="!header.noHighlight && storage.selected[record.id] && i === 0" class="highlight starting"></div>
-						<div v-if="!header.noHighlight && storage.selected[record.id] && i === headers.length - 1" class="highlight ending"></div>
-						<button class="table-content">
-							<slot name="table-content" :header="header" :record="record">
-								<div class="contents" :class="header.id?header.id:''" v-if="formatter[header.id]">
-									<div v-html="formatter[header.id](record[header.id], record, header)"></div>
-								</div>
-								<div class="contents markdown" :class="header.id?header.id:''" v-else-if="header.type === 'markdown'">
-									<div v-html="rsshowdown(record[header.id] || '', record, false)"></div>
-								</div>
-								<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'array'">
-									<ul>
-										<li v-for="item in record[header.id]">{{getValue(header, item.name || item)}}</li>
-									</ul>
-								</div>
-								<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'object' || header.type === 'object:dice' || header.type === 'object:calculated'">
-									<div v-html="formatObjectHeader(record[header.id])">
+	<div class="table-scroll-container">
+		<div class="table-container" v-if="storage">
+			<table class="table-element" :class="storage.classes">
+				<thead>
+					<tr>
+						<th v-for="header in headers">
+							<button class="title actionable table-content" v-on:click="headerAction(header)" :class="header.thClass" v-if="!hidden[header.id]">
+								<span class="sort fas" v-if="storage.key === header.id" :class="{'fa-sort-down':storage.order === 1, 'fa-sort-up':storage.order === -1}"></span>
+								<span class="sort fas fa-sort" v-if="(!header.attribute || !header.attribute.no_sort || sorts[header.id]) && storage.key !== header.id"></span>
+								<span>{{header.name}}</span>
+							</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-if="corpus.length === 0 && source.length">
+						<td class="notification" :colspan="headers.length">
+							<span class="fas fa-exclamation-triangle warning"></span>
+							<span>All Items Filtered Out</span>
+						</td>
+					</tr>
+					<tr v-else-if="corpus.length === 0 && source.length === 0">
+						<td class="notification" :colspan="headers.length">
+							<span class="fas fa-exclamation-triangle warning"></span>
+							<span>No Items Available</span>
+						</td>
+					</tr>
+					<tr v-for="record in corpus" :key="record.id" :class="(!record.child_parent && storage.selected[record.id]) || (record.child_parent && storage.selected[record.child_parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id" v-linkable="record.id">
+						<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.child_parent" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
+							<!-- TODO: Field attribute Checks -->
+							<div v-if="!header.noCross" class="crosshair"></div>
+							<div v-if="!header.noHighlight && storage.selected[record.id] && i === 0" class="highlight starting"></div>
+							<div v-if="!header.noHighlight && storage.selected[record.id] && i === headers.length - 1" class="highlight ending"></div>
+							<button class="table-content">
+								<slot name="table-content" :header="header" :record="record">
+									<div class="contents" :class="header.id?header.id:''" v-if="formatter[header.id]">
+										<div v-html="formatter[header.id](record[header.id], record, header)"></div>
 									</div>
-								</div>
-								<div class="contents" :class="header.id?header.id:''" v-else-if="record[header.id]">
-									{{getValue(header, record[header.id])}}
-								</div>
-								<div class="contents" :class="header.id?header.id:''" v-else>
-									<span> </span>
-								</div>
-							</slot>
-						</button>
-					</td>
-					<td v-if="record.child_parent"></td>
-					<td v-if="record.child_parent" :colspan="headers.length - 1" class="table-record child-record">
-						<div v-if="storage.selected[record.child_parent] >= record.select" class="highlight starting"></div>
-						<div v-if="storage.selected[record.child_parent] >= record.select" class="highlight ending"></div>
-						<button class="child table-content" v-on:click="selectChild(record)">
-							<span>{{record.name}}</span>
-						</button>
-					</td>
-					<td v-if="!record.child_parent && idCount[record.id] && idCount[record.id] > 1">
-						<span>x {{idCount[record.id]}}</span>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+									<div class="contents markdown" :class="header.id?header.id:''" v-else-if="header.type === 'markdown'">
+										<div v-html="rsshowdown(record[header.id] || '', record, false)"></div>
+									</div>
+									<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'array'">
+										<ul>
+											<li v-for="item in record[header.id]">{{getValue(header, item.name || item)}}</li>
+										</ul>
+									</div>
+									<div class="contents" :class="header.id?header.id:''" v-else-if="header.type === 'object' || header.type === 'object:dice' || header.type === 'object:calculated'">
+										<div v-html="formatObjectHeader(record[header.id])">
+										</div>
+									</div>
+									<div class="contents" :class="header.id?header.id:''" v-else-if="record[header.id]">
+										{{getValue(header, record[header.id])}}
+									</div>
+									<div class="contents" :class="header.id?header.id:''" v-else>
+										<span> </span>
+									</div>
+								</slot>
+							</button>
+						</td>
+						<td v-if="record.child_parent"></td>
+						<td v-if="record.child_parent" :colspan="headers.length - 1" class="table-record child-record">
+							<div v-if="storage.selected[record.child_parent] >= record.select" class="highlight starting"></div>
+							<div v-if="storage.selected[record.child_parent] >= record.select" class="highlight ending"></div>
+							<button class="child table-content" v-on:click="selectChild(record)">
+								<span>{{record.name}}</span>
+							</button>
+						</td>
+						<td v-if="!record.child_parent && idCount[record.id] && idCount[record.id] > 1">
+							<span>x {{idCount[record.id]}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<component class="table-paging" :is="paging" :storage="storage" :source="source" :filtered="filtered" :corpus="corpus" :last-page="lastPage" v-on:info="info($event)"/>
 	<div class="dlanchors"></div>

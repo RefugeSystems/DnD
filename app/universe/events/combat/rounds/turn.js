@@ -133,7 +133,7 @@ module.exports.initialize = function(universe) {
 				/**
 				 * 
 				 * @event entity:combat:turn:end
-				 * @for RSObject
+				 * @for Chronicle
 				 * @param {String} skirmish
 				 * @param {Number} time
 				 * @param {Number} date
@@ -183,7 +183,7 @@ module.exports.initialize = function(universe) {
 			/**
 			 * 
 			 * @event entity:combat:turn:end
-			 * @for RSObject
+			 * @for Chronicle
 			 * @param {String} skirmish
 			 * @param {Number} time
 			 * @param {Number} date
@@ -240,7 +240,7 @@ module.exports.initialize = function(universe) {
 						"hideFormula": true,
 						"hideHistory": true,
 						"closeAfterCheck": true
-					});
+					}, 15000);
 				}
 			}
 		}
@@ -259,18 +259,18 @@ module.exports.initialize = function(universe) {
 			universe.warnMasters("Need initiative roll for " + up.name, {
 				"skill": "skill:initiative",
 				"entity": up.id
-			});
-			universe.messagePlayers(up.owned, "Roll Initiative for " + up.name + " to end your turn", "fa-solid fa-dice", {
-				// ToMay: Add flags to sync back?
-				"type": "dialog-open",
-				"component": "dndDialogCheck",
-				"storageKey": "store:roll:" + up.id,
-				"entity": up.id,
-				"skill": "skill:initiative",
-				"hideFormula": true,
-				"hideHistory": true,
-				"closeAfterCheck": true
-			});
+			}, 5000);
+			// universe.messagePlayers(up.owned, "Roll Initiative for " + up.name + " to end your turn", "fa-solid fa-dice", {
+			// 	// ToMay: Add flags to sync back?
+			// 	"type": "dialog-open",
+			// 	"component": "dndDialogCheck",
+			// 	"storageKey": "store:roll:" + up.id,
+			// 	"entity": up.id,
+			// 	"skill": "skill:initiative",
+			// 	"hideFormula": true,
+			// 	"hideHistory": true,
+			// 	"closeAfterCheck": true
+			// });
 		} else if(entities.length) {
 			entities.sort(sortByInitiative);
 			if(skirmish.combat_turn) {
@@ -301,7 +301,7 @@ module.exports.initialize = function(universe) {
 					/**
 					 * 
 					 * @event entity:combat:round:start
-					 * @for RSObject
+					 * @for Chronicle
 					 * @param {String} skirmish
 					 * @param {Number} time
 					 * @param {Number} date
@@ -329,16 +329,18 @@ module.exports.initialize = function(universe) {
 				"skirmish": skirmish.id,
 				"turn": entity.id
 			});
-			universe.emit("send", {
-				"type": "audio:queue",
-				"audio": "audio:combat:turn",
-				"control": "audio:play",
-				"recipients": entity.played_by?entity.owned:null
-			});
+			if(!entity.is_minion && !entity.is_npc) {
+				universe.emit("send", {
+					"type": "audio:queue",
+					"audio": "audio:combat:turn",
+					"control": "audio:play",
+					"recipients": entity.played_by?entity.owned:null
+				});
+			}
 			/**
 			 * 
 			 * @event entity:combat:turn:start
-			 * @for RSObject
+			 * @for Chronicle
 			 * @param {String} skirmish
 			 * @param {Number} time
 			 * @param {Number} date
@@ -353,12 +355,12 @@ module.exports.initialize = function(universe) {
 			});
 
 			if(entity.owned && Object.keys(entity.owned).length) {
-				universe.messagePlayers(entity.owned, "It is \"" + entity.name + "\"'s turn in combat");
+				universe.messagePlayers(entity.owned, "It is \"" + entity.name + "\"'s turn in combat", null, null, 5000);
 			}
 			
 			entity = entities[(next + 1)%entities.length];
 			if(entity.owned && Object.keys(entity.owned).length) {
-				universe.messagePlayers(entity.owned, "\"" + entity.name + "\" is on deck for combat");
+				universe.messagePlayers(entity.owned, "\"" + entity.name + "\" is on deck for combat", null, null, 5000);
 			}
 		} else {
 			// TODO: Improve handling/feedback

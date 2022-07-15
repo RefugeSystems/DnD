@@ -1,6 +1,7 @@
 /**
  * 
  * @class RSSWXServiceWorker
+ * @deprecated
  * @constructor
  * @see https://github.com/GoogleChromeLabs/airhorn/blob/master/app/sw.js
  */

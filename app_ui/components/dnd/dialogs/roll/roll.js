@@ -326,7 +326,7 @@ rsSystem.component("dndDialogRoll", {
 		if(!this.storage.rolls) {
 			this.storage.rolls = [];
 		}
-		if(this.skills.length === 1) {
+		if(this.skills.length === 1 && this.skills[0].skill) {
 			var find = $(this.$el).find("#" + this.skills[0].skill.id.substring(7));
 			if(find && find.length) {
 				find[0].focus();
@@ -561,8 +561,49 @@ rsSystem.component("dndDialogRoll", {
 		 * Determine what dice are involved and roll the missing dice.
 		 * @method fillRoll
 		 */
-		"fillRoll": function() {
-			
+		"fillRoll": function(roll) {
+			var formula = roll.formula,
+				calculated,
+				percent,
+				result,
+				dice,
+				die,
+				i,
+				r;
+
+			if(formula) {
+				if(roll.dice_rolls) {
+					for(die in roll.dice_rolls) {
+						roll.dice_rolls[die].splice(0);
+					}
+				} else {
+					Vue.set(roll, "dice_rolls", {});
+				}
+				dice = rsSystem.dnd.parseDiceRoll(rsSystem.dnd.reducedDiceRoll(formula));
+				result = 0;
+				for(die in dice) {
+					calculated = rsSystem.dnd.compute(dice[die], this.entity);
+					if(die[0] === "d" && typeof(calculated) === "number") {
+						if(!roll.dice_rolls[die]) {
+							Vue.set(roll.dice_rolls, die, []);
+						}
+						for(i=0; i<calculated; i++) {
+							r = Random.integer(this.range[die], 1);
+							roll.dice_rolls[die].push(r);
+							result += r;
+						}
+					} else if(die[0] === "%") {
+						percent = calculated;
+					} else {
+						result += calculated;
+					}
+				}
+				if(percent) {
+					result = result * (percent/100);
+				}
+
+				Vue.set(roll, "computed", result);
+			}
 		},
 		"autoRoll": function() {
 			var roll,
@@ -617,12 +658,14 @@ rsSystem.component("dndDialogRoll", {
 			if(this.skills.length === 1) {
 				var advantage = 0;
 				this.skills[0].roll();
-				if(this.entity.skill_advantage && this.entity.skill_advantage[this.skills[0].skill.id] && this.entity.skill_advantage[this.skills[0].skill.id] !== "0") {
-					advantage += parseInt(this.entity.skill_advantage[this.skills[0].skill.id]) || 1;
-				}
-				// Disadvantage is deprecated but the idea applies the same
-				if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[this.skills[0].skill.id] && this.entity.skill_disadvantage[this.skills[0].skill.id] !== "0") {
-					advantage -= parseInt(this.entity.skill_disadvantage[this.skills[0].skill.id]) || 1;
+				if(this.skills[0].skill) {
+					if(this.entity.skill_advantage && this.entity.skill_advantage[this.skills[0].skill.id] && this.entity.skill_advantage[this.skills[0].skill.id] !== "0") {
+						advantage += parseInt(this.entity.skill_advantage[this.skills[0].skill.id]) || 1;
+					}
+					// Disadvantage is deprecated but the idea applies the same
+					if(this.entity.skill_disadvantage && this.entity.skill_disadvantage[this.skills[0].skill.id] && this.entity.skill_disadvantage[this.skills[0].skill.id] !== "0") {
+						advantage -= parseInt(this.entity.skill_disadvantage[this.skills[0].skill.id]) || 1;
+					}
 				}
 				// console.log("Advantage: ", advantage, this.entity.skill_advantage);
 				if(advantage < 0) {

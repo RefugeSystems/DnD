@@ -100,6 +100,7 @@ module.exports.initialize = function(universe) {
 			
 			/**
 			 * @event item:used
+			 * @for Chronicle
 			 * @param {String} item
 			 * @param {String} consume
 			 * @param {Array | String} yields

@@ -68,6 +68,7 @@ module.exports.initialize = function(universe) {
 								"recipients": notify,
 								"message": entity.name + " is over-equipped in some slots: " + warnings.join(", "),
 								"data": event.message.data,
+								"timeout": 15000,
 								"anchored": true
 							});
 						}
@@ -287,6 +288,7 @@ module.exports.initialize = function(universe) {
 						"recipients": notify,
 						"message": entity.name + " can not equip " + item.name + " to their main hand unless they have that item equipped",
 						"data": event.message.data,
+						"timeout": 7000,
 						"anchored": true
 					});
 				} else {
@@ -300,6 +302,7 @@ module.exports.initialize = function(universe) {
 						"recipients": notify,
 						"message": item?entity.name + " equip " + item.name + " to their main hand":"Main hand unequipped",
 						"data": event.message.data,
+						"timeout": 7000,
 						"anchored": true
 					});
 					/**

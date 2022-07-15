@@ -12,6 +12,9 @@ rsSystem.dragndrop.general = (function() {
 	build.drop = function() {
 		var data = dragging;
 		dragging = null;
+		if(typeof(data) === "function") {
+			data = data();
+		}
 		return data;
 	};
 	

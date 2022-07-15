@@ -287,6 +287,17 @@ rsSystem.component("DNDEntities", {
 		}
 	},
 	"methods": {
+		"scrollWheel": function(event) {
+			if(event.path[0] == this.$refs.view) {
+				var offset = this.$refs.view.scrollLeft,
+					width = 60,
+					direction = event.deltaY > 0?1:-1,
+					add = direction * width;
+				offset -= offset%width;
+				offset += add;
+				this.$refs.view.scrollLeft = offset;
+			}
+		},
 		"processDrop": function(event) {
 			var data = rsSystem.dragndrop.general.drop();
 			if(data && (data = this.universe.getObject(data))) {

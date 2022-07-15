@@ -1,4 +1,4 @@
-<div class="rs-page dnd-page dnd-entities">
+<div class="rs-page dnd-page dnd-entities" ref="view" v-wheel="scrollWheel">
 	<div class="column" v-if="!profile.lock_character">
 		<div class="column-content" v-if="!main || main.state === 'deceased'">
 			<button v-on:click="createPlayer()" class="general create">

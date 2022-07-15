@@ -269,6 +269,10 @@ rsSystem.component("DNDMasterScreen", {
 			data.tracking.player[this.universe.listing.player[i].id] = this.universe.listing.player[i].connections || 0;
 		}
 
+		data.panLeft = 0;
+		data.levelingScrollLast = null;
+		data.levelingScrollTo = null;
+		data.levelingScroll = null;
 		data.rolled = {};
 
 		data.bucketIcon = {
@@ -571,6 +575,7 @@ rsSystem.component("DNDMasterScreen", {
 			return "<span class=\"" + classes + (value || "") + "\"></span>";
 		};
 
+		data.printEvent = null;
 		return data;
 	},
 	"mounted": function() {
@@ -621,6 +626,144 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"methods": {
+		"getScreenClasses": function() {
+			if(rsSystem.device.touch) {
+				// return "touch";
+			}
+			return "";
+		},
+		"scrollWheel": function(event) {
+			if(event.path[0] == this.$refs.view) {
+				event.stopPropagation();
+				event.preventDefault();
+				var offset = this.$refs.view.scrollLeft,
+					width = this.$refs.panel.clientWidth,
+					direction = event.deltaY > 0?1:-1,
+					add = direction * width;
+				offset -= offset%width;
+				offset += add;
+				this.$refs.view.scrollLeft = offset;
+			}
+		},
+		"panScreen": function(event) {
+			var width = this.$refs.panel.clientWidth,
+				view = this.$refs.view.scrollWidth,
+				half = width/2,
+				direction,
+				offset;
+
+			if(rsSystem.device.touch) {
+				// if(!event || event.isFinal) {
+				// 	direction = event.additionalEvent === "panleft"?1:-1;
+				// 	offset = this.panLeft;
+				// 	console.log(event?"Event - " + event.additionalEvent + "[" + view + "]: " + direction + "[" + event.deltaX + "," + event.deltaY + "] @" + width + " > " + offset:"None", event);
+				// 	// if(this.levelingScroll) {
+				// 	// 	clearTimeout(this.levelingScroll);
+				// 	// }
+				// 	// if(event.isFinal) {
+				// 	// 	this.levelingScroll = setTimeout(() => {
+				// 	// 		this.alignOnStop();
+				// 	// 	}, 500);
+				// 	// }
+
+				// 	offset += direction * width;
+				// 	if(offset < 0) {
+				// 		console.log(" > Min: " + offset);
+				// 		offset = 0;
+				// 	}
+				// 	if(offset + width > view) {
+				// 		console.log(" > Max: " + offset, view);
+				// 		offset = view - width;
+				// 	}
+				// 	offset += offset%width;
+				// 	console.log(" > Yield: " + offset);
+				// 	Vue.set(this, "panLeft", offset);
+				// }
+			} else {
+				offset = this.$refs.view.scrollLeft;
+				if(!event || event.isFinal) {
+					this.levelingScrollLast = null;
+					offset -= ((offset + half)%width) - half;
+					this.$refs.view.scrollLeft = offset;
+				}
+			}
+
+		},
+		"touchSlide": function(event) {
+			var width = this.$refs.panel.clientWidth,
+				view = this.$refs.view.scrollWidth,
+				half = width/2,
+				direction,
+				offset;
+
+			if(rsSystem.device.touch && event.isFinal) {
+				direction = event.additionalEvent === "panleft"?1:(event.additionalEvent === "panright"?-1:0);
+				offset = this.panLeft;
+				// console.log(event?"Event - " + event.additionalEvent + "[" + view + "]: " + direction + "[" + event.deltaX + "," + event.deltaY + "] @" + width + " > " + offset:"None", event);
+				console.log("Event(" + event.additionalEvent + "): " + event.center.x + ", " + event.center.y + "[" + event.deltaX + "," + event.deltaY + "] " + width + " > " + offset + "\n > Angle: " + event.angle + "\n> Direction: " + direction + " | Event: " + event.direction + ", Event OD: " + event.offsetDirection, event.center);
+				if(this.printEvent) {
+					console.log(" > ", event);
+				}
+				// if(this.levelingScroll) {
+				// 	clearTimeout(this.levelingScroll);
+				// }
+				// if(event.isFinal) {
+				// 	this.levelingScroll = setTimeout(() => {
+				// 		this.alignOnStop();
+				// 	}, 500);
+				// }
+
+				offset += direction * width;
+				if(offset < 0) {
+					console.log(" > Min: " + offset);
+					offset = 0;
+				}
+				if(direction === 1 && view/width < 2) {
+					console.log(" > Max: " + offset, view);
+				} else {
+					offset -= offset%width;
+					console.log(" > Yield: " + offset);
+					Vue.set(this, "panLeft", offset);
+				}
+			}
+		},
+		"alignOnStop": function() {
+			if(this.$refs.view.scrollLeft === 0 || this.$refs.view.scrollLeft + this.$refs.view.clientWidth === this.$refs.view.scrollWidth) {
+				this.levelingScrollLast = null;
+			} else if(!this.levelingScrollLast || this.levelingScrollLast !== this.$refs.view.scrollLeft) {
+				this.levelingScrollLast = this.$refs.view.scrollLeft;
+				setTimeout(this.alignOnStop, 100);
+			} else {
+				this.levelingScrollLast = null;
+				var offset = this.$refs.view.scrollLeft,
+					width = this.$refs.panel.clientWidth,
+					half = width/2;
+				offset -= ((offset + half)%width) - half;
+				this.$refs.view.scrollLeft = offset;
+			}
+		},
+		"scrollLevel": function() {
+			if(this.levelingScrollTo === null) {
+				if(this.levelingScroll) {
+					clearTimeout(this.levelingScroll);
+				}
+				setTimeout(() => {
+					this.scrollLevelFinish();
+				}, 500);
+			} else if(this.$refs.view.scrollLeft === this.levelingScrollTo) {
+				console.warn("Scroll event cleared - " + this.$refs.view.scrollLeft + " | " + this.levelingScrollTo);
+				this.levelingScrollTo = null;
+			} else {
+				console.warn("Scroll event ignored - " + this.$refs.view.scrollLeft + " | " + this.levelingScrollTo);
+			}
+		},
+		"scrollLevelFinish": function() {
+			var offset = this.$refs.view.scrollLeft,
+				width = this.$refs.panel.clientWidth;
+			this.levelingScrollTo = offset - (offset + width)%width;
+			this.$refs.view.scrollLeft = this.levelingScrollTo;
+			this.levelingScroll = null;
+		},
 		"createCharacter": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndCreateCharacterDialog",

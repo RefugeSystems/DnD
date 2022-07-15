@@ -17,7 +17,7 @@
 		</div> -->
 	</div>
 	<div class="weapons" v-if="storage.is_open">
-		<div class="weapon slot">Main Hand</div>
+		<div class="weapon slot" v-if="mainhand">Main Hand</div>
 		<div class="weapon main flex h v-center" v-if="mainhand" v-linkable="mainhand.id" :title="mainhand.name">
 			<button class="quick rounded general action" v-on:click="open(mainhand)" v-on:click.right.prevent.stop="attack(mainhand)">
 				<span class="action-icon" :class="mainhand.icon"></span>

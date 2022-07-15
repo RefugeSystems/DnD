@@ -88,6 +88,14 @@ rsSystem.component("sysInfoGeneral", {
 				if(!this.info.is_preview && this.info._class) {
 					if(this.player) {
 						if(this.player.gm) {
+							if(object._class === "player") {
+								this.controls.push({
+									"title": "View Player Dashboard",
+									"icon": "fa-solid fa-table-columns",
+									"type": "button",
+									"action": "player-overview"
+								});
+							}
 							if(this.info.obscured) {
 								this.controls.push({
 									"title": "Unobscure object",
@@ -784,6 +792,9 @@ rsSystem.component("sysInfoGeneral", {
 						"entity": entity,
 						"channel": object
 					});
+					break;
+				case "player-overview":
+					rsSystem.toPath("/overview/" + object.id);
 					break;
 				case "inventory":
 					rsSystem.toPath("/inventory/" + object.id);

@@ -49,6 +49,17 @@
 			}
 		},
 		"computed": {
+			"attackIcon": function() {
+				var loading;
+				if(this.entity) {
+					if((loading = this.universe.getObject(this.entity.main_weapon)) && loading.icon) {
+						return loading.icon;
+					} else if(this.entity.spells.length) {
+						return "game-icon game-icon-magic-swirl";
+					}
+				}
+				return "game-icon game-icon-punch";
+			},
 			"isVisible": function() {
 				var skirmish,
 					i;

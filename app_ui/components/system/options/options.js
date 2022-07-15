@@ -120,6 +120,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "encounter_ignore_type",
+					"label": "Ignore Encounter Type Changes",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "screen_wake",
 					"label": "Lock Screen Awake",
 					"base": this.profile,

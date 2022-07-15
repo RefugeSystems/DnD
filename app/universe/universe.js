@@ -1340,15 +1340,17 @@ class Universe extends EventEmitter {
 	 * @param {String} message Text
 	 * @param {String} icon Text
 	 * @param {Object} emission Event for UI
+	 * @param {Number} timeout
 	 */
-	messagePlayers(players, message, icon, emission) {
+	messagePlayers(players, message, icon, emission, timeout) {
 		this.emit("send", {
 			"type": "notice",
 			"recipients": players,
 			"message": message,
 			"icon": icon,
 			"anchored": true,
-			"emission": emission
+			"emission": emission,
+			"timeout": timeout
 		});
 	}
 
@@ -1374,14 +1376,15 @@ class Universe extends EventEmitter {
 	 * @param {String} message 
 	 * @param {Object} [data] 
 	 */
-	warnMasters(message, data) {
+	warnMasters(message, data, timeout) {
 		this.emit("send", {
 			"type": "notice",
 			"icon": "fas fa-exclamation-triangle rs-lightred",
 			"recipients": this.getMasters(),
 			"message": message,
 			"data": data,
-			"anchored": true
+			"anchored": true,
+			"timeout": timeout
 		});
 	}
 

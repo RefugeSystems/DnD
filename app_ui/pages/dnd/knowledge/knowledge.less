@@ -64,14 +64,18 @@
 				flex-shrink: 0;
 			}
 
-			.table-container {
+			.table-scroll-container {
 				width: 100%;
 				z-index: 3;
 				flex-grow: 5;
 				overflow: auto;
 
-				table {
+				.table-container {
 					width: 100%;
+					
+					table {
+						width: 100%;
+					}
 				}
 			}
 
