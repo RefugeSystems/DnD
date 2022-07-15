@@ -516,7 +516,8 @@ rsSystem.component("dndDialogDamage", {
 		},
 		"finishSection": function(section) {
 			// TODO: Validate Current
-			var additives,
+			var channel = this.channel,
+				additives,
 				additive,
 				damages,
 				targets,
