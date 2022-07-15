@@ -48,10 +48,11 @@ rsSystem.audio = rsSystem.audio || {};
 			console.log("Play Audio? ", event);
 			if(event && event.data) {
 				var audio = universe.index.audio[event.data.audio],
+					volume = event.volume,
 					delay = event.data.delay;
 				switch(event.control) {
 					case "audio:play":
-						rsSystem.audio.play(audio, delay);
+						rsSystem.audio.play(audio, volume, delay);
 						break;
 					case "audio:stop":
 						rsSystem.audio.stop(audio, delay);
@@ -68,10 +69,11 @@ rsSystem.audio = rsSystem.audio || {};
 			console.log("Queue Audio? ", event);
 			if(event && event.audio) {
 				var audio = universe.index.audio[event.audio],
+					volume = event.volume,
 					delay = event.delay || 0;
 				switch(event.control) {
 					case "audio:play":
-						rsSystem.audio.play(audio, delay);
+						rsSystem.audio.play(audio, volume, delay);
 						break;
 					case "audio:stop":
 						rsSystem.audio.stop(audio, delay);
@@ -128,7 +130,7 @@ rsSystem.audio = rsSystem.audio || {};
 	 * @param {RSAudio} object
 	 * @param {Integer} [delay]
 	 */
-	rsSystem.audio.play = function(object, delay) {
+	rsSystem.audio.play = function(object, volume, delay) {
 		var audio,
 			play,
 			id;
@@ -151,6 +153,9 @@ rsSystem.audio = rsSystem.audio || {};
 							audio._retried = 0;
 							if(object.is_looped) {
 								audio.loop = true;
+							}
+							if(volume || object.volume) {
+								audio.volume = volume || object.volume/100;
 							}
 							// rsSystem.log.warn("Playing Audio: " + id);
 							// audio.currentTime = 0;
@@ -200,6 +205,9 @@ rsSystem.audio = rsSystem.audio || {};
 						});
 					}
 				} else {
+					if(volume || object.volume) {
+						audio.volume = volume || object.volume/100;
+					}
 					// rsSystem.log.warn("Found Audio: " + id);
 					if(audio.readyState === 4) {
 						audio.currentTime = 0;
