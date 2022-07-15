@@ -538,7 +538,7 @@ rsSystem.component("dndDialogDamage", {
 						for(a=0; a<additives.length; a++) {
 							additive = this.adding[additives[a]];
 							// Checks that the additive applies are handled in the channel selection
-							if(!additive.damage_bonus_type_lock || channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]) {
+							if(!additive.damage_bonus_type_lock || (channel && (channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]))) {
 								if(this.channel.damage_type && additive.damage_bonus_weapon) {
 									type = this.universe.index.damage_type[this.channel.damage_type];
 									if(type) {
