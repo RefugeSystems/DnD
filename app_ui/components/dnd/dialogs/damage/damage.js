@@ -881,7 +881,8 @@ rsSystem.component("dndDialogDamage", {
 			return classes;
 		},
 		"buildAdditives": function() {
-			var always = 0,
+			var channel = this.channel,
+				always = 0,
 				additive,
 				keys,
 				i;
@@ -896,11 +897,13 @@ rsSystem.component("dndDialogDamage", {
 			for(i=0; i<this.available_additives.length; i++) {
 				additive = this.available_additives[i];
 				if(additive.additive_attack || (!additive.additive_attack_melee && !additive.additive_attack_range && !additive.additive_attack_spell) || (this.channel && ((additive.additive_attack_spell && this.channel._class === "spell") || (additive.additive_attack_melee && this.channel.melee) || (additive.additive_attack_range && this.channel.ranged)))) {
-					if(!additive.additive_attack_charged || additive.charges > 0) {
-						this.additives.push(additive);
-						if(additive.additive_attack_always) {
-							this.adding[additive.id] = additive;
-							always++;
+					if(!additive.damage_bonus_type_lock || (channel && (channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]))) {
+						if(!additive.additive_attack_charged || additive.charges > 0) {
+							this.additives.push(additive);
+							if(additive.additive_attack_always) {
+								this.adding[additive.id] = additive;
+								always++;
+							}
 						}
 					}
 				}
