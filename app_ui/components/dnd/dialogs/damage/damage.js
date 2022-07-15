@@ -552,7 +552,7 @@ rsSystem.component("dndDialogDamage", {
 									console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
 								}
 							}
-							if(additive.damage_bonus_spell) {
+							if(additive.damage_bonus_spell && (!additive.damage_bonus_type_lock || channel.damage_type === additive.damage_bonus_type_lock)) {
 								damages = Object.keys(additive.damage_bonus_spell);
 								for(i=0; i<damages.length; i++) {
 									damage = damages[i];
@@ -940,7 +940,8 @@ rsSystem.component("dndDialogDamage", {
 
 			// Build New Rolls objects for damage
 			if(channel && ((channel.skill_damage && rsSystem.utility.isNotEmpty(channel.skill_damage)) || (channel.damage && rsSystem.utility.isNotEmpty(channel.damage)))) {
-				map = channel._formula || {};
+				// map = channel._formula || {};
+				map = channel; // Formula does not update and any applicable replacements should have been completed by the server already
 				if(map.skill_damage && rsSystem.utility.isNotEmpty(map.skill_damage)) {
 					map = map.skill_damage;
 				} else if(map.damage && rsSystem.utility.isNotEmpty(map.damage)) {
