@@ -14,6 +14,9 @@
 			<span v-if="fieldData.type === 'boolean'" :class="getValueClass()"></span>
 			<span v-else class="text">{{getValue()}}</span>
 		</div>
+		<div class="value flat">
+			<span class="value flat">{{getCellCount()}}</span>
+		</div>
 		<button class="flat action fas fa-info-circle display-info rs-blue" v-if="fieldData.inheritable && fieldData.type === 'string'" v-on:click="info(object[field])" v-linkable="object[field]"></button>
 		<button class="flat action fas rs-chevron-circle-down" :class="valuesContainerClass()" v-if="canToggleField" v-on:click="toggleField()"></button>
 		<button class="flat action fad rs-purple" :class="viewInvolved?'fa-layer-minus':'fa-layer-plus'" v-if="hasInvolved()" v-on:click="toggleInvolved()"></button>

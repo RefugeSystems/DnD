@@ -73,7 +73,7 @@ rsSystem.component("DNDMasterSoundboard", {
 						categories[audio.category] = [];
 					}
 					categories[audio.category].push(audio);
-				}
+				} 
 			}
 
 			return categories;

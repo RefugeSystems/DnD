@@ -1,0 +1,84 @@
+.dnd-component.entity-broad {
+
+
+	.character-data {
+		flex-grow: 10;
+		padding: 7px;
+		
+		.action {
+			font-size: 18px;
+			padding: 4px 9px;
+		}
+
+		.raw-data {
+			font-size: 16px;
+			padding: 4px 6px 4px 20px;
+		}
+	}
+
+	.character-stats {
+		flex-shrink: 0;
+	}
+
+	.broad-column {
+		font-size: 14px;
+	}
+
+	.property-container {
+		.embolden {
+			padding-left: 3px;
+			padding-right: 3px;
+		}
+	}
+
+	.emphasis-stat {
+		position: relative;
+		height: 50px;
+		width: 100px;
+		border: 1px solid @rsWhite;
+		border-radius: 8px;
+		text-align: center;
+		background-color: @rsBlack;
+		color: @rsWhite;
+		margin: 14px 7px;
+
+		&:hover {
+			background-color: @rsWhite;
+			color: @rsBlack;
+		}
+
+		.stat-label {
+			position: absolute;
+			top: -8px;
+			left: ~"calc( (100% - 70px) / 2 )";
+			height: 15px;
+			width: 70px;
+			background-color: inherit;
+			background-color: @rsBlack;
+			color: @rsWhite;
+			font-size: 12px;
+			border-width: inherit;
+			border-style: inherit;
+			border-radius: 5px;
+		}
+
+		.stat-value {
+			font-size: 20px;
+		}
+
+		.stat-foot {
+			position: absolute;
+			bottom: -8px;
+			left: 30px;
+			height: 15px;
+			width: 40px;
+			background-color: inherit;
+			background-color: @rsBlack;
+			color: @rsWhite;
+			font-size: 13px;
+			border-width: inherit;
+			border-style: inherit;
+			border-radius: 5px;
+		}
+	}
+}

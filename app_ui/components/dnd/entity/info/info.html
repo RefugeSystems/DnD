@@ -1,7 +1,7 @@
 <div class="rs-component dnd-component entity-info flex v">
 	<div class="property-container health" v-if="!widget.attribute.hide_health">
 		<button class="property" v-on:click="takeDamage()">
-			<span class="icon fas fa-heartbeat"></span>
+			<span class="icon fad fa-heartbeat rs-green rs-secondary-solid rs-secondary-white"></span>
 			<span class="flex h">
 				<span class="flex h" v-if="entity.hp_temp">
 					<span class="rs-light-blue">{{entity.hp_temp}}</span>

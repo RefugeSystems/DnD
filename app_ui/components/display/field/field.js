@@ -107,7 +107,6 @@ rsSystem.component("rsDisplayField", {
 		data.viewFormula = false;
 		data.detailInvolved = {};
 		data.viewFormulaKey = {};
-
 		data.objectKeys = [];
 
 		return data;
@@ -183,6 +182,13 @@ rsSystem.component("rsDisplayField", {
 		},
 		"toggleFormulaKey": function(key) {
 			Vue.set(this.viewFormulaKey, key, !this.viewFormulaKey[key]);
+		},
+		"getCellCount": function() {
+			var value = this.object[this.field];
+			if(typeof(this.fieldData.attribute.cell_size) === "number" && typeof(value) === "number") {
+				return " (" + (value / this.fieldData.attribute.cell_size).toFixed(0) + " Cells)";
+			}
+			return "";
 		},
 		"getValueDisplay": function(field, value) {
 			if(field.attribute.obscures) {

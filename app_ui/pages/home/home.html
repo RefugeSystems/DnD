@@ -22,8 +22,9 @@
 			<span class="far fa-spinner fa-pulse"></span>
 		</div>
 	</div>
-	<div class="system-display active" v-if="state === 10 && player && configuration && !active">
-		<component class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
+	<div class="system-display active" v-if="state === 10 && player && configuration && !active" :class="mainViewClass">
+		<!-- <component class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component> -->
+		<component class="system-view" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
 
 		<!-- Locked Player Character View -->
 		<div class="dnd-entities-shiv" v-if="storage.profile.lock_character" :class=getLockClasses()>

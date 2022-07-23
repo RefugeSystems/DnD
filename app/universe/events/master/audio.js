@@ -13,6 +13,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} event.message.data.audio
+	 * @param {Object} [event.message.data.recipients] 
 	 * @param {Integer} [event.message.data.delay] Time to wait before playing the audio
 	 * @param {Boolean} [event.message.data.sync] When true, the client attempts to synchronize the play time by leveraging
 	 * 		the current ping statistics.

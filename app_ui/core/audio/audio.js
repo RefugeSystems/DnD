@@ -48,7 +48,7 @@ rsSystem.audio = rsSystem.audio || {};
 			console.log("Play Audio? ", event);
 			if(event && event.data) {
 				var audio = universe.index.audio[event.data.audio],
-					volume = event.volume,
+					volume = event.data.volume,
 					delay = event.data.delay;
 				switch(event.control) {
 					case "audio:play":
@@ -138,6 +138,10 @@ rsSystem.audio = rsSystem.audio || {};
 		if(typeof(object) === "string") {
 			id = object;
 			object = universe.index.audio[object];
+		}
+
+		if(typeof(volume) === "number") {
+			volume = volume/100;
 		}
 
 		if(object) {

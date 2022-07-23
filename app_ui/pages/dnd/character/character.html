@@ -1,0 +1,43 @@
+<div class="rs-page dnd-page dnd-character">
+	<div class="page-container entity-container flex h">
+		<div class="character-container main-character-container column flex v">
+			<dnd-entity-name :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.name" :storage-container="storage.name"></dnd-entity-name>
+			<dnd-entity-broad :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.broad" :storage-container="storage.broad" v-on:scrollcon="scrollTo($event)"></dnd-entity-broad>
+			<dnd-entity-actions :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.actions" :storage-container="storage.actions"></dnd-entity-actions>
+			<dnd-entity-dice :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.dice" :storage-container="storage.dice"></dnd-entity-dice>
+		</div>
+		<div class="initiative-container" :class="skirmish?'combat':'closed'">
+			<button class="action quick rounded general accented-blue" v-on:click="info(skirmish)">
+				<span class="action-icon fa-solid fa-swords"></span>
+			</button>
+			<rs-shiny-button class="general rounded action" v-for="entity in initiatives" v-on:click="info(entity)" :active="initiativeActive(entity)" :color="initiativeColor(entity)" :title="entity.name" :key="entity.id">
+				<span class="action-icon" :class="entity.icon || 'fa-solid fa-user'"></span>
+				<span class="action-count" :class="getSubIcon(entity)"></span>
+			</rs-shiny-button>
+		</div>
+		<div class="information-container" ref="infocon" v-wheel="scrollWheel">
+			<div class="info character-container column flex v">
+				<dnd-entity-effects :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.effects" :storage-container="storage.effects"></dnd-entity-effects>
+				<dnd-entity-skills :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.skills" :storage-container="storage.skills"></dnd-entity-skills>
+			</div>
+			<div class="info character-container column flex v">
+				<dnd-entity-notes :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.scratch" :storage-container="storage.scratch"></dnd-entity-notes>
+				<dnd-entity-equipment :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.equipment" :storage-container="storage.equipment"></dnd-entity-equipment>
+				<dnd-entity-spells :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.spells" :storage-container="storage.spells"></dnd-entity-spells>
+			</div>
+			<div class="info character-container column flex v">
+				<dnd-entity-feats :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.feats" :storage-container="storage.feats"></dnd-entity-feats>
+				<dnd-entity-notes :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.notes" :storage-container="storage.notes"></dnd-entity-notes>
+			</div>
+			<div class="info character-table-container" ref="inventory">
+				<d-n-d-inventory :entity="entity" :universe="universe" :profile="profile" :player="player" :storage-container="storage.inventory" :configuration="widget.inventory"></d-n-d-inventory>
+			</div>
+			<div class="info character-table-container" ref="spells">
+				<d-n-d-spells :entity="entity" :universe="universe" :profile="profile" :player="player" :storage-container="storage.spell_list" :configuration="widget.spell_list"></d-n-d-spells>
+			</div>
+			<div class="info character-table-container" ref="knowledge">
+				<d-n-d-knowledge :entity="entity" :universe="universe" :profile="profile" :player="player" :storage-container="storage.knowledge" :configuration="widget.knowledge"></d-n-d-knowledge>
+			</div>
+		</div>
+	</div>
+</div>

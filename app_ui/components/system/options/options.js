@@ -135,6 +135,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "navigation_labels",
+					"label": "Label Navigation",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "chat_top",
 					"label": "Chat Window to Top",
 					"base": this.profile,

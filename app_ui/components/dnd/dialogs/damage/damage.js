@@ -946,8 +946,9 @@ rsSystem.component("dndDialogDamage", {
 
 			// Build New Rolls objects for damage
 			if(channel && ((channel.skill_damage && rsSystem.utility.isNotEmpty(channel.skill_damage)) || (channel.damage && rsSystem.utility.isNotEmpty(channel.damage)))) {
-				// map = channel._formula || {};
-				map = channel; // Formula does not update and any applicable replacements should have been completed by the server already
+				// The channel _formula is used to allow slight adjustments UI side such as Upcasting calculations
+				map = channel._formula || {}; // 7/23/2022 - Formula updated in Universe delta sync - RSUniverse - @method receiveDelta - line ~549
+				// map = channel; // Formula does not update and any applicable replacements should have been completed by the server already
 				if(map.skill_damage && rsSystem.utility.isNotEmpty(map.skill_damage)) {
 					map = map.skill_damage;
 				} else if(map.damage && rsSystem.utility.isNotEmpty(map.damage)) {

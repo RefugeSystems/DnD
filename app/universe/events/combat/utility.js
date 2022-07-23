@@ -1,3 +1,4 @@
+const { randomGamma } = require("d3");
 var Random = require("rs-random");
 
 var TRACKING_Limit = 18;
@@ -516,8 +517,14 @@ module.exports.initialize = function(universe) {
 		}
 
 		// var events = target.active_events || {};
+		var emission,
+			notify,
+			firing,
+			audio,
+			item,
+			i;
 
-		var emission = {
+		emission = {
 			"id": activity,
 			"type": "dialog-open",
 			"component": "dndDialogRoll",
@@ -548,7 +555,68 @@ module.exports.initialize = function(universe) {
 			"active_events": emission
 		});
 
-		var notify = function() {
+		if(source) {
+			if(typeof(source) === "string") {
+				source = universe.get(source);
+			}
+			firing = {
+				"source": source.id,
+				"channel": channel?channel.id||channel:null,
+				"target": target.id,
+				"damage": damage
+			};
+			/**
+			 * Fired on the items, feats, and spells owned by the attacking
+			 * entity when the attack is declared (Before damage dealt is know
+			 * but the amount going out is present).
+			 * @event source:attacked
+			 * @param {String} source
+			 * @param {String} target
+			 * @param {String} [channel]
+			 * @param {Object} damage Mapping damage_type IDs to the amount being
+			 * 		dealt.
+			 */
+			if(source.inventory) {
+				for(i=0; i<source.inventory.length; i++) {
+					item = universe.get(source.inventory[i]);
+					if(item) {
+						item.fireHandlers("source:attacked", firing);
+					}
+				}
+			}
+			if(source.feats) {
+				for(i=0; i<source.feats.length; i++) {
+					item = universe.get(source.feats[i]);
+					if(item) {
+						item.fireHandlers("source:attacked", firing);
+					}
+				}
+			}
+			if(source.spells) {
+				for(i=0; i<source.spells.length; i++) {
+					item = universe.get(source.spells[i]);
+					if(item) {
+						item.fireHandlers("source:attacked", firing);
+					}
+				}
+			}
+		}
+
+		if(channel) {
+			if(typeof(channel) === "string") {
+				channel = universe.get(channel);
+			}
+			if(channel.audio) {
+				audio = universe.get(channel.audio);
+			} else if(channel.audios) {
+				audio = universe.get(channel.audios[Random.integer(channel.audios.length)]);
+			}
+			if(audio) {
+				universe.utility.playAudio({"player:master":true}, audio.id, audio.volume || 100);
+			}
+		}
+
+		notify = function() {
 			var tracked = tracking[activity];
 			if(tracked && (!tracked.resend || tracked.resend < TRACKING_Limit)) {
 				tracked.resend = (tracked.resend || 0) + 1;
@@ -614,7 +682,10 @@ module.exports.initialize = function(universe) {
 		}
 		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
+			firing,
 			target,
+			audio,
+			item,
 			i;
 
 		if(typeof(channel) === "string") {
@@ -630,6 +701,67 @@ module.exports.initialize = function(universe) {
 				"spell": channel?channel.id:null,
 				"skill": skill
 			});
+		}
+
+		if(source) {
+			if(typeof(source) === "string") {
+				source = universe.get(source);
+			}
+			firing = {
+				"source": source.id,
+				"channel": channel?channel.id||channel:null,
+				"target": target.id,
+				"damage": damage
+			};
+			/**
+			 * Fired on the items, feats, and spells owned by the attacking
+			 * entity when the attack is declared (Before damage dealt is know
+			 * but the amount going out is present).
+			 * @event source:spellcasted
+			 * @param {String} source
+			 * @param {String} target
+			 * @param {String} [channel]
+			 * @param {Object} damage Mapping damage_type IDs to the amount being
+			 * 		dealt.
+			 */
+			if(source.inventory) {
+				for(i=0; i<source.inventory.length; i++) {
+					item = universe.get(source.inventory[i]);
+					if(item) {
+						item.fireHandlers("source:spellcasted", firing);
+					}
+				}
+			}
+			if(source.feats) {
+				for(i=0; i<source.feats.length; i++) {
+					item = universe.get(source.feats[i]);
+					if(item) {
+						item.fireHandlers("source:spellcasted", firing);
+					}
+				}
+			}
+			if(source.spells) {
+				for(i=0; i<source.spells.length; i++) {
+					item = universe.get(source.spells[i]);
+					if(item) {
+						item.fireHandlers("source:spellcasted", firing);
+					}
+				}
+			}
+		}
+
+		if(channel) {
+			if(typeof(channel) === "string") {
+				channel = universe.get(channel);
+			}
+			if(channel.audio) {
+				audio = universe.get(channel.audio);
+			} else if(channel.audios) {
+				audio = universe.get(channel.audios[Random.integer(channel.audios.length)]);
+			}
+			if(audio) {
+				universe.utility.playAudio({"player:master":true}, audio.id, audio.volume || 100);
+			}
 		}
 
 		for(i=0; i<targets.length; i++) {

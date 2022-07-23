@@ -2,7 +2,7 @@ var combat = require("./events/combat/utility.js");
 
 /**
  * 
- * @class 
+ * @class UniverseUtility
  * @constructor
  */
 class UniverseUtility {
@@ -192,6 +192,51 @@ class UniverseUtility {
 
 	/**
 	 * 
+	 * @method playAudio
+	 * @param {Object} players
+	 * @param {String} audio
+	 * @param {Number} [volume]
+	 * @param {Number} [delay]
+	 * @param {Number} [sync]
+	 */
+	playAudio(players, audio, volume, delay, sync) {
+		if(typeof(volume) !== "number") {
+			volume = 100;
+		}
+		this.universe.emit("master:control", {
+			"control": "audio:play",
+			"recipients": players,
+			"data": {
+				"audio": audio,
+				"volume": volume,
+				"delay": delay,
+				"sync": sync
+			}
+		});
+	}
+
+	/**
+	 * 
+	 * @method stopAudio
+	 * @param {Object} players
+	 * @param {String} audio
+	 * @param {Number} [delay]
+	 * @param {Number} [sync]
+	 */
+	stopAudio(players, audio, delay, sync) {
+		this.universe.emit("master:control", {
+			"control": "audio:stop",
+			"recipients": players,
+			"data": {
+				"audio": audio,
+				"delay": delay,
+				"sync": sync
+			}
+		});
+	}
+
+	/**
+	 * 
 	 * @method dismissMessage
 	 * @param {Object} players
 	 * @param {String} id
@@ -204,8 +249,22 @@ class UniverseUtility {
 		});
 	}
 
-	info(message) {
-		this.console.log(message);
+	/**
+	 * 
+	 * @method info
+	 * @param {*} ...message
+	 */
+	print(...message) {
+		this.console.log.apply(this.console.log, message);
+	}
+
+	/**
+	 * 
+	 * @method info
+	 * @param {*} ...message
+	 */
+	info(...message) {
+		this.console.log.apply(this.console.log, message);
 	}
 }
 

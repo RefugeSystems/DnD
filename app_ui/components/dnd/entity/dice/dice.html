@@ -1,5 +1,5 @@
 <div class="rs-component dnd-component entity-dice" v-if="storage">
-	<div class="divider"></div>
+	<div class="divider" v-if="widget && !widget.no_divider"></div>
 	<div class="available flex h centered" v-if="storage.count">
 		<button class="general rounded quick action" v-on:click="clear()" title="Total of individual dice rolled. Click to clear.">
 			<span>{{storage.sum}}</span>

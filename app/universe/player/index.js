@@ -286,6 +286,7 @@ class PlayerConnection extends EventEmitter {
 						
 					}
 					
+					send._formula = change._formula;
 					send._class = change._class;
 					if(change._search) {
 						send._search = change._search;

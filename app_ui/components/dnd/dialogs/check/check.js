@@ -80,15 +80,22 @@ rsSystem.component("dndDialogCheck", {
 		if(typeof(data.entity) === "string") {
 			data.entity = this.universe.index.entity[this.details.entity];
 		}
-		data.skill = this.details.skill;
-		if(typeof(data.skill) === "string") {
-			data.skill = this.universe.index.skill[data.skill];
-		}
-		if(data.skill && data.entity && data.entity.skill_check) {
-			formula = "1d20 + " + (data.entity.skill_check[data.skill.id] || 0);
+		if(this.details.formula) {
+			formula = this.details.formula;
+		} else if(this.details.skill) {
+			data.skill = this.details.skill;
+			if(typeof(data.skill) === "string") {
+				data.skill = this.universe.index.skill[data.skill];
+			}
+			if(data.skill && data.entity && data.entity.skill_check) {
+				formula = "1d20 + " + (data.entity.skill_check[data.skill.id] || 0);
+			} else {
+				formula = "1d20";
+			}
 		} else {
 			formula = "1d20";
 		}
+
 		data.roll = new Roll({
 			"name": data.skill?data.skill.name:this.details.name,
 			"source": data.entity,
@@ -145,12 +152,25 @@ rsSystem.component("dndDialogCheck", {
 			// return classes;
 		},
 		"recalculateFormula": function() {
-			var formula = "1d20 + " + this.entity.skill_check[this.skill.id],
-				adds = Object.keys(this.active_additives),
+			// var formula = "1d20 + " + this.entity.skill_check[this.skill.id],
+			var adds = Object.keys(this.active_additives),
+				formula,
 				i;
+			
+			if(this.details.formula) {
+				formula = this.details.formula;
+			} else if(this.skill) {
+				if(this.entity && this.entity.skill_check) {
+					formula = "1d20 + " + (this.entity.skill_check[this.skill.id] || 0);
+				} else {
+					formula = "1d20";
+				}
 
-			for(i=0; i<adds.length; i++) {
-				formula += " + " + this.active_additives[adds[i]].additive_skill[this.skill.id];
+				for(i=0; i<adds.length; i++) {
+					formula += " + " + this.active_additives[adds[i]].additive_skill[this.skill.id];
+				}
+			} else {
+				formula = "1d20";
 			}
 
 			this.roll.setFormula(formula);

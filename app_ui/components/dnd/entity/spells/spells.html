@@ -1,5 +1,5 @@
 <div class="rs-component dnd-component entity-spells">
-	<div class="divider"></div>
+	<div class="divider" v-if="widget && !widget.no_divider"></div>
 	<div class="flex h justified">
 		<div class="flex h">
 			<button class="property" v-on:click="toggleList()">

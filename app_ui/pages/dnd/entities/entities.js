@@ -45,7 +45,11 @@ rsSystem.component("DNDEntities", {
 		},
 		"page": function() {
 			if(this.main) {
-				return this.universe.index.page[this.main.page];
+				if(this.storage.ctrl && this.storage.ctrl.list && this.storage.ctrl.list.scratch) {
+					return this.universe.index.page[this.main.scratch_page];
+				} else {
+					return this.universe.index.page[this.main.page];
+				}
 			}
 			return null;
 		},
@@ -141,6 +145,20 @@ rsSystem.component("DNDEntities", {
 				load,
 				i;
 
+			controls.push({
+				"icon": "fas fa-note",
+				"title": "Use your Scratch Pad instead of your Notes page",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "scratch"
+			});
+			controls.push({
+				"icon": "fas fa-users-slash",
+				"title": "Hide the nearby creatures list",
+				"ctrl": "list",
+				"type": "flip",
+				"id": "hidenearby"
+			});
 			controls.push({
 				"icon": "fas fa-users",
 				"title": "Include all nearby creatures in the list of creatures nearby",
@@ -265,6 +283,10 @@ rsSystem.component("DNDEntities", {
 					"text": notes
 				});
 			}
+		},
+		"page": function() {
+			console.log("Page Changed: ", this.page.name);
+			Vue.set(this, "notes", this.page.description);
 		}
 	},
 	"mounted": function() {
@@ -288,14 +310,14 @@ rsSystem.component("DNDEntities", {
 	},
 	"methods": {
 		"scrollWheel": function(event) {
-			if(event.path[0] == this.$refs.view) {
-				var offset = this.$refs.view.scrollLeft,
+			if(event.path[0] == this.$refs.grid) {
+				var offset = this.$refs.grid.scrollLeft,
 					width = 60,
 					direction = event.deltaY > 0?1:-1,
 					add = direction * width;
 				offset -= offset%width;
 				offset += add;
-				this.$refs.view.scrollLeft = offset;
+				this.$refs.grid.scrollLeft = offset;
 			}
 		},
 		"processDrop": function(event) {
@@ -384,6 +406,13 @@ rsSystem.component("DNDEntities", {
 						Vue.set(!this.storage.ctrl, control.ctrl, {});
 					}
 					Vue.set(this.storage.ctrl[control.ctrl], control.id, !this.storage.ctrl[control.ctrl][control.id]);
+					break;
+			}
+			switch(control.id) {
+				case "hidenearby":
+					if(!this.storage.ctrl[control.ctrl][control.id]) {
+						this.$refs.grid.scrollLeft = 0;
+					}
 					break;
 			}
 		},

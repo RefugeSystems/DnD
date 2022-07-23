@@ -1,6 +1,6 @@
 <div class="rs-component dnd-component entity-skills dnd-widget flex v" v-if="storage && storage.rolled">
 	<div class="section" v-for="(section, $index) in sections">
-		<div class="divider"></div>
+		<div class="divider" v-if="widget && !widget.no_divider"></div>
 		<div class="section-name flex h justified">
 			<div class="name flex h">
 				<button class="property" v-on:click="toggleSection(section.id)">

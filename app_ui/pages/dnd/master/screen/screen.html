@@ -1,6 +1,6 @@
-<div class="rs-page dnd-page master-screen" :class="getScreenClasses()" v-on:click.right.stop.prevent="checkToEditRecord($event)" ref="view" v-wheel="scrollWheel" v-pan.left.right.stop.prevent="panScreen">
+<div class="rs-page dnd-page master-screen" v-on:click.right.stop.prevent="checkToEditRecord($event)" ref="view" v-wheel="scrollWheel">
 	<!-- <div class="screen-container" ref="container" :style="'left:' + (-1 * panLeft) + 'px;'" v-pan.left.right.stop.prevent="touchSlide"> -->
-	<div class="screen-container" ref="container">
+	<div class="screen-container">
 		<div class="screen-panel" ref="panel">
 			<div class="screen-column small">
 				<dnd-master-meeting :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking" storage-key="masterMeeting"></dnd-master-meeting>
@@ -29,23 +29,23 @@
 		</div>
 		<div class="screen-panel" v-if="storage && storage.itemTable && storage.entityTable">
 			<div class="screen-data-column">
-				<rs-table :universe="universe" :source="universe.listing.item" :headings="itemHeadings" :formatter="formatter" :controls="itemControls" :storage-container="storage.itemTable" :profile="profile"/>
+				<rs-table class="fitted" :universe="universe" :source="universe.listing.item" :headings="itemHeadings" :formatter="formatter" :controls="itemControls" :storage-container="storage.itemTable" :profile="profile"/>
 			</div>
 			<div class="screen-data-column">
-				<rs-table :universe="universe" :source="universe.listing.entity" :headings="entityHeadings" :formatter="formatter" :controls="entityControls" :storage-container="storage.entityTable" :profile="profile"/>
+				<rs-table class="fitted" :universe="universe" :source="universe.listing.entity" :headings="entityHeadings" :formatter="formatter" :controls="entityControls" :storage-container="storage.entityTable" :profile="profile"/>
 			</div>
 		</div>
 		<div class="screen-panel" v-if="storage && storage.spellTable && storage.knowledgeTable">
 			<div class="screen-data-column">
-				<rs-table :universe="universe" :source="availableSpells" :headings="spellHeadings" :formatter="formatter" :controls="spellControls" :storage-container="storage.spellTable" :profile="profile"/>
+				<rs-table class="fitted" :universe="universe" :source="availableSpells" :headings="spellHeadings" :formatter="formatter" :controls="spellControls" :storage-container="storage.spellTable" :profile="profile"/>
 			</div>
 			<div class="screen-data-column">
-				<rs-table :universe="universe" :source="availableKnowledge" :headings="knowledgeHeadings" :formatter="formatter" :controls="knowledgeControls" :storage-container="storage.knowledgeTable" :profile="profile"/>
+				<rs-table class="fitted" :universe="universe" :source="availableKnowledge" :headings="knowledgeHeadings" :formatter="formatter" :controls="knowledgeControls" :storage-container="storage.knowledgeTable" :profile="profile"/>
 			</div>
 		</div>
 		<div class="screen-panel" v-if="storage && storage.itemTable && storage.dynamicTable">
 			<div class="screen-data-column">
-				<rs-table :universe="universe" :source="dynamicCorpus" :headings="dynamicHeadings" :formatter="formatter" :controls="dynamicControls" :selections="dynamicSelections" :storage-container="storage.dynamicTable" :profile="profile"/>
+				<rs-table class="fitted" :universe="universe" :source="dynamicCorpus" :headings="dynamicHeadings" :formatter="formatter" :controls="dynamicControls" :selections="dynamicSelections" :storage-container="storage.dynamicTable" :profile="profile"/>
 			</div>
 		</div>
 	</div>

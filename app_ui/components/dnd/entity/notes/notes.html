@@ -1,0 +1,34 @@
+<div class="rs-component dnd-component entity-notes dnd-widget flex v">
+	<div class="divider" v-if="widget && !widget.no_divider"></div>
+	<div class="section-name flex h justified">
+		<div class="name flex h">
+			<button class="property" v-on:click="toggle()">
+				<span class="fal" :class="storage && storage.is_open?'fa-minus':'fa-plus'"></span>
+			</button>
+			<div class="property rsbg-lightBlue">
+				<span>{{widget.title || "Notes"}}</span>
+			</div>
+		</div>
+	</div>
+	<div class="notepage-widget" v-if="storage.is_open">
+		<div class="notepage-container">
+			<div v-if="!page" class="note-warning">
+				<span class="fa-solid fa-exclamation-triangle"></span>
+				<span>No Note Page for Character {{entity.name}}</span>
+			</div>
+			<textarea v-if="page" class="notepage" ref="notepage" v-delayed:300="notes" v-on:drop.stop.prevent="processDrop()" v-on:dragover.prevent="">
+			</textarea>
+			<div v-if="page" class="waiting">
+				<span class="indicator fas fa-spinner fa-pulse"></span>
+			</div>
+		</div>
+		<div class="notepage-controls flex h" v-if="!widget.no_controls">
+			<button class="property" v-on:click="toKnowledge()" title="Convert to knowledge">
+				<span class="action-icon fa-solid fa-brain"></span>
+			</button>
+			<button class="property" v-on:click="toKnowledge(true)" title="Convert to knowledge and clear-out">
+				<span class="action-icon fa-solid fa-brain-arrow-curved-right"></span>
+			</button>
+		</div>
+	</div>
+</div>

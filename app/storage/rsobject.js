@@ -1803,6 +1803,7 @@ class RSObject {
 		delta._class = this._class;
 		delta._invloved = this._invloved;
 		delta._calculated = this._calculated;
+		delta._formula = this._formula;
 		return delta;
 	}
 	

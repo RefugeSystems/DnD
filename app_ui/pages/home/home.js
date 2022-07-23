@@ -44,6 +44,7 @@ rsSystem.component("RSHome", {
 		data.player = null;
 		data.user = null;
 		
+		data.mainViewClass = null;
 		data.title = document.title;
 		data.pages = ["Privacy", "License", "Terms"];
 		data.version = rsSystem.version;
@@ -131,6 +132,15 @@ rsSystem.component("RSHome", {
 				console.warn("Release Lock Screen");
 				this.screenLock.release();
 			}
+		},
+		"storage.profile.navigation_labels": function() {
+			Vue.set(this, "mainViewClass", this.getNavClasses());
+		},
+		"storage.profile.navigation_collapsed": function() {
+			Vue.set(this, "mainViewClass", this.getNavClasses());
+		},
+		"storage.profile.lock_character": function() {
+			Vue.set(this, "mainViewClass", this.getNavClasses());
 		}
 	},
 	"mounted": function() {
@@ -214,13 +224,40 @@ rsSystem.component("RSHome", {
 			Vue.set(this.storage.profile, "default_dashboard", "dashboard:character:default");
 		}
 		
+		Vue.set(this, "mainViewClass", this.getNavClasses());
 		this.universe.setProfile(this.storage.profile);
 		this.setActive();
+		
+		document.addEventListener("visibilitychange", this.acquireScreenLock, false);
+		if(this.storage.profile.screen_wake) {
+			this.acquireScreenLock();
+		}
 	},
 	"methods": {
+		"getNavClasses": function() {
+			if(this.storage.profile.lock_character) {
+				if(this.storage.profile.navigation_collapsed) {
+					return "collapsed-shiv";
+				} else if(this.storage.profile.navigation_labels) {
+					return "labelled-shiv";
+				} else {
+					return "extended-shiv";
+				}
+			} else {
+				if(this.storage.profile.navigation_collapsed) {
+					return "collapsed";
+				} else if(this.storage.profile.navigation_labels) {
+					return "labelled";
+				} else {
+					return "extended";
+				}
+			}
+		},
 		"getLockClasses": function() {
 			if(this.storage.profile.navigation_collapsed) {
 				return "collapsed";
+			} else if(this.storage.profile.navigation_labels) {
+				return "labelled";
 			} else {
 				return "extended";
 			}
@@ -265,21 +302,55 @@ rsSystem.component("RSHome", {
 				this.$router.push(this.$route.path + "?p=" + page);
 			}
 		},
+		/**
+		 * Handles the initial request for the screenlock from the profile update.
+		 * @method acquireScreenLock
+		 */
 		"acquireScreenLock": function() {
-			if(navigator.wakeLock) {
+			if(this.storage.profile.screen_wake && navigator.wakeLock) {
 				navigator.wakeLock.request()
 				.then((lock) => {
 					Vue.set(this, "screenLock", lock);
 					lock.onrelease = (event) => {
-						console.warn("Screen Lock Release Event");
+						// console.warn("Screen Lock Released");
 						Vue.set(this, "screenLock", null);
 						if(this.storage.profile.screen_wake) {
-							this.acquireScreenLock();
+							// console.warn("Screen Wake Reaquiring");
+							this.reacquireScreenLock();
 						}
 					};
 				})
 				.catch((err) => {
-					console.error("Screen Wake Lock Failed: ", err);
+					// This error state is common for when someone navigates away from the page and the API drops the lock for us
+					// console.error("Screen Wake Lock Failed, retrying: ", err);
+					this.reacquireScreenLock();
+				});
+			}
+		},
+		/**
+		 * Handles maintaining the screenlock. This has some minor logical differences,
+		 * but notably assumes the wakeLock API exists as handled by the initial acquire
+		 * method.
+		 * @method reacquireScreenLock
+		 */
+		"reacquireScreenLock": function() {
+			if(this.storage.profile.screen_wake && !this.screenLock) {
+				navigator.wakeLock.request()
+				.then((lock) => {
+					console.warn("Screen Lock Reaquired");
+					Vue.set(this, "screenLock", lock);
+					lock.onrelease = (event) => {
+						// console.warn("Screen Lock Release Event");
+						Vue.set(this, "screenLock", null);
+						if(this.storage.profile.screen_wake) {
+							// console.warn("Screen Wake Reaquiring");
+							this.reacquireScreenLock();
+						}
+					};
+				})
+				.catch((err) => {
+					// console.error("Screen Wake Lock Retrying...", err);
+					setTimeout(this.reacquireScreenLock, 5000);
 				});
 			}
 		},
@@ -325,6 +396,9 @@ rsSystem.component("RSHome", {
 				});
 			});
 		}
+	},
+	"beforeDestroy": function() {
+		document.remoceEventListener("visibilitychange", this.acquireScreenLock, false);
 	},
 	"template": Vue.templified("pages/home.html")
 });

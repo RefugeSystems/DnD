@@ -63,14 +63,16 @@ rsSystem.component("dndDialogKnowing", {
 		}
 	},
 	"data": function () {
-		var data = {};
+		var data = {},
+			i;
 
+		data.choiceMap = {};
 		data.page = "page1";
 		data.target = "";
 
 		data.knowledge = {};
-		data.knowledge.name = "";
-		data.knowledge.description = "";
+		data.knowledge.name = this.details.initial_name || "";
+		data.knowledge.description = this.details.initial_text || "";
 		if(this.details.associations) {
 			if(this.details.associations instanceof Array) {
 				data.knowledge.associations = this.details.associations;
@@ -102,6 +104,10 @@ rsSystem.component("dndDialogKnowing", {
 			});
 		}
 
+		for(i=0; i<data.choices.length; i++)  {
+			data.choiceMap[data.choices[i].id] = data.choices[i];
+		}
+
 		return data;
 	},
 	"mounted": function () {
@@ -114,6 +120,9 @@ rsSystem.component("dndDialogKnowing", {
 				event.preventDefault();
 			}
 		};
+		if(this.details.choice && this.choiceMap[this.details.choice]) {
+			this.select(this.choiceMap[this.details.choice]);
+		}
 	},
 	"methods": {
 		"select": function(choice) {
@@ -166,6 +175,9 @@ rsSystem.component("dndDialogKnowing", {
 					break;
 				default:
 					console.error("Unknown Knowing Choice: ", this.choice);
+			}
+			if(typeof(this.details.finish) === "function") {
+				this.details.finish(this.choice, this.knowledge);
 			}
 			this.closeDialog();
 		}

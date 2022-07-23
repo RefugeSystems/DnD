@@ -147,6 +147,9 @@ rsSystem.component("systemMenu", {
 				
 				this.$forceUpdate();
 			}
+		},
+		"profile.navigation_labels": function() {
+			this.updateCollapse();
 		}
 	},
 	"mounted": function() {
@@ -201,9 +204,23 @@ rsSystem.component("systemMenu", {
 			Vue.set(this.chatItem, "icon", "fas fa-comment");
 			return false;
 		},
+		"navTextClass": function() {
+			if(this.profile.navigation_labels) {
+				return "displayed";
+			} else {
+				return "none";
+			}
+		},
 		"updateCollapse": function() {
 			Vue.set(this.collapseItem, "icon", "fas fa-sign-out-alt " + (this.profile.navigation_collapsed?"rot270":"rot90"));
-			Vue.set(this.storage, "classing", this.profile.navigation_collapsed?"collapsed":"extended");
+			if(this.profile.navigation_collapsed) {
+				Vue.set(this.storage, "classing", "collapsed");
+				this.$refs.menu.scrollTop = 0;
+			} else if(this.profile.navigation_labels) {
+				Vue.set(this.storage, "classing", "labelled");
+			} else {
+				Vue.set(this.storage, "classing", "extended");
+			}
 		},
 		"isActive": function(item) {
 			if(!item.hidden && !item.inactive && (item.path || item.emit)) {

@@ -1,0 +1,112 @@
+button.emboldened {
+	position: relative;
+	display: inline-block;
+	height: 2rem !important;
+	line-height: 2rem;
+	border-radius: .7rem;
+	border-width: 1px !important;
+	border-style: solid !important;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+	z-index: 1;
+
+	// Default is .white
+	background-color: @rsBlack !important;
+	color: @rsWhite !important;
+	border-color: @rsWhite !important;
+
+	.emboldened-label {
+		position: absolute;
+		z-index: 3;
+		top: -.7rem;
+
+		height: .8rem;
+		border-color: inherit;
+		border-width: 1px;
+		border-style: solid;
+		border-radius: .3rem;
+		padding: 2px;
+		font-size: .8rem;
+		background-color: inherit;
+		color: inherit;
+		white-space: nowrap;
+	}
+
+	.emboldened-value {
+		z-index: 2;
+		font-size: 1.2rem;
+		color: inherit;
+		white-space: nowrap;
+	}
+
+	.emboldened-foot {
+		position: absolute;
+		z-index: 3;
+		top: 1.5rem;
+		height: .7rem;
+		border-color: inherit;
+		border-width: 1px;
+		border-style: solid;
+		border-radius: .3rem;
+		padding: 2px;
+		font-size: .7rem;
+		background-color: inherit;
+		color: inherit;
+		white-space: nowrap;
+	}
+
+	&.black {
+		background-color: @rsWhite;
+		color: @rsBlack;
+		border-color: @rsBlack;
+	}
+
+	&.white {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border-color: @rsWhite;
+	}
+
+	&.red {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border-color: @rsLightRed;
+	}
+
+	&.green {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border-color: @rsLightGreen;
+	}
+
+	&.green {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border-color: @rsLightBlue;
+	}
+
+	&.shadowed {
+		// Default is .white
+		box-shadow: 0px 0px 8px @rsWhite;
+
+		&.black {
+			box-shadow: 0px 0px 8px @rsBlack;
+		}
+	
+		&.white {
+			box-shadow: 0px 0px 8px @rsWhite;
+		}
+	
+		&.red {
+			box-shadow: 0px 0px 8px @rsLightRed;
+		}
+	
+		&.green {
+			box-shadow: 0px 0px 8px @rsLightGreen;
+		}
+	
+		&.green {
+			box-shadow: 0px 0px 8px @rsLightBlue;
+		}
+	}
+}

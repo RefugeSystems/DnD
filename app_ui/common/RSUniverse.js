@@ -575,6 +575,12 @@ class RSUniverse extends EventEmitter {
 				} else {
 					for(x=0; x<keys.length; x++) {
 						if(!this.index[classification][id]._sync[keys[x]] || this.index[classification][id]._sync[keys[x]] < received) {
+							if(delta._formula && delta._formula[keys[x]]) {
+								this.index[classification][id]._formula[keys[x]] = delta._formula[keys[x]];
+							}
+							if(delta._involved && delta._involved[keys[x]]) {
+								this.index[classification][id]._involved[keys[x]] = delta._involved[keys[x]];
+							}
 							if(this.index[classification][id][keys[x]] === null || delta[keys[x]] === null) {
 								Vue.set(this.index[classification][id], keys[x], delta[keys[x]]);
 							} else if(delta[keys[x]] && (this.index[classification][id][keys[x]] instanceof Array)) {
@@ -598,6 +604,9 @@ class RSUniverse extends EventEmitter {
 							}
 							Vue.set(this.index[classification][id]._sync, keys[x], received);
 						}
+					}
+					if(delta._search) {
+						this.index[classification][id]._search = delta._search;
 					}
 				}
 				this.$emit("updated", this.index[classification][id]);
@@ -843,6 +852,11 @@ class RSUniverse extends EventEmitter {
 					fail(event);
 				}
 			};
+
+			/**
+			 * @event updated
+			 * @param {RSObject} event The updated object.
+			 */
 
 			socket.onmessage = (event) => {
 				var message,

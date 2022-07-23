@@ -1,5 +1,5 @@
 <div class="rs-component dnd-component entity-equipment">
-	<div class="divider" v-if="equipment.shown.length || equipment.hidden.length"></div>
+	<div class="divider" v-if="widget && !widget.no_divider"></div>
 	<div class="section-name flex h justified">
 		<div class="name flex h">
 			<button class="property" v-on:click="toggle()">

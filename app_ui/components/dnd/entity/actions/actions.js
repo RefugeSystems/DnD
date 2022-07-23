@@ -68,7 +68,7 @@
 					return false;
 				}
 
-				if(this.widget.attribute.show_non_combat) {
+				if(this.widget.attribute && this.widget.attribute.show_non_combat) {
 					return true;
 				}
 				
