@@ -164,7 +164,7 @@ class Soundscape {
 					} else {
 						player = this.get(destination);
 					}
-					if(!player) {
+					if(!player && this.active.master_fallback) {
 						player = this.get(0);
 					}
 					if(player) {
