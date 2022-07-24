@@ -163,6 +163,9 @@ class Soundscape {
 					} else {
 						id = this.get(destination);
 					}
+					if(!id) {
+						id = this.get(0);
+					}
 					if(id) {
 						players[id] = true;
 					}
