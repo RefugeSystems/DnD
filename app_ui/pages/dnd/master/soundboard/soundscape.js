@@ -150,7 +150,8 @@ class Soundscape {
 	 */
 	playbackAudioPattern(id, audio, destinations, destination, volume, interval) {
 		var localInterval,
-			players;
+			players,
+			player;
 		id = id || audio;
 
 		if(id && audio) {
@@ -159,15 +160,15 @@ class Soundscape {
 				players = Object.assign({}, destinations);
 				if(destination) {
 					if(destination instanceof Array) {
-						id = this.get(destination[Random.integer(destination.length)]);
+						player = this.get(destination[Random.integer(destination.length)]);
 					} else {
-						id = this.get(destination);
+						player = this.get(destination);
 					}
-					if(!id) {
-						id = this.get(0);
+					if(!player) {
+						player = this.get(0);
 					}
-					if(id) {
-						players[id] = true;
+					if(player) {
+						players[player] = true;
 					}
 				}
 				this.controller.playPlayerAudio(players, audio, volume);
