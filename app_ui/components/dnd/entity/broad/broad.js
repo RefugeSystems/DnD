@@ -82,6 +82,9 @@ rsSystem.component("dndEntityBroad", {
 		"emitScrollNotice": function(marker) {
 			this.$emit("scrollcon", marker);
 		},
+		"scrollHome": function() {
+			this.$emit("scrollhome");
+		},
 		"getModifier": function(field) {
 			if(0 <= this.entity[field]) {
 				return "+" + this.entity[field];

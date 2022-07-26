@@ -722,7 +722,6 @@ rsSystem.component("dndDialogDamage", {
 
 			switch(section.id) {
 				case "channel":
-					console.log("Levels: ", _p(this.entity.spell_slots));
 					this.available_levels.splice(1);
 					if(this.entity && this.entity.spell_slots) {
 						// TODO: Build Out spell levels for selection of the cast
@@ -902,7 +901,8 @@ rsSystem.component("dndDialogDamage", {
 						if(!additive.additive_attack_charged || additive.charges > 0) {
 							this.additives.push(additive);
 							if(additive.additive_attack_always) {
-								this.adding[additive.id] = additive;
+								// this.adding[additive.id] = additive;
+								this.toggleAdditive(additive);
 								always++;
 							}
 						}

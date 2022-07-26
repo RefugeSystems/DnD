@@ -101,6 +101,7 @@ rsSystem.component("dndChronicleReadout", {
 							"source": event.source,
 							"skill": event.skill,
 							"result": event.save,
+							"original_damage": event.original_damage,
 							"damage": event.damage,
 							"difficulty": event.difficulty,
 							"channel": event.channel,
@@ -113,14 +114,15 @@ rsSystem.component("dndChronicleReadout", {
 						});
 						break;
 					case "entity:saved":
-						// console.log("Entity Save: ", event);
+						console.log("Entity Save: ", event);
 						update = {
 							"save": event.save,
 							"critical": event.critical,
 							"failure": event.failure,
 							"succeeded": event.succeeded,
 							"resist": event.resist,
-							"resist_source": event.resist_source
+							"resist_source": event.resist_source,
+							"damage": event.damage || null
 						};
 						if(event.damage_source) {
 							update.damage_source = event.damage_source;
@@ -160,13 +162,15 @@ rsSystem.component("dndChronicleReadout", {
 							"timeline": event.timeline,
 							"level": event.level,
 							"channel": event.channel,
+							"original_damage": event.original_damage,
 							"damage": event.damage
 						});
 						break;
 					case "entity:damaged":
 						update = {
 							"resist_source": event.resist_source,
-							"resist": event.resist
+							"resist": event.resist,
+							"damage": event.damage || null
 						};
 						if(event.damage_source) {
 							update.damage_source = event.damage_source;
@@ -226,7 +230,9 @@ rsSystem.component("dndChronicleReadout", {
 			if(activity) {
 				keys = Object.keys(data);
 				for(i=0; i<keys.length; i++) {
-					Vue.set(activity.data, keys[i], data[keys[i]]);
+					if(data[keys[i]]) {
+						Vue.set(activity.data, keys[i], data[keys[i]]);
+					}
 				}
 				
 				Vue.set(activity, "_updated_date", (new Date()).toLocaleTimeString());

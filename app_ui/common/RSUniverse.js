@@ -324,11 +324,20 @@ class RSUniverse extends EventEmitter {
 			Vue.set(this, "version", event.version);
 			this.checkVersion();
 		};
+		/**
+		 * 
+		 * @event connected
+		 * @param {RSUniverse} universe
+		 */
 		this.processEvent.connected = (event) => {
 			this.metrics.connected = Date.now();
 			this.metrics.connected_server = event.sent;
 			this.$emit("connected", this);
-			this.sync();
+			if(this.state.reconnecting) {
+				this.state.reconnecting = false;
+			} else {
+				this.sync();
+			}
 		};
 		this.processEvent.close = (event) => {
 			this.metrics.closed = event.sent;
@@ -735,7 +744,12 @@ class RSUniverse extends EventEmitter {
 				"session": session.id
 			});
 
-			var socket = new WebSocket(address + "/connect?session=" + session.id);
+			var socket;
+			if(this.state.reconnecting) {
+				socket = new WebSocket(address + "/connect?reconnect=true&session=" + session.id);
+			} else {
+				socket = new WebSocket(address + "/connect?session=" + session.id);
+			}
 
 			socket.onopen = (event) => {
 				this.state.closing = false;
@@ -743,7 +757,7 @@ class RSUniverse extends EventEmitter {
 				this.state.reconnectAttempts = 0;
 				this.addLogEvent("Connection Established", 30, event);
 				if(this.state.reconnecting) {
-					this.state.reconnecting = false;
+					// this.state.reconnecting = false; // Handled by the function that processes the "connection" event to skip sync if reconnecting
 					this.$emit("reconnected", this);
 					this.$emit("notification", {
 						"id": "universe:connection:status",

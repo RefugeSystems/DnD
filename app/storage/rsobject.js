@@ -616,6 +616,7 @@ class RSObject {
 		var fields = this._manager.fieldIDs,conditional,
 			inherit,
 			loading,
+			search,
 			source,
 			parent,
 			field,
@@ -642,7 +643,16 @@ class RSObject {
 						case "string":
 							if(field.attribute.searchable) {
 								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
-								this._search += ":::" + this._calculated[field.id].toLowerCase();
+								if(field.inheritable && field.inheritable.length) {
+									search = this._universe.get(this._calculated[field.id]);
+									if(search && (typeof(search.name) === "string")) {
+										this._search += ":::" + search.name.toLowerCase();
+									} else {
+										this._search += ":::" + this._calculated[field.id].toLowerCase();
+									}
+								} else {
+									this._search += ":::" + this._calculated[field.id].toLowerCase();
+								}
 							}
 						default:
 						case "dice":
@@ -658,10 +668,31 @@ class RSObject {
 							break;
 						case "array":
 							this[fields[x]] = [].concat(this._calculated[fields[x]]);
+							if(field.attribute.searchable) {
+								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
+								if(field.inheritable && field.inheritable.length) {
+									for(j=0; j<this[fields[x]].length; j++) {
+										search = this._universe.get(this[fields[x]][j]);
+										if(search && (typeof(search.name) === "string")) {
+											this._search += ":::" + search.name.toLowerCase();
+										} else if(typeof(this[fields[x]][j]) === "string") {
+											this._search += ":::" + this[fields[x]][j].toLowerCase();
+										}
+									}
+								} else {
+									this._search += ":::" + this[fields[x]].join().toLowerCase();
+								}
+							}
 							break;
 					}
 				}
 			}
+		}
+
+		if(this.level) {
+			this._search += ":::" + this.level;
+			this._search += ":::level" + this.level;
+			this._search += ":::level " + this.level;
 		}
 		
 		// Fill in Parent Values where this is doesn't have that field filled
@@ -1033,7 +1064,7 @@ class RSObject {
 	 * @param {Object} event 
 	 */
 	fireHandlers(name, event) {
-		console.log("Fireing Handlers: " + name);
+		// console.log("Fireing Handlers: " + name);
 		var handler,
 			i;
 
@@ -1046,7 +1077,7 @@ class RSObject {
 			}
 			for(i=0; i<this.handlers.length; i++) {
 				handler = this._universe.manager.handler.object[this.handlers[i]];
-				console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
+				// console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
 				if(handler && handler._occurrence[name]) {
 					this._universe.processEvent(this, name, event, handler);
 				}
@@ -1982,16 +2013,14 @@ RSObject.addValues = function(a, b, type, op) {
 					return (a || 0) + " + " + (b || 0);
 				}
 			case "array":
-				try {
-					if(typeof(a) === "object") {
+				if(typeof(a) === "object") {
+					if(a instanceof Array) {
 						return a.concat(b);
 					} else {
 						return [a].concat(b);
 					}
-				} catch(e) {
-					// console.log("A: ", a, JSON.stringify(a), e);
-					throw e;
-					// return null;
+				} else {
+					return [a].concat(b);
 				}
 			case "boolean":
 				return a && b;

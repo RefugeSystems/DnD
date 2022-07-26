@@ -241,30 +241,43 @@ rsSystem.component("DNDSpells", {
 		
 					details.title = this.entity.name;
 					details.component = "dndDialogList";
-					details.sections = ["no_school", "known"];
+					details.sections = ["cantrip", 1, 2, 3, 4, 5, 6, 7, 8, 9, "known"];
 					details.cards = {
-						"no_school": {
-							"name": "No School",
-							"icon": "fas fa-cube"
+						"cantrip": {
+							"name": "Cantrips",
+							"icon": "fa-light fa-hand-holding-magic"
 						},
 						"known": {
 							"name": "Already Known",
-							"icon": "fas fa-cube"
+							"icon": "fas fa-brain"
 						},
 						"unavailable": {
 							"name": "Unavailable",
-							"icon": "fas fa-cube"
+							"icon": "fas fa-cancel"
 						}
 					};
 					details.limit = 10,
 					details.data = {
+						"cantrip": [],
 						"unavailable": [],
-						"no_school": [],
 						"known": []
 					};
+					for(i=1; i<10; i++) {
+						details.data[i] = [];
+						details.cards[i] = {};
+						details.cards[i].name = "Level " + i;
+						details.cards[i].icon = "fa-solid fa-hand-holding-magic";
+					}
 		
 					details.activate = (section, object) => {
 						if(!known[object.id] && (!object.archetypes || object.archetypes.hasCommon(this.entity.archetypes))) {
+							var array = details.data[object.level] || details.data.unavailable,
+								index = array.indexOf(object);
+							known[object.id] = true;
+							knowns.push(object);
+							if(index !== -1) {
+								array.splice(index, 1);
+							}
 							this.universe.send("spells:grant", {
 								"entities": [this.entity.id],
 								"spells": [object.id]
@@ -290,24 +303,20 @@ rsSystem.component("DNDSpells", {
 								details.data.known.push(object);
 							} else if(object.archetypes && !object.archetypes.hasCommon(this.entity.archetypes)) {
 								details.data.unavailable.push(object);
-							} else if(object.type) {
-								if(!details.data[object.type]) {
-									details.data[object.type] = [];
-									details.cards[object.type] = {};
-									if(this.universe.index.type[object.type]) {
-										details.cards[object.type].icon = this.universe.index.type[object.type].icon || "fas fa-cube";
-										details.cards[object.type].name = this.universe.index.type[object.type].name || object.type;
-									} else {
-										details.cards[object.type].icon = "fas fa-cube";
-										details.cards[object.type].name = "Unknown: " + object.type;
-									}
-									details.sections.unshift(object.type);
+							} else if(object.level) {
+								if(!details.data[object.level]) {
+									details.data.unavailable.push(object);
+								} else {
+									details.data[object.level].push(object);
 								}
-								details.data[object.type].push(object);
 							} else {
-								details.data.no_school.push(object);
+								details.data.cantrip.push(object);
 							}
 						}
+					}
+
+					if(details.data.unavailable.length) {
+						details.sections.push("unavailable");
 					}
 		
 					console.log("Open Details: ", details);

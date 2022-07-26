@@ -583,9 +583,9 @@ class Universe extends EventEmitter {
 				this.connected.push(player.id);
 			}
 			// console.log("Connect");
-			connection.on("connected", () => {
+			// connection.on("connected", () => {
 				
-			});
+			// });
 			
 			connection.connect(session, socket);
 		} else {

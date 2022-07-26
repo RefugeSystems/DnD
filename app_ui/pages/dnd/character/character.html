@@ -2,7 +2,7 @@
 	<div class="page-container entity-container flex h">
 		<div class="character-container main-character-container column flex v">
 			<dnd-entity-name :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.name" :storage-container="storage.name"></dnd-entity-name>
-			<dnd-entity-broad :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.broad" :storage-container="storage.broad" v-on:scrollcon="scrollTo($event)"></dnd-entity-broad>
+			<dnd-entity-broad :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.broad" :storage-container="storage.broad" v-on:scrollcon="scrollTo($event)" v-on:scrollhome="scrollHome()"></dnd-entity-broad>
 			<dnd-entity-actions :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.actions" :storage-container="storage.actions"></dnd-entity-actions>
 			<dnd-entity-dice :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.dice" :storage-container="storage.dice"></dnd-entity-dice>
 		</div>
@@ -15,8 +15,11 @@
 				<span class="action-count" :class="getSubIcon(entity)"></span>
 			</rs-shiny-button>
 		</div>
-		<div class="information-container" ref="infocon" v-wheel="scrollWheel">
-			<div class="info character-container column flex v">
+		<div class="information-container" ref="infocon" v-wheel="scrollWheel" v-on:scroll="checkLeft($event)">
+			<div class="info character-container column flex v" v-for="minion in minions">
+				<dnd-entity-overview class="nearby-entity" :entity="minion" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :storage-key="'_dndeoc:' + minion.id" :key="minion.id" />
+			</div>
+			<div class="info character-container column flex v" ref="stats">
 				<dnd-entity-effects :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.effects" :storage-container="storage.effects"></dnd-entity-effects>
 				<dnd-entity-skills :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.skills" :storage-container="storage.skills"></dnd-entity-skills>
 			</div>

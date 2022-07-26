@@ -62,6 +62,12 @@ rsSystem.component("DNDCharacter", {
 		var reference = this,
 			data = {};
 
+		data.meeting = this.universe.index.setting["setting:meeting"];
+		if(data.meeting) {
+			data.meeting = this.universe.index.meeting[data.meeting.value];
+		}
+		data.minions = [];
+
 		data.initiativeSubicon = {};
 		data.initiativeClass = "";
 		data.initiatives = [];
@@ -124,21 +130,31 @@ rsSystem.component("DNDCharacter", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		this.universe.$on("updated", this.checkUpdate);
 		window.onresize = () => {
 			this.updateTableContainers();
 		};
-		this.updateTableContainers();
 
-		if(this.skirmish) {
-			this.updateSkirmish();
-		}
+		this.universe.$on("updated", this.checkUpdate);
+		this.updateTableContainers();
+		this.updateSkirmish();
+		this.updateMinions();
 	},
 	"methods": {
 		"scrollTo": function(marker) {
 			if(this.$refs[marker]) {
-				this.$refs.infocon.scrollLeft = this.$refs[marker].offsetLeft - 100; // TODO: Fix Adjustment to use actual offset instead of fudging and using grid alignment
+				this.$refs.infocon.scrollLeft = this.$refs[marker].offsetLeft - 420; // Appears to need the main column removed // TODO: Fix Adjustment to use actual offset instead of fudging and using grid alignment
 			}
+		},
+		"checkLeft": function(event) {
+			// console.log("Check Left Event: ", this.$refs.infocon.scrollLeft);
+			if(this.$refs.infocon.scrollLeft === 0 && this.widget.broad.show_home) {
+				Vue.set(this.widget.broad, "show_home", false);
+			} else if(!this.widget.broad.show_home) {
+				Vue.set(this.widget.broad, "show_home", true);
+			}
+		},
+		"scrollHome": function() {
+			this.$refs.infocon.scrollLeft = 0;
 		},
 		"scrollWheel": function(event) {
 			if(event.path[0] == this.$refs.infocon) {
@@ -151,9 +167,9 @@ rsSystem.component("DNDCharacter", {
 				this.$refs.infocon.scrollLeft = offset;
 				*/
 				if(event.deltaY > 0) {
-					this.$refs.infocon.scrollLeft += 40;
-				} else {
-					this.$refs.infocon.scrollLeft -= 40;
+					this.$refs.infocon.scrollLeft += 420;
+				} else if(event.deltaY < 0) {
+					this.$refs.infocon.scrollLeft -= 420;
 				}
 			}
 		},
@@ -190,6 +206,20 @@ rsSystem.component("DNDCharacter", {
 			}
 			return null;
 		},
+		"updateMinions": function() {
+			var entity,
+				i;
+			
+			this.minions.splice(0);
+			if(this.meeting && this.meeting.entities && this.meeting.entities.length) {
+				for(i=0; i<this.meeting.entities.length; i++) {
+					entity = this.universe.index.entity[this.meeting.entities[i]];
+					if(rsSystem.utility.isValid(entity) && entity.is_minion && (entity.character === this.entity.id || (entity.loyal_to && entity.loyal_to[this.entity.id]))) {
+						this.minions.push(entity);
+					}
+				}
+			}
+		},
 		"updateSkirmish": function() {
 			var entity,
 				i;
@@ -206,12 +236,38 @@ rsSystem.component("DNDCharacter", {
 			this.initiatives.sort(rsSystem.utility.sortByInitiative);
 		},
 		"checkUpdate": function(event) {
-			if(this.skirmish && event) {
-				if(event.id === this.skirmish.id ) {
-					this.updateSkirmish();
-				}
-				if(this.skirmish.entities && this.skirmish.entities.indexOf(event.id) !== -1) {
-					this.updateSkirmish();
+			if(event) {
+				switch(event._class) {
+					case "skirmish":
+						if(this.skirmish) {
+							if(event.id === this.skirmish.id ) {
+								if(event.is_active) {
+									this.updateSkirmish();
+								} else {
+									Vue.set(this, "skimish", null);
+								}
+							}
+						} else if(event.is_active) {
+							Vue.set(this, "skirmish", event);
+							this.updateSkirmish();
+						}
+						break;
+					case "entity":
+						if(this.skirmish && this.skirmish.entities && this.skirmish.entities.indexOf(event.id) !== -1) {
+							this.updateSkirmish();
+						}
+						if(this.meeting) {
+							this.updateMinions();
+						}
+						break;
+					case "meeting":
+						if(this.meeting) {
+							if(this.meeting.id === event.id) {
+								this.updateMinions();
+							}
+						} else if(event.is_active) {
+							Vue.set(this, "meeting", event);
+						}
 				}
 			}
 		}

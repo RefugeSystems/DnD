@@ -4,7 +4,10 @@
  * @constructor
  */
 
-const Universe = require("../../../universe");
+var Universe = require("../../../universe"),
+	notifyMasterOnly = {
+		"player:master": true
+	};
 
 /**
  * Sorting function to sort objects by initiative with rules for negotiating ties.
@@ -334,7 +337,7 @@ module.exports.initialize = function(universe) {
 					"type": "audio:queue",
 					"audio": "audio:combat:turn",
 					"control": "audio:play",
-					"recipients": entity.played_by?entity.owned:null
+					"recipients": entity.played_by?entity.owned:notifyMasterOnly
 				});
 			}
 			/**

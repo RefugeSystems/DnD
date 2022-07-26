@@ -152,6 +152,22 @@
 				<div class="stat-foot">Long</div>
 			</button>
 		</div>
+		<div class="property-container rest flex h">
+			<button class="emphasis-stat" v-if="widget.show_home" v-on:click="scrollHome()">
+				<div class="stat-label">Scroll</div>
+				<div class="stat-value">
+					<span class="icon fa-solid fa-arrow-left-long-to-line"></span>
+				</div>
+				<div class="stat-foot">Home</div>
+			</button>
+			<button class="emphasis-stat" v-on:click="emitScrollNotice('stats')">
+				<div class="stat-label">Scroll</div>
+				<div class="stat-value">
+					<span class="icon fa-solid fa-table-columns"></span>
+				</div>
+				<div class="stat-foot">Stats</div>
+			</button>
+		</div>
 	</div>
 	<div class="character-stats broad-column flex v">
 		<button class="emphasis-stat" v-for="stat in characterStats" v-on:click="performSkillCheck(stat.skill)">

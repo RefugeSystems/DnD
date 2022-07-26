@@ -114,6 +114,20 @@ rsSystem.component("dndChronicleReadoutDamage", {
 			}
 			return 0;
 		},
+		"getKeyedObjectString": function(object) {
+			var result = "Damage:",
+				keyed,
+				key;
+			for(key in object) {
+				keyed = this.universe.getObject(key);
+				if(keyed) {
+					result += "\r\n" + keyed.name + ": " + object[key];
+				} else {
+					result += "\r\n" + key + ": " + object[key];
+				}
+			}
+			return result;
+		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record

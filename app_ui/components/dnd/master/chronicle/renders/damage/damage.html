@@ -34,7 +34,7 @@
 		</button>
 		<span>{{occurred.data.attack}} vs. {{entity.armor}}AC</span>
 	</div>
-	<div class="details">
+	<div class="details" :title="getKeyedObjectString(occurred.data.original_damage)">
 		<div class="damages flex v">
 			<span>Damage:</span>
 			<ul>

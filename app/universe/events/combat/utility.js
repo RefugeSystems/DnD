@@ -20,11 +20,88 @@ module.exports.initialize = function(universe) {
 		sendSaves,
 		sendSave,
 
+		successfulOutcome,
 		finishDamage,
 		sendDamages,
 		sendDamage,
 		takeDamage;
 	
+	/**
+	 * 
+	 * @method successfulOutcome
+	 * @staitc
+	 * @param {Object} log The source for the check
+	 * @param {Number | String} log.check_difficulty The value that must be met or overcome
+	 * @param {Number | String} log.check_outcome The rolled value by the initiator
+	 * @param {String} [type] Optional specifier declaring the type of check being made.
+	 * @return {Boolean}
+	 */
+	successfulOutcome = module.exports.successfulOutcome = function(log, type) {
+		var dc = log.check_difficulty,
+			roll = log.check_outcome,
+			channel = log.channel,
+			source = log.source,
+			target = log.target;
+
+		if(typeof(dc) === "number" && typeof(roll) === "number") {
+			return dc <= roll;
+		}
+
+		if(typeof(channel) === "string") {
+			channel = universe.get(channel);
+		}
+		if(typeof(source) === "string") {
+			source = universe.get(source);
+		}
+		if(typeof(target) === "string") {
+			target = universe.get(target);
+		}
+
+		if(typeof(dc) === "string") {
+			dc = universe.calculator.computedDiceRoll(dc, target);
+		}
+		if(typeof(roll) === "string") {
+			roll = universe.calculator.computedDiceRoll(roll, source);
+		}
+		if(typeof(dc) === "number" && typeof(roll) === "number") {
+			return dc <= roll;
+		}
+		
+		// TODO: Consider filling in and computing missing rolls when channel data is present to guide
+		switch(type) {
+			/* Currently all rolls are on a "meets or exceeds" basis but the log is used to determine difficulties
+			 * or other criteria to fill in missing data.
+			 */
+			case "attack":
+				if(!dc) {
+					dc = target.armor;
+				}
+				if(!roll) {
+					roll = 0;
+				}
+				break;
+			case "attack_save":
+				if(!dc) {
+					dc = channel.dc || source.spell_dc;
+				}
+				if(!roll) {
+					roll = 0;
+				}
+				break;
+			case "spell_save":
+				if(!dc) {
+					dc = channel.dc || source.spell_dc;
+				}
+				if(!roll) {
+					roll = 0;
+				}
+				break;
+			default:
+		}
+
+		return dc <= roll;
+	};
+
 	/**
 	 * 
 	 * @method takeDamage
@@ -50,6 +127,7 @@ module.exports.initialize = function(universe) {
 			resisted = {},
 			waiting = [],
 			was_damaged,
+			source,
 			adding,
 			effect,
 			notify,
@@ -75,63 +153,90 @@ module.exports.initialize = function(universe) {
 			log.activity = activity;
 			log.target = entity.id;
 			log.source = null;
+			log.channel = null;
+			log.check_difficulty = 0;
+			log.check_outcome = 0;
+			log.original_damage = damage;
 			log.damage = damage;
 			tracked = {};
 		}
-		if(damage) {
-			log.resist_source = resist;
-			was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source);
-			log.resist = resisted;
 
-			// events = entity.active_events || {};
-			// console.log("Delete Damage Activity[" + activity + "]: " + Object.keys(events).join());
-			// events[activity] = null;
-			// delete(events[activity]);
-			entity.subValues({
-				"active_events": [activity]
-			});
-			universe.chronicle.updateOccurrence(log.id, log, "entity:damaged", universe.time, log.source, entity.id);
-			if(tracked && tracked.source && tracked.target) {
-				if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
-					for(i=0; i<tracked.channel.instilled.length; i++) {
-						effect = universe.get(tracked.channel.instilled[i]);
-						if(!effect.damage_required || was_damaged) {
-							waiting.push(universe.copyPromise(effect, {
-								"character": tracked.target.id,
-								"caster": tracked.source.id
-							}));
+		entity.subValues({
+			"active_events": [activity]
+		});
+
+		if(log.source) {
+			log.succeeded = successfulOutcome(log, "attack");
+		} else {
+			log.succeeded = true; // Master or Environment
+		}
+		if(damage) {
+			if(log.succeeded) {
+				log.damage = damage; // Update for what the player submitted as final damage
+				log.resist_source = resist;
+				was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source);
+				log.resist = resisted;
+
+				if(was_damaged && (source = tracked.source || log.source)) {
+					if(typeof(source) === "string") {
+						source = universe.get(tracked.source);
+					}
+					source.fireHandlers("entity:damage:dealt", log);
+				}
+
+				// events = entity.active_events || {};
+				// console.log("Delete Damage Activity[" + activity + "]: " + Object.keys(events).join());
+				// events[activity] = null;
+				// delete(events[activity]);
+				entity.subValues({
+					"active_events": [activity]
+				});
+				if(tracked && tracked.source && tracked.target) {
+					if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
+						for(i=0; i<tracked.channel.instilled.length; i++) {
+							effect = universe.get(tracked.channel.instilled[i]);
+							if(!effect.damage_required || was_damaged) {
+								waiting.push(universe.copyPromise(effect, {
+									"character": tracked.target.id,
+									"caster": tracked.source.id
+								}));
+							}
 						}
 					}
-				}
-				if(tracked.effects && tracked.effects.length) {
-					for(i=0; i<tracked.effects.length; i++) {
-						effect = universe.get(tracked.effects[i]);
-						if(!effect.damage_required || was_damaged) {
-							waiting.push(universe.copyPromise(effect, {
-								"character": tracked.target.id,
-								"caster": tracked.source.id
-							}));
+					if(tracked.effects && tracked.effects.length) {
+						for(i=0; i<tracked.effects.length; i++) {
+							effect = universe.get(tracked.effects[i]);
+							if(!effect.damage_required || was_damaged) {
+								waiting.push(universe.copyPromise(effect, {
+									"character": tracked.target.id,
+									"caster": tracked.source.id
+								}));
+							}
 						}
 					}
-				}
-				if(waiting.length) {
-					Promise.all(waiting)
-					.then(function(effects) {
-						adding = [];
-						for(i=0; i<effects.length; i++) {
-							adding.push(effects[i].id);
-						}
-						tracked.target.addValues({
-							"effects": adding
+					if(waiting.length) {
+						Promise.all(waiting)
+						.then(function(effects) {
+							adding = [];
+							for(i=0; i<effects.length; i++) {
+								adding.push(effects[i].id);
+							}
+							tracked.target.addValues({
+								"effects": adding
+							});
+						})
+						.catch(function(err) {
+							universe.generalError("damage:taken", null, "Error while instilling channel effects", {
+								"activity": activity,
+								"log": log
+							});
 						});
-					})
-					.catch(function(err) {
-						universe.generalError("damage:taken", null, "Error while instilling channel effects", {
-							"activity": activity,
-							"log": log
-						});
-					});
+					}
 				}
+			} else {
+				// log.damage = {};
+				log.resist_source = damage;
+				log.resist = damage;
 			}
 		} else {
 			try {
@@ -143,6 +248,7 @@ module.exports.initialize = function(universe) {
 				universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received for entity:damaged event");
 			}
 		}
+		universe.chronicle.updateOccurrence(log.id, log, "entity:damaged", universe.time, log.source, entity.id);
 	};
 
 	/**
@@ -203,6 +309,10 @@ module.exports.initialize = function(universe) {
 			tracked = {};
 		}
 		
+		entity.subValues({
+			"active_events": [activity]
+		});
+
 		if(tracked && tracked.target) {
 			castMask = {};
 			castMask.caster = log.source;
@@ -257,9 +367,6 @@ module.exports.initialize = function(universe) {
 			// events = entity.active_events || {};
 			// console.log("Delete Save Activity[" + activity + "]: " + Object.keys(events).join());
 			// delete(events[activity]);
-			entity.subValues({
-				"active_events": [activity]
-			});
 			// was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
 			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 				for(i=0; i<tracked.channel.instilled.length; i++) {
@@ -432,7 +539,9 @@ module.exports.initialize = function(universe) {
 				"source": source,
 				"target": target,
 				"channel": channel,
-				"attack": atk,
+				"attack": atk, // Deprecating
+				"check_outcome": atk, // Standardizing around "check_outcome" & "check_difficulty"
+				"check_difficulty": target.armor,
 				"damage": damage,
 				"skill": attack_skill?attack_skill.id || attack_skill:undefined
 			};
@@ -443,6 +552,9 @@ module.exports.initialize = function(universe) {
 				"target": target.id,
 				"channel": channel?channel.id:null,
 				"attack": atk,
+				"check_outcome": atk, // Standardizing around "check_outcome" & "check_difficulty"
+				"check_difficulty": target.armor,
+				"original_damage": damage,
 				"damage": damage,
 				"skill": attack_skill?attack_skill.id || attack_skill:undefined
 			};
@@ -457,14 +569,16 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			source.fireHandlers("entity:attacking", {
-				"source": source?source.id:null,
-				"target": target.id,
-				"channel": channel?channel.id:null,
-				"damage": damage,
-				"time": time,
-				"date": date
-			});
+			if(source) {
+				source.fireHandlers("entity:attacking", {
+					"source": source?source.id:null,
+					"target": target.id,
+					"channel": channel?channel.id:null,
+					"damage": damage,
+					"time": time,
+					"date": date
+				});
+			}
 			/**
 			 * Fired for the creature being attacked
 			 * @event entity:attacked
@@ -477,7 +591,7 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} date
 			 */
 			target.fireHandlers("entity:attacked", {
-				"source": source.id,
+				"source": source?source.id:null,
 				"target": target.id,
 				"channel": channel?channel.id:null,
 				"damage": damage,

@@ -396,9 +396,25 @@ rsSystem.component("DNDWidgetCore", {
 		 * @param {Object} event That is active from an `active-event` field.
 		 */
 		"openActiveEvent": function(event) {
+			var loading;
 			switch(event.type) {
 				case "dialog-open":
 					rsSystem.EventBus.$emit("dialog-open", event);
+					break;
+				case "timer":
+					break;
+				case "minigame":
+					loading = this.universe.index.minigame[event.minigame];
+					if(loading) {
+						rsSystem.EventBus.$emit("dialog-open", {
+							"id": loading.id,
+							"minigame": loading,
+							"activity": event,
+							"component": loading.component
+						});
+					} else {
+						console.warn("Failed ot lcoate minigame for activity: ", event);
+					}
 					break;
 			}
 		},

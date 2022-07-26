@@ -82,12 +82,36 @@
 			},
 			"events": function() {
 				var events = [],
+					event,
 					keys,
 					i;
 				if(this.entity.active_events) {
 					keys = Object.keys(this.entity.active_events);
 					for(i=0; i<keys.length; i++) {
-						events.push(this.entity.active_events[keys[i]]);
+						event = this.entity.active_events[keys[i]];
+						if(event && !event.ongoing) {
+							events.push(event);
+						}
+					}
+					events.sort(this.sortByTime);
+				}
+				return events;
+			},
+			"ongoing": function() {
+				var events = [],
+					event,
+					keys,
+					i;
+				if(this.entity.active_events) {
+					keys = Object.keys(this.entity.active_events);
+					for(i=0; i<keys.length; i++) {
+						event = this.entity.active_events[keys[i]];
+						if(event && event.ongoing) {
+							if(event.id && !this.timers[event.id]) {
+								this.startTimer(event);
+							}
+							events.push(event);
+						}
 					}
 					events.sort(this.sortByTime);
 				}
@@ -97,6 +121,7 @@
 		"data": function() {
 			var data = {};
 
+			data.timers = {};
 			if(this.entity.action_max) {
 				data.actions = Object.keys(this.entity.action_max);
 			} else {
@@ -109,6 +134,33 @@
 			rsSystem.register(this);
 		},
 		"methods": {
+			"timerEventDisplay": function(event) {
+				var buffer;
+				if(event.countdown) {
+					buffer = Math.ceil((event.timer_mark - Date.now())/1000);
+					if(buffer <= 0) {
+						event.timer_finished = true;
+						event.icon = "fa-duotone fa-hourglass-end";
+						return "( Complete )";
+					} else {
+						return this.universe.calendar.displayDuration(buffer);
+					}
+				} else {
+					return this.universe.calendar.displayDuration(Date.now() - event.timer_mark);
+				}
+			},
+			"startTimer": function(event) {
+				if(event && event.id && !this.timers[event.id]) {
+					Vue.set(event, "display", this.timerEventDisplay(event));
+					this.timers[event.id] = () => {
+						Vue.set(event, "display", this.timerEventDisplay(event));
+						if(!event.timer_finished) {
+							setTimeout(this.timers[event.id], 500);
+						}
+					};
+					this.timers[event.id]();
+				}
+			},
 			"setActionBar": function() {
 				rsSystem.EventBus.$emit("entity:bar", this.entity);
 			},

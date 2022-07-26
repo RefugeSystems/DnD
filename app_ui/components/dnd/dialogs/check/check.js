@@ -203,7 +203,7 @@ rsSystem.component("dndDialogCheck", {
 				check.critical = this.roll.is_critical;
 				check.failure = this.roll.is_failure;
 				check.target = this.details.target;
-				console.log("Sending[" + this.roll.computed + "]: ", check);
+				// console.log("Sending[" + this.roll.computed + "]: ", check);
 				this.universe.send("action:check", check);
 				if(this.details.closeAfterCheck) {
 					this.closeDialog();

@@ -34,7 +34,7 @@ module.exports = new (function() {
 			// Create WebSocket handler for server
 			handler = new WebSocket.Server(options);
 			handler.on("connection", function(connection, request) {
-				// console.log( " [!] Websocket Server Connection");
+				// console.log( " [!] Websocket Server Connection: ", request.reconnecting);
 
 				if(request.session) {
 					connection.username = request.session.username;
@@ -56,6 +56,7 @@ module.exports = new (function() {
 				// console.log(" [!] Upgrade URL: ", request.url);
 
 				if(request.url.pathname === "/connect" && request.url.searchParams) {
+					request.reconnecting = request.url.searchParams.get("reconnect") === true;
 					request.query = request.url.query; // This doesn't appear to be handled by WS
 					request.path = request.url.pathname;
 
