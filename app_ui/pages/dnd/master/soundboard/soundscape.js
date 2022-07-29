@@ -118,7 +118,7 @@ class Soundscape {
 						Object.assign(this.activeDestinations[pattern.audio], destinations);
 					};
 					if(delay) {
-						setTimeout(play, delay);
+						this.timeouts["delayed:" + pattern.id] = setTimeout(play, delay);
 					} else {
 						play();
 					}
