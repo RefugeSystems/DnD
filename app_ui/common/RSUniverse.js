@@ -1171,9 +1171,29 @@ class RSUniverse extends EventEmitter {
 		URL.revokeObjectURL(anchor.href);
 		appendTo.removeChild(anchor);
 	}
+
+	/**
+	 * Brings UI in line with server
+	 * @method get
+	 * @alias getObject
+	 * @param {String} id 
+	 * @returns {Object}
+	 */
+	get(id) {
+		return this.getObject(id);
+	}
 	
+	/**
+	 * 
+	 * @method getObject
+	 * @param {String} id 
+	 * @returns {Object}
+	 */
 	getObject(id) {
 		var c;
+		if(this.index.all && this.index.all[id]) {
+			return this.index.all[id];
+		}
 		if(id && (c = this.getClassFromID(id)) && this.index[c]) {
 			switch(c) {
 				case "classes":

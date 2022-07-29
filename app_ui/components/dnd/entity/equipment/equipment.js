@@ -1,4 +1,3 @@
-
 /**
  *
  *
@@ -109,6 +108,46 @@ rsSystem.component("dndEntityEquipment", {
 		}
 	},
 	"methods": {
+		"getDamage": function(item) {
+			var types = Object.keys(item.damage),
+				roll = "",
+				i;
+			for(i=0; i<types.length; i++) {
+				roll += " " + item.damage[types[i]];
+			}
+			return rsSystem.dnd.Calculator.reducedDiceRoll(roll.trim(), item);
+		},
+		"getDamageRange": function(item) {
+			var field = this.universe.index.fields.range_normal,
+				range = item.range_normal;
+
+			if(field.attribute && field.attribute.cell_size) {
+				range = range + "(" + (item.range_normal/field.attribute.cell_size).toFixed(0) + " Cells)";
+			}
+			
+			if(item.range_minimum) {
+				range = "(Min:" + item.range_minimum + ") " + range;
+			}
+			// if(item.range_maximum) {
+			// 	range = range + " / " + item.range_maximum;
+			// }
+
+			return range;
+		},
+		"getDamageIcon": function(item) {
+			var type = this.universe.get(item.damage_type);
+			if(type) {
+				return type.icon || "fa-solid fa-info-circle rs-yellow";
+			}
+			return "fa-solid fa-exclamation-triangle rs-red";
+		},
+		"getDamageType": function(item) {
+			var type = this.universe.get(item.damage_type);
+			if(type) {
+				return type.name;
+			}
+			return "No Type";
+		},
 		"hoveredItem": function(item) {
 			this.$emit("hovered-object", item);
 		},

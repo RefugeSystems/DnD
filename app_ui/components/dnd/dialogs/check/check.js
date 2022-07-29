@@ -40,28 +40,28 @@ rsSystem.component("dndDialogCheck", {
 				search = this.universe.transcribeInto(this.entity.feats);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+					if(check.skill_bonus_roll || (check.additive_skill && check.additive_skill[this.skill.id])) {
 						additives.push(check);
 					}
 				}
 				search = this.universe.transcribeInto(this.entity.equipped);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+					if(check.skill_bonus_roll || (check.additive_skill && check.additive_skill[this.skill.id])) {
 						additives.push(check);
 					}
 				}
 				search = this.universe.transcribeInto(this.entity.spells);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+					if(check.skill_bonus_roll || (check.additive_skill && check.additive_skill[this.skill.id])) {
 						additives.push(check);
 					}
 				}
 				search = this.universe.transcribeInto(this.entity.effects);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(check.additive_skill && check.additive_skill[this.skill.id]) {
+					if(check.skill_bonus_roll || (check.additive_skill && check.additive_skill[this.skill.id])) {
 						additives.push(check);
 					}
 				}
@@ -155,6 +155,7 @@ rsSystem.component("dndDialogCheck", {
 			// var formula = "1d20 + " + this.entity.skill_check[this.skill.id],
 			var adds = Object.keys(this.active_additives),
 				formula,
+				add,
 				i;
 			
 			if(this.details.formula) {
@@ -167,7 +168,12 @@ rsSystem.component("dndDialogCheck", {
 				}
 
 				for(i=0; i<adds.length; i++) {
-					formula += " + " + this.active_additives[adds[i]].additive_skill[this.skill.id];
+					add = this.active_additives[adds[i]];
+					if(add.additive_skill && add.additive_skill[this.skill.id]) {
+						formula += " + " + add.additive_skill[this.skill.id];
+					} else if(add.skill_bonus_roll) {
+						formula += " + " + add.skill_bonus_roll;
+					}
 				}
 			} else {
 				formula = "1d20";

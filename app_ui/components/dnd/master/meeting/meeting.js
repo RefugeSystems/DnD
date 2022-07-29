@@ -1,4 +1,3 @@
-
 /**
  *
  *
@@ -176,6 +175,8 @@
 			data.id = this.active?this.active.id:"";
 			data.weather = "";
 			data.type = "";
+			data.activeTimer = null;
+			data.timer = {};
 
 			return data;
 		},
@@ -184,6 +185,112 @@
 			this.universe.$on("time:changed", this.updateTime);
 		},
 		"methods": {
+			"selectTimer": function() {
+				var details = {},
+					action,
+					types,
+					i,
+					j;
+
+				details.title = "Select Timer Duration";
+				details.component = "dndDialogList";
+				details.sections = ["timers"];
+				details.clear = true;
+				details.related = {};
+				details.cards = {};
+				details.data = {
+					"timers": []
+				};
+
+				details.activate = (section, timer) => {
+					timer = Object.assign({}, timer);
+					timer.id = Random.identifier("timer");
+					timer.entities = this.active.entities;
+					timer.meeting = this.active.id;
+					timer.is_active = true;
+					Vue.set(this.timer, timer.id, timer.entities);
+					Vue.set(this, "activeTimer", timer.id);
+					this.universe.send("meeting:timer", timer);
+					this.closeDialog();
+				};
+
+				// details.classing = (section, action) => {
+				// 	return "fa-duotone fa-hourglass";
+				// };
+
+				// details.note = (section, action) => {
+				// 	return "<span>Note</span>";
+				// };
+
+				details.cards.timers = {
+					"name": "Durations",
+					"icon": "fa-solid fa-hourglass-clock",
+					"description": "Select timer duration"
+				};
+				details.data.timers = [{
+					"id": "duration:1",
+					"icon": "fa-solid fa-hourglass",
+					"name": "1 Minute",
+					"description": "",
+					"duration": 60000,
+					"_search": "1 minute 1minute"
+				}, {
+					"id": "duration:2",
+					"icon": "fa-solid fa-hourglass",
+					"name": "2 Minutes",
+					"description": "",
+					"duration": 120000
+				}, {
+					"id": "duration:3",
+					"icon": "fa-solid fa-hourglass",
+					"name": "3 Minutes",
+					"description": "",
+					"duration": 180000
+				}, {
+					"id": "duration:4",
+					"icon": "fa-solid fa-hourglass",
+					"name": "4 Minutes",
+					"description": "",
+					"duration": 240000
+				}, {
+					"id": "duration:5",
+					"icon": "fa-solid fa-hourglass",
+					"name": "5 Minutes",
+					"description": "",
+					"duration": 300000
+				}, {
+					"id": "duration:10",
+					"icon": "fa-solid fa-hourglass",
+					"name": "10 Minutes",
+					"description": "",
+					"duration": 600000
+				}, {
+					"id": "duration:15",
+					"icon": "fa-solid fa-hourglass",
+					"name": "15 Minutes",
+					"description": "",
+					"duration": 900000
+				}, {
+					"id": "duration:20",
+					"icon": "fa-solid fa-hourglass",
+					"name": "20 Minutes",
+					"description": "",
+					"duration": 1200000
+				}];
+
+				rsSystem.EventBus.$emit("dialog-open", details);
+			},
+			"endTimer": function() {
+				if(this.activeTimer) {
+					var timer = {};
+					timer.entities = this.timer[timer.id];
+					timer.meeting = this.active.id;
+					timer.id = this.activeTimer;
+					this.universe.send("meeting:untime", timer);
+					Vue.set(this, "activeTimer", null);
+					Vue.delete(this.timer, timer.id);
+				}
+			},
 			"createNextMeeting": function() {
 				this.universe.send("meeting:generate", {
 					"meeting": this.active.id

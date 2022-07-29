@@ -25,6 +25,22 @@
 			</button>
 			<dnd-object-charges class="general rounded" v-if="showCharges(mainhand)" :object="mainhand" :universe="universe" :no-details="true"></dnd-object-charges>
 			<div class="weapon displayed-name">{{mainhand.name}}</div>
+			<div class="weapon-stats flex h spaced">
+				<div class="weapon-stat flex h">
+					<div class="weapon displayed-name icon" v-on:click="info(mainhand.damage_type)">
+						<span :class="getDamageIcon(mainhand)"></span>
+					</div>
+					<div class="weapon displayed-name" v-on:click="attack(mainhand)">
+						<span>{{getDamage(mainhand)}}</span>
+					</div>
+				</div>
+				<div>
+					<div class="weapon-stat displayed-name" v-on:click="attack(mainhand)" v-if="mainhand.ranged">
+						<span class="game-icon game-icon-overhead"></span>
+						<span>{{getDamageRange(mainhand)}}</span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="weapon main flex h v-center" v-if="!mainhand">
 			<button class="quick rounded general action" v-on:click="open('knowledge:rules:mainhand')">
@@ -40,6 +56,22 @@
 			</button>
 			<dnd-object-charges class="general rounded" v-if="showCharges(weapon)" :object="weapon" :universe="universe" :no-details="true"></dnd-object-charges>
 			<div class="weapon displayed-name">{{weapon.name}}</div>
+			<div class="weapon-stats flex h spaced">
+				<div class="weapon-stat flex h">
+					<div class="weapon displayed-name icon" v-on:click="info(weapon.damage_type)">
+						<span :class="getDamageIcon(weapon)"></span>
+					</div>
+					<div class="weapon displayed-name" v-on:click="attack(weapon)">
+						<span>{{getDamage(weapon)}}</span>
+					</div>
+				</div>
+				<div>
+					<div class="weapon-stat displayed-name" v-on:click="attack(weapon)" v-if="weapon.ranged">
+						<span class="game-icon game-icon-overhead"></span>
+						<span>{{getDamageRange(weapon)}}</span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="mini-divider"></div>
 	</div>

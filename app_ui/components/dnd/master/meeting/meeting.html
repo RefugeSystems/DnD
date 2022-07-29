@@ -115,6 +115,12 @@
 			<button class="rounded general quick action" v-on:click="info(active)" v-on:click.right.stop.prevent="active?editNoun($event, active):null" title="Information on the current active meeting.">
 				<span class="fas fa-info-circle"></span>
 			</button>
+			<button class="rounded general quick action" v-if="!activeTimer" v-on:click="selectTimer(active)" title="Start a timer for all entities.">
+				<span class="fa-regular fa-hourglass-clock"></span>
+			</button>
+			<button class="rounded general quick action" v-if="activeTimer" v-on:click="endTimer()" title="Stop the last created timer for all entities.">
+				<span class="fa-regular fa-hourglass-end"></span>
+			</button>
 		</div>
 	</div>
 	<div class="flex h wrap master-actions">

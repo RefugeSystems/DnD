@@ -66,10 +66,10 @@ rsSystem.component("dndEntityBroad", {
 
 		data.shortRest = "action:rest:short";
 		if(this.entity.actions && this.entity.actions.indexOf("action:rest:trance") === -1) {
-			data.longRestIcon = "icon fas fa-bed";
+			data.longRestIcon = "fas fa-bed";
 			data.longRest = "action:rest:long";
 		} else {
-			data.longRestIcon = "icon game-icon game-icon-meditation";
+			data.longRestIcon = "game-icon game-icon-meditation";
 			data.longRest = "action:rest:trance";
 		}
 

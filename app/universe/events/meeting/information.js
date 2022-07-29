@@ -87,7 +87,8 @@ module.exports.initialize = function(universe) {
 					}
 				}
 				if(changing.length) {
-					transition = {	
+					transition = {
+						"name": "Creatures join the travels...",
 						"type": "session:nearby:coming",
 						"entities": changing,
 						"meeting": meeting.id,
@@ -163,7 +164,8 @@ module.exports.initialize = function(universe) {
 					}
 				}
 				if(changing.length) {
-					transition = {	
+					transition = {
+						"name": "Creatures leave the travels...",
 						"type": "session:nearby:going",
 						"entities": changing,
 						"meeting": meeting.id,

@@ -6,7 +6,7 @@
 				<span>{{entity.hp}}</span>
 				<span class="seperator">/</span>
 				<span>{{entity.hp_max}}</span>
-				<span class="icon fad fa-heartbeat rs-green rs-secondary-solid rs-secondary-white"></span>
+				<span class="fad fa-heartbeat rs-green rs-secondary-solid rs-secondary-white"></span>
 			</button>
 			<span class="property-label">
 				<span>Health Points</span>
@@ -15,7 +15,7 @@
 		<div class="property-container health flex h v-center" v-if="entity.hp_temp">
 			<button class="action general rounded" v-on:click="takeDamage()">
 				<span>{{entity.hp_temp}}</span>
-				<span class="icon game-icon game-icon-bell-shield rs-light-blue"></span>
+				<span class="game-icon game-icon-bell-shield rs-light-blue"></span>
 			</button>
 			<span class="property-label">
 				<span>Temporary Health Points</span>
@@ -25,7 +25,7 @@
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="viewDefenses()">
 				<span>{{entity.armor}}</span>
-				<span class="icon fas fa-shield"></span>
+				<span class="fas fa-shield"></span>
 			</button>
 			<span class="property-label">
 				<span>Armor Class (AC)</span>
@@ -34,7 +34,7 @@
 		<div class="property-container defense flex h v-center" v-for="(amount, die) in entity.hit_dice">
 			<span class="raw-data">
 				<span>{{amount}} / {{entity.hit_dice_max[die]}}</span>
-				<span class="icon fa-solid" :class="'fa-dice-' + die"></span>
+				<span class="fa-solid" :class="'fa-dice-' + die"></span>
 			</span>
 			<span class="property-label">
 				<span>{{die}} Hit Die</span>
@@ -55,7 +55,7 @@
 		<div class="property-container defense flex h v-center" v-on:click="viewLanguages()">
 			<button class="action general rounded">
 				<span>{{languages.length}}</span>
-				<span class="icon fas fa-comment"></span>
+				<span class="fas fa-comment"></span>
 			</button>
 			<span class="property-label">
 				<span>Languages Spoken</span>
@@ -64,7 +64,7 @@
 		<div class="property-container defense flex h v-center">
 			<div class="raw-data">
 				<span>{{entity.movement_ground}}</span>
-				<span class="icon fa-solid fa-running"></span>
+				<span class="fa-solid fa-running"></span>
 			</div>
 			<span class="property-label">
 				<span>Movement Speed</span>
@@ -74,7 +74,7 @@
 		<div class="property-container defense flex h v-center" v-if="entity.movement_fly">
 			<div class="raw-data">
 				<span>{{entity.movement_fly}}</span>
-				<span class="icon game-icon game-icon-liberty-wing"></span>
+				<span class="game-icon game-icon-liberty-wing"></span>
 			</div>
 			<span class="property-label">
 				<span>Flying Speed</span>
@@ -84,7 +84,7 @@
 		<div class="property-container defense flex h v-center" v-if="entity.movement_swim">
 			<div class="raw-data">
 				<span>{{entity.movement_swim}}</span>
-				<span class="icon fa-solid fa-person-swimming"></span>
+				<span class="fa-solid fa-person-swimming"></span>
 			</div>
 			<span class="property-label">
 				<span>Swimming Speed</span>
@@ -95,7 +95,7 @@
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="emitScrollNotice('inventory')">
 				<span>{{formatNumber(entity.weight)}}</span>
-				<span class="icon fa-solid fa-weight-scale"></span>
+				<span class="fa-solid fa-weight-scale"></span>
 			</button>
 			<span class="property-label">
 				<span>Total Weight</span>
@@ -106,7 +106,7 @@
 				<span>{{bag_weight}}</span>
 				<span class="seperator">/</span>
 				<span>{{max_carry}}</span>
-				<span class="icon fa-solid fa-backpack"></span>
+				<span class="fa-solid fa-backpack"></span>
 			</div>
 			<span class="property-label">
 				<!-- <span class="icon" :class="getWeightScales()"></span> -->
@@ -120,7 +120,7 @@
 					<span class="seperator">/</span>
 					<span>{{entity.gold_max}}</span>
 				</span>
-				<span class="icon fas fa-coins"></span>
+				<span class="fas fa-coins"></span>
 			</button>
 			<span class="property-label">
 				<span>Gold</span>
@@ -130,7 +130,7 @@
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="info(entity.location)">
 				<span>{{location?location.name:"No Location"}}</span>
-				<span class="icon fa-solid fa-location-pin"></span>
+				<span class="fa-solid fa-location-pin"></span>
 			</button>
 			<span class="property-label">
 				<span>Current Location</span>
@@ -140,33 +140,51 @@
 			<button class="emphasis-stat" v-on:click="takeShortRest()">
 				<div class="stat-label">Rest</div>
 				<div class="stat-value">
-					<span class="icon fas fa-dice"></span>
+					<span class="fas fa-dice"></span>
 				</div>
 				<div class="stat-foot">Short</div>
 			</button>
 			<button class="emphasis-stat" v-on:click="takeLongRest()">
 				<div class="stat-label">Rest</div>
 				<div class="stat-value">
-					<span :class="longRestIcon"></span>
+					<span class="correct-2" :class="longRestIcon"></span>
 				</div>
 				<div class="stat-foot">Long</div>
 			</button>
 		</div>
+		<h3>Panel Scrolling</h3>
 		<div class="property-container rest flex h">
+			<button class="action general rounded quick" v-if="widget.show_home" v-on:click="scrollHome()" title="Scroll all the way back to the left (Including any minions)">
+				<span class="action-icon fa-solid fa-arrow-left-long-to-line"></span>
+			</button>
+			<button class="action general rounded quick" v-on:click="emitScrollNotice('stats')" title="Scroll to start of character stats">
+				<span class="action-icon fa-solid fa-table-columns"></span>
+			</button>
+			<button class="action general rounded quick" v-on:click="emitScrollNotice('inventory')" title="Scroll to Inventory">
+				<span class="action-icon fa-solid fa-backpack"></span>
+			</button>
+			<button class="action general rounded quick" v-on:click="emitScrollNotice('spells')" title="Scroll to Spellbook">
+				<span class="action-icon fad fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
+			</button>
+			<button class="action general rounded quick" v-on:click="emitScrollNotice('knowledge')" title="Scroll to knowledge">
+				<span class="action-icon fa-solid fa-brain"></span>
+			</button>
+			<!--
 			<button class="emphasis-stat" v-if="widget.show_home" v-on:click="scrollHome()">
 				<div class="stat-label">Scroll</div>
 				<div class="stat-value">
-					<span class="icon fa-solid fa-arrow-left-long-to-line"></span>
+					<span class="fa-solid fa-arrow-left-long-to-line"></span>
 				</div>
 				<div class="stat-foot">Home</div>
 			</button>
 			<button class="emphasis-stat" v-on:click="emitScrollNotice('stats')">
 				<div class="stat-label">Scroll</div>
 				<div class="stat-value">
-					<span class="icon fa-solid fa-table-columns"></span>
+					<span class="fa-solid fa-table-columns"></span>
 				</div>
 				<div class="stat-foot">Stats</div>
 			</button>
+			-->
 		</div>
 	</div>
 	<div class="character-stats broad-column flex v">
@@ -179,7 +197,7 @@
 			<div class="stat-label">Spell DC</div>
 			<div class="stat-value">{{entity.spell_dc}}</div>
 			<div class="stat-foot">
-				<span class="icon fad fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
+				<span class="fad fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
 			</div>
 		</button>
 		<button class="emphasis-stat" v-on:click="performSkillCheck('skill:raw:proficiency')">

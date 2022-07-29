@@ -106,28 +106,28 @@ rsSystem.component("dndDialogDamage", {
 				search = this.universe.transcribeInto(this.entity.feats);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.skill_bonus_roll || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
 						additives.push(check);
 					}
 				}
 				search = this.universe.transcribeInto(this.entity.equipped);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.skill_bonus_roll || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
 						additives.push(check);
 					}
 				}
 				search = this.universe.transcribeInto(this.entity.spells);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.skill_bonus_roll || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
 						additives.push(check);
 					}
 				}
 				search = this.universe.transcribeInto(this.entity.effects);
 				for(i=0; i<search.length; i++) {
 					check = search[i];
-					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.skill_bonus_roll || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
 						additives.push(check);
 					}
 				}
@@ -505,7 +505,7 @@ rsSystem.component("dndDialogDamage", {
 					}
 				} else {
 					Vue.set(this.adding, additive.id, additive);
-					if(!this.skill_add[additive.id] && rsSystem.utility.isNotEmpty(additive.additive_skill)) {
+					if(!this.skill_add[additive.id] && (rsSystem.utility.isNotEmpty(additive.additive_skill) || additive.skill_bonus_roll)) {
 						Vue.set(this.skill_add, additive.id, additive);
 					}
 				}
@@ -539,7 +539,7 @@ rsSystem.component("dndDialogDamage", {
 							additive = this.adding[additives[a]];
 							// Checks that the additive applies are handled in the channel selection
 							if(!additive.damage_bonus_type_lock || (channel && (channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]))) {
-								if(this.channel.damage_type && additive.damage_bonus_weapon) {
+								if(channel && channel.damage_type && additive.damage_bonus_weapon) {
 									type = this.universe.index.damage_type[this.channel.damage_type];
 									if(type) {
 										for(j=0; j<this.available_targets.length; j++) {
@@ -637,7 +637,6 @@ rsSystem.component("dndDialogDamage", {
 			return true;
 		},
 		"buildSkillChecks": function() {
-			console.log("Build Skills: ", this.skill_add);
 			var formula,
 				targets,
 				skill,
@@ -678,8 +677,10 @@ rsSystem.component("dndDialogDamage", {
 						if(rsSystem.utility.isNotEmpty(this.skill_add)) {
 							for(i in this.skill_add) {
 								add = this.skill_add[i];
-								if(add.additive_skill[skill.id]) {
+								if(add.additive_skill && add.additive_skill[skill.id]) {
 									formula += " + " + add.additive_skill[skill.id];
+								} else if(add.skill_bonus_roll) {
+									formula += " + " + add.skill_bonus_roll;
 								}
 							}
 						}
@@ -733,33 +734,38 @@ rsSystem.component("dndDialogDamage", {
 					}
 					break;
 				case "additives":
-					if(this.additives.length === 0 && !this.autoskipped[this.activeSection.id]) {
-						this.autoskipped[this.activeSection.id] = true;
+					// if(this.additives.length === 0 && !this.autoskipped[this.activeSection.id]) {
+					if(this.additives.length === 0 && !this.autoskipped[section.id]) {
+						this.autoskipped[section.id] = true;
 						setTimeout(() => {
 							this.goToNextSection();
 						});
-					} else if(this.quick_adds && auto_submit && !this.autoskipped[this.activeSection.id]) {
-						this.autoskipped[this.activeSection.id] = true;
+					// } else if(this.quick_adds && auto_submit && !this.autoskipped[this.activeSection.id]) {
+					} else if(this.quick_adds && auto_submit && !this.autoskipped[section.id]) {
+						this.autoskipped[section.id] = true;
 						setTimeout(() => {
 							this.goToNextSection();
 						});
 					}
 					break;
 				case "checks":
-					if(this.skill_checks.length === 0 && !this.autoskipped[this.activeSection.id]) {
-						this.autoskipped[this.activeSection.id] = true;
+					console.log("Check[" + this.activeSection.id + "]: ", _p(this.skill_checks));
+					// if(this.skill_checks.length === 0 && !this.autoskipped[this.activeSection.id]) {
+					if(this.skill_checks.length === 0 && !this.autoskipped[section.id]) {
+						this.autoskipped[section.id] = true;
 						setTimeout(() => {
 							this.goToNextSection();
 						});
-					} else if(this.profile && auto) {
+					} else if(auto) {
 						setTimeout(() => {
 							this.goToNextSection();
 						});
 					}
 					break;
 				case "targets":
-					if(this.available_targets.length === 0 && !this.autoskipped[this.activeSection.id]) {
-						this.autoskipped[this.activeSection.id] = true;
+					// if(this.available_targets.length === 0 && !this.autoskipped[this.activeSection.id]) {
+					if(this.available_targets.length === 0 && !this.autoskipped[section.id]) {
+						this.autoskipped[section.id] = true;
 						setTimeout(() => {
 							this.goToNextSection();
 						});
@@ -767,12 +773,13 @@ rsSystem.component("dndDialogDamage", {
 					break;
 				case "damage":
 					if(this.channel) {
-						if(this.available_damages.length === 0 && !this.autoskipped[this.activeSection.id]) {
-							this.autoskipped[this.activeSection.id] = true;
+						// if(this.available_damages.length === 0 && !this.autoskipped[this.activeSection.id]) {
+						if(this.available_damages.length === 0 && !this.autoskipped[section.id]) {
+							this.autoskipped[section.id] = true;
 							setTimeout(() => {
 								this.goToNextSection();
 							});
-						} else if(this.profile && auto) {
+						} else if(auto) {
 							setTimeout(() => {
 								this.goToNextSection();
 							});
@@ -817,8 +824,9 @@ rsSystem.component("dndDialogDamage", {
 						}
 					}
 					console.log("Effects: ", this.effects, this.effects_self);
-					if(!this.autoskipped[this.activeSection.id] && ((this.effects.length === 0 && this.effects_self.length === 0) || this.channel)) {
-						this.autoskipped[this.activeSection.id] = true;
+					// if(!this.autoskipped[this.activeSection.id] && ((this.effects.length === 0 && this.effects_self.length === 0) || this.channel)) {
+					if(!this.autoskipped[section.id] && ((this.effects.length === 0 && this.effects_self.length === 0) || this.channel)) {
+						this.autoskipped[section.id] = true;
 						setTimeout(() => {
 							this.goToNextSection();
 						});

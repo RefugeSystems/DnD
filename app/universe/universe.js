@@ -1237,8 +1237,8 @@ class Universe extends EventEmitter {
 				if(event && event.code) {
 					result.code = event.code;
 					if(event.player && event.player.gm && typeof(event.code) === "string") {
-						method = new Function("player", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", event.code),
-						result.returned = method(event.player, universe, universe.utility) || null;
+						method = new Function("player", "universe", "utility", "Random", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", event.code),
+						result.returned = method(event.player, universe, universe.utility, Random) || null;
 						result.message = "Execution complete";
 						result.status = 0;
 					} else {
