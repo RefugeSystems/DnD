@@ -110,10 +110,14 @@ rsSystem.component("dndEntityEquipment", {
 	"methods": {
 		"getDamage": function(item) {
 			var types = Object.keys(item.damage),
-				roll = "",
+				roll,
 				i;
 			for(i=0; i<types.length; i++) {
-				roll += " " + item.damage[types[i]];
+				if(roll) {
+					roll += " + " + item.damage[types[i]];
+				} else {
+					roll = item.damage[types[i]];
+				}
 			}
 			return rsSystem.dnd.Calculator.reducedDiceRoll(roll.trim(), item);
 		},
