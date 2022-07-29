@@ -76,12 +76,12 @@ class Soundscape {
 		var keys = Object.keys(this.timeouts),
 			key,
 			i;
+		for(i=0; i<keys.length; i++) {
+			key = keys[i];
+			clearTimeout(this.timeouts[key]);
+			delete(this.timeouts[key]);
+		}
 		if(this.active) {
-			for(i=0; i<keys.length; i++) {
-				key = keys[i];
-				clearTimeout(this.timeouts[key]);
-				delete(this.timeouts[key]);
-			}
 			for(key in this.activeDestinations) {
 				this.controller.stopPlayerAudio(this.activeDestinations[key], key);
 			}
