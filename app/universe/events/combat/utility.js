@@ -192,6 +192,7 @@ module.exports.initialize = function(universe) {
 					"active_events": [activity]
 				});
 				if(tracked && tracked.source && tracked.target) {
+					// TODO: Improve conditions around instill to be able to not require damage and a hit
 					if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 						for(i=0; i<tracked.channel.instilled.length; i++) {
 							effect = universe.get(tracked.channel.instilled[i]);
@@ -273,6 +274,7 @@ module.exports.initialize = function(universe) {
 			events,
 			notify,
 			keys,
+			mask,
 			i;
 		
 		if(!save) {
@@ -287,7 +289,7 @@ module.exports.initialize = function(universe) {
 			log.save = save;
 			log.critical = critical;
 			log.failure = failure;
-			log.succeeded = succeeded = tracked.difficulty <= save;
+			log.succeeded = succeeded = !failure && (critical || tracked.difficulty <= save);
 			if(tracked.target.owned && Object.keys(tracked.target.owned).length) {
 				notify = tracked.target.owned;
 			} else {
@@ -321,9 +323,8 @@ module.exports.initialize = function(universe) {
 				castMask.expiration = universe.time + tracked.channel.duration;
 			}
 
-			if(!failure && (critical || succeeded)) {
+			if(succeeded) {
 				console.log("Succeed [" + save + " vs. DC" + tracked.difficulty + "]");
-				succeeded = true;
 				if(tracked.damage) {
 					// TODO: Improve logic for spell damage reduction as cantrip vs. full spell []
 					damage = log.damage = {};
@@ -368,14 +369,17 @@ module.exports.initialize = function(universe) {
 			// console.log("Delete Save Activity[" + activity + "]: " + Object.keys(events).join());
 			// delete(events[activity]);
 			// was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
+			// TODO: Conditional Instill
 			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 				for(i=0; i<tracked.channel.instilled.length; i++) {
+					mask = Object.assign({}, castMask);
+					mask.character = tracked.target.id;
 					buffer = universe.get(tracked.channel.instilled[i]);
 					if(buffer && ((buffer.damage_required && was_damaged && buffer.hit_required && succeeded === false)
 							|| (buffer.damage_required && was_damaged && !buffer.hit_required)
 							|| (!buffer.damage_required && buffer.hit_required && succeeded === false)
 							|| (!buffer.damage_required && !buffer.hit_required))) {
-						universe.copy(buffer.id, castMask, function(err, effect) {
+						universe.copy(buffer.id, mask, function(err, effect) {
 							universe.trackExpiration(effect, log.target, "effects");
 							tracked.target.addValues({
 								"effects": [effect.id]
