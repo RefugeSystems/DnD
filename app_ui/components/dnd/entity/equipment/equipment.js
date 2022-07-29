@@ -119,7 +119,11 @@ rsSystem.component("dndEntityEquipment", {
 					roll = item.damage[types[i]];
 				}
 			}
-			return rsSystem.dnd.Calculator.reducedDiceRoll(roll.trim(), item);
+			if(roll) {
+				return rsSystem.dnd.Calculator.reducedDiceRoll(roll.trim(), item);
+			} else {
+				return "0d0";
+			}
 		},
 		"getDamageRange": function(item) {
 			var field = this.universe.index.fields.range_normal,
