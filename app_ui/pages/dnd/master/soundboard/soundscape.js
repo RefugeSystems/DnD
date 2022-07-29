@@ -73,10 +73,14 @@ class Soundscape {
 	}
 
 	stopSoundscape() {
-		var key;
+		var keys = Object.keys(this.timeouts),
+			key,
+			i;
 		if(this.active) {
-			for(key in this.timeouts) {
+			for(i=0; i<keys.length; i++) {
+				key = keys[i];
 				clearTimeout(this.timeouts[key]);
+				delete(this.timeouts[key]);
 			}
 			for(key in this.activeDestinations) {
 				this.controller.stopPlayerAudio(this.activeDestinations[key], key);
@@ -164,7 +168,7 @@ class Soundscape {
 					} else {
 						player = this.get(destination);
 					}
-					if(!player && this.active.master_fallback) {
+					if(!player && this.active && this.active.master_fallback) {
 						player = this.get(0);
 					}
 					if(player) {
