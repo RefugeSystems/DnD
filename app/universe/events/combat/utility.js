@@ -796,7 +796,6 @@ module.exports.initialize = function(universe) {
 		}
 		var id = Random.identifier(activityPrefix, 10, 32),
 			activity,
-			firing,
 			target,
 			audio,
 			item,
@@ -817,53 +816,6 @@ module.exports.initialize = function(universe) {
 			});
 		}
 
-		if(source) {
-			if(typeof(source) === "string") {
-				source = universe.get(source);
-			}
-			firing = {
-				"source": source.id,
-				"channel": channel?channel.id||channel:null,
-				"target": target.id,
-				"damage": damage
-			};
-			/**
-			 * Fired on the items, feats, and spells owned by the attacking
-			 * entity when the attack is declared (Before damage dealt is know
-			 * but the amount going out is present).
-			 * @event source:spellcasted
-			 * @param {String} source
-			 * @param {String} target
-			 * @param {String} [channel]
-			 * @param {Object} damage Mapping damage_type IDs to the amount being
-			 * 		dealt.
-			 */
-			if(source.inventory) {
-				for(i=0; i<source.inventory.length; i++) {
-					item = universe.get(source.inventory[i]);
-					if(item) {
-						item.fireHandlers("source:spellcasted", firing);
-					}
-				}
-			}
-			if(source.feats) {
-				for(i=0; i<source.feats.length; i++) {
-					item = universe.get(source.feats[i]);
-					if(item) {
-						item.fireHandlers("source:spellcasted", firing);
-					}
-				}
-			}
-			if(source.spells) {
-				for(i=0; i<source.spells.length; i++) {
-					item = universe.get(source.spells[i]);
-					if(item) {
-						item.fireHandlers("source:spellcasted", firing);
-					}
-				}
-			}
-		}
-
 		if(channel) {
 			if(typeof(channel) === "string") {
 				channel = universe.get(channel);
@@ -880,6 +832,7 @@ module.exports.initialize = function(universe) {
 
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
+
 			activity = id + ":" + target.id;
 			tracking[activity] = {
 				"activity": activity,
@@ -927,7 +880,12 @@ module.exports.initialize = function(universe) {
 
 		// var events = target.active_events || {};
 
-		var emission = {
+		var emission,
+			firing,
+			item,
+			i;
+
+		emission = {
 			"id": activity,
 			"name": "Spell Save",
 			"type": "dialog-open",
@@ -952,6 +910,53 @@ module.exports.initialize = function(universe) {
 		target.addValues({
 			"active_events": emission
 		});
+
+		if(source) {
+			if(typeof(source) === "string") {
+				source = universe.get(source);
+			}
+			firing = {
+				"source": source.id,
+				"channel": channel?channel.id||channel:null,
+				"target": target.id,
+				"damage": damage
+			};
+			/**
+			 * Fired on the items, feats, and spells owned by the attacking
+			 * entity when the attack is declared (Before damage dealt is know
+			 * but the amount going out is present).
+			 * @event source:spellcasted
+			 * @param {String} source
+			 * @param {String} target
+			 * @param {String} [channel]
+			 * @param {Object} damage Mapping damage_type IDs to the amount being
+			 * 		dealt.
+			 */
+			if(source.inventory) {
+				for(i=0; i<source.inventory.length; i++) {
+					item = universe.get(source.inventory[i]);
+					if(item) {
+						item.fireHandlers("source:spellcasted", firing);
+					}
+				}
+			}
+			if(source.feats) {
+				for(i=0; i<source.feats.length; i++) {
+					item = universe.get(source.feats[i]);
+					if(item) {
+						item.fireHandlers("source:spellcasted", firing);
+					}
+				}
+			}
+			if(source.spells) {
+				for(i=0; i<source.spells.length; i++) {
+					item = universe.get(source.spells[i]);
+					if(item) {
+						item.fireHandlers("source:spellcasted", firing);
+					}
+				}
+			}
+		}
 
 		var notify = function() {
 			var tracked = tracking[activity];
