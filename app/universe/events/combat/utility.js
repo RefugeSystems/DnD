@@ -204,6 +204,7 @@ module.exports.initialize = function(universe) {
 							}
 						}
 					}
+					// TODO: Reconsider effects on an item/spell behaving like instill - these should probably merely add to the item/spell
 					if(tracked.effects && tracked.effects.length) {
 						for(i=0; i<tracked.effects.length; i++) {
 							effect = universe.get(tracked.effects[i]);
