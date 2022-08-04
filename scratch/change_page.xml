@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<j:set var="jvar_change" value="${sysparm_change}"/>
+	<j:set var="jvar_name" value="${sysparm_name}"/>
+	
+	<j:set var="jvar_blocked_release_window" value=""/>
+	<j:set var="jvar_blocked_accepted" value=""/>
+	<j:set var="jvar_blocked_stories" value=""/>
+	<j:set var="jvar_query_accepted" value=""/>
+	<j:set var="jvar_table_accepted" value=""/>
+	<j:set var="jvar_query_stories" value=""/>
+	<j:set var="jvar_table_stories" value=""/>
+	
+	<j:set var="jvar_release_number" value=""/>
+	<j:set var="jvar_release_sysid" value=""/>
+	<j:set var="jvar_release" value=""/>
+	
+	<j:set var="jvar_queries" value=""/>
+	<j:set var="jvar_query" value=""/>
+	<g:evaluate>
+		var blocked_change_window = ChangeWorkflowCheck.isBlocked("changewindowtasks", "${sysparm_change}"),
+			query_change_window = ChangeWorkflowCheck.getQuery("changewindowtasks", "${sysparm_change}"),
+			table_change_window = "change_task",
+
+			blocked_release_window = ChangeWorkflowCheck.isBlocked("release", "${sysparm_change}"),
+		
+			blocked_accepted = ChangeWorkflowCheck.isBlocked("accepted", "${sysparm_change}"),
+			query_accepted = ChangeWorkflowCheck.getQuery("accepted", "${sysparm_change}"),
+			table_accepted = "change_task",
+
+			blocked_stories = ChangeWorkflowCheck.isBlocked("stories", "${sysparm_change}"),
+			query_stories = ChangeWorkflowCheck.getQuery("stories", "${sysparm_change}"),
+			table_stories = "u_versionone",
+
+			blocked_owners = ChangeWorkflowCheck.isBlockedForNoOwners("${sysparm_change}"),
+			owners_found = ChangeWorkflowCheck.getOwners("${sysparm_change}").length,
+			owners_url = ChangeWorkflowCheck.getClassicURLForInactive("${sysparm_change}"),
+
+			release = ChangeWorkflowCheck.getRelease("${sysparm_change}"),
+			release_number,
+			release_sysid,
+			release_start,
+			release_end
+		
+		if(release) {
+			release_start = release.getDisplayValue("expected_start");
+			release_end = release.getDisplayValue("u_expected_end");
+			release_number = release.getValue("number");
+			release_sysid = release.getUniqueValue();
+		} else {
+			release_number = "";
+			release_sysid = "";
+		}
+
+		var query = ChangeWorkflowCheck.getAcceptanceQuery("${sysparm_change}");
+	</g:evaluate>
+	
+	<style>
+		.accept-status.icon {
+			vertical-align: text-bottom;
+			padding: 0px 5px 0px 0px;
+		} 
+		/* Issues with UI Pages collapsing the spacing around the anchor element */
+		.spaced-link {
+			padding: 0px .5em;
+		}
+		li.spaced-info {
+			padding-bottom: 10px;
+		}
+		.spaced-info .date {
+			-webkit-font-smoothing: antialiased;
+			font-weight: 600;
+			padding: 0px 7px;
+			color: black;
+		}
+	</style>
+	
+	<p>
+		You currently can not request approval for this change as there are some important requirements that are not yet met.
+	</p>
+	
+	<!-- The HTML in the UI Page doesn't nicely space the link, the text collapses onto it, so the link is moved to a button but preserved in this style as a note
+	<p>
+		<span>You currently can not request approval for this change as there are still </span>
+		<a class="spaced-link" href="/change_task_list.do?sysparm_query=change_request%3D${sysparm_change}%5Eu_accepted%3Dfalse%5Eu_environment%3DPRD" target="_blank">Change Tasks</a>
+		<span>for Production awaiting acceptance.</span>
+	</p>
+	-->
+	
+	<ul>
+		<j:if test="${blocked_release_window}">
+			<li class="spaced-info">
+				<p>The start and end times for this change must fall between the start and end times of the release ${release_number} spanning <span class="date">${release_start}</span> to <span class="date">${release_end}</span>.</p>
+
+				<a class="btn btn-primary" href="/rm_release.do?sys_id=${release_sysid}" target="_blank">View Release</a>
+			</li>
+		</j:if>
+
+		<j:if test="${blocked_accepted}">
+			<li class="spaced-info">
+				<p>Tasks are currently pending acceptance.</p>
+
+				<a class="btn btn-primary" href="/${table_accepted}_list.do?sysparm_query=${query_accepted}" target="_blank">View Pending Change Tasks</a>
+			</li>
+		</j:if>
+		
+		<j:if test="${blocked_stories}">
+			<li class="spaced-info">
+				<p>All associated stories must be accepted.</p>
+
+				<a class="btn btn-primary" href="/${table_stories}_list.do?sysparm_query=${query_stories}" target="_blank">View Unaccepted Stories</a>
+			</li>
+		</j:if>
+		
+		<j:if test="${blocked_owners}">
+			<j:if test="${owners_found != 0}">
+				<li class="spaced-info">
+					<p>Unable to request approval as none of the ${owners_found} active IT Owners were found for this change. Administrators have been notified about this exception.</p>
+
+					<a class="btn btn-primary" href="${owners_url}" target="_blank">View Inactive Owners</a>
+				</li>
+			</j:if>
+			<j:if test="${owners_found == 0}">
+				<li class="spaced-info">
+					<p>Unable to request approval as no IT Owners were found for this change. Administrators have been notified about this exception.</p>
+				</li>
+			</j:if>
+		</j:if>
+		
+		<j:if test="${blocked_change_window}">
+			<li class="spaced-info">
+				<p>There are Production change tasks scheduled outside of the change window .</p>
+
+				<a class="btn btn-primary" href="/${table_change_window}_list.do?sysparm_query=${query_change_window}" target="_blank">View Misscheduled Change Tasks</a>
+			</li>
+		</j:if>
+		
+		<j:if test="${!blocked_release_window &amp;&amp; !blocked_stories &amp;&amp; !blocked_accepted &amp;&amp; !blocked_change_window &amp;&amp; !blocked_owners}">
+			<li class="spaced-info">
+				<p>The change is ready to request approvals however the form data is stale. Please save and reload the form.</p>
+
+				<a class="btn btn-primary" onclick="location.reload()">Reload Form</a>
+			</li>
+		</j:if>
+	</ul>
+</j:jelly>
