@@ -161,7 +161,6 @@ rsSystem.component("rsDisplayField", {
 		},
 		"isActive": function(value) {
 			if(value && value.id) {
-				console.log("Is Active[" + value.id + "]: ", value.active, value.is_active, !!(value.active || value.is_active), value);
 				return !!(value.active || value.is_active);
 			}
 		},
