@@ -488,6 +488,9 @@ module.exports.initialize = function(universe) {
 						universe.notifyMasters(entity.name + " has lost consciousness");
 					}
 					entity.fireHandlers("entity:consciousness:lost", {});
+					meeting.addValues({
+						"killed": [entity.id]
+					});
 				} else if(!conscious && entity.hp !== 0) {
 					universe.notifyMasters(entity.name + " has gained consciousness");
 					entity.fireHandlers("entity:consciousness:gain", {});
@@ -522,6 +525,21 @@ module.exports.initialize = function(universe) {
 									}
 									meeting.subValues({
 										"entities": [transform.id]
+									});
+								}
+								if(meeting = universe.getActiveSkirmish()) {
+									if(meeting.combat_turn === entity.id) {
+										meeting.setValues({
+											"combat_turn": entity.transform_character
+										});
+									}
+									if(meeting.entities.indexOf(entity.transform_character) === -1) {
+										meeting.addValues({
+											"entities": [entity.transform_character]
+										});
+									}
+									meeting.subValues({
+										"entities": [entity.id]
 									});
 								}
 								transform.fireHandlers("entity:damaged", {

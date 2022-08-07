@@ -1231,6 +1231,35 @@ class Universe extends EventEmitter {
 	}
 
 
+	getActiveSkirmish() {
+		var meeting = this.getActiveMeeting(),
+			skirmish,
+			i;
+		if(meeting) {
+			if(meeting.skirmishes) {
+				for(i=0; i<meeting.skirmishes.length; i++) {
+					skirmish = this.manager.skirmish.object[meeting.skirmishes[i]];
+					if(!skirmish.is_preview && (skirmish.active || skirmish.is_active)) {
+						return skirmish;
+					}
+				}
+			}
+		} else {
+			for(i=0; i<this.manager.skirmish.objectIDs.length; i++) {
+				skirmish = this.manager.skirmish.object[this.manager.skirmish.objectIDs[i]];
+				if(!skirmish.is_preview && (skirmish.active || skirmish.is_active)) {
+					return skirmish;
+				}
+			}
+		}
+		return null;
+	}
+
+	getActiveCombat() {
+		return this.getActiveSkirmish();
+	}
+
+
 	processScript(event) {
 		var universe = this;
 		setTimeout(function() {

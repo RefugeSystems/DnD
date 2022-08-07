@@ -77,6 +77,7 @@ module.exports.initialize = function(universe) {
 			mask.stat_intelligence = character.stat_intelligence;
 			mask.stat_charisma = character.stat_charisma;
 			mask.stat_wisdom = character.stat_wisdom;
+			mask.initiative = character.initiative;
 			mask.hp = transform.hp_max;
 			mask.handlers = handlers;
 			mask.actions = actions;
@@ -91,6 +92,21 @@ module.exports.initialize = function(universe) {
 				} else {
 					// TODO: Update party list
 					if(meeting) {
+						if(meeting.entities.indexOf(transformed.id) === -1) {
+							meeting.addValues({
+								"entities": [transformed.id]
+							});
+						}
+						meeting.subValues({
+							"entities": [character.id]
+						});
+					}
+					if(meeting = universe.getActiveSkirmish()) {
+						if(meeting.combat_turn === character.id) {
+							meeting.setValues({
+								"combat_turn": transformed.id
+							});
+						}
 						if(meeting.entities.indexOf(transformed.id) === -1) {
 							meeting.addValues({
 								"entities": [transformed.id]
@@ -119,7 +135,7 @@ module.exports.initialize = function(universe) {
 							"id": Random.identifier("action").toLowerCase(),
 							"name": "Transformed",
 							"icon": transformed.icon || "fa-solid fa-user",
-							"description": "Currently transformation into a " + transform.name,
+							"description": "Currently transformation into " + transform.name,
 							"type": "concentration",
 							"send": "character:untransform",
 							"okay_text": "End Transformation",
@@ -181,6 +197,22 @@ module.exports.initialize = function(universe) {
 				if(meeting.entities.indexOf(character.transform_character) === -1) {
 					meeting.addValues({
 						"entities": [character.transform_character]
+					});
+				}
+				meeting.subValues({
+					"entities": [character.id]
+				});
+			}
+			if(meeting = universe.getActiveSkirmish()) {
+				if(meeting.combat_turn === character.id) {
+					meeting.setValues({
+						"combat_turn": character.transform_character
+					});
+				}
+				if(meeting.entities.indexOf(character.transform_character) === -1) {
+					meeting.addValues({
+						"entities": [character.transform_character],
+						"killed": [character.id]
 					});
 				}
 				meeting.subValues({

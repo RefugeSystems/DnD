@@ -63,6 +63,7 @@
 		<div class="values" :class="valuesContainerClass()">
 			<div class="value array flex v" v-if="fieldData.type === 'array'">
 				<div class="element" v-for="value in getArrayValue()" v-if="!value.obscured && !value.hidden">
+					<span v-if="isActive(value)" class="fa-solid fa-check"></span>
 					<span class="text">{{getValueDisplay(fieldData, value)}}</span>
 					<button class="flat action fas fa-info-circle" v-if="value.id" v-on:click="info(value)" v-linkable="value.id"></button>
 				</div>

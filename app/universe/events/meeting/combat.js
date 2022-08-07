@@ -83,7 +83,7 @@ module.exports.initialize = function(universe) {
 						});
 					}
 					meeting.addValues({
-						"skirmishes": [skirmish]
+						"skirmishes": [skirmish.id]
 					});
 				}
 			});
