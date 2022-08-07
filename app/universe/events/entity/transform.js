@@ -1,3 +1,4 @@
+var Random = require("rs-random");
 
 module.exports.initialize = function(universe) {
 	
@@ -20,15 +21,19 @@ module.exports.initialize = function(universe) {
 	 * @param {String} event.message.data.transform The target to transform into
 	 * @param {String} event.message.data.polymorph When set, stores the current entity data and replaces it with
 	 * 		the transform source data instead of shimming a copy.
+	 * @param {String} event.message.data.player The target to transform into
 	 */
 	universe.on("player:character:transform", function(event) {
-		var character = event.message.data.character,
+		var player = event.message.data.player || event.player,
+			character = event.message.data.character,
 			transform = event.message.data.transform,
 			polymorph = event.message.data.polymorph,
-			player = event.player,
+			meeting = universe.getActiveMeeting(),
 			player_attr,
 			handlers,
 			handler,
+			actions,
+			action,
 			mask,
 			i;
 
@@ -38,31 +43,91 @@ module.exports.initialize = function(universe) {
 		if(typeof(transform) === "string") {
 			transform = universe.manager.entity.object[transform];
 		}
+		if(typeof(player) === "string") {
+			player = universe.manager.player.object[player];
+		}
 		
 		// Manually pull the handler that should automatically manage reverting to the base form on 0HP
-		handler = universe.manager.entity.object["handler:transformation:revert"];
+		handler = universe.manager.handler.object["handler:transformation:revert"];
 		if(!handler) {
 			universe.notifyMasters("Player transforming and unable to find transformation handler", event.message.data);
 		}
+		action = universe.manager.action.object["action:transformation:revert"];
+		if(!action) {
+			universe.notifyMasters("Player transforming and unable to find untransformation action", event.message.data);
+		}
 
-		if(character && character.owned[player.id] && transform && event.player.attribute.playing_as === character.id) {
+		if(player && character && transform && (player.gm || (character.owned[player.id] && event.player.attribute.playing_as === character.id))) {
 			handlers = transform.handlers || [];
-			handlers.push(handler.id);
+			if(handler) {
+				handlers.push(handler.id);
+			}
+			actions = transform.actions || [];
+			if(action) {
+				actions.push(action.id);
+			}
 
 			mask = {};
+			mask.id = Random.identifier("entity").toLowerCase();
+			mask.name = character.name;
 			mask.transform_character = character.id;
 			mask.transform_player = player.id;
 			mask.character = character.id;
+			mask.skill_proficiency = character.skill_proficiency;
+			mask.stat_intelligence = character.stat_intelligence;
+			mask.stat_charisma = character.stat_charisma;
+			mask.stat_wisdom = character.stat_wisdom;
 			mask.hp = transform.hp_max;
 			mask.handlers = handlers;
+			mask.actions = actions;
 			mask.owned = {};
 			mask.owned[player.id] = Date.now();
+			mask.parent = transform.id;
 
 			universe.createObject(mask, function(error, transformed) {
 				if(error) {
 					// TODO: Log Error
 					universe.notifyMasters("Error during Player transformation creation: " + error.message, event.message.data);
 				} else {
+					// TODO: Update party list
+					if(meeting) {
+						if(meeting.entities.indexOf(transformed.id) === -1) {
+							meeting.addValues({
+								"entities": [transformed.id]
+							});
+						}
+						meeting.subValues({
+							"entities": [character.id]
+						});
+					}
+					/*
+					timer.id = id;
+					timer.icon = icon || "fa-duotone fa-hourglass";
+					timer.name = name || "Timer";
+					timer.timer_mark = Date.now() + duration;
+					timer.is_active = active;
+					timer.countdown = true;
+					timer.ongoing = true;
+					timer.type = "timer";
+					activeTimers[id] = entry;
+					timer = [timer];
+					*/
+
+					transformed.addValues({
+						"active_events": [{
+							"activate": "dialog:confirmation:send",
+							"id": Random.identifier("action").toLowerCase(),
+							"name": "Transformed",
+							"icon": transformed.icon || "fa-solid fa-user",
+							"description": "Currently transformation into a " + transform.name,
+							"type": "concentration",
+							"send": "character:untransform",
+							"okay_text": "End Transformation",
+							"is_active": true,
+							"ongoing": true
+						}]
+					});
+
 					player_attr = Object.assign({}, player.attribute);
 					player_attr.playing_as = transformed.id;
 					player.setValues({
@@ -97,6 +162,7 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("player:character:untransform", function(event) {
 		var character = event.message.data.character,
+			meeting = universe.getActiveMeeting(),
 			player = event.player,
 			player_attr;
 
@@ -104,12 +170,23 @@ module.exports.initialize = function(universe) {
 			character = universe.manager.entity.object[character];
 		}
 
-		if(character && character.owned[player.id] && character.transform_player === player.id && character.transform_character) {
+		if(character && (player.gm || (character.owned[player.id] && character.transform_player === player.id && character.transform_character))) {
 			player_attr = Object.assign({}, player.attribute);
 			player_attr.playing_as = character.transform_character;
+			// TODO: Update party list
 			player.setValues({
 				"attribute": player_attr
 			});
+			if(meeting) {
+				if(meeting.entities.indexOf(character.transform_character) === -1) {
+					meeting.addValues({
+						"entities": [character.transform_character]
+					});
+				}
+				meeting.subValues({
+					"entities": [character.id]
+				});
+			}
 		}
 	});
 };

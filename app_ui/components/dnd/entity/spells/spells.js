@@ -41,6 +41,8 @@ rsSystem.component("dndEntitySpells", {
 				}
 			}
 
+			// TODO: Add in warlock slots
+
 			slots.sort();
 			if(slots.indexOf(this.storage.slot) === -1) {
 				Vue.set(this.storage, "slot", slots[0]);

@@ -25,7 +25,7 @@
 		</rs-shiny-button>
 		<rs-shiny-button v-for="(event,i) in ongoing" :key="event.id" class="general rounded action" :active="event.is_active" color="blue" v-on:click="openActiveEvent(event)" :title="event.name">
 			<span v-if="event.icon" class="action-icon" :class="event.icon"></span>
-			<span class="action-text">{{event.display}}</span>
+			<span class="action-text">{{event.name}}</span>
 		</rs-shiny-button>
 		<rs-shiny-button v-for="(event,i) in events" :key="event.id" class="general rounded action" :active="i===0" color="red" v-on:click="openActiveEvent(event)" :title="event.name">
 			<span v-if="event.icon" class="action-icon" :class="event.icon"></span>

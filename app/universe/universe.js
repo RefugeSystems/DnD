@@ -1223,6 +1223,14 @@ class Universe extends EventEmitter {
 	}
 
 
+	getActiveMeeting() {
+		if(this.manager.setting.object["setting:meeting"]) {
+			return this.manager.meeting.object[this.manager.setting.object["setting:meeting"].value] || null;
+		}
+		return null;
+	}
+
+
 	processScript(event) {
 		var universe = this;
 		setTimeout(function() {

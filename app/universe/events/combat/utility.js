@@ -411,11 +411,14 @@ module.exports.initialize = function(universe) {
 			return false;
 		}
 		var keys = Object.keys(damage),
-			conscious = 0 < entity.hp,
+			conscious = 0 <= entity.hp,
+			start_hp = entity.hp,
 			was_damaged = false,
+			transform,
 			received,
 			add = {},
 			temp_cap,
+			meeting,
 			i;
 
 		add.hp_temp = 0;
@@ -479,8 +482,14 @@ module.exports.initialize = function(universe) {
 			} else {
 				console.log("Damage Handler Fire");
 				if(conscious && entity.hp === 0) {
+					if(entity.transform_character) {
+						universe.notifyMasters(entity.name + " has lost lost their transformation");
+					} else {
+						universe.notifyMasters(entity.name + " has lost consciousness");
+					}
 					entity.fireHandlers("entity:consciousness:lost", {});
 				} else if(!conscious && entity.hp !== 0) {
+					universe.notifyMasters(entity.name + " has gained consciousness");
 					entity.fireHandlers("entity:consciousness:gain", {});
 				}
 				entity.fireHandlers("entity:damaged", {
@@ -490,6 +499,42 @@ module.exports.initialize = function(universe) {
 					"damage": damage,
 					"resist": resisted
 				});
+
+				if(entity.hp <= 0 && entity.transform_character && (transform = universe.get(entity.transform_character))) {
+					add.hp += start_hp;
+					if(add.hp != 0) {
+						add.hp_temp = 0;
+						transform.addValues(add, function(err) {
+							if(err) {
+								universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
+							} else {
+								if(conscious && transform.hp === 0) {
+									transform.fireHandlers("entity:consciousness:lost", {});
+								} else if(!conscious && entity.hp !== 0) {
+									transform.fireHandlers("entity:consciousness:gain", {});
+								}
+								// TODO: Transformation resolution needs centralized
+								if(meeting = universe.getActiveMeeting()) {
+									if(meeting.entities.indexOf(entity.transform_character) === -1) {
+										meeting.addValues({
+											"entities": [entity.transform_character]
+										});
+									}
+									meeting.subValues({
+										"entities": [transform.id]
+									});
+								}
+								transform.fireHandlers("entity:damaged", {
+									"source": source,
+									"target": entity,
+									"amount": add.hp,
+									"damage": damage,
+									"resist": resisted
+								});
+							}
+						});
+					}
+				}
 			}
 		});
 

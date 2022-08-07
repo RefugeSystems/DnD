@@ -270,17 +270,17 @@ rsSystem.component("DNDWidgetCore", {
 			}
 			console.log("Cast at " + level + ": ", _p(spell), action, cast);
 
-			if(typeof(action) === "string") {
-				action = this.universe.index.action[action];
-			} else if(!action) {
-				if(spell && spell.action_cost && spell.action_cost.main) {
-					action = this.universe.index.action["action:main:cast"];
-				} else if(spell && spell.action_cost && spell.action_cost.bonus) {
-					action = this.universe.index.action["action:bonus:cast:spell"];
-				} else if(spell && spell.action_cost && spell.action_cost.reaction) {
-					action = this.universe.index.action["action:reaction:spell"];
-				}
-			}
+			// if(typeof(action) === "string") {
+			// 	action = this.universe.index.action[action];
+			// } else if(!action) {
+			// 	if(spell && spell.action_cost && spell.action_cost.main) {
+			// 		action = this.universe.index.action["action:main:cast"];
+			// 	} else if(spell && spell.action_cost && spell.action_cost.bonus) {
+			// 		action = this.universe.index.action["action:bonus:cast:spell"];
+			// 	} else if(spell && spell.action_cost && spell.action_cost.reaction) {
+			// 		action = this.universe.index.action["action:reaction:spell"];
+			// 	}
+			// }
 			action = undefined;
 
 			if(spell.damage) {
@@ -298,7 +298,11 @@ rsSystem.component("DNDWidgetCore", {
 			details.entity = this.entity;
 			details.channel = cast;
 			details.action = action;
-			rsSystem.EventBus.$emit("dialog-open", details);
+			if(spell.ui_emit) {
+				rsSystem.EventBus.$emit(spell.ui_emit, details);
+			} else {
+				rsSystem.EventBus.$emit("dialog-open", details);
+			}
 
 			/*
 			rsSystem.EventBus.$emit("dialog-open", {
@@ -397,25 +401,48 @@ rsSystem.component("DNDWidgetCore", {
 		 */
 		"openActiveEvent": function(event) {
 			var loading;
-			switch(event.type) {
-				case "dialog-open":
-					rsSystem.EventBus.$emit("dialog-open", event);
-					break;
-				case "timer":
-					break;
-				case "minigame":
-					loading = this.universe.index.minigame[event.minigame];
-					if(loading) {
-						rsSystem.EventBus.$emit("dialog-open", {
-							"id": loading.id,
-							"minigame": loading,
-							"activity": event,
-							"component": loading.component
-						});
-					} else {
-						console.warn("Failed ot lcoate minigame for activity: ", event);
-					}
-					break;
+			if(event) {
+				switch(event.type) {
+					case "dialog-open":
+						rsSystem.EventBus.$emit("dialog-open", event);
+						break;
+					case "timer":
+						break;
+					case "minigame":
+						loading = this.universe.index.minigame[event.minigame];
+						if(loading) {
+							rsSystem.EventBus.$emit("dialog-open", {
+								"id": loading.id,
+								"minigame": loading,
+								"activity": event,
+								"component": loading.component
+							});
+						} else {
+							console.warn("Failed ot lcoate minigame for activity: ", event);
+						}
+						break;
+					default:
+						switch(event.activate) {
+							case "dialog:confirmation:send":
+								rsSystem.EventBus.$emit("dialog-open", {
+									"id": event.id,
+									"send": event.send,
+									"details": event.details,
+									"description": event.description,
+									"paragraphs": event.paragraphs,
+									"okay_icon": event.okay_icon,
+									"okay_text": event.okay_text,
+									"abort_icon": event.abort_icon,
+									"abort_text": event.abort_text,
+									"data": {
+										"character": this.entity || this.character || event.source
+									},
+									"activity": event,
+									"component": "rsDialogConfirm"
+								});
+								break;
+						}
+				}
 			}
 		},
 		/**

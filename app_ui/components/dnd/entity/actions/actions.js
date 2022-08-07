@@ -61,6 +61,8 @@
 				return "game-icon game-icon-punch";
 			},
 			"isVisible": function() {
+				return true;
+				
 				var skirmish,
 					i;
 
@@ -107,8 +109,16 @@
 					for(i=0; i<keys.length; i++) {
 						event = this.entity.active_events[keys[i]];
 						if(event && event.ongoing) {
-							if(event.id && !this.timers[event.id]) {
-								this.startTimer(event);
+							switch(event.type) {
+								case "timer":
+									if(event.id && !this.timers[event.id]) {
+										this.startTimer(event);
+									}
+									break;
+								default:
+									if(!event.name) {
+										event.name = event.id;
+									}
 							}
 							events.push(event);
 						}
@@ -151,9 +161,9 @@
 			},
 			"startTimer": function(event) {
 				if(event && event.id && !this.timers[event.id]) {
-					Vue.set(event, "display", this.timerEventDisplay(event));
+					Vue.set(event, "name", this.timerEventDisplay(event));
 					this.timers[event.id] = () => {
-						Vue.set(event, "display", this.timerEventDisplay(event));
+						Vue.set(event, "name", this.timerEventDisplay(event));
 						if(!event.timer_finished) {
 							setTimeout(this.timers[event.id], 500);
 						}
