@@ -199,7 +199,8 @@ module.exports.initialize = function(universe) {
 							if(!effect.damage_required || was_damaged) {
 								waiting.push(universe.copyPromise(effect, {
 									"character": tracked.target.id,
-									"caster": tracked.source.id
+									"caster": tracked.source.id,
+									"expiration": effect.duration?universe.time + effect.duration:undefined
 								}));
 							}
 						}
@@ -211,7 +212,8 @@ module.exports.initialize = function(universe) {
 							if(!effect.damage_required || was_damaged) {
 								waiting.push(universe.copyPromise(effect, {
 									"character": tracked.target.id,
-									"caster": tracked.source.id
+									"caster": tracked.source.id,
+									"expiration": effect.duration?universe.time + effect.duration:undefined
 								}));
 							}
 						}
@@ -221,7 +223,11 @@ module.exports.initialize = function(universe) {
 						.then(function(effects) {
 							adding = [];
 							for(i=0; i<effects.length; i++) {
-								adding.push(effects[i].id);
+								effect = effects[i];
+								if(effect.expiration) {
+									universe.trackExpiration(effect, tracked.target.id, "effects");
+								}
+								adding.push(effect.id);
 							}
 							tracked.target.addValues({
 								"effects": adding
@@ -373,18 +379,23 @@ module.exports.initialize = function(universe) {
 			// TODO: Conditional Instill
 			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
 				for(i=0; i<tracked.channel.instilled.length; i++) {
+					buffer = universe.get(tracked.channel.instilled[i]);
 					mask = Object.assign({}, castMask);
 					mask.character = tracked.target.id;
-					buffer = universe.get(tracked.channel.instilled[i]);
+					mask.expiration = universe.time + buffer.duration;
 					if(buffer && ((buffer.damage_required && was_damaged && buffer.hit_required && succeeded === false)
 							|| (buffer.damage_required && was_damaged && !buffer.hit_required)
 							|| (!buffer.damage_required && buffer.hit_required && succeeded === false)
 							|| (!buffer.damage_required && !buffer.hit_required))) {
 						universe.copy(buffer.id, mask, function(err, effect) {
-							universe.trackExpiration(effect, log.target, "effects");
-							tracked.target.addValues({
-								"effects": [effect.id]
-							});
+							if(!err) {
+								universe.trackExpiration(effect, tracked.target.id, "effects");
+								tracked.target.addValues({
+									"effects": [effect.id]
+								});
+							} else {
+								console.log("Error tracking effect expiration from spell save: ", err);
+							}
 						});
 					}
 				}

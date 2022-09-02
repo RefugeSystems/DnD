@@ -157,6 +157,9 @@
 			<button class="action general rounded quick" v-if="widget.show_home" v-on:click="scrollHome()" title="Scroll all the way back to the left (Including any minions)">
 				<span class="action-icon fa-solid fa-arrow-left-long-to-line"></span>
 			</button>
+			<button class="action general rounded quick" v-on:click="emitScrollNotice('nearby')" title="Scroll to list of near-by entites">
+				<span class="action-icon fa-solid fa-street-view"></span>
+			</button>
 			<button class="action general rounded quick" v-on:click="emitScrollNotice('stats')" title="Scroll to start of character stats">
 				<span class="action-icon fa-solid fa-table-columns"></span>
 			</button>

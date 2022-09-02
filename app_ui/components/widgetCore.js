@@ -401,7 +401,7 @@ rsSystem.component("DNDWidgetCore", {
 		 */
 		"openActiveEvent": function(event) {
 			var loading;
-			if(event) {
+			if(event && typeof(event) === "object") {
 				switch(event.type) {
 					case "dialog-open":
 						rsSystem.EventBus.$emit("dialog-open", event);
@@ -441,6 +441,12 @@ rsSystem.component("DNDWidgetCore", {
 									"component": "rsDialogConfirm"
 								});
 								break;
+							default:
+								if(event.info_id) {
+									this.info(event.info_id);
+								} else {
+									this.info(event.id);
+								}
 						}
 				}
 			}

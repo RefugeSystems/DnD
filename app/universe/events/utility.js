@@ -105,7 +105,7 @@ module.exports.addUniquely = function(universe, adding, to) {
 
 
 /**
- * @method instillChannelEffects
+ * @method instillEffects
  * @param {Universe} universe 
  * @param {Array | String | RSObject} effects To instill. Mutated by universe transcription.
  * @param {RSObject} source 
@@ -133,6 +133,7 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 	for(i=0; i<effects.length; i++) {
 		effect = effects[i];
 		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.is_hit_required || hit) && (!effect.damage_required || damaged) && (!effect.is_damage_required || damaged) && (!effect.is_fail_required || !saved)) {
+			mask.expiration = effect.duration?universe.time+effect.duration:undefined;
 			waiting.push(universe.copyPromise(effect, mask));
 		}
 	}
@@ -143,6 +144,7 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 			var instill = [],
 				i;
 			for(i=0; i<instilling.length; i++) {
+				universe.trackExpiration(instilling[i], target.id, "effects");
 				instill.push(instilling[i].id);
 			}
 			target.addValues({

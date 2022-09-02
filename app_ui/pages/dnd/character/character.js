@@ -33,6 +33,37 @@ rsSystem.component("DNDCharacter", {
 		}
 	},
 	"computed": {
+		"nearby": function() {
+			var entities = [],
+				entity,	
+				x;
+			
+			if(this.meeting && this.meeting.entities) {
+				for(x=0; x<this.meeting.entities.length; x++) {
+					entity = this.universe.index.entity[this.meeting.entities[x]];
+					if(rsSystem.utility.isValid(entity)) {
+						entities.uniquely(entity);
+					}
+				}
+			}
+			if(this.location && this.location.populace) {
+				for(x=0; x<this.location.populace.length; x++) {
+					entity = this.universe.index.entity[this.location.populace[x]];
+					if(entity && entity.id !== this.entity.id  && !entity.is_preview && !entity.disabled && !entity.obscured) {
+						entities.uniquely(entity);
+					}
+				}
+			}
+			
+			entities.sort(rsSystem.utility.sortByName);
+			return entities;
+		},
+		"location": function() {
+			if(this.entity && this.entity.location) {
+				return this.universe.index.location[this.entity.location];
+			}
+			return null;
+		},
 		"skirmish": function() {
 			var skirmish,
 				i;
@@ -61,6 +92,10 @@ rsSystem.component("DNDCharacter", {
 	"data": function() {
 		var reference = this,
 			data = {};
+
+		data.nearbyDashboard = this.universe.index.dashboard["dashboard:entity:nearby"];
+		data.nearbyMinion = this.universe.index.dashboard["dashboard:entity:minion"];
+		data.nearbyFriend = this.universe.index.dashboard["dashboard:entity:friendly"];
 
 		data.meeting = this.universe.index.setting["setting:meeting"];
 		if(data.meeting) {
@@ -187,6 +222,30 @@ rsSystem.component("DNDCharacter", {
 				return "blue";
 			}
 			return "";
+		},
+		"getNearbyDashboard": function(entity) {
+			// if(entity.is_minion) {
+			// 	return this.nearbyMinion;
+			// } else if(entity.played_by) {
+			// 	return this.nearbyFriend;
+			// }
+			return this.nearbyDashboard;
+		},
+		"getNearbyClasses": function(entity) {
+			var classes = "";
+			if(this.skirmish && this.skirmish.combat_turn === entity.id) {
+				classes += "combat_turn ";
+			}
+			if(this.entity && this.entity.id === entity.id) {
+				classes += "self ";
+			}
+			if(entity.is_hostile) {
+				classes += "hostile ";
+			}
+			if(entity.is_npc) {
+				classes += "npc ";
+			}
+			return classes;
 		},
 		"updateTableContainers": function() {
 			var tables = document.getElementsByClassName("character-table-container"),

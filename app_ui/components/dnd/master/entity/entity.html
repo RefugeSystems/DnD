@@ -4,6 +4,11 @@
 	</div>
 	<div class="widgets container flex v">
 		<dnd-entity-name class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<div class="entity-descriptor">
+			<span class="">{{gender.name}}</span>
+			<span class="">{{race.name}}</span>
+			<span class="">{{classes}}</span>
+		</div>
 		<dnd-entity-healthbar class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 		<dnd-entity-properties class="widget" v-on:gold="giveGold()" v-on:property="fireProperty($event)" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 		<div class="master-actions widget flex h">
@@ -27,7 +32,7 @@
 				<span class="roll-result">{{roll.result}}</span>
 			</button>
 		</div>
-		<dnd-entity-equipment class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<!-- <dnd-entity-equipment class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/> -->
 		<dnd-entity-effects class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 	</div>
 </div>

@@ -38,6 +38,46 @@ rsSystem.component("dndMasterEntity", {
 		}
 	},
 	"computed": {
+		"classes": function() {
+			var archetypes = this.entity.archetypes,
+				classing = {},
+				classes = [],
+				result = [],
+				archetype,
+				i;
+
+			if(archetypes && archetypes.length) {
+				for(i=0; i<archetypes.length; i++) {
+					archetype = this.universe.get(archetypes[i]);
+					if(archetype && archetype.root) {
+						if(!classing[archetype.id]) {
+							classing[archetype.id] = {};
+							classing[archetype.id].prefix = [];
+						}
+						if(archetype.subclassing) {
+							if(!classing[archetype.subclassing]) {
+								classing[archetype.subclassing] = {};
+								classing[archetype.subclassing].prefix = [];
+							}
+							classing[archetype.subclassing].prefix.push(archetype.name);
+						} else {
+							classing[archetype.id].name = archetype.name;
+							classes.push(archetype.id);
+						}
+					}
+				}
+				for(i=0; i<classes.length; i++) {
+					archetype = classing[classes[i]];
+					if(archetype.prefix.length) {
+						result.push(archetype.prefix.join(" ") + " " + archetype.name);
+					} else {
+						result.push(archetype.name);
+					}
+				}
+			}
+
+			return result.join(", ");
+		},
 		"image": function() {
 			return this.universe.index.image[this.entity.portrait];
 		}
@@ -69,6 +109,8 @@ rsSystem.component("dndMasterEntity", {
 		var data = {};
 
 		data.rolls = [];
+		data.gender = this.universe.get(this.entity.gender) || {"name": "No Gender"};
+		data.race = this.universe.get(this.entity.race) || {"name": "No Race"};
 
 		return data;
 	},

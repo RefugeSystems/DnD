@@ -87,6 +87,14 @@ rsSystem.component("sysInfoGeneral", {
 				this.controls.splice(0);
 				if(!this.info.is_preview && this.info._class) {
 					if(this.player) {
+						if(this.info.is_shop && (this.player.gm || (entity && entity.location === this.info.location) || (this.activeMeeting && this.activeMeeting.entities && this.activeMeeting.entities.indexOf(this.info.id) !== -1))) {
+							this.controls.push({
+								"title": "Shop at this store",
+								"icon": "fa-solid fa-cash-register",
+								"type": "button",
+								"action": "shop"
+							});
+						}
 						if(this.player.gm) {
 							if(object._class === "player") {
 								this.controls.push({
@@ -308,23 +316,37 @@ rsSystem.component("sysInfoGeneral", {
 								// 	}
 								// 	this.controls.push(loading);
 								// }
-								switch(this.info._class) {
-									case "entity":
-										if(this.info.hp === 0 && this.info.types.indexOf("type:dead") === -1) {
-											this.controls.push({
-												"title": "Declare Dead",
-												"icon": "fas fa-skull",
-												"type": "button",
-												"action": "nowdead"
-											});
-										} else if(this.info.hp !== 0 && this.info.types.indexOf("type:dead") !== -1) {
-											this.controls.push({
-												"title": "Declare Revived",
-												"icon": "game-icon game-icon-rod-of-asclepius",
-												"type": "button",
-												"action": "notdead"
-											});
-										}
+								if(this.info.hp === 0 && this.info.types.indexOf("type:dead") === -1) {
+									this.controls.push({
+										"title": "Declare Dead",
+										"icon": "fas fa-skull",
+										"type": "button",
+										"action": "nowdead"
+									});
+								} else if(this.info.hp !== 0 && this.info.types.indexOf("type:dead") !== -1) {
+									this.controls.push({
+										"title": "Declare Revived",
+										"icon": "game-icon game-icon-rod-of-asclepius",
+										"type": "button",
+										"action": "notdead"
+									});
+								}
+								if(this.activeMeeting) {
+									if(this.activeMeeting.entities && this.activeMeeting.entities.indexOf(this.info.id) === -1) {
+										this.controls.push({
+											"title": "Add entity to active party",
+											"icon": "fa-solid fa-user-plus",
+											"type": "button",
+											"action": "partyentity"
+										});
+									} else {
+										this.controls.push({
+											"title": "Remove entity from active party",
+											"icon": "fa-solid fa-user-minus",
+											"type": "button",
+											"action": "unpartyentity"
+										});
+									}
 								}
 							} else if(this.info._class === "location") {
 								if(this.activeMeeting && this.info.map) {
@@ -345,6 +367,18 @@ rsSystem.component("sysInfoGeneral", {
 									}
 								}
 							}
+							this.controls.push({
+								"title": "Add Info Activity",
+								"icon": "fa-solid fa-person-circle-plus",
+								"type": "button",
+								"action": "addinfoactivity"
+							});
+							this.controls.push({
+								"title": "Remove Info Activity",
+								"icon": "fa-solid fa-person-circle-minus",
+								"type": "button",
+								"action": "subinfoactivity"
+							});
 						// } else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id] && this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 						// 	this.controls.push({
 						// 		"title": "Assume Entity in Overview",
@@ -687,6 +721,65 @@ rsSystem.component("sysInfoGeneral", {
 						"field": "types",
 						"value": ["type:dead"]
 					});
+					break;
+				case "shop":
+					if(entity) {
+						rsSystem.EventBus.$emit("dialog-open", {
+							"component": "dndDialogShop",
+							"entity": entity.id,
+							"shop": this.info.id
+						});
+					} else {
+						console.warn("Player Character not found: " + this.player.attribute.playing_as);
+					}
+					break;
+				case "partyentity":
+					if(this.activeMeeting) {
+						this.universe.send("meeting:add:entities", {
+							"meeting": this.activeMeeting.id,
+							"entities": [object.id]
+						});
+					}
+					break;
+				case "unpartyentity":
+					if(this.activeMeeting) {
+						this.universe.send("meeting:remove:entities", {
+							"meeting": this.activeMeeting.id,
+							"entities": [object.id]
+						});
+					}
+					break;
+				case "partyentities":
+					if(this.activeMeeting) {
+						this.universe.send("meeting:add:entities", {
+							"meeting": this.activeMeeting.id,
+							"entities": object.entities
+						});
+					}
+					break;
+				case "unpartyentities":
+					if(this.activeMeeting) {
+						this.universe.send("meeting:remove:entities", {
+							"meeting": this.activeMeeting.id,
+							"entities": object.entities
+						});
+					}
+					break;
+				case "addinfoactivity":
+					if(this.activeMeeting) {
+						this.universe.send("meeting:activity:info:add", {
+							"meeting": this.activeMeeting.id,
+							"info": object.id
+						});
+					}
+					break;
+				case "subinfoactivity":
+					if(this.activeMeeting) {
+						this.universe.send("meeting:activity:info:sub", {
+							"meeting": this.activeMeeting.id,
+							"info": object.id
+						});
+					}
 					break;
 				case "meeting-location":
 					if(this.activeMeeting) {

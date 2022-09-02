@@ -84,6 +84,10 @@ module.exports.initialize = function(universe) {
 			mask.owned = {};
 			mask.owned[player.id] = Date.now();
 			mask.parent = transform.id;
+			mask.effects = character.effects;
+			mask.inventory = character.inventory;
+			mask.equipped = character.equipped;
+			mask.stealth = character.stealth;
 
 			universe.createObject(mask, function(error, transformed) {
 				if(error) {

@@ -210,6 +210,7 @@ var copyFeats = function(data) {
 
 		if(data.details.feats) {
 			mask.acquired = data.universe.time;
+			mask.character = data.character.id;
 			mask.user = data.character.id;
 			data.sets.feats = [];
 
