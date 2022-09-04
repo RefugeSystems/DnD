@@ -401,14 +401,13 @@ rsSystem.component("DNDWidgetCore", {
 		 * @returns {String} CSS Class String
 		 */
 		"objectBoxClasses": function(object) {
-			var classes = object.icon || "game-icon game-icon-abstract-041";
+			var classes = [];
 
-			classes += " test-box";
 			if(object.obscured) {
-				classes += " obscured-object";
+				classes.push("obscured-object");
 			}
 
-			return classes;
+			return classes.join(" ");
 		},
 		/**
 		 * 
