@@ -34,7 +34,7 @@ rsSystem.component("dndEntityEffects", {
 				
 				for(i=0; i<this.entity.effects.length; i++) {
 					effect = this.universe.index.effect[this.entity.effects[i]];
-					if(effect && !effect.obscured && !effect.is_obscured) {
+					if(effect && (this.player.gm || (!effect.obscured && !effect.is_obscured))) {
 						if(effect.debuff) {
 							negative.push(effect);
 						} else if(this.storage && this.storage.hide && this.storage.hide[effect.id]) {
@@ -142,7 +142,10 @@ rsSystem.component("dndEntityEffects", {
 		"effectClasses": function(effect) {
 			var classes = effect.icon || "game-icon game-icon-abstract-041";
 
-			if(effect.debuff) {
+			if(effect.obscured) {
+				classes += " obscured-object";
+			}
+			if(effect.debuff || effect.is_negative) {
 				classes += " rs-lightred";
 			}
 

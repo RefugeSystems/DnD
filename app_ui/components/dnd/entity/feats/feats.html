@@ -20,7 +20,7 @@
 		<button class="rounded general quick action hidden-shadow" v-if="feats.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden feats. Toggle hide by right clicking.">
 			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
 		</button>
-		<button class="feat rounded general quick action hidden-shadow" v-for="feat in renderedHidden" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+		<button class="feat rounded general quick action hidden-shadow" :class="objectBoxClasses(feat)" v-for="feat in renderedHidden" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
 			<span class="action-icon" :class="feat.icon"></span>
 			<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
 		</button>
@@ -37,8 +37,8 @@
 			<span class="displayed-name">{{storage.show_hidden?"Hide Tucked Feats":"Show Tucked Feats"}}</span>
 		</div>
 		<div class="flex h v-center"  v-for="feat in renderedHidden">
-			<button class="feat rounded general quick action hidden-shadow" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
-				<span class="action-icon" :class="feat.icon"></span>
+			<button class="feat rounded general quick action hidden-shadow" :class="objectBoxClasses(feat)" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+				<span class="action-icon" :class="objectClasses(feat)"></span>
 				<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
 			</button>
 			<dnd-object-charges class="general rounded" v-if="showCharges(feat)" :object="feat" :universe="universe" :no-details="true"></dnd-object-charges>

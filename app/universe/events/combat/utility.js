@@ -43,6 +43,10 @@ module.exports.initialize = function(universe) {
 			source = log.source,
 			target = log.target;
 
+		if(roll === undefined || roll === null || dc === undefined || dc === null) {
+			return true;
+		}
+
 		if(typeof(dc) === "number" && typeof(roll) === "number") {
 			return dc <= roll;
 		}

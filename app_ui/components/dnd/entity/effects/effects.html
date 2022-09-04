@@ -25,7 +25,7 @@
 		<button class="rounded general quick action hidden-shadow" v-if="effects.hidden.length" v-on:click="toggleHidden()" v-on:click.right.prevent.stop="toggleHidden()" title="Toggle hidden effects. Toggle hide by right clicking.">
 			<span class="fas rot270" :class="storage.show_hidden?'fa-layer-minus':'fa-layer-plus'"></span>
 		</button>
-		<button class="feat rounded general quick action hidden-shadow" v-for="effect in renderedHidden" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+		<button class="feat rounded general quick action hidden-shadow" :class="objectBoxClasses(effect)" v-for="effect in renderedHidden" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
 			<span class="action-icon" :class="effectClasses(effect)"></span>
 			<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 		</button>
@@ -42,7 +42,7 @@
 			<span class="displayed-name">{{storage.show_hidden?"Hide Tucked Effects":"Show Tucked Effects"}}</span>
 		</div>
 		<div class="flex h v-center"  v-for="effect in renderedHidden">
-			<button class="effect rounded general quick action hidden-shadow" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+			<button class="effect rounded general quick action hidden-shadow" :class="objectBoxClasses(effect)" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
 				<span class="action-icon" :class="effect.icon"></span>
 				<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 			</button>

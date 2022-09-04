@@ -396,6 +396,36 @@ rsSystem.component("DNDWidgetCore", {
 		},
 		/**
 		 * 
+		 * @method objectBoxClasses
+		 * @param {Object} object 
+		 * @returns {String} CSS Class String
+		 */
+		"objectBoxClasses": function(object) {
+			var classes = object.icon || "game-icon game-icon-abstract-041";
+
+			if(object.obscured) {
+				classes += " obscured-object";
+			}
+
+			return classes;
+		},
+		/**
+		 * 
+		 * @method objectClasses
+		 * @param {Object} object 
+		 * @returns {String} CSS Class String
+		 */
+		"objectClasses": function(object) {
+			var classes = object.icon || "game-icon game-icon-abstract-041";
+
+			if(object.is_negative) {
+				classes += " rs-lightred";
+			}
+
+			return classes;
+		},
+		/**
+		 * 
 		 * @method openActiveEvent
 		 * @param {Object} event That is active from an `active-event` field.
 		 */
