@@ -67,6 +67,7 @@ module.exports.initialize = function(universe) {
 	universe.on("player:meeting:add:entities", function(event) {
 		var entities = event.message.data.entities,
 			meeting = event.message.data.meeting,
+			associations = [],
 			changing = [],
 			transition,
 			entity,
@@ -84,6 +85,9 @@ module.exports.initialize = function(universe) {
 					}
 					if(entity && !entity.disabled && !entity.is_preview && meeting.entities.indexOf(entity.id) === -1) {
 						changing.push(entity.id);
+						if(!meeting.associations || meeting.associations.indexOf(entity.id) === -1) {
+							associations.push(entity.id);
+						}
 					}
 				}
 				if(changing.length) {
@@ -96,6 +100,7 @@ module.exports.initialize = function(universe) {
 						"date": Date.now()
 					};
 					meeting.addValues({
+						"associations": associations.length?associations:undefined,
 						"entities": changing
 					});
 					meeting.addValues({

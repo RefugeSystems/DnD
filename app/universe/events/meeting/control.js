@@ -238,11 +238,12 @@ module.exports.initialize = function(universe) {
 			location = event.message.data.location,
 			distance = event.message.data.distance || 0,
 			transition,
+			adding,
 			entity,
 			i;
 
 		meeting = universe.get(meeting);
-		if(meeting && (location = universe.get(location))) {
+		if(event.player.gm && meeting && (location = universe.get(location))) {
 			transition = {	
 				"type": "session:travel:location",
 				"name": "Travel to " + location.name,
@@ -252,11 +253,16 @@ module.exports.initialize = function(universe) {
 				"time": universe.time,
 				"date": Date.now()
 			};
+			adding = {
+				"historical_events": [transition],
+				"locations": [location.id]
+			};
+			if(!meeting.associations || meeting.associations.indexOf(location.id) === -1) {
+				adding.associations = [location.id];
+			}
+			meeting.addValues(adding);
 			meeting.setValues({
 				"location": location.id
-			});
-			meeting.addValues({
-				"historical_events": [transition]
 			});
 			universe.emit("send", transition);
 

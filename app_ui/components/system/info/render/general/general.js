@@ -366,6 +366,28 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 								}
+							} else if(this.info._class === "event") {
+								// TODO: Consider tying this directly into the push to player entities for active action tracking
+								this.controls.push({
+									"title": "Set the start time for this event",
+									"icon": "fa-regular fa-hourglass-start",
+									"type": "button",
+									"action": "setstart"
+								});
+								this.controls.push({
+									"title": "Set the end time for this event",
+									"icon": "fa-regular fa-hourglass-end",
+									"type": "button",
+									"action": "setend"
+								});
+							}
+							if((this.info._class === "event" || this.info.locations) && this.activeMeeting && this.activeMeeting.location) {
+								this.controls.push({
+									"title": "Add Current Location to locations list",
+									"icon": "fa-solid fa-location-plus",
+									"type": "button",
+									"action": "addcurrentlocation"
+								});
 							}
 							this.controls.push({
 								"title": "Add Info Activity",
@@ -558,7 +580,8 @@ rsSystem.component("sysInfoGeneral", {
 		},
 		"process": function(control) {
 			var entity = this.playerCharacter || this.getPlayerCharacter(),
-				object = this.info;
+				object = this.info,
+				buffer;
 
 			switch(control.action || control) {
 				case "goto":
@@ -616,6 +639,31 @@ rsSystem.component("sysInfoGeneral", {
 						"field": "is_marker",
 						"value": false
 					});
+					break;
+				case "setstart":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "time_start",
+						"value": this.universe.time
+					});
+					break;
+				case "setend":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "time_end",
+						"value": this.universe.time
+					});
+					break;
+				case "addcurrentlocation":
+					if(this.activeMeeting && this.activeMeeting.location) {
+						buffer = object.locations || [];
+						buffer.push(this.activeMeeting.location);
+						this.universe.send("master:quick:set", {
+							"object": object.id,
+							"field": "locations",
+							"value": buffer
+						});
+					}
 					break;
 				case "closeopennable":
 					this.universe.send("master:quick:set", {

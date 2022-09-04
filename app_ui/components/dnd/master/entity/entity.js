@@ -109,8 +109,8 @@ rsSystem.component("dndMasterEntity", {
 		var data = {};
 
 		data.rolls = [];
-		data.gender = this.universe.get(this.entity.gender) || {"name": "No Gender"};
-		data.race = this.universe.get(this.entity.race) || {"name": "No Race"};
+		data.gender = this.universe.get(this.entity.gender) || {"name": this.entity.gender || "No Gender"};
+		data.race = this.universe.get(this.entity.race) || {"name": this.entity.race || "No Race"};
 
 		return data;
 	},

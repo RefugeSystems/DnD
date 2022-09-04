@@ -4,8 +4,8 @@
 	<div v-if="!editing" class="description" v-html="description"/>
 	<div v-if="!editing && player.gm && note" class="note description" v-html="note"/>
 	<div v-if="editing" class="description">
-		<textarea class="edit-description" v-model="editDescription"></textarea>
-		<textarea v-if="player.gm" class="edit-description" v-model="editNote"></textarea>
+		<textarea class="edit-description" v-model="editDescription" v-save="submitDescription"></textarea>
+		<textarea v-if="player.gm" class="edit-description" v-model="editNote" v-save="submitDescription"></textarea>
 		<div class="controls flex h justified">
 			<button class="main general rounded action" v-on:click="submitDescription()">
 				<span class="fas fa-check rs-green"></span>

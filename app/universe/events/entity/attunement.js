@@ -16,17 +16,28 @@ module.exports.initialize = function(universe) {
 	universe.on("player:items:attune", function(event) {
 		var entity = universe.get(event.message.data.entity),
 			items = event.message.data.items,
+			item,
 			i;
 		
 		if(entity && items && items.length && (event.player.gm || entity.owned[event.player.id])) {
 			for(i=0; i<items.length; i++) {
-				universe.emit("action:item:attune", {
-					"entity": entity,
-					"item": items[i]
-				});
-				entity.fireHandlers("entity:attunement:gained", {
-					"item": items[i]
-				});
+				if(item = universe.get(items[i])) {
+					universe.emit("action:item:attune", {
+						"player": event.player.id,
+						"entity": entity,
+						"item": item.id
+					});
+					entity.fireHandlers("action:item:attune", {
+						"player": event.player.id,
+						"entity": entity.id,
+						"item": item.id
+					});
+					item.fireHandlers("action:item:attune", {
+						"player": event.player.id,
+						"entity": entity.id,
+						"item": item.id
+					});
+				}
 			}
 		}
 	});
@@ -50,17 +61,28 @@ module.exports.initialize = function(universe) {
 	universe.on("player:items:unattune", function(event) {
 		var entity = universe.get(event.message.data.entity),
 			items = event.message.data.items,
+			item,
 			i;
 		
 		if(entity && items && items.length && (event.player.gm || entity.owned[event.player.id])) {
 			for(i=0; i<items.length; i++) {
-				universe.emit("action:item:unattune", {
-					"entity": entity,
-					"item": items[i]
-				});
-				entity.fireHandlers("entity:attunement:lost", {
-					"item": items[i]
-				});
+				if(item = universe.get(items[i])) {
+					universe.emit("action:item:unattune", {
+						"player": event.player.id,
+						"entity": entity,
+						"item": item.id
+					});
+					entity.fireHandlers("action:item:unattune", {
+						"player": event.player.id,
+						"entity": entity.id,
+						"item": item.id
+					});
+					item.fireHandlers("action:item:unattune", {
+						"player": event.player.id,
+						"entity": entity.id,
+						"item": item.id
+					});
+				}
 			}
 		}
 	});
@@ -69,12 +91,15 @@ module.exports.initialize = function(universe) {
 	 * 
 	 * @event action:item:attune
 	 * @for Universe
-	 * @param {Object} event With data from the system
-	 * @param {String} event.entity The event name being fired, should match this event's name
+	 * @param {Object} event
+	 * @param {String} event.player Firing the control
+	 * @param {String} event.entity Attuning
+	 * @param {String} event.item Being attuned
 	 */
 	universe.on("action:item:attune", function(event) {
 		var entity = event.entity || event.source,
-			item = event.item;
+			item = event.item,
+			message;
 
 		if(typeof(entity) === "string") {
 			entity = universe.manager.entity.object[entity];
@@ -95,8 +120,22 @@ module.exports.initialize = function(universe) {
 				entity.addValues({
 					"attunements": [item.id]
 				});
+				universe.notifyMasters(entity.name + " attuned to " + item.name);
+			} else {
+				message = entity.name + " failed to attune to " + item.name;
+				if(item.attunement_blocked) {
+					message += "; Item blocks attunement";
+				}
+				if(entity.attunement_blocked) {
+					message += "; Entity blocks attunement";
+				}
+				if(!entity.attunements) {
+					message += "; Entity can not attune";
+				} else if(entity.attunements.length >= entity.attune_max) {
+					message += "; Entity has too many attunements";
+				}
+				universe.notifyMasters(message);
 			}
-			universe.notifyMasters(entity.name + " attuned to " + item.name);
 		} else {
 			universe.warnMasters("Attunement Failed", {
 				"entity": entity?entity.id:"Unknown",
@@ -111,9 +150,9 @@ module.exports.initialize = function(universe) {
 	 * 
 	 * @event action:item:unattune
 	 * @for Universe
-	 * @param {Object} event With data from the system
-	 * @param {String} event.entity The event name being fired, should match this event's name
-	 * @param {String} event.item The event item being unattuned
+	 * @param {String} event.player Firing the control
+	 * @param {String} event.entity Unattuning
+	 * @param {String} event.item Being unattuned
 	 */
 	 universe.on("action:item:unattune", function(event) {
 		var entity = event.entity || event.source,
