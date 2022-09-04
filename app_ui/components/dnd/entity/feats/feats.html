@@ -24,7 +24,7 @@
 			<span class="action-icon" :class="feat.icon"></span>
 			<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
 		</button>
-		<button class="feat rounded general quick action" v-for="feat in feats.shown" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+		<button class="feat rounded general quick action" :class="objectBoxClasses(feat)" v-for="feat in feats.shown" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
 			<span class="action-icon" :class="feat.icon"></span>
 			<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
 		</button>
@@ -45,7 +45,7 @@
 			<span class="displayed-name">{{feat.name}}</span>
 		</div>
 		<div class="flex h v-center" v-for="feat in feats.shown">
-			<button class="feat rounded general quick action" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
+			<button class="feat rounded general quick action" :class="objectBoxClasses(feat)" v-on:click="open(feat)" v-on:click.right.prevent.stop="toggleHide(feat)" v-linkable="feat.id" :title="feat.name">
 				<span class="action-icon" :class="feat.icon"></span>
 				<span class="action-count" v-if="showCharges(feat)">{{feat.charges || 0}}</span>
 			</button>

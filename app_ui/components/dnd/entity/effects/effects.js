@@ -142,9 +142,6 @@ rsSystem.component("dndEntityEffects", {
 		"effectClasses": function(effect) {
 			var classes = effect.icon || "game-icon game-icon-abstract-041";
 
-			if(effect.obscured) {
-				classes += " obscured-object";
-			}
 			if(effect.debuff || effect.is_negative) {
 				classes += " rs-lightred";
 			}

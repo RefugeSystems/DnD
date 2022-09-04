@@ -29,7 +29,7 @@
 			<span class="action-icon" :class="effectClasses(effect)"></span>
 			<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 		</button>
-		<button class="effect rounded general quick action" v-for="effect in effects.shown" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+		<button class="effect rounded general quick action" :class="objectBoxClasses(effect)" v-for="effect in effects.shown" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
 			<span class="action-icon" :class="effectClasses(effect)"></span>
 			<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 		</button>
@@ -50,7 +50,7 @@
 			<span class="displayed-name">{{effect.name}}</span>
 		</div>
 		<div class="flex h v-center" v-for="effect in effects.shown">
-			<button class="effect rounded general quick action" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
+			<button class="effect rounded general quick action" :class="objectBoxClasses(effect)" v-on:click="open(effect)" v-on:click.right.prevent.stop="toggleHide(effect)" v-linkable="effect.id" :title="effect.name">
 				<span class="action-icon" :class="effectClasses(effect)"></span>
 				<span class="action-count" v-if="showCharges(effect)">{{effect.charges || 0}}</span>
 			</button>

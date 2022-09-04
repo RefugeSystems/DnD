@@ -403,6 +403,7 @@ rsSystem.component("DNDWidgetCore", {
 		"objectBoxClasses": function(object) {
 			var classes = object.icon || "game-icon game-icon-abstract-041";
 
+			classes += " test-box";
 			if(object.obscured) {
 				classes += " obscured-object";
 			}
