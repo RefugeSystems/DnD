@@ -1206,20 +1206,46 @@ class Universe extends EventEmitter {
 		return object && !object.disabled && !object.is_disabled && !object.preview && !object.is_preview;
 	}
 
-
+	/**
+	 * 
+	 * Fires the event handlers for the object off asynchronously.
+	 * 
+	 * This is typically meant for events that do not need to be tracked and may or may not modify
+	 * the underlying event data.
+	 * @method processEvent
+	 * @param {RSObject} source 
+	 * @param {String} name 
+	 * @param {Object} event 
+	 * @param {RSHandler} handler 
+	 */
 	processEvent(source, name, event, handler) {
-		var universe = this;
-		setTimeout(function() {
-			event.name = name;
-			try {
-				handler.processor(source, event, universe, universe.utility);
-				console.log("Handler[" + handler.id + "]: Completed Successfully for " + source.id);
-				// TODO: Consider a result process
-			} catch(exception) {
-				// TODO: Expand logging
-				console.error(" ! Exception processing event " + name + " for object " + source.id + " with handler " + handler.id + ":\n", exception);
-			}
+		setTimeout(() => {
+			this.processEventInline(source, name, event, handler);
 		}, 0);
+	}
+
+	/**
+	 * 
+	 * Fires the event handlers for the object off synchronously.
+	 * 
+	 * This is typically meant for events that need to be tracked or modify the underlying
+	 * event data.
+	 * @method processEventInline
+	 * @param {RSObject} source 
+	 * @param {String} name 
+	 * @param {Object} event 
+	 * @param {RSHandler} handler 
+	 */
+	processEventInline(source, name, event, handler) {
+		event.name = name;
+		try {
+			handler.processor(source, event, this, this.utility);
+			console.log("Handler[" + handler.id + "]: Completed Successfully for " + source.id);
+			// TODO: Consider a result process
+		} catch(exception) {
+			// TODO: Expand logging
+			console.error(" ! Exception processing event " + name + " for object " + source.id + " with handler " + handler.id + ":\n", exception);
+		}
 	}
 
 

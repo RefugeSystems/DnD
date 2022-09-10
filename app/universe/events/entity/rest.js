@@ -102,7 +102,7 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:rest:long", {});
+			entity.fireHandlers("entity:rest:long", {}, ["equipped", "feats", "effects"]);
 			/**
 			 * 
 			 * @event entity:consciousness:lost
@@ -110,7 +110,7 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:consciousness:lost", {});
+			entity.fireHandlers("entity:consciousness:lost", {}, ["equipped", "feats", "effects"]);
 			/**
 			 * 
 			 * @event entity:consciousness:gain
@@ -118,7 +118,7 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:consciousness:gain", {});
+			entity.fireHandlers("entity:consciousness:gain", {}, ["equipped", "feats", "effects"]);
 		}
 	});
 
@@ -219,7 +219,7 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:rest:short", {});
+			entity.fireHandlers("entity:rest:short", {}, ["equipped", "feats", "effects"]);
 		}
 	});
 };

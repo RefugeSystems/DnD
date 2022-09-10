@@ -376,6 +376,12 @@
 				"text": "Add Point"
 			};
 
+			data.removePointOption = {
+				"icon": "fas fa- rs-light-red",
+				"event": "remove-point",
+				"text": "Remove Point"
+			};
+
 			data.setNamePointOption = {
 				"icon": "fal fa-code-commit",
 				"event": "set-name-point",
@@ -836,22 +842,31 @@
 					point,
 					x;
 
-				point = event.target.getAttribute("data-id") || event.target.parentNode.getAttribute("data-id");
-				if(point && (point = this.universe.index.location[point] || this.universe.index.entity[point] || this.universe.index.item[point] || this.universe.index.party[point] || this.universe.index.storm[point]) && point.x && point.y) {
-					// console.log("Buffer: ", buffer);
-					xc = this.image.width * point.x/100;
-					yc = this.image.height * point.y/100;
+				if(!this.localeInfo) {
+					this.localeInfo = {};
 				}
 
-				this.localeInfo.id = undefined;
+				point = event.target.getAttribute("data-id") || event.target.parentNode.getAttribute("data-id");
+				if(point && (point = this.universe.index.location[point] || this.universe.index.entity[point] || this.universe.index.item[point] || this.universe.index.party[point] || this.universe.index.storm[point]) && point.x && point.y) {
+					console.log(" - Point In Path: ", point);
+					Vue.set(this.actions, "header", point.name);
+					xc = this.image.width * point.x/100;
+					yc = this.image.height * point.y/100;
+					this.localeInfo.location = point;
+					this.localeInfo.text = point.name;
+					this.localeInfo.id = point.id;
+				} else {
+					console.log(" - No Point In Path: ", point);
+					this.localeInfo.id = undefined;
+				}
 				if(event.ctrlKey) {
 					this.appendPath(xc/this.image.width*100, yc/this.image.height*100);
 				} else if(event.shiftKey) {
-					this.setNamePoint(xc/this.image.width*100, yc/this.image.height*100);
+					this.prunePath();
 				} else {
 					for(x=0; x<this.locales.length; x++) {
 						locale = this.locales[x];
-						if(locale.rendering_path_closed) {
+						if(locale.rendering_path_closed && !this.localeInfo.id) {
 							buffer = this.availableLocales[locale.id];
 							// if(buffer) {
 							// 	console.log("Point Check[" + locale.id + " - " + xc + ", " + yc + " @ " + buffer.isPointInPath(xc, yc) + "]: ", buffer);
@@ -1053,6 +1068,9 @@
 					case "add-point":
 						this.appendPath(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						break;
+					case "remove-point":
+						this.prunePath();
+						break;
 					case "set-name-point":
 						this.setNamePoint(this.actions.x/this.image.width*100, this.actions.y/this.image.height*100);
 						break;
@@ -1175,12 +1193,46 @@
 				if(this.storage.path_fill) {
 					buffer = this.universe.index.location[this.storage.path_fill];
 					if(buffer && this.player.gm) {
-						// console.log("Update Path[" + buffer.id + "]: ", buffer);
-						buffer.appendPath(x, y);
+						console.log("Append Path[" + buffer.id + "]: ", x, y, this.localeInfo && (!this.localeInfo.location || !this.localeInfo.location.rendering_has_path));
+						// buffer.appendPath(x, y);
+						if(this.localeInfo && this.localeInfo.id && (!this.localeInfo.location || !this.localeInfo.location.rendering_has_path)) {
+							this.universe.send("map:path:add", {
+								"location": buffer.id,
+								"x": this.localeInfo.id
+							});
+						} else {
+							this.universe.send("map:path:add", {
+								"location": buffer.id,
+								"x": x,
+								"y": y
+							});
+						}
+					}
+				}
+			},
+			"prunePath": function(x, y) {
+				var buffer;
+				if(this.storage.path_fill) {
+					buffer = this.universe.index.location[this.storage.path_fill];
+					if(buffer && this.player.gm) {
+						// console.log("Prune Path[" + buffer.id + "]: ", x, y, this.localeInfo?this.localeInfo.id:"NoID", !!(this.localeInfo && (!this.localeInfo.location || !this.localeInfo.location.rendering_has_path)));
+						// buffer.appendPath(x, y);
+						if(this.localeInfo && this.localeInfo.id && (!this.localeInfo.location || !this.localeInfo.location.rendering_has_path)) {
+							this.universe.send("map:path:remove", {
+								"location": buffer.id,
+								"x": this.localeInfo.id
+							});
+						} else {
+							this.universe.send("map:path:remove", {
+								"location": buffer.id
+							});
+						}
 					}
 				}
 			},
 			"setNamePoint": function(x, y) {
+				console.log("Name Point Disabled: ", x, y);
+				/*
 				var buffer;
 				if(this.storage.path_fill) {
 					buffer = this.universe.index.location[this.storage.path_fill];
@@ -1191,6 +1243,7 @@
 						});
 					}
 				}
+			*/
 			},
 			/*
 			 * Move these calculations into the update step to rebuild when the coordinates change rather than with every redraw
@@ -1580,30 +1633,13 @@
 
 				canvas.locationID = path.id;
 				canvas.strokeStyle = path.rendering_path_color || "#FFFFFF";
-				canvas.lineWidth = path.thickness;
-				if(path.opacity !== undefined) {
-					canvas.globalAlpha = path.opacity;
+				canvas.lineWidth = path.rendering_path_thickness;
+				if(path.rendering_fill_opacity !== undefined) {
+					canvas.globalAlpha = path.rendering_fill_opacity;
 				}
-				canvas.beginPath();
-				canvas.moveTo(points[0][0], points[0][1]);
-				for(x=1; x<points.length; x++) {
-					if(path.rendering_curved) {
-						//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
-						xc = (points[x-1][0] + points[x][0]) / 2;
-						yc = (points[x-1][1] + points[x][1]) / 2;
-						canvas.quadraticCurveTo(xc, yc, points[x][0], points[x][1]);
-//						canvas.quadraticCurveTo(
-//							path.values[x-1][0] * this.image.width,
-//							path.values[x-1][1] * this.image.height,
-//							path.values[x][0] * this.image.width,
-//							path.values[x][1] * this.image.height);
-					} else {
-						canvas.lineTo(points[x][0], points[x][1]);
-					}
-				}
+
+
 				if(path.rendering_path_closed) {
-					canvas.closePath();
-					canvas.stroke();
 					canvas.fillStyle = path.rendering_fill_color || "#FFFFFF";
 					canvas.beginPath();
 					canvas.moveTo(points[0][0], points[0][1]);
@@ -1630,11 +1666,39 @@
 						canvas.font = "bold " + Math.min(12 + this.image.zoom, location.max_font_size || 50) + "px Arial";
 						canvas.shadowColor = path.label_shadow_color || "rgba(0, 0, 0, .4)";
 						canvas.shadowBlur = path.label_shadow_blur || 3;
-						canvas.globalAlpha = path.label_opacity || 1;
+						canvas.globalAlpha = path.rendering_label_opacity || 1;
 						canvas.shadowOffsetX = 0;
 						canvas.shadowOffsetY = 0;
 						canvas.fillText(path.label || path.name, path.x * this.image.width, path.y * this.image.height);
 					}
+				}
+
+				if(path.rendering_path_opacity !== undefined) {
+					canvas.globalAlpha = path.rendering_path_opacity;
+				} else {
+					canvas.globalAlpha = undefined;
+				}
+
+				canvas.beginPath();
+				canvas.moveTo(points[0][0], points[0][1]);
+				for(x=1; x<points.length; x++) {
+					if(path.rendering_curved) {
+						//canvas.bezierCurveTo(path.values[x][0] * this.image.width, path.values[x][1] * this.image.height);
+						xc = (points[x-1][0] + points[x][0]) / 2;
+						yc = (points[x-1][1] + points[x][1]) / 2;
+						canvas.quadraticCurveTo(xc, yc, points[x][0], points[x][1]);
+//						canvas.quadraticCurveTo(
+//							path.values[x-1][0] * this.image.width,
+//							path.values[x-1][1] * this.image.height,
+//							path.values[x][0] * this.image.width,
+//							path.values[x][1] * this.image.height);
+					} else {
+						canvas.lineTo(points[x][0], points[x][1]);
+					}
+				}
+				if(path.rendering_path_closed) {
+					canvas.closePath();
+					canvas.stroke();
 				} else {
 					canvas.stroke();
 				}

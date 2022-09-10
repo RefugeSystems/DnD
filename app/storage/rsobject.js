@@ -1058,16 +1058,75 @@ class RSObject {
 	}
 
 	/**
+	 * An inline version of fireHandlers
+	 * @method processHandlers
+	 * @param {String} name 
+	 * @param {Object} event 
+	 */
+	processHandlers(name, event, fields) {
+		// console.log("Fireing Handlers: " + name);
+		var handler,
+			object,
+			field,
+			obj,
+			i,
+			f;
+
+		// Fire Base Handlers
+		if(this.handlers instanceof Array) {
+			if(typeof(event.time) !== "number") {
+				event.time = this._universe.time;
+			}
+			if(typeof(event.date) !== "number") {
+				event.date = Date.now();
+			}
+			for(i=0; i<this.handlers.length; i++) {
+				handler = this._universe.manager.handler.object[this.handlers[i]];
+				// console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
+				if(handler && handler._occurrence[name]) {
+					this._universe.processEventInline(this, name, event, handler);
+				}
+			}
+		}
+
+		// Fire for sub-fields
+		if(fields) {
+			for(f=0; f<fields.length; f++) {
+				field = fields[f];
+				object = this[field];
+				if(object) {
+					if(object instanceof Array) {
+						for(i=0; i<object.length; i++) {
+							if(obj = this._universe.get(object[i])) {
+								obj.processHandlers(name, event, fields);
+							}
+						}
+					} else if(typeof(object.processHandlers) === "function") {
+						object.processHandlers(name, event, fields);
+					}
+				}
+			}
+		}
+
+		return event;
+	}
+
+	/**
 	 * 
 	 * @method fireHandlers
 	 * @param {String} name 
 	 * @param {Object} event 
 	 */
-	fireHandlers(name, event) {
+	fireHandlers(name, event, fields) {
 		// console.log("Fireing Handlers: " + name);
 		var handler,
-			i;
+			object,
+			field,
+			obj,
+			i,
+			f;
 
+		// Fire Base Handlers
 		if(this.handlers instanceof Array) {
 			if(typeof(event.time) !== "number") {
 				event.time = this._universe.time;
@@ -1080,6 +1139,25 @@ class RSObject {
 				// console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
 				if(handler && handler._occurrence[name]) {
 					this._universe.processEvent(this, name, event, handler);
+				}
+			}
+		}
+
+		// Fire for sub-fields
+		if(fields) {
+			for(f=0; f<fields.length; f++) {
+				field = fields[f];
+				object = this[field];
+				if(object) {
+					if(object instanceof Array) {
+						for(i=0; i<object.length; i++) {
+							if(obj = this._universe.get(object[i])) {
+								obj.fireHandlers(name, event, fields);
+							}
+						}
+					} else if(typeof(object.processHandlers) === "function") {
+						object.fireHandlers(name, event, fields);
+					}
 				}
 			}
 		}

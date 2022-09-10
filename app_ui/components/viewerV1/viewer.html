@@ -54,6 +54,10 @@
 								<span class="fas fa-code-commit"></span>
 								<span>Add Point</span>
 							</button>
+							<button class="option normal" v-if="storage.path_fill" v-on:click.stop.prevent="fire(removePointOption, $event)">
+								<span class="fas fa-circle-xmark rs-light-red"></span>
+								<span>Remove Point</span>
+							</button>
 							<div class="set-distance flex h" v-if="player.gm && storage.measuring[location.id] && storage.measuring[location.id].length === 2">
 								<input type="number" v-model.number="storage.distance" v-on:keyup.enter="fire(setMeasurements, $event)"/>
 								<select v-model.number="storage.distance_unit">
@@ -167,13 +171,13 @@
 
 	<div class="legend" :class="legendOpen?'open':'closed'" v-if="legendDisplayed && locales.length">
 		<button class="control toggle" v-on:click="toggleLegend()">
-			<span class="rotational-icon fas fa-caret-square-up" :class="legendOpen?'rot180':''"></span>
+			<span class="rotational-icon fas fa-caret-square-down" :class="legendOpen?'rot180':''"></span>
 		</button>
 		<div class="menu-items flow-v">
 			<div class="legend-list flex v fill">
 				<button class="control follow grow-3" v-for="locale in locales" v-on:click="toggleLocale(locale)">
 					<span class="icon fal" :class="storage.hidden_legend[locale.id]?'fa-square':'fa-check-square'"></span>
-					<span class="icon far" :class="locale.contained?'fa-draw-polygon':'fa-horizontal-rule'" :style="'color: ' + locale.color + ';'"></span>
+					<span class="icon far" :class="locale.rendering_path_closed?'fa-draw-polygon':'fa-horizontal-rule'" :style="'color: ' + (locale.rendering_fill_color || locale.rendering_path_color) + ';'"></span>
 					<span class="text">{{locale.name}}</span>
 				</button>
 			</div>

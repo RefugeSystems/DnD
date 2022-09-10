@@ -178,7 +178,7 @@ module.exports.initialize = function(universe) {
 			if(log.succeeded) {
 				log.damage = damage; // Update for what the player submitted as final damage
 				log.resist_source = resist;
-				was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source);
+				was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source, tracked.channel);
 				log.resist = resisted;
 
 				if(was_damaged && (source = tracked.source || log.source)) {
@@ -373,7 +373,7 @@ module.exports.initialize = function(universe) {
 				damage = tracked.damage;
 			}
 			log.resist_source = resist;
-			was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source);
+			was_damaged = resolveDamage(entity, damage, resist, resisted, tracked.source, tracked.channel);
 			// was_damaged = resolveDamage(entity, damage, resist, resisted);
 			log.resist = resisted;
 			// events = entity.active_events || {};
@@ -412,6 +412,38 @@ module.exports.initialize = function(universe) {
 	 };
 
 	/**
+	 * Fired BEFORE bamage is passed into the entity. Modify the values in the handle to change the results.
+	 * 
+	 * Changing the hp and hp_temp values change how the source object's health is modified, the rest serve only
+	 * as notes and have already been calculated.
+	 * @event damage:incoming
+	 * @param {Object} event
+	 * @param {RSEntity} event.target
+	 * @param {RSEntity} event.source
+	 * @param {RSEntity} event.channel
+	 * @param {Object} event.damage Mapping damage_type IDs to values
+	 * @param {Object} event.resisted Mapping damage_type IDs to values
+	 * @param {Object} event.resist Mapping damage_type IDs to values
+	 * @param {Object} event.change
+	 * @param {Integer} event.change.hp Change in HP that was determined and will be used
+	 * @param {Integer} event.change.hp_temp Change in Temp HP that was determined and will be used
+	 */
+	/**
+	 * Fired AFTER bamage is passed into the entity. Modifying the values is not recommended here as this is processed
+	 * asynchronously by various handlers.
+	 * @event damage:taken
+	 * @param {Object} event
+	 * @param {RSEntity} event.target
+	 * @param {RSEntity} event.source
+	 * @param {RSEntity} event.channel
+	 * @param {Object} event.damage Mapping damage_type IDs to values
+	 * @param {Object} event.resisted Mapping damage_type IDs to values
+	 * @param {Object} event.resist Mapping damage_type IDs to values
+	 * @param {Object} event.change
+	 * @param {Integer} event.change.hp Change in HP that was determined and will be used
+	 * @param {Integer} event.change.hp_temp Change in Temp HP that was determined and will be used
+	 */
+	/**
 	 * 
 	 * @method resolveDamage
 	 * @param {RSObject} entity 
@@ -420,7 +452,7 @@ module.exports.initialize = function(universe) {
 	 * @returns {Boolean} True if damage was taken, false otherwise. If healing occurs, this will
 	 * 		return true that "healing" "damage" was taken. Merely indicates HP changed.
 	 */
-	var resolveDamage = function(entity, damage, resist = {}, resisted = {}, source) {
+	var resolveDamage = function(entity, damage, resist = {}, resisted = {}, source, channel) {
 		if(!damage) {
 			universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received");
 			return false;
@@ -429,6 +461,7 @@ module.exports.initialize = function(universe) {
 			conscious = 0 <= entity.hp,
 			start_hp = entity.hp,
 			was_damaged = false,
+			event = {},
 			transform,
 			received,
 			add = {},
@@ -457,7 +490,18 @@ module.exports.initialize = function(universe) {
 				add.hp -= received;
 			}
 		}
-		console.log("Resisted: ", resisted);
+
+		event.target = entity;
+		event.source = source;
+		event.channel = channel;
+		event.resisted = resisted;
+		event.resist = resist;
+		event.damge = damage;
+		event.channgel = channel;
+		event.change = add;
+		entity.processHandlers("damage:incoming", event, ["equipped", "feats", "effects"]);
+
+		// console.log("Resisted: ", resisted);
 
 		// if(add.hp < 0) {
 		// 	add.hp = 0;
@@ -490,12 +534,12 @@ module.exports.initialize = function(universe) {
 			});
 		}
 
-		console.log("Damage Set");
+		// console.log("Damage Set");
 		entity.addValues(add, function(err) {
 			if(err) {
 				universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
 			} else {
-				console.log("Damage Handler Fire");
+				// console.log("Damage Handler Fire");
 				if(conscious && entity.hp === 0) {
 					if(entity.transform_character) {
 						universe.notifyMasters(entity.name + " has lost lost their transformation");
@@ -510,13 +554,7 @@ module.exports.initialize = function(universe) {
 					universe.notifyMasters(entity.name + " has gained consciousness");
 					entity.fireHandlers("entity:consciousness:gain", {});
 				}
-				entity.fireHandlers("entity:damaged", {
-					"source": source,
-					"target": entity,
-					"amount": add.hp,
-					"damage": damage,
-					"resist": resisted
-				});
+				entity.fireHandlers("entity:damaged", event);
 
 				if(entity.hp <= 0 && entity.transform_character && (transform = universe.get(entity.transform_character))) {
 					add.hp += start_hp;
@@ -557,13 +595,7 @@ module.exports.initialize = function(universe) {
 										"entities": [entity.id]
 									});
 								}
-								transform.fireHandlers("entity:damaged", {
-									"source": source,
-									"target": entity,
-									"amount": add.hp,
-									"damage": damage,
-									"resist": resisted
-								});
+								transform.fireHandlers("entity:damaged", event, ["equipped", "feats", "effects"]);
 							}
 						});
 					}
@@ -608,6 +640,9 @@ module.exports.initialize = function(universe) {
 		console.log(" > Process Damages to Send: " + targets.join());
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
+			if(typeof(target) === "string") {
+				target = universe.get(target);
+			}
 			if(attacks && typeof(attacks[target.id]) !== "undefined") {
 				atk = attacks[target.id];
 			} else {
@@ -915,6 +950,9 @@ module.exports.initialize = function(universe) {
 
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
+			if(typeof(target) === "string") {
+				target = universe.get(target);
+			}
 
 			activity = id + ":" + target.id;
 			tracking[activity] = {

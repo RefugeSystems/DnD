@@ -219,7 +219,7 @@ class Chronicle extends EventEmitter {
 	 * @param {Array | String} [involved]
 	 */
 	updateOccurrence(id, event, type, time, source, target, timeline, emit, involved) {
-		console.log("Update: ", update);
+		// console.log("Update: ", update);
 		var statement = "update chronicle set event = $event, updated = $updated",
 			update = Object.assign({}, event),
 			values = {};
@@ -264,7 +264,7 @@ class Chronicle extends EventEmitter {
 		}
 		statement += " where id = $id;";
 
-		console.log("Update: ", update);
+		// console.log("Update: ", update);
 		if(!update.type) {
 			this.database.connection.run("select type from chronicle where id = $id;", {"$id":id}, (err, rows) => {
 				if(err) {
