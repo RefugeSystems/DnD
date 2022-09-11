@@ -79,7 +79,7 @@ rsSystem.component("rsStatBlock", {
 				field,
 				x;
 
-			if(!this.player.gm || !this.profile.override_must_know) {
+			if(!this.player || !this.player.gm || !this.profile.override_must_know) {
 				if(this.object.concealed && this.size <= 150) {
 					return fields;
 				} else if(this.object.must_know && !this.isKnown) {

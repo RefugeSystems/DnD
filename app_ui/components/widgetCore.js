@@ -426,6 +426,51 @@ rsSystem.component("DNDWidgetCore", {
 		},
 		/**
 		 * 
+		 * @method openCalendar
+		 * @param {Integer} time 
+		 * @param {Array | Object} [specialEvents]
+		 * @param {RSObject} [entity]
+		 */
+		"openCalendar": function(time, specialEvents, entity) {
+			specialEvents = specialEvents || [];
+			entity = entity || this.entity;
+			if(entity && entity.birthday) {
+				specialEvents.push({
+					"name": "Birthday",
+					"repeats": "span",
+					"repeat_span": this.universe.calendar.CONSTANTS.year,
+					"start": entity.birthday
+				});
+			}
+
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "rsCalendarDialog",
+				"specialEvents": specialEvents,
+				"time": time
+			});
+		},
+		/**
+		 * 
+		 * @method displayTime
+		 * @param {Integer} time 
+		 * @param {Object} [options]
+		 * @returns {String}
+		 */
+		"displayTime": function(time, options) {
+			return this.universe.calendar.toDisplay(time, true, true, false);
+		},
+		/**
+		 * 
+		 * @method displayDate
+		 * @param {Integer} time 
+		 * @param {Object} [options]
+		 * @returns {String}
+		 */
+		"displayDate": function(time, options) {
+			return this.universe.calendar.toDisplay(time, false, true, false);
+		},
+		/**
+		 * 
 		 * @method openActiveEvent
 		 * @param {Object} event That is active from an `active-event` field.
 		 */

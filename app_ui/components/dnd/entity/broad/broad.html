@@ -136,15 +136,34 @@
 				<span>Current Location</span>
 			</span>
 		</div>
+		<div class="property-container defense flex h v-center" v-if="weather">
+			<button class="action general rounded" v-on:click="info(weather)">
+				<span>{{weather.name}}</span>
+				<span :class="weather.icon"></span>
+			</button>
+			<span class="property-label">
+				<span>Weather</span>
+			</span>
+		</div>
+		<div class="property-container defense flex h v-center">
+			<button class="action general rounded" v-on:click="openCalendar(universe.time)">
+				<span>{{displayDate(universe.time, {})}}</span>
+				<span class="fa-solid fa-calendar"></span>
+			</button>
+			<span class="property-label">
+				<span>Date</span>
+			</span>
+		</div>
 		<div class="property-container rest flex h">
-			<button class="emphasis-stat" v-on:click="takeShortRest()">
+			<button class="emphasis-stat" v-on:click="takeShortRest()" :title="totalHitDice + ' Hit Dice left'">
 				<div class="stat-label">Rest</div>
 				<div class="stat-value">
 					<span class="fas fa-dice"></span>
+					({{totalHitDice}})
 				</div>
 				<div class="stat-foot">Short</div>
 			</button>
-			<button class="emphasis-stat" v-on:click="takeLongRest()">
+			<button class="emphasis-stat" v-on:click="takeLongRest()" :title="longRestNote">
 				<div class="stat-label">Rest</div>
 				<div class="stat-value">
 					<span class="correct-2" :class="longRestIcon"></span>

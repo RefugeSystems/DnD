@@ -331,6 +331,30 @@
 			return null;
 		},
 		/**
+		 * Compare the IDs and parental IDs of the objects (1 ancestry). If matched with is_unique set
+		 * on either object, they are considered similar enough to be considered not unique to one another.
+		 * @method isUniqueTo
+		 * @param {RSObject} source 
+		 * @param {RSObject | Array} compare Either an object or an array of objects.
+		 * @returns {Boolean} True when the source and compare objects should be considered to differ enough
+		 * 		to be considered unique to one another.
+		 */
+		"isUniqueTo": function(source, compare) {
+			if(compare instanceof Array) {
+				var comp,
+					i;
+				for(i=0; i<compare.length; i++) {
+					comp = compare[i];
+					if((source.is_unique || comp.is_unique) && (source.id === comp.id || source.parent === comp.id || source.id === comp.parent || source.parent === comp.parent)) {
+						return false;
+					}
+				}
+			} else {
+				return !((source.is_unique || compare.is_unique) && (source.id === compare.id || source.parent === compare.id || source.id === compare.parent || source.parent === compare.parent));
+			}
+			return true;
+		},
+		/**
 		 * 
 		 * @method isVisibleTo
 		 * @param {RSUniverse} universe 

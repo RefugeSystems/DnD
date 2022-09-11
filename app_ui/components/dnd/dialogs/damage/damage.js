@@ -153,7 +153,7 @@ rsSystem.component("dndDialogDamage", {
 				j;
 
 			add = (target, skip) => {
-				if(rsSystem.utility.isValid(target) && !filter[target.id]) {
+				if(rsSystem.utility.isValid(target) && !filter[target.id] && ((!target.obscured && !target.is_obscured) || (this.player && this.player.gm))) {
 					filter[target.id] = true;
 					if(skip || !types || any || rsSystem.utility.hasCommonKey(types, target.types)) {
 						if(target.obscured || target.is_obscured) {

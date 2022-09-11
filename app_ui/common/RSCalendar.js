@@ -376,7 +376,7 @@
 		 * @param {Boolean} [includeTime] Included by default.
 		 * @returns {String}
 		 */
-		toDisplay(time, includeTime = true, longForm = true) {
+		toDisplay(time, includeTime = true, longForm = true, dayOfWeek = true) {
 			if(time) {
 				time = Math.floor(time);
 			} else {
@@ -400,12 +400,16 @@
 			}
 
 			if(longForm) {
-				day = this.daysOfWeek[time%this.daysOfWeek.length];
+				if(dayOfWeek) {
+					day = this.daysOfWeek[time%this.daysOfWeek.length] + " ";
+				} else {
+					day = "";
+				}
 				num = Math.floor(time%25) + 1;
 				time = Math.floor(time/25);
 				month = this.monthsOfYear[Math.floor(time%this.monthsOfYear.length)];
 				year = Math.floor(time/this.monthsOfYear.length) + 1;
-				return day + " " + month + " " + num + ", " + year + string;
+				return day + month + " " + num + ", " + year + string;
 			} else {
 				num = Math.floor(time%25) + 1;
 				time = Math.floor(time/25);

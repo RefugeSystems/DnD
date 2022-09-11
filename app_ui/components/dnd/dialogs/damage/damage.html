@@ -160,7 +160,7 @@
 							<button class="general rounded quick action icon" v-on:click="info(target)">
 								<span class="action-icon" :class="target.icon"></span>
 							</button>
-							<button class="general rounded action selection target-select has-hp" v-on:click="toggleTarget(target)">
+							<button class="general rounded action selection target-select has-hp" :class="target.obscured || target.is_obscured?'target-obscured':'target-unobscured'" v-on:click="toggleTarget(target)">
 								<span v-if="target.color_flag" class="target-hat game-icon game-icon-top-hat" :class="getHatColor(target)"></span>
 								<span class="action-text">
 									<span>{{getVisibleName(target)}}</span>

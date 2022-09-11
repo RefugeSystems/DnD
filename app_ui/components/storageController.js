@@ -119,7 +119,7 @@ rsSystem.component("StorageController", {
 		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
-				"info": record.id || record
+				"info": record?record.id || record:"knowledge:error:unknown"
 			});
 		}
 	}

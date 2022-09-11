@@ -24,7 +24,14 @@
 					<button class="flat action fas fa-info-circle"></button>
 				</div>
 			</div>
-			<div class="section-customizations">
+			<div class="customizations">
+				<div class="customization" v-for="block in customizations">
+					<div class="customization-name">{{block.name}}</div>
+					<div class="customization-selection" v-for="selection in universe.transcribeInto(block._selected)">
+						<span class="selection-icon" :class="selection.icon"></span>
+						<span class="selection-name">{{selection.name}}</span>
+					</div>
+				</div>
 			</div>
 			<div class="flex h righted">
 				<button class="rounded general action level-up" v-on:click="levelUp()">

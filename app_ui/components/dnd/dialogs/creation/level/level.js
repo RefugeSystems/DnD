@@ -208,7 +208,6 @@ rsSystem.component("dndCharacterLevelDialog", {
 			}
 		},
 		"blockSelected": function(block) {
-			console.log("Block Selected: ", block);
 			this.finishSection("customizations");
 			if(this.sectionInfo.customizations.completed) {
 				this.nextSection();

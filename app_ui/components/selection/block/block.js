@@ -33,6 +33,15 @@ rsSystem.component("rsSelectionBlock", {
 		}
 	},
 	"computed": {
+		"entity": function() {
+			return this.block.entity?this.universe.index.entity[this.block.entity]:null;
+		},
+		"base": function() {
+			if(this.entity && this.block.field) {
+				return this.universe.transcribeInto(this.entity[this.block.field]);
+			}
+			return [];
+		},
 		"choices": function() {
 			var choices = [],
 				archMap = {},
@@ -80,12 +89,16 @@ rsSystem.component("rsSelectionBlock", {
 					}
 					break;
 				default:
-					for(x=0; x<this.block.choices.length; x++) {
-						record = this.universe.getObject(this.block.choices[x]);
-						if(record) {
-							choices.push(record);
-						} else {
-							choices.push(this.block.choices[x]);
+					if(this.block && this.block.choices) {
+						for(x=0; x<this.block.choices.length; x++) {
+							record = this.universe.getObject(this.block.choices[x]);
+							if(record) {
+								if(!record.is_unique || (rsSystem.utility.isUniqueTo(record, choices) &&  rsSystem.utility.isUniqueTo(record, this.base))) {
+									choices.push(record);
+								}
+							} else {
+								choices.push(this.block.choices[x]);
+							}
 						}
 					}
 			}
@@ -96,25 +109,40 @@ rsSystem.component("rsSelectionBlock", {
 	"data": function() {
 		var data = {};
 
-		this.limit = this.block.limit || 1;
-		this.block._selected = this.block._selected || [];
-		this.block._tracked = this.block._tracked || {};
+		data.spent = this.block._spent || 0;
+		data.limit = this.block.limit || 1;
 		
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		if(this.choices.length <= this.limit) {
+		
+		if(!this.block._selected) {
+			Vue.set(this.block, "_selected", []);
+		}
+		if(!this.block._tracked) {
+			Vue.set(this.block, "_tracked", {});
+		}
+
+		var available = 0,
+			i;
+		for(i=0; i<this.choices.length; i++) {
+			available += typeof(this.choices[i].cost_points) === "number"?this.choices[i].cost_points:1;
+		}
+		if(available <= this.limit) {
 			setTimeout(() => {
-				for(var i=0; i<this.choices.length; i++) {
+				for(i=0; i<this.choices.length; i++) {
 					this.select(this.choices[i]);
 				}
 			}, 0);
 		}
 	},
 	"methods": {
+		"hasSpecialCost": function(choice) {
+			return typeof(choice.cost_points) === "number" && choice.cost_points !== 1;
+		},
 		"getIcon": function(choice) {
-			return this.block._tracked[choice.id || choice]?"far fa-check-square":"far fa-square";
+			return this.block._tracked && this.block._tracked[choice.id || choice]?"far fa-check-square":"far fa-square";
 		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
@@ -130,22 +158,26 @@ rsSystem.component("rsSelectionBlock", {
 		},
 		"select": function(choice) {
 			if(!this.block._tracked[choice.id || choice]) {
+				Vue.set(this, "spent", this.spent + (typeof(choice.cost_points) === "number"?choice.cost_points:1));
 				Vue.set(this.block._tracked, choice.id || choice, true);
 				this.block._selected.uniquely(choice.id);
+				this.block._spent = this.spent;
 				this.$forceUpdate(); // TODO: Not updating naturally?
 				this.complete();
 			}
 		},
 		"deselect": function(choice) {
 			if(this.block._tracked[choice.id || choice]) {
+				Vue.set(this, "spent", this.spent - (typeof(choice.cost_points) === "number"?choice.cost_points:1));
 				Vue.set(this.block._tracked, choice.id || choice, false);
 				this.block._selected.purge(choice.id);
+				this.block._spent = this.spent;
 				this.$forceUpdate(); // TODO: Not updating naturally?
 				this.complete();
 			}
 		},
 		"complete": function() {
-			if(this.block._selected.length === this.limit) {
+			if(this.spent === this.limit) {
 				Vue.set(this.block, "_completed", true);
 				this.$emit("selected", this.block);
 			} else {

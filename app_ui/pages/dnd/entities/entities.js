@@ -66,6 +66,12 @@ rsSystem.component("DNDEntities", {
 
 			return null;
 		},
+		"weather": function() {
+			if(this.meeting) {
+				return this.universe.index.weather[this.meeting.weather];
+			}
+			return null;
+		},
 		"skirmish": function() {
 			var skirmish,
 				i;

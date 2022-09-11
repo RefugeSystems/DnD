@@ -24,6 +24,26 @@ rsSystem.component("dndEntityBroad", {
 		}
 	},
 	"computed": {
+		"totalHitDice": function() {
+			var total = 0,
+				keys,
+				i;
+			
+			if(this.entity.hit_dice) {
+				keys = Object.keys(this.entity.hit_dice);
+				for(i=0; i<keys.length; i++) {
+					total += (this.entity.hit_dice[keys[i]] || 0);
+				}
+			}
+
+			return total;
+		},
+		"longRestNote": function() {
+			if(this.entity.last_rest) {
+				return "Last long rest was " + this.displayTime(this.entity.last_rest) + " (" + this.universe.calendar.displayDuration(this.universe.time - this.entity.last_rest, true, false) + " ago)";
+			}
+			return "Your last long rest was sometime ago";
+		},
 		"bag_weight": function() {
 			var bag_weight = 0,
 				items,
@@ -35,6 +55,18 @@ rsSystem.component("dndEntityBroad", {
 			}
 	
 			return bag_weight.toFixed(2);
+		},
+		"meeting": function() {
+			if(this.universe.index.setting["setting:meeting"]) {
+				return this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value];
+			}
+			return null;
+		},
+		"weather": function() {
+			if(this.meeting) {
+				return this.universe.index.weather[this.meeting.weather];
+			}
+			return null;
 		},
 		"location": function() {
 			return this.universe.index.location[this.entity.location];
