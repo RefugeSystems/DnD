@@ -1354,7 +1354,7 @@ class RSUniverse extends EventEmitter {
 				// and the control warning is aimed at when the user is actively trying to update. However if the page has been active for more than
 				// a day AND this issue comes up, the warning isprobably relevent.
 				//rsSystem.controls.serviceWorkerFault();
-				console.warn("Issues with Service Worker");
+				console.warn("Issues with Service Worker - Service Worker: ", !!navigator.serviceWorker, " Controller: ", navigator.serviceWorker?!!navigator.serviceWorker.controller:false);
 			}
 		}
 	}

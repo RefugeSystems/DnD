@@ -6,15 +6,40 @@
  */
 var storageKey = "_rs_connectComponentKey",
 	// TODO: Centralize ServiceWorker versioning for app control (Align with package version?)
-	version = "0.9.8",
-	cacheID = "rsdnd_" + version,
 	development = location.href.indexOf("127.0.0.1") !== -1 || location.href.indexOf("localhost") !== -1 || location.href.indexOf(".development.") !== -1 || location.href.indexOf(".dev.") !== -1,
+	cacheID = "rsdnd_" + version,
+	version = "0.9.842",
 	processAction,
 	updateCaches,
+	cacheOptions,
 	followUp,
-	cacheOptions = {
-		"ignoreSearch": true
-	};
+	pages;
+
+pages = [
+	"./",
+	"./index.html",
+	"./configuration.json",
+
+	"./images/rook.blue.png",
+	"./images/rook.green.png",
+	"./images/rook.orange.png",
+	"./images/rook.red.png",
+	"./favicon.png",
+
+	"./fonts/starwars-glyphicons.css",
+	"./fonts/xwing-miniatures.css",
+	"./fonts/rpg-awesome.css",
+	"./webfonts/all.css",
+	"./fonts/rsswx.css",
+	"./main.css",
+
+	"./externals.js",
+	"./main.js"
+];
+
+cacheOptions = {
+	"ignoreSearch": true
+};
 
 processAction = function(action, data) {
 	switch (action) {
@@ -25,35 +50,22 @@ processAction = function(action, data) {
 };
 
 updateCaches = function() {
+	var i;
+
+	for(i=0; i<pages.length; i++) {
+		self.caches.delete(pages[i]);
+		caches.delete(pages[i]);
+	}
+
 	caches.keys()
 	.then(function(keys) {
-		for(var i = 0; i < keys.length; i++) {
+		for(i = 0; i < keys.length; i++) {
 			caches.delete(keys[i]);
 		}
 		return caches.open(cacheID);
 	})
 	.then(function(cache) {
-		return cache.addAll([
-			"./",
-			"./index.html",
-			"./configuration.json",
-
-			"./images/rook.blue.png",
-			"./images/rook.green.png",
-			"./images/rook.orange.png",
-			"./images/rook.red.png",
-			"./favicon.png",
-
-			"./fonts/starwars-glyphicons.css",
-			"./fonts/xwing-miniatures.css",
-			"./fonts/rpg-awesome.css",
-			"./webfonts/all.css",
-			"./fonts/rsswx.css",
-			"./main.css",
-
-			"./externals.js",
-			"./main.js"
-		]);
+		return cache.addAll(pages);
 	})
 	.then(function() {
 		console.log("Cache Updated");
@@ -65,37 +77,19 @@ updateCaches = function() {
 	});
 };
 
-
 self.addEventListener("install", function(event) {
-	var result = caches.keys()
+	var result,
+		i;
+
+	result = caches.keys()
 	.then(function(keys) {
-		for(var i = 0; i < keys.length; i++) {
+		for(i = 0; i < keys.length; i++) {
 			caches.delete(keys[i]);
 		}
 		return caches.open(cacheID);
 	})
 	.then(function(cache) {
-		return cache.addAll([
-			"./",
-			"./index.html",
-			// "./configuration.json",
-
-			"./images/rook.blue.png",
-			"./images/rook.green.png",
-			"./images/rook.orange.png",
-			"./images/rook.red.png",
-			"./favicon.png",
-
-			"./fonts/starwars-glyphicons.css",
-			"./fonts/xwing-miniatures.css",
-			"./fonts/rpg-awesome.css",
-			"./webfonts/all.css",
-			"./fonts/rsswx.css",
-			"./main.css",
-
-			"./externals.js",
-			"./main.js"
-		]);
+		return cache.addAll(pages);
 	})
 	.then(function() {
 		self.skipWaiting();
@@ -137,11 +131,12 @@ self.addEventListener("message", function(message) {
 });
 
 self.addEventListener("push", function(event) {
-	console.log("[Service Worker] Push Received.");
+	var title = "RSDnD",
+		options;
+
 	console.log("[Service Worker] Push had this data: ", event);
 
-	var title = "RSDnD";
-	var options = {
+	options = {
 		"body": "Notification",
 		"icon": "images/rook.green.png",
 		"badge": "images/rook.blue.png"
