@@ -2068,6 +2068,9 @@
 					if(link.token_z || link.z) {
 						string += "z-index: " + (link.token_z || link.z) + ";";
 					}
+					if(link.label_color) {
+						string += "color: " + link.label_color + ";";
+					}
 					if(link.color_flag) {
 						if(link.color_flag === "transparent") {
 							string += "border-color: transparent;";
