@@ -937,6 +937,7 @@ class Universe extends EventEmitter {
 			fields = {},
 			state = {},
 			master_fields,
+			owner_fields,
 			manager,
 			sync,
 			f,
@@ -951,14 +952,18 @@ class Universe extends EventEmitter {
 		for(m=0; m<managers.length; m++) {
 			manager = this.manager[managers[m]];
 			master_fields = [];
+			owner_fields = [];
 			if(!omittedFromSync[managers[m]] && (!managers[m].attribute || !managers[m].attribute.server_only)) {
 				state.classes.push(manager.toJSON());
 				state[manager.id] = [];
 				if(!player.gm) {
 					master_fields = [];
+					owner_fields = [];
 					for(f=0; f<manager.fields.length; f++) {
 						if(manager.fields[f].attribute.master_only) {
 							master_fields.push(manager.fields[f].id);
+						} else if(manager.fields[f].attribute.owner_only) {
+							owner_fields.push(manager.fields[f].id);
 						}
 					}
 				}
@@ -974,8 +979,14 @@ class Universe extends EventEmitter {
 										delete(sync[master_fields[f]]);
 									}
 								}
-							}
-							if(player.gm) {
+								if(owner_fields.length && sync.owned && !sync.owned[player.id]) {
+									for(f=0; f<owner_fields.length; f++) {
+										if(sync[owner_fields[f]] !== undefined) {
+											delete(sync[owner_fields[f]]);
+										}
+									}
+								}
+							} else {
 								sync._search += " ::: " + sync.id;
 							}
 							state[manager.id].push(sync);

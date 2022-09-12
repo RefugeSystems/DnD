@@ -286,6 +286,7 @@ class PlayerConnection extends EventEmitter {
 						
 					}
 					
+					send._calculated = Object.assign({}, change._calculated);
 					send._formula = change._formula;
 					send._class = change._class;
 					if(change._search) {
@@ -294,13 +295,13 @@ class PlayerConnection extends EventEmitter {
 					if(change._involved) {
 						send._involved = change._involved;
 					}
-					if(change._data) {
+					if(change._data && this.player.gm) {
 						send._data = change._data;
 					}
 
 					for(x=0; x<manager.fields.length; x++) {
 						field = manager.fields[x];
-						if(change[field.id] !== undefined && (!field.attribute.master_only || this.player.gm) && !field.attribute.server_only) {
+						if(change[field.id] !== undefined && (!field.attribute.master_only || this.player.gm) && (!field.attribute.owner_only || !change.owned || this.player.gm || change.owned[this.player.id]) && !field.attribute.server_only) {
 							send[field.id] = change[field.id];
 						} else {
 							if(send._calculated) {

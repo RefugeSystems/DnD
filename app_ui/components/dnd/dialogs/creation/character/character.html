@@ -22,6 +22,7 @@
 						<td class="align-right align-top">Age:</td>
 						<td><input type="number" v-model.number="building.age" /></td>
 						<td>
+							<span v-if="building.age">Born {{getBirthDate(building.age)}}</span>
 						</td>
 					</tr>
 					<tr>
@@ -83,7 +84,7 @@
 			<div slot="controls" slot-scope="{record}" class="align-right">
 				<button v-on:click.prevent.stop="choose(record)" class="basic general action">
 					<span class="fas fa-check rs-green"></span>
-					<span>Select</span>
+					<span>Select {{stages[stage]}}</span>
 				</button>
 				<button class="quick general action">
 					<span class="fas fa-info rs-lightblue"></span>
@@ -94,6 +95,47 @@
 		<div class="notice" v-else-if="corpus[stages[stage]] && !corpus[stages[stage]].length">
 			<span class="fas fa-exclamation-triangle rs-yellow"></span>
 			<span>No {{stages[stage]}} Chioces</span>
+		</div>
+
+		<div class="selection choices" v-else-if="stages[stage] === 'rumors'">
+			<h3>Rumors</h3>
+			<p>Rumors that are true and false that tend to spread wherever you travel. Some may be more supstantial rumors that don't spread
+				until you've been in a place for a few weeks, but they should all be things that come up from your traveling and not necessarily
+				secrets you might have.</p>
+			<table>
+				<tr>
+					<td class="align-right align-top">Truths:</td>
+					<td>
+						<textarea v-model="building.rumors_truths"></textarea>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="align-right align-top">Lies:</td>
+					<td>
+						<textarea v-model="building.rumors_lies"></textarea>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			<h3>Secrets</h3>
+			<p>Things you try to keep hidden that someone may gleam from you if they were to read your mind. Things you may think, such as
+				overly judging people or thinking that all goblins should be murdered, and thigns you've done such as where you've buried
+				all the goblins you've illegally killed.</p>
+			<table>
+				<tr>
+					<td class="align-right align-top">Thoughts:</td>
+					<td>
+						<textarea v-model="building.rumors_thoughts"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-right align-top">Affairs:</td>
+					<td>
+						<textarea v-model="building.rumors_events"></textarea>
+					</td>
+				</tr>
+			</table>
 		</div>
 
 		<div class="selection choices" v-else-if="stages[stage] === 'additional'">
@@ -247,6 +289,38 @@
 						<td v-if="errorCount"></td>
 						<td class="value">
 							<rs-text-block :universe="universe" :text="building.notes" />
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="label align-right align-top">True Rumors:</td>
+						<td v-if="errorCount"></td>
+						<td class="value">
+							<rs-text-block :universe="universe" :text="building.rumors_truths" />
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="label align-right align-top">False Rumors:</td>
+						<td v-if="errorCount"></td>
+						<td class="value">
+							<rs-text-block :universe="universe" :text="building.rumors_lies" />
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="label align-right align-top">Secret Thoughts:</td>
+						<td v-if="errorCount"></td>
+						<td class="value">
+							<rs-text-block :universe="universe" :text="building.rumors_thoughts" />
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="label align-right align-top">Secret Affairs:</td>
+						<td v-if="errorCount"></td>
+						<td class="value">
+							<rs-text-block :universe="universe" :text="building.rumors_events" />
 						</td>
 						<td></td>
 					</tr>

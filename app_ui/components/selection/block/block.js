@@ -5,9 +5,12 @@
  * @class rsSelectionBlock
  * @constructor
  * @module Components
- * @params {Universe} universe
- * @params {SelectionBlock} block To render and feed
- * @params {Array} outcome Where the selected element is queued
+ * @param {Universe} universe
+ * @param {SelectionBlock} block To render and feed
+ * @param {Array} outcome Where the selected element is queued
+ * @param {Object} [entity] Optional object describing the main entity involved.
+ * @param {Object} [transitive] Optional object describing an intermediate state Object to
+ * 		consider in addition to the entity.
  */
 
 /**
@@ -30,6 +33,9 @@ rsSystem.component("rsSelectionBlock", {
 		"block": {
 			"required": true,
 			"type": Object
+		},
+		"transitive": {
+			"type": Object
 		}
 	},
 	"computed": {
@@ -37,10 +43,16 @@ rsSystem.component("rsSelectionBlock", {
 			return this.block.entity?this.universe.index.entity[this.block.entity]:null;
 		},
 		"base": function() {
-			if(this.entity && this.block.field) {
-				return this.universe.transcribeInto(this.entity[this.block.field]);
+			var base = [];
+			if(this.block.field) {
+				if(this.transitive && this.transitive[this.block.field]) {
+					base.push.apply(base, this.universe.transcribeInto(this.transitive[this.block.field]));
+				}
+				if(this.entity && this.entity[this.block.field]) {
+					base.push.apply(base, this.universe.transcribeInto(this.entity[this.block.field]));
+				}
 			}
-			return [];
+			return base;
 		},
 		"choices": function() {
 			var choices = [],

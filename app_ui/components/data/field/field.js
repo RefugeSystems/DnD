@@ -427,7 +427,7 @@
 				this.emitChanged();
 			},
 			"addObjectReference": function(key, value) {
-				console.log("Add Object Key: ", key, value);
+				// console.log("Add Object Key: ", key, value);
 				if((key || key === 0) && (value || value === 0)) {
 					if(value.startsWith("json::")) {
 						try {

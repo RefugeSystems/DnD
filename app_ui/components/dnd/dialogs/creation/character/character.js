@@ -93,6 +93,15 @@ rsSystem.component("dndCreateCharacterDialog", {
 			selectable.sort(rsSystem.utility.sortData);
 			corpus.alignment = selectable;
 
+			selectable = [];
+			for(x = 0; x < this.universe.listing.location.length; x++) {
+				if(this.universe.listing.location[x].playable && rsSystem.utility.isValid(this.universe.listing.location[x])) {
+					selectable.push(this.universe.listing.location[x]);
+				}
+			}
+			selectable.sort(rsSystem.utility.sortData);
+			corpus.birthplace = selectable;
+
 			/*
 			selectable = [];
 			if(this.building) {
@@ -131,6 +140,9 @@ rsSystem.component("dndCreateCharacterDialog", {
 			if(this.building.background && this.building.background.selection) {
 				choiceBlocks = choiceBlocks.concat(this.building.background.selection);
 			}
+			if(this.building.birthplace && this.building.birthplace.selection) {
+				choiceBlocks = choiceBlocks.concat(this.building.birthplace.selection);
+			}
 
 			return choiceBlocks;
 		},
@@ -166,11 +178,13 @@ rsSystem.component("dndCreateCharacterDialog", {
 			"race",
 			"variant",
 			"archetype",
+			"birthplace",
 			"background",
 			"alignment",
 			"additional",
 			"stats",
 			"details", // Name, Description
+			"rumors",
 			"review"
 		];
 
@@ -252,6 +266,12 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.knowledges = [];
 				details.portrait = this.building.portrait;
 				details.picture = this.building.picture;
+				details.birthday = this.getBirthTime(this.building.age);
+				details.birthplace = this.building.birthplace;
+				details.rumors_thoughts = this.building.rumors_thoughts;
+				details.rumors_events = this.building.rumors_events;
+				details.rumors_truths = this.building.rumors_truths;
+				details.rumors_lies = this.building.rumors_lies;
 
 				for(i = 0; i < this.stats.length; i++) {
 					details["stat_" + this.stats[i]] = this.building[this.stats[i]];
@@ -305,13 +325,13 @@ rsSystem.component("dndCreateCharacterDialog", {
 				stage = this.stage;
 			}
 
-			console.log("Validate[" + stage + "]: " + this.stages[this.stage]);
 			switch (this.stages[stage]) {
 				case "race":
 				case "variant":
 				case "archetype":
 				case "background":
 				case "alignment":
+				case "birthplace":
 					if(this.corpus[this.stages[this.stage]].length && !this.building[this.stages[stage]]) {
 						this.errors[stage] = "Please make a selection";
 						this.errorCount++;
@@ -527,6 +547,12 @@ rsSystem.component("dndCreateCharacterDialog", {
 				return (record.name || record) + " ";
 			}
 			return record.name || record;
+		},
+		"getBirthDate": function(age) {
+			return this.universe.calendar.toDisplay(this.getBirthTime(age), false, true, false);
+		},
+		"getBirthTime": function(age) {
+			return this.universe.time - age * this.universe.calendar.CONSTANTS.year;
 		},
 		"syncPortrait": function() {
 
