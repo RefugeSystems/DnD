@@ -578,6 +578,16 @@ rsSystem.component("sysInfoGeneral", {
 		"cancelDescription": function() {
 			this.process("cancel-description");
 		},
+		"editTopData": function() {
+			if(this.player && this.player.gm) {
+				Vue.set(this, "editDescription", this.info.description);
+				Vue.set(this, "editNote", this.info.note);
+				Vue.set(this, "editing", true);
+			} else if(this.entity && (this.info.character === this.entity.id || this.info.user === this.entity.id || this.info.caster === this.entity.id)) {
+				Vue.set(this, "editDescription", this.info.description);
+				Vue.set(this, "editing", true);
+			}
+		},
 		"process": function(control) {
 			var entity = this.playerCharacter || this.getPlayerCharacter(),
 				object = this.info,
@@ -866,11 +876,7 @@ rsSystem.component("sysInfoGeneral", {
 					});
 					break;
 				case "edit-description":
-					Vue.set(this, "editDescription", object.description);
-					if(this.player.gm) {
-						Vue.set(this, "editNote", object.note);
-					}
-					Vue.set(this, "editing", true);
+					this.editTopData();
 					break;
 				case "cancel-description":
 					Vue.set(this, "editing", false);
