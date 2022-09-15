@@ -276,6 +276,7 @@
 
 			data.resetViewportFlag = true;
 			data.focusedLocation = null;
+			data.availableLocaleTypes = [];
 			data.availableCanvases = {};
 			data.availableLocales = {};
 			data.pointsOfInterest = [];
@@ -774,8 +775,27 @@
 			"toggleMenu": function() {
 				Vue.set(this, "menuOpen", !this.menuOpen);
 			},
+			/**
+			 * Hide a path rendered location
+			 * @method toggleLocale
+			 * @deprecated
+			 * @param {Object} locale 
+			 */
 			"toggleLocale": function(locale) {
 				Vue.set(this.storage.hidden_legend, locale.id, !this.storage.hidden_legend[locale.id]);
+				this.redrawPaths();
+			},
+			/**
+			 * 
+			 * @method toggleLocaleType
+			 * @param {Object} type
+			 */
+			"toggleLocaleType": function(type) {
+				if(this.storage.hidden_legend[type.id]) {
+					Vue.delete(this.storage.hidden_legend, type.id);
+				} else {
+					Vue.set(this.storage.hidden_legend, type.id, true);
+				}
 				this.redrawPaths();
 			},
 			"toggleCombatants": function() {
@@ -1592,7 +1612,7 @@
 			},
 			"drawPath": function(canvas, path) {
 				// console.log("Draewing Path: ", canvas, path);
-				if(path && path.rendering_has_path && !this.storage.hidden_legend[path.id]) {
+				if(path && path.rendering_has_path && !rsSystem.utility.hasCommonKey(this.storage.hidden_legend, path.types)) { //!this.storage.hidden_legend[path.id]) {
 					var points = [],
 						buffer,
 						point,
@@ -2096,6 +2116,15 @@
 				}
 				return string;
 			},
+			"poiLinkStylingString": function(link) {
+				var classing = "";
+
+				if(link.label_shadow_blur) {
+					classing += "text-shadow: 0 0 " + link.label_shadow_blur + "px " + (link.label_shadow_color || "black") + ";";
+				}
+
+				return classing;
+			},
 			"poiStyling": function(link) {
 				if(!link) {
 					return "";
@@ -2326,7 +2355,14 @@
 				return rsSystem.utility.isValid(object) && (!object.obscured || (this.player.gm && this.storage.master_view === "master")) && object.location === this.location.id && ((this.player.gm && this.storage.master_view === "master") || (object.owned && this.viewingEntity && rsSystem.utility.hasCommonKey(this.viewingEntity.owned, object.owned)) || ((!object.is_position_hidden || this.isVisibleTo(entity, object)) && ((this.player.gm && this.storage.master_view === "master") || !object.is_marker || !object.must_know || rsSystem.utility.isKnownBy(entity, object))));
 			},
 			"update": function(source) {
-				var now = Date.now();
+				var now = Date.now(),
+					localeTypes = {},
+					buffer,
+					type,
+					i,
+					x,
+					y;
+
 				if(source) {
 					if(source.id === "setting:meeting") {
 						Vue.set(this, "activeMeeting", this.universe.index.meeting[source.value]);
@@ -2340,9 +2376,8 @@
 					if((now - this.last) > UPDATESTEP) {
 						// console.log("Start Update: " + now);
 						this.last = now;
-						var buffer,
-							x;
 
+						this.availableLocaleTypes.splice(0);
 						this.availablePOIs.splice(0);
 						this.locales.splice(0);
 						Vue.set(this, "baseFontSize", this.location.base_font_size || 10);
@@ -2353,6 +2388,16 @@
 								this.availablePOIs.push(buffer);
 								if(buffer.rendering_has_path && this.locales) {
 									this.locales.push(buffer);
+								}
+							}
+						}
+						for(x=0; x<this.locales.length; x++) {
+							if(this.locales[x].types) {
+								for(i=0; i<this.locales[x].types.length; i++) {
+									if(!localeTypes[this.locales[x].types[i]] && (type = this.universe.index.type[this.locales[x].types[i]])) {
+										this.availableLocaleTypes.push(type);
+										localeTypes[type.id] = true;
+									}
 								}
 							}
 						}

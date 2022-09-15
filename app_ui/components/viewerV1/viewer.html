@@ -10,7 +10,7 @@
 					-->
 					<button class="scaled poi" :class="poiStyling(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="poiStylingString(link)" :key="link.id" v-on:click="openLink(link)" v-on:click.stop.prevent="poiMenu(link)">
 						<span class="poi-icon scaled" v-if="!link.token_image" :class="poiClass(link)"></span>
-						<span class="labeling scaled" v-if="link.label && !link.token_image" :class="link.label && storage.labels?'shown':'hidden'">{{link.label || link.nickname || link.name}}</span>
+						<span class="labeling scaled" v-if="link.label && !link.token_image" :class="link.label && storage.labels?'shown':'hidden'" :style="poiLinkStylingString(link)">{{link.label || link.nickname || link.name}}</span>
 					</button>
 				</div>
 				<div class="coordinates" v-for="coordinate in location.coordinates" v-if="!coordinate.standalone">
@@ -175,10 +175,17 @@
 		</button>
 		<div class="menu-items flow-v">
 			<div class="legend-list flex v fill">
+				<!--
 				<button class="control follow grow-3" v-for="locale in locales" v-on:click="toggleLocale(locale)">
 					<span class="icon fal" :class="storage.hidden_legend[locale.id]?'fa-square':'fa-check-square'"></span>
 					<span class="icon far" :class="locale.rendering_path_closed?'fa-draw-polygon':'fa-horizontal-rule'" :style="'color: ' + (locale.rendering_fill_color || locale.rendering_path_color) + ';'"></span>
 					<span class="text">{{locale.name}}</span>
+				</button>
+				-->
+				<button class="control follow grow-3" v-for="type in availableLocaleTypes" v-on:click="toggleLocaleType(type)">
+					<span class="icon fal" :class="storage.hidden_legend[type.id]?'fa-square':'fa-check-square'"></span>
+					<span class="icon far" :class="type.icon"></span>
+					<span class="text">{{type.name}}</span>
 				</button>
 			</div>
 		</div>
