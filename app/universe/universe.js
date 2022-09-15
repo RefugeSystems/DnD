@@ -976,12 +976,14 @@ class Universe extends EventEmitter {
 								delete(sync._data);
 								for(f=0; f<master_fields.length; f++) {
 									if(sync[master_fields[f]] !== undefined) {
+										sync[master_fields[f]] = undefined;
 										delete(sync[master_fields[f]]);
 									}
 								}
 								if(owner_fields.length && sync.owned && !sync.owned[player.id]) {
 									for(f=0; f<owner_fields.length; f++) {
 										if(sync[owner_fields[f]] !== undefined) {
+											sync[owner_fields[f]] = undefined;
 											delete(sync[owner_fields[f]]);
 										}
 									}

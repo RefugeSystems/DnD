@@ -34,6 +34,9 @@ rsSystem.component("rsDisplayField", {
 			"required": true,
 			"type": Object
 		},
+		"player": {
+			"type": Object
+		},
 		"profile": {
 			"type": Object
 		},
@@ -61,6 +64,16 @@ rsSystem.component("rsDisplayField", {
 			}
 			if(this.fieldData.attribute.hide_when_not_set && !this.object[this.field]) {
 				return false;
+			}
+			if(this.player && this.object[this.field]) {
+				if(this.fieldData.attribute.master_only !== undefined && !this.player.gm) {
+					rsSystem.log.error("Non-GM Player has Master Only data", {"object": this.object.id, "player": this.player.id, "field": this.field, "time": Date.now()});
+					return false;
+				}
+				if(this.fieldData.attribute.owner_only && this.object.owned && !this.object.owned[this.player.id]) {
+					rsSystem.log.error("Non-Owning Player has Owner Only data", {"object": this.object.id, "player": this.player.id, "field": this.field, "time": Date.now()});
+					return false;
+				}
 			}
 			return this.empties || this.fieldData.type === "boolean" || (this.object[this.field] && (typeof(this.object[this.field]) !== "object" || Object.keys(this.object[this.field]).length));
 		},
