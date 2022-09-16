@@ -989,7 +989,7 @@ class Universe extends EventEmitter {
 									}
 								}
 							} else {
-								sync._search += " ::: " + sync.id;
+								sync._search += ":::" + sync.id;
 							}
 							state[manager.id].push(sync);
 						}

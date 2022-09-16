@@ -641,6 +641,7 @@ class RSObject {
 							break;
 						case "markdown":
 						case "string":
+							this[fields[x]] = this._calculated[fields[x]];
 							if(field.attribute.searchable) {
 								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
 								if(field.inheritable && field.inheritable.length) {
@@ -654,12 +655,20 @@ class RSObject {
 									this._search += ":::" + this._calculated[field.id].toLowerCase();
 								}
 							}
+							break;
 						default:
-						case "dice":
 						case "formula": // formula Reduction handled in updateFieldValues
-						case "number":
 						case "boolean":
+						case "number":
+						case "dice":
 							this[fields[x]] = this._calculated[fields[x]];
+							if(field.attribute.searchable) {
+								if(this[fields[x]]) {
+									this._search += ":::" + fields[x] + ":true";
+								} else {
+									this._search += ":::" + fields[x] + ":false";
+								}
+							}
 							break;
 						case "object:integer":
 						case "object:dice":
@@ -692,6 +701,7 @@ class RSObject {
 		if(this.level) {
 			this._search += ":::" + this.level;
 			this._search += ":::level" + this.level;
+			this._search += ":::level:" + this.level;
 			this._search += ":::level " + this.level;
 		}
 		
@@ -742,7 +752,7 @@ class RSObject {
 					case "calculated":
 						this[fields[x]] = this.calculateField(fields[x], this._calculated[fields[x]]);
 						if(field.attribute.searchable) {
-							this._search += " ::: " + this[field[x]];
+							this._search += ":::" + this[field[x]];
 						}
 						break;
 					default:

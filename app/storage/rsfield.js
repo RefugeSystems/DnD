@@ -240,7 +240,7 @@ class RSField extends EventEmitter {
 		 * @property _search
 		 * @type String
 		 */
-		this._search = this.id + " ::: " + this.name.toLowerCase() + this.attribute.metadata;
+		this._search = this.id + ":::" + this.name.toLowerCase() + this.attribute.metadata;
 
 		this.updateSpecification(specification);
 	}
@@ -300,7 +300,7 @@ class RSField extends EventEmitter {
 			this.attribute = {};
 		}
 		this.updated = Date.now();
-		this._search = this.id + " ::: " + this.name.toLowerCase() + this.attribute.metadata;
+		this._search = this.id + ":::" + this.name.toLowerCase() + this.attribute.metadata;
 		this.emit("changed");
 	}
 	

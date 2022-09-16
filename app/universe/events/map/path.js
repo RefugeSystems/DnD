@@ -73,7 +73,6 @@ module.exports.initialize = function(universe) {
 			}
 			if(location) {
 				path = location.rendering_path || [];
-				console.log("Prune: ", x);
 				if(typeof(x) === "string") {
 					index = path.indexOf(x);
 					if(index !== -1) {

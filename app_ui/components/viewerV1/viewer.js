@@ -507,6 +507,9 @@
 				Vue.set(this.storage, "hide", {});
 			}
 
+			if(this.$route.query.filter) {
+				Vue.set(this.storage, "search", this.$route.query.filter);
+			}
 			if(this.storage.search) {
 				Vue.set(this, "search_criteria", this.storage.search.toLowerCase().split(" "));
 			} else {
