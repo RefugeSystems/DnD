@@ -39,6 +39,7 @@
  * @param {Integer} event.message.data.stat_charisma Stat score
  */
 
+const { parseHTML } = require("jquery");
 var parseDataUrl = require("parse-data-url"),
 	Random = require("rs-random");
 /**
@@ -144,18 +145,39 @@ var makeCharacter = function(universe, event, source, details) {
 	details.level_archetype[data.archetype.name.toLowerCase()] = 1;
 
 	pg.id = "page:" + details.id;
+	pg.name = "Note Page for " + details.name;
+	pg.associations = [details.id];
+	pg.date = Date.now();
+	pg.description = "";
+	pg.owned = {};
+	pg.owned[details.played_by] = true;
 	return new Promise(function(done, fail) {
 		data.universe.createObject(pg, function(perr, page) {
 			if(perr) {
 				fail(perr);
 			} else {
 				details.page = page.id;
-				data.universe.createObject(data.details, function(err, character) {
-					if(err) {
-						fail(err);
+				pg = {};
+				pg.id = "page:scratch:" + details.id;
+				pg.name = "Scratch Page for " + details.name;
+				pg.associations = [details.id];
+				pg.date = Date.now();
+				pg.description = "";
+				pg.owned = {};
+				pg.owned[details.played_by] = true;
+				data.universe.createObject(pg, function(sperr, spage) {
+					if(sperr) {
+						fail(sperr);
 					} else {
-						data.character = character;
-						done(data);
+						details.scratch_page = spage.id;
+						data.universe.createObject(data.details, function(err, character) {
+							if(err) {
+								fail(err);
+							} else {
+								data.character = character;
+								done(data);
+							}
+						});
 					}
 				});
 			}

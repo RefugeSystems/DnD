@@ -136,6 +136,10 @@
 					</td>
 				</tr>
 			</table>
+			<button class="rounded basic general action" v-on:click="forward()">
+				<span>Next</span>
+				<span class="fas fa-user-edit"></span>
+			</button>
 		</div>
 
 		<div class="selection choices" v-else-if="stages[stage] === 'additional'">
