@@ -70,7 +70,13 @@ var keys = [
 	"stat_constitution",
 	"stat_intelligence",
 	"stat_wisdom",
-	"stat_charisma"
+	"stat_charisma",
+	"birthday",
+	"birthplace",
+	"rumors_thoughts",
+	"rumors_truths",
+	"rumors_events",
+	"rumors_lies"
 ];
 // If changed, update docs
 
@@ -113,12 +119,6 @@ module.exports.initialize = function(universe) {
 		details.hp_rolled = 0;
 		details.gold = 0;
 		details.level = 1;
-		details.birthday = universe.time - year * (event.message.data.age || 0);
-		details.birthplace = event.message.data.birthplace;
-		details.rumors_thoughts = event.message.data.rumors_thoughts;
-		details.rumors_truths = event.message.data.rumors_truths;
-		details.rumors_events = event.message.data.rumors_events;
-		details.rumors_lies = event.message.data.rumors_lies;
 
 		makeCharacter(universe, event, source, details)
 		.then(copySpells)
