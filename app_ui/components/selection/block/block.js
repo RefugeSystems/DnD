@@ -105,7 +105,7 @@ rsSystem.component("rsSelectionBlock", {
 						for(x=0; x<this.block.choices.length; x++) {
 							record = this.universe.getObject(this.block.choices[x]);
 							if(record) {
-								if(!record.is_unique || (rsSystem.utility.isUniqueTo(record, choices) &&  rsSystem.utility.isUniqueTo(record, this.base))) {
+								if(!record.is_unique || (rsSystem.utility.isUniqueTo(record, choices) && rsSystem.utility.isUniqueTo(record, this.base))) {
 									choices.push(record);
 								}
 							} else {

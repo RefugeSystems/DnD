@@ -340,19 +340,27 @@
 		 * 		to be considered unique to one another.
 		 */
 		"isUniqueTo": function(source, compare) {
-			if(compare instanceof Array) {
-				var comp,
-					i;
-				for(i=0; i<compare.length; i++) {
-					comp = compare[i];
-					if((source.is_unique || comp.is_unique) && (source.id === comp.id || source.parent === comp.id || source.id === comp.parent || source.parent === comp.parent)) {
-						return false;
+			if(compare) {
+				if(source) {
+					if(compare instanceof Array) {
+						var comp,
+							i;
+						for(i=0; i<compare.length; i++) {
+							comp = compare[i];
+							if((source.is_unique || comp.is_unique) && (source.id === comp.id || source.parent === comp.id || source.id === comp.parent || source.parent === comp.parent)) {
+								return false;
+							}
+						}
+					} else {
+						return !((source.is_unique || compare.is_unique) && (source.id === compare.id || source.parent === compare.id || source.id === compare.parent || source.parent === compare.parent));
 					}
+					return true;
+				} else {
+					return false;
 				}
 			} else {
-				return !((source.is_unique || compare.is_unique) && (source.id === compare.id || source.parent === compare.id || source.id === compare.parent || source.parent === compare.parent));
+				return true;
 			}
-			return true;
 		},
 		/**
 		 * 
