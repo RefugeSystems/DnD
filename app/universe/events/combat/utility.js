@@ -525,6 +525,10 @@ module.exports.initialize = function(universe) {
 			was_damaged = true;
 		}
 
+		if(0 < add.hp_temp) {
+			add.hp_temp = add.hp_temp - entity.hp_temp;
+		}
+
 		if(add.hp > 0 && (entity.death_fail || entity.death_save)) {
 			entity.setValues({
 				"death_fail": 0,
