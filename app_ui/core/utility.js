@@ -551,7 +551,7 @@
 		},
 		/**
 		 *
-		 * @method sortByInitiative
+		 * @method sortByName
 		 * @param a
 		 * @param b
 		 * @return {Number}

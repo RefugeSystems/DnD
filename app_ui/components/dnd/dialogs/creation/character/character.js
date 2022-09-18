@@ -267,7 +267,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.portrait = this.building.portrait;
 				details.picture = this.building.picture;
 				details.birthday = this.getBirthTime(this.building.age);
-				details.birthplace = this.building.birthplace;
+				details.birthplace = this.building.birthplace.id;
 				details.rumors_thoughts = this.building.rumors_thoughts;
 				details.rumors_events = this.building.rumors_events;
 				details.rumors_truths = this.building.rumors_truths;
