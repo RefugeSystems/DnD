@@ -62,6 +62,8 @@ var keys = [
 	"alignment",
 	"archetypes",
 	"feats",
+	"items",
+	"effects",
 	"skill_proficiency",
 	"proficiencies",
 	"knowledges",
