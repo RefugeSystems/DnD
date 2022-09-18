@@ -265,7 +265,7 @@ rsSystem.component("dndCreateCharacterDialog", {
 				details.proficiencies = [];
 				details.knowledges = [];
 				details.effects = [];
-				details.items = [];
+				details.inventory = [];
 				details.portrait = this.building.portrait;
 				details.picture = this.building.picture;
 				details.birthday = this.getBirthTime(this.building.age);
