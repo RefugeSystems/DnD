@@ -693,7 +693,7 @@ class Universe extends EventEmitter {
 			id = source;
 			source = this.get(source);
 		} else {
-			id = source.id || source;
+			id = source.id;
 		}
 		
 		if(typeof(mask) === "function" && !callback) {
@@ -715,7 +715,8 @@ class Universe extends EventEmitter {
 					// Object.assign(details, source._data, mask);
 					Object.assign(details, mask);
 				}
-				details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+				// details.id = Random.identifier(source._class, 10, 32).toLowerCase();
+				details.id = id + ":" + Random.string(32).toLowerCase();
 				details.acquired_in = this.manager.setting.object["setting:meeting"].value;
 				details.acquired = this.time;
 				details.is_template = false;
