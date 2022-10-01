@@ -1252,7 +1252,8 @@ class Universe extends EventEmitter {
 							update[field] = [];
 							for(i=0; i<object[field].length; i++) {
 								buffer = this.manager.feat.object[object[field][i]];
-								if(typeof(buffer) === "object" && buffer !== null && ((buffer.is_copy && buffer.parent) || (!buffer.is_unique && !buffer.is_singular && !buffer.is_template))) {
+								// if(typeof(buffer) === "object" && buffer !== null && ((buffer.is_copy && buffer.parent) || (!buffer.is_unique && !buffer.is_singular && !buffer.is_template))) {
+								if(typeof(buffer) === "object" && buffer !== null && buffer.is_copy && buffer.parent) {
 									console.log("...Deleting: " + buffer.name + "[" + buffer.id + "]");
 									this.deleteObject(buffer, function(err) {
 										if(err) {
@@ -1321,7 +1322,8 @@ class Universe extends EventEmitter {
 						if(object[field]) {
 							for(i=0; i<object[field].length; i++) {
 								buffer = this.manager.feat.object[object[field][i]];
-								if(typeof(buffer) === "object" && buffer !== null && ((buffer.is_copy && buffer.parent) || (!buffer.is_unique && !buffer.is_singular && !buffer.is_template))) {
+								// if(typeof(buffer) === "object" && buffer !== null && ((buffer.is_copy && buffer.parent) || (!buffer.is_unique && !buffer.is_singular && !buffer.is_template))) {
+								if(typeof(buffer) === "object" && buffer !== null && buffer.is_copy && buffer.parent) {
 									console.log("...Deleting: " + buffer.name + "[" + buffer.id + "]");
 									this.deleteObject(buffer, function(err) {
 										if(err) {
