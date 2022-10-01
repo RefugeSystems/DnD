@@ -348,6 +348,40 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 								}
+								if(this.info.is_deletable) {
+									this.controls.push({
+										"title": "Clear Deletion Flag",
+										"icon": "fa-regular fa-trash-slash",
+										"type": "button",
+										"action": "unremovingcharacter"
+									});
+									this.controls.push({
+										"title": "Fully Strip Character",
+										"icon": "fa-regular fa-eraser",
+										"type": "button",
+										"action": "stripcharacter"
+									});
+									this.controls.push({
+										"title": "Fully Delete Character",
+										"icon": "fa-regular fa-trash-xmark",
+										"type": "button",
+										"action": "removecharacter"
+									});
+								} else {
+									this.controls.push({
+										"title": "Start Deletion Process",
+										"icon": "fa-regular fa-person-arrow-down-to-line",
+										"type": "button",
+										"action": "removingcharacter"
+									});
+								}
+							} else if(this.info._class === "item") {
+								this.controls.push({
+									"title": "Give Item",
+									"icon": "fas fa-people-carry",
+									"action": "giveitemto",
+									"type": "button"
+								});
 							} else if(this.info._class === "location") {
 								if(this.activeMeeting && this.info.map) {
 									if(this.activeMeeting.location !== this.info.id) {
@@ -743,6 +777,43 @@ rsSystem.component("sysInfoGeneral", {
 						"object": object.id,
 						"field": "is_powered",
 						"value": true
+					});
+					break;
+				case "unremovingcharacter":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_deletable",
+						"value": false
+					});
+					break;
+				case "removingcharacter":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_deletable",
+						"value": true
+					});
+					break;
+				case "removecharacter":
+					this.universe.send("delete:character", {
+						"character": object.id
+					});
+					break;
+				case "stripcharacter":
+					this.universe.send("strip:character", {
+						"character": object.id
+					});
+					break;
+				case "giveitemto":
+					rsSystem.EventBus.$emit("dialog-open", {
+						"component": "dndDialogGive",
+						"finish": (target) => {
+							if(target && target.id) {
+								this.universe.send("inventory:give", {
+									"items": [object.id],
+									"target": target.id
+								});
+							}
+						}
 					});
 					break;
 				case "unpower":

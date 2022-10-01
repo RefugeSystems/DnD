@@ -31,52 +31,71 @@ module.exports.initialize = function(universe) {
 		if(typeof(target) === "string") {
 			target = universe.get(target);
 		}
-		if(entity && (entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) && entity.inventory && target && target.inventory && items && items.length) {
+		if(entity) {
+			if((entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) && entity.inventory && target && target.inventory && items && items.length) {
+				for(i=0; i<items.length; i++) {
+					item = universe.manager.item.object[items[i]];
+					if(item && entity.inventory.indexOf(item.id) !== -1) {
+						if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
+							exchanging.push(item.id);
+							if(!item.is_singular || item.is_special) {
+								item.setValues({
+									"acquired_in": universe.manager.setting.object["setting:meeting"].value,
+									"acquired": universe.time,
+									"character": null,
+									"user": null
+								});
+							}
+						} else {
+							universe.messagePlayer(event.player, "Can not give item \"" + item.name + "\" because it is currently equipped");
+						}
+					}
+				}
+			}
+		} else if(event.player.gm) {
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
-				if(item && entity.inventory.indexOf(item.id) !== -1) {
-					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
-						exchanging.push(item.id);
-						if(!item.is_singular || item.is_special) {
-							item.setValues({
-								"acquired_in": universe.manager.setting.object["setting:meeting"].value,
-								"acquired": universe.time,
-								"character": null,
-								"user": null
-							});
-						}
-					} else {
-						universe.messagePlayer(event.player, "Can not give item \"" + item.name + "\" because it is currently equipped");
+				if(item) {
+					exchanging.push(item.id);
+					if(!item.is_singular || item.is_special) {
+						item.setValues({
+							"acquired_in": universe.manager.setting.object["setting:meeting"].value,
+							"acquired": universe.time,
+							"character": null,
+							"user": null
+						});
 					}
 				}
 			}
 		}
 		if(exchanging.length) {
-			update = {
-				"inventory": exchanging
-			};
-			entity.subValues(update);
-			update = {
-				"history": [{
-					"event": "give:items",
-					"time": universe.time,
-					"items": exchanging,
-					"to": target.id
-				}]
-			};
-			entity.addValues(update);
+			if(entity) {
+				update = {
+					"inventory": exchanging
+				};
+				entity.subValues(update);
+				update = {
+					"history": [{
+						"event": "give:items",
+						"time": universe.time,
+						"items": exchanging,
+						"to": target.id
+					}]
+				};
+				entity.addValues(update);
+			}
 			update = {
 				"inventory": exchanging,
 				"history": [{
 					"event": "recv:items",
 					"time": universe.time,
 					"items": exchanging,
-					"from": entity.id
+					"from": entity?entity.id:undefined
 				}]
 			};
 			target.addValues(update);
 			universe.chronicle.addOccurrence("entity:trade:items", {
-				"source": entity.id,
+				"source": entity?entity.id:undefined,
 				"target": target.id,
 				"items": exchanging
 			});
@@ -89,7 +108,7 @@ module.exports.initialize = function(universe) {
 			universe.emit("send", {
 				"type": "notice",
 				"recipients": target.owned,
-				"message": target.name + " received " + exchanging.length + " items from " + entity.name,
+				"message": target.name + " received " + exchanging.length + (entity?" items from " + entity.name:" items"),
 				"timeout": 5000
 			});
 		}

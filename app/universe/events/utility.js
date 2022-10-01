@@ -119,6 +119,7 @@ module.exports.addUniquely = function(universe, adding, to) {
 module.exports.instillEffects = function(universe, effects, source, target, channel, hit, damaged, saved) {
 	var waiting = [],
 		mask = {},
+		duration,
 		effect,
 		i;
 	
@@ -133,7 +134,10 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 	for(i=0; i<effects.length; i++) {
 		effect = effects[i];
 		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.is_hit_required || hit) && (!effect.damage_required || damaged) && (!effect.is_damage_required || damaged) && (!effect.is_fail_required || !saved)) {
-			mask.expiration = effect.duration?universe.time+effect.duration:undefined;
+			duration = channel.duration || effect.duration;
+			if(duration) {
+				mask.expiration = universe.time + duration;
+			}
 			waiting.push(universe.copyPromise(effect, mask));
 		}
 	}

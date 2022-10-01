@@ -275,7 +275,11 @@ rsSystem.component("dndEntitySpells", {
 					"slot": slot
 				});
 			} else {
-				Vue.set(this.storage, "slot", slot);
+				// Vue.set(this.storage, "slot", slot);
+				this.universe.send("spell:slot", {
+					"entity": this.entity.id,
+					"slot": slot
+				});
 			}
 		},
 		"isSilenced": function() {
@@ -320,10 +324,13 @@ rsSystem.component("dndEntitySpells", {
 				state += " not_gesture";
 			}
 
+			Vue.set(this.storage, "slot", typeof(this.entity.cast_level) === "number"?this.entity.cast_level.toString():this.entity.cast_level);
 			Vue.set(this, "entity_state", state);
+			console.log("Updated[" + this.entity.id + "]: " + this.entity.cast_level, this.storage);
 		},
 		"update": function(event) {
 			if(event && event.id === this.entity.id) {
+				console.log("Update[" + this.entity.id + "]: " + this.entity.cast_level);
 				this.updateEntityState();
 			}
 		}

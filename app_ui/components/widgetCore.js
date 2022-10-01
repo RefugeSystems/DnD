@@ -978,6 +978,18 @@ rsSystem.component("DNDWidgetCore", {
 				"entity": this.entity
 			});
 		},
+		"viewListData": function(details, list) {
+			details.component = "dndDialogList";
+			details.activate = (section, action) => {
+				this.info(action);
+			};
+			if(list) {
+				details.data = {
+					"data": list
+				};
+			}
+			rsSystem.EventBus.$emit("dialog-open", details);
+		},
 		"viewLanguages": function() {
 			var details = {};
 

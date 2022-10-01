@@ -6,8 +6,7 @@
 				<span class="fal" :class="storage && storage.is_open?'fa-minus':'fa-plus'"></span>
 			</button>
 			<div class="property rsbg-lightBlue">
-				<span>Effects</span>
-				<span v-if="entity.effects.length"> ( {{entity.effects.length}} )</span>
+				<span>Effects<span v-if="effects.all.length"> ( {{effects.all.length}} )</span></span>
 			</div>
 			<button class="property" v-on:click="toggleFormat()">
 				<span class="fal" :class="storage && storage.is_view_list?'fa-ellipsis':'fa-list'"></span>

@@ -256,7 +256,6 @@ rsSystem.audio = rsSystem.audio || {};
 			setTimeout(rsSystem.audio.stopAll, delay);
 		} else {
 			for(var id in rsSystem.audio.active) {
-				delete(rsSystem.audio.active[id]);
 				rsSystem.audio.stop(id);
 			}
 		}

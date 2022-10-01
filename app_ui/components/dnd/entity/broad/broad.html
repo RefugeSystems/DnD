@@ -61,6 +61,15 @@
 				<span>Languages Spoken</span>
 			</span>
 		</div>
+		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(proficiencyDetails)">
+			<button class="action general rounded">
+				<span>{{totalProficiencies}}</span>
+				<span class="fa-regular fa-screwdriver-wrench"></span>
+			</button>
+			<span class="property-label">
+				<span>Proficiencies</span>
+			</span>
+		</div>
 		<div class="property-container defense flex h v-center">
 			<div class="raw-data">
 				<span>{{entity.movement_ground}}</span>

@@ -91,7 +91,7 @@ rsSystem.component("dndDialogGive", {
 			return classes;
 		},
 		"isVisible": function(entity) {
-			if(entity && this.entity.id !== entity.id && !entity.is_locked && (!this.filter || (entity._search && entity._search.indexOf(this.filter) !== -1))) {
+			if(entity && (!this.entity || this.entity.id !== entity.id) && !entity.is_locked && (!this.filter || (entity._search && entity._search.indexOf(this.filter) !== -1))) {
 				return true;
 			}
 			return false;

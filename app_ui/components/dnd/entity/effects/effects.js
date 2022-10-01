@@ -29,12 +29,14 @@ rsSystem.component("dndEntityEffects", {
 				var positive = [],
 					negative = [],
 					hidden = [],
+					all = [],
 					effect,
 					i;
 				
 				for(i=0; i<this.entity.effects.length; i++) {
 					effect = this.universe.index.effect[this.entity.effects[i]];
 					if(effect && (this.player.gm || (!effect.obscured && !effect.is_obscured))) {
+						all.push(effect);
 						if(effect.debuff) {
 							negative.push(effect);
 						} else if(this.storage && this.storage.hide && this.storage.hide[effect.id]) {
@@ -46,12 +48,14 @@ rsSystem.component("dndEntityEffects", {
 				}
 
 				return {
+					"all": all,
 					"shown": positive.concat(negative),
 					"negative": negative,
 					"hidden": hidden
 				};
 			} else {
 				return {
+					"all": [],
 					"hidden": [],
 					"negative": [],
 					"shown": []

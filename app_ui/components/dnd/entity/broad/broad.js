@@ -71,6 +71,52 @@ rsSystem.component("dndEntityBroad", {
 		"location": function() {
 			return this.universe.index.location[this.entity.location];
 		},
+		"totalProficiencies": function() {
+			return this.proficientSkills.length + this.proficientTools.length;
+		},
+		"proficientSkills": function() {
+			var proficiencies = [],
+				track = {},
+				skills,
+				prf,
+				i;
+			if(this.entity.skill_proficiency) {
+				skills = Object.keys(this.entity.skill_proficiency);
+				for(i=0; i<skills.length; i++) {
+					if(!track[skills[i]] && this.entity.skill_proficiency[skills[i]] != 0) {
+						track[skills[i]] = true;
+						prf = this.universe.index.skill[skills[i]];
+						proficiencies.push(prf);
+					}
+				}
+			}
+			if(this.proficiencyDetails.data) {
+				Vue.set(this.proficiencyDetails.data, "skills", proficiencies);
+			}
+			return proficiencies;
+		},
+		"proficientTools": function() {
+			var proficiencies = [],
+				track = {},
+				skills,
+				prf,
+				i;
+			if(this.entity.proficiencies) {
+				for(i=0; i<this.entity.proficiencies.length; i++) {
+					if(!track[this.entity.proficiencies[i]]) {
+						track[this.entity.proficiencies[i]] = true;
+						prf = this.universe.index.proficiency[this.entity.proficiencies[i]];
+						if(prf && prf.id.indexOf("language") === -1) {
+							proficiencies.push(prf);
+						}
+					}
+				}
+			}
+			if(this.proficiencyDetails.data) {
+				Vue.set(this.proficiencyDetails.data, "tools", proficiencies);
+			}
+			return proficiencies;
+		},
 		"languages": function() {
 			var languages = [],
 				track = {},
@@ -104,6 +150,29 @@ rsSystem.component("dndEntityBroad", {
 			data.longRestIcon = "game-icon game-icon-meditation";
 			data.longRest = "action:rest:trance";
 		}
+
+
+		data.proficiencyDetails = {};
+
+		data.proficiencyDetails.title = this.entity.name + " Proficiencies";
+		data.proficiencyDetails.sections = ["skills", "tools"];
+		data.proficiencyDetails.related = {};
+		data.proficiencyDetails.cards = {
+			"skills": {
+				"name": "Skills",
+				"icon": "fa-regular fa-universal-access",
+				"description": "Activities at which you are proicient."
+			},
+			"tools": {
+				"name": "Tools",
+				"icon": "fa-regular fa-screwdriver-wrench",
+				"description": "Tools with which you are proficient."
+			}
+		};
+		data.proficiencyDetails.data = {
+			"skills": this.proficientSkills,
+			"tools": this.proficientTools
+		};
 
 		return data;
 	},

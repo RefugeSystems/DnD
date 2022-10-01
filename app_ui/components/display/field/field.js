@@ -70,7 +70,7 @@ rsSystem.component("rsDisplayField", {
 					rsSystem.log.error("Non-GM Player has Master Only data", {"object": this.object.id, "player": this.player.id, "field": this.field, "time": Date.now()});
 					return false;
 				}
-				if(this.fieldData.attribute.owner_only && this.object.owned && !this.object.owned[this.player.id]) {
+				if(this.fieldData.attribute.owner_only && !this.player.gm && this.object.owned && !this.object.owned[this.player.id]) {
 					rsSystem.log.error("Non-Owning Player has Owner Only data", {"object": this.object.id, "player": this.player.id, "field": this.field, "time": Date.now()});
 					return false;
 				}

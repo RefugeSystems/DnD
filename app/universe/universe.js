@@ -1209,6 +1209,152 @@ class Universe extends EventEmitter {
 	}
 
 	/**
+	 * Deletes all contained objects in the specified array fields. Similar to full delete but the passed
+	 * object is left.
+	 * @method stripObject
+	 * @param {String | RSObject} object 
+	 * @param {Array | String} fields 
+	 * @returns {Promise} Nothing on success, an array of errors on failure.
+	 */
+	stripObject(object, fields) {
+		console.log("Strip Object: " + object.name + "[" + object.id + "]");
+		return new Promise((done, fail) => {
+			var errors = [],
+				update = {},
+				count = 0,
+				total = 0,
+				finish,
+				buffer,
+				field,
+				f,
+				i;
+
+			if(typeof(object) === "string") {
+				object = this.get(object);
+			}
+
+			finish = () => {
+				if(count + errors.length === total) {
+					if(errors.length) {
+						fail(errors);
+					} else {
+						console.log("Stripped: " + object.name + "[" + object.id + "]");
+						object.setValues(update, done);
+					}
+				}
+			};
+
+			if(object) {
+				if(fields) {
+					for(f=0; f<fields.length; f++) {
+						field = fields[f];
+						if(object[field]) {
+							update[field] = [];
+							for(i=0; i<object[field].length; i++) {
+								buffer = this.manager.feat.object[object[field][i]];
+								if(typeof(buffer) === "object" && buffer !== null && ((buffer.is_copy && buffer.parent) || (!buffer.is_unique && !buffer.is_singular && !buffer.is_template))) {
+									console.log("...Deleting: " + buffer.name + "[" + buffer.id + "]");
+									this.deleteObject(buffer, function(err) {
+										if(err) {
+											console.log("Failed to delete an object");
+											errors.push(err);
+										} else {
+											count++;
+										}
+										finish();
+									});
+									total++;
+								}
+							}
+						}
+					}
+				}
+			}
+			finish();
+		});
+	}
+
+	/**
+	 * 
+	 * @method deleteFullObject
+	 * @param {String | RSObject} object 
+	 * @param {Array | String} fields 
+	 * @returns {Promise} Nothing on success, an array of errors on failure.
+	 */
+	deleteFullObject(object, fields) {
+		console.log("Deleting Object: " + object.name + "[" + object.id + "]");
+		return new Promise((done, fail) => {
+			var errors = [],
+				count = 0,
+				total = 0,
+				finish,
+				buffer,
+				field,
+				f,
+				i;
+
+			if(typeof(object) === "string") {
+				object = this.get(object);
+			}
+
+			finish = () => {
+				if(count + errors.length === total) {
+					if(errors.length) {
+						fail(errors);
+					} else {
+						console.log("Deleted: " + object.name + "[" + object.id + "]");
+						this.deleteObject(object, function(error) {
+							if(error) {
+								fail([error]);
+							} else {
+								done();
+							}
+						});
+					}
+				}
+			};
+
+			if(object) {
+				if(fields) {
+					for(f=0; f<fields.length; f++) {
+						field = fields[f];
+						if(object[field]) {
+							for(i=0; i<object[field].length; i++) {
+								buffer = this.manager.feat.object[object[field][i]];
+								if(typeof(buffer) === "object" && buffer !== null && ((buffer.is_copy && buffer.parent) || (!buffer.is_unique && !buffer.is_singular && !buffer.is_template))) {
+									console.log("...Deleting: " + buffer.name + "[" + buffer.id + "]");
+									this.deleteObject(buffer, function(err) {
+										if(err) {
+											console.log("Failed to delete an object");
+											errors.push(err);
+										} else {
+											count++;
+										}
+										finish();
+									});
+									total++;
+								}
+							}
+						}
+					}
+				}
+			}
+			finish();
+		});
+	}
+
+	/**
+	 * 
+	 * @method hasAccess
+	 * @param {RSplayer} player 
+	 * @param {Object} object 
+	 * @return {Boolean}
+	 */
+	hasAccess(player, object) {
+		return player && (player.gm || (object.owned && object.owned[player.id]));
+	}
+
+	/**
 	 * Checks if an object is valid for use or consumption. Essentially exists, not a `Preview` and not disabled
 	 * with future proofing.
 	 * @method isValid
@@ -1298,12 +1444,25 @@ class Universe extends EventEmitter {
 		return this.getActiveSkirmish();
 	}
 
-
+	/**
+	 * 
+	 * @method processScript
+	 * @param {Object} event 
+	 */
 	processScript(event) {
 		var universe = this;
 		setTimeout(function() {
 			var result = {},
+				returned,
+				finish,
 				method;
+			
+			finish = function() {
+				result.duration = Date.now() - result.start;
+				universe.emit("send", result);
+				console.log("Execution Result: ", result);
+			};
+
 			result.start = Date.now();
 			result.recipients = {};
 			result.recipients[event.player.id] = true;
@@ -1313,27 +1472,54 @@ class Universe extends EventEmitter {
 				if(event && event.code) {
 					result.code = event.code;
 					if(event.player && event.player.gm && typeof(event.code) === "string") {
-						method = new Function("player", "universe", "utility", "Random", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", event.code),
-						result.returned = method(event.player, universe, universe.utility, Random) || null;
-						result.message = "Execution complete";
-						result.status = 0;
+						method = new Function("player", "universe", "utility", "Random", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", event.code);
+						try {
+							returned = method(event.player, universe, universe.utility, Random) || null;
+							if(returned instanceof Promise) {
+								returned
+								.then(function(resultant) {
+									result.returned = resultant;
+									result.message = "Promised: Execution complete";
+									result.status = 0;
+									finish();
+								})
+								.catch(function(error) {
+									result.returned = null;
+									result.error = error;
+									result.message = "Promised: Execution failed";
+									result.status = 0;
+									finish();
+								});
+							} else {
+								result.returned = returned;
+								result.message = "Execution complete";
+								result.status = 0;
+								finish();
+							}
+						} catch(exception) {
+							result.returned = null;
+							result.error = exception;
+							result.message = "Execution failed: " + exception.message;
+							result.status = 0;
+							finish();
+						}
 					} else {
 						result.message = "Access denied";
 						result.status = 4;
+						finish();
 					}
 				} else {
 					result.message = "No code specified";
 					result.status = 3;
+					finish();
 				}
 			} catch(exception) {
 				result.message = "Error processing script: " + exception.message;
 				result.stack = exception.stack;
 				result.error = exception;
 				result.status = 5;
+				finish();
 			}
-			result.duration = Date.now() - result.start;
-			console.log("Execution Result: ", result);
-			universe.emit("send", result);
 		}, 0);
 	}
 
