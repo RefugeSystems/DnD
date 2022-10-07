@@ -76,6 +76,81 @@ rsSystem.component("sysInfoGeneral", {
 				this.populateControls();
 			}
 		},
+		"getEntityLocality": function(current, entity) {
+			var places = [],
+				added = {},
+				buffer,
+				id,
+				i;
+
+			current = current || (this.activeMeeting?this.activeMeeting.location:null);
+			if(typeof(current) === "string") {
+				current = this.universe.get(current);
+			}
+			entity = entity || this.entity;
+			if(typeof(entity) === "string") {
+				entity = this.universe.get(entity);
+			}
+
+			if(current) {
+				places.push(current);
+				places.push("-- [Nearby Locations] --");
+				// Parent
+				if(current.location && (buffer = this.universe.get(current.location))) {
+					places.push(buffer);
+				}
+				// Available Transitions
+				for(i=0; i<this.universe.listing.location.length; i++) {
+					buffer = this.universe.listing.location[i];
+					if(buffer && (buffer.location === current.id || (current.location && buffer.location === current.location)) && buffer.id !== current.id) {
+						if(buffer.links_to) {
+							added[buffer.links_to] = true;
+							if(buffer = this.universe.get(buffer.links_to)) {
+								places.push(buffer);
+							}
+						} else {
+							added[buffer.id] = true;
+							places.push(buffer);
+						}
+					}
+				}
+			}
+
+			// Meeting Relevent Specified Locations
+			places.push("-- [Meeting Locations] --");
+			if(this.activeMeeting && this.activeMeeting.locations) {
+				for(i=0; i<this.activeMeeting.locations.length; i++) {
+					id = this.activeMeeting.locations[i];
+					if(id !== current.id && !added[id] && (buffer = this.universe.get(id))) {
+						places.push(buffer);
+					}
+				}
+			}
+
+			places.push("-- [Active Entities] --");
+			if(this.activeMeeting && this.activeMeeting.entities && this.activeMeeting.entities.length) {
+				for(i=0; i<this.activeMeeting.entities.length; i++) {
+					if(buffer = this.universe.get(this.activeMeeting.entities[i])) {
+						added[buffer.id] = true;
+						places.push(buffer);
+					}
+				}
+			}
+
+			
+			places.push("-- [Location Entities] --");
+			if(this.location) {
+				for(i=0; i<this.universe.listing.entity.length; i++) {
+					buffer = this.universe.listing.entity[i];
+					if(buffer && buffer.location === this.location.id && !added[buffer.id]) {
+						added[buffer.id] = true;
+						places.push(buffer);
+					}
+				}
+			}
+
+			return places;
+		},
 		"populateControls": function() {
 			setTimeout(() => {
 				var entity = this.playerCharacter || this.getPlayerCharacter(),
@@ -235,6 +310,16 @@ rsSystem.component("sysInfoGeneral", {
 							}
 							// }
 							if(this.info._class === "entity") {
+								this.controls.push({
+									"title": "Move to Location or Place",
+									"icon": "fas fa-right-to-bracket",
+									"action": "movetoplace",
+									"property": "location",
+									"type": "selectobj",
+									"_value": this.info.location,
+									"options": this.getEntityLocality()
+								});
+
 								if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 									this.controls.push({
 										"title": "Assume entity in Overview",
@@ -329,6 +414,14 @@ rsSystem.component("sysInfoGeneral", {
 										"icon": "game-icon game-icon-rod-of-asclepius",
 										"type": "button",
 										"action": "notdead"
+									});
+								}
+								if(this.info.inside) {
+									this.controls.push({
+										"title": "Exit current occupancy",
+										"icon": "fa-regular fa-person-to-door",
+										"type": "button",
+										"action": "exitentity"
 									});
 								}
 								if(this.activeMeeting) {
@@ -837,6 +930,13 @@ rsSystem.component("sysInfoGeneral", {
 						"value": false
 					});
 					break;
+				case "exitentity":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "inside",
+						"value": null
+					});
+					break;
 				case "nowdead":
 					this.universe.send("master:quick:add", {
 						"object": object.id,
@@ -1052,6 +1152,23 @@ rsSystem.component("sysInfoGeneral", {
 						control._missing = control._value;
 					} else {
 						Vue.delete(control, "_missing");
+					}
+					break;
+				case "movetoplace":
+					if(buffer = this.universe.get(control._value)) {
+						if(buffer._class === "location") {
+							this.universe.send("master:quick:set", {
+								"object": object.id,
+								"field": "location",
+								"value": control._value
+							});
+						} else if(buffer._class === "entity") {
+							this.universe.send("master:quick:set", {
+								"object": object.id,
+								"field": "inside",
+								"value": control._value
+							});
+						}
 					}
 					break;
 				default:

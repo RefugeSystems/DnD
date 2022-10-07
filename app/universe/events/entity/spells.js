@@ -1,5 +1,3 @@
-const { contourDensity } = require("d3");
-
 module.exports.initialize = function(universe) {
 
 	/**

@@ -27,6 +27,9 @@ module.exports.initialize = function(universe) {
 				if(event.message.data.description && event.message.data.description.length) {
 					update.description = event.message.data.description;
 				}
+				if(event.message.data.note && event.message.data.note.length) {
+					update.note = event.message.data.note;
+				}
 				meeting.setValues(update);
 			} else {
 				universe.warnMasters("Missing information - No Meeting Found: " + event.message.data.meeting, event.message.data);

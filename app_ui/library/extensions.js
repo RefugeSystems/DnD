@@ -43,6 +43,13 @@ String.prototype.pluralize = function(capitalize) {
 	}
 };
 
+
+/**
+ *
+ * @class Array
+ * @constructor
+ */
+
 /**
  * Add an item to an array if and only if that item is not currently in this array.
  * @method uniquely

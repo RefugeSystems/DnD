@@ -327,6 +327,11 @@ rsSystem.component("DNDInventory", {
 		data.sloted = {};
 		data.attuned = 0;
 
+		data.recipes = [];
+		if(this.entity.recipes && this.entity.recipes.length) {
+			this.universe.transcribeInto(this.entity.recipes, data.recipes, "recipe");
+		}
+
 		return data;
 	},
 	"mounted": function() {
@@ -350,6 +355,10 @@ rsSystem.component("DNDInventory", {
 	"methods": {
 		"checkUpdate": function(event) {
 			if(this.entity && this.entity.id === event.id) {
+				if(this.entity.recipes && this.entity.recipes.length !== this.recipes.length) {
+					this.recipes.splice(0);
+					this.universe.transcribeInto(this.entity.recipes, this.recipes, "recipe");
+				}
 				Vue.set(this.storage, "processing", null);
 				this.buildControls();
 			}
@@ -373,7 +382,9 @@ rsSystem.component("DNDInventory", {
 				show = false,
 				v1h = false,
 				v2h = false,
+				parental = [],
 				unequip = [],
+				recipes = [],
 				attuned = 0,
 				equip = [],
 				items = [],
@@ -382,6 +393,7 @@ rsSystem.component("DNDInventory", {
 				i,
 				j;
 
+			parental = rsSystem.utility.expandParentalKeys(selected);
 			this.unattunable.splice(0);
 			this.attunable.splice(0);
 			this.controls.splice(0);
@@ -396,6 +408,13 @@ rsSystem.component("DNDInventory", {
 				}
 			}
 			Vue.set(this, "attuned", attuned);
+
+			for(i=0; i<this.recipes.length; i++) {
+				buffer = this.recipes[i];
+				if(buffer.items && buffer.items.hasCommon(parental)) {
+					recipes.push(buffer);
+				}
+			}
 
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.item[selected[i]];
@@ -599,6 +618,29 @@ rsSystem.component("DNDInventory", {
 						reference.universe.send("items:unattune", {
 							"items": items,
 							"entity": reference.entity.id
+						});
+					}
+				});
+			}
+			if(recipes.length) {
+				this.controls.push({
+					"title": "Craft",
+					"icon": "fas fa-",
+					"process": function() {
+						rsSystem.EventBus.$emit("dialog-open", {
+							"component": "dndCraftRecipe",
+							"source": reference.entity.id,
+							"target": reference.entity.id,
+							"ingredients": selected,
+							"recipes": recipes,
+							"finish": function(craft) {
+								if(craft && craft.recipe && craft.inputs) {
+									rsSystem.utility.clearObject(reference.storage.selected);
+									craft.target = craft.target || reference.entity.id;
+									craft.source = reference.entity.id;
+									reference.universe.send("entity:craft:recipe", craft);
+								}
+							}
 						});
 					}
 				});

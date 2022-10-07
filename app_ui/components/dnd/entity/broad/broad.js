@@ -69,7 +69,13 @@ rsSystem.component("dndEntityBroad", {
 			return null;
 		},
 		"location": function() {
+			if(this.inside) {
+				return this.universe.index.location[this.inside.location];
+			}
 			return this.universe.index.location[this.entity.location];
+		},
+		"inside": function() {
+			return this.universe.get(this.entity.inside);
 		},
 		"totalProficiencies": function() {
 			return this.proficientSkills.length + this.proficientTools.length;

@@ -11,6 +11,13 @@
 		</div>
 		<dnd-entity-healthbar class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 		<dnd-entity-properties class="widget" v-on:gold="giveGold()" v-on:property="fireProperty($event)" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
+		<!--
+		<div class="master-actions flex h fill">
+			<select class="type-select locality grow-10" v-model="location">
+				<option v-for="l in locality" :value="l.id" :title="l.id" :disabled="!l.id">{{l.id?l.name:l}}</option>
+			</select>
+		</div>
+		-->
 		<div class="master-actions widget flex h">
 			<button class="general rounded quick action" v-on:click="giveGold()">
 				<span class="fas fa-coins"></span>
@@ -27,7 +34,7 @@
 			<button class="general rounded quick action">
 				<span class="fas fa-dice rs-orange"></span>
 			</button>
-			<button class="general rounded action roll-result" :class="getRollClass(roll)" v-for="(roll,$index) in rolls" v-on:click="info(roll.skill)" v-on:click.right.stop.prevent="dismissRoll($index)">
+			<button class="general rounded action roll-result" :class="getRollClass(roll)" v-for="(roll,$index) in rolls" v-on:click="info(roll.skill)" v-on:click.right.stop.prevent="dismissRoll($index)" :title="roll.name || roll.skill || roll.roll.forumla">
 				<span :class="roll.skill.icon"></span>
 				<span class="roll-result">{{roll.result}}</span>
 			</button>

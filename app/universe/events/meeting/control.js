@@ -1,6 +1,5 @@
-
-const { transform } = require("lodash");
-var Random = require("rs-random");
+var Utility = require("../utility.js"),
+	Random = require("rs-random");
 
 module.exports.initialize = function(universe) {
 	var second = 1000,
@@ -233,6 +232,18 @@ module.exports.initialize = function(universe) {
 	 * @param {Number} time Simulation
 	 * @param {Number} date Reality
 	 */
+	/**
+	 * Entered an entity (Such as a boat or house).
+	 * @event session:travel:entity
+	 * @for Chronicle
+	 * @param {String} type Event type classifier
+	 * @param {String} entity
+	 * @param {Number} distance 0 is used if no distance is specified to support multiplicative calculations,
+	 * 		though divisions will need to be cautious.
+	 * @param {String} meeting
+	 * @param {Number} time Simulation
+	 * @param {Number} date Reality
+	 */
 	universe.on("player:meeting:location", function(event) {
 		var meeting = event.message.data.meeting,
 			location = event.message.data.location,
@@ -240,37 +251,76 @@ module.exports.initialize = function(universe) {
 			transition,
 			adding,
 			entity,
+			set,
 			i;
 
 		meeting = universe.get(meeting);
 		if(event.player.gm && meeting && (location = universe.get(location))) {
-			transition = {	
-				"type": "session:travel:location",
-				"name": "Travel to " + location.name,
-				"location": location.id,
-				"distance": distance,
-				"meeting": meeting.id,
-				"time": universe.time,
-				"date": Date.now()
-			};
-			adding = {
-				"historical_events": [transition],
-				"locations": [location.id]
-			};
-			if(!meeting.associations || meeting.associations.indexOf(location.id) === -1) {
-				adding.associations = [location.id];
-			}
-			meeting.addValues(adding);
-			meeting.setValues({
-				"location": location.id
-			});
-			universe.emit("send", transition);
+			if(location._class === "location") {
+				transition = {	
+					"type": "session:travel:location",
+					"name": "Travel to " + location.name,
+					"location": location.id,
+					"distance": distance,
+					"meeting": meeting.id,
+					"time": universe.time,
+					"date": Date.now()
+				};
+				adding = {
+					"historical_events": [transition]
+				};
+				set = {
+					"location": location.id
+				};
+				if(!meeting.locations || meeting.locations.indexOf(location.id) === -1) {
+					adding.locations = [location.id];
+				}
+				if(!meeting.associations || meeting.associations.indexOf(location.id) === -1) {
+					adding.associations = [location.id];
+				}
+				meeting.addValues(adding);
+				meeting.setValues(set);
+				universe.emit("send", transition);
 
-			if(meeting.entities && meeting.entities.length) {
-				for(i=0; i<meeting.entities.length; i++) {
-					entity = universe.get(meeting.entities[i]);
-					if(entity) {
-						entity.fireHandler(transition.type, transition);
+				if(meeting.entities && meeting.entities.length) {
+					for(i=0; i<meeting.entities.length; i++) {
+						entity = universe.get(meeting.entities[i]);
+						if(entity && !Utility.isEmpty(entity.owned)) {
+							entity.setValues(set, function() {
+								entity.fireHandlers(transition.type, transition);
+							});
+						}
+					}
+				}
+			} else if(location._class === "entity") {
+				transition = {	
+					"type": "session:travel:entity",
+					"name": "Went inside " + location.name,
+					"entity": location.id,
+					"distance": distance,
+					"meeting": meeting.id,
+					"time": universe.time,
+					"date": Date.now()
+				};
+				adding = {
+					"historical_events": [transition]
+				};
+				set = {
+					"inside": location.id
+				};
+				if(!meeting.associations || meeting.associations.indexOf(location.id) === -1) {
+					adding.associations = [location.id];
+				}
+				meeting.addValues(adding);
+				universe.emit("send", transition);
+				if(meeting.entities && meeting.entities.length) {
+					for(i=0; i<meeting.entities.length; i++) {
+						entity = universe.get(meeting.entities[i]);
+						if(entity && !Utility.isEmpty(entity.owned) && entity.id !== set.inside) {
+							entity.setValues(set, function() {
+								entity.fireHandlers(transition.type, transition);
+							});
+						}
 					}
 				}
 			}

@@ -68,6 +68,7 @@
 				return weathers;
 			},
 			"types": function() {
+				/*
 				var types = [],
 					type,
 					i;
@@ -78,8 +79,14 @@
 						types.push(type);
 					}
 				}
-
+				
 				return types;
+				*/
+				var types = ["type:combat", "type:investigation", "type:travel"];
+				if(this.active && types.indexOf(this.active.type) === -1) {
+					types.unshift(this.active.type);
+				}
+				return this.universe.transcribeInto(types);
 			},
 			"active": function() {
 				var meet,
@@ -89,8 +96,10 @@
 					meet = this.universe.listing.meeting[i];
 					if(meet.is_active && !meet.disabled && !meet.is_preview) {
 						Vue.set(this, "description", meet.description || "");
+						Vue.set(this, "note", meet.note || "");
 						Vue.set(this, "weather", meet.weather || "");
 						Vue.set(this, "type", meet.type || "");
+						Vue.set(this, "location", meet.location);
 						if(!meet.name) {
 							Vue.set(this, "editName", true);
 						} else {
@@ -116,6 +125,87 @@
 
 				return null;
 			},
+			"locality": function() {
+				if(this.storage && this.storage.all_locations) {
+					return this.universe.listing.location;
+				}
+
+				var places = [],
+					added = {},
+					current,
+					location,
+					entity,
+					id,
+					i;
+
+				if(current = this.universe.get(this.location)) {
+					places.push(current);
+					places.push("-- [Nearby Locations] --");
+					// Parent
+					if(current.location && (location = this.universe.get(current.location))) {
+						places.push(location);
+					}
+					// Available Transitions
+					for(i=0; i<this.universe.listing.location.length; i++) {
+						location = this.universe.listing.location[i];
+						if(location && (location.location === current.id || (current.location && location.location === current.location)) && location.id !== current.id) {
+							if(location.links_to) {
+								added[location.links_to] = true;
+								if(location = this.universe.get(location.links_to)) {
+									places.push(location);
+								}
+							} else {
+								added[location.id] = true;
+								places.push(location);
+							}
+						}
+					}
+				}
+
+				// Meeting Relevent Specified Locations
+				places.push("-- [Meeting Locations] --");
+				if(this.active && this.active.locations) {
+					for(i=0; i<this.active.locations.length; i++) {
+						id = this.active.locations[i];
+						if(id !== current.id && !added[id] && (location = this.universe.get(id))) {
+							places.push(location);
+						}
+					}
+				}
+
+				places.push("-- [Active Entities] --");
+				if(this.skirmish) {
+					if(this.skirmish.entities) {
+						for(i=0; i<this.skirmish.entities.length; i++) {
+							if(entity = this.universe.get(this.skirmish.entities[i])) {
+								added[entity.id] = true;
+								places.push(entity);
+							}
+						}
+					}
+				} else if(this.active && this.active.entities && this.active.entities.length) {
+					for(i=0; i<this.active.entities.length; i++) {
+						if(entity = this.universe.get(this.active.entities[i])) {
+							added[entity.id] = true;
+							places.push(entity);
+						}
+					}
+				}
+
+				
+				places.push("-- [Location Entities] --");
+				if(this.location) {
+					for(i=0; i<this.universe.listing.entity.length; i++) {
+						entity = this.universe.listing.entity[i];
+						if(entity && entity.location === this.location.id && !added[entity.id]) {
+							added[entity.id] = true;
+							places.push(entity);
+						}
+					}
+				}
+
+				return places;
+			},
 			"entities": function() {
 				if(this.active && this.active.entities) {
 					return this.universe.transcribeInto(this.active.entities, [], "entity");
@@ -133,7 +223,6 @@
 				}
 			},
 			"weather": function(newValue, oldValue) {
-				console.log("New Weather: ", newValue, oldValue);
 				if(newValue) {
 					this.universe.send("meeting:weather", {
 						"meeting": this.active.id,
@@ -141,8 +230,15 @@
 					});
 				}
 			},
+			"location": function(newValue, oldValue) {
+				if(newValue) {
+					this.universe.send("meeting:location", {
+						"meeting": this.active.id,
+						"location": newValue
+					});
+				}
+			},
 			"type": function(newValue, oldValue) {
-				console.log("New Type: ", newValue, oldValue);
 				if(newValue) {
 					this.universe.send("meeting:type", {
 						"meeting": this.active.id,
@@ -151,7 +247,6 @@
 				}
 			},
 			"id": function(newValue, oldValue) {
-				console.log("New ID: ", newValue, oldValue);
 				if(newValue && (!this.active || newValue !== this.active.id)) {
 					this.universe.send("meeting:activate", {
 						"meeting": newValue
@@ -163,6 +258,9 @@
 			},
 			"description": function(text) {
 				this.syncDescription();
+			},
+			"note": function(text) {
+				this.syncDescription();
 			}
 		},
 		"data": function() {
@@ -172,11 +270,13 @@
 			data.editName = false;
 			data.name = "";
 			data.description = this.active?this.active.description:"";
+			data.note = this.active?this.active.note:"";
 			data.id = this.active?this.active.id:"";
 			data.weather = "";
 			data.type = "";
 			data.activeTimer = null;
 			data.timer = {};
+			data.location = null;
 
 			return data;
 		},
@@ -185,6 +285,25 @@
 			this.universe.$on("time:changed", this.updateTime);
 		},
 		"methods": {
+			"exitEntity": function() {
+				var entity,
+					i;
+				if(this.active && this.active.entities) {
+					for(i=0; i<this.active.entities.length; i++) {
+						entity = this.universe.get(this.active.entities[i]);
+						if(entity && !rsSystem.utility.isEmpty(entity.owned)) {
+							this.universe.send("master:quick:set", {
+								"object": entity.id,
+								"field": "inside",
+								"value": null
+							});
+						}
+					}
+				}
+			},
+			"toggleLocales": function() {
+				Vue.set(this.storage, "all_locations", !this.storage.all_locations);
+			},
 			"selectTimer": function() {
 				var details = {},
 					action,
@@ -405,7 +524,7 @@
 								i;
 							for(i=0; i<this.active.entities.length; i++) {
 								entity = this.universe.index.entity[this.active.entities[i]];
-								if(entity.played_by && (player = this.universe.index.player[entity.played_by]) && !player.gm) {
+								if(entity.played_by && (player = this.universe.index.player[entity.played_by])) {
 									entities.push(entity.id);
 								}
 							}
@@ -469,19 +588,19 @@
 			 * multi-client synced editing.
 			 * @method syncDescription
 			 */
-			"syncDescription": function(meeting, description) {
+			"syncDescription": function(meeting, description, note) {
+				var send = {};
 				if(meeting) {
-					this.universe.send("meeting:details", {
-						"meeting": meeting,
-						"description": description
-					});
+					send.meeting = meeting;
+					send.description = description;
+					send.note = note;
 				} else if(this.active) {
-					this.universe.send("meeting:details", {
-						"meeting": this.active.id,
-						"name": this.name,
-						"description": this.description
-					});
+					send.meeting = this.active.id;
+					send.description = this.description;
+					send.name = this.name;
+					send.note = this.note;
 				}
+				this.universe.send("meeting:details", send);
 			},
 			"setTimeTo": function(time) {
 				this.universe.send("time:to", {

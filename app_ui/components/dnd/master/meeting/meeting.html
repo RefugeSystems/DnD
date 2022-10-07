@@ -6,6 +6,9 @@
 				<input class="grow-1" v-delayed:1500="name" />
 			</div>
 			<div class="meeting-description flex h">
+				<textarea class="grow-1" v-delayed:500="note"></textarea>
+			</div>
+			<div class="meeting-description flex h">
 				<textarea class="grow-1" v-delayed:500="description"></textarea>
 			</div>
 		</div>
@@ -61,18 +64,29 @@
 		</div>
 		<div class="flex v meeting-states">
 			<div class="state-container flex h">
-				<button class="rounded general quick action" v-on:click="info(weather)">
+				<button class="rounded general quick action shrink-0" v-on:click="info(location)">
 					<span class="action-icon fa-solid fa-info-circle"></span>
 				</button>
-				<select class="weather-select" v-model="weather">
+				<select class="type-select locality grow-10" v-model="location">
+					<option v-for="l in locality" :value="l.id" :title="l.id" :disabled="!l.id">{{l.id?l.name:l}}</option>
+				</select>
+				<button class="rounded general quick action shrink-0" v-on:click="toggleLocales()" v-on:click.right.stop.prevent="exitEntity()">
+					<span class="action-icon fa-regular" :class="storage.all_locations?'fa-check':'fa-square'"></span>
+				</button>
+			</div>
+			<div class="state-container flex h">
+				<button class="rounded general quick action shrink-0" v-on:click="info(weather)">
+					<span class="action-icon fa-solid fa-info-circle"></span>
+				</button>
+				<select class="weather-select grow-10" v-model="weather">
 					<option v-for="w in weathers" :value="w.id" :title="w.id">{{w.name}}</option>
 				</select>
 			</div>
 			<div class="state-container flex h">
-				<button class="rounded general quick action" v-on:click="info(type)">
+				<button class="rounded general quick action shrink-0" v-on:click="info(type)">
 					<span class="action-icon fa-solid fa-info-circle"></span>
 				</button>
-				<select class="type-select" v-model="type">
+				<select class="type-select grow-10" v-model="type">
 					<option v-for="t in types" :value="t.id" :title="t.id">{{t.name}}</option>
 				</select>
 			</div>

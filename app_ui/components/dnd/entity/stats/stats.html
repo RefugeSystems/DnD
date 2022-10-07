@@ -30,6 +30,9 @@
 		<button class="property" v-if="entity.location" v-on:click="info(entity.location)">
 			<span class="fas fa-globe"></span>
 		</button>
+		<button class="property" v-if="inside" v-on:click="info(inside)">
+			<span :class="inside.icon"></span>
+		</button>
 	</div>
 	<!--div class="property-container dicebin">
 		<button class="property" v-on:click="openDiceBin()">

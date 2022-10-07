@@ -1,0 +1,99 @@
+.dnd-page.master-synopsis {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	// overflow: auto;
+	// scroll-behavior: smooth;
+	
+	/*
+	overscroll-behavior-x: contain;
+	scroll-snap-type: x mandatory;
+	grid-auto-flow: column;
+	display: grid;
+	gap: 0px;
+	*/
+
+	.screen-container {
+		position: relative;
+		height: 100%;
+		width: 100%;
+
+		overflow: auto;
+		scroll-behavior: smooth;
+
+		display: grid;
+		grid-auto-flow: column;
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x mandatory;
+		gap: 0px;
+		// flex-direction: row;
+		// scroll-behavior: smooth;
+		left: 0px;
+	}
+
+	.screen-panel {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		height: ~"calc(100vh - 7px)"; // Grid causing manual account for scrollbar
+		width: 100vw;
+		flex-shrink: 0;
+		scroll-snap-align: start;
+	}
+	
+	.screen-column {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		max-width: 420px;
+		min-width: 300px;
+		overflow-x: hidden;
+		overflow-y: auto;
+
+		&.small {
+			max-width: 300px;
+		}
+
+		&.large {
+			min-width: 420px;
+		}
+	}
+
+	.screen-action-column {
+		display: flex;
+		flex-direction: column;
+		max-height: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+		flex-shrink: 0;
+
+		button {
+			margin: 5px;
+		}
+	}
+
+	.screen-data-column {
+		display: flex;
+		flex-direction: column;
+		max-height: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	.current_turn > .widgets.container {
+		border-color: @rsOrange !important;
+		box-shadow: 0px 0px 10px inset @rsOrange !important;
+	}
+
+	button.bucket.action.active {
+		box-shadow: 0px 0px 10px @rsBlue;
+		border-color: @rsBlue;
+	}
+
+	.master-actions {
+		.action {
+			margin: 5px;
+			min-height: 34px;
+		}
+	}
+}

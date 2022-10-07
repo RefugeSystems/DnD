@@ -78,6 +78,95 @@ rsSystem.component("dndMasterEntity", {
 
 			return result.join(", ");
 		},
+		"inside": function() {
+			return this.universe.get(this.entity.inside);
+		},
+		"active": function() {
+			var meeting;
+			if(this.universe.index.setting["setting:meeting"] && (meeting = this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value])) {
+				return meeting;
+			}
+			return null;
+		},
+		/*
+		"locality": function() {
+			var places = [],
+				added = {},
+				current,
+				location,
+				entity,
+				id,
+				i;
+
+			if(current = this.universe.get(this.location)) {
+				places.push(current);
+				places.push("-- [Nearby Locations] --");
+				// Parent
+				if(current.location && (location = this.universe.get(current.location))) {
+					places.push(location);
+				}
+				// Available Transitions
+				for(i=0; i<this.universe.listing.location.length; i++) {
+					location = this.universe.listing.location[i];
+					if(location && (location.location === current.id || (current.location && location.location === current.location)) && location.id !== current.id) {
+						if(location.links_to) {
+							added[location.links_to] = true;
+							if(location = this.universe.get(location.links_to)) {
+								places.push(location);
+							}
+						} else {
+							added[location.id] = true;
+							places.push(location);
+						}
+					}
+				}
+			}
+
+			// Meeting Relevent Specified Locations
+			places.push("-- [Meeting Locations] --");
+			if(this.active && this.active.locations) {
+				for(i=0; i<this.active.locations.length; i++) {
+					id = this.active.locations[i];
+					if(id !== current.id && !added[id] && (location = this.universe.get(id))) {
+						places.push(location);
+					}
+				}
+			}
+
+			places.push("-- [Active Entities] --");
+			if(this.skirmish) {
+				if(this.skirmish.entities) {
+					for(i=0; i<this.skirmish.entities.length; i++) {
+						if(entity = this.universe.get(this.skirmish.entities[i])) {
+							added[entity.id] = true;
+							places.push(entity);
+						}
+					}
+				}
+			} else if(this.active && this.active.entities && this.active.entities.length) {
+				for(i=0; i<this.active.entities.length; i++) {
+					if(entity = this.universe.get(this.active.entities[i])) {
+						added[entity.id] = true;
+						places.push(entity);
+					}
+				}
+			}
+
+			
+			places.push("-- [Location Entities] --");
+			if(this.location) {
+				for(i=0; i<this.universe.listing.entity.length; i++) {
+					entity = this.universe.listing.entity[i];
+					if(entity && entity.location === this.location.id && !added[entity.id]) {
+						added[entity.id] = true;
+						places.push(entity);
+					}
+				}
+			}
+
+			return places;
+		},
+		*/
 		"image": function() {
 			return this.universe.index.image[this.entity.portrait];
 		}
@@ -105,18 +194,48 @@ rsSystem.component("dndMasterEntity", {
 		// 	return rolls;
 		// }
 	},
+	"watch": {/*
+		"location": function(newValue, oldValue) {
+			var location;
+			if(newValue !== this.entity.location) {
+				location = this.universe.get(newValue);
+				if(rsSystem.utility.isValid(location)) {
+					if(location._class === "location") {
+						this.universe.send("master:quick:set", {
+							"object": this.entity.id,
+							"field": "location",
+							"value": newValue
+						});
+					} else if(location._class === "entity") {
+						Vue.set(this, "location", oldValue);
+						this.universe.send("master:quick:set", {
+							"object": this.entity.id,
+							"field": "inside",
+							"value": newValue
+						});
+
+					}
+				}
+			}
+		}
+		*/
+	},
 	"data": function() {
 		var data = {};
 
 		data.rolls = [];
 		data.gender = this.universe.get(this.entity.gender) || {"name": this.entity.gender || "No Gender"};
 		data.race = this.universe.get(this.entity.race) || {"name": this.entity.race || "No Race"};
+		/*
+		data.location = this.entity.location;
+		*/
 
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
 		this.universe.$on("entity:roll", this.entityRolled);
+		this.universe.$on("updated", this.update);
 	},
 	"methods": {
 		"fireProperty": function(property) {
@@ -305,10 +424,18 @@ rsSystem.component("dndMasterEntity", {
 				this.rolled[this.entity.id].splice(index, 1);
 				this.updateRolls();
 			}
+		},
+		"update": function(event) {
+			if(event && event.id === this.entity.id) {
+				if(this.location !== this.entity.location) {
+					Vue.set(this, "location", this.entity.location);
+				}
+			}
 		}
 	},
 	"beforeDestroy": function() {
 		this.universe.$off("entity:roll", this.entityRolled);
+		this.universe.$off("updated", this.update);
 	},
 	"template": Vue.templified("components/dnd/master/entity.html")
 });

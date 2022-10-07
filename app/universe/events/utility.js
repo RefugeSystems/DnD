@@ -389,3 +389,19 @@ module.exports.consumeObject = function(universe, source, consuming, targets, ch
 
 	return problems;
 };
+
+/**
+ * Test if an object contains no properties.
+ * @method isEmpty
+ * @param {Object} object 
+ * @return {Boolean} Returns true if the object is falsey or has no children
+ */
+module.exports.isEmpty = function(object) {
+	if(!object) {
+		return true;
+	}
+	for(var i in object) {
+		return false;
+	}
+	return true;
+};

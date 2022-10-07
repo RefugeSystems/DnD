@@ -136,7 +136,7 @@
 			</span>
 		</div>
 		<h3>World</h3>
-		<div class="property-container defense flex h v-center">
+		<div class="property-container location flex h v-center">
 			<button class="action general rounded" v-on:click="info(entity.location)">
 				<span>{{location?location.name:"No Location"}}</span>
 				<span class="fa-solid fa-location-pin"></span>
@@ -145,7 +145,16 @@
 				<span>Current Location</span>
 			</span>
 		</div>
-		<div class="property-container defense flex h v-center" v-if="weather">
+		<div v-if="inside" class="property-container inside flex h v-center">
+			<button class="action general rounded" v-on:click="info(inside)">
+				<span>{{inside.name}}</span>
+				<span :class="inside.icon"></span>
+			</button>
+			<span class="property-label">
+				<span>Occupancy</span>
+			</span>
+		</div>
+		<div class="property-container weather flex h v-center" v-if="weather">
 			<button class="action general rounded" v-on:click="info(weather)">
 				<span>{{weather.name}}</span>
 				<span :class="weather.icon"></span>
@@ -154,7 +163,7 @@
 				<span>Weather</span>
 			</span>
 		</div>
-		<div class="property-container defense flex h v-center">
+		<div class="property-container date flex h v-center">
 			<button class="action general rounded" v-on:click="openCalendar(universe.time)">
 				<span>{{displayDate(universe.time, {})}}</span>
 				<span class="fa-solid fa-calendar"></span>

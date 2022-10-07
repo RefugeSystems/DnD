@@ -149,6 +149,12 @@ class RSUniverse extends EventEmitter {
 		 */
 		this.index = {};
 		/**
+		 * Global ID map for general lookup.
+		 * @property index.all
+		 * @type Object
+		 */
+		this.index.all = {};
+		/**
 		 * Maps class IDs to another object which maps object Names
 		 * to their corresponding object. This is primarily for
 		 * loose searches, such as the Showdown renderer, to allow
@@ -209,6 +215,7 @@ class RSUniverse extends EventEmitter {
 
 			if(this.index[classification] && this.index[classification][id]) {
 				delete(this.index[classification][id]);
+				delete(this.index.all[id]);
 				for(i=0; i<this.listing[classification].length; i++) {
 					if(this.listing[classification][i].id === id) {
 						this.listing[classification].splice(i, 1);
@@ -573,6 +580,7 @@ class RSUniverse extends EventEmitter {
 				if(!this.index[classification][id]) {
 					Vue.set(this.index[classification], id, delta);
 					Vue.set(this.index[classification][id], "_sync", {});
+					Vue.set(this.index.all, id, this.index[classification][id]);
 					this.listing[classification].push(delta);
 					if(delta.name) {
 						Vue.set(this.named, delta.name, delta);
@@ -1143,6 +1151,14 @@ class RSUniverse extends EventEmitter {
 		
 		URL.revokeObjectURL(anchor.href);
 		appendTo.removeChild(anchor);
+	}
+
+	findReferences(id) {
+		var cl,
+			o,
+			r,
+			i;
+			
 	}
 	
 	exportFilteredData(title, data) {

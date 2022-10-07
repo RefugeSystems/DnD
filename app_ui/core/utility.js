@@ -154,6 +154,86 @@
 		},
 		/**
 		 * 
+		 * @method expandParentalKeys 
+		 * @param {Array | String | Object} source Of objects or string IDs to which to add any relevent parental object's or IDs.
+		 * @return {Array | String} IDs of the contained objects and all of their parents.
+		 */
+		"expandParentalKeys": function(source) {
+			var strings = typeof(source[0]) === "string",
+				parental = [],
+				lookup,
+				parent,
+				i;
+
+			for(i=0; i<source.length; i++) {
+				if(strings) {
+					lookup = this.universe.get(source[i]);
+				} else {
+					lookup = source[i];
+				}
+				parental.push(lookup.id);
+				while(lookup.parent && (parent = this.universe.get(lookup.parent))) {
+					parental.push(parent.id);
+					lookup = parent;
+				}
+			}
+
+			return parental;
+		},
+		/**
+		 *
+		 * For copying a class instantiation, recommend `.clone(true)` to get the functions
+		 * and to rebind them.
+		 * 
+		 * For copying flat objects or arrays, recommend `.clone()` as the functions needn't
+		 * be cloned.
+		 * 
+		 * @method clone
+		 * @param {Boolean} [functions] When set, functions are set on the clone but are
+		 * 		not bound by default
+		 * @return {Object}
+		 */
+		 "clone": function(functions) {
+			var clone = JSON.parse(JSON.stringify(this)),
+				keys,
+				i;
+	
+			if(functions) {
+				keys = Object.keys(this);
+				for(i=0; i<keys.length; i++) {
+					if(typeof(this[keys[i]]) === "function") {
+						clone[keys[i]] = this[keys[i]].bind(clone);
+					}
+				}
+			}
+			return clone;
+		},
+		/**
+		 * 
+		 * @method hasParentalKey
+		 * @param {Object} object 
+		 * @param {String} id 
+		 * @return {Boolean}
+		 */
+		"hasParentalKey": function(object, id) {
+			if(typeof(object) === "string") {
+				if(object === id) {
+					return true;
+				}
+				object = this.universe.get(object);
+			}
+
+			while(object.parent) {
+				if(object.parent === id) {
+					return true;
+				}
+				object = this.universe.get(object.parent);
+			}
+
+			return false;
+		},
+		/**
+		 * 
 		 * @method hasDamage
 		 * @param {RSObject} object 
 		 * @return {Boolean}

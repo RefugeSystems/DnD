@@ -1,4 +1,5 @@
-var combat = require("./events/combat/utility.js");
+var combat = require("./events/combat/utility.js"),
+	Random = require("rs-random");
 
 /**
  * 
@@ -81,6 +82,11 @@ class UniverseUtility {
 		}
 	}
 
+	/**
+	 * 
+	 * @param {RSObject} entity 
+	 * @returns {Function}
+	 */
 	receiveGrantEffects(entity) {
 		return (effects) => {
 			this.grantEffects(entity, effects);
@@ -110,13 +116,23 @@ class UniverseUtility {
 		}
 	}
 
+	/**
+	 * 
+	 * @method receiveRemoveEffects
+	 * @param {RSObject} entity 
+	 * @returns 
+	 */
 	receiveRemoveEffects(entity) {
 		return (effects) => {
 			this.removeEffects(entity, effects);
 		};
 	}
 
-
+	/**
+	 * 
+	 * @method revokeEffects
+	 * @param {Array | String} effects 
+	 */
 	revokeEffects(effects) {
 		var effect,
 			i;
@@ -156,7 +172,7 @@ class UniverseUtility {
 		if(typeof(weather) === "string") {
 			weather = this.universe.get(weather);
 		}
-		console.log("Apply Weather: ");
+		// console.log("Apply Weather: ");
 		if(meeting && weather) {
 			console.log("Apply Weather: ", meeting.id, weather.id);
 			previous = this.universe.get(meeting.weather);

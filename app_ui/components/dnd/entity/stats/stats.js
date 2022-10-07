@@ -36,6 +36,9 @@ rsSystem.component("dndEntityStats", {
 	
 			return bag_weight.toFixed(2);
 		},
+		"inside": function() {
+			return this.universe.get(this.entity.inside);
+		},
 		"max_carry": function() {
 			return this.entity.encumberance_max?this.entity.encumberance_max.toFixed(2):0;
 		}
