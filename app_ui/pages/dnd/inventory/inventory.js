@@ -328,9 +328,6 @@ rsSystem.component("DNDInventory", {
 		data.attuned = 0;
 
 		data.recipes = [];
-		if(this.entity.recipes && this.entity.recipes.length) {
-			this.universe.transcribeInto(this.entity.recipes, data.recipes, "recipe");
-		}
 
 		return data;
 	},
@@ -342,6 +339,9 @@ rsSystem.component("DNDInventory", {
 			} else {
 				Vue.set(this.share, "icon", "fas fa-users");
 			}
+		}
+		if(this.entity.recipes && this.entity.recipes.length) {
+			this.universe.transcribeInto(this.entity.recipes, this.recipes, "recipe");
 		}
 		if(this.storage.processing) {
 			Vue.set(this.storage, "processing", null);

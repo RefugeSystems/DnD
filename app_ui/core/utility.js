@@ -167,12 +167,12 @@
 
 			for(i=0; i<source.length; i++) {
 				if(strings) {
-					lookup = this.universe.get(source[i]);
+					lookup = rsSystem.universe.get(source[i]);
 				} else {
 					lookup = source[i];
 				}
 				parental.push(lookup.id);
-				while(lookup.parent && (parent = this.universe.get(lookup.parent))) {
+				while(lookup.parent && (parent = rsSystem.universe.get(lookup.parent))) {
 					parental.push(parent.id);
 					lookup = parent;
 				}
