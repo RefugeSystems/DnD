@@ -109,4 +109,32 @@
 		flex-shrink: 0;
 		flex-grow: 0;
 	}
+
+	.character-container.nearby {
+		/*
+		& > .widgets.container {
+			border: 1px solid transparent;
+			transition: border-color .5s;
+		}
+		*/
+
+		.self > .widgets.container {
+			border-color: @rsLightBlue;
+			box-shadow: 0px 0px 10px inset @rsLightBlue !important;
+		}
+
+		.combat_turn > .widgets.container {
+			border-color: @rsOrange !important;
+			box-shadow: 0px 0px 10px inset @rsOrange !important;
+		}
+
+		.npc .entity-heading button.property {
+			border-left: 7px solid @rsBlue !important;
+		}
+
+		.hostile .entity-heading button.property {
+			color: @rsLightRed !important;
+			border-left: 7px solid @rsRed !important;
+		}
+	}
 }

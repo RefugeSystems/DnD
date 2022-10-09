@@ -90,7 +90,9 @@
 			index,
 			mark,
 			end,
-			x;
+			key,
+			x,
+			i;
 
 		index = sourceText.indexOf(marking.start);
 		while(index !== -1 && (end = sourceText.indexOf(marking.end, index)) !== -1 && index + 3 < end) {
@@ -181,7 +183,39 @@
 					// } else {
 					// 	value = entity[value[0]] || "";
 					// }
-					element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
+					if(typeof(value) === "object") {
+						element = "<ul class=\"" + properties.classes + "\">";
+						if(value instanceof Array) {
+							for(i=0; i<value.length; i++) {
+								buffer = universe.get(value[i]);
+								if(buffer) {
+									element += "<li>" + buffer.name + "</li>";
+								} else {
+									element += "<li>" + value[i] + "</li>";
+								}
+							}
+						} else {
+							for(i in value) {
+								buffer = universe.get(value[i]);
+								key = universe.get(i);
+								element += "<li>";
+								if(key) {
+									element += key.name + ": ";
+								} else {
+									element += i + ": ";
+								}
+								if(buffer) {
+									element += buffer.name;
+								} else {
+									element += value[i];
+								}
+								element += "</li>";
+							}
+						}
+						element = $(element + "</ul>");
+					} else {
+						element = $("<span class=\"" + properties.classes + "\">" + value + "</span>");
+					}
 				} else if(value[0] === "?") {
 					// Formulas
 					value = value.substring(1).trim();

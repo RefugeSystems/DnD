@@ -1,22 +1,108 @@
-<div class="rs-component dnd-component dialog-shop">
-	<rs-table :universe="universe" :source="inventory" :storage-container="table" :headings="tableHeadings" :formatter="formatter" :actions="actions" v-on:selected="update()" v-on:deselected="update()"/>
-	<div class="cart flex v">
-		<div class="character flex h" title="Character currently shopping">
-			<span class="fa-solid fa-user"></span>
-			<span class="shopping-note name">{{entity.name}}</span>
+<div class="rs-component dnd-component dialog-craft flex v">
+	<div class="grow-10 pages flex h" :class="page">
+		<panel-select class="panel recipe" v-on:selected="selectRecipe($event)" :flush="6" :corpus="details.recipes" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :descriptionless="false" :current="recipe" fmarking="fad fa-dot-circle rs-secondary-transparent">
+			<div slot="controls" slot-scope="{record}" class="align-right">
+				<!--<button v-on:click.prevent.stop="selectRecipe(record)" class="basic general action">-->
+				<button class="basic general action">
+					<span :class="record.icon || 'fas fa-check rs-green'"></span>
+					<span>Select Recipe</span>
+				</button>
+				<button class="quick general action" v-on:click.prevent.stop="info(record)">
+					<span class="fas fa-info rs-lightblue"></span>
+				</button>
+			</div>
+		</panel-select>
+		<div class="panel recipe flex v">
+			<div class="form flex v grow-10">
+				<div class="recipe-name">
+					<button v-if="details.recipes && details.recipes.length" class="action quick primary rounded general" v-on:click="reselectRecipe()" title="Go back to recipe selection">
+						<span class="action-icon fa-solid fa-arrow-right-from-bracket rot180"></span>
+					</button>
+					<span>Recipe: </span>
+					<span>{{recipe?recipe.name:"No Recipe Selected"}}</span>
+					<select class="element" v-model.number="count" v-on:change="selectRecipe(recipe)">
+						<option v-for="i in 10" :value="i">{{i}}</option>
+					</select>
+				</div>
+				<div class="input-container-wrapper grow-10">
+					<div class="input-container-view">
+						<div class="input-container flex v" v-for="key in bins" :class="key">
+							<div class="input-header flex h v-center">
+								<span class="key-count">
+									<span class="key-count-selected">{{inputs[key.id].length}}</span>
+									<span class="key-count-divide">/</span>
+									<span class="key-count-needed">{{counts[key.id]}}</span>
+								</span>
+								<button class="choose action quick primary general rounded" v-on:click="selectInput(key)" title="Select components for this input">
+									<span v-if="inputs[key.id].length === counts[key.id]" class="action-icon fa-regular fa-check rs-light-green"></span>
+									<span v-if="inputs[key.id].length < counts[key.id]" class="action-icon fa-regular fa-list-check"></span>
+									<span v-if="inputs[key.id].length > counts[key.id]" class="action-icon fa-regular fa-exclamation-triangle rs-light-yellow"></span>
+								</button>
+								<!--
+								<button class="choose action quick primary general rounded" v-on:click="selectInput(key)" title="Select components for this input">
+									<span class="action-icon fa-regular fa-info-circle rs-light-blue"></span>
+								</button>
+								-->
+								<span class="key-label">
+									<span class="key-icon" :class="key.icon"></span>
+									<span class="key-name">{{key.name}}</span>
+									<button class="action flat fa-solid fa-info-circle rs-light-blue" v-on:click="info(key)"></button>
+								</span>
+							</div>
+							<div class="key-parts flex h wrap grow-10">
+								<div class="input-part" v-for="part in inputs[key.id]">
+									<button class="action flat fa-solid fa-info-circle rs-light-blue" v-on:click="info(part)"></button>
+									<span :class="part.icon"></span>
+									<span class="part-name">{{part.name}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div v-if="recipe" class="flex v v-center yields">
+					<div class="flex h">
+						<span class="">Crafting Yields:</span>
+						<div v-if="recipe.yields && recipe.yield_limit && recipe.yield_limit < recipe.yields.length" class="flex h">
+							<button class="choose action quick primary general rounded" v-on:click="selectYields()" title="Select what this recipe should yield with the selected input">
+								<span v-if="yields.length === recipe.yield_limit" class="action-icon fa-regular fa-check rs-light-green"></span>
+								<span v-if="yields.length < recipe.yield_limit" class="action-icon fa-regular fa-list-check"></span>
+								<span v-if="yields.length > recipe.yield_limit" class="action-icon fa-regular fa-exclamation-triangle rs-light-yellow"></span>
+							</button>
+							<span class="key-count">
+								<span class="key-count-selected">{{yields.length}}</span>
+								<span class="key-count-divide">/</span>
+								<span class="key-count-needed">{{recipe.yield_limit}}</span>
+							</span>
+						</div>
+					</div>
+					<div class="key-parts flex h wrap">
+						<div class="input-part" v-for="part in yields">
+							<button class="action flat fa-solid fa-info-circle rs-light-blue" v-on:click="info(part)"></button>
+							<span :class="part.icon"></span>
+							<span class="part-name">{{part.name}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="flex h v-center cost">
+					<span class="">Gold Payment: </span>
+					<input class="element crafting-cost" v-model.number="cost" />
+					<button class="action flat fa-solid fa-info-circle rs-light-blue" v-on:click="info('knowledge:rules:craftingcost')"></button>
+				</div>
+				<div class="flex h v-center finish">
+					<button class="action general primary rounded" v-on:click="beginCrafting()">
+						<span class="action-icon game-icon game-icon-anvil-impact"></span>
+						<span class="action-text">Begin Crafting</span>
+					</button>
+					<button class="action general primary rounded" v-on:click="closeDialog()">
+						<span class="action-icon fa-regular fa-times rs-light-red"></span>
+						<span class="action-text">Cancel</span>
+					</button>
+				</div>
+			</div>
 		</div>
-		<div class="cost flex h" title="How much coin you have">
-			<span class="fas fa-coins"></span>
-			<span class="shopping-note gold">{{entity.gold}}</span>
-		</div>
-		<!-- <button class="rounded general action" :disabled="!canAfford" v-on:click="checkout()"> -->
-		<button class="rounded general action checkout" v-on:click="checkout()">
-			<span class="fas fa-shopping-cart"></span>
-			<span>Checkout</span>
-		</button>
-		<div class="cost flex h" title="Cost to checkout">
-			<span class="fa-solid fa-cash-register"></span>
-			<span class="shopping-note price" :class="canAfford?'rs-light-green':'rs-light-red'">{{displayedCost}}</span>
+		<div class="panel inputs flex v">
+			<!--<rs-table v-if="selecting" class="flex v" :universe="universe" :source="available[selecting]" :storage-container="storage.table" label="Crafting Inputs" :actions="actions" :controls="controls" :formatter="formatter" v-on:selected="ingredientChange()" v-on:deselected="ingredientChange()"></rs-table>-->
+			<rs-table v-if="selecting" class="flex v" :universe="universe" :source="available[selecting]" :storage-container="table" label="Crafting Inputs" :headings="headings" :actions="actions" :controls="controls" :formatter="formatter"></rs-table>
 		</div>
 	</div>
 </div>

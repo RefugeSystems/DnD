@@ -16,7 +16,7 @@
 			</rs-shiny-button>
 		</div>
 		<div class="information-container" ref="infocon" v-wheel="scrollWheel" v-on:scroll="checkLeft($event)">
-			<div class="info character-container column flex v" ref="nearby">
+			<div class="info character-container column flex v nearby" ref="nearby">
 				<dnd-entity-overview v-for="entity in nearby" class="nearby-entity" :entity="entity" :universe="universe" :player="player" :configuration="configuration" :profile="profile" :forced-dashboard="getNearbyDashboard(entity)" :class="getNearbyClasses(entity)" :storage-key="'_dndeoc:' + entity.id" :key="entity.id" />
 			</div>
 			<div class="info character-container column flex v" v-for="minion in minions">

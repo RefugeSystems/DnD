@@ -382,18 +382,19 @@ rsSystem.component("DNDInventory", {
 				show = false,
 				v1h = false,
 				v2h = false,
-				parental = [],
 				unequip = [],
 				recipes = [],
 				attuned = 0,
 				equip = [],
 				items = [],
+				types = [],
+				parental,
 				buffer,
+				parts,
 				item,
 				i,
 				j;
 
-			parental = rsSystem.utility.expandParentalKeys(selected);
 			this.unattunable.splice(0);
 			this.attunable.splice(0);
 			this.controls.splice(0);
@@ -409,16 +410,12 @@ rsSystem.component("DNDInventory", {
 			}
 			Vue.set(this, "attuned", attuned);
 
-			for(i=0; i<this.recipes.length; i++) {
-				buffer = this.recipes[i];
-				if(buffer.items && buffer.items.hasCommon(parental)) {
-					recipes.push(buffer);
-				}
-			}
-
 			for(i=0; i<selected.length; i++) {
 				buffer = this.universe.index.item[selected[i]];
 				if(buffer && !buffer.disabled && !buffer.is_preview && (this.entity.owned[this.player.id] || this.player.gm) && this.entity.inventory.indexOf(buffer.id) !== -1) {
+					if(buffer.types) {
+						types = types.concat(buffer.types);
+					}
 					for(j=0; j<this.storage.selected[buffer.id]; j++) {
 						items.push(buffer.id);
 					}
@@ -450,6 +447,17 @@ rsSystem.component("DNDInventory", {
 					}
 				}
 			}
+
+			if(selected.length) {
+				parental = rsSystem.utility.expandParentalKeys(selected);
+				for(i=0; i<this.recipes.length; i++) {
+					buffer = this.recipes[i];
+					if(buffer.input_components && (buffer.input_components.hasCommon(parental) || buffer.input_components.hasCommon(types))) {
+						recipes.push(buffer);
+					}
+				}
+			}
+
 			if(this.storage.show_shared) {
 				this.controls.push({
 					"title": "Click toggle shared items. They are currently shown.",
@@ -625,23 +633,29 @@ rsSystem.component("DNDInventory", {
 			if(recipes.length) {
 				this.controls.push({
 					"title": "Craft",
-					"icon": "fas fa-",
-					"process": function() {
-						rsSystem.EventBus.$emit("dialog-open", {
-							"component": "dndCraftRecipe",
-							"source": reference.entity.id,
-							"target": reference.entity.id,
-							"ingredients": selected,
-							"recipes": recipes,
-							"finish": function(craft) {
-								if(craft && craft.recipe && craft.inputs) {
-									rsSystem.utility.clearObject(reference.storage.selected);
-									craft.target = craft.target || reference.entity.id;
-									craft.source = reference.entity.id;
-									reference.universe.send("entity:craft:recipe", craft);
+					"icon": "game-icon game-icon-anvil-impact",
+					"process": () => {
+						var parts = [],
+							id,
+							i,
+							j;
+
+						if(selected.length) {
+							for(i=0; i<selected.length; i++) {
+								id = selected[i];
+								for(j=0; j<this.storage.selected[id]; j++) {
+									parts.push(id);
 								}
 							}
-						});
+							rsSystem.utility.clearObject(this.storage.selected);
+							rsSystem.EventBus.$emit("dialog-open", {
+								"component": "dndDialogCraft",
+								"source": reference.entity.id,
+								"target": reference.entity.id,
+								"ingredients": parts,
+								"recipes": recipes
+							});
+						}
 					}
 				});
 			}

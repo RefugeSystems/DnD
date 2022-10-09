@@ -1,3 +1,70 @@
 .dnd-component.dialog-craft {
+	width: 100%;
+	overflow: hidden;
 
+	.pages {
+		transition: left .5s;
+		position: relative;
+
+		&.page0 {
+			left: 0%;
+		}
+
+		&.page1 {
+			left: -100%;
+		}
+
+		&.page2 {
+			left: -200%;
+		}
+
+		&.page3 {
+			left: -300%;
+		}
+	}
+
+	.form {
+		margin-left: 70px;
+	}
+
+	.element {
+		border-radius: 5px;
+		padding: 4px;
+		margin: 4px;
+	}
+
+	.panel {
+		width: 100%;
+		min-height: 500px;
+		flex-shrink: 0;
+	}
+
+	.input-container {
+		margin : 0px;
+	}
+
+	.input-container-wrapper {
+		overflow: auto;
+	}
+
+	.key-parts {
+		position: relative;
+	}
+
+	.key-count {
+		display: block;
+		min-width: 50px;
+		text-align: center;
+	}
+
+	.input-part {
+		border: 1px solid @rsLightBlue;
+		border-radius: 5px;
+		padding: 4px 7px;
+		margin: 3px;
+	}
+
+	.finish {
+		margin-top: 15px;
+	}
 }

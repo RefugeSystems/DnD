@@ -319,7 +319,7 @@ rsSystem.component("sysInfoGeneral", {
 									"_value": this.info.location,
 									"options": this.getEntityLocality()
 								});
-
+								
 								if(this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 									this.controls.push({
 										"title": "Assume entity in Overview",
@@ -361,6 +361,14 @@ rsSystem.component("sysInfoGeneral", {
 											"action": "lock"
 										});
 									}
+								}
+								if(!rsSystem.utility.isEmpty(this.info.owned) && (this.info.is_npc || this.info.is_minion)) {
+									this.controls.push({
+										"title": "Declare as a rampaging NPC by clearing owner",
+										"icon": "fa-regular fa-face-angry-horns",
+										"type": "button",
+										"action": "rampage"
+									});
 								}
 								loading = {
 									"title": "Color Code",
@@ -578,6 +586,14 @@ rsSystem.component("sysInfoGeneral", {
 											"action": "ismarker"
 										});
 									}
+									break;
+								case "recipe":
+									this.controls.push({
+										"title": "Begin crafting this recipe",
+										"icon": "game-icon game-icon-anvil-impact",
+										"type": "button",
+										"action": "craft"
+									});
 									break;
 								case "effect":
 									if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
@@ -907,6 +923,25 @@ rsSystem.component("sysInfoGeneral", {
 								});
 							}
 						}
+					});
+					break;
+				case "craft":
+					this.closeInfo();
+					rsSystem.EventBus.$emit("dialog-open", {
+						"component": "dndDialogCraft",
+						"entity": entity.id,
+						// "source": entity.id,
+						// "target": entity.id,
+						"initial_recipe": object.id,
+						// "ingredients": parts,
+						"recipes": this.universe.transcribeInto(entity.recipes || [])
+					});
+					break;
+				case "rampage":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "owned",
+						"value": null
 					});
 					break;
 				case "unpower":

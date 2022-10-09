@@ -74,6 +74,7 @@ module.exports.initialize = function(universe) {
 			changing = [],
 			transition,
 			entity,
+			add,
 			i;
 
 		if(typeof(meeting) === "string") {
@@ -88,8 +89,13 @@ module.exports.initialize = function(universe) {
 					}
 					if(entity && !entity.disabled && !entity.is_preview && meeting.entities.indexOf(entity.id) === -1) {
 						changing.push(entity.id);
-						if(!meeting.associations || meeting.associations.indexOf(entity.id) === -1) {
-							associations.push(entity.id);
+						if(entity.is_minion && entity.parent) {
+							add = entity.parent;
+						} else {
+							add = entity.id;
+						}
+						if(!meeting.associations || meeting.associations.indexOf(add) === -1) {
+							associations.push(add);
 						}
 					}
 				}

@@ -159,22 +159,40 @@
 		 * @return {Array | String} IDs of the contained objects and all of their parents.
 		 */
 		"expandParentalKeys": function(source) {
-			var strings = typeof(source[0]) === "string",
-				parental = [],
+			var parental = [],
+				strings,
 				lookup,
 				parent,
 				i;
 
-			for(i=0; i<source.length; i++) {
-				if(strings) {
-					lookup = rsSystem.universe.get(source[i]);
-				} else {
-					lookup = source[i];
+			if(source instanceof Array) {
+				strings = typeof(source[0]) === "string";
+				for(i=0; i<source.length; i++) {
+					if(strings) {
+						lookup = rsSystem.universe.get(source[i]);
+					} else {
+						lookup = source[i];
+					}
+					if(lookup) {
+						parental.push(lookup.id);
+						while(lookup.parent && (parent = rsSystem.universe.get(lookup.parent))) {
+							parental.push(parent.id);
+							lookup = parent;
+						}
+					}
 				}
-				parental.push(lookup.id);
-				while(lookup.parent && (parent = rsSystem.universe.get(lookup.parent))) {
-					parental.push(parent.id);
-					lookup = parent;
+			} else {
+				if(typeof(source) === "string") {
+					lookup = rsSystem.universe.get(source);
+				} else {
+					lookup = source;
+				}
+				if(lookup) {
+					parental.push(lookup.id);
+					while(lookup.parent && (parent = rsSystem.universe.get(lookup.parent))) {
+						parental.push(parent.id);
+						lookup = parent;
+					}
 				}
 			}
 
