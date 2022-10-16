@@ -153,20 +153,25 @@
 					if(value.length < 2) {
 						value = entity[value[0]];
 					} else {
-						buffer = universe.getObject(entity[value[0]]);
+						buffer = universe.get(entity[value[0]]);
 						for(x=1; buffer && x<value.length; x++) {
-							buffer = universe.getObject(buffer[value[x]]);
+							buffer = universe.get(buffer[value[x]]) || buffer[value[x]];
 						}
-						if(buffer) {
-							value = buffer.name || buffer.id;
-						} else {
-							console.error("Failed to get referenced field: ", value, entity);
-						}
+						value = buffer;
+						// if(buffer) {
+						// 	value = buffer.name || buffer.id;
+						// } else {
+						// 	console.error("Failed to get referenced field: ", value, entity);
+						// }
+
 						// tracking = universe.getObject(entity[value[0]]);
 						// for(x=1; x<value.length; x++) {
 						// 	tracking = universe.getObject(tracking[value[x]]);
 						// }
 						// value = tracking.name || tracking.id;
+					}
+					if(value && value.name) {
+						value = value.name;
 					}
 					// if(value.length === 2) {
 					// 	switch(value[0]) {
