@@ -6,6 +6,13 @@
  * @class rsForm
  * @constructor
  * @module Components
+ * @param {Universe} universe
+ * @param {Player} player
+ * @param {Object} details
+ * @param {Boolean} show_undefined
+ * @param {Array} [fields]
+ * @param {Object} [configuration]
+ * @param {Object} [profile]
  */
 (function() {
 	rsSystem.component("rsForm", {
@@ -88,6 +95,12 @@
 			},
 			"setTimeToNow": function(field) {
 				Vue.set(this.details, field.id, this.universe.time);
+			},
+			"setDateToNow": function(field) {
+				var now = new Date();
+				now.setSeconds(0);
+				now.setMilliseconds(0);
+				Vue.set(this.details, field.id, now.getTime());
 			},
 			"fileAttach": function(event) {
 				console.log("Drop: ", event);

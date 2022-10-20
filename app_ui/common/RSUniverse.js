@@ -405,8 +405,13 @@ class RSUniverse extends EventEmitter {
 				
 				this.state.synchronizing = false;
 				this.$emit("loaded", this);
-				if(rsSystem.audio.initialize) {
-					rsSystem.audio.initialize(this);
+				for(i=0; i<rsSystem.initializations.length; i++) {
+					try {
+						rsSystem.initializations[i](this);
+					} catch(err) {
+						console.error("Failed to load initialization: ", rsSystem.initializations[i]);
+						// TODO: Improve logging and initialization registration for feedback
+					}
 				}
 				console.log("Ready: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
 				rsSystem.diagnostics.at.finish = Date.now();

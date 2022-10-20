@@ -454,6 +454,13 @@
 			},
 			/**
 			 * 
+			 * @method broadcastThinking
+			 */
+			"broadcastThinking": function() {
+				this.universe.send("master:thinking", {});
+			},
+			/**
+			 * 
 			 * @method forwardTime
 			 * @param {Integer} increment Seconds to go forward in time
 			 */

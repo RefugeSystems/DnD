@@ -1,0 +1,104 @@
+<div class="rs-page page-release">
+	<div class="planning">
+		<!--
+			Readout for the resulting (Or selected) Release if it exists or not | This involves a timesort and analysis of the current day vs. the "next" release
+
+			This needs to adjust to selected releases
+		-->
+		<div class="plan done" :class="releaseStyleClasses" v-save="updateRelease">
+			<h2>Release</h2>
+			<rs-form :universe="universe" :player="player" :profile="profile" :details="release" :fields="releaseFields" :show_undefined="false"></rs-form>
+			<div class="flex h">
+				<button class="primary general rounded action" v-on:click="updateRelease(release)">
+					<span>Update</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="clearRelease()">
+					<span>Clear</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="populateRelease(release)">
+					<span>Pull</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="completeRelease(release)">
+					<span>Release</span>
+				</button>
+			</div>
+		</div>
+		<!--
+			Form for viewed Task
+		-->
+		<div class="plan task" v-save="updateTask">
+			<h2>Task</h2>
+			<rs-form :universe="universe" :player="player" :profile="profile" :details="task" :fields="taskFields" :show_undefined="false"></rs-form>
+			<div class="flex h">
+				<button class="primary general rounded action" v-on:click="updateTask(task)">
+					<span>Update</span>
+				</button>
+				<button class="primary general rounded action" v-on:click="clearTask()">
+					<span v-if="task && task.id">New</span>
+					<span v-else>Clear</span>
+				</button>
+			</div>
+		</div>
+		<!--
+			List of all tasks with release markers in line here for component control
+
+			Release markers are "ghosts" for uncreated releases
+			
+			Clicking a non-existent release creates it in a lose sense (Date, name, id)
+		-->
+		<div class="plan list">
+			<div class="planned-task" v-for="task in queue" v-on:click="open(task)">
+				<div class="task-line release" v-if="task._class === 'dmrelease'">
+					<!-- Name - Ghosted if not real (no id) -->
+					<span class="task-effort">
+						<span :class="getReleaseIcon(task)"></span>
+					</span>
+					<span class="task-effort" title="Effort">
+						<span class="effort">{{release_effort[task.date_started]}}</span>
+					</span>
+					<span class="task-effort hover-only">
+						<button class="flat action info fa-solid fa-info-circle rs-blue" v-if="task.id" v-on:click.stop="info(task)"></button>
+					</span>
+					<span class="task-name">{{task.name}}</span>
+					<span class="task-notice" v-if="notice_timeshift[task.date_started]" title="Incoming time change">
+						<span class="fa-regular fa-calendars rs-light-yellow"></span>
+					</span>
+					<span class="task-date">
+						<span class="date">{{getDate(task.date_started)}}</span>
+					</span>
+					<span class="task-date">
+						<span class="date">{{getDate(task.date_completed)}}</span>
+					</span>
+				</div>
+				<div class="task-line" v-if="task._class === 'dmtask'">
+					<span class="task-effort" title="Effort">
+						<span class="effort">{{task.effort}}</span>
+					</span>
+					<span class="task-effort" title="Priority">
+						<span class="priority">{{task.priority}}</span>
+					</span>
+					<span class="task-effort hover-only">
+						<button class="flat action info fa-solid fa-info-circle rs-blue" v-if="task.id" v-on:click.stop="info(task)"></button>
+					</span>
+					<span class="task-notice" v-if="task.date_completed" title="This task is complete">
+						<span class="fa-regular fa-check rs-light-green"></span>
+					</span>
+					<span class="task-notice" v-if="!task.id" title="This is a pending task that needs created">
+						<span class="fa-regular fa-exclamation-triangle rs-yellow fa-fade"></span>
+					</span>
+					<span class="task-notice alerting" v-if="notice_missed[task.id]" :title="'This repeating task has missed ' + notice_missed[task.id] + ' iterations'">
+						<span class="fa-regular fa-exclamation-triangle rs-red fa-fade"></span>
+						<span>{{notice_missed[task.id]}}</span>
+					</span>
+					<span class="task-name">{{task.name}}</span>
+					<span class="task-notice" v-if="notice_needed[task.id]" title="Failing to meet deadline">
+						<span class="fa-regular fa-calendar-clock rs-light-red"></span>
+					</span>
+					<span class="task-date" v-if="task.date_needed">
+						<span class="date">{{getDate(task.date_needed)}}</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

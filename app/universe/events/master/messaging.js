@@ -93,4 +93,13 @@ module.exports.initialize = function(universe) {
 			"recipients": notify
 		});
 	 });
+
+
+	 universe.on("player:master:thinking", function(event) {
+		if(event.player.gm) {
+			universe.emit("send", {
+				"type": "master:thinking"
+			});
+		}
+	 });
 };

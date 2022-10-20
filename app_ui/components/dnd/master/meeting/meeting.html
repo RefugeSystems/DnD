@@ -49,8 +49,13 @@
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">10</span>
 			</button>
+			<!--
 			<button class="rounded general quick action" v-on:click="toggleTimeLock()" title="Toggle Time Locking">
 				<span class="action-icon fas" :class="storage.timeLocked?'fa-lock':'fa-unlock'"></span>
+			</button>
+			-->
+			<button class="rounded general quick action" v-on:click="broadcastThinking()" title="Trigger 'Thinking' response - ie. Display hints for players.">
+				<span class="action-icon fa-solid fa-face-thinking"></span>
 			</button>
 			<button class="rounded general quick action" v-if="!skirmish" v-on:click="startSkirmish()" title="Start Skirmish">
 				<span class="action-icon fas fa-swords"></span>

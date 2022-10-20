@@ -1,26 +1,26 @@
-/**
- * 
- * @event player:create:object
- * @for Universe
- * @param {Object} event With data from the system
- * @param {String} event.type The event name being fired, should match this event's name
- * @param {Integer} event.received Timestamp of when the server received the event
- * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
- * @param {RSObject} event.player That triggered the event
- * @param {Object} event.message The payload from the UI
- * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
- * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
- * @param {Object} event.message.data Typical location of data from the UI
- */
-
 var cleanID = new RegExp("[^a-z0-9_:]", "g"),
 	Random = require("rs-random");
 
 module.exports.initialize = function(universe) {
+	/**
+	 * 
+	 * @event player:create:object
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 */
 	universe.on("player:create:object", function(event) {
 		if(event.player.gm) {
 			var classification = event.message.data.classification,
-				details = event.message.data.details;
+				details = event.message.data.details,
+				release;
 
 			if(details) {
 				if(details.id) {
@@ -42,6 +42,15 @@ module.exports.initialize = function(universe) {
 							"anchored": true
 						});
 					} else {
+						// If Tracking a release in the universe, note modifications to this object through this hook (Event for the noun editor)
+						release = universe.getActiveRelease();
+						if(release && (!release.associations || release.associations.indexOf(object.id) === -1)) {
+							release.addValues({
+								"associations": [object.id]
+							});
+						}
+
+						// Emit change notice
 						universe.emit("send", {
 							"type": "notice",
 							"mid": "create:object",

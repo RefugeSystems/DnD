@@ -8,6 +8,8 @@
 			</button>
 			<button class="clear-link ctrl-link flat fas fa-clock" v-if="field.type === 'gametime'" v-on:click="setTimeToNow(field)" tabindex=2>
 			</button>
+			<button class="clear-link ctrl-link flat fas fa-clock" v-if="field.type === 'date'" v-on:click="setDateToNow(field)" tabindex=2>
+			</button>
 			<button class="clear-link ctrl-link flat fas fa-ban" v-on:click="clearData(field)" tabindex=2>
 			</button>
 			<button class="clear-link ctrl-link flat fas fa-times-octagon" v-on:click="noData(field)" tabindex=2>

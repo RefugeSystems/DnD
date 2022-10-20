@@ -6,8 +6,9 @@
 	"core_version": "0.1.0",
 	"main": "app/index.js",
 	"keywords": [
-		"rs",
-		"dnd"
+		"tabletop",
+		"dnd",
+		"rs"
 	],
 	"scripts": {
 		"test": "grunt test"

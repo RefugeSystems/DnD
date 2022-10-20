@@ -207,20 +207,21 @@
 		 * be cloned.
 		 * 
 		 * @method clone
+		 * @param {Object} [source] 
 		 * @param {Boolean} [functions] When set, functions are set on the clone but are
 		 * 		not bound by default
 		 * @return {Object}
 		 */
-		 "clone": function(functions) {
-			var clone = JSON.parse(JSON.stringify(this)),
+		 "clone": function(source, functions) {
+			var clone = JSON.parse(JSON.stringify(source)),
 				keys,
 				i;
 	
 			if(functions) {
-				keys = Object.keys(this);
+				keys = Object.keys(source);
 				for(i=0; i<keys.length; i++) {
-					if(typeof(this[keys[i]]) === "function") {
-						clone[keys[i]] = this[keys[i]].bind(clone);
+					if(typeof(source[keys[i]]) === "function") {
+						clone[keys[i]] = source[keys[i]].bind(clone);
 					}
 				}
 			}

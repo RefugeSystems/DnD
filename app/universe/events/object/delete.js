@@ -256,7 +256,7 @@ module.exports.initialize = function(universe) {
 
 		if(character) {
 			if(event.player.gm) {
-				universe.deleteFullObject(character, ["feats", "effects", "inventory", "spells", "spells_prepared", "spells_known"])
+				universe.deleteFullObject(character, ["feats", "effects", "inventory", "spells", "spells_prepared", "spells_known", "knowledges"])
 				.then(function(object) {
 					universe.emit("send", {
 						"type": "notice",
@@ -317,7 +317,7 @@ module.exports.initialize = function(universe) {
 
 		if(character) {
 			if(event.player.gm) {
-				universe.stripObject(character, ["feats", "effects", "inventory", "spells", "spells_prepared", "spells_known"])
+				universe.stripObject(character, ["feats", "effects", "inventory", "spells", "spells_prepared", "spells_known", "knowledges"])
 				.then(function(object) {
 					universe.emit("send", {
 						"type": "notice",

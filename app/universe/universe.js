@@ -1419,6 +1419,25 @@ class Universe extends EventEmitter {
 	}
 
 
+	getActiveRelease() {
+		if(this.manager.setting.object["setting:release"]) {
+			return this.manager.dmrelease.object[this.manager.setting.object["setting:release"].value] || null;
+		}
+		return null;
+	}
+
+
+	setActiveRelease(release) {
+		// TODO: Add ID check for passed release and create setting if it doesn't exist
+		if(this.manager.setting.object["setting:release"]) {
+			this.manager.setting.object["setting:release"].setValue({
+				"value": release
+			});
+		}
+	}
+
+
+
 	getActiveSkirmish() {
 		var meeting = this.getActiveMeeting(),
 			skirmish,

@@ -220,6 +220,26 @@
 		"description": "A primary stat for an entity",
 		"fields": ["parent", "name", "icon", "stat", "description", "disabled", "is_preview", "review", "attribute"]
 	}, {
+		"id": "dmtask",
+		"name": "DM Task",
+		"description": "Details a task to be done. Used for keeping notes of things that need completed or follow up.",
+		"fields": ["parent", "name", "icon", "description", "state", "associations", "hints", "is_player_affected", "repetition", "missed", "categories", "date_needed", "date_started", "date_completed", "priority", "effort", "ordering", "is_preview", "is_deletable", "review", "attribute"]
+	}, {
+		"id": "dmrelease",
+		"name": "DM Release",
+		"description": "Collection of tasks that have been completed. This is used for task projection and marking updates to notify players. Additional aid is wrapped around driving Hint creation from player affecting tasks to help ensure awareness of changes.",
+		"fields": ["parent", "name", "icon", "description", "state", "association_index", "associations", "ordering", "hints", "tasks", "effort", "is_baseline", "date_started", "date_completed", "is_preview", "review", "attribute"]
+	}, {
+		"id": "hint",
+		"name": "Hint",
+		"description": "Collection of tasks that have been completed. This is used for task projection and marking updates to notify players. Additional aid is wrapped around driving Hint creation",
+		"fields": ["parent", "name", "icon", "description", "state", "associations", "ordering", "is_preview", "is_deletable", "review", "attribute"]
+	}, {
+		"id": "repetition",
+		"name": "Repetition",
+		"description": "Describes time based repeition of some object.",
+		"fields": ["parent", "name", "icon", "description", "duration", "script", "ordering", "is_preview", "review", "attribute"]
+	}, {
 		"id": "item",
 		"name": "Item",
 		"description": "An item used by entities",
