@@ -233,7 +233,7 @@
 		"data": function() {
 			var data = {};
 
-			data.activeMeeting = this.universe.index.meeting[this.universe.index.setting["setting:meeting"]];
+			data.activeMeeting = this.universe.index.setting["setting:meeting"]?this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value]:null;
 			if(this.viewingEntity && this.location && this.viewingEntity.location === this.location.id) {
 				data.hourClassing = "time-hour-" + this.universe.calendar.hour;
 			} else {
@@ -2360,6 +2360,7 @@
 			"update": function(source) {
 				var now = Date.now(),
 					localeTypes = {},
+					redirect,
 					buffer,
 					type,
 					i,
@@ -2376,6 +2377,32 @@
 					}
 				}
 				if(this.location && (!source || source.location === this.location.id || source.id === this.location.id || (this.viewingEntity && (source.id === this.viewingEntity.id || source.entity === this.viewingEntity.id)))) {
+					if(this.location.links_to) {
+						rsSystem.toPath("/map/" + this.location.links_to);
+						return null;
+					}
+
+					if(!this.location.map) {
+						// Search Parent Chain for redirect
+						redirect = this.location;
+						while(redirect = this.universe.get(redirect.location)) {
+							if(redirect.map) {
+								rsSystem.toPath("/map/" + redirect.id);
+								return null;
+							}
+						}
+
+						// Fallback to default
+						if(this.location.world) {
+							rsSystem.toPath("/map/" + this.location.world);
+							return null;
+						}
+						if(this.activeMeeting && this.activeMeeting.world) {
+							rsSystem.toPath("/map/" + this.activeMeeting.world);
+							return null;
+						}
+					}
+
 					if((now - this.last) > UPDATESTEP) {
 						// console.log("Start Update: " + now);
 						this.last = now;

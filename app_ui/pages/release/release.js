@@ -229,6 +229,11 @@
 					Vue.set(this, "task", rsSystem.utility.clone(task, false));
 				}
 			},
+			"copyTask": function(task) {
+				var copy = rsSystem.utility.clone(task, false);
+				delete(copy.id);
+				Vue.set(this, "task", copy);
+			},
 			"clearRelease": function() {
 				Vue.set(this, "releaseStyleClasses", "");
 				Vue.set(this, "release", {});
