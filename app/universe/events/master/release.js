@@ -18,9 +18,9 @@ module.exports.initialize = function(universe) {
 		var release = event.message.data.release;
 		if(event.player.gm) {
 			if(release === null) {
-				
+				universe.setActiveRelease(null);
 			} else if(release = universe.get(release)) {
-				
+				universe.setActiveRelease(release.id);
 			} else {
 				// No Set
 			}

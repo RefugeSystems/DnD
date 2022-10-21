@@ -135,6 +135,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "hints_disabled",
+					"label": "Disable Hints",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "navigation_labels",
 					"label": "Label Navigation",
 					"base": this.profile,

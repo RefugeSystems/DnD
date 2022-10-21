@@ -147,7 +147,9 @@ module.exports.initialize = function(universe) {
 		for(i=0; i<ids.length; i++) {
 			device = lookup[ids[i]];
 			if(device && device.capability && device.capability[config.capability.sonos]) {
-				device.setValue("is_discovered", false);
+				device.setValues({
+					"is_discovered": false
+				});
 			}
 		}
 

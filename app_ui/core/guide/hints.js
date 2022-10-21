@@ -43,4 +43,25 @@ rsSystem.hints = rsSystem.hints || {};
 	};
 
 	rsSystem.addInitialization(rsSystem.hints.initialize);
+
+	/**
+	 * 
+	 * @method displayRandomHint
+	 */
+	rsSystem.hints.displayRandomHint = function() {
+
+	};
+
+	/**
+	 * 
+	 * @method showHint
+	 * @param {Object} hint
+	 */
+	rsSystem.hints.showHint = function(hint) {
+		if(!rsSystem.universe.profile.hints_disabled) {
+
+		} else {
+			console.warn("Show Hint Suppressed by Profile: ", hint);
+		}
+	};
 })();

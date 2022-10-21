@@ -37,6 +37,9 @@
 					<span v-if="task && task.id">New</span>
 					<span v-else>Clear</span>
 				</button>
+				<button class="primary general rounded action" v-if="task && task.id" v-on:click="populateTask(task)">
+					<span>Pull Associations</span>
+				</button>
 			</div>
 		</div>
 		<!--

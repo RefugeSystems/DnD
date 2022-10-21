@@ -4,7 +4,7 @@
  * 
  * @class systemMessage
  * @constructor
- * @module common
+ * @module Components
  * @zindex 50
  */
 (function() {

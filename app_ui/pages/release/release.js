@@ -28,6 +28,15 @@
 
 	// date_needed, priority, effort
 	var sortTask = function(a, b) {
+		if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
+			return -1;
+		} else if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
+			return 1;
+		} else if(a.ordering < b.ordering) {
+			return -1;
+		} else if(a.ordering > b.ordering) {
+			return 1;
+		}
 		if((b.date_needed === undefined || b.date_needed === null) && a.date_needed !== undefined && a.date_needed !== null) {
 			return -1;
 		} else if((a.date_needed === undefined || a.date_needed === null) && b.date_needed !== undefined && b.date_needed !== null) {
@@ -49,15 +58,6 @@
 		if(a.effort < b.effort) {
 			return -1;
 		} else if(a.effort > b.effort) {
-			return 1;
-		}
-		if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
-			return -1;
-		} else if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
-			return 1;
-		} else if(a.ordering < b.ordering) {
-			return -1;
-		} else if(a.ordering > b.ordering) {
 			return 1;
 		}
 		if(a.name < b.name) {
@@ -113,6 +113,7 @@
 			data.release_effort = {};
 
 			data.cachedDate = {};
+			data.trackedReleases = {};
 			data.tracked = {};
 
 			data.released = [];
@@ -178,6 +179,32 @@
 					});
 				}
 			},
+			"getAssociatedRelease": function(task) {
+				var times = Object.keys(this.tracked),
+					release,
+					start,
+					i;
+				task = task?task.id||task||this.task.id:this.task.id;
+				if(task) {
+					// Search by cache map
+					for(i=0; i<times.length; i++) {
+						start = times[i];
+						if(this.tracked[start] && this.tracked[start].indexOf(task) !== -1) {
+							return this.trackedReleases[start];
+						}
+					}
+
+					// Search releases
+					for(i=0; i<this.universe.listing.dmrelease.length; i++) {
+						release = this.universe.listing.dmrelease[i];
+						if(release.tasks && release.tasks.indexOf(task) !== -1) {
+							return release;
+						}
+					}
+				}
+
+				return null;
+			},
 			"zeroDate": function(date) {
 				date.setHours(0);
 				date.setMinutes(0);
@@ -208,6 +235,12 @@
 			},
 			"clearTask": function(task) {
 				Vue.set(this, "task", {});
+			},
+			"populateTask": function(task) {
+				var release = this.getAssociatedRelease(task);
+				if(release && release.associations && release.associations.length) {
+					this.task.associations = release.associations.union(this.task.associations || []);
+				}
 			},
 			"populateRelease": function(release) {
 				var tasks,
@@ -359,6 +392,7 @@
 				releases.sort(sortByStart);
 				for(i=0; i<releases.length; i++) {
 					release = releases[i];
+					this.trackedReleases[release.date_started] = release;
 					if(release.date_completed < date) {
 						this.released.push(release);
 						if(order < release.ordering) {

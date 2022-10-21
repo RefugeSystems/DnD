@@ -1429,8 +1429,8 @@ class Universe extends EventEmitter {
 
 	setActiveRelease(release) {
 		// TODO: Add ID check for passed release and create setting if it doesn't exist
-		if(this.manager.setting.object["setting:release"]) {
-			this.manager.setting.object["setting:release"].setValue({
+		if(this.manager.setting.object["setting:release"] && (release === null || this.manager.dmrelease.object[release])) {
+			this.manager.setting.object["setting:release"].setValues({
 				"value": release
 			});
 		}

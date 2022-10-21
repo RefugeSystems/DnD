@@ -515,6 +515,23 @@ rsSystem.component("sysInfoGeneral", {
 									"type": "button",
 									"action": "setend"
 								});
+							} else if(this.info._class === "dmrelease") {
+								// TODO: Consider tying this directly into the push to player entities for active action tracking
+								if(this.universe.index.setting["setting:release"] && this.universe.index.setting["setting:release"].value === this.info.id) {
+									this.controls.push({
+										"title": "Clear the universe's tracked release",
+										"icon": "fa-regular fa-print-slash",
+										"type": "button",
+										"action": "release-clear"
+									});
+								} else {
+									this.controls.push({
+										"title": "Set the universe's tracked release for tracking directed object updates",
+										"icon": "fa-regular fa-print-magnifying-glass",
+										"type": "button",
+										"action": "release-set"
+									});
+								}
 							}
 							if((this.info._class === "event" || this.info.locations) && this.activeMeeting && this.activeMeeting.location) {
 								this.controls.push({
@@ -996,6 +1013,16 @@ rsSystem.component("sysInfoGeneral", {
 					} else {
 						console.warn("Player Character not found: " + this.player.attribute.playing_as);
 					}
+					break;
+				case "release-set":
+					this.universe.send("release:set", {
+						"release": object.id
+					});
+					break;
+				case "release-clear":
+					this.universe.send("release:set", {
+						"release": null
+					});
 					break;
 				case "partyentity":
 					if(this.activeMeeting) {
