@@ -355,11 +355,17 @@
 					for(i=0; i<release.associations.length; i++) {
 						load = release.associations[i];
 						classification = rsSystem.utility.getClass(load);
-						if(!classification.attribute.no_track_task && classification.id !== "dmtask" && classification.id !== "dmrelease") {
+						console.log("Classification: " + classification.id, classification);
+						if(classification && !classification.attribute.no_track_task && classification.id !== "dmtask" && classification.id !== "dmrelease") {
+							console.log("  > Pushed: " + classification.id);
 							associations.push(load);
 						}
 					}
-					this.task.associations = release.associations.union(associations);
+					if(this.task.associations) {
+						this.task.associations = this.task.associations.union(associations);
+					} else {
+						this.task.associations = associations;
+					}
 				}
 			},
 			"populateRelease": function(release) {
