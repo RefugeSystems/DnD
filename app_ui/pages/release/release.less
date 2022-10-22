@@ -22,14 +22,17 @@
 				flex-grow: 10;
 				z-index: 1;
 				box-shadow: 0px 0px 15px @rsBlack;
+				height: 100%;
+				overflow: auto;
 
 				.list-filter {
-					position: relative;
+					position: sticky;
 					width: 100%;
 					background-color: @rsWhite;
 					margin-bottom: 10px;
 					z-index: 1;
 					height: 34px;
+					top: 0px;
 
 					input {
 						position: relative;
@@ -39,13 +42,14 @@
 						background-color: @rsWhite;
 						background-color: transparent;
 						line-height: 16px;
+						flex-grow: 10;
 						z-index: 5;
 					}
 
 					.filtering-icon {
 						position: absolute;
 						font-size: 22px;
-						top: 6px;
+						top: 5px;
 						left: 5px;
 						z-index: 2;
 						transition: color .5s;
