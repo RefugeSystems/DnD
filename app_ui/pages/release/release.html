@@ -58,7 +58,7 @@
 				<input type="text" v-delayed="filterText" />
 				<span class="filtering-icon buffering fa-solid fa-spinner fa-spin-pulse"></span>
 				<span class="filtering-icon ready fa-solid fa-filter"></span>
-				<span class="alert-no-release fa-solid fa-exclamation-triangle rs-dark-yellow" v-if="!universe.index.setting['setting:release'] || !universe.index.setting['setting:release'].value" :title="There is no release currently set"></span>
+				<span class="alert-no-release fa-solid fa-exclamation-triangle rs-dark-yellow" v-if="!universe.index.setting['setting:release'] || !universe.index.setting['setting:release'].value" title="There is no release currently set"></span>
 			</div>
 			<div class="planned-warning" v-if="warning" v-on:click="info(getFirstRelease())">
 				<div class="planned-warning-object">
