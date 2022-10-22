@@ -56,7 +56,8 @@
 		<div class="plan list">
 			<div class="list-filter">
 				<input type="text" v-delayed="filterText" />
-				<span class="filtering-icon fa-solid fa-spinner fa-spin-pulse"></span>
+				<span class="filtering-icon buffering fa-solid fa-spinner fa-spin-pulse"></span>
+				<span class="filtering-icon ready fa-solid fa-filter"></span>
 			</div>
 			<div class="planned-task" v-for="task in queue" v-on:click="open(task)">
 				<div class="task-line release" v-if="task._class === 'dmrelease'">
@@ -71,7 +72,7 @@
 						<button class="flat action info fa-solid fa-info-circle rs-blue" v-if="task.id" v-on:click.stop="info(task)"></button>
 					</span>
 					<span class="task-name">{{task.name}}</span>
-					<span class="task-notice" v-if="notice_timeshift[task.date_started]" title="Incoming time change">
+					<span class="task-notice" v-if="notice_timeshift[task.date_started]" title="Temporal descrepency - Calendar Time Adjustment Likely Occurs During this Release Period (ie. Daylight Savings Time)">
 						<span class="fa-regular fa-calendars rs-light-yellow"></span>
 					</span>
 					<span class="task-date">

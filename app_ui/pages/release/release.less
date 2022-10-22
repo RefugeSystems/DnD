@@ -29,29 +29,46 @@
 					background-color: @rsWhite;
 					margin-bottom: 10px;
 					z-index: 1;
+					height: 34px;
 
 					input {
 						position: relative;
 						width: 100%;
-						padding: 7px 3px;
+						padding: 7px 3px 7px 33px;
 						font-size: 14px;
 						background-color: @rsWhite;
-						transition: background-color .5s;
+						background-color: transparent;
 						line-height: 16px;
 						z-index: 5;
-
-						&.buffering {
-							background-color: transparent;
-						}
 					}
 
 					.filtering-icon {
 						position: absolute;
 						font-size: 22px;
 						top: 6px;
-						right: 5px;
-						color: @rsBlack;
+						left: 5px;
 						z-index: 2;
+						transition: color .5s;
+					}
+
+					.filtering-icon.ready {
+						color: @rsBlack;
+						z-index: 4;
+					}
+
+					.filtering-icon.buffering {
+						color: transparent;
+						z-index: 3;
+					}
+
+					&.buffering {
+						.filtering-icon.ready {
+							color: transparent;
+						}
+	
+						.filtering-icon.buffering {
+							color: @rsBlack;
+						}
 					}
 				}
 
@@ -67,7 +84,8 @@
 						position: relative;
 						width: 100%;
 						font-size: 20px;
-						margin: 2px 0px;
+						padding: 5px 0px;
+						cursor: pointer;
 
 						.hover-only {
 							visibility: hidden;
@@ -143,6 +161,10 @@
 									border-color: @rsBlack;
 								}
 							
+								&.color-brown {
+									border-color: @rsLightBrown;
+								}
+							
 								&.color-red {
 									border-color: @rsLightRed;
 								}
@@ -161,6 +183,14 @@
 							
 								&.color-purple {
 									border-color: @rsLightPurple;
+								}
+							
+								&.color-cyan {
+									border-color: @rsLightCyan;
+								}
+							
+								&.color-orange {
+									border-color: @rsLightOrange;
 								}
 							
 								&.color-cyan {

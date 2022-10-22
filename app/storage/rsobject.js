@@ -647,12 +647,12 @@ class RSObject {
 								if(field.inheritable && field.inheritable.length) {
 									search = this._universe.get(this._calculated[field.id]);
 									if(search && (typeof(search.name) === "string")) {
-										this._search += ":::" + search.name.toLowerCase();
+										this._search += ":::" + (field.name + ":" + search.name).toLowerCase();
 									} else {
-										this._search += ":::" + this._calculated[field.id].toLowerCase();
+										this._search += ":::" + (field.name + ":" + this._calculated[field.id]).toLowerCase();
 									}
 								} else {
-									this._search += ":::" + this._calculated[field.id].toLowerCase();
+									this._search += ":::" + (field.name + ":" + this._calculated[field.id]).toLowerCase();
 								}
 							}
 							break;
@@ -663,11 +663,7 @@ class RSObject {
 						case "dice":
 							this[fields[x]] = this._calculated[fields[x]];
 							if(field.attribute.searchable) {
-								if(this[fields[x]]) {
-									this._search += ":::" + fields[x] + ":true";
-								} else {
-									this._search += ":::" + fields[x] + ":false";
-								}
+								this._search += ":::" + field.name.toLowerCase() + ":" + (this[fields[x]]?"true":"false");
 							}
 							break;
 						case "object:integer":
@@ -683,7 +679,7 @@ class RSObject {
 									for(j=0; j<this[fields[x]].length; j++) {
 										search = this._universe.get(this[fields[x]][j]);
 										if(search && (typeof(search.name) === "string")) {
-											this._search += ":::" + search.name.toLowerCase();
+											this._search += ":::" + (field.name + ":" + search.name).toLowerCase();
 										} else if(typeof(this[fields[x]][j]) === "string") {
 											this._search += ":::" + this[fields[x]][j].toLowerCase();
 										}

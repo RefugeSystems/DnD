@@ -217,7 +217,7 @@ class Universe extends EventEmitter {
 					mark,
 					x;
 				
-				console.log("Linking Objects...");
+				console.log("Linking Objects [Background Processing Layered with Loading]...");
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();

@@ -1,4 +1,4 @@
-console.log(">>> Startup: " + (new Date).toString());
+console.log(">>> Startup: " + (new Date()).toString());
 
 // Add custom methods to select classes
 require("./extensions/string.js");
@@ -104,5 +104,8 @@ verify(configuration)
 	details.server_configuration = configuration.server;
 	error = new Anomaly("app:startup:failure", "System startup failure", 60, details, error, componentID);
 	logging.entry(error);
-	process.exit();
+	setTimeout(function() {
+		process.exit();
+	}, 5000);
+	console.log(">>> Process Exit in 5 seconds...");
 });

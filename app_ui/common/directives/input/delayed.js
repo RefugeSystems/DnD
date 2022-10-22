@@ -42,6 +42,9 @@ Vue.directive("delayed", {
 		process = function() {
 			if(Date.now() > update) {
 				el.classList.remove("buffering");
+				if(el.parentElement) {
+					el.parentElement.classList.remove("buffering");
+				}
 				if(binding.modifiers.lower) {
 					Vue.set(root, field, el.value.toLowerCase());
 				} else {
@@ -65,6 +68,9 @@ Vue.directive("delayed", {
 				if(timeout === null) {
 					timeout = setTimeout(process, delay);
 					el.classList.add("buffering");
+					if(el.parentElement) {
+						el.parentElement.classList.add("buffering");
+					}
 				}
 			}
 		};
