@@ -44,7 +44,7 @@ module.exports.initialize = function(universe) {
 					} else {
 						// If Tracking a release in the universe, note modifications to this object through this hook (Event for the noun editor)
 						release = universe.getActiveRelease();
-						if(release && (!release.associations || release.associations.indexOf(object.id) === -1)) {
+						if(release && (!release.associations || release.associations.indexOf(object.id) === -1) && !universe.manager[object._class].attribute.no_track_release) {
 							release.addValues({
 								"associations": [object.id]
 							});

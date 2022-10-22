@@ -169,6 +169,9 @@
 			data.filterKeys = [];
 			data.filter = {};
 
+			data.warningText = null;
+			data.warning = null;
+
 			data.setting = {};
 			data.setting.initial_burn = 10;
 			data.setting.initial_day = 5;
@@ -235,9 +238,30 @@
 
 				return false;
 			},
+			"getFirstRelease": function() {
+				var entry,
+					i;
+				for(i=0; i<this.queue.length; i++) {
+					entry = this.queue[i];
+					if(entry._class === "dmrelease") {
+						return entry;
+					}
+				}
+				return null;
+			},
+			"getReleaseStyles": function(task) {
+				if(this.universe.index.setting["setting:release"] && this.universe.index.setting["setting:release"].value === task.id) {
+					return "current";
+				}
+				return "";
+			},
 			"getReleaseIcon": function(task) {
 				if(task.id) {
-					return task.icon || "fa-duotone fa-merge";
+					var icon = task.icon || "fa-duotone fa-merge";
+					if(this.universe.index.setting["setting:release"] && this.universe.index.setting["setting:release"].value === task.id) {
+						return "rs-green " + icon;
+					}
+					return icon;
 				} else {
 					return "fa-duotone fa-merge rs-yellow";
 				}
@@ -321,21 +345,43 @@
 				Vue.set(this, "task", {});
 			},
 			"populateTask": function(task) {
-				var release = this.getAssociatedRelease(task);
+				var release = this.getAssociatedRelease(task),
+					associations = [],
+					classification,
+					load,
+					i;
+
 				if(release && release.associations && release.associations.length) {
-					this.task.associations = release.associations.union(this.task.associations || []);
+					for(i=0; i<release.associations.length; i++) {
+						load = release.associations[i];
+						classification = rsSystem.utility.getClass(load);
+						if(!classification.attribute.no_track_task && classification.id !== "dmtask" && classification.id !== "dmrelease") {
+							associations.push(load);
+						}
+					}
+					this.task.associations = release.associations.union(associations);
 				}
 			},
 			"populateRelease": function(release) {
-				var tasks,
+				var tasks = this.tracked[release.date_started].map((t) => t.id),
+					task,
 					i;
+
+				if(this.release.associations) {
+					for(i=0; i<this.release.associations.length; i++) {
+						task = this.release.associations[i];
+						if(task.startsWith("dmtask:") && (task = this.universe.get(task)) && task.date_completed) {
+							tasks.uniquely(task.id);
+						}
+					}
+				}
+
 				if(this.release.tasks) {
-					tasks = this.tracked[release.date_started].map((t) => t.id);
 					for(i=0; i<tasks.length; i++) {
 						this.release.tasks.uniquely(tasks[i]);
 					}
 				} else {
-					Vue.set(this.release, "tasks", this.tracked[release.date_started].map((t) => t.id));
+					Vue.set(this.release, "tasks", tasks);
 				}
 			},
 			"completeRelease": function(release) {
@@ -419,6 +465,7 @@
 					check,
 
 					// Buffer/Loop Variables
+					warning,
 					o,
 					i,
 					j;
@@ -464,6 +511,28 @@
 					}
 					this.queue.push(task);
 				};
+
+				Vue.set(this, "warningText", null);
+				Vue.set(this, "warning", null);
+				if(this.universe.index.setting["setting:release"] && this.universe.index.setting["setting:release"].value) {
+					warning = this.universe.index.dmrelease[this.universe.index.setting["setting:release"].value];
+					if(rsSystem.utility.isValid(warning)) {
+						if(Date.now() < warning.date_completed) {
+							if(warning.date_started < Date.now()) {
+								// Release Ok. Possible Additional Checks?
+							} else {
+								Vue.set(this, "warningText", "Current release has not yet started. Change current release to top most release when ready to move forward.");
+								Vue.set(this, "warning", warning);
+							}
+						} else {
+							Vue.set(this, "warningText", "Current release has closed. Change current release to top most release when ready to move forward.");
+							Vue.set(this, "warning", warning);
+						}
+					} else {
+						Vue.set(this, "warningText", "Current release is not valid");
+						Vue.set(this, "warning", warning);
+					}
+				}
 
 				for(i=0; i<this.universe.listing.dmtask.length; i++) {
 					task = this.universe.listing.dmtask[i];
@@ -593,7 +662,7 @@
 				}
 			},
 			"updateReceived": function(event) {
-				if(event && (event._class === "dmrelease" || event._class === "dmtask")) {
+				if(event && (event._class === "dmrelease" || event._class === "dmtask" || event._class === "setting")) {
 					// Rebuild List & Release Markers
 					this.buildForecast();
 				}

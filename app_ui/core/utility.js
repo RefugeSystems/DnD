@@ -228,6 +228,30 @@
 			return clone;
 		},
 		/**
+		 * Get the object describing the class for the specified object.
+		 * @method getClass
+		 * @param {String | Object} object Whose class is to be retrieved. Either the object it self or its ID.
+		 * @return {RSClass}
+		 */
+		"getClass": function(object) {
+			if(!object) {
+				return null;
+			}
+			if(typeof(object) !== "string") {
+				object = object.id;
+			}
+			if(typeof(object) !== "string") {
+				return null;
+			}
+
+			var id = object.indexOf(":");
+			if(id === -1) {
+				return null;
+			}
+			id = object.substring(0, id);
+			return rsSystem.universe.index.classes[id];
+		},
+		/**
 		 * 
 		 * @method hasParentalKey
 		 * @param {Object} object 

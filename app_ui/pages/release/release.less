@@ -16,6 +16,7 @@
 				flex-shrink: 0;
 				width: 400px;
 				z-index: 1;
+				height: 100%;
 			}
 	
 			&.list {
@@ -24,6 +25,22 @@
 				box-shadow: 0px 0px 15px @rsBlack;
 				height: 100%;
 				overflow: auto;
+
+				.planned-warning {
+					padding: 0px 10px 10px 10px;
+					border: 1px solid @rsLightRed;
+					margin: 10px;
+					border-radius: 20px;
+					max-width: 500px;
+
+					.planned-warning-object {
+						font-size: 22px;
+					}
+
+					p {
+						margin: 10px 0px 0px 0px;
+					}
+				}
 
 				.list-filter {
 					position: sticky;
@@ -36,7 +53,7 @@
 
 					input {
 						position: relative;
-						width: 100%;
+						flex-grow: 10;
 						padding: 7px 3px 7px 33px;
 						font-size: 14px;
 						background-color: @rsWhite;
@@ -44,6 +61,21 @@
 						line-height: 16px;
 						flex-grow: 10;
 						z-index: 5;
+					}
+
+					.alert-no-release {
+						position: absolute;
+						z-index: 9;
+						background-color: @rsBlack;
+						top: 0px;
+						right: 0px;
+						width: 34px;
+						height: 34px;
+						line-height: 34px;
+						border-radius: 6px;
+						color: @rsYellow;
+						text-align: center;
+						vertical-align: middle;
 					}
 
 					.filtering-icon {
@@ -233,6 +265,10 @@
 							border-color: @rsBlack;
 							padding-bottom: 4px;
 							margin-bottom: 10px;
+
+							&.current {
+								border-color: @rsGreen;
+							}
 						}
 					}
 				}
@@ -244,15 +280,27 @@
 				left: 0px;
 				width: 0px;
 				height: 100%;
-				overflow: hidden;
 				transition: width .5s;
 				z-index: 5;
 				background: @rsBlack;
 				box-shadow: 0px 0px 15px black;
+				overflow: hidden;
 
 				&.open {
 					width: 400px;
 				}
+			}
+
+			.plan-title {
+				position: relative;
+			}
+
+			.component-form {
+				overflow: auto;
+			}
+
+			.controls {
+				position: relative;
 			}
 		}
 
