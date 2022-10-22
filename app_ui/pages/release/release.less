@@ -19,10 +19,41 @@
 			}
 	
 			&.list {
-				padding: 10px;
 				flex-grow: 10;
 				z-index: 1;
 				box-shadow: 0px 0px 15px @rsBlack;
+
+				.list-filter {
+					position: relative;
+					width: 100%;
+					background-color: @rsWhite;
+					margin-bottom: 10px;
+					z-index: 1;
+
+					input {
+						position: relative;
+						width: 100%;
+						padding: 7px 3px;
+						font-size: 14px;
+						background-color: @rsWhite;
+						transition: background-color .5s;
+						line-height: 16px;
+						z-index: 5;
+
+						&.buffering {
+							background-color: transparent;
+						}
+					}
+
+					.filtering-icon {
+						position: absolute;
+						font-size: 22px;
+						top: 6px;
+						right: 5px;
+						color: @rsBlack;
+						z-index: 2;
+					}
+				}
 
 				.planned-task {
 					display: flex;
@@ -89,6 +120,59 @@
 							}
 						}
 
+						.task-category {
+							margin: 0px 4px;
+							flex-shrink: 0;
+
+							.category-name {
+								border-width: 3px;
+								border-radius: 6px;
+								border-color: @rsWhite;
+								border-style: solid;
+								padding: 0px 4px;
+							
+								&.color-white {
+									border-color: @rsWhite;
+								}
+							
+								&.color-gray {
+									border-color: @rsGray;
+								}
+							
+								&.color-black {
+									border-color: @rsBlack;
+								}
+							
+								&.color-red {
+									border-color: @rsLightRed;
+								}
+							
+								&.color-green {
+									border-color: @rsLightGreen;
+								}
+							
+								&.color-blue {
+									border-color: @rsLightBlue;
+								}
+							
+								&.color-yellow {
+									border-color: @rsLightYellow;
+								}
+							
+								&.color-purple {
+									border-color: @rsLightPurple;
+								}
+							
+								&.color-cyan {
+									border-color: @rsLightCyan;
+								}
+							}
+						}
+
+						.task-name {
+							flex-grow: 10;
+						}
+
 						.task-date {
 							min-width: 120px;
 							flex-shrink: 0;
@@ -109,12 +193,12 @@
 
 						}
 
-						.task-name {
-							flex-grow: 10;
-						}
-
 						&.release {
-							margin-bottom: 12px;
+							border-width: 0px 0px 3px 0px;
+							border-style: solid;
+							border-color: @rsBlack;
+							padding-bottom: 4px;
+							margin-bottom: 10px;
 						}
 					}
 				}

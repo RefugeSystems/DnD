@@ -15,7 +15,23 @@
 		month = 30 * day,
 		year = 365 * day,
 		weekJump = week + 12 * hour,
-		softStart = 5 * week;
+		softStart = 5 * week,
+		now = Date.now(),
+		debug = {};
+	
+	var calculateWeight = function(task) {
+		var weight = 0;
+		if(task.priority) {
+			weight += task.priority * 4;
+		}
+		if(task.effort) {
+			weight += task.effort * 2;
+		}
+		if(task.ordering) {
+			weight *= task.ordering;
+		}
+		return weight;
+	};
 
 	var sortByStart = function(a, b) {
 		if(a.date_started < b.date_started) {
@@ -28,6 +44,36 @@
 
 	// date_needed, priority, effort
 	var sortTask = function(a, b) {
+		var weightA = calculateWeight(a),
+			weightB = calculateWeight(b),
+			timeDiff;
+
+		debug[a.name] = weightA;
+		debug[b.name] = weightB;
+		
+		// If both have a time, sort with a weight shift up to 10
+		if(a.date_needed && b.date_needed) {
+			timeDiff = b.date_needed - a.date_needed;
+			timeDiff = 10 * (timeDiff/year);
+		} else if(a.date_needed) {
+			timeDiff = 10;
+		} else if(b.date_needed) {
+			timeDiff = -10;
+		} else {
+			timeDiff = 0;
+		}
+
+		weightA += timeDiff;
+		weightB -= timeDiff;
+
+		if(weightB < weightA) {
+			return -1;
+		} else if(weightB > weightA) {
+			return 1;
+		}
+		return 0;
+
+		/*
 		if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
 			return -1;
 		} else if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
@@ -71,6 +117,7 @@
 			return 1;
 		}
 		return 0;
+		*/
 	};
 
 	rsSystem.component("RSRelease", {
@@ -98,10 +145,29 @@
 			}
 		},
 		"watch": {
+			"filterText": function(text) {
+				text = text.toLowerCase();
+				var filter,
+					keys,
+					key,
+					i;
+				
+				for(i=0; i<this.filterKeys.length; i++) {
+					delete(this.filter[this.filterKeys[i]]);
+				}
+				this.filterKeys.splice(0);
 
+				Vue.set(this.filter, "_", text);
+				// TODO: Key:Value pair parse
+				// TODO: Move this to a component
+			}
 		},
 		"data": function() {
 			var data = {};
+			data.debugging = debug;
+			data.filterText = "";
+			data.filterKeys = [];
+			data.filter = {};
 
 			data.setting = {};
 			data.setting.initial_burn = 10;
@@ -113,6 +179,7 @@
 			data.release_effort = {};
 
 			data.cachedDate = {};
+			data.trackedCategory = {};
 			data.trackedReleases = {};
 			data.tracked = {};
 
@@ -160,12 +227,24 @@
 			this.buildForecast();
 		},
 		"methods": {
+			"taskVisible": function(task) {
+				if(task._class === "dmtask") {
+					// TODO: Add Key:Value parsing
+					return !this.filter._ || task._search.indexOf(this.filter._) !== -1;
+				}
+
+				return false;
+			},
 			"getReleaseIcon": function(task) {
 				if(task.id) {
 					return task.icon || "fa-duotone fa-merge";
 				} else {
 					return "fa-duotone fa-merge rs-yellow";
 				}
+			},
+			"getTaskCategory": function(task) {
+				var category = this.trackedCategory[task.id];
+				return "category-name color-" + (category?category.label_color || "gray":"gray");
 			},
 			"getDate": function(timestamp) {
 				if(this.cachedDate[timestamp]) {
@@ -322,6 +401,7 @@
 
 					// Functions
 					queueRelease,
+					queueTask,
 
 					// Calculation Variables
 					burn, // Initial burn is 10 points unless a prior release is found
@@ -342,7 +422,7 @@
 					o,
 					i,
 					j;
-
+				
 				queueRelease = (release) => {
 					if(release) {
 						if(release.tasks && release.tasks.length) {
@@ -351,7 +431,7 @@
 								if(rsSystem.utility.isValid(release_task) && !tracking[release_task.id]) {
 									this.release_effort[start] += release_task.effort || 0;
 									remaining -= release_task.effort || 0;
-									this.queue.push(release_task);
+									queueTask(release_task);
 								}
 							}
 						}
@@ -366,6 +446,23 @@
 							"ordering": o
 						});
 					}
+				};
+
+				queueTask = (task) => {
+					var category;
+					if(task && task.categories && task.categories.length) {
+						if(!this.trackedCategory[task.id] || this.trackedCategory[task.id] !== task.categories[0]) {
+							category = this.universe.index.category[task.categories[0]];
+							if(rsSystem.utility.isValid(category)) {
+								this.trackedCategory[task.id] = category;
+							} else {
+								this.trackedCategory[task.id] = null;
+							}
+						}
+					} else if(this.trackedCategory[task.id]) {
+						this.trackedCategory[task.id] = null;
+					}
+					this.queue.push(task);
 				};
 
 				for(i=0; i<this.universe.listing.dmtask.length; i++) {
@@ -475,7 +572,7 @@
 							}
 						}
 						this.tracked[start].push(task);
-						this.queue.push(task);
+						queueTask(task);
 						this.release_effort[start] += task.effort || 0;
 
 						// Does the task have a date_needed and is that after the release's expected complete

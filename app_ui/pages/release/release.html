@@ -31,7 +31,8 @@
 			<rs-form :universe="universe" :player="player" :profile="profile" :details="task" :fields="taskFields" :show_undefined="false"></rs-form>
 			<div class="flex h">
 				<button class="primary general rounded action" v-on:click="updateTask(task)">
-					<span>Update</span>
+					<span v-if="task && task.id">Update</span>
+					<span v-else>Create</span>
 				</button>
 				<button class="primary general rounded action" v-on:click="clearTask()">
 					<span v-if="task && task.id">New</span>
@@ -53,6 +54,10 @@
 			Clicking a non-existent release creates it in a lose sense (Date, name, id)
 		-->
 		<div class="plan list">
+			<div class="list-filter">
+				<input type="text" v-delayed="filterText" />
+				<span class="filtering-icon fa-solid fa-spinner fa-spin-pulse"></span>
+			</div>
 			<div class="planned-task" v-for="task in queue" v-on:click="open(task)">
 				<div class="task-line release" v-if="task._class === 'dmrelease'">
 					<!-- Name - Ghosted if not real (no id) -->
@@ -76,7 +81,7 @@
 						<span class="date">{{getDate(task.date_completed)}}</span>
 					</span>
 				</div>
-				<div class="task-line" v-if="task._class === 'dmtask'">
+				<div class="task-line" v-if="taskVisible(task)">
 					<span class="task-effort" title="Effort">
 						<span class="effort">{{task.effort}}</span>
 					</span>
@@ -95,6 +100,9 @@
 					<span class="task-notice alerting" v-if="notice_missed[task.id]" :title="'This repeating task has missed ' + notice_missed[task.id] + ' iterations'">
 						<span class="fa-regular fa-exclamation-triangle rs-red fa-fade"></span>
 						<span>{{notice_missed[task.id]}}</span>
+					</span>
+					<span class="task-category"v-if="trackedCategory[task.id]">
+						<span :class="getTaskCategory(task)">{{trackedCategory[task.id].name}}</span>
 					</span>
 					<span class="task-name">{{task.name}}</span>
 					<span class="task-notice" v-if="notice_needed[task.id]" title="Failing to meet deadline">
