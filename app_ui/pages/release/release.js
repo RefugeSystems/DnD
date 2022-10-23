@@ -485,7 +485,7 @@
 				});
 			},
 			"buildForecast": function() {
-				var releases = this.universe.listing.dmrelease,
+				var releases = [],
 					releasing = {}, // Maps by week offset where 0 is the current week Friday -> Friday (TODO: Make the start day dynamic)
 					tracking = {},
 					tasks = [],
@@ -587,6 +587,13 @@
 						delete(this.weights[task.id]);
 						tracking[task.id] = true;
 						tasks.push(task);
+					}
+				}
+
+				for(i=0; this.universe.listing.dmrelease.length; i++) {
+					release = this.universe.listing.dmrelease[i];
+					if(rsSystem.utility.isValid(release)) {
+						releases.push(release);
 					}
 				}
 
