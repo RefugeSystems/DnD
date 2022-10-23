@@ -25,7 +25,7 @@
 			weight += task.priority * 4;
 		}
 		if(task.effort) {
-			weight += task.effort * 2;
+			weight += 3 * (6/task.effort);
 		}
 		if(task.ordering) {
 			weight += 10 * task.ordering;
