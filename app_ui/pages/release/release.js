@@ -241,6 +241,9 @@
 
 				return false;
 			},
+			"firstReleaseInfo": function() {
+				this.info(this.getFirstRelease());
+			},
 			"getFirstRelease": function() {
 				var entry,
 					i;

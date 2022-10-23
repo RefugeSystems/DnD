@@ -108,9 +108,9 @@
 				<span class="filtering-icon ready fa-solid fa-filter"></span>
 				<span class="alert-no-release fa-solid fa-exclamation-triangle rs-dark-yellow" v-if="!universe.index.setting['setting:release'] || !universe.index.setting['setting:release'].value" title="There is no release currently set"></span>
 			</div>
-			<div class="planned-warning" v-if="warning" v-on:click="info(getFirstRelease())">
+			<div class="planned-warning" v-if="warning" v-on:click="firstReleaseInfo()">
 				<div class="planned-warning-object">
-					<span class="warning-info fa-solid fa-exclamation-triangle fa-beat-fade rs-light-red action general flat"></span>
+					<span class="warning-info fa-solid fa-exclamation-triangle fa-fade rs-light-red action general flat"></span>
 					<span class="warning-name">{{warning.name}}</span>
 					<button class="fa-solid fa-circle-info rs-blue action flat" v-on:click.stop="info(warning)"></button>
 				</div>
