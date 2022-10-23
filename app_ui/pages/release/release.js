@@ -590,7 +590,7 @@
 					}
 				}
 
-				for(i=0; this.universe.listing.dmrelease.length; i++) {
+				for(i=0; i<this.universe.listing.dmrelease.length; i++) {
 					release = this.universe.listing.dmrelease[i];
 					if(rsSystem.utility.isValid(release)) {
 						releases.push(release);
