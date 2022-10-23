@@ -247,7 +247,7 @@
 				for(i=0; i<this.queue.length; i++) {
 					entry = this.queue[i];
 					if(entry._class === "dmrelease") {
-						return entry;
+						return entry.id;
 					}
 				}
 				return null;
