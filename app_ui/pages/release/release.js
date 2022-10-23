@@ -165,6 +165,9 @@
 		"data": function() {
 			var data = {};
 			data.debugging = debug;
+
+			data.planningStyling = "";
+
 			data.filterText = "";
 			data.filterKeys = [];
 			data.filter = {};
@@ -185,6 +188,10 @@
 			data.trackedCategory = {};
 			data.trackedReleases = {};
 			data.tracked = {};
+
+			data.references = {};
+			data.references.priority = [];
+			data.references.effort = [];
 
 			data.released = [];
 			data.queue = [];
@@ -228,6 +235,7 @@
 			rsSystem.register(this);
 			this.universe.$on("updated", this.updateReceived);
 			this.buildForecast();
+			this.buildReferences();
 		},
 		"methods": {
 			"taskVisible": function(task) {
@@ -344,6 +352,41 @@
 			"clearTask": function(task) {
 				Vue.set(this, "task", {});
 			},
+			"toggleReferenceFlyout": function() {
+				if(this.planningStyling) {
+					Vue.set(this, "planningStyling", "");
+				} else {
+					Vue.set(this, "planningStyling", "referencing");
+				}
+			},
+			"buildReferences": function() {
+				var task,
+					i;
+				this.references.priority.splice(0);
+				this.references.effort.splice(0);
+
+				for(i=0; i<this.queue.length; i++) {
+					task = this.queue[i];
+					if(task._class === "dmtask") {
+						if(task.priority && !this.references.priority[task.priority]) {
+							this.references.priority[task.priority] = task;
+						}
+						if(task.effort && !this.references.effort[task.effort]) {
+							this.references.effort[task.effort] = task;
+						}
+					}
+				}
+
+				for(i=0; i<this.universe.listing.dmtask.length; i++) {
+					task = this.universe.listing.dmtask[i];
+					if(task.priority && !this.references.priority[task.priority]) {
+						this.references.priority[task.priority] = task;
+					}
+					if(task.effort && !this.references.effort[task.effort]) {
+						this.references.effort[task.effort] = task;
+					}
+				}
+			},
 			"populateTask": function(task) {
 				var release = this.getAssociatedRelease(task),
 					associations = [],
@@ -355,9 +398,7 @@
 					for(i=0; i<release.associations.length; i++) {
 						load = release.associations[i];
 						classification = rsSystem.utility.getClass(load);
-						console.log("Classification: " + classification.id, classification);
 						if(classification && !classification.attribute.no_track_task && classification.id !== "dmtask" && classification.id !== "dmrelease") {
-							console.log("  > Pushed: " + classification.id);
 							associations.push(load);
 						}
 					}

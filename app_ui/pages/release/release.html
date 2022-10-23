@@ -1,5 +1,5 @@
 <div class="rs-page page-release">
-	<div class="planning">
+	<div class="planning" :class="planningStyling">
 		<!--
 			Readout for the resulting (Or selected) Release if it exists or not | This involves a timesort and analysis of the current day vs. the "next" release
 
@@ -46,6 +46,34 @@
 				</button>
 			</div>
 		</div>
+		<!--
+			Reference list for different priorities and efforts
+		-->
+		<div class="plan reference" v-save="updateTask">
+			<h2 class="plan-title">Effort Reference <button class="flat action fa-solid fa-refresh rs-white" v-on:click="buildReferences()"></button></h2>
+			<div class="flex v">
+				<div class="reference-data flex h v-center nowrap" v-for="(reference, i) in references.effort" v-if="reference">
+					<span class="task-effort">
+						<span class="effort">{{i}}</span>
+					</span>
+					<button class="flat action reference-info fa-solid fa-circle-info rs-blue" v-on:click="info(reference)"></button>
+					<span class="name grow-10">{{reference.name}}</span>
+				</div>
+			</div>
+			<h2 class="plan-title">Priority Reference</h2>
+			<div class="flex v">
+				<div class="reference-data flex h v-center nowrap" v-for="(reference, i) in references.priority" v-if="reference">
+					<span class="task-effort">
+						<span class="priority">{{i}}</span>
+					</span>
+					<button class="flat action reference-info fa-solid fa-circle-info rs-blue" v-on:click="info(reference)"></button>
+					<span class="name grow-10">{{reference.name}}</span>
+				</div>
+			</div>
+		</div>
+		<button class="reference-tab" v-on:click="toggleReferenceFlyout()">
+			<span class="tab-icon fa-solid fa-chevron-right"></span>
+		</button>
 		<!--
 			List of all tasks with release markers in line here for component control
 

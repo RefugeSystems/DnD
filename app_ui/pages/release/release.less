@@ -7,6 +7,32 @@
 		display: flex;
 		flex-direction: row;
 
+		.task-effort {
+			width: 30px;
+			flex-shrink: 0;
+			flex-grow: 0;
+			margin: 0px 4px;
+			text-align: center;
+
+			.effort {
+				display: block;
+				line-height: 22px;
+				border-radius: 10px;
+				font-size: 22px;
+				background-color: @rsLightBlue;
+				color: @rsBlack;
+			}
+
+			.priority {
+				display: block;
+				line-height: 22px;
+				border-radius: 10px;
+				font-size: 22px;
+				background-color: @rsLightRed;
+				color: @rsBlack;
+			}
+		}
+
 		.plan {
 			display: flex;
 			flex-direction: column;
@@ -17,6 +43,53 @@
 				width: 400px;
 				z-index: 1;
 				height: 100%;
+			}
+	
+			&.done {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 0px;
+				height: 100%;
+				transition: width .5s;
+				z-index: 6;
+				background: @rsBlack;
+				box-shadow: 0px 0px 15px black;
+				overflow: hidden;
+
+				&.open {
+					width: 400px;
+				}
+			}
+
+			&.reference {
+				flex-shrink: 0;
+				width: 0px;
+				height: 100%;
+				transition: width .5s;
+				z-index: 4;
+				background: @rsBlack;
+				height: 100%;
+				overflow: auto;
+				z-index: 1;
+
+				.plan-title {
+					position: sticky;
+					top: 0px;
+					white-space: nowrap;
+				}
+
+				.reference-info {
+					margin: 0px 5px;
+					flex-shrink: 0;
+				}
+
+				.reference-data {
+					white-space: nowrap;
+					font-size: 18px;
+					padding: 3px 0px;
+					margin: 3px 0px;
+				}
 			}
 	
 			&.list {
@@ -136,32 +209,6 @@
 							}
 						}
 
-						.task-effort {
-							width: 30px;
-							flex-shrink: 0;
-							flex-grow: 0;
-							margin: 0px 4px;
-							text-align: center;
-
-							.effort {
-								display: block;
-								line-height: 22px;
-								border-radius: 10px;
-								font-size: 22px;
-								background-color: @rsLightBlue;
-								color: @rsBlack;
-							}
-
-							.priority {
-								display: block;
-								line-height: 22px;
-								border-radius: 10px;
-								font-size: 22px;
-								background-color: @rsLightRed;
-								color: @rsBlack;
-							}
-						}
-
 						.task-notice {
 							width: 30px;
 							flex-shrink: 0;
@@ -273,23 +320,6 @@
 					}
 				}
 			}
-	
-			&.done {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				width: 0px;
-				height: 100%;
-				transition: width .5s;
-				z-index: 5;
-				background: @rsBlack;
-				box-shadow: 0px 0px 15px black;
-				overflow: hidden;
-
-				&.open {
-					width: 400px;
-				}
-			}
 
 			.plan-title {
 				position: relative;
@@ -303,6 +333,52 @@
 				position: relative;
 			}
 		}
+	}
 
+	.reference-tab {
+		position: absolute;
+		top: ~"calc(50% - 35px)";
+		left: 400px;
+		width: 30px;
+		line-height: 70px;
+		height: 70px;
+		transition: left .5s, top .5s, border-radius .5s, border-width .5s;
+		z-index: 5;
+		background: @rsBlack;
+		border-width: 1px 1px 1px 0px;
+		border-style: solid;
+		border-color: rgba(200,200,200,.5);
+		background-color: rgba(230,230,230,.2);
+		color: @rsBlack;
+		font-size: 30px;
+		text-align: center;
+		vertical-align: middle;
+		border-bottom-left-radius: 0px;
+		border-top-left-radius: 0px;
+		border-bottom-right-radius: 10px;
+		border-top-right-radius: 10px;
+
+		.tab-icon {
+			transition: transform .5s;
+		}
+	}
+
+	.referencing {
+		.plan.reference {
+			width: 300px;
+		}
+
+		.reference-tab {
+			left: 670px;
+			border-width: 1px 0px 1px 1px;
+			border-bottom-left-radius: 10px;
+			border-top-left-radius: 10px;
+			border-bottom-right-radius: 0px;
+			border-top-right-radius: 0px;
+		}
+
+		.tab-icon {
+			transform: rotateY(180deg);
+		}
 	}
 }
