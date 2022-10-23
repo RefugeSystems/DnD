@@ -28,7 +28,10 @@
 			weight += task.effort * 2;
 		}
 		if(task.ordering) {
-			weight *= task.ordering;
+			weight += 10 * task.ordering;
+		}
+		if(task.date_needed) {
+			weight += 20 * (month/(task.date_needed - now));
 		}
 		return weight;
 	};
@@ -45,26 +48,10 @@
 	// date_needed, priority, effort
 	var sortTask = function(a, b) {
 		var weightA = calculateWeight(a),
-			weightB = calculateWeight(b),
-			timeDiff;
+			weightB = calculateWeight(b);
 
 		debug[a.name] = weightA;
 		debug[b.name] = weightB;
-		
-		// If both have a time, sort with a weight shift up to 10
-		if(a.date_needed && b.date_needed) {
-			timeDiff = b.date_needed - a.date_needed;
-			timeDiff = 10 * (timeDiff/year);
-		} else if(a.date_needed) {
-			timeDiff = 10;
-		} else if(b.date_needed) {
-			timeDiff = -10;
-		} else {
-			timeDiff = 0;
-		}
-
-		weightA += timeDiff;
-		weightB -= timeDiff;
 
 		if(weightB < weightA) {
 			return -1;
