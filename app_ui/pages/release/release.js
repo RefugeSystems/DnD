@@ -18,6 +18,11 @@
 		softStart = 5 * week,
 		now = Date.now(),
 		debug = {};
+
+	var getFunctionText = function(method) {
+		method = method.toString();
+		return method.slice(method.indexOf("{") + 1, method.lastIndexOf("}"));
+	};
 	
 	var calculateWeight = function(task) {
 		var weight = 0;
@@ -31,7 +36,7 @@
 			weight += 10 * task.ordering;
 		}
 		if(task.date_needed) {
-			weight += 20 * (month/(task.date_needed - now));
+			weight += 10 * (month/(task.date_needed - now));
 		}
 		return weight;
 	};
@@ -46,66 +51,6 @@
 	};
 
 	// date_needed, priority, effort
-	var sortTask = function(a, b) {
-		var weightA = calculateWeight(a),
-			weightB = calculateWeight(b);
-
-		debug[a.name] = weightA;
-		debug[b.name] = weightB;
-
-		if(weightB < weightA) {
-			return -1;
-		} else if(weightB > weightA) {
-			return 1;
-		}
-		return 0;
-
-		/*
-		if((b.ordering === undefined || b.ordering === null) && a.ordering !== undefined && a.ordering !== null) {
-			return -1;
-		} else if((a.ordering === undefined || a.ordering === null) && b.ordering !== undefined && b.ordering !== null) {
-			return 1;
-		} else if(a.ordering < b.ordering) {
-			return -1;
-		} else if(a.ordering > b.ordering) {
-			return 1;
-		}
-		if((b.date_needed === undefined || b.date_needed === null) && a.date_needed !== undefined && a.date_needed !== null) {
-			return -1;
-		} else if((a.date_needed === undefined || a.date_needed === null) && b.date_needed !== undefined && b.date_needed !== null) {
-			return 1;
-		} else if(a.date_needed < b.date_needed) {
-			return -1;
-		} else if(a.date_needed > b.date_needed) {
-			return 1;
-		}
-		if((b.priority === undefined || b.priority === null) && a.priority !== undefined && a.priority !== null) {
-			return -1;
-		} else if((a.priority === undefined || a.priority === null) && b.priority !== undefined && b.priority !== null) {
-			return 1;
-		} else if(a.priority > b.priority) {
-			return -1;
-		} else if(a.priority > b.priority) {
-			return 1;
-		}
-		if(a.effort < b.effort) {
-			return -1;
-		} else if(a.effort > b.effort) {
-			return 1;
-		}
-		if(a.name < b.name) {
-			return -1;
-		} else if(a.name > b.name) {
-			return 1;
-		}
-		if(a.id < b.id) {
-			return -1;
-		} else if(a.id > b.id) {
-			return 1;
-		}
-		return 0;
-		*/
-	};
 
 	rsSystem.component("RSRelease", {
 		"inherit": true,
@@ -147,6 +92,9 @@
 				Vue.set(this.filter, "_", text);
 				// TODO: Key:Value pair parse
 				// TODO: Move this to a component
+			},
+			"storage.calculateWeight": function(text) {
+				this.delayWeight();
 			}
 		},
 		"data": function() {
@@ -182,6 +130,13 @@
 
 			data.released = [];
 			data.queue = [];
+
+			data.customCalculation = null;
+			data.calculateWeight = calculateWeight;
+			data.weightWarning = null;
+			data.weightWaiting = null;
+			data.waitWeight = null;
+			data.weights = {};
 
 			data.task = {};
 			data.taskFields = this.universe.transcribeInto([
@@ -221,10 +176,63 @@
 		"mounted": function() {
 			rsSystem.register(this);
 			this.universe.$on("updated", this.updateReceived);
+
+			if(this.storage.calculateWeight) {
+				this.setWeightCalculation(this.storage.calculateWeight);
+			} else {
+				Vue.set(this.storage, "calculateWeight", getFunctionText(calculateWeight));
+			}
+
 			this.buildForecast();
 			this.buildReferences();
 		},
 		"methods": {
+			"delayWeight": function() {
+				if(!this.weightWaiting) {
+					Vue.set(this, "weightWaiting", setTimeout(this.setWeightFormula, 250));
+				}
+				this.waitWeight = Date.now() + 500;
+			},
+			"setWeightFormula": function() {
+				if(this.weightWaiting) {
+					if(this.waitWeight < Date.now()) {
+						this.setWeightCalculation(this.storage.calculateWeight);
+						Vue.set(this, "weightWaiting", null);
+					} else {
+						setTimeout(this.setWeightFormula, 250);
+					}
+				}
+			},
+			"resetWeightCalculation": function() {
+				Vue.set(this.storage, "lastCalculateWeight", this.storage.calculateWeight);
+				Vue.set(this.storage, "calculateWeight", getFunctionText(calculateWeight));
+				Vue.set(this, "calculateWeight", calculateWeight);
+				this.buildForecast();
+			},
+			"restoreWeightCalculation": function() {
+				var buffer = this.storage.calculateWeight;
+				Vue.set(this.storage, "calculateWeight", this.storage.lastCalculateWeight);
+				Vue.set(this.storage, "lastCalculateWeight", buffer);
+				this.setWeightCalculation(this.storage.calculateWeight);
+			},
+			"setWeightCalculation": function(formula) {
+				var calculation,
+					test;
+
+				try {
+					calculation = new Function("task", "second", "minute", "hour", "day", "week", "month", "year", "weekJump", "softStart", "now", "rsSystem", "document", "window", "global", "location", "localStorage", "sessionStorage", "navigator", "navigation", "element", "Vue", "Random", formula),
+					test = calculation({}, second, minute, hour, day, week, month, year, weekJump, softStart, now);
+					if(test === 0) {
+						Vue.set(this, "calculateWeight", calculation);
+						Vue.set(this, "weightWarning", null);
+					} else {
+						Vue.set(this, "weightWarning", "Custom Weight Calculation failed to return 0 for empty task");
+					}
+				} catch(error) {
+					Vue.set(this, "weightWarning", "Custom Weight Calculation threw an error while testing during initialization and was ignored: ", error.message);
+					console.log("Custom Weight Calculation threw an error while testing during initialization and was ignored: ", error.message);
+				}
+			},
 			"taskVisible": function(task) {
 				if(task._class === "dmtask") {
 					// TODO: Add Key:Value parsing
@@ -573,6 +581,7 @@
 					// TODO: Check for task repetition (Leveraging date_started, repetition, and Ghost Tasks)
 					// TODO: Calculate missed repetitions based on repetition duration value - see notice_missed
 					if(rsSystem.utility.isValid(task) && !task.date_completed) {
+						delete(this.weights[task.id]);
 						tracking[task.id] = true;
 						tasks.push(task);
 					}
@@ -631,7 +640,7 @@
 				// Scan tasks and order by date_needed, priority, effort (Null in any means sort to back)
 					// Filter out tasks that are "completed". Those to track are in their respective releases and seen there
 
-				tasks.sort(sortTask);
+				tasks.sort(this.sortTask);
 				if(!this.tracked[start]) {
 					this.tracked[start] = [];
 				} else {
@@ -694,6 +703,20 @@
 				} else if(this.queue.length && this.queue[this.queue.length - 1] && this.queue[this.queue.length - 1]._class !== "dmrelease") {
 					queueRelease();
 				}
+			},
+			"sortTask": function(a, b) {
+				var weightA = this.weights[a.id] || this.calculateWeight(a, second, minute, hour, day, week, month, year, weekJump, softStart, now),
+					weightB = this.weights[b.id] || this.calculateWeight(b, second, minute, hour, day, week, month, year, weekJump, softStart, now);
+		
+				debug[a.name] = weightA;
+				debug[b.name] = weightB;
+		
+				if(weightB < weightA) {
+					return -1;
+				} else if(weightB > weightA) {
+					return 1;
+				}
+				return 0;
 			},
 			"updateReceived": function(event) {
 				if(event && (event._class === "dmrelease" || event._class === "dmtask" || event._class === "setting")) {

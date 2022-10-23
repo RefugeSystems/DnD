@@ -5,7 +5,7 @@
  * @constructor
  * @module Library
  */
-var Random = (function() {
+const Random = (function() {
 	/**
 	 * Provides a suite of functions for generating random data.
 	 * @class Random

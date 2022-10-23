@@ -70,6 +70,26 @@
 					<span class="name grow-10">{{reference.name}}</span>
 				</div>
 			</div>
+			<h2 class="plan-title">Weight Calculation</h2>
+			<rs-code class="calculation-code" v-model="storage.calculateWeight"></rs-code>
+			<div class="weight-warning" v-if="weightWarning">
+				<span class="fa-solid fa-exclamation-triangle fa-beat-fade rs-light-red"></span>
+				<span>{{weightWarning}}</span>
+			</div>
+			<div class="controls flex h v-center">
+				<button class="primary general quick rounded action" v-on:click="buildForecast()">
+					<span class="action-icon fa-solid fa-folder-gear"></span>
+				</button>
+				<button class="primary general quick rounded action" v-on:click="resetWeightCalculation()">
+					<span class="action-icon fa-solid fa-clock-rotate-left"></span>
+				</button>
+				<button class="primary general quick rounded action" v-on:click="restoreWeightCalculation()" v-if="storage.calculateWeight && storage.lastCalculateWeight && storage.calculateWeight !== storage.lastCalculateWeight">
+					<span class="action-icon fa-solid fa-retweet"></span>
+				</button>
+				<button class="primary general quick rounded action" v-on:click="setWeightFormula()" v-if="weightWaiting">
+					<span class="action-icon fa-solid fa-refresh fa-spin"></span>
+				</button>
+			</div>
 		</div>
 		<button class="reference-tab" v-on:click="toggleReferenceFlyout()">
 			<span class="tab-icon fa-solid fa-chevron-right"></span>
@@ -92,7 +112,7 @@
 				<div class="planned-warning-object">
 					<span class="warning-info fa-solid fa-exclamation-triangle fa-beat-fade rs-light-red action general flat"></span>
 					<span class="warning-name">{{warning.name}}</span>
-					<button class="fa-solid fa-circle-info rs-blue action general flat" v-on:click.stop="info(warning)"></button>
+					<button class="fa-solid fa-circle-info rs-blue action flat" v-on:click.stop="info(warning)"></button>
 				</div>
 				<p>{{warningText || "Issue with the noted release related object"}}</p>
 			</div>

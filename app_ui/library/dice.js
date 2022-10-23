@@ -3,7 +3,7 @@
  *
  *
  */
-var Dice = (function() {
+const Dice = (function() {
 
 	var diceReductionRegEx = /\+?([0-9a-z\.]+|\([0-9+-\/\*\(\)a-z\.]+)(d[0-9]+|dj[abcdps]|ability|proficiency|boost|difficulty|challenge|setback|hit|evade|a|b|c|d|p|s|f|h|e)[ \+\/-]/g,
 		calculateSecurityRegEx = /^[<>0-9\(\)+-\/\*]*$/,
