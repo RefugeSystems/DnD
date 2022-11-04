@@ -1,0 +1,21 @@
+<div class="rs-component dialog-released">
+	<div class="dialog-header align-center">
+		<span>{{details.name || details.title || "Confirmation"}}</span>
+	</div>
+	<div class="dialog-contents">
+		<p v-if="details.description">{{details.description}}</p>
+		<div v-if="details.paragraphs">
+			<p v-for="p in details.paragraphs">{{p}}</p>
+		</div>
+	</div>
+	<div class="dialog-confirmation flex h justified">
+		<button class="rounded accept action"  v-on:click="confirmed()">
+			<span v-if="details.okay_icon" :class="details.okay_icon"></span>
+			<span>{{details.okay_text || "Okay"}}</span>
+		</button>
+		<button class="rounded cancel action" v-if="details.abort_text" v-on:click="closeDialog()">
+			<span :class="details.abort_icon"></span>
+			<span>{{details.abort_text}}</span>
+		</button>
+	</div>
+</div>

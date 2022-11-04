@@ -72,7 +72,7 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"methods": {
 		"repopulateControls": function(event) {
-			if(event && this.info && (event._class === "setting" || event.id === this.info.id || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id))) {
+			if(event && this.info && (event._class === "setting" || event.id === this.info.id || (this.player && event.id === this.player.id) || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id))) {
 				this.populateControls();
 			}
 		},

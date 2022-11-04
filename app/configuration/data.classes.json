@@ -235,6 +235,16 @@
 		"description": "Collection of tasks that have been completed. This is used for task projection and marking updates to notify players. Additional aid is wrapped around driving Hint creation",
 		"fields": ["parent", "name", "icon", "description", "state", "associations", "ordering", "is_preview", "is_deletable", "review", "attribute"]
 	}, {
+		"id": "backlog",
+		"name": "Backlog",
+		"description": "Stores an ordered array of tasks and saves associated releases.",
+		"fields": ["parent", "name", "icon", "description", "state", "tasks", "releases", "categories", "ordering", "is_preview", "is_deletable", "review", "attribute"]
+	}, {
+		"id": "equipment_set",
+		"name": "Equipment Set",
+		"description": "A pre-defined set of items to equip",
+		"fields": ["parent", "name", "icon", "description", "state", "type", "items", "ordering", "is_preview", "is_deletable", "review", "attribute"]
+	}, {
 		"id": "repetition",
 		"name": "Repetition",
 		"description": "Describes time based repeition of some object.",

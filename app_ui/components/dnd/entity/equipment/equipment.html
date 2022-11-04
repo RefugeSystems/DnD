@@ -20,8 +20,12 @@
 		<div class="weapon slot" v-if="mainhand">Main Hand</div>
 		<div class="weapon main flex h v-center" v-if="mainhand" v-linkable="mainhand.id" :title="mainhand.name">
 			<button class="quick rounded general action" v-on:click="open(mainhand)" v-on:click.right.prevent.stop="attack(mainhand)">
+				<span class="action-label" :class="mainhandAmmo.icon" v-if="mainhandAmmo"></span>
 				<span class="action-icon" :class="mainhand.icon"></span>
-				<span class="action-count" v-if="showCharges(mainhand)">{{mainhand.charges || 0}}</span>
+			</button>
+			<button class="quick rounded general action hidden-shadow" v-on:click="open(mainhand.ammo)" v-if="mainhandAmmo" v-on:click.right.prevent.stop="attack(mainhand)" :title="'Ammo for ' + mainhand.name">
+				<span class="action-icon" :class="mainhandAmmo.icon"></span>
+				<span class="action-count">{{ammoCounts[mainhandAmmo.id].length}}</span>
 			</button>
 			<dnd-object-charges class="general rounded" v-if="showCharges(mainhand)" :object="mainhand" :universe="universe" :no-details="true"></dnd-object-charges>
 			<div class="weapon displayed-name">{{mainhand.name}}</div>
@@ -51,8 +55,12 @@
 		<div class="weapon slot" v-if="weapons.length">Off Hand</div>
 		<div class="weapon main flex h v-center" v-for="weapon in weapons" v-linkable="weapon.id" :title="weapon.name">
 			<button class="quick rounded general action" v-on:click="open(weapon)" v-on:click.right.prevent.stop="attack(weapon)">
+				<span class="action-label" :class="offhandAmmo[weapon.id].icon" v-if="weapon.ammo && offhandAmmo[weapon.id]"></span>
 				<span class="action-icon" :class="weapon.icon"></span>
-				<span class="action-count" v-if="showCharges(weapon)">{{weapon.charges || 0}}</span>
+			</button>
+			<button class="quick rounded general action hidden-shadow" v-on:click="open(weapon.ammo)" v-if="weapon.ammo && offhandAmmo[weapon.id]" v-on:click.right.prevent.stop="attack(weapon)" :title="'Ammo for ' + weapon.name">
+				<span class="action-icon" :class="offhandAmmo[weapon.id].icon"></span>
+				<span class="action-count">{{ammoCounts[weapon.ammo].length}}</span>
 			</button>
 			<dnd-object-charges class="general rounded" v-if="showCharges(weapon)" :object="weapon" :universe="universe" :no-details="true"></dnd-object-charges>
 			<div class="weapon displayed-name">{{weapon.name}}</div>

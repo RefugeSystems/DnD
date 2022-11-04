@@ -587,7 +587,7 @@ class RSUniverse extends EventEmitter {
 					Vue.set(this.index[classification][id], "_sync", {});
 					Vue.set(this.index.all, id, this.index[classification][id]);
 					this.listing[classification].push(delta);
-					if(delta.name) {
+					if(delta.name && !delta.is_copy && !delta.is_preview) {
 						Vue.set(this.named, delta.name, delta);
 					}
 					for(x=0; x<keys.length; x++) {

@@ -6,7 +6,10 @@
 		</div>
 		<div class="message visibility">
 			<div class="notification-message" v-if="entry.type === 'notification'">
-				<div>{{entry.message}}</div>
+				<div v-if="isArray(entry.message)">
+					<div v-for="message in entry.message">{{message}}</div>
+				</div>
+				<div v-else>{{entry.message}}</div>
 				<div class="date flow-h" v-if="entry._display_time">
 					<span>{{entry._display_time.toLocaleDateString()}}</span>
 					<span class="spacing"></span>

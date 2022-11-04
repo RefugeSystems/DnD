@@ -35,7 +35,12 @@
 					<div class="weapons flex h wrap">
 						<div class="channel weapon flex h grow-1" v-if="mainhand">
 							<button class="general rounded quick action item" v-on:click="info(mainhand)">
+								<span class="action-label" :class="ammos[mainhand.id].item.icon" v-if="ammos[mainhand.id]"></span>
 								<span class="action-icon" :class="mainhand.icon"></span>
+							</button>
+							<button class="general rounded quick action item" v-on:click="info(mainhand.ammo)" v-if="ammos[mainhand.id]" :title="'Ammo used and available for ' + mainhand.name">
+								<span class="action-icon" :class="ammos[mainhand.id].item.icon"></span>
+								<span class="action-count">{{ammos[mainhand.id].available.length}}</span>
 							</button>
 							<button class="general rounded action selection item" v-on:click="selectChannel(mainhand)" :class="channelClasses(mainhand)">
 								<span class="action-text">{{mainhand.name}}</span>
@@ -43,7 +48,12 @@
 						</div>
 						<div class="channel weapon flex h grow-1" v-for="offhand in available_offhand">
 							<button class="general rounded quick action item" v-on:click="info(offhand)">
+								<span class="action-label" :class="ammos[offhand.id].item.icon" v-if="ammos[offhand.id]"></span>
 								<span class="action-icon" :class="offhand.icon"></span>
+							</button>
+							<button class="general rounded quick action item" v-on:click="info(offhand.ammo)" v-if="ammos[offhand.id]" :title="'Ammo used and available for ' + offhand.name">
+								<span class="action-icon" :class="ammos[offhand.id].item.icon"></span>
+								<span class="action-count">{{ammos[offhand.id].available.length}}</span>
 							</button>
 							<button class="general rounded action selection item" v-on:click="selectChannel(offhand)" :class="channelClasses(offhand)">
 								<span class="action-text">{{offhand.name}}</span>
@@ -102,36 +112,6 @@
 					</div>
 				</div>
 			</section>
-			<section class="page additives">
-				<div class="page-contents">
-					<!-- This may be passed in as an array of IDs "targets" -->
-					<div class="message additives" v-if="additives.length === 0">
-						<span class="action-icon fas fa-empty-set rs-light-yellow"></span>
-						<span class="action-text">No Additives Avaialble</span>
-					</div>
-					<!-- Additives currently lock due to roll modifications -->
-					<div class="message additives" v-if="additives_locked">
-						<span class="action-icon fas fa-exclamation-triangle rs-light-red"></span>
-						<span class="action-text">Addives locked. Select new channel or close and restart.</span>
-					</div>
-
-					<!-- Select from entities, items, spells, effects, etc. in shared location (Togglable type limited from method when known, starts as true on dialog open) -->
-					<div class="additives-list">
-						<div class="target flex h" v-for="additive in additives" :class="getAdditiveClasses(additive)">
-							<rs-shiny-button class="general rounded action" :active="!!additive.expiration && !adding[additive.id]" color="blue" v-on:click="toggleAdditive(additive)" :title="additive.name">
-								<span class="action-icon fa-solid shiny-toggle" :class="adding[additive.id]?'fa-check rs-light-green':'fa-times rs-light-red'"></span>
-								<span class="action-count" v-if="additive.charges_max">{{additive.charges || 0}}</span>
-							</rs-shiny-button>
-							<button class="general rounded quick action icon" v-on:click="info(additive)">
-								<span class="action-icon" :class="additive.icon"></span>
-							</button>
-							<button class="general rounded action selection target-select" v-on:click="toggleAdditive(additive)">
-								<span class="action-text">{{additive.name}}</span>
-							</button>
-						</div>
-					</div>
-				</div>
-			</section>
 			<section class="page targets">
 				<div class="page-contents">
 					<!-- This may be passed in as an array of IDs "targets" -->
@@ -169,6 +149,36 @@
 									</span>
 								</span>
 								<dnd-health-bar :entity="target"></dnd-health-bar>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="page additives">
+				<div class="page-contents">
+					<!-- This may be passed in as an array of IDs "targets" -->
+					<div class="message additives" v-if="additives.length === 0">
+						<span class="action-icon fas fa-empty-set rs-light-yellow"></span>
+						<span class="action-text">No Additives Avaialble</span>
+					</div>
+					<!-- Additives currently lock due to roll modifications -->
+					<div class="message additives" v-if="additives_locked">
+						<span class="action-icon fas fa-exclamation-triangle rs-light-red"></span>
+						<span class="action-text">Addives locked. Select new channel or close and restart.</span>
+					</div>
+
+					<!-- Select from entities, items, spells, effects, etc. in shared location (Togglable type limited from method when known, starts as true on dialog open) -->
+					<div class="additives-list">
+						<div class="target flex h" v-for="additive in additives" :class="getAdditiveClasses(additive)">
+							<rs-shiny-button class="general rounded action" :active="!!additive.expiration && !adding[additive.id]" color="blue" v-on:click="toggleAdditive(additive)" :title="additive.name">
+								<span class="action-icon fa-solid shiny-toggle" :class="adding[additive.id]?'fa-check rs-light-green':'fa-times rs-light-red'"></span>
+								<span class="action-count" v-if="additive.charges_max">{{additive.charges || 0}}</span>
+							</rs-shiny-button>
+							<button class="general rounded quick action icon" v-on:click="info(additive)">
+								<span class="action-icon" :class="additive.icon"></span>
+							</button>
+							<button class="general rounded action selection target-select" v-on:click="toggleAdditive(additive)">
+								<span class="action-text">{{additive.name}}</span>
 							</button>
 						</div>
 					</div>

@@ -78,6 +78,15 @@
 		},
 		"methods": {
 			/**
+			 * 
+			 * @method isArray
+			 * @param {String | Array} message 
+			 * @return {Boolean}
+			 */
+			"isArray": function(message) {
+				return message instanceof Array;
+			},
+			/**
 			 * Emits an event on the universe matching the received tracker.id value with the message tracking
 			 * object as its parameter so that Vue.set controls can be used to update the message display with
 			 * progress.

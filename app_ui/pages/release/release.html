@@ -101,7 +101,8 @@
 			
 			Clicking a non-existent release creates it in a lose sense (Date, name, id)
 		-->
-		<div class="plan list">
+		<rs-backlog class="plan list" v-if="backlog" :backlog="backlog" :player="player"></rs-backlog>
+		<div class="plan list" v-if="!backlog">
 			<div class="list-filter flex v">
 				<input type="text" v-delayed="filterText" />
 				<span class="filtering-icon buffering fa-solid fa-spinner fa-spin-pulse"></span>

@@ -26,6 +26,40 @@ rsSystem.component("dndEntityEquipment", {
 		"mainhand": function() {
 			return this.universe.index.item[this.entity.main_weapon];
 		},
+		"mainhandAmmo": function() {
+			if(this.mainhand.ammo) {
+				return this.universe.index.item[this.mainhand.ammo];
+			}
+			return null;
+		},
+		"offhandAmmo": function() {
+			var ammos = {},
+				ammo,
+				i;
+
+			for(i=0; i<this.weapons.length; i++) {
+				if(ammo = this.universe.index.item[this.weapons[i].ammo]) {
+					ammos[this.weapons[i].id] = ammo;
+				}
+			}
+
+			return ammos;
+		},
+		"ammoCounts": function() {
+			var ammos = {},
+				ammo,
+				i;
+			if(this.mainhandAmmo) {
+				ammos[this.mainhandAmmo.id] = rsSystem.utility.getByParentID(this.mainhandAmmo.id, this.entity, ["inventory"]);
+			}
+			for(i=0; i<this.weapons.length; i++) {
+				if(ammo = this.weapons[i].ammo) {
+					ammos[ammo] = rsSystem.utility.getByParentID(ammo, this.entity, ["inventory"]);
+				}
+			}
+
+			return ammos;
+		},
 		"weapons": function() {
 			var weapons = [],
 				item,

@@ -1,0 +1,20 @@
+<div class="rs-component dialog-hint">
+	<div class="dialog-header">
+		<h1>
+			<span v-if="details.hint.icon" :class="details.hint.icon"></span>
+			<span>{{details.name || details.title || details.hint.name}}</span>
+		</h1>
+	</div>
+	<div class="hint-details">
+		<rs-text-block :text="details.hint.description" :universe="universe" :record="details.hint"></rs-text-block>
+	</div>
+	<div class="hint-affected" v-if="associations.length">
+		<h1 v-if="associations.length !== details.hint.associations.length">Some Affected Things...</h1>
+		<h1 v-if="associations.length === details.hint.associations.length">Affected</h1>
+		<button class="general primary rounded action" v-for="item in associations" v-on:click="info(item)">
+			<span class="action-icon" :class="item.icon"></span>
+			<span class="action-text">{{item.name}}</span>
+			<span class="fa-solid fa-info-circle rs-light-blue"></span>
+		</button>
+	</div>
+</div>

@@ -25,7 +25,10 @@ rsSystem.component("rsTextBlock", {
 			"type": String
 		},
 		"profile": {
-			"type": Object
+			"type": Object,
+			"default": function() {
+				return rsSystem.universe.profile;
+			}
 		},
 		"record": {
 			"type": Object

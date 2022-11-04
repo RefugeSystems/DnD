@@ -37,13 +37,11 @@ rsSystem.component("DialogController", {
 				response,
 				i;
 
-			console.log("Action: ", this.entity, action, using, perform);
 			if(this.entity && action) {
 				perform.action = action.id;
 				perform.source = this.entity.id;
 				perform.channel = using;
 				this.universe.send("action:perform", perform);
-				console.log(" > Sent: ", perform);
 				
 				if(this.entity.response && this.entity.response[action.id]) {
 					for(i=0; i<this.entity.response[action.id].length; i++) {
@@ -83,6 +81,11 @@ rsSystem.component("DialogController", {
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {
 				"info": record.id || record
+			});
+		},
+		"info": function(record) {
+			rsSystem.EventBus.$emit("display-info", {
+				"info": record?record.id || record:"knowledge:error:unknown"
 			});
 		},
 		"sortData": rsSystem.utility.sortData,

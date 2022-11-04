@@ -253,24 +253,145 @@
 		},
 		/**
 		 * 
+		 * @method hasParent
+		 * @param {String | Object} object
+		 * @param {String} id
+		 * @return {Boolean}
+		 * 
+		 */
+		"hasParent": function(object, id) {
+			if(!object) {
+				return false;
+			}
+			if(!id) {
+				return true;
+			}
+			if(typeof(object) === "string") {
+				object = rsSystem.universe.get(object);
+			}
+			while(object) {
+				if(object.id === id) {
+					return true;
+				}
+				object = rsSystem.universe.get(object.parent);
+			}
+			return false;
+		},
+		/**
+		 * Get an array of IDs which meet the passed parent ID.
+		 * @method getByParentID
+		 * @param {String} id For which to scan
+		 * @param {Object} source Object to scan for the passed values
+		 * @param {Array} [fields] To scan for values
+		 * @return {Array}
+		 */
+		"getByParentID": function(id, source, fields) {
+			var found = [],
+				manager,
+				field,
+				value,
+				f,
+				j;
+	
+			if(typeof(source) === "string") {
+				source = rsSystem.universe.get(source);
+			}
+	
+			if(source && (manager = rsSystem.universe.index.classes[source._class])) {
+				fields = fields || manager.fields;
+				for(f=0; f<fields.length; f++) {
+					field = rsSystem.universe.index.fields[fields[f]];
+					if(field && (value = source[field.id])) {
+						if(field.inheritable) {
+							// Check Parental Chain
+							if(value instanceof Array) {
+								for(j=0; j<value.length; j++) {
+									if(value[j] && (value[j] === id || value[j].id === id)) {
+										found.unshift(id);
+									} else if(rsSystem.utility.hasParent(value[j], id)) {
+										found.push(value[j]);
+									}
+								}
+							} else if((value === id)) {
+								found.unshift(id);
+							} else if(typeof(value) === "object") {
+								if(value.id === id) {
+									found.unshift(id);
+								} else if(rsSystem.utility.hasParent(value,id)) {
+									found.push(value.id);
+								}
+							}
+						} else {
+							// Flat Check
+							if(value instanceof Array) {
+								for(j=0; j<value.length; j++) {
+									if(value[j] === id) {
+										found.unshift(id);
+									}
+								}
+							} else if((typeof(value) === "object" && value.id === id) || (value === id)) {
+								found.unshift(id);
+							}
+						}
+					} else {
+						if(field) {
+							// this.console.log("No value for field:" + fields[f]);
+						} else {
+							console.log("No field: " + fields[f]);
+						}
+					}
+				}
+			}
+	
+			return found;
+		},
+		/**
+		 * 
 		 * @method hasParentalKey
-		 * @param {Object} object 
+		 * @param {Object} source 
 		 * @param {String} id 
 		 * @return {Boolean}
 		 */
-		"hasParentalKey": function(object, id) {
-			if(typeof(object) === "string") {
-				if(object === id) {
-					return true;
-				}
-				object = this.universe.get(object);
-			}
+		"hasParentalKey": function(source, id) {
+			var strings,
+				lookup,
+				i;
 
-			while(object.parent) {
-				if(object.parent === id) {
-					return true;
+			if(source instanceof Array) {
+				strings = typeof(source[0]) === "string";
+				for(i=0; i<source.length; i++) {
+					if(strings) {
+						lookup = rsSystem.universe.get(source[i]);
+					} else {
+						lookup = source[i];
+					}
+					if(lookup) {
+						if(lookup.id === id) {
+							return true;
+						}
+						while(lookup = rsSystem.universe.get(lookup.parent)) {
+							if(lookup.id === id) {
+								return true;
+							}
+						}
+					}
 				}
-				object = this.universe.get(object.parent);
+			} else {
+				if(typeof(source) === "string") {
+					lookup = rsSystem.universe.get(source);
+				} else {
+					lookup = source;
+				}
+				if(lookup) {
+					if(lookup.id === id) {
+						return true;
+					}
+					while(lookup = rsSystem.universe.get(lookup.parent)) {
+						if(lookup.id === id) {
+							return true;
+						}
+					}
+				}
 			}
 
 			return false;

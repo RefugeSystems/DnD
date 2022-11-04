@@ -32,12 +32,10 @@ rsSystem.component("rsShinyButton", {
 			}
 
 			switch(this.shine) {
-				case "siren":
-					classes += " siren";
-					break;
 				case "cascade":
 					classes += " cascade";
 					break;
+				case "siren":
 				default:
 					classes += " siren";
 			}

@@ -82,6 +82,28 @@ rsSystem.component("dndDialogDamage", {
 
 			return items;
 		},
+		"ammos": function() {
+			var ammos = {},
+				ammo,
+				i;
+
+			if(this.mainhand && (ammo = this.universe.index.item[this.mainhand.ammo])) {
+				ammos[this.mainhand.id] = {
+					"available": rsSystem.utility.getByParentID(ammo.id, this.entity, ["inventory"]),
+					"item": ammo
+				};
+			}
+			for(i=0; i<this.available_offhand.length; i++) {
+				if(ammo = this.universe.index.item[this.available_offhand[i].ammo]) {
+					ammos[this.available_offhand[i].id] = {
+						"available": rsSystem.utility.getByParentID(ammo.id, this.entity, ["inventory"]),
+						"item": ammo
+					};
+				}
+			}
+
+			return ammos;
+		},
 		"available_effects": function() {
 			var effects = [],
 				effect,
@@ -267,13 +289,13 @@ rsSystem.component("dndDialogDamage", {
 			"description": "Select how you are dealing the damage or healing, such as a spell, weapon, or through a feat.",
 			"id": "channel"
 		}, {
-			"name": "Adds",
-			"description": "Select abilities from which to add effects",
-			"id": "additives"
-		}, {
 			"name": "Targets",
 			"description": "Select the targets of your damage",
 			"id": "targets"
+		}, {
+			"name": "Adds",
+			"description": "Select abilities from which to add effects",
+			"id": "additives"
 		}, {
 			"name": "Skills",
 			"description": "Indicate skills that are being performed and enter the values you rolled",
@@ -627,6 +649,7 @@ rsSystem.component("dndDialogDamage", {
 					} else {
 						this.damage_targets.push(null);
 					}
+					this.buildAdditives();
 					break;
 				case "review":
 					this.send();
@@ -888,7 +911,25 @@ rsSystem.component("dndDialogDamage", {
 
 			return classes;
 		},
+		"targetAdditiveApplies": function(additive) {
+			if(additive.bonus_target_lock || additive.bonus_effect_lock) {
+				var target,
+					i;
+
+				for(i=0; i<this.active_targets.length; i++) {
+					target = this.active_targets[i];
+					if(additive.bonus_target_lock && rsSystem.utility.hasParentalKey(target, additive.bonus_target_lock)) {
+						return true;
+					} else if(additive.bonus_effect_lock && target.effects && target.effects.length && rsSystem.utility.hasParentalKey(target.effects, additive.bonus_effect_lock)) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		},
 		"buildAdditives": function() {
+			console.log("Building Additives...", this.active_targets);
 			var channel = this.channel,
 				always = 0,
 				additive,
@@ -905,7 +946,13 @@ rsSystem.component("dndDialogDamage", {
 			for(i=0; i<this.available_additives.length; i++) {
 				additive = this.available_additives[i];
 				if(additive.additive_attack || (!additive.additive_attack_melee && !additive.additive_attack_range && !additive.additive_attack_spell) || (this.channel && ((additive.additive_attack_spell && this.channel._class === "spell") || (additive.additive_attack_melee && this.channel.melee) || (additive.additive_attack_range && this.channel.ranged)))) {
-					if(!additive.damage_bonus_type_lock || (channel && (channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]))) {
+					if((!additive.damage_bonus_type_lock && !additive.bonus_type_lock && !additive.bonus_channel_lock && !additive.bonus_target_lock && !additive.bonus_effect_lock) ||
+							(channel
+							&& (!additive.damage_bonus_type_lock || (channel.damage[additive.damage_bonus_type_lock] || channel.damage_type === additive.damage_bonus_type_lock))
+							&& (!additive.bonus_type_lock || channel.type === additive.bonus_type_lock || (channel.types && channel.types.indexOf(additive.bonus_type_lock) !== -1))
+							&& (!additive.bonus_channel_lock || rsSystem.utility.hasParentalKey(channel, additive.bonus_channel_lock))
+							&& ((!additive.bonus_effect_lock && !additive.bonus_target_lock) || this.targetAdditiveApplies(additive))
+							)) {
 						if(!additive.additive_attack_charged || additive.charges > 0) {
 							this.additives.push(additive);
 							if(additive.additive_attack_always) {
@@ -923,6 +970,7 @@ rsSystem.component("dndDialogDamage", {
 			} else {
 				Vue.set(this, "quick_adds", false);
 			}
+			console.log("...Built Additives: ", this.additives);
 		},
 		"selectChannel": function(channel) {
 			var target,
@@ -1028,7 +1076,7 @@ rsSystem.component("dndDialogDamage", {
 			}
 
 			this.available_damages.sort(rsSystem.utility.sortData);
-			this.buildAdditives();
+			// this.buildAdditives();
 			this.goToNextSection();
 		},
 		"skillVantage": function(skill) {
