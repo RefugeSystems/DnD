@@ -946,11 +946,14 @@ rsSystem.component("dndDialogDamage", {
 			for(i=0; i<this.available_additives.length; i++) {
 				additive = this.available_additives[i];
 				if(additive.additive_attack || (!additive.additive_attack_melee && !additive.additive_attack_range && !additive.additive_attack_spell) || (this.channel && ((additive.additive_attack_spell && this.channel._class === "spell") || (additive.additive_attack_melee && this.channel.melee) || (additive.additive_attack_range && this.channel.ranged)))) {
-					if((!additive.damage_bonus_type_lock && !additive.bonus_type_lock && !additive.bonus_channel_lock && !additive.bonus_target_lock && !additive.bonus_effect_lock) ||
+					if((!additive.damage_bonus_type_lock && !additive.bonus_type_lock && !additive.bonus_channel_lock && !additive.bonus_target_lock && !additive.bonus_effect_lock && !additive.bonus_lock_to_class) ||
 							(channel
 							&& (!additive.damage_bonus_type_lock || (channel.damage[additive.damage_bonus_type_lock] || channel.damage_type === additive.damage_bonus_type_lock))
 							&& (!additive.bonus_type_lock || channel.type === additive.bonus_type_lock || (channel.types && channel.types.indexOf(additive.bonus_type_lock) !== -1))
 							&& (!additive.bonus_channel_lock || rsSystem.utility.hasParentalKey(channel, additive.bonus_channel_lock))
+							&& (!additive.bonus_lock_to_class || channel._class === bonus_lock_to_class)
+							&& (!additive.bonus_lock_to_ranged || channel.ranged)
+							&& (!additive.bonus_lock_to_melee || channel.melee)
 							&& ((!additive.bonus_effect_lock && !additive.bonus_target_lock) || this.targetAdditiveApplies(additive))
 							)) {
 						if(!additive.additive_attack_charged || additive.charges > 0) {
