@@ -17,6 +17,8 @@
 
 	var xssOptions = {
 		"whiteList": {
+			"section": validTags,
+			"button": validTags,
 			"span": validTags,
 			"img": validTags,
 			"div": validTags,
