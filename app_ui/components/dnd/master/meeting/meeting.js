@@ -82,7 +82,7 @@
 				
 				return types;
 				*/
-				var types = ["type:combat", "type:investigation", "type:travel"];
+				var types = ["type:travel", "type:town", "type:combat:town", "type:combat", "type:combat:boss", "type:combat:epic", "type:investigation", "type:investigation:town", "type:investigation:risky"];
 				if(this.active && types.indexOf(this.active.type) === -1) {
 					types.unshift(this.active.type);
 				}
@@ -96,15 +96,15 @@
 					meet = this.universe.listing.meeting[i];
 					if(meet.is_active && !meet.disabled && !meet.is_preview) {
 						Vue.set(this, "description", meet.description || "");
-						Vue.set(this, "note", meet.note || "");
 						Vue.set(this, "weather", meet.weather || "");
-						Vue.set(this, "type", meet.type || "");
 						Vue.set(this, "location", meet.location);
-						if(!meet.name) {
-							Vue.set(this, "editName", true);
-						} else {
+						Vue.set(this, "note", meet.note || "");
+						Vue.set(this, "type", meet.type || "");
+						if(meet.name) {
 							Vue.set(this, "editName", false);
 							Vue.set(this, "name", "");
+						} else {
+							Vue.set(this, "editName", true);
 						}
 						return meet;
 					}
