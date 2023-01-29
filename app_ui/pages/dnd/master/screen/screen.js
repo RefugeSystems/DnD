@@ -627,6 +627,7 @@ rsSystem.component("DNDMasterScreen", {
 	},
 	"methods": {
 		"scrollWheel": function(event) {
+			/*
 			if(event.path[0] == this.$refs.view) {
 				event.stopPropagation();
 				event.preventDefault();
@@ -638,6 +639,7 @@ rsSystem.component("DNDMasterScreen", {
 				offset += add;
 				this.$refs.view.scrollLeft = offset;
 			}
+			*/
 		},
 		"createCharacter": function() {
 			rsSystem.EventBus.$emit("dialog-open", {

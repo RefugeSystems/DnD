@@ -596,6 +596,13 @@ rsSystem.component("dndDialogDamage", {
 							}
 						}
 					}
+					if(this.targets_changed || this.channel_changed) {
+						Vue.set(this, "targets_changed", false);
+						Vue.set(this, "channel_changed", false);
+						this.active_targets.splice(0);
+						this.universe.transcribeInto(targets, this.active_targets);
+						this.buildSkillChecks();
+					}
 					break;
 				case "checks":
 					for(i=0; i<this.skill_checks.length; i++) {
@@ -636,13 +643,6 @@ rsSystem.component("dndDialogDamage", {
 					break;
 				case "targets":
 					targets = Object.keys(this.targeting);
-					if(this.targets_changed || this.channel_changed) {
-						Vue.set(this, "targets_changed", false);
-						Vue.set(this, "channel_changed", false);
-						this.active_targets.splice(0);
-						this.universe.transcribeInto(targets, this.active_targets);
-						this.buildSkillChecks();
-					}
 					this.damage_targets.splice(0);
 					if(this.splitDamage) {
 						this.damage_targets.push.apply(this.damage_targets, targets);
