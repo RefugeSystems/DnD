@@ -567,10 +567,16 @@ rsSystem.component("dndDialogDamage", {
 										for(j=0; j<this.available_targets.length; j++) {
 											target = this.available_targets[j].id;
 											this.roll_damage[target][this.channel.damage_type].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][this.channel.damage_type].formula + " + " + additive.damage_bonus_weapon));
+											if(this.profile.auto_roll) {
+												this.roll_damage[target][this.channel.damage_type].roll();
+											}
 										}
 										this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_weapon));
 										if(this.available_damages.indexOf(type) === -1) {
 											this.available_damages.push(type);
+										}
+										if(this.profile.auto_roll) {
+											this.roll_damage[null][type.id].roll();
 										}
 									} else {
 										console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
@@ -585,10 +591,16 @@ rsSystem.component("dndDialogDamage", {
 											for(j=0; j<this.available_targets.length; j++) {
 												target = this.available_targets[j].id;
 												this.roll_damage[target][damage].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][damage].formula + " + " + additive.damage_bonus_spell[damage]));
+												if(this.profile.auto_roll) {
+													this.roll_damage[target][damage].roll();
+												}
 											}
 											this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_spell[type.id]));
 											if(this.available_damages.indexOf(type) === -1) {
 												this.available_damages.push(type);
+											}
+											if(this.profile.auto_roll) {
+												this.roll_damage[null][type.id].roll();
 											}
 										}
 									}
