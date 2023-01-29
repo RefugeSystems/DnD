@@ -642,6 +642,7 @@ rsSystem.component("dndDialogDamage", {
 						Vue.set(this, "channel_changed", false);
 						this.active_targets.splice(0);
 						this.universe.transcribeInto(targets, this.active_targets);
+						this.buildSkillChecks();
 					}
 					this.damage_targets.splice(0);
 					if(this.splitDamage) {
