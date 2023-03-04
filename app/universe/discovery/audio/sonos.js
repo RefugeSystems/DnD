@@ -49,6 +49,7 @@ module.exports.initialize = function(universe) {
 		}
 
 		discovery = new Sonos.AsyncDeviceDiscovery({
+			"address": configuration.discovery.wirelessAddress || undefined,
 			"timeout": config.timeout
 		});
 
