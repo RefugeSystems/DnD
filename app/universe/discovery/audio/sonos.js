@@ -48,12 +48,12 @@ module.exports.initialize = function(universe) {
 			});
 		}
 
-		discovery = new Sonos.AsyncDeviceDiscovery({
-			"address": configuration.discovery.wirelessAddress || undefined,
-			"timeout": config.timeout
-		});
+		discovery = new Sonos.AsyncDeviceDiscovery();
 
-		discovery.discover().then((device, model) => {
+		discovery.discover({
+			"address": config.wirelessAddress || configuration.server.wirelessAddress || undefined,
+			"timeout": config.timeout
+		}).then((device, model) => {
 			return device.getAllGroups();
 		}).then((groups) => {
 			seen = Date.now();
