@@ -954,6 +954,65 @@ class ClassManager extends EventEmitter {
 	}
 
 	/**
+	 * Iterate over every valid member of this manager
+	 * @method forEach
+	 * @param {Function} processor To process the object. Takes up to 3 arguments; Object, ID, ID Index
+	 */
+	forEach(processor) {
+		if(typeof(processor) === "function") {
+			var processing,
+				i;
+			for(i=0; i<this.objectIDs.length; i++) {
+				processing = this.object[this.objectIDs[i]];
+				if(processing && (processing.active === undefined || processing.active) && (processing.inactive === undefined || !processing.inactive) && !processing.is_preview && !processing.preview) {
+					processor(processing, i);
+				}
+			}
+		} else {
+			throw new Error("Non-Function passed to Storage Manager Iterator");
+		}
+	}
+
+	/**
+	 * Iterate over every valid member of this manager, stops when `processor` returns true.
+	 * @method every
+	 * @param {Function} processor 
+	 */
+	every(processor) {
+		if(typeof(processor) === "function") {
+			var processing,
+				state,
+				i;
+			for(i=0; !state && i<this.objectIDs.length; i++) {
+				processing = this.object[this.objectIDs[i]];
+				if(processing && (processing.active === undefined || processing.active) && (processing.inactive === undefined || !processing.inactive) && !processing.is_preview && !processing.preview) {
+					state = processor(processing, processing.id, i);
+				}
+			}
+		} else {
+			throw new Error("Non-Function passed to Storage Manager Iterator");
+		}
+	}
+
+	/**
+	 * Iterate over every valid member of this manager
+	 * @method map
+	 * @param {Function} processor To process the object. Takes up to 3 arguments; Object, ID, ID Index
+	 * @return {Array} Filled with the result of the processor function
+	 */
+	map(processor) {
+		var processed = [],
+			i;
+		for(i=0; i<this.objectIDs.length; i++) {
+			processing = this.object[this.objectIDs[i]];
+			if(processing && (processing.active === undefined || processing.active) && (processing.inactive === undefined || !processing.inactive) && !processing.is_preview && !processing.preview) {
+				processed.push(processor(processing, i));
+			}
+		}
+		return processed;
+	}
+
+	/**
 	 * 
 	 * @method setAttributes
 	 * @param {Object} attributes Mapping keys to new attribute values.
@@ -1293,6 +1352,7 @@ class ClassManager extends EventEmitter {
 			} else {
 				// insert
 				write = mapping._toObject(this.fields, object, true);
+				this.objectIDs.push(object.id);
 				this.object[object.id] = {};
 				statement = mapping._toInsert(this.id, this.fields, object);
 				object.updated = write.$updated;

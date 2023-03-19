@@ -3442,8 +3442,19 @@
 			"display_size": 30,
 			"metadata": ""
 		}
-	},
-	{
+	}, {
+		"name": "Address",
+		"id": "address",
+		"description": "Internet address for the resource, this could be an IP, domain, etc.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 30,
+			"metadata": ""
+		}
+	}, {
 		"name": "Is Discovered",
 		"id": "is_discovered",
 		"description": "Indicates that the object has been found by a relevent discovery process recently. May switch to false if a discovery process runs and this object is not found when expected.",
@@ -3455,8 +3466,7 @@
 			"display_size": 30,
 			"metadata": ""
 		}
-	},
-	{
+	}, {
 		"name": "Errors",
 		"id": "errors",
 		"description": "Array of objects describing relevent errors for the object. Used for display sync and investigation. Logs shouold still be consulted for more in-depth analysis.",
@@ -3481,6 +3491,14 @@
 		"attribute": {
 			"display_size": 100,
 			"metadata": ""
+		}
+	}, {
+		"id": "is_secure",
+		"name": "Is Secure",
+		"description": "Encryption flag",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
 		}
 	}, {
 		"id": "attachments",

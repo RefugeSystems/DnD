@@ -362,6 +362,21 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 								}
+								if(this.info.is_combatable) {
+									this.controls.push({
+										"title": "Disable combatable flag",
+										"icon": "fas fa-peace",
+										"type": "button",
+										"action": "noncombat"
+									});
+								} else {
+									this.controls.push({
+										"title": "Enable combatable flag",
+										"icon": "fas fa-swords",
+										"type": "button",
+										"action": "cancombat"
+									});
+								}
 								if(!rsSystem.utility.isEmpty(this.info.owned) && (this.info.is_npc || this.info.is_minion)) {
 									this.controls.push({
 										"title": "Declare as a rampaging NPC by clearing owner",
@@ -979,6 +994,20 @@ rsSystem.component("sysInfoGeneral", {
 					this.universe.send("master:quick:set", {
 						"object": object.id,
 						"field": "is_active",
+						"value": false
+					});
+					break;
+				case "cancombat":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_combatable",
+						"value": true
+					});
+					break;
+				case "noncombat":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_combatable",
 						"value": false
 					});
 					break;

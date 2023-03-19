@@ -1,6 +1,7 @@
-var reg = /^(https:\/\/refugesystems.net\/audio\/music\/pb\/)([a-z_]+)\/([0-9]+)_(loop|full)([0-9]+)?_([a-z0-9_-]+)\.(mp3|wav)/,
+var reg = /^(https:\/\/refugesystems.net\/audio\/music\/pb\/)([a-z_-]+)\/([0-9]+)_(loop|full)([0-9]+)?_([a-z0-9_-]+)\.(mp3|wav)/,
 	clean = /_/g,
 	toImport = [],
+	errors = [],
 	build;
 	
 build = function(path) {
@@ -23,9 +24,13 @@ build = function(path) {
 		console.log(result);
 		toImport.push(result);
     } else {
-       console.error("Failed on path: " + path);
+		errors.push("Failed on path: " + path);
     }
 };
 
 list.forEach(build);
+console.log("Exported JSON:");
 console.log(JSON.stringify(toImport, null, 4));
+if(errors.length) {
+	console.error("Errors Encountered: ", errors);
+}

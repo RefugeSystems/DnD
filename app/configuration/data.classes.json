@@ -65,6 +65,11 @@
 		"description": "Represents an internal process that handles locating physical assets and either loading devices or updating existing devices based on IDs and the process that discovery uses to generate the IDs.",
 		"fields": ["parent", "name", "description", "capability", "disabled", "model", "errors", "is_preview", "review", "attribute"]
 	}, {
+		"id": "world",
+		"name": "World",
+		"description": "A world to offer to users for alternative realms to join for games",
+		"fields": ["parent", "name", "icon", "description", "is_copy", "is_preview", "review", "attribute", "address", "is_secure", "players", "date_started", "date_completed"]
+	}, {
 		"id": "error",
 		"name": "Error",
 		"description": "Error representation",

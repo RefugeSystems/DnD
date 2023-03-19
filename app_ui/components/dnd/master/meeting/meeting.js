@@ -82,7 +82,7 @@
 				
 				return types;
 				*/
-				var types = ["type:travel", "type:town", "type:combat:town", "type:combat", "type:combat:boss", "type:combat:epic", "type:investigation", "type:investigation:town", "type:investigation:risky"];
+				var types = ["type:travel", "type:town", "type:combat", "type:combat:town", "type:combat:boss", "type:combat:epic", "type:investigation", "type:investigation:town", "type:investigation:risky"];
 				if(this.active && types.indexOf(this.active.type) === -1) {
 					types.unshift(this.active.type);
 				}

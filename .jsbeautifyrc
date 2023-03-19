@@ -2,5 +2,8 @@
     "wrap_attributes": "preserve",
     "indent_with_tabs": true,
     "indent_inner_html": true,
-    "space_before_conditional": false
+    "space_before_conditional": false,
+	"keep_array_indentation": true,
+	"keep_function_indentation": true,
+	"unindent_chained_methods": true
 }

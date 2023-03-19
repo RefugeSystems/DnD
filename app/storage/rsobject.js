@@ -24,9 +24,7 @@ var stackRestricted = [
 	"attribute"
 ];
 
-
 var noOpFunction = function() {};
-
 
 var fieldHasValue = function(value) {
 	if(value === null || value === undefined) {
@@ -42,10 +40,8 @@ var fieldHasValue = function(value) {
 	return true;
 };
 
-
 var _ = require("lodash");
 require("../extensions/array");
-
 
 class RSObject {
 	constructor(universe, manager, details) {
@@ -56,7 +52,7 @@ class RSObject {
 			throw new Error("Object ID must start with class ID");
 		}
 		/**
-		 * 
+		 *
 		 * @property id
 		 * @type String
 		 */
@@ -73,7 +69,7 @@ class RSObject {
 		 * Flag for objects with properties that don't have any additional keys set that
 		 * affect the object; ie. only `id`, `parent`, `is_template`, `is_copy`, and
 		 * `attribute` can be set.
-		 * 
+		 *
 		 * See the `stackRestricted` private static array.
 		 * @property _stackable
 		 * @type Boolean
@@ -81,7 +77,7 @@ class RSObject {
 		this._stackable = false;
 		/**
 		 * Tracks warning flags for use of deprecated fields to aid with clean-up.
-		 * 
+		 *
 		 * A field ID is mapped to true is usage is found and that field has a
 		 * deprecated attribute.
 		 * @property _deprecation
@@ -89,25 +85,25 @@ class RSObject {
 		 */
 		this._deprecation = {};
 		/**
-		 * 
+		 *
 		 * @property _parent
 		 * @type String
 		 */
 		this._parent = details._parent || undefined;
 		/**
-		 * 
+		 *
 		 * @property _grid
 		 * @type String
 		 */
 		this._grid = details._grid || undefined;
 		/**
-		 * 
+		 *
 		 * @property _x
 		 * @type String
 		 */
 		this._x = details._x || undefined;
 		/**
-		 * 
+		 *
 		 * @property _y
 		 * @type String
 		 */
@@ -140,13 +136,13 @@ class RSObject {
 		 */
 		this._occurrence = {};
 		/**
-		 * 
+		 *
 		 * @property updated
 		 * @type String
 		 */
 		this.updated = details.updated;
 		/**
-		 * 
+		 *
 		 * @property created
 		 * @type String
 		 */
@@ -209,14 +205,14 @@ class RSObject {
 		 */
 		this._calcRef = {};
 		/**
-		 * 
+		 *
 		 * @property _class
 		 * @type String
 		 */
 		this._class = manager.id;
 		/**
 		 * Stores reference keys and sync to clients for debugging inspection.
-		 * 
+		 *
 		 * Do not depend on this for anything.
 		 * @property _debug
 		 * @type Object
@@ -229,11 +225,11 @@ class RSObject {
 		this._debug.properties = {};
 		this._debug.times = {};
 	}
-	
+
 	/**
 	 * @method linkFieldValues
 	 * @param {Boolean} [force] When true, ignores the _linkMask check. This is primarily used for universe initialization.
-	 * @return {Promise} 
+	 * @return {Promise}
 	 */
 	linkFieldValues(force, debug) {
 		// console.log("Link: " + this.id);
@@ -241,9 +237,9 @@ class RSObject {
 			var relink = false,
 				unlink = [],
 				x;
-				
+
 			// console.log("relink scan");
-			for(x=0; x<this._manager.inheritableFields.length; x++) {
+			for(x = 0; x < this._manager.inheritableFields.length; x++) {
 				if(force || this._linkMask[this._manager.inheritableFields[x]] !== this._data[this._manager.inheritableFields[x]]) {
 					if(!force && this._linkMask[this._manager.inheritableFields[x]]) {
 						unlink.push(this._linkMask[this._manager.inheritableFields[x]]);
@@ -253,7 +249,7 @@ class RSObject {
 				}
 			}
 			// console.log("scan fin");
-			 
+
 			if(relink) {
 				if(debug) {
 					console.log("RSObject Relinking[" + this.id + "]: " + unlink);
@@ -276,27 +272,27 @@ class RSObject {
 			}
 		});
 	}
-	
+
 	/**
 	 * Abstract method for hooks into the update process
 	 * @method preFieldCalculate
 	 */
- 	
- 	/**
- 	 * Abstract method for hooks into the update process
- 	 * @method postFieldCalculate
- 	 */
- 	
- 	/**
- 	 * Abstract method for hooks into the update process
- 	 * @method preFieldUpdate
- 	 */
-  	
-  	/**
-  	 * Abstract method for hooks into the update process
-  	 * @method postFieldUpdate
-  	 */
-	
+
+	/**
+	 * Abstract method for hooks into the update process
+	 * @method postFieldCalculate
+	 */
+
+	/**
+	 * Abstract method for hooks into the update process
+	 * @method preFieldUpdate
+	 */
+
+	/**
+	 * Abstract method for hooks into the update process
+	 * @method postFieldUpdate
+	 */
+
 	/**
 	 * Clear the _calc buffer and recalculate fields.
 	 * @method recalculateFieldValues
@@ -315,7 +311,7 @@ class RSObject {
 		if(typeof(this.preFieldCalculate) === "function") {
 			this.preFieldCalculate();
 		}
-		
+
 		this._involved = {};
 		var inheriting = [],
 			inherit,
@@ -331,8 +327,8 @@ class RSObject {
 
 		if(this._data.parent && (parent = this._universe.objectHandler.retrieve(this._data.parent))) {
 			fields = this._manager.fieldIDs;
-			for(i=0; i<fields.length; i++) {
-				if((this._data[fields[i]] === null || this._data[fields[i]] === undefined) && fields[i] !== "template" && fields[i] !== "is_template" /* TODO: Implement Field Attribute for no parental inheritance */) {
+			for(i = 0; i < fields.length; i++) {
+				if((this._data[fields[i]] === null || this._data[fields[i]] === undefined) && fields[i] !== "template" && fields[i] !== "is_template" /* TODO: Implement Field Attribute for no parental inheritance */ ) {
 					this._combined[fields[i]] = parent._combined[fields[i]];
 				} else {
 					this._combined[fields[i]] = this._data[fields[i]];
@@ -343,8 +339,6 @@ class RSObject {
 		}
 		this._calculated = {};
 
-		
-		
 		// TODO: Investigate fixing errant variable references (See: i, v, x and their uses)
 		inherit = (field, id) => {
 			// console.log("Inherit: ", id);
@@ -356,7 +350,7 @@ class RSObject {
 				if(source && source._calculated) {
 					// this._universe.objectHandler.trackInheritance(source, field.inheritanceFields);
 					inheriting.push(source.id);
-					for(i=0; i<field.inheritanceFields.length; i++) {
+					for(i = 0; i < field.inheritanceFields.length; i++) {
 						ifield = this._manager.database.field[field.inheritanceFields[i]];
 						if(debug) {
 							debugA = JSON.stringify(this._calculated[field.inheritanceFields[i]]);
@@ -366,7 +360,7 @@ class RSObject {
 							if(field.inheritanceFields[i] === debug || debug === true) {
 								console.log("Inheriting Field[" + source.id + " -> " + field.inheritanceFields[i] + "]: ", source[field.inheritanceFields[i]], this._calculated[field.inheritanceFields[i]]);
 							}
-							switch(field.inheritance[field.inheritanceFields[i]]) {
+							switch (field.inheritance[field.inheritanceFields[i]]) {
 								case "+=":
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
 									// this._calculated[field.inheritanceFields[i]] = RSObject.addValues(this._calculated[field.inheritanceFields[i]], source._calculated[field.inheritanceFields[i]], ifield.type, "calculated", "+=");
@@ -407,7 +401,7 @@ class RSObject {
 							}
 							// console.log(this.id + "[" + field.inheritanceFields[i] + "] -> " + source.id);
 							if(source._combined[field.inheritanceFields[i]]) { // Intentionally ignoring 0, false, and other falsey values as they essentially aren't contributing
-								switch(ifield.type) {
+								switch (ifield.type) {
 									case "object":
 										if(Object.keys(source._combined[field.inheritanceFields[i]]).length) {
 											this._involved[field.inheritanceFields[i]][source.id] = source._combined[field.inheritanceFields[i]];
@@ -427,9 +421,9 @@ class RSObject {
 							}
 						} catch (e) {
 							if(debug) {
-								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield?ifield.id:"") + "]", debugA, debugB, e);
+								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield ? ifield.id : "") + "]", debugA, debugB, e);
 							} else {
-								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield?ifield.id:"") + "]", e);
+								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield ? ifield.id : "") + "]", e);
 							}
 						}
 					}
@@ -443,21 +437,21 @@ class RSObject {
 				}
 			}
 		};
-		
+
 		/*
 		fields = this._manager.fieldIDs;
 		for(x=0; x<fields.length; x++) {
-			this[fields[x]] = this._calculated[fields[x]];
+		this[fields[x]] = this._calculated[fields[x]];
 		}
-		*/
-		
+		 */
+
 		// console.log("Calculating Self[" + this._data.id + "]");
 		fields = this._manager.fieldIDs;
-		for(x=0; x<fields.length; x++) {
+		for(x = 0; x < fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			if(field) {
 				this._calculated[fields[x]] = this._combined[fields[x]];
-				
+
 				// Normalize Numeric Fields
 				if(this._calculated[field.id]) {
 					if(field.type === "number" && isNaN(this._calculated[field.id])) {
@@ -476,39 +470,39 @@ class RSObject {
 						}
 					} else if((field.type === "object" && field.attribute && field.attribute.values === "integer") || field.type === "object:integer") {
 						keys = Object.keys(this._calculated[field.id]);
-						for(i=0; i<keys.length; i++) {
+						for(i = 0; i < keys.length; i++) {
 							this._calculated[field.id][keys[i]] = parseInt(this._calculated[field.id][keys[i]]);
 						}
 					}
 				}
 				/*
 				if(this._combined[field.id] !== undefined && this._combined[field.id] !== null) {
-					switch(field.type) {
-						case "string":
-						default:
-						case "calculated":
-						case "array":
-						case "object":
-						case "dice":
-						case "formula": // formula Reduction handled in updateFieldValues
-						case "number":
-						case "boolean":
-						case "object":
-							this._calculated[fields[x]] = this._combined[fields[x]];
-							break;
-					}
+				switch(field.type) {
+				case "string":
+				default:
+				case "calculated":
+				case "array":
+				case "object":
+				case "dice":
+				case "formula": // formula Reduction handled in updateFieldValues
+				case "number":
+				case "boolean":
+				case "object":
+				this._calculated[fields[x]] = this._combined[fields[x]];
+				break;
 				}
-				*/
+				}
+				 */
 			}
 		}
-		
+
 		fields = this._manager.inheritableFields;
-		for(x=0; x<fields.length; x++) {
+		for(x = 0; x < fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			// console.log("Inheriting Field: ", field);
 			if(field && this._calculated[field.id]) {
 				if(this._calculated[field.id] instanceof Array) {
-					for(v=0; v<this._calculated[field.id].length; v++) {
+					for(v = 0; v < this._calculated[field.id].length; v++) {
 						inherit(field, this._calculated[field.id][v]);
 					}
 				} else {
@@ -518,9 +512,9 @@ class RSObject {
 		}
 
 		// this._universe.objectHandler.trackReference(this, inheriting);
-		
+
 		fields = this._manager.fieldIDs;
-		for(x=0; x<fields.length; x++) {
+		for(x = 0; x < fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			if(field && field.attribute) {
 				// Gaurentee Objects and Arrays where no value is set
@@ -539,7 +533,7 @@ class RSObject {
 						} else {
 							this._calculated[field.id] = [];
 						}
-					} else if(typeof(field.attribute.default) !== "undefined"){
+					} else if(typeof(field.attribute.default) !== "undefined") {
 						this._calculated[field.id] = field.attribute.default;
 					}
 				} else if(typeof(field.attribute.min) === "number" && this[field.id] < field.attribute.min) {
@@ -549,15 +543,15 @@ class RSObject {
 				}
 				// Cast final calculated values as needed
 				if(this._calculated[fields[x]]) {
-					switch(field.attribute.nested_value_type) { // Really only for casting nested values
+					switch (field.attribute.nested_value_type) { // Really only for casting nested values
 						case "number":
 							if(field.type === "object") {
 								keys = Object.keys(this._calculated[fields[x]]);
-								for(i=0; i<keys.length; i++) {
+								for(i = 0; i < keys.length; i++) {
 									this._calculated[fields[x]][keys[i]] = parseInt(this._calculated[fields[x]][keys[i]]);
 								}
 							} else if(field.type instanceof Array) {
-								for(i=0; i<this._calculated[fields[x]].length; i++) {
+								for(i = 0; i < this._calculated[fields[x]].length; i++) {
 									this._calculated[fields[x]][i] = parseInt(this._calculated[fields[x]][i]);
 								}
 							}
@@ -565,11 +559,11 @@ class RSObject {
 						case "boolean":
 							if(field.type === "object") {
 								keys = Object.keys(this._calculated[fields[x]]);
-								for(i=0; i<keys.length; i++) {
+								for(i = 0; i < keys.length; i++) {
 									this._calculated[fields[x]][keys[i]] = !!this._calculated[fields[x]][keys[i]];
 								}
 							} else if(field.type instanceof Array) {
-								for(i=0; i<this._calculated[fields[x]].length; i++) {
+								for(i = 0; i < this._calculated[fields[x]].length; i++) {
 									this._calculated[fields[x]][i] = !!this._calculated[fields[x]][i];
 								}
 							}
@@ -581,11 +575,11 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		if(typeof(this.postFieldCalculate) === "function") {
 			this.postFieldCalculate();
 		}
-		
+
 		// console.log("Calculated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushCalculated(this.id);
 		this._universe.objectHandler.pushUpdated(this.id, origins);
@@ -611,9 +605,10 @@ class RSObject {
 		if(typeof(this.preFieldUpdate) === "function") {
 			this.preFieldUpdate();
 		}
-		
+
 		// this._involved = {};
-		var fields = this._manager.fieldIDs,conditional,
+		var fields = this._manager.fieldIDs,
+			conditional,
 			inherit,
 			loading,
 			search,
@@ -626,16 +621,16 @@ class RSObject {
 			x;
 
 		this._search = "";
-		
+
 		// Establish Base Values
-		for(x=0; x<fields.length; x++) {
+		for(x = 0; x < fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			// if(field && this._calculated[field.id] !== undefined && this._calculated[field.id] !== null) {
 			if(field && this._calculated[field.id] !== undefined) {
 				if(this._calculated[field.id] === null) {
 					this[fields[x]] = null;
 				} else {
-					switch(field.type) {
+					switch (field.type) {
 						case "calculated":
 							// this._calculated[fields[x]] = this.calculateField(fields[x], this._data[fields[x]]);
 							break;
@@ -663,7 +658,7 @@ class RSObject {
 						case "dice":
 							this[fields[x]] = this._calculated[fields[x]];
 							if(field.attribute.searchable) {
-								this._search += ":::" + field.name.toLowerCase() + ":" + (this[fields[x]]?"true":"false");
+								this._search += ":::" + field.name.toLowerCase() + ":" + (this[fields[x]] ? "true" : "false");
 							}
 							break;
 						case "object:integer":
@@ -676,7 +671,7 @@ class RSObject {
 							if(field.attribute.searchable) {
 								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
 								if(field.inheritable && field.inheritable.length) {
-									for(j=0; j<this[fields[x]].length; j++) {
+									for(j = 0; j < this[fields[x]].length; j++) {
 										search = this._universe.get(this[fields[x]][j]);
 										if(search && (typeof(search.name) === "string")) {
 											this._search += ":::" + (field.name + ":" + search.name).toLowerCase();
@@ -700,51 +695,51 @@ class RSObject {
 			this._search += ":::level:" + this.level;
 			this._search += ":::level " + this.level;
 		}
-		
+
 		// Fill in Parent Values where this is doesn't have that field filled
 		/*
 		if(this._data.parent) {
-			parent = this._universe.objectHandler.retrieve(this._data.parent);
-			if(parent) {
-				for(x=0; x<fields.length; x++) {
-					if(this._calculated[fields[x]] === undefined || this._calculated[fields[x]] === null) {
-						field = this._manager.database.field[fields[x]];
-						if(field && !field.attribute.no_parental && parent._calculated[field.id] !== undefined && parent._calculated[field.id] !== null) {
-							switch(field.type) {
-								case "calculated":
-									// this._calculated[fields[x]] = this.calculateField(fields[x], parent[fields[x]]);
-									break;
-								case "string":
-									if(field.attribute.searchable) {
-										this._search += ":::" + parent._calculated[field.id].toLowerCase();
-									}
-								default:
-								case "formula": // formula Reduction handled in updateFieldValues
-								case "number":
-								case "boolean":
-								case "object":
-									this[fields[x]] = parent._calculated[fields[x]];
-									break;
-							}
-						}
-					}
-				}
-			} else {
-				// TODO: Improved error handling
-				// console.error("Unknown Parent[" + this._data.parent + "] for Object[" + this._data.id + "]");
-			}
+		parent = this._universe.objectHandler.retrieve(this._data.parent);
+		if(parent) {
+		for(x=0; x<fields.length; x++) {
+		if(this._calculated[fields[x]] === undefined || this._calculated[fields[x]] === null) {
+		field = this._manager.database.field[fields[x]];
+		if(field && !field.attribute.no_parental && parent._calculated[field.id] !== undefined && parent._calculated[field.id] !== null) {
+		switch(field.type) {
+		case "calculated":
+		// this._calculated[fields[x]] = this.calculateField(fields[x], parent[fields[x]]);
+		break;
+		case "string":
+		if(field.attribute.searchable) {
+		this._search += ":::" + parent._calculated[field.id].toLowerCase();
 		}
-		*/
-		
+		default:
+		case "formula": // formula Reduction handled in updateFieldValues
+		case "number":
+		case "boolean":
+		case "object":
+		this[fields[x]] = parent._calculated[fields[x]];
+		break;
+		}
+		}
+		}
+		}
+		} else {
+		// TODO: Improved error handling
+		// console.error("Unknown Parent[" + this._data.parent + "] for Object[" + this._data.id + "]");
+		}
+		}
+		 */
+
 		// Establish Calculated Values
 		// console.log("Updating Self[" + this._data.id + "]");
-		for(x=0; x<fields.length; x++) {
+		for(x = 0; x < fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			if(field && this._calculated[field.id] !== undefined && this._calculated[field.id] !== null) {
 				if(debug) {
 					console.log(" > Update Field[" + this._data.id + "] - " + field.id + ": ", this._calculated[field.id]);
 				}
-				switch(field.type) {
+				switch (field.type) {
 					case "calculated":
 						this[fields[x]] = this.calculateField(fields[x], this._calculated[fields[x]]);
 						if(field.attribute.searchable) {
@@ -765,47 +760,47 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		// Fill in Parent Values where this is doesn't have that field filled
 		/*
 		if(this._data.parent) {
-			parent = this._universe.objectHandler.retrieve(this._data.parent);
-			if(parent) {
-				// console.log("Found Parent[" + parent.id + "] for Object[" + this._data.id + "]");
-				for(x=0; x<fields.length; x++) {
-					if(this._calculated[fields[x]] === undefined || this._calculated[fields[x]] === null) {
-						field = this._manager.database.field[fields[x]];
-						if(field && !field.attribute.no_parental && parent._calculated[field.id] !== undefined && parent._calculated[field.id] !== null) {
-							switch(field.type) {
-								case "calculated":
-									this[fields[x]] = this.calculateField(fields[x], parent._calculated[fields[x]]);
-									break;
-								default:
-								case "formula": // formula Reduction handled in updateFieldValues
-								case "string":
-								case "number":
-								case "boolean":
-								case "object":
-									// this._calculated[fields[x]] = parent[fields[x]];
-									break;
-							}
-						}
-					} else {
-						// console.log("Non-null Parent Field: " + fields[x] + " -> ", this._calculated[fields[x]]);
-					}
-				}
-			} else {
-				// TODO: Improved error handling
-				// console.error("Unknown Parent[" + this._data.parent + "] for Object[" + this._data.id + "]");
-			}
+		parent = this._universe.objectHandler.retrieve(this._data.parent);
+		if(parent) {
+		// console.log("Found Parent[" + parent.id + "] for Object[" + this._data.id + "]");
+		for(x=0; x<fields.length; x++) {
+		if(this._calculated[fields[x]] === undefined || this._calculated[fields[x]] === null) {
+		field = this._manager.database.field[fields[x]];
+		if(field && !field.attribute.no_parental && parent._calculated[field.id] !== undefined && parent._calculated[field.id] !== null) {
+		switch(field.type) {
+		case "calculated":
+		this[fields[x]] = this.calculateField(fields[x], parent._calculated[fields[x]]);
+		break;
+		default:
+		case "formula": // formula Reduction handled in updateFieldValues
+		case "string":
+		case "number":
+		case "boolean":
+		case "object":
+		// this._calculated[fields[x]] = parent[fields[x]];
+		break;
 		}
-		*/
-		
+		}
+		} else {
+		// console.log("Non-null Parent Field: " + fields[x] + " -> ", this._calculated[fields[x]]);
+		}
+		}
+		} else {
+		// TODO: Improved error handling
+		// console.error("Unknown Parent[" + this._data.parent + "] for Object[" + this._data.id + "]");
+		}
+		}
+		 */
+
 		// Consider Conditional Values
 		// this._debug._conditionals_failed.splice(0);
 		if(this.conditionals) {
 			this._conditionals.splice(0);
-			for(x=0; x<this.conditionals.length; x++) {
+			for(x = 0; x < this.conditionals.length; x++) {
 				loading = this._universe.manager.conditional.object[this.conditionals[x]];
 				if(loading) {
 					if(this.checkConditional(loading)) {
@@ -825,21 +820,21 @@ class RSObject {
 			if(debug) {
 				console.log(" > Gathder Conditionals[" + this._data.id + "] - " + field.id + ": ", this._conditionals);
 			}
-			
-			for(x=0; x<this._conditionals.length; x++) {
+
+			for(x = 0; x < this._conditionals.length; x++) {
 				conditional = this._conditionals[x];
-				for(i=0; i<this._manager.fieldIDs.length; i++) {
+				for(i = 0; i < this._manager.fieldIDs.length; i++) {
 					field = this._manager.fieldUsed[this._manager.fieldIDs[i]];
 					/*
 					if(this._conditionals[x].adds && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
-						this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
+					this[field.id] = RSObject.addValues(this[field.id], loading, field.type);
 					} else if(this._conditionals[x].subs && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
-						this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
+					this[field.id] = RSObject.subValues(this[field.id], loading, field.type);
 					} else if(this._conditionals[x].sets && (loading = this.computeValues(field, this._conditionals[x].adds[field.id]))) {
-						this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
+					this[field.id] = RSObject.setValues(this[field.id], loading, field.type);
 					}
-					*/
-					
+					 */
+
 					if(!this._involved[field.id]) {
 						this._involved[field.id] = {};
 					}
@@ -876,7 +871,7 @@ class RSObject {
 		}
 
 		// Final Field Checks
-		for(x=0; x<fields.length; x++) {
+		for(x = 0; x < fields.length; x++) {
 			field = this._manager.database.field[fields[x]];
 			if(field) {
 				// Reduce Dice Fields
@@ -884,7 +879,7 @@ class RSObject {
 					if(typeof(this[field.id]) === "object") {
 						keys = Object.keys(this[field.id]);
 						this._formula[field.id] = {};
-						for(i=0; i<keys.length; i++) {
+						for(i = 0; i < keys.length; i++) {
 							if(typeof(this[field.id][keys[i]]) === "string") {
 								this._formula[field.id][keys[i]] = this[field.id][keys[i]];
 								this[field.id][keys[i]] = this._universe.calculator.reducedDiceRoll(this[field.id][keys[i]], this);
@@ -914,13 +909,13 @@ class RSObject {
 					}
 				} else if((field.type === "object" && field.attribute && field.attribute.values === "integer") || field.type === "object:integer") {
 					keys = Object.keys(this[field.id]);
-					for(i=0; i<keys.length; i++) {
+					for(i = 0; i < keys.length; i++) {
 						this[field.id][keys[i]] = parseInt(this[field.id][keys[i]]);
 					}
 				} else if(this[field.id] && (field.type === "function" || field.type === "method") && !this.preview && !this.is_preview && this[field.id] !== this._previous[field.id]) {
 					try {
 						this[field.id] = new Function("source", "event", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", this[field.id]);
-					} catch(initializationException) {
+					} catch (initializationException) {
 						console.log("Function Initialization Err: ", initializationException);
 					}
 				} else if(field.type === "calculated" && isNaN(this[field.id])) {
@@ -929,7 +924,7 @@ class RSObject {
 				} else if(field.type === "object:calculated" && isNaN(this[field.id])) {
 					keys = Object.keys(this[field.id]);
 					this._formula[field.id] = {};
-					for(i=0; i<keys.length; i++) {
+					for(i = 0; i < keys.length; i++) {
 						this._formula[field.id][keys[i]] = this[field.id][keys[i]];
 						this[field.id][keys[i]] = this._universe.calculator.computedDiceRoll(this[field.id][keys[i]], this);
 					}
@@ -950,13 +945,13 @@ class RSObject {
 				} else if(typeof(field.attribute.max) === "number" && this[field.id] > field.attribute.max) {
 					this[field.id] = field.attribute.max;
 				}
-				
+
 				/* Check if an object HAS a deprecated value. Shifted to only warn on PROVIDING deprecated values during calculation
 				if(field.attribute.deprecated && this[field.id] !== null && this[field.id] !== undefined && !this._deprecation[field.id] && fieldHasValue()) {
-					console.warn("Deprecated field[" + field.id + "] has value for object[" + this.id + "]");
-					this._deprecation[field.id] = true;
+				console.warn("Deprecated field[" + field.id + "] has value for object[" + this.id + "]");
+				this._deprecation[field.id] = true;
 				}
-				*/
+				 */
 			}
 		}
 
@@ -964,7 +959,7 @@ class RSObject {
 		if(this.is_concealed) {
 			if(this.concealment) {
 				keys = Object.keys(this.concealment);
-				for(i=0; i<keys.length; i++) {
+				for(i = 0; i < keys.length; i++) {
 					if(keys[i][0] !== "_" && keys[i] !== "id") {
 						this[keys[i]] = this.concealment[keys[i]];
 					}
@@ -975,13 +970,13 @@ class RSObject {
 				this.description = "Unknown";
 			}
 		}
-		
+
 		// Maintain updated/created
 		this.updated = Date.now();
 		if(!this.created) {
 			this.created = this._data.created;
 		}
-		
+
 		if(typeof(this.postFieldUpdate) === "function") {
 			this.postFieldUpdate();
 		}
@@ -997,31 +992,31 @@ class RSObject {
 		/* Stacking is being removed for now to address memory usage issues, possible return with improved load/unload controls
 		keys = Object.keys(this._data);
 		if(keys.length > stackRestricted.length) {
-			this._stackable = false;
+		this._stackable = false;
 		} else {
-			this._stackable = null;
-			for(i=0; i<keys.length && this._stackable === null; i++) {
-				if(stackRestricted.indexOf(keys[i]) !== -1) {
-					this._stackable = false;
-					break;
-				}
-			}
-			if(this._stackable === null) {
-				this._stackable = true;
-			}
+		this._stackable = null;
+		for(i=0; i<keys.length && this._stackable === null; i++) {
+		if(stackRestricted.indexOf(keys[i]) !== -1) {
+		this._stackable = false;
+		break;
 		}
-		*/
+		}
+		if(this._stackable === null) {
+		this._stackable = true;
+		}
+		}
+		 */
 
 		// console.log("Updated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushUpdated(this.id);
 
 		if(this.occurrences instanceof Array) {
 			keys = Object.keys(this._occurrence);
-			for(i=0; i<keys.length; i++) {
+			for(i = 0; i < keys.length; i++) {
 				this._occurrence[keys[i]] = false;
 			}
 			// for(i=0; i<this._universe.manager.occurrence.length; i++) {
-			for(i=0; i<this.occurrences.length; i++) {
+			for(i = 0; i < this.occurrences.length; i++) {
 				loading = this._universe.manager.occurrence.object[this.occurrences[i]];
 				if(loading) {
 					// console.log(" - Mapping Occurrence[" + loading.id + "]: " + JSON.stringify(loading, null, 4));
@@ -1029,23 +1024,23 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		if(this.changed()) {
 			/*
 			if(this.handlers instanceof Array) {
-				for(i=0; i<this._universe.manager.occurrence.length; i++) {
-					loading = this._universe.manager.occurrence[i];
-					this._occurrences.push(loading.name);
-				}
-			} else if(this._occurrences.length) {
-				this._occurrences.splice(0);
+			for(i=0; i<this._universe.manager.occurrence.length; i++) {
+			loading = this._universe.manager.occurrence[i];
+			this._occurrences.push(loading.name);
 			}
-			*/
+			} else if(this._occurrences.length) {
+			this._occurrences.splice(0);
+			}
+			 */
 
 			if(!suppress) {
-				for(i=0; i<this._manager.fieldIDs.length; i++) {
+				for(i = 0; i < this._manager.fieldIDs.length; i++) {
 					field = this._manager.fieldIDs[i];
-					switch(typeof(this[field])) {
+					switch (typeof(this[field])) {
 						case "object":
 							if(this[field] === null) {
 								this._previous[field] = null;
@@ -1066,8 +1061,8 @@ class RSObject {
 	/**
 	 * An inline version of fireHandlers
 	 * @method processHandlers
-	 * @param {String} name 
-	 * @param {Object} event 
+	 * @param {String} name
+	 * @param {Object} event
 	 */
 	processHandlers(name, event, fields) {
 		// console.log("Fireing Handlers: " + name);
@@ -1086,7 +1081,7 @@ class RSObject {
 			if(typeof(event.date) !== "number") {
 				event.date = Date.now();
 			}
-			for(i=0; i<this.handlers.length; i++) {
+			for(i = 0; i < this.handlers.length; i++) {
 				handler = this._universe.manager.handler.object[this.handlers[i]];
 				// console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
 				if(handler && handler._occurrence[name]) {
@@ -1097,12 +1092,12 @@ class RSObject {
 
 		// Fire for sub-fields
 		if(fields) {
-			for(f=0; f<fields.length; f++) {
+			for(f = 0; f < fields.length; f++) {
 				field = fields[f];
 				object = this[field];
 				if(object) {
 					if(object instanceof Array) {
-						for(i=0; i<object.length; i++) {
+						for(i = 0; i < object.length; i++) {
 							if(obj = this._universe.get(object[i])) {
 								obj.processHandlers(name, event, fields);
 							}
@@ -1118,10 +1113,10 @@ class RSObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method fireHandlers
-	 * @param {String} name 
-	 * @param {Object} event 
+	 * @param {String} name
+	 * @param {Object} event
 	 */
 	fireHandlers(name, event, fields) {
 		// console.log("Fireing Handlers: " + name);
@@ -1140,7 +1135,7 @@ class RSObject {
 			if(typeof(event.date) !== "number") {
 				event.date = Date.now();
 			}
-			for(i=0; i<this.handlers.length; i++) {
+			for(i = 0; i < this.handlers.length; i++) {
 				handler = this._universe.manager.handler.object[this.handlers[i]];
 				// console.log(" - Entity[" + this.id + "] Handler[" + this.handlers[i] + "]: " + (handler?JSON.stringify(handler.occurrences,null,4) + " -> " + JSON.stringify(handler._occurrence,null,4):"Null"));
 				if(handler && handler._occurrence[name]) {
@@ -1151,12 +1146,12 @@ class RSObject {
 
 		// Fire for sub-fields
 		if(fields) {
-			for(f=0; f<fields.length; f++) {
+			for(f = 0; f < fields.length; f++) {
 				field = fields[f];
 				object = this[field];
 				if(object) {
 					if(object instanceof Array) {
-						for(i=0; i<object.length; i++) {
+						for(i = 0; i < object.length; i++) {
 							if(obj = this._universe.get(object[i])) {
 								obj.fireHandlers(name, event, fields);
 							}
@@ -1170,7 +1165,7 @@ class RSObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @method changed
 	 * @return {Boolean}
 	 */
@@ -1178,10 +1173,10 @@ class RSObject {
 		var field,
 			i;
 
-		for(i=0; i<this._manager.fieldIDs.length; i++) {
+		for(i = 0; i < this._manager.fieldIDs.length; i++) {
 			field = this._manager.fieldIDs[i];
 			if(!_.isEqual(this._previous[field], this[field])) {
-			// if(!RSObject.isEqual(this._previous[field], this[field])) {
+				// if(!RSObject.isEqual(this._previous[field], this[field])) {
 				return true;
 			}
 		}
@@ -1189,9 +1184,9 @@ class RSObject {
 	}
 
 	/**
-	 * 
-	 * @param {String | Object} field 
-	 * @param {String | Number | Object} object 
+	 *
+	 * @param {String | Object} field
+	 * @param {String | Number | Object} object
 	 */
 	computeValues(field, value) {
 		if(value === null || value === undefined) {
@@ -1202,13 +1197,13 @@ class RSObject {
 			keys,
 			i;
 
-		switch(field.type) {
+		switch (field.type) {
 			case "object:calculated":
 			case "object:dice":
 			case "object":
 				keys = Object.keys(value);
 				filled = {};
-				for(i=0; i<keys.length; i++) {
+				for(i = 0; i < keys.length; i++) {
 					filled[keys[i]] = this._universe.calculator.computedDiceRoll(value[keys[i]], this);
 				}
 				break;
@@ -1303,13 +1298,13 @@ class RSObject {
 			}
 		}, 0);
 	}
-	
+
 	/**
 	 * Retrieves the value of the identified field from the `_calculated` property on
 	 * this object.
 	 *
 	 * As `linkFieldValues` keeps all relevent objects loaded for the universe to access,
-	 * this method is 
+	 * this method is
 	 */
 	/**
 	 * Retrieves the value of the identified field from the top level of this object, following
@@ -1333,7 +1328,7 @@ class RSObject {
 		} else if(index === undefined || index === null) {
 			index = 0;
 		}
-		
+
 		var details,
 			follow;
 
@@ -1382,7 +1377,7 @@ class RSObject {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Calculate the value of the field based on this object's current values.
 	 *
@@ -1395,7 +1390,7 @@ class RSObject {
 	 * @method calculateField
 	 * @param {String} field Name for calcRef mask reference.
 	 * @param {String | Number} value For the field to be copmuted.
-	 * @return {String | Number} 
+	 * @return {String | Number}
 	 */
 	calculateField(field, value, tracked) {
 		// console.log("Calculate Field[" + this.id + " . " + field + "]: ", value);
@@ -1404,7 +1399,7 @@ class RSObject {
 			parsed,
 			keys,
 			i;
-		
+
 		if(value === null || value === undefined) {
 			return null;
 		}
@@ -1430,7 +1425,7 @@ class RSObject {
 					this._involved[field] = {};
 				}
 				// this._involved[field] = this._involved[field].concat(referenced);
-				for(i=0; i<referenced.length; i++) {
+				for(i = 0; i < referenced.length; i++) {
 					this._involved[field][referenced[i]] = true;
 				}
 				this._universe.objectHandler.trackReference(this, referenced);
@@ -1440,19 +1435,18 @@ class RSObject {
 		} else {
 			tracked.push(this.id);
 		}
-		
+
 		return value;
 	}
-	
+
 	/**
 	 * @method reduceField
-	 * @return {String} 
+	 * @return {String}
 	 */
 	reduceField(value) {
 		return value;
 	}
-	
-	
+
 	promiseValue(name) {
 		return new Promise((done, fail) => {
 			this.getValue(name, 0, (err, value) => {
@@ -1464,8 +1458,7 @@ class RSObject {
 			});
 		});
 	}
-	
-	
+
 	addValues(delta, callback) {
 		delta.updated = Date.now();
 		var result = {},
@@ -1474,9 +1467,9 @@ class RSObject {
 			keys,
 			i,
 			x;
-		
+
 		// console.log("Delta: ", delta);
-		for(x=0; x<this._manager.fieldIDs.length; x++) {
+		for(x = 0; x < this._manager.fieldIDs.length; x++) {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.addValues(this._data[field.id], delta[field.id], field.type, undefined, field.attribute.max);
@@ -1486,7 +1479,7 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		result.id = this.id;
 		this._manager.writeObjectData(result, (err) => {
 			if(err) {
@@ -1497,7 +1490,7 @@ class RSObject {
 				// this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
-		
+
 		// Update links as needed for new Data
 		this.linkFieldValues()
 		.then(() => {
@@ -1515,16 +1508,15 @@ class RSObject {
 			}
 		});
 	}
-	
-	
+
 	subValues(delta, callback) {
 		delta.updated = Date.now();
 		var result = {},
 			details,
 			field,
 			x;
-		
-		for(x=0; x<this._manager.fieldIDs.length; x++) {
+
+		for(x = 0; x < this._manager.fieldIDs.length; x++) {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				result[field.id] = this._data[field.id] = RSObject.subValues(this._data[field.id], delta[field.id], field.type);
@@ -1533,7 +1525,7 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		result.id = this.id;
 		this._manager.writeObjectData(result, (err) => {
 			if(err) {
@@ -1544,7 +1536,7 @@ class RSObject {
 				// this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
-		
+
 		// Update links as needed for new Data
 		this.linkFieldValues()
 		.then(() => {
@@ -1562,7 +1554,7 @@ class RSObject {
 			}
 		});
 	}
-	
+
 	/**
 	 * This method is unique in that changes to reference fields update the universe linking for change tracking.
 	 * As such, this is one of the 2 methods responsible for interacting with the Universe however all work is handled
@@ -1578,8 +1570,8 @@ class RSObject {
 			details,
 			field,
 			x;
-		
-		for(x=0; x<this._manager.fieldIDs.length; x++) {
+
+		for(x = 0; x < this._manager.fieldIDs.length; x++) {
 			field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 			if(field && delta[field.id] !== undefined) {
 				this._data[field.id] = result[field.id] = RSObject.setValues(this._data[field.id], delta[field.id], field.type);
@@ -1588,7 +1580,7 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		// Write Data but don't wait
 		result.id = this.id;
 		this._manager.writeObjectData(result, (err) => {
@@ -1600,7 +1592,7 @@ class RSObject {
 				// this._universe.emit("error", new this._universe.Anomaly("object:write:fault", "Failed to store object data", 50, details, err, this));
 			}
 		});
-		
+
 		// Update links as needed for new Data
 		this.linkFieldValues()
 		.then(() => {
@@ -1619,6 +1611,18 @@ class RSObject {
 		});
 	}
 
+	promiseValues(delta) {
+		return new Promise((done, fail) => {
+			this.setValues(delta, function(err) {
+				if(err) {
+					fail(err);
+				} else {
+					done(this);
+				}
+			});
+		});
+	}
+
 	refresh() {
 		this.linkFieldValues()
 		.then(() => {
@@ -1626,11 +1630,13 @@ class RSObject {
 			this.updateFieldValues();
 		})
 		.catch((err) => {
-			this._universe.warnMasters("Failed to refresh " + this.name + " [" + this.id + "]", {"id": this.id, "error": err});
+			this._universe.warnMasters("Failed to refresh " + this.name + " [" + this.id + "]", {
+				"id": this.id,
+				"error": err
+			});
 		});
 	}
 
-	
 	levelField(field, result) {
 		var keys,
 			i;
@@ -1642,7 +1648,7 @@ class RSObject {
 		}
 		if(typeof(field.attribute.max) === "number" && typeof(result[field.id]) === "object") {
 			keys = Object.keys(result[field.id]);
-			for(i=0; i<keys.length; i++) {
+			for(i = 0; i < keys.length; i++) {
 				if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > field.attribute.max) {
 					result[field.id][keys[i]] = field.attribute.max;
 				}
@@ -1651,7 +1657,7 @@ class RSObject {
 		if(result[field.id] !== undefined && result[field.id] !== null) {
 			if(typeof(field.attribute.min) === "number" && typeof(result[field.id]) === "object") {
 				keys = Object.keys(result[field.id]);
-				for(i=0; i<keys.length; i++) {
+				for(i = 0; i < keys.length; i++) {
 					if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < field.attribute.min) {
 						result[field.id][keys[i]] = field.attribute.min;
 					}
@@ -1661,22 +1667,22 @@ class RSObject {
 				result[field.id].splice(field.attribute.limit);
 			}
 			if(result[field.id] && field.attribute.bound_max) {
-				switch(typeof(result[field.id])) {
+				switch (typeof(result[field.id])) {
 					case "number":
 						if(typeof(this[field.attribute.bound_max]) === "number" && result[field.id] > this[field.attribute.bound_max]) {
 							this._data[field.id] = result[field.id] = this[field.attribute.bound_max];
-						// } else if(typeof(result[field.id]) === "number" && result[field.id] > 0) {
-						// 	this._data[field.id] = result[field.id] = 0;
+							// } else if(typeof(result[field.id]) === "number" && result[field.id] > 0) {
+							// 	this._data[field.id] = result[field.id] = 0;
 						}
 						break;
 					case "object":
 						if(typeof(this[field.attribute.bound_max]) === "object") {
 							keys = Object.keys(result[field.id]);
-							for(i=0; i<keys.length; i++) {
+							for(i = 0; i < keys.length; i++) {
 								if(typeof(this[field.attribute.bound_max][keys[i]]) === "number" && result[field.id][keys[i]] > this[field.attribute.bound_max][keys[i]]) {
 									result[field.id][keys[i]] = this[field.attribute.bound_max][keys[i]]; // _data references same object
-								// } else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > 0) {
-								// 	result[field.id][keys[i]] = 0; // _data references same object
+									// } else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] > 0) {
+									// 	result[field.id][keys[i]] = 0; // _data references same object
 								}
 							}
 						}
@@ -1684,22 +1690,22 @@ class RSObject {
 				}
 			}
 			if(result[field.id] && field.attribute.bound_min) {
-				switch(typeof(result[field.id])) {
+				switch (typeof(result[field.id])) {
 					case "number":
 						if(typeof(this[field.attribute.bound_min]) === "number" && result[field.id] < this[field.attribute.bound_min]) {
 							this._data[field.id] = result[field.id] = this[field.attribute.bound_min];
-						// } else if(typeof(result[field.id]) === "number" && result[field.id] < 0) {
-						// 	this._data[field.id] = result[field.id] = 0;
+							// } else if(typeof(result[field.id]) === "number" && result[field.id] < 0) {
+							// 	this._data[field.id] = result[field.id] = 0;
 						}
 						break;
 					case "object":
 						if(typeof(this[field.attribute.bound_min]) === "object") {
 							keys = Object.keys(result[field.id]);
-							for(i=0; i<keys.length; i++) {
+							for(i = 0; i < keys.length; i++) {
 								if(typeof(this[field.attribute.bound_min][keys[i]]) === "number" && result[field.id][keys[i]] < this[field.attribute.bound_min][keys[i]]) {
 									result[field.id][keys[i]] = this[field.attribute.bound_min][keys[i]]; // _data references same object
-								// } else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < 0) {
-								// 	result[field.id][keys[i]] = 0; // _data references same object
+									// } else if(typeof(result[field.id][keys[i]]) === "number" && result[field.id][keys[i]] < 0) {
+									// 	result[field.id][keys[i]] = 0; // _data references same object
 								}
 							}
 						}
@@ -1708,20 +1714,20 @@ class RSObject {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @method checkValue
-	 * @param {String} field 
+	 * @param {String} field
 	 * @param {String | Number | Boolean | Object | Array} value
-	 * @return {Boolean} 
+	 * @return {Boolean}
 	 */
 	checkValue(id, value) {
 		var field = this._manager.database.field[id];
 		if(!field) {
 			throw new Error("Unknown field: " + id);
 		}
-		switch(field.type) {
+		switch (field.type) {
 			case "object":
 				return typeof(value) === "object";
 			case "array":
@@ -1754,7 +1760,7 @@ class RSObject {
 			value,
 			ref,
 			x;
-		
+
 		// TODO: Debugging
 		// if(!this._debug.conditionals[conditional.id]) {
 		// 	this._debug.conditionals[conditional.id] = [];
@@ -1768,7 +1774,7 @@ class RSObject {
 		// --
 
 		if(conditional.conditions) {
-			for(x=0; x<conditional.conditions.length; x++) {
+			for(x = 0; x < conditional.conditions.length; x++) {
 				ref = [];
 				result = this._universe.calculator.computedDiceRoll(conditional.conditions[x], this, ref);
 				// TODO: Debugging
@@ -1784,7 +1790,7 @@ class RSObject {
 			}
 		}
 		if(conditional.condition && conditional.ifop) {
-			for(x=0; x<conditional._fields_condition.length; x++) {
+			for(x = 0; x < conditional._fields_condition.length; x++) {
 				field = conditional._fields_condition[x];
 				value = this.fetchValue(conditional.condition[field]) || conditional.condition[field];
 				// TODO: Debugging
@@ -1799,7 +1805,7 @@ class RSObject {
 				}
 			}
 		}
-		
+
 		// TODO: Debugging
 		// if(30 < this._debug.conditionals[conditional.id].length) {
 		// 	this._debug.conditionals[conditional.id].splice(30);
@@ -1808,11 +1814,11 @@ class RSObject {
 
 		return true;
 	}
-	
+
 	/**
 	 * Calculate and store the changes to apply to this object from the passed
 	 * conditional.
-	 * 
+	 *
 	 * Conditional value adjustments may depend on the current state of this object.
 	 * To control, the results are calculated for all valid conditionals and stored
 	 * to `_conditionals` to be applied after.
@@ -1824,8 +1830,7 @@ class RSObject {
 		var result = {},
 			field,
 			x;
-			
-		
+
 		// TODO: Debugging
 		// if(!this._debug.conditional_fill[conditional.id]) {
 		// 	this._debug.conditional_fill[conditional.id] = [];
@@ -1842,7 +1847,7 @@ class RSObject {
 		result.add = {};
 		if(conditional.add) {
 			result.add = {};
-			for(x=0; x<conditional._fields_add.length; x++) {
+			for(x = 0; x < conditional._fields_add.length; x++) {
 				field = conditional._fields_add[x];
 				// if(!this._involved[field]) {
 				// 	this._involved[field] = [];
@@ -1852,10 +1857,10 @@ class RSObject {
 				result.add[field] = conditional.add[field];
 			}
 		}
-		
+
 		result.sub = {};
 		if(conditional.sub) {
-			for(x=0; x<conditional._fields_sub.length; x++) {
+			for(x = 0; x < conditional._fields_sub.length; x++) {
 				field = conditional._fields_sub[x];
 				// if(!this._involved[field]) {
 				// 	this._involved[field] = [];
@@ -1865,10 +1870,10 @@ class RSObject {
 				result.sub[field] = conditional.sub[field];
 			}
 		}
-		
+
 		result.set = {};
 		if(conditional.set) {
-			for(x=0; x<conditional._fields_set.length; x++) {
+			for(x = 0; x < conditional._fields_set.length; x++) {
 				field = conditional._fields_set[x];
 				// if(!this._involved[field]) {
 				// 	this._involved[field] = [];
@@ -1883,7 +1888,7 @@ class RSObject {
 		// 	"result": result
 		// });
 		// --
-		
+
 		// TODO: Debugging
 		// if(30 < this._debug.conditional_fill[conditional.id].length) {
 		// 	this._debug.conditional_fill[conditional.id].splice(30);
@@ -1892,7 +1897,7 @@ class RSObject {
 
 		return result;
 	}
-	
+
 	/**
 	 *
 	 * Currently a naive implementation, takes the set fields and adds dice and
@@ -1906,14 +1911,14 @@ class RSObject {
 		var delta = {},
 			field,
 			x;
-			
-		for(x=0; x<this._manager.fields.length; x++) {
+
+		for(x = 0; x < this._manager.fields.length; x++) {
 			field = this._manager.fields[x];
 			if(!field.attribute.server_only && (op[field.id] !== undefined || field.type === "calculcated" || field.type === "dice")) {
 				delta[field.id] = this[field.id];
 			}
 		}
-		
+
 		delta.id = this.id;
 		delta._class = this._class;
 		delta._invloved = this._invloved;
@@ -1921,7 +1926,7 @@ class RSObject {
 		delta._formula = this._formula;
 		return delta;
 	}
-	
+
 	/**
 	 * Get the raw JSON value of this object based on the current data and the
 	 * class fields.
@@ -1930,7 +1935,7 @@ class RSObject {
 	 * does not explicitly feature it.
 	 * @method toJSON
 	 * @param {Boolean} [include] Keys with a leading "_".
-	 * @return {Object} 
+	 * @return {Object}
 	 */
 	toJSON(include) {
 		var calculated = Object.assign({}, this._calculated),
@@ -1940,9 +1945,9 @@ class RSObject {
 			field,
 			keys,
 			x;
-		
+
 		if(this._manager && this._manager.fieldIDs) {
-			for(x=0; x<this._manager.fieldIDs.length; x++) {
+			for(x = 0; x < this._manager.fieldIDs.length; x++) {
 				field = this._manager.fieldUsed[this._manager.fieldIDs[x]];
 				if(field) {
 					if(!field.attribute || !field.attribute.server_only) {
@@ -1964,7 +1969,7 @@ class RSObject {
 			}
 		} else {
 			keys = Object.keys(this);
-			for(x=0; x<keys.length; x++) {
+			for(x = 0; x < keys.length; x++) {
 				if(keys[x][0] !== "_") {
 					json[keys[x]] = this[keys[x]];
 				}
@@ -2004,7 +2009,7 @@ class RSObject {
 }
 
 /**
- * 
+ *
  * @method getClassFromID
  * @static
  * @param {String} id
@@ -2019,7 +2024,7 @@ RSObject.getClassFromID = function(id) {
 };
 
 /**
- * 
+ *
  * @method addObjects
  * @static
  * @param  {[type]} a [description]
@@ -2037,17 +2042,17 @@ RSObject.addObjects = function(a, b, type) {
 			checked = {},
 			result = {},
 			x;
-		
-		for(x=0; x<akeys.length; x++) {
+
+		for(x = 0; x < akeys.length; x++) {
 			result[akeys[x]] = RSObject.addValues(a[akeys[x]], b[akeys[x]], type);
 			checked[akeys[x]] = true;
 		}
-		for(x=0; x<bkeys.length; x++) {
+		for(x = 0; x < bkeys.length; x++) {
 			if(!checked[bkeys[x]]) {
 				result[bkeys[x]] = RSObject.addValues(a[bkeys[x]], b[bkeys[x]], type);
 			}
 		}
-		
+
 		return result;
 	} else {
 		return null;
@@ -2055,14 +2060,14 @@ RSObject.addObjects = function(a, b, type) {
 };
 
 /**
- * 
+ *
  * @method addValues
  * @static
- * @param  {[type]} a    [description]
- * @param  {[type]} b    [description]
+ * @param  {[type]} a	[description]
+ * @param  {[type]} b	[description]
  * @param  {[type]} [type] [description]
  * @param  {[type]} [op] [description]
- * @return {[type]}      [description]
+ * @return {[type]}	  [description]
  */
 RSObject.addValues = function(a, b, type, op) {
 	if((a === undefined || a === null || a === "undefined") && (b === undefined || b === null || b === "undefined")) {
@@ -2079,7 +2084,7 @@ RSObject.addValues = function(a, b, type, op) {
 				type = typeof(a);
 			}
 		}
-		switch(type) {
+		switch (type) {
 			case "markdown":
 			case "string":
 			case "icon":
@@ -2129,13 +2134,13 @@ RSObject.addValues = function(a, b, type, op) {
 				return a + parseFloat(a);
 			}
 		} else {
-			throw new Error("Can not add values as types[" + type + "|" + typeof(a) + "|" + typeof(b) + "] do not match: " + (a?a.id||a:a) + "[" + (!!a) + "] | " + (b?b.id||b:b) + "[" + (!!b) + "]");
+			throw new Error("Can not add values as types[" + type + "|" + typeof(a) + "|" + typeof(b) + "] do not match: " + (a ? a.id || a : a) + "[" + (!!a) + "] | " + (b ? b.id || b : b) + "[" + (!!b) + "]");
 		}
 	}
 };
 
 /**
- * 
+ *
  * @method subObjects
  * @static
  * @param  {[type]} a [description]
@@ -2154,17 +2159,17 @@ RSObject.subObjects = function(a, b, type) {
 			checked = {},
 			result = {},
 			x;
-		
-		for(x=0; x<akeys.length; x++) {
+
+		for(x = 0; x < akeys.length; x++) {
 			result[akeys[x]] = RSObject.subValues(a[akeys[x]], b[akeys[x]], type);
 			checked[akeys[x]] = true;
 		}
-		for(x=0; x<bkeys.length; x++) {
+		for(x = 0; x < bkeys.length; x++) {
 			if(!checked[bkeys[x]]) {
 				result[bkeys[x]] = RSObject.subValues(a[bkeys[x]], b[bkeys[x]], type);
 			}
 		}
-		
+
 		return result;
 	} else {
 		return null;
@@ -2172,33 +2177,33 @@ RSObject.subObjects = function(a, b, type) {
 
 	/*
 	if(!a) {
-		a = {};
+	a = {};
 	}
 	if(!b) {
-		b = {};
+	b = {};
 	}
 
 	var keys = Object.keys(a),
-		result = {},
-		x;
-	
+	result = {},
+	x;
+
 	keys.uniquely.apply(keys, Object.keys(b));
 	for(x=0; x<keys.length; x++) {
-		result[keys[x]] = RSObject.subValues(a[keys[x]], b[keys[x]]);
+	result[keys[x]] = RSObject.subValues(a[keys[x]], b[keys[x]]);
 	}
-	
+
 	return result;
-	*/
+	 */
 };
 
 /**
- * 
+ *
  * @method subValues
  * @static
- * @param  {[type]} a    [description]
- * @param  {[type]} b    [description]
+ * @param  {[type]} a	[description]
+ * @param  {[type]} b	[description]
  * @param  {[type]} [type] [description]
- * @return {[type]}      [description]
+ * @return {[type]}	  [description]
  */
 RSObject.subValues = function(a, b, type) {
 	var buffer,
@@ -2220,7 +2225,14 @@ RSObject.subValues = function(a, b, type) {
 	}
 
 	if(typeof(a) === "undefined") {
-		switch(typeof(b)) {
+		if(!type) {
+			if(b instanceof Array) {
+				type = "array";
+			} else {
+				type = typeof(b);
+			}
+		}
+		switch (type || typeof(b)) {
 			case "markdown":
 			case "string":
 				return "";
@@ -2253,10 +2265,10 @@ RSObject.subValues = function(a, b, type) {
 		}
 
 		// console.log("A[" + typeof(a) + "]: " + a + " | B[" + typeof(b) + "]: " + b);
-		
+
 		// console.log(" > A[" + typeof(a) + "]: " + a + " | B[" + typeof(b) + "]: " + b);
 
-		switch(type) {
+		switch (type) {
 			case "markdown":
 			case "string":
 			case "icon":
@@ -2273,7 +2285,7 @@ RSObject.subValues = function(a, b, type) {
 				}
 			case "array":
 				lookup = {};
-				for(i=0; i<b.length; i++) {
+				for(i = 0; i < b.length; i++) {
 					if(b[i]) {
 						id = b[i].id || b[i];
 						if(lookup[id]) {
@@ -2283,8 +2295,12 @@ RSObject.subValues = function(a, b, type) {
 						}
 					}
 				}
-				buffer = [].concat(a);
-				for(i=buffer.length - 1; 0<=i; i--) {
+				if(a) {
+					buffer = [].concat(a);
+				} else {
+					buffer = [];
+				}
+				for(i = buffer.length - 1; 0 <= i; i--) {
 					if(buffer[i]) { // Arrays reasonable do not have nulls so "filtering them out" here should not happen nor be a problem
 						id = buffer[i].id || buffer[i];
 						if(lookup[id]) {
@@ -2300,12 +2316,12 @@ RSObject.subValues = function(a, b, type) {
 				return RSObject.subObjects(a, b);
 		}
 	} else {
-		throw new Error("Can not sub values as types do not match: " + typeof(a) + ":" + a + ", " +  typeof(b) + ":" + b);
+		throw new Error("Can not sub values as types do not match: " + typeof(a) + ":" + a + ", " + typeof(b) + ":" + b);
 	}
 };
 
 /**
- * 
+ *
  * @method setObjects
  * @static
  * @param  {[type]} a [description]
@@ -2319,32 +2335,32 @@ RSObject.setObjects = function(a, b, type) {
 	if(!a) {
 		return b;
 	}
-	
+
 	var akeys = Object.keys(a),
 		bkeys = Object.keys(b),
 		checked = {},
 		result = {},
 		x;
-	
-	for(x=0; x<akeys.length; x++) {
+
+	for(x = 0; x < akeys.length; x++) {
 		result[akeys[x]] = RSObject.setValues(a[akeys[x]], b[akeys[x]], type);
 		checked[akeys[x]] = true;
 	}
-	for(x=0; x<bkeys.length; x++) {
+	for(x = 0; x < bkeys.length; x++) {
 		if(!checked[bkeys[x]]) {
 			result[bkeys[x]] = RSObject.setValues(a[bkeys[x]], b[bkeys[x]], type);
 		}
 	}
-	
+
 	return result;
 };
 
 /**
- * 
+ *
  * @method setValues
  * @static
- * @param a 
- * @param b 
+ * @param a
+ * @param b
  * @param {String} [type]
  * @return The value to be set.
  */
@@ -2363,16 +2379,16 @@ RSObject.setValues = function(a, b, type) {
 };
 
 /**
- * 
+ *
  * @method checkCondition
  * @static
- * @param from 
- * @param {String} op 
- * @param to 
- * @return {Boolean} 
+ * @param from
+ * @param {String} op
+ * @param to
+ * @return {Boolean}
  */
 RSObject.checkCondition = function(from, op, to) {
-	switch(op) {
+	switch (op) {
 		case "has":
 			if(!from) {
 				return false;
@@ -2413,41 +2429,41 @@ RSObject.checkCondition = function(from, op, to) {
 			return from <= to;
 			/*
 			if(!from && to) {
-				return true;
+			return true;
 			} else if(from && !to) {
-				return false;
+			return false;
 			} else if(!from && !to) {
-				return true;
+			return true;
 			} else {
-				return from <= to;
+			return from <= to;
 			}
 			break;
-			*/
+			 */
 		case "<":
 			return from < to;
 			/*
 			if(!from && to) {
-				return true;
+			return true;
 			} else if(from && !to) {
-				return false;
+			return false;
 			} else if(!from && !to) {
-				return true;
+			return true;
 			} else {
-				return from < to;
+			return from < to;
 			}
 			break;
-			*/
+			 */
 		case "!=":
 			return from != to;
 			/*
 			if(!from && to) {
-				return true;
+			return true;
 			} else if(from && !to) {
-				return true;
+			return true;
 			} else if(!from && !to) {
-				return false;
+			return false;
 			} else {
-				return from != to;
+			return from != to;
 			}
 			break;
 			*/
@@ -2455,13 +2471,13 @@ RSObject.checkCondition = function(from, op, to) {
 			return from === to;
 			/*
 			if(!from && to) {
-				return false;
+			return false;
 			} else if(from && !to) {
-				return false;
+			return false;
 			} else if(!from && !to) {
-				return true;
+			return true;
 			} else {
-				return from == to;
+			return from == to;
 			}
 			break;
 			*/
@@ -2469,13 +2485,13 @@ RSObject.checkCondition = function(from, op, to) {
 			return from > to;
 			/*
 			if(!from && to) {
-				return false;
+			return false;
 			} else if(from && !to) {
-				return true;
+			return true;
 			} else if(!from && !to) {
-				return false;
+			return false;
 			} else {
-				return from > to;
+			return from > to;
 			}
 			break;
 			*/
@@ -2483,13 +2499,13 @@ RSObject.checkCondition = function(from, op, to) {
 			return from >= to;
 			/*
 			if(!from && to) {
-				return false;
+			return false;
 			} else if(from && !to) {
-				return true;
+			return true;
 			} else if(!from && !to) {
-				return true;
+			return true;
 			} else {
-				return from >= to;
+			return from >= to;
 			}
 			break;
 			*/
@@ -2499,12 +2515,12 @@ RSObject.checkCondition = function(from, op, to) {
 };
 
 /**
- * 
+ *
  * @method isEqual
  * @static
- * @param a 
+ * @param a
  * @param b
- * @return {Boolean} 
+ * @return {Boolean}
  */
 RSObject.isEqual = function(a, b) {
 	var type,
@@ -2514,17 +2530,17 @@ RSObject.isEqual = function(a, b) {
 	if(a === b) {
 		return true;
 	}
-	if( (!a && b) || (!b && a) ) {
+	if((!a && b) || (!b && a)) {
 		return false;
 	}
-	
+
 	if((type = typeof(a)) !== typeof(b)) {
 		return false;
 	}
 
 	if(a && b && type === "object") {
 		keys = Object.keys(a);
-		for(i=0; i<keys.length; i++) {
+		for(i = 0; i < keys.length; i++) {
 			if(!RSObject.isEqual(a[keys[i]], b[keys[i]])) {
 				return false;
 			}
@@ -2538,10 +2554,10 @@ RSObject.isEqual = function(a, b) {
 };
 
 /**
- * 
+ *
  * @method copyObjectValue
  * @static
- * @param {Object} object 
+ * @param {Object} object
  * @returns {Object}
  */
 RSObject.copyObjectValue = function(object) {

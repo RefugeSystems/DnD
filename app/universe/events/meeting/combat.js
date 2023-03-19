@@ -19,6 +19,7 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("player:meeting:combat", function(event) {
 		var meeting = event.message.data.meeting,
+			combatEntities = [],
 			details = {},
 			notify = [],
 			location,
@@ -35,8 +36,9 @@ module.exports.initialize = function(universe) {
 				if(typeof(entity) === "string") {
 					entity = universe.manager.entity.object[entity];
 				}
-				if(entity) {
-					if(!entity.is_shop && (entity.is_npc || entity.is_hostile)) {
+				if(entity && entity.is_combatable) {
+					combatEntities.push(entity.id);
+					if(entity.is_npc || entity.is_hostile) {
 						entity.setValues({
 							"initiative": Random.integer(20,1) + (entity.skill_check?entity.skill_check["skill:initiative"] || 0:0)
 						});
@@ -60,7 +62,7 @@ module.exports.initialize = function(universe) {
 			details.id = Random.identifier("skirmish", 10, 32).toLowerCase();
 			details.is_active = true;
 			details.start = universe.time;
-			details.entities = meeting.entities;
+			details.entities = combatEntities;
 			details.time = universe.time;
 			details.date = Date.now();
 			details.icon = "fas fa-swords";
