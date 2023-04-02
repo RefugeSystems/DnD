@@ -1,0 +1,4 @@
+<div class="rs-component dnd-component party-presenter">
+	<rs-viewer-v1 v-if="presenting === 'map'" class="map" :universe="universe" :player="player" :profile="profile" :configuration="configuration" :location="current_location" :storage-container="location_parameters"></rs-viewer-v1>
+	<h1 v-else>No Presentation Data</h1>
+</div>

@@ -1,0 +1,6 @@
+<div class="rs-page dnd-page dnd-presentation">
+	<dnd-presenter-battle :class="presenting.skirmish?'displayed':'hidden'" class="presenting-combat" :universe="universe" :player="player" :profile="profile" :presenting="presenting"></dnd-presenter-battle>
+	<dnd-presenter-map v-if="storage.presenting === 'map'" class="presenting-map" :universe="universe" :player="player" :profile="profile" :presenting="presenting"></dnd-presenter-map>
+	<h1 v-else>No Presentation Data</h1>
+	<div class="vista flex v center" :id="vista.id" :class="vista.classes" v-for="vista in vistas"><rs-image :image="vista.image"></rs-image></div>
+</div>

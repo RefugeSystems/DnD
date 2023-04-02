@@ -44,6 +44,7 @@ rsSystem.component("RSHome", {
 		data.player = null;
 		data.user = null;
 		
+		data.routeViewClass = null;
 		data.mainViewClass = null;
 		data.title = document.title;
 		data.pages = ["Privacy", "License", "Terms"];
@@ -52,6 +53,7 @@ rsSystem.component("RSHome", {
 		data.mainpage = "RSDashboard";
 		data.menuSpacing = null;
 		data.meetingNotice = false;
+		data.hidden = {};
 		
 		data.active = null;
 		data.configuration = null;
@@ -232,11 +234,38 @@ rsSystem.component("RSHome", {
 		if(this.storage.profile.screen_wake) {
 			this.acquireScreenLock();
 		}
+
+		rsSystem.EventBus.$on("home.hide", this.respondHideEvent);
+		rsSystem.EventBus.$on("home.show", this.respondShowEvent);
 	},
 	"methods": {
+		"respondShowEvent": function(event) {
+			switch(event.element) {
+				case "message":
+				case "info":
+				case "chat":
+				case "menu":
+					Vue.set(this.hidden, event.element, false);
+					Vue.set(this, "routeViewClass", this.getNavClasses());
+					Vue.set(this, "mainViewClass", this.getNavClasses());
+					break;
+			}
+		},
+		"respondHideEvent": function(event) {
+			switch(event.element) {
+				case "message":
+				case "info":
+				case "chat":
+				case "menu":
+					Vue.set(this.hidden, event.element, true);
+					Vue.set(this, "routeViewClass", this.getNavClasses());
+					Vue.set(this, "mainViewClass", this.getNavClasses());
+					break;
+			}
+		},
 		"getNavClasses": function() {
 			if(this.storage.profile.lock_character) {
-				if(this.storage.profile.navigation_collapsed) {
+				if(this.storage.profile.navigation_collapsed || this.hidden.menu) {
 					return "collapsed-shiv";
 				} else if(this.storage.profile.navigation_labels) {
 					return "labelled-shiv";
@@ -244,7 +273,7 @@ rsSystem.component("RSHome", {
 					return "extended-shiv";
 				}
 			} else {
-				if(this.storage.profile.navigation_collapsed) {
+				if(this.storage.profile.navigation_collapsed || this.hidden.menu) {
 					return "collapsed";
 				} else if(this.storage.profile.navigation_labels) {
 					return "labelled";
@@ -254,7 +283,7 @@ rsSystem.component("RSHome", {
 			}
 		},
 		"getLockClasses": function() {
-			if(this.storage.profile.navigation_collapsed) {
+			if(this.storage.profile.navigation_collapsed || this.hidden.menu) {
 				return "collapsed";
 			} else if(this.storage.profile.navigation_labels) {
 				return "labelled";
@@ -266,7 +295,7 @@ rsSystem.component("RSHome", {
 			if(this.storage.profile.lock_character) {
 				return "";
 			} else {
-				if(this.storage.profile.navigation_collapsed) {
+				if(this.storage.profile.navigation_collapsed || this.hidden.menu) {
 					return "collapsed";
 				} else {
 					return "extended";
@@ -398,7 +427,9 @@ rsSystem.component("RSHome", {
 		}
 	},
 	"beforeDestroy": function() {
-		document.remoceEventListener("visibilitychange", this.acquireScreenLock, false);
+		document.removeEventListener("visibilitychange", this.acquireScreenLock, false);
+		rsSystem.EventBus.$off("home.hide", this.respondHideEvent);
+		rsSystem.EventBus.$off("home.show", this.respondShowEvent);
 	},
 	"template": Vue.templified("pages/home.html")
 });

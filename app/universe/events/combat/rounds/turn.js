@@ -332,12 +332,31 @@ module.exports.initialize = function(universe) {
 				"skirmish": skirmish.id,
 				"turn": entity.id
 			});
-			if(!entity.is_minion && !entity.is_npc) {
+			if(!entity.is_minion && !entity.is_npc && entity.played_by) {
+				/**
+				 * 
+				 * @event entity:combat:turn:start
+				 * @for Chronicle
+				 * @param {String} skirmish
+				 * @param {Number} time
+				 * @param {Number} date
+				 */
+				entity.fireHandlers("entity:combat:turn:start", {
+					"skirmish": skirmish.id,
+					"time": time,
+					"date": date
+				});
 				universe.emit("send", {
 					"type": "audio:queue",
 					"audio": "audio:combat:turn",
 					"control": "audio:play",
-					"recipients": entity.played_by?entity.owned:notifyMasterOnly
+					"recipients": entity.owned
+				});
+				universe.emit("send", {
+					"type": "audio:queue",
+					"audio": "audio:combat:nextturn",
+					"control": "audio:play",
+					"recipients": notifyMasterOnly
 				});
 			}
 			/**

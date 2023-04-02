@@ -35,6 +35,8 @@
 			data.session = {};
 			data.external = false;
 			data.password = "";
+			data.otherWorlds = null;
+			data.worlds = {};
 			
 			/*
 			data.storage = this.loadStorage({
@@ -47,6 +49,19 @@
 			*/
 			
 			return data;
+		},
+		"watch": {
+			"storage.address": function(value) {
+				if(this.worlds[value]) {
+					if(typeof(this.worlds[value].secure) === "boolean") {
+						Vue.set(this.storage, "secure", this.worlds[value].secure);
+					} else if(value.startsWith("https") || value.startsWith("wss")) {
+						Vue.set(this.storage, "secure", true);
+					} else {
+						Vue.set(this.storage, "secure", false);
+					}
+				}
+			}
 		},
 		"computed": {
 			"passwordPlaceholder": function() {
@@ -159,6 +174,7 @@
 						this.alternatives.push(result.modules[x]);
 					}
 				}
+
 				Vue.set(this, "loading", false);
 				
 				setTimeout(() => {
@@ -167,6 +183,26 @@
 						login[0].focus();
 					}
 				}, 10);
+
+				return fetch(new Request(this.getHTTPAddress() + "/api/v1/worlds/list"));
+			}).then((res) => {
+				if(res.status === 404) {
+					throw new Error("Endpoint Not Found");
+				} else if(res.status === 500) {
+					throw new Error("Server Error");
+				} else if(res.status === 200) {
+					return res.json();
+				} else {
+					throw new Error("Unknown Error");
+				}
+			}).then((list) => {
+				console.log("World List: ", list);
+				if(list) {
+					Vue.set(this, "otherWorlds", list);
+					for(var x=0; x<list.length; x++) {
+						this.worlds[list[x].address] = list[x];
+					}
+				}
 			}).catch((error) => {
 				console.error("Error processing Available Authentication Modules: ", error);
 				this.$emit("message", {

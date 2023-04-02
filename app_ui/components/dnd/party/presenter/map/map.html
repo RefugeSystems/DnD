@@ -1,0 +1,28 @@
+<div class="rs-component dnd-component party-presenter-map">
+	<h1 v-if="!presenting.location">No Location to Present</h1>
+	<div class="map" v-if="presenting.location">
+		<div class="view">
+			<div class="parchment" :style="'font-size: ' + getMarkerSize() + 'px;'">
+				<div class="pointsOfInterest" v-if="pointsOfInterest.length">
+					<button class="scaled poi" :class="poiStyling(link)" v-for="link in pointsOfInterest" :data-id="link.id" :style="poiStylingString(link)" :key="link.id" v-on:click="openLink(link)" v-on:click.stop.prevent="poiMenu(link)">
+						<span class="poi-icon scaled" v-if="!link.token_image" :class="poiClass(link)"></span>
+						<span class="labeling scaled" v-if="link.label && !link.token_image" :class="link.label" :style="poiLinkStylingString(link)">{{link.label || link.nickname || link.name}}</span>
+					</button>
+				</div>
+				<div class="coordinates" v-for="coordinate in presenting.location.coordinates" v-if="!coordinate.standalone">
+					<span class="coordinate top left" :style="styleTL[coordinate.id]"></span>
+					<span class="coordinate bottom right" :style="styleBR[coordinate.id]"></span>
+				</div>
+				<div class="coordinate-dots">
+					<button class="dot" v-for="coordinate in presenting.location.coordinates" :style="stylePosition[coordinate.id]" v-on:click="dismissCoordinate(coordinate)"></button>
+				</div>
+				<div class="map-paths time-of-day" :class="hourClassing">
+					<canvas v-for="loc in locales" :data-id="'locale:' + loc.id"></canvas>
+					<canvas id="measuring"></canvas>
+				</div>
+				<rs-image :image="presenting.location.map" modes="viewer-map" draggable="false" />
+			</div>
+			<rs-image class="background-image" :image="presenting.location.mapbg" modes="viewer-map"  v-if="presenting.location.mapbg" draggable="false" />
+		</div>
+	</div>
+</div>

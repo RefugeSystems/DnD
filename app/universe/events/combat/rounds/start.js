@@ -66,6 +66,12 @@ module.exports.initialize = function(universe) {
 					}
 				}
 			}
+
+			universe.emit("send", {
+				"type": "combat:end:skirmish",
+				"skirmish": skirmish.id,
+				"id": skirmish.id
+			});
 		}
 	});
 };

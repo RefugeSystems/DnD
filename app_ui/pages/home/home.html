@@ -23,8 +23,9 @@
 		</div>
 	</div>
 	<div class="system-display active" v-if="state === 10 && player && configuration && !active" :class="mainViewClass">
+	<!--<div class="system-display active" v-if="state === 10 && player && configuration && !active" :class="getNavClasses()">-->
 		<!-- <component class="system-view" :class="storage.profile.navigation_collapsed?'collapsed':'extended'" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component> -->
-		<component class="system-view" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
+		<component class="system-view component-view-section" :is="mainpage" v-if="$route.path === '/'" :universe="universe" :chat-core="chatCore" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="'maincomponentskey' + mainpage"></component>
 
 		<!-- Locked Player Character View -->
 		<div class="dnd-entities-shiv" v-if="storage.profile.lock_character" :class=getLockClasses()>
@@ -43,15 +44,15 @@
 			</div>
 		</div>
 		<!-- Content Page -->
-		<router-view class="system-view" :class="getViewClasses()" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="$route.path === '/' || $route.path === '/home'?'maincomponentskey' + mainpage:'pathcomponentKey' + $route.path"></router-view>
+		<router-view class="system-view router-view-section" :class="getViewClasses()" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" :storage-key="$route.path === '/' || $route.path === '/home'?'maincomponentskey' + mainpage:'pathcomponentKey' + $route.path"></router-view>
 
 
 		<system-user-bar class="" :universe="universe" :player="player" :profile="storage.profile" storage-key="_key_sysbar"></system-user-bar>
-		<system-menu class="system-menu" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmenu"></system-menu>
-		<system-info class="system-info" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysinfo"></system-info>
+		<system-menu v-if="!hidden.menu" class="system-menu" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmenu"></system-menu>
+		<system-info v-if="!hidden.info" class="system-info" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysinfo"></system-info>
 		<system-dialog class="system-dialog" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysdialog"></system-dialog>
-		<system-message class="system-message" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmsg"></system-message>
-		<system-chat class="system-chat" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_syschat" :class="storage.profile.chat_top?'topped':''"></system-chat>
+		<system-message v-if="!hidden.message" class="system-message" :universe="universe" :player="player" :configuration="configuration" :profile="storage.profile" storage-key="_key_sysmsg"></system-message>
+		<system-chat v-if="!hidden.chat" class="system-chat" :universe="universe" :player="player" :chat-core="chatCore" :configuration="configuration" :profile="storage.profile" storage-key="_key_syschat" :class="storage.profile.chat_top?'topped':''"></system-chat>
 	</div>
 	<div class="display-page" v-if="active">
 		<component :is="'page' + active" class="display-contents"></component>

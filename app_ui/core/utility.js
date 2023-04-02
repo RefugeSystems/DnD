@@ -440,27 +440,30 @@
 		 * TODO: This, in theory, should be removed and leverage the server obscuring data instead, however
 		 * 		this is proving expensive
 		 * @method getName
-		 * @param {RSObject} entity 
+		 * @param {RSObject} [entity] Optional entity from whose perspective the entity should be named.
 		 * @param {RSObject} object 
 		 * @return {String} The name of the object according to the passed entity
 		 */
-		"getName":function(entity, object) {
+		"getName": function(entity, object) {
+			if(object.obscured || object.is_obscured) {
+				return "Unknown";
+			}
+			if(object.is_concealed && object.concealment && object.concealment.name) {
+				return object.concealment.name;
+			}
 			if(object.must_know) {
 				if(entity) {
 					if(isNaN(object.must_know)) {
 						if(entity.knowledge_matrix[object.must_know] && entity.knowledge_matrix[object.must_know].length !== 0) {
-							return object.name;
+							return object.nickname || object.name;
 						}
 					} else if(entity.knowledge_matrix[object.id] && object.must_know <= entity.knowledge_matrix[object.id].length) {
-						return object.name;
+						return object.nickname || object.name;
 					}
-				}
-				if(object.concealment && object.concealment.name) {
-					return object.concealment.name;
 				}
 				return "Unknown";
 			} else {
-				return object.name;
+				return object.nickname || object.name;
 			}
 		},
 

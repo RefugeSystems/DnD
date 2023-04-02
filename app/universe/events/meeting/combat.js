@@ -87,6 +87,11 @@ module.exports.initialize = function(universe) {
 					meeting.addValues({
 						"skirmishes": [skirmish.id]
 					});
+					universe.emit("send", {
+						"type": "combat:start:skirmish",
+						"skirmish": skirmish.id,
+						"id": skirmish.id
+					});
 				}
 			});
 		} else {

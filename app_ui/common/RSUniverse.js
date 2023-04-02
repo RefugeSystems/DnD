@@ -1319,6 +1319,35 @@ class RSUniverse extends EventEmitter {
 
 		return destination;
 	}
+
+	/**
+	 * Get a setting based on its id or key. Where the ID is "setting:example:id" and the
+	 * subsequent key would be "example:id".
+	 * @method getSetting
+	 * @param {String} key The key OR id for the setting.
+	 * @return {String} The value of the setting or Null if the setting or value isn't
+	 * 		found. Note that an empty string value will be returned as an empty string.
+	 * 		This is true for all other falsey values except undefined, which will also
+	 * 		return as Null.
+	 */
+	getSetting(key) {
+		var setting;
+		if(key[0] === "s" && key[7] === ":") {
+			setting = this.get(key);
+		} else {
+			setting = this.get("setting:" + key);
+		}
+		
+		if(!setting) {
+			return null;
+		}
+		
+		if(setting.value === undefined || setting.value === null) {
+			return null;
+		}
+
+		return setting.value;
+	}
 	
 	checkVersion() {
 		if(!this.serviceWorkerIssues && !rsSystem.options.suppress_update_warning && this.version != rsSystem.version) {

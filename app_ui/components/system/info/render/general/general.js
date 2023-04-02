@@ -568,6 +568,23 @@ rsSystem.component("sysInfoGeneral", {
 								"type": "button",
 								"action": "subinfoactivity"
 							});
+							if(this.info._class === "entity" || this.info._class === "location") {
+								if(this.info.is_presenting) {
+									this.controls.push({
+										"title": "Stop Presenting Object",
+										"icon": "fas fa-film-slash",
+										"type": "button",
+										"action": "unpresent"
+									});
+								} else {
+									this.controls.push({
+										"title": "Start Presenting Object",
+										"icon": "fas fa-film",
+										"type": "button",
+										"action": "present"
+									});
+								}
+							}
 						// } else if(this.info._class === "entity" && this.info.owned && this.info.owned[this.player.id] && this.player.attribute && this.player.attribute.playing_as !== this.info.id) {
 						// 	this.controls.push({
 						// 		"title": "Assume Entity in Overview",
@@ -994,6 +1011,20 @@ rsSystem.component("sysInfoGeneral", {
 					this.universe.send("master:quick:set", {
 						"object": object.id,
 						"field": "is_active",
+						"value": false
+					});
+					break;
+				case "present":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_presenting",
+						"value": true
+					});
+					break;
+				case "unpresent":
+					this.universe.send("master:quick:set", {
+						"object": object.id,
+						"field": "is_presenting",
 						"value": false
 					});
 					break;

@@ -7,6 +7,12 @@ rsSystem.component("DNDCore", {
 			"required": true,
 			"type": Object
 		},
+		"utility": {
+			"type": Object,
+			"default": function() {
+				return rsSystem.utility;
+			}
+		},
 		"player": {
 			"required": true,
 			"type": Object

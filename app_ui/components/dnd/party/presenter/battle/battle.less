@@ -1,0 +1,93 @@
+.dnd-component.party-presenter-battle {
+	background-color: transparent;
+	color: @rsWhite;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	.combatant {
+		position: relative;
+		height: 100px;
+		border: 0px;
+		margin: 10px;
+		background: @rsBlack;
+		border-radius: 10px;
+		box-shadow: 0 0 5px black;
+
+		.combatant-icon {
+			height: 100px;
+			width: 100px;
+			font-size: 50px;
+			flex-shrink: 0;
+			flex-grow: 0;
+			border-color: transparent;
+
+			.content {
+				height: ~"calc(100% - 14px)";
+				width: ~"calc(100% - 14px)";
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+
+		.combatant-portrait {
+			overflow: hidden;
+			height: 100%;
+			width: 100%;
+
+			img {
+				height: 100%;
+			}
+		}
+
+		.combatant-info {
+			position: relative;
+			flex-grow: 10;
+			height: 100px;
+			overflow: hidden;
+
+			.combatant-name {
+				padding: 5px;
+				font-size: 30px;
+				overflow: hidden;
+				white-space: nowrap;
+
+				.entity-hat {
+					padding: 0px 5px;
+				}
+			}
+
+			.combatant-effects {
+
+				.effect {
+					font-size: 20px;
+					padding: 5px;
+
+					&.negative {
+						color: @rsRed;
+					}
+				}
+			}
+
+			.display-healthbar {
+				height: 11px;
+
+				.hp.bar {
+					height: 11px;
+				}
+			}
+		}
+
+		&.npc {
+			.combatant-name {
+				color: @rsLightBlue;
+			}
+		}
+
+		&.hostile {
+			.combatant-name {
+				color: @rsLightRed;
+			}
+		}
+	}
+}

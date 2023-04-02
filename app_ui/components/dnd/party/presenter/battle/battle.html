@@ -1,0 +1,25 @@
+<div class="rs-component dnd-component party-presenter-battle">
+	<div class="combatant flex h" v-for="combatant in combatants" :id="combatant.id">
+		<!--
+		<div class="combatant-icon flex h centered middled">
+			<rs-image class="combatant-portrait" v-if="combatant.portrait || combatant.token_image || combatant.picture" :image="combatant.portrait || combatant.picture || combatant.token_image"></rs-image>
+			<span :class="combatant.icon" v-else></span>
+		</div>
+		-->
+		<rs-shiny-button class="combatant-icon flex h centered middled" :active="presenting.skirmish && combatant.id === presenting.skirmish.combat_turn" color="red">
+			<rs-image class="combatant-portrait" v-if="combatant.portrait || combatant.token_image || combatant.picture" :image="combatant.portrait || combatant.picture || combatant.token_image"></rs-image>
+			<span :class="combatant.icon" v-else></span>
+		</rs-shiny-button>
+
+		<div class="combatant-info flex v" :class="getCombatantClasses(combatant)">
+			<div class="combatant-name">
+				<span v-if="combatant.color_flag" class="entity-hat" :class="getCombatantHat(combatant)"></span>
+				<span>{{utility.getName(null, combatant)}}</span>
+			</div>
+			<div class="combatant-effects flex h">
+				<span class="effect" v-for="effect in combatant.effects" v-if="universe.index.effect[effect]" :class="universe.index.effect[effect].icon"></span>
+			</div>
+			<dnd-health-bar :entity="combatant"></dnd-health-bar>
+		</div>
+	</div>
+</div>

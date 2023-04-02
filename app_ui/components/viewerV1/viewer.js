@@ -245,6 +245,7 @@
 			data.search_criteria = [];
 			// data.image = {};
 
+			data.canvasElement = null;
 			data.measurementCanvas = null;
 			data.initializing = true;
 			data.baseFontSize = 13;
@@ -1077,6 +1078,7 @@
 						buffer = this.getCenter();
 						buffer.location = this.location.id;
 						this.universe.send("master:control:mapview", buffer);
+						break;
 					case "set-location":
 						buffer = this.universe.getObject(this.storage.alter);
 						if(buffer) {

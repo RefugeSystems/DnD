@@ -41,6 +41,21 @@
 						</button>
 					</td>
 				</tr>
+				<tr v-if="otherWorlds">
+					<td class="label">
+						<label class="full align-right" for="login-world">
+							<span class="field-text">World</span>
+						</label>
+					</td>
+					<td>
+						<select v-model="storage.address" v-esc="clearAddress">
+							<option value="">Select a world...</option>
+							<option v-for="world in otherWorlds" :value="world.address">{{world.name}}</option>
+						</select>
+					</td>
+					<td>
+					</td>
+				</tr>
 				<tr v-if="external">
 					<td class="label">
 						<label class="full align-right" for="login-address">
