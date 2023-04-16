@@ -7,7 +7,7 @@
 		</div>
 		-->
 		<rs-shiny-button class="combatant-icon flex h centered middled" :active="presenting.skirmish && combatant.id === presenting.skirmish.combat_turn" color="red">
-			<rs-image class="combatant-portrait" v-if="combatant.portrait || combatant.token_image || combatant.picture" :image="combatant.portrait || combatant.picture || combatant.token_image"></rs-image>
+			<rs-image class="combatant-portrait" v-if="combatant.portrait || combatant.token_image || combatant.picture" :image="combatant.portrait || combatant.token_image || combatant.picture"></rs-image>
 			<span :class="combatant.icon" v-else></span>
 		</rs-shiny-button>
 

@@ -76,24 +76,26 @@ rsSystem.component("DNDPresentation", {
 		rsSystem.EventBus.$emit("home.hide", {"element": "chat"});
 
 		this.universe.$on("master:control:mapview", this.controlResponse);
-
 		this.universe.$on("master:control", this.controlResponse);
-		this.universe.$on("master:presentation", this.processEvent);
+
 		this.universe.$on("combat:start:skirmish", this.processEvent);
+		this.universe.$on("master:presentation", this.processEvent);
 		this.universe.$on("combat:end:skirmish", this.processEvent);
+
 		this.universe.$on("updated", this.update);
 
 		this.update();
 	},
 	"methods": {
 		"update": function(event) {
-			var types,
+			var active,
+				types,
 				vista,
 				type,
+				all,
 				i;
 
 			if(!event || (this.presenting.location && event.id === this.presenting.location.id) || (this.presenting.meeting && event.id === this.presenting.meeting.id)) {
-				console.log(" - Update Vistas: ", event);
 				this.vistas.splice(0);
 				if(this.presenting.location && this.presenting.location.vista) {
 					types = Object.keys(this.presenting.location.vista);
@@ -101,10 +103,22 @@ rsSystem.component("DNDPresentation", {
 						this.vistas.push(vista = {});
 						type = types[i];
 
-						vista.classes = this.presenting.meeting && this.presenting.meeting.type === type?"viewed":"hidden";
 						vista.image = this.presenting.location.vista[type];
 						vista.type = type;
-						vista.id = type;
+						vista.id = this.presenting.location.vista[type];
+
+						if(this.presenting.meeting && this.presenting.meeting.type === type) {
+							active = vista;
+							vista.classes = "viewed";
+						} else {
+							vista.classes = "hidden";
+						}
+						if(type === "*" || type === "type:*") {
+							all = vista;
+						}
+					}
+					if(!active && all) {
+						all.classes = "viewed";
 					}
 				}
 			}

@@ -41,6 +41,9 @@ rsSystem.component("sysInfoGeneral", {
 			return null;
 		},
 		"image": function() {
+			if(this.info.picture && this.universe.index.image[this.info.picture]) {
+				return this.universe.index.image[this.info.picture];
+			}
 			if(this.info.portrait && this.universe.index.image[this.info.portrait]) {
 				return this.universe.index.image[this.info.portrait];
 			}

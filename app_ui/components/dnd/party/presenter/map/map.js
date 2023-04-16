@@ -864,7 +864,7 @@ rsSystem.component("dndPresenterMap", {
 			return this.poiVisible(link);
 		},
 		"poiVisible": function(link) {
-			return link.is_presenting;
+			return link.is_presenting && link.location === this.presenting.location.id;
 		},
 		"minorUpdate": function() {
 			this.$forceUpdate();
