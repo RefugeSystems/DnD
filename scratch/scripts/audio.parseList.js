@@ -1,3 +1,4 @@
+// https://refugesystems.net/audio/music/pb/
 var reg = /^(https:\/\/refugesystems.net\/audio\/music\/pb\/)([a-z_-]+)\/([0-9]+)_(loop|full)([0-9]+)?_([a-z0-9_-]+)\.(mp3|wav)/,
 	clean = /_/g,
 	toImport = [],

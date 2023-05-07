@@ -88,7 +88,8 @@ rsSystem.component("DNDPresentation", {
 	},
 	"methods": {
 		"update": function(event) {
-			var active,
+			var location,
+				active,
 				types,
 				vista,
 				type,
@@ -97,15 +98,16 @@ rsSystem.component("DNDPresentation", {
 
 			if(!event || (this.presenting.location && event.id === this.presenting.location.id) || (this.presenting.meeting && event.id === this.presenting.meeting.id)) {
 				this.vistas.splice(0);
-				if(this.presenting.location && this.presenting.location.vista && this.presenting.meeting.type !== "type:navigating") {
-					types = Object.keys(this.presenting.location.vista);
+				if(this.presenting.meeting && this.presenting.meeting.type !== "type:navigating" && (location = this.universe.get(this.presenting.meeting.location)) && location.vista) {
+				// if(this.presenting.location && this.presenting.location.vista && this.presenting.meeting.type !== "type:navigating") {
+					types = Object.keys(location.vista);
 					for(i=0; i<types.length; i++) {
 						this.vistas.push(vista = {});
 						type = types[i];
 
-						vista.image = this.presenting.location.vista[type];
+						vista.image = location.vista[type];
 						vista.type = type;
-						vista.id = this.presenting.location.vista[type];
+						vista.id = location.vista[type];
 
 						if(this.presenting.meeting && this.presenting.meeting.type === type) {
 							active = vista;
@@ -121,6 +123,7 @@ rsSystem.component("DNDPresentation", {
 						all.classes = "viewed";
 					}
 				}
+				console.log("Update Fired - Location: ", location, "\nEvent: ", event);
 			}
 		},
 		"processEvent": function(event) {

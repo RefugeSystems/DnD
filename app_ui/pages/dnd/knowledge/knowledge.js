@@ -111,16 +111,31 @@ rsSystem.component("DNDKnowledge", {
 				if(!this.$route.params.entity && this.meeting) {
 					for(j=0; j<this.meeting.entities.length; j++) {
 						entity = this.universe.index.entity[this.meeting.entities[j]];
-						if(entity && !entity.disabled && !entity.is_preview && entity.hp && entity.id !== this.entity.id && (entity.played_by === this.player.id || (entity.owned && entity.owned[this.player.id]) || this.player.gm) && entity.knowledges && entity.knowledges.length) {
-							for(i=0; i<entity.knowledges.length; i++) {
-								knowledge = this.universe.index.knowledge[entity.knowledges[i]];
-								if(knowledge && !knowledge.disabled && !knowledge.concealed) {
-									if(!this.known_by[knowledge.id]) {
-										Vue.set(this.known_by, knowledge.id, [entity.name]);
-										cats[knowledge.category] = true;
-										known.uniquely(knowledge);
-									} else {
-										this.known_by[knowledge.id].uniquely(entity.name);
+						if(entity && !entity.disabled && !entity.is_preview && entity.hp && entity.id !== this.entity.id) {
+							if((entity.played_by === this.player.id || (entity.owned && entity.owned[this.player.id]) || this.player.gm) && entity.knowledges && entity.knowledges.length) {
+								for(i=0; i<entity.knowledges.length; i++) {
+									knowledge = this.universe.index.knowledge[entity.knowledges[i]];
+									if(knowledge && !knowledge.disabled && !knowledge.concealed) {
+										if(!this.known_by[knowledge.id]) {
+											Vue.set(this.known_by, knowledge.id, [entity.name]);
+											cats[knowledge.category] = true;
+											known.uniquely(knowledge);
+										} else {
+											this.known_by[knowledge.id].uniquely(entity.name);
+										}
+									}
+								}
+							} else if(entity.is_sharing_knowledge) {
+								for(i=0; i<entity.knowledges.length; i++) {
+									knowledge = this.universe.index.knowledge[entity.knowledges[i]];
+									if(knowledge && !knowledge.disabled && !knowledge.concealed && knowledge.is_shared) {
+										if(!this.known_by[knowledge.id]) {
+											Vue.set(this.known_by, knowledge.id, [entity.name]);
+											cats[knowledge.category] = true;
+											known.uniquely(knowledge);
+										} else {
+											this.known_by[knowledge.id].uniquely(entity.name);
+										}
 									}
 								}
 							}

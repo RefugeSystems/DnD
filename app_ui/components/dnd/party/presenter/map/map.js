@@ -902,6 +902,7 @@ rsSystem.component("dndPresenterMap", {
 						this.updateTimeOfDay();
 					});
 				}
+				console.log("Presenting Source Update: ", source);
 			}
 			if(this.presenting.location && (!source || source.location === this.presenting.location.id || source.id === this.presenting.location.id || (this.viewingEntity && (source.id === this.viewingEntity.id || source.entity === this.viewingEntity.id)))) {
 				if(this.presenting.location.links_to) {

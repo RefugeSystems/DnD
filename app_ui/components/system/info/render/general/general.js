@@ -749,13 +749,32 @@ rsSystem.component("sysInfoGeneral", {
 									break;
 							}
 						}
+						if(this.info._class === "knowledge") {
+							if(this.player.gm || (entity && entity.id === this.info.character)) {
+								if(this.info.is_shared) {
+									this.controls.push({
+										"title": "Stop sharing this knowledge with others in the party",
+										"icon": "fa-kit fa-light-share-nodes-circle-minus",
+										"type": "button",
+										"action": "unshareknow"
+									});
+								} else {
+									this.controls.push({
+										"title": "Share this knowledge with others in the party",
+										"icon": "fa-kit fa-light-share-nodes-circle-plus",
+										"type": "button",
+										"action": "shareknow"
+									});
+								}
+							}
+						}
 						this.controls.push({
 							"title": "Create a personal knowledge entry for " + name,
 							"icon": "fa-solid fa-thought-bubble",
 							"type": "button",
 							"action": "knowing"
 						});
-						if(this.player.gm || (character && !this.info.is_singular)) {
+						if(this.player.gm || (character === entity.id && !this.info.is_singular)) {
 							this.controls.push({
 								"title": "Edit description for " + name,
 								"icon": "fas fa-edit",
@@ -994,6 +1013,20 @@ rsSystem.component("sysInfoGeneral", {
 						"object": object.id,
 						"field": "owned",
 						"value": null
+					});
+					break;
+				case "shareknow":
+					this.universe.send("quick:set", {
+						"object": object.id,
+						"field": "is_shared",
+						"value": true
+					});
+					break;
+				case "unshareknow":
+					this.universe.send("quick:set", {
+						"object": object.id,
+						"field": "is_shared",
+						"value": false
 					});
 					break;
 				case "unpower":
