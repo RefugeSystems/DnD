@@ -27,7 +27,7 @@ rsSystem.component("dndEntityEquipment", {
 			return this.universe.index.item[this.entity.main_weapon];
 		},
 		"mainhandAmmo": function() {
-			if(this.mainhand.ammo) {
+			if(this.mainhand && this.mainhand.ammo) {
 				return this.universe.index.item[this.mainhand.ammo];
 			}
 			return null;
