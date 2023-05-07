@@ -47,6 +47,30 @@ fields.push({
 	}
 });
 fields.push({
+	"id": "created",
+	"name": "Created",
+	"description": "Timestamp of when this object was created.",
+	"type": "date",
+	"inheritable": [],
+	"ordering": 1000,
+	"attribute": {
+		"displayed": false,
+		"display_size": 110
+	}
+});
+fields.push({
+	"id": "updated",
+	"name": "Updated",
+	"description": "Timestamp of when this object was updated.",
+	"type": "date",
+	"inheritable": [],
+	"ordering": 1001,
+	"attribute": {
+		"displayed": false,
+		"display_size": 110
+	}
+});
+fields.push({
 	"id": "restricted",
 	"name": "Restricted",
 	"description": "When set, the object's listed properties require knowledge with the 'reveals' property and the corrsponding object as a subject.",

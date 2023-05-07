@@ -84,6 +84,10 @@ rsSystem.component("rsTableConfigure", {
 					}
 				}
 			}
+			if(this.player && this.player.gm) {
+				headers.push(this.universe.index.fields.updated);
+				headers.push(this.universe.index.fields.created);
+			}
 			headers.sort(rsSystem.utility.sortByName);
 			return headers;
 		},

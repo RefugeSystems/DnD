@@ -314,6 +314,7 @@ class PlayerConnection extends EventEmitter {
 					}
 
 					send.id = change.id;
+					send.updated = change.updated;
 					if(this.player.gm) {
 						send._search += ":::" + send.id;
 					}

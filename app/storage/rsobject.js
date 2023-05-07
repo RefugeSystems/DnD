@@ -19,6 +19,8 @@ var valid = new RegExp("^[a-z][a-z0-9_]+:[a-z0-9:_]+$");
 var stackRestricted = [
 	"id",
 	"parent",
+	"created",
+	"updated",
 	"is_copy",
 	"is_template",
 	"attribute"
@@ -972,10 +974,13 @@ class RSObject {
 		}
 
 		// Maintain updated/created
-		this.updated = Date.now();
-		if(!this.created) {
-			this.created = this._data.created;
-		}
+		// this.updated = Date.now();
+		this.created = this._data.created;
+		this.updated = this._data.updated;
+		// if(!this.created) {
+		// 	this.created = this._data.created;
+		// 	// this.updated = Date.now();
+		// }
 
 		if(typeof(this.postFieldUpdate) === "function") {
 			this.postFieldUpdate();
@@ -1460,7 +1465,8 @@ class RSObject {
 	}
 
 	addValues(delta, callback) {
-		delta.updated = Date.now();
+		// delta.updated = Date.now();
+		this._data.updated = Date.now();
 		var result = {},
 			details,
 			field,
@@ -1480,6 +1486,7 @@ class RSObject {
 			}
 		}
 
+		result.updated = this._data.updated;
 		result.id = this.id;
 		this._manager.writeObjectData(result, (err) => {
 			if(err) {
@@ -1510,7 +1517,8 @@ class RSObject {
 	}
 
 	subValues(delta, callback) {
-		delta.updated = Date.now();
+		// delta.updated = Date.now();
+		this._data.updated = Date.now();
 		var result = {},
 			details,
 			field,
@@ -1526,6 +1534,7 @@ class RSObject {
 			}
 		}
 
+		result.updated = this._data.updated;
 		result.id = this.id;
 		this._manager.writeObjectData(result, (err) => {
 			if(err) {
@@ -1565,7 +1574,8 @@ class RSObject {
 	 * @param {Function} callback
 	 */
 	setValues(delta, callback) {
-		delta.updated = Date.now();
+		// delta.updated = Date.now();
+		this._data.updated = Date.now();
 		var result = {},
 			details,
 			field,
@@ -1582,6 +1592,7 @@ class RSObject {
 		}
 
 		// Write Data but don't wait
+		result.updated = this._data.updated;
 		result.id = this.id;
 		this._manager.writeObjectData(result, (err) => {
 			if(err) {
@@ -2002,8 +2013,8 @@ class RSObject {
 		if(!json.attribute) {
 			json.attribute = {};
 		}
-		json.created = this.created;
-		json.updated = this.updated;
+		json.created = this._data.created;
+		json.updated = this._data.updated;
 		return json;
 	}
 }
