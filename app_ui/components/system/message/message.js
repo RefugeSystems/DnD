@@ -8,6 +8,8 @@
  * @zindex 50
  */
 (function() {
+	var lastSystemNotification = 0,
+		limit = 5000;
 	
 	rsSystem.component("systemMessage", {
 		"inherit": true,
@@ -120,6 +122,9 @@
 			 */
 			"receiveMessage": function(event) {
 				// console.log("Received: ", event);
+				var now = Date.now(),
+					notify;
+
 				if(this.identified[event.id]) {
 					this.dismissMessage(this.identified[event.id]);
 				}
@@ -155,6 +160,27 @@
 					event.timeout = setTimeout(() => {
 						this.dismissMessage(event);
 					}, event.timeout);
+				}
+
+				if(document.hidden && !event.no_system_notification && (lastSystemNotification + limit) < now) {
+					lastSystemNotification = now;
+					if(Notification.permission === "granted") {
+						notify = new Notification("DnD Notification", {
+							"body": event.message,
+							"icon": "/favicon.png"
+						});
+						notify.addEventListener("show", function(event) {
+
+						});
+						notify.addEventListener("click", function(event) {
+
+						});
+						notify.addEventListener("close", function(event) {
+
+						});
+					} else {
+						console.warn("No permission for system notifications");
+					}
 				}
 				
 				this.messages.unshift(event);

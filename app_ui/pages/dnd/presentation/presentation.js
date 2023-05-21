@@ -96,7 +96,7 @@ rsSystem.component("DNDPresentation", {
 				all,
 				i;
 
-			if(!event || (this.presenting.location && event.id === this.presenting.location.id) || (this.presenting.meeting && event.id === this.presenting.meeting.id)) {
+			if(!event || (this.presenting.location && (event.id === this.presenting.location.id || event.location === this.presenting.location.id)) || (this.presenting.meeting && event.id === this.presenting.meeting.id)) {
 				this.vistas.splice(0);
 				if(this.presenting.meeting && this.presenting.meeting.type !== "type:navigating" && (location = this.universe.get(this.presenting.meeting.location)) && location.vista) {
 				// if(this.presenting.location && this.presenting.location.vista && this.presenting.meeting.type !== "type:navigating") {

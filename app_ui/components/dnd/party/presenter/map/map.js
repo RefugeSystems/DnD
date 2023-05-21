@@ -997,6 +997,10 @@ rsSystem.component("dndPresenterMap", {
 						this.waitDimensions(this.universe.getImagePath(this.presenting.location.map), this.finishUpdate);
 					} else {
 						this.finishUpdate();
+						setTimeout(() => {
+							this.renderMeasurements();
+							this.redrawPaths();
+						}, 0);
 					}
 
 					for(x=0; x<this.presenting.location.coordinates.length; x++) {
