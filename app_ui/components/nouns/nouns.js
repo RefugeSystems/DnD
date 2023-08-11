@@ -475,23 +475,29 @@
 			 */
 			"modify": function() {
 				var saving = {},
+					field,
 					i;
 
 				// Clean eroneous fields
 				saving.id = this.details.id;
 				for(i=0; i<this.fields.length; i++) {
-					switch(typeof(this.details[this.fields[i].id])) {
+					field = this.fields[i];
+					switch(typeof(this.details[field.id])) {
 						case "object":
-							if(this.details[this.fields[i].id] === null) {
-								saving[this.fields[i].id] = null;
-							} else if(Object.keys(this.details[this.fields[i].id]).length) {
-								saving[this.fields[i].id] = JSON.parse(JSON.stringify(this.details[this.fields[i].id]));
+							if(this.details[field.id] === null) {
+								saving[field.id] = null;
+							} else if(Object.keys(this.details[field.id]).length) {
+								saving[field.id] = JSON.parse(JSON.stringify(this.details[field.id]));
 							} else {
-								saving[this.fields[i].id] = null;
+								saving[field.id] = null;
 							}
 							break;
 						default:
-							saving[this.fields[i].id] = this.details[this.fields[i].id];
+							if(field.attribute && field.attribute.hashed && typeof(this.details[field.id]) === "string") {
+								saving[field.id] = this.details[field.id].sha256();
+							} else {
+								saving[field.id] = this.details[field.id];
+							}
 					}
 				}
 

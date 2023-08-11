@@ -341,11 +341,11 @@ module.exports.initialize = function(universe) {
 				 * @param {Number} time
 				 * @param {Number} date
 				 */
-				entity.fireHandlers("entity:combat:turn:start", {
-					"skirmish": skirmish.id,
-					"time": time,
-					"date": date
-				});
+				// entity.fireHandlers("entity:combat:turn:start", {
+				// 	"skirmish": skirmish.id,
+				// 	"time": time,
+				// 	"date": date
+				// });
 				universe.emit("send", {
 					"type": "audio:queue",
 					"audio": "audio:combat:turn",

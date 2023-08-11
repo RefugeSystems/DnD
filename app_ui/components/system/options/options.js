@@ -37,10 +37,15 @@ rsSystem.component("systemOptionsDialog", {
 		var data = {},
 			dashboards = [],
 			default_dash,
+			section,
+			loading,
 			option,
 			sizes,
+			maps,
 			keys,
+			key,
 			i,
+			j,
 			x;
 			
 		sizes = [{
@@ -71,6 +76,13 @@ rsSystem.component("systemOptionsDialog", {
 		data.navigator = rsSystem.getBrowserName();
 		data.active = null;
 		data.updating = "";
+		data.filter = "";
+		data.keymapDefaultOption = {
+			"id": "default-keybinds",
+			"action": "restore-defaults",
+			"icon": "fas fa-ban rs-light-orange",
+			"label": "Restore Defaults"
+		};
 
 		for(i=0; i<this.universe.listing.dashboard.length; i++) {
 			if(!this.universe.listing.dashboard[i].is_preview && !this.universe.listing.dashboard[i].disabled) {
@@ -84,6 +96,72 @@ rsSystem.component("systemOptionsDialog", {
 		}
 		if(!this.profile.default_dashboard && default_dash) {
 			Vue.set(this.profile, "default_dashboard", default_dash.id);
+		}
+
+		data.availableKeyEvents = [{
+			"label": "Filter",
+			"id": null,
+			"type": "filter"
+		}, {
+			"label": "Character Actions",
+			"id": null,
+			"meta": "character:::action",
+			"type": "section"
+		}, {
+			"name": "Character Info",
+			"id": "character:info",
+			"type": "keybind"
+		}, {
+			"name": "Character Attack",
+			"id": "character:attack",
+			"type": "keybind"
+		}, {
+			"label": "System Actions",
+			"id": null,
+			"meta": "system:::action",
+			"type": "section"
+		}, {
+			"name": "Menu",
+			"id": "system:menu",
+			"type": "keybind"
+		}, {
+			"name": "Help",
+			"id": "system:help",
+			"type": "keybind"
+		}];
+		data.availableKeyMapEvents = {};
+		for(i=0; i<data.availableKeyEvents.length; i++) {
+			loading = data.availableKeyEvents[i];
+			if(loading.id) {
+				data.availableKeyMapEvents[loading.id] = loading.name;
+				if(typeof(loading.meta) !== "string") {
+					loading.meta = "";
+				}
+				loading.meta += ":::" + loading.name.toLowerCase();
+				if(!loading.section && section) {
+					loading.section = section;
+					loading.meta += ":::" + section.meta;
+				}
+			} else {
+				section = loading;
+			}
+		}
+
+		data.currentKeyMap = {};
+		keys = Object.keys(rsSystem.keyboard.keymap);
+		for(i=0; i<keys.length; i++) {
+			key = rsSystem.keyboard.keymap[keys[i]];
+			if(key) {
+				if(key.alt) {
+					data.currentKeyMap[key.alt] = "alt + " + keys[i];
+				}
+				if(key.ctrl) {
+					data.currentKeyMap[key.ctrl] = "ctrl + " + keys[i];
+				}
+				if(key[""]) {
+					data.currentKeyMap[key[""]] = keys[i];
+				}
+			}
 		}
 
 		data.pages = {
@@ -112,6 +190,11 @@ rsSystem.component("systemOptionsDialog", {
 				}, {
 					"id": "lock_character",
 					"label": "Lock Character Column",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "suppress_auto_action",
+					"label": "Do not open the Action Dialog on Turn Start",
 					"base": this.profile,
 					"type": "toggle"
 				}, {
@@ -192,6 +275,10 @@ rsSystem.component("systemOptionsDialog", {
 					"type": "select",
 					"options": dashboards
 				}]
+			},
+			"keybinds": {
+				"name": "Keybindings",
+				"options": data.availableKeyEvents.concat([data.keymapDefaultOption])
 			},
 			"account": {
 				"name": "Account",
@@ -425,6 +512,8 @@ rsSystem.component("systemOptionsDialog", {
 			Vue.set(this.storage, "page", this.pageList[0]);
 		}
 		this.toPage(this.storage.page);
+		rsSystem.keyboard.$on("system:keymap:defaulted", this.keymapDefaulted);
+		rsSystem.keyboard.$on("system:keymap:updated", this.refreshMapping);
 	},
 	"methods": {
 		"emitButton": function(button) {
@@ -473,6 +562,9 @@ rsSystem.component("systemOptionsDialog", {
 				case "report-submit":
 					this.universe.send("error:report", this.report_mirror);
 					break;
+				case "restore-defaults":
+					rsSystem.keyboard.$emit("system:keymap:default");
+					break;
 				case "uncache":
 					this.universe.deleteCache();
 					// Handlea reload(true) with the forced reload being deprecated
@@ -484,7 +576,7 @@ rsSystem.component("systemOptionsDialog", {
 				case "emit":
 					rsSystem.EventBus.$emit(key);
 					if(key === "app-update") {
-						// TODO: Update with smoothing of update process
+						// TODO: Smooth update process
 						Vue.set(option, "icon", "fas fa-sync fa-spin");
 					}
 					break;
@@ -498,6 +590,62 @@ rsSystem.component("systemOptionsDialog", {
 					rsSystem.EventBus.$emit("universe-reconnect");
 					break;
 			}
+		},
+		"isShown": function(option, type) {
+			return (!this.filter || (option.meta && option.meta.indexOf(this.filter) !== -1)) && option.type === type;
+		},
+		"setMapping": function(event, option) {
+			Vue.set(option, "remapping", true);
+		},
+		"updateMapping": function(event, option) {
+			if(option) {
+				Vue.set(option, "remapping", false);
+				rsSystem.keyboard.$emit("system:keymap:set", {
+					"key": event.key === "Backspace"?null:event.key,
+					"old": this.currentKeyMap[option.id],
+					"alt": event.altKey,
+					"ctrl": event.ctrlKey,
+					"emit": option.id
+				});
+			}
+
+			event.preventDefault();
+			if(typeof(event.stopPropogation) === "function") {
+				event.stopPropogation();
+			}
+		},
+		"refreshMapping": function() {
+			var keys = Object.keys(this.currentKeyMap),
+				key,
+				i;
+			
+			for(i=0; i<keys.length; i++) {
+				Vue.delete(this.currentKeyMap, keys[i]);
+			}
+
+			keys = Object.keys(rsSystem.keyboard.keymap);
+			for(i=0; i<keys.length; i++) {
+				key = rsSystem.keyboard.keymap[keys[i]];
+				if(key) {
+					if(key.alt) {
+						Vue.set(this.currentKeyMap, key.alt, "alt + " + keys[i]);
+					}
+					if(key.ctrl) {
+						Vue.set(this.currentKeyMap, key.ctrl, "ctrl + " + keys[i]);
+					}
+					if(key[""]) {
+						Vue.set(this.currentKeyMap, key[""], keys[i]);
+					}
+				}
+			}
+		},
+		"keymapDefaulted": function() {
+			Vue.set(this.keymapDefaultOption, "action", "noop");
+			Vue.set(this.keymapDefaultOption, "icon", "fas fa-check rs-light-green");
+			setTimeout(() => {
+				Vue.set(this.keymapDefaultOption, "icon", "fas fa-ban rs-light-orange");
+				Vue.set(this.keymapDefaultOption, "action", "restore-defaults");
+			}, 5000);
 		},
 		"getOptionClass": function(option) {
 			var classes = option.type;
@@ -533,6 +681,10 @@ rsSystem.component("systemOptionsDialog", {
 		"setOption": function(base, key, value) {
 			Vue.set(this[base], key, value);
 		}
+	},
+	"beforeDestroy": function() {
+		rsSystem.keyboard.$off("system:keymap:defaulted", this.keymapDefaulted);
+		rsSystem.keyboard.$off("system:keymap:updated", this.refreshMapping);
 	},
 	"template": Vue.templified("components/system/options.html")
 });

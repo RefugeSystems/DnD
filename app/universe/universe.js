@@ -15,6 +15,7 @@ var appPackage = require("../../package.json"),
 	fs = require("fs"),
 
 	UniverseUtility = require("./utility.js"),
+	Libraries = require("../management/libraries"),
 	Chronicle = require("../storage/chronicle"),
 	Anomaly = require("../management/anomaly"),
 	
@@ -77,6 +78,7 @@ class Universe extends EventEmitter {
 		this.specification = configuration.universe;
 		this.classes = configuration.universe.classes?defaultClasses.concat(configuration.universe.classes):defaultClasses;
 		this.initialized = false;
+		this.Libraries = new Libraries(this);
 
 		this.chronicle.on("error", function(error) {
 			this.handleError("chronicle:general", error);
@@ -893,6 +895,39 @@ class Universe extends EventEmitter {
 							created.updateFieldValues();
 							// this.emit("object-created", created);
 							callback(null, created);
+						})
+						.catch(callback);
+					}
+				});
+			}
+		} else {
+			callback(new Error("Attempted to create null object?"));
+		}
+	}
+	
+	/**
+	 * 
+	 * @method modifyObject
+	 * @param {Object} details 
+	 * @param {Function} callback 
+	 */
+	modifyObject(details, callback = NOOP) {
+		if(details) {
+			var classification = this.getClassFromID(details.id);
+			if(!this.manager[classification]) {
+				callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+			} else {
+				this.manager[classification].modify(this, details, (err, modified) => {
+					if(err) {
+						console.log("Error: ", err);
+						callback(err);
+					} else {
+						modified.linkFieldValues()
+						.then(() => {
+							modified.calculateFieldValues();
+							modified.updateFieldValues();
+							this.emit("object:modified", modified);
+							callback(null, modified);
 						})
 						.catch(callback);
 					}

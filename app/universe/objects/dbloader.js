@@ -175,7 +175,8 @@ fields.push({
 	"type": "string",
 	"attribute": {
 		"server_only": true,
-		"encrypted": true
+		"encrypted": true,
+		"hashed": true
 	}
 });
 fields.push({

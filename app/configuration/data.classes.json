@@ -285,6 +285,16 @@
 		"description": "Representative of an abstract skill such as a language or weapon usage",
 		"fields": ["parent", "name", "icon", "description", "selectable", "obscured", "is_preview", "review", "attribute", "conditionals"]
 	}, {
+		"id": "reaction",
+		"name": "Reaction",
+		"description": "Handles reacting to a specified event in the universe server side",
+		"fields": ["parent", "name", "icon", "description", "attribute", "acknowledge", "is_preview", "processor"]
+	}, {
+		"id": "library",
+		"name": "Library",
+		"description": "An instantiated class from the processor script that is referencable in Processors",
+		"fields": ["parent", "name", "icon", "description", "attribute", "is_preview", "processor"]
+	}, {
 		"id": "minigame",
 		"name": "Minigame",
 		"description": "Describes the state of a mini-game",

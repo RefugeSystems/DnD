@@ -29,7 +29,7 @@ module.exports.initialize = function(universe) {
 					details.id = Random.identifier(classification, 10, 32).toLowerCase();
 				}
 
-				universe.createObject(details, function(err, object) {
+				universe.modifyObject(details, function(err, object) {
 					if(err) {
 						console.log("Err: ", err);
 						universe.emit("send", {

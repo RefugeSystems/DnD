@@ -690,6 +690,23 @@ rsSystem.component("sysInfoGeneral", {
 											"action": "interior"
 										});
 									}
+									this.controls.push({
+										"title": "Open the action dialog targeting " + name,
+										"icon": "fa-light fa-crosshairs-simple",
+										"type": "button",
+										"action": "target"
+									});
+									break;
+								case "equipment_set":
+									//
+									if(entity && entity.equipment_sets && entity.equipment_sets.indexOf(object.id)) {
+										this.controls.push({
+											"title": "Equip the " + object.name + " equipment set to " + name,
+											"icon": object.icon || "game-icon game-icon-attached-shield",
+											"type": "button",
+											"action": "equipset"
+										});
+									}
 									break;
 								case "item":
 									if(entity.inventory.indexOf(this.info.id) !== -1) {
@@ -1099,12 +1116,39 @@ rsSystem.component("sysInfoGeneral", {
 						"value": ["type:dead"]
 					});
 					break;
+				case "equipset":
+					if(entity) {
+						this.universe.send("equipment:equipset", {
+							"entity": entity.id,
+							"set": object.id
+						});
+					} else {
+						console.warn("Player Character not found: " + this.player.attribute.playing_as);
+					}
+					break;
 				case "shop":
 					if(entity) {
 						rsSystem.EventBus.$emit("dialog-open", {
 							"component": "dndDialogShop",
 							"entity": entity.id,
 							"shop": this.info.id
+						});
+					} else {
+						console.warn("Player Character not found: " + this.player.attribute.playing_as);
+					}
+					break;
+				case "target":
+					if(entity) {
+						// Establish Target Index
+						buffer = {};
+						buffer[this.info.id] = true;
+						// Open Damage Dialog
+						rsSystem.EventBus.$emit("dialog-open", {
+							"title": entity.name + " Attack",
+							"component": "dndDialogDamage",
+							"action": this.universe.index.action["action:main:attack"],
+							"targeting": buffer,
+							"entity": entity.id
 						});
 					} else {
 						console.warn("Player Character not found: " + this.player.attribute.playing_as);

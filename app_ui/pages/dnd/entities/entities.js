@@ -316,7 +316,7 @@ rsSystem.component("DNDEntities", {
 	},
 	"methods": {
 		"scrollWheel": function(event) {
-			if(event.path[0] == this.$refs.grid) {
+			if(event && event.path && event.path[0] == this.$refs.grid) {
 				var offset = this.$refs.grid.scrollLeft,
 					width = 60,
 					direction = event.deltaY > 0?1:-1,

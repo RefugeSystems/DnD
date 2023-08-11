@@ -917,6 +917,7 @@ class RSObject {
 				} else if(this[field.id] && (field.type === "function" || field.type === "method") && !this.preview && !this.is_preview && this[field.id] !== this._previous[field.id]) {
 					try {
 						this[field.id] = new Function("source", "event", "universe", "utility", "console", "module", "require", "global", "window", "document", "location", "process", "performance", "URL", "fetch", "exports", "Response", "Request", "EventTarget", "__filename", "__dirname", this[field.id]);
+						this[field.id] = this[field.id].bind(this);
 					} catch (initializationException) {
 						console.log("Function Initialization Err: ", initializationException);
 					}
@@ -1574,6 +1575,7 @@ class RSObject {
 	 * @param {Function} callback
 	 */
 	setValues(delta, callback) {
+		// console.log("Setting Values for " + this.name);
 		// delta.updated = Date.now();
 		this._data.updated = Date.now();
 		var result = {},
@@ -1586,6 +1588,11 @@ class RSObject {
 			if(field && delta[field.id] !== undefined) {
 				this._data[field.id] = result[field.id] = RSObject.setValues(this._data[field.id], delta[field.id], field.type);
 				if(field.attribute) {
+					if(field.attribute.hashed && typeof(result[field.id]) === "string") {
+						result[field.id] = result[field.id].sha256();
+						// console.log(" > Setting Hashed Field[" + field.name + "] - " + result[field.id]);
+						delta[field.id] = this._data[field.id] = result[field.id];
+					}
 					this.levelField(field, result);
 				}
 			}

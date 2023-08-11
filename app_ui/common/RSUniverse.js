@@ -495,6 +495,28 @@ class RSUniverse extends EventEmitter {
 	}
 
 	/**
+	 * Get the currently connected player.
+	 * @method getPlayer
+	 * @return {RSPlayer} Player object from the current session
+	 */
+	getPlayer() {
+		return this.get(this.connection.session.player);
+	}
+
+	/**
+	 * Get the character for the currently connected player.
+	 * @method getPlayerCharacter
+	 * @return {RSEntity} Entity character object from the current session
+	 */
+	getPlayerCharacter() {
+		var player = this.get(this.connection.session.player);
+		if(player && player.attribute) {
+			return this.get(player.attribute.playing_as);
+		}
+		return null;
+	}
+
+	/**
 	 * 
 	 * @method cacheData
 	 */

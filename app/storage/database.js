@@ -1002,6 +1002,7 @@ class ClassManager extends EventEmitter {
 	 */
 	map(processor) {
 		var processed = [],
+			processing,
 			i;
 		for(i=0; i<this.objectIDs.length; i++) {
 			processing = this.object[this.objectIDs[i]];
@@ -1162,30 +1163,97 @@ class ClassManager extends EventEmitter {
 	/**
 	 * 
 	 * @method create
+	 * @deprecated Use `modify` which more appropriately represents the create or update structure
+	 * 		based on pre-defined ID
 	 * @param {Universe} universe
 	 * @param {Object} details
 	 * @param {Function} callback
 	 */
 	create(universe, details, callback) {
+		var Construction,
+			object,
+			field,
+			i;
+
 		try {
-			var object = this.database.constructor[this.id] || RSObject;
-			if(object) {
-				this.writeObjectData(details, (err) => {
-					if(err) {
-						console.log("Data Write Failed[" + this.id + "]: " + details.id);
-						callback(err, null);
-					} else {
-						// console.log("Data Written[" + this.id + "]: " + details.id);
-						object = new object(universe, this, details);
-						object.created = details.created;
-						object.updated = details.updated;
-						this.object[object.id] = object;
-						this.objectIDs.push(object.id);
-						callback(null, object);
-					}
-				});
+			details.updated = Date.now();
+			if(details.id && this.object[details.id]) {
+				this.object[details.id].setValues(details, callback);
 			} else {
-				callback(new Error("Failed to locate constructor for Class " + this.id));
+				Construction = this.database.constructor[this.id] || RSObject;
+				if(Construction) {
+					for(i=0; i<this.fieldIDs.length; i++) {
+						field = this.fieldUsed[this.fieldIDs[i]];
+						if(field.attribute && field.attribute.hashed && details[field.id]) {
+							details[field.id] = details[field.id].sha256();
+						}
+					}
+					this.writeObjectData(details, (err) => {
+						if(err) {
+							console.log("Data Write Failed[" + this.id + "]: " + details.id);
+							callback(err, null);
+						} else {
+							// console.log("Data Written[" + this.id + "]: " + details.id);
+							object = new Construction(universe, this, details);
+							object.created = details.created;
+							object.updated = details.updated;
+							this.object[object.id] = object;
+							this.objectIDs.push(object.id);
+							callback(null, object);
+						}
+					});
+				} else {
+					callback(new Error("Failed to locate constructor for Class " + this.id));
+				}
+			}
+		} catch(constructionException) {
+			callback(constructionException);
+		}
+	}
+	
+	/**
+	 * 
+	 * @method modify
+	 * @param {Universe} universe
+	 * @param {Object} details
+	 * @param {Function} callback
+	 */
+	modify(universe, details, callback) {
+		var Construction,
+			object,
+			field,
+			i;
+
+		try {
+			details.updated = Date.now();
+			if(details.id && this.object[details.id]) {
+				this.object[details.id].setValues(details, callback);
+			} else {
+				Construction = this.database.constructor[this.id] || RSObject;
+				if(Construction) {
+					for(i=0; i<this.fieldIDs.length; i++) {
+						field = this.fieldUsed[this.fieldIDs[i]];
+						if(field.attribute && field.attribute.hashed && details[field.id]) {
+							details[field.id] = details[field.id].sha256();
+						}
+					}
+					this.writeObjectData(details, (err) => {
+						if(err) {
+							console.log("Data Write Failed[" + this.id + "]: " + details.id);
+							callback(err, null);
+						} else {
+							// console.log("Data Written[" + this.id + "]: " + details.id);
+							object = new Construction(universe, this, details);
+							object.created = details.created;
+							object.updated = details.updated;
+							this.object[object.id] = object;
+							this.objectIDs.push(object.id);
+							callback(null, object);
+						}
+					});
+				} else {
+					callback(new Error("Failed to locate constructor for Class " + this.id));
+				}
 			}
 		} catch(constructionException) {
 			callback(constructionException);

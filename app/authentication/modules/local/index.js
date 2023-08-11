@@ -47,15 +47,15 @@ module.exports = new (function() {
 						check,
 						x;
 					
-					console.log("Request: \"" + username + "\", \"" + password + "\"");	
+					// console.log("Request: \"" + username + "\", \"" + password + "\"");	
 					if(password) {
 						password = password.sha256();
 					}
-					console.log(" > Compare: \"" + username + "\", \"" + password + "\"");
+					// console.log(" > Compare: \"" + username + "\", \"" + password + "\"");
 					players = Object.keys(universe.manager.player.object);
 					for(x=0; x<players.length; x++) {
 						check = universe.manager.player.object[players[x]];
-						console.log(" > Check[" + check.id + " - " + check.disabled + " | " + check.is_preview + "]: \"" + check.username + "\" - \"" + check.password + "\"");
+						// console.log(" > Check[" + check.id + " - " + check.disabled + " | " + check.is_preview + "]: \"" + check.username + "\" - \"" + check.password + "\"");
 						if(check && !check.disabled && !check.is_preview && check.username === username && (check.password === password || !check.password)) {
 							player = check;
 						}
