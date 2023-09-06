@@ -21,6 +21,7 @@ deploy_web/externals.js
 *.old
 *.test
 stitched.json
+deploy_web/test
 
 # Logs
 logs
