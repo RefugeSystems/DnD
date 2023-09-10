@@ -1420,8 +1420,8 @@ class ClassManager extends EventEmitter {
 			} else {
 				// insert
 				write = mapping._toObject(this.fields, object, true);
-				this.objectIDs.push(object.id);
-				this.object[object.id] = {};
+				// this.objectIDs.push(object.id);
+				// this.object[object.id] = object;
 				statement = mapping._toInsert(this.id, this.fields, object);
 				object.updated = write.$updated;
 				object.created = write.$created;
