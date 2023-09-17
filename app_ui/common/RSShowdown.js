@@ -294,7 +294,8 @@
 						if(mark) {
 							element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + (properties.id || mark.id) + "\">" + value + "</a>");
 						} else {
-							element = $("<span class=\"null-result rendered-value " + properties.classes + " not-found\">" + value + "[Not Known]</span>");
+							// element = $("<span class=\"null-result rendered-value " + properties.classes + " not-found\">" + value + "[Not Known]</span>");
+							element = $("<span class=\"null-result rendered-value " + properties.classes + " not-found\">" + value + "</span>");
 						}
 					}
 	//				console.warn("Properties: ", properties);

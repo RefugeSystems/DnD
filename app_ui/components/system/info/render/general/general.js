@@ -763,6 +763,14 @@ rsSystem.component("sysInfoGeneral", {
 											"action": "drop"
 										});
 									}
+									if(this.info.masthead) {
+										this.controls.push({
+											"title": "Read the scroll in full",
+											"icon": "fa-duotone fa-scroll-old",
+											"type": "button",
+											"action": "read"
+										});
+									}
 									break;
 							}
 						}
@@ -1150,6 +1158,20 @@ rsSystem.component("sysInfoGeneral", {
 							"targeting": buffer,
 							"entity": entity.id
 						});
+					} else {
+						console.warn("Player Character not found: " + this.player.attribute.playing_as);
+					}
+					break;
+				case "read":
+					if(entity) {
+						// Open Reader Dialog
+						rsSystem.EventBus.$emit("dialog-open", {
+							"title": this.info.name,
+							"component": "rsReader",
+							"entity": entity.id,
+							"source": this.info
+						});
+						this.closeInfo();
 					} else {
 						console.warn("Player Character not found: " + this.player.attribute.playing_as);
 					}

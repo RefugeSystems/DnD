@@ -1,0 +1,55 @@
+.rs-reader {
+	font-size: 24px;
+	overflow: auto;
+
+	img {
+		width: 100%;
+	}
+
+	.masthead {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+
+		.reader-content {
+			padding: 20px;
+			max-width: 700px;
+		}
+	}
+
+	.reader-contents {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		text-align: justify;
+
+		.reader-column {
+			display: flex;
+			flex-direction: column;
+			padding: 10px;
+
+			h1 {
+				border-bottom: 1px solid @rsWhite;
+			}
+
+			h2, h3 {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.footer {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+
+		.reader-content {
+			padding: 20px;
+			max-width: 500px;
+		}
+	}
+}

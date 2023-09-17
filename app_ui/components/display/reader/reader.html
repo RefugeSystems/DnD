@@ -1,0 +1,15 @@
+<div class="rs-component rs-reader">
+	<rs-image v-if="heading" :image="heading" class="heading"></rs-image>
+
+	<div v-if="masthead" class="masthead">
+		<div class="reader-content" v-html="masthead"></div>
+	</div>
+
+	<div class="reader-contents" v-if="columns">
+		<div class="reader-column" v-for="text in columns" v-html="text"></div>
+	</div>
+
+	<div v-if="footer" class="footer">
+		<div class="reader-content" v-html="footer"></div>
+	</div>
+</div>
