@@ -5,9 +5,9 @@ var reg = /.*?([^./]*).(mp3|wav|ogg)/,
 	build,
 	type;
 
-// type = "mus"; // https://refugesystems.net/audio/music/
+ type = "mus"; // https://refugesystems.net/audio/music/
 // type = "eff"; // https://refugesystems.net/audio/effects/
-type = "env"; // https://refugesystems.net/audio/environment/
+// type = "env"; // https://refugesystems.net/audio/environment/
 // type = "eve"; // https://refugesystems.net/audio/events/
 	
 build = function(path) {
