@@ -249,6 +249,9 @@
 						if(!buffer) {
 							buffer = universe.getObject(entity[value]);
 						}
+						// TODO: Respond to object type better here. This is mainly to drive a more "native" support for images, but things
+						//		like items should auto include some key details like icon, damage, or type. Possibly as hover text but likely
+						//		also in parenthesis.
 						if(buffer) {
 							element = $("<a class=\"rendered-value linked-value " + properties.classes + "\" data-id=\"" + buffer.id + "\">" + buffer.name + "</a>");
 						} else {
