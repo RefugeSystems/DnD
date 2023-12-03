@@ -3543,6 +3543,49 @@
 			"item"
 		],
 		"attribute": {}
+	}, {
+		"name": "Date Completed",
+		"id": "date_completed",
+		"description": "Real time offset indicating when this was finished.",
+		"type": "date",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 90,
+			"metadata": "",
+			"version_since": "0.9.85",
+			"version_update": "0.9.85"
+		}
+	},
+	{
+		"name": "Date Needed",
+		"id": "date_needed",
+		"description": "Real time offset by which time that this is needed.",
+		"type": "date",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 90,
+			"metadata": "",
+			"version_since": "0.9.85",
+			"version_update": "0.9.85"
+		}
+	},
+	{
+		"name": "Date Started",
+		"id": "date_started",
+		"description": "Real time offset indicating when this was started.",
+		"type": "date",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 90,
+			"metadata": "",
+			"version_since": "0.9.85",
+			"version_update": "0.9.85"
+		}
 	}]
-
 }
