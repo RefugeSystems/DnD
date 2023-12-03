@@ -16,9 +16,9 @@ class Constructor extends RSObject {
 	
 	postFieldUpdate() {
 		try {
-			this.universe.Libraries.update(this.name, new this.processor(this._universe));
+			this._universe.Libraries.update(this.name, new this.processor(this._universe));
 		} catch(exception) {
-			this.universe.emit("error", new this._universe.Anomaly("library:instantiation", "Post Field Update", 50, {"processor": this.processor.toString()}, exception, this));
+			this._universe.emit("error", new this._universe.Anomaly("library:instantiation", "Post Field Update", 50, {"processor": this.processor.toString()}, exception, this));
 		}
 	}
 }
