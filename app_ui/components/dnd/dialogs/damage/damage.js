@@ -673,8 +673,8 @@ rsSystem.component("dndDialogDamage", {
 			return true;
 		},
 		"buildSkillChecks": function() {
-			var formula,
-				targets,
+			var targets = Object.keys(this.targeting),
+				formula,
 				skill,
 				add,
 				i;
@@ -693,9 +693,9 @@ rsSystem.component("dndDialogDamage", {
 					}
 				}
 			}
+			
 			if(this.channel) {
 				if((this.isWeapon(this.channel) || this.channel.cast_attack)) {
-					targets = Object.keys(this.targeting);
 					if(this.entity.main_weapon === this.channel.id) {
 						skill = this.universe.index.skill["skill:mainhand"];
 					} else {

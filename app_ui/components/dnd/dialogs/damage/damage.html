@@ -297,6 +297,12 @@
 							<button class="general rounded action selection" v-on:click="info(target_check[target.id].skill)" v-if="target_check[target.id]">
 								<span class="action-text">{{target_check[target.id].skill.name}} ({{target_check[target.id].roll.computed}})</span>
 							</button>
+							<span v-if="channel.dc_save">
+								(
+								<span class="seperator fa-solid fa-dice"></span>
+								<span>{{channel.dc_save}}</span>
+								}
+							</span>
 							<span class="seperator fas fa-chevrons-right" v-if="target_check[target.id]"></span>
 							<button class="general rounded quick action" v-on:click="info(target)">
 								<span class="action-icon" :class="target.icon"></span>
