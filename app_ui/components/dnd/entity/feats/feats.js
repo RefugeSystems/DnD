@@ -43,6 +43,9 @@ rsSystem.component("dndEntityFeats", {
 				}
 			}
 
+			feats.hidden.sort(rsSystem.utility.sortByName);
+			feats.shown.sort(rsSystem.utility.sortByName);
+
 			return feats;
 		},
 		"renderedHidden": function() {

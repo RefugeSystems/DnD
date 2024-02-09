@@ -1,7 +1,7 @@
 {
 	"name": "rs-dnd",
 	"title": "The World of Somnicael",
-	"version": "0.9.91",
+	"version": "0.9.92",
 	"description": "A Dungeons and Dragons Adventure",
 	"core_version": "0.1.0",
 	"main": "app/index.js",
@@ -37,6 +37,7 @@
 		"hammerjs": "^2.0.8",
 		"jquery": "^3.6.0",
 		"lodash": "^4.17.21",
+		"nodemon": "^3.0.2",
 		"parse-data-url": "^4.0.1",
 		"passport": "^0.4.1",
 		"passport-bnet": "^2.0.0",

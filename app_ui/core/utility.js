@@ -85,6 +85,55 @@
 		},
 		/**
 		 * 
+		 * @method testNeeds
+		 * @param {Entity} entity
+		 * @param {Object} target
+		 * @return {Boolean} 
+		 */
+		"testNeeds": function(entity, target) {
+			var keys,
+				key,
+				i;
+
+			if(target.needs) {
+				keys = Object.keys(target.needs);
+				for(i=0; i<keys.length; i++) {
+					key = keys[i];
+					switch(typeof(target.needs[key])) {
+						case "boolean":
+							if(entity[key] !== target.needs[key]) {
+								return false;
+							}
+							break;
+						case "number":
+							if(entity[key] < target.needs[key]) {
+								return false;
+							}
+							break;
+						case "string":
+							if(entity[key] && target.needs[key].indexOf(entity[key]) === -1) {
+								return false;
+							}
+							break;
+						case "object":
+							if(target.needs[key] instanceof Array) {
+								if(target.needs[key].intersection(entity[key]).length === 0) {
+									return false;
+								}
+							} else {
+								return false;
+							}
+							break;
+						default:
+							return false;
+					}
+				}
+			}
+
+			return true;
+		},
+		/**
+		 * 
 		 * @method isOwner
 		 * @param {RSObject} record 
 		 * @param {RSPlayer} player 
@@ -583,23 +632,21 @@
 		 * @method isUniqueTo
 		 * @param {RSObject} source 
 		 * @param {RSObject | Array} compare Either an object or an array of objects.
+		 * @param {Boolean} [unique] Force uniqueness regardless of individual record settings.
 		 * @returns {Boolean} True when the source and compare objects should be considered to differ enough
 		 * 		to be considered unique to one another.
 		 */
-		"isUniqueTo": function(source, compare) {
+		"isUniqueTo": function(source, compare, unique) {
 			if(compare) {
 				if(source) {
 					if(compare instanceof Array) {
-						var comp,
-							i;
-						for(i=0; i<compare.length; i++) {
-							comp = compare[i];
-							if((source.is_unique || comp.is_unique) && (source.id === comp.id || source.parent === comp.id || source.id === comp.parent || source.parent === comp.parent)) {
+						for(var i=0; i<compare.length; i++) {
+							if(utility.checkUniqueness(source, compare[i], unique)) {
 								return false;
 							}
 						}
 					} else {
-						return !((source.is_unique || compare.is_unique) && (source.id === compare.id || source.parent === compare.id || source.id === compare.parent || source.parent === compare.parent));
+						return !utility.checkUniqueness(source, compare, unique);
 					}
 					return true;
 				} else {
@@ -608,6 +655,36 @@
 			} else {
 				return true;
 			}
+		},
+		/**
+		 * Exhaust a parental chain checking for the ID.
+		 * @method checkUniqueness
+		 * @param {RSObject} source
+		 * @param {RSObject} compare
+		 * @param {Boolean} [unique] Force uniqueness regardless of individual record settings.
+		 * @return {RSObject} Matched object if their is a unique collision. Null if the ID is unique to the passed start. 
+		 */
+		"checkUniqueness": function(source, compare, unique) {
+			if(typeof(source) === "string") {
+				source = rsSystem.universe.get(source);
+			}
+			if(typeof(compare) === "string") {
+				compare = rsSystem.universe.get(compare);
+			}
+
+			if(compare && source) {
+				if(source.id === compare.id && (unique || compare.is_unique || source.is_unique)) {
+					return compare;
+				}
+
+				while(compare = rsSystem.universe.get(compare.parent)) {
+					if(source.id === compare.id && (unique || compare.is_unique || source.is_unique)) {
+						return compare;
+					}
+				}
+			}
+
+			return null;
 		},
 		/**
 		 * 

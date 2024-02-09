@@ -415,6 +415,28 @@
 					"meeting": this.active.id
 				});
 			},
+			"createKnowledge": function() {
+				console.log("Create Knowledge");
+				var details = {
+					"component": "dndMeetingKnowledge",
+					"storageKey": "master",
+					"id": "dndMeetingOption",
+					"meeting": this.active,
+					"max_size": true
+				};
+				rsSystem.EventBus.$emit("dialog-open", details);
+			},
+			"createEvent": function() {
+				console.log("Create Event");
+				var details = {
+					"component": "dndMeetingEvent",
+					"storageKey": "master",
+					"id": "dndMeetingOption",
+					"meeting": this.active,
+					"max_size": true
+				};
+				rsSystem.EventBus.$emit("dialog-open", details);
+			},
 			"toggleNameEdit": function() {
 				Vue.set(this, "editName", !this.editName);
 				if(this.editName && this.active && this.active.name) {

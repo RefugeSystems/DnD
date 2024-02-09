@@ -111,6 +111,10 @@ rsSystem.component("dndEntityEquipment", {
 
 				equipment.shown = weapons.concat(equipment.shown);
 				*/
+
+				equipment.hidden.sort(rsSystem.utility.sortByName);
+				equipment.shown.sort(rsSystem.utility.sortByName);
+
 				return equipment;
 			} else {
 				return {

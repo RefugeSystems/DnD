@@ -61,6 +61,7 @@ rsSystem.component("rsSelectionBlock", {
 				player,
 				record,
 				spell,
+				feat,
 				add,
 				i,
 				j,
@@ -92,12 +93,47 @@ rsSystem.component("rsSelectionBlock", {
 									add = true;
 								}
 							}
-						} else {
-							add = true;
 						}
-						if(add && (!entity.spells_known || entity.spells_known.indexOf(spell.id) === -1) && (typeof(spell.level) === "number" && spell.level >= 0) && !spell.obscured && !spell.is_preview && !spell.disabled && !spell.is_disabled && !spell.is_template && !spell.is_copy && !spell.is_inherited) {
+						if(add && typeof(spell.level) === "number" && spell.level >= 0 && !spell.obscured && !spell.is_preview && !spell.disabled && !spell.is_disabled && !spell.is_template && !spell.is_copy && !spell.is_inherited && typeof(entity.spell_slot_max[spell.level]) === "number" && entity.spell_slot_max[spell.level] !== 0 && rsSystem.utility.isUniqueTo(spell, this.base, this.block.unique) && rsSystem.utility.testNeeds(entity, spell)) {
 							choices.push(spell);
 						}
+					}
+					if(choices.length < this.block.limit) {
+						Vue.set(this.block, "limit", choices.length);
+					}
+					break;
+				case "feat":
+					entity = this.universe.index.entity[this.block.entity];
+					if(!entity) {
+						player = this.universe.index.player[this.universe.connection.session.player];
+						if(player && player.attribute && player.attribute.playing_as) {
+							entity = this.universe.index.entity[player.attribute.playing_as];
+						}
+					}
+					if(entity.archetypes) {
+						for(i=0; i<entity.archetypes.length; i++) {
+							archMap[entity.archetypes[i]] = true;
+						}
+					}
+					if(this.block._archetype) {
+						archMap[this.block._archetype] = true;
+					}
+					for(i=0; i<this.universe.listing.feat.length; i++) {
+						feat = this.universe.listing.feat[i];
+						add = false;
+						if(feat && feat.archetypes && feat.archetypes.length) {
+							for(j=0; !add && j<feat.archetypes.length; j++) {
+								if(archMap[feat.archetypes[j]]) {
+									add = true;
+								}
+							}
+						}
+						if(add && (!entity.feats || entity.feats.indexOf(feat.id) === -1) && rsSystem.testNeeds(entity, feat) && rsSystem.utility.isUniqueTo(feat, entity.feats, this.block.unique)) {
+							choices.push(feat);
+						}
+					}
+					if(choices.length < this.block.limit) {
+						Vue.set(this.block, "limit", choices.length);
 					}
 					break;
 				default:
@@ -105,7 +141,7 @@ rsSystem.component("rsSelectionBlock", {
 						for(x=0; x<this.block.choices.length; x++) {
 							record = this.universe.getObject(this.block.choices[x]);
 							if(record) {
-								if(!record.is_unique || (rsSystem.utility.isUniqueTo(record, choices) && rsSystem.utility.isUniqueTo(record, this.base))) {
+								if(rsSystem.utility.isUniqueTo(record, choices, this.block.unique) && rsSystem.utility.isUniqueTo(record, this.base, this.block.unique) && rsSystem.utility.testNeeds(entity, record)) {
 									choices.push(record);
 								}
 							} else {

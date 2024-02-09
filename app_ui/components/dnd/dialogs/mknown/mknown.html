@@ -1,0 +1,15 @@
+<div class="rs-component dnd-component dialog-meeting-knowledge">
+	<h1>
+		<span class="fas fa-edit"></span>
+		<span>Meeting Knowledge</span>
+	</h1>
+	<div class="updating">
+		<rs-form :details="root" :fields="fields" :player="player" :universe="universe" :show_undefined="true"></rs-form>
+	</div>
+	<div class="controls">
+		<button class="general rounded primary action" v-on:click="sendUpdate()">
+			<span class="action-icon fas fa-edit"></span>
+			<span class="action-text">Create and Distribute</span>
+		</button>
+	</div>
+</div>
