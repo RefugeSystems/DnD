@@ -41,6 +41,14 @@
 			"jetstream",
 			"storm",
 			"world",
+
+			"calendar",
+			"month",
+			"day",
+			"season",
+			"festival",
+			"moon",
+			"sun",
 			
 			"party",
 			"entity",

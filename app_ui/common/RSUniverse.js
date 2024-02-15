@@ -141,6 +141,7 @@ class RSUniverse extends EventEmitter {
 			"Horakkir"
 		]);
 		this.calendar.setDays([25]);
+		
 		/**
 		 * Maps class IDs to another object which maps object IDs
 		 * to their corresponding object.

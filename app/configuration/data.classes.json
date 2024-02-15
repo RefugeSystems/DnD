@@ -319,5 +319,40 @@
 		"name": "Location",
 		"description": "A location in the universe that is of importance. Possibly a point such as a city on a world map, a simple path with lines tracing it, or an area with a defined perimeter and area",
 		"fields": ["parent", "name", "icon", "symbol", "backstory", "concealed", "concealment", "concealed_ui", "is_concealed", "skill_check", "view", "is_default", "base_font_size", "max_font_size", "weather_tabulation", "weather", "coordinates", "mapbg", "rendering_path", "rendering_path_closed", "rendering_has_path", "rendering_has_fill", "rendering_path_thickness", "rendering_fill_color", "rendering_path_color", "map_distance", "handlers", "response", "description", "location", "obscured", "nation", "population", "populace", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "picture", "background", "map", "links_to", "is_preview", "review", "attribute", "conditionals"]
-	}]
+	}, {
+        "id": "festival",
+        "name": "Festival",
+        "description": "A celebratory day",
+        "fields": ["parent", "name", "icon", "description", "month", "day", "types", "category", "period_days", "locations", "associations", "note"]
+    }, {
+        "id": "month",
+        "name": "Month",
+        "description": "A sectional period of time in a calendar",
+        "fields": ["parent", "name", "icon", "description", "days", "types", "note"]
+    }, {
+        "id": "season",
+        "name": "Season",
+        "description": "A season of expected weather",
+        "fields": ["parent", "name", "icon", "description", "types", "note", "month", "day"]
+    }, {
+        "id": "sun",
+        "name": "Sun",
+        "description": "Star that a world orbits and controls how/when night/day starts",
+        "fields": ["parent", "name", "icon", "description", "types", "note", "eq_sunrise", "eq_sunset"]
+    }, {
+        "id": "moon",
+        "name": "Moon",
+        "description": "A celestial object in orbit of a location that affects weather, lighting, or the view and is tracked as part of the calendar",
+        "fields": ["parent", "name", "icon", "description", "days", "types", "note"]
+    }, {
+        "id": "day",
+        "name": "Day",
+        "description": "A day of a week in a month. This is used to describe various characteristics and serves as the base for building out a calendar.",
+        "fields": ["parent", "name", "icon", "description", "seconds", "types", "note"]
+    }, {
+        "id": "calendar",
+        "name": "Calendar",
+        "description": "A location in the universe that is of importance. Possibly a point such as a city on a world map, a simple path with lines tracing it, or an area with a defined perimeter and area",
+        "fields": ["parent", "name", "icon", "description", "note", "moons", "suns", "months", "week", "seasons", "festivals", "associations"]
+    }]
 }
