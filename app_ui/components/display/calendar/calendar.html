@@ -1,3 +1,18 @@
 <div class="rs-component dialog-calendar">
-	<div>Calendar Coming Soon</div>
+	<div class="error" v-if="error">
+		<span :class="error.class"></span>
+		<span>{{error.text}}</span>
+	</div>
+
+	<div class="view month" v-if="viewingMonth()">
+		<rs-calendar-month :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :entity="entity"></rs-calendar-month>
+	</div>
+
+	<div class="view year" v-else-if="viewingYear()">
+		<rs-calendar-year :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :entity="entity"></rs-calendar-year>
+	</div>
+
+	<div class="view era" v-else>
+		<rs-calendar-era :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :entity="entity"></rs-calendar-era>
+	</div>
 </div>

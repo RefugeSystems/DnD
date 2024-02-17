@@ -1,0 +1,40 @@
+<div class="rs-component calendar-month">
+	<div class="flex h">
+		<button class="ctrl previous" v-on:click="previousMonth()">
+			<span class="fa-solid fa-chevron-left"></span>
+		</button>
+		<div class="name-bar flex v centered">
+			<h2 class="month-name">
+				{{name}}
+				{{year}}
+			</h2>
+			<span>( {{rendering.getMonth() + 1}} / {{rendering.getFullYear()}} )</span>
+		</div>
+		<button class="ctrl next" v-on:click="nextMonth()">
+			<span class="fa-solid fa-chevron-right"></span>
+		</button>
+	</div>
+	<div class="flex v centered">
+		<table class="container-month">
+			<thead>
+				<tr class="container-week">
+					<td v-for="day in calendar.daysOfWeek" class="container-name">
+						{{day.name}}
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="week in weeks" class="container-week">
+					<td v-for="day in week" class="container-day" :class="day.classes">
+						<button class="button-day" v-if="day.number">
+							<span class="date">{{day.number}}</span>
+							<button class="button-event" v-for="event in day.events">
+								<span class="event">{{event.name}}</span>
+							</button>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,83 @@
+.rs-component.calendar-month {
+	max-width: 100%;
+
+	.ctrl {
+		padding: 5px;
+		min-width: 64px;
+		min-height: 64px;
+		flex-shrink: 0;
+		flex-grow: 0;
+	}
+
+	.name-bar {
+		flex-grow: 10;
+	}
+
+	.container-name {
+		border-bottom: 1px solid @rsGray;
+	}
+
+	.container-month {
+
+		.container-name {
+			text-align: center;
+			padding: 4px;
+		}
+
+		.container-week {
+
+			.container-day {
+
+			}
+
+			.today {
+				.button-day {
+					border-color: @rsLightBlue;
+				}
+			}
+
+			.button-day {
+				position: relative;
+				min-width: 100px;
+				min-height: 80px;
+				background: @rsBlack;
+				padding: 24px 4px 4px 4px;
+				border: 1px solid @rsGray;
+				border-radius: 4px;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+
+				&:hover {
+					background-color: @rsDarkGray;
+				}
+
+				.date {
+					position: absolute;
+					top: 0px;
+					left: 0px;
+					font-size: 20px;
+					color: @rsWhite;
+					font-weight: 500;
+					line-height: 20px;
+					vertical-align: middle;
+					width: 30px;
+					text-align: right;
+				}
+			}
+
+			.button-event {
+				max-width: 92px;
+				overflow-x: hidden;
+				margin: 0px;
+				padding: 0px;
+				border-bottom: 1px solid @rsDarkYellow;
+				border-bottom: 1px solid #776f08;
+				border-width: 0px 0px 1px 0px;
+				background: transparent;
+				color: white;
+				white-space: nowrap;
+			}
+		}
+	}
+}

@@ -121,26 +121,6 @@ class RSUniverse extends EventEmitter {
 		 * @type rsSystem.Calendar
 		 */
 		this.calendar = new rsSystem.Calendar(this);
-		// TODO: Abstract calendar
-		this.calendar.nameMonths([
-			"Alucevum",
-			"Vaknaevum",
-			"Borgevum",
-			"Skaparvum",
-			"Umqavum",
-			"Comiaevum",
-			"Unkulevum",
-			"Dormevum"
-		]);
-		this.calendar.nameDays([
-			"Horallum",
-			"Horaneskja",
-			"Horantono",
-			"Horavis",
-			"Horanquil",
-			"Horakkir"
-		]);
-		this.calendar.setDays([25]);
 		
 		/**
 		 * Maps class IDs to another object which maps object IDs
@@ -410,7 +390,7 @@ class RSUniverse extends EventEmitter {
 					try {
 						rsSystem.initializations[i](this);
 					} catch(err) {
-						console.error("Failed to load initialization: ", rsSystem.initializations[i]);
+						console.error("Failed to load initialization:\n", err, "\nInitialization Definition:\n", rsSystem.initializations[i]);
 						// TODO: Improve logging and initialization registration for feedback
 					}
 				}

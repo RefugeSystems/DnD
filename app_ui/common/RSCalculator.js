@@ -71,6 +71,31 @@ class RSCalculator {
 
 	}
 
+	average(...values) {
+		var count = 0,
+			sum = 0,
+			i,
+			j;
+
+		for(i=0; i<values.length; i++) {
+			if(values[i] instanceof Array) {
+				for(j=0; j<values[i].length; j++) {
+					if(typeof(values[i][j]) === "number") {
+						sum += values[i][j];
+						count++;
+					}
+				}
+			} else {
+				if(typeof(values[i]) === "number") {
+					sum += values[i];
+					count++;
+				}
+			}
+		}
+
+		return sum/count;
+	}
+
 	/**
 	 *
 	 * @method process

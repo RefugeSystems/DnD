@@ -33,6 +33,17 @@ rsSystem.component("rsCalendarDialog", {
 	"data": function () {
 		var data = {};
 
+		data.calendar = this.details.calendar;
+		data.entity = this.details.entity;
+		data.error = null;
+
+		// Create initial rendering data
+		data.rendering = new this.details.calendar.RSDate();
+		// Create another instance of now for reference that won't be changed
+		data.today = new this.details.calendar.RSDate();
+
+		data.view = "month";
+
 		return data;
 	},
 	"mounted": function () {
@@ -47,7 +58,15 @@ rsSystem.component("rsCalendarDialog", {
 		};
 	},
 	"methods": {
-
+		"viewingMonth": function() {
+			return this.view === "month";
+		},
+		"viewingYear": function() {
+			return this.view === "year";
+		},
+		"era": function() {
+			return this.view === "era";
+		}
 	},
 	"beforeDestroy": function () {
 

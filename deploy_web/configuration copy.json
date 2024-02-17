@@ -1,0 +1,60 @@
+{
+	"title": "Tale of The Cave of Light",
+	"mainpage": "DNDEntities",
+	"address": "127.0.0.1:3000",
+	"secure": false,
+	"force": true,
+	"debug": true,
+	"navigations": [{
+		"icon": "fas fa-backpack",
+		"action": "navigate",
+		"label": "Inventory",
+		"path": "/inventory/:entity?",
+		"highlight": "/inventory",
+		"route": "/inventory/:entity?",
+		"to": "/inventory",
+		"component": "DNDInventory"
+	}, {
+		"icon": "fas fa-map",
+		"action": "navigate",
+		"label": "Map",
+		"path": "/map/:location?",
+		"highlight": "/map",
+		"route": "/map/:location?",
+		"to": "/map",
+		"component": "DNDMap"
+	}, {
+		"icon": "fas fa-chart-network",
+		"action": "navigate",
+		"label": "Knowledge",
+		"path": "/knowledge/:entity?",
+		"highlight": "/knowledge",
+		"route": "/knowledge/:entity?",
+		"to": "/knowledge",
+		"component": "DNDKnowledge"
+	}, {
+		"icon": "fas fa-edit",
+		"action": "navigate",
+		"label": "Control",
+		"path": "/control/:classification?/:id?",
+		"highlight": "/control",
+		"route": "/control/:classification?/:id?",
+		"to": "/control",
+		"component": "RSControl",
+		"conditionals": [{
+			"gm": true
+		}]
+	}, {
+		"icon": "fas fa-solar-panel",
+		"action": "navigate",
+		"label": "Screen",
+		"path": "/screen/:screen?",
+		"highlight": "/screen",
+		"route": "/screen/:screen?",
+		"to": "/screen",
+		"component": "DNDMasterScreen",
+		"conditionals": [{
+			"gm": true
+		}]
+	}]
+}

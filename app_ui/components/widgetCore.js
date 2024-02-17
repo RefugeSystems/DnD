@@ -432,20 +432,23 @@ rsSystem.component("DNDWidgetCore", {
 		 * @param {RSObject} [entity]
 		 */
 		"openCalendar": function(time, specialEvents, entity) {
+			var loading;
 			specialEvents = specialEvents || [];
 			entity = entity || this.entity;
 			if(entity && entity.birthday) {
-				specialEvents.push({
-					"name": "Birthday",
-					"repeats": "span",
-					"repeat_span": this.universe.calendar.CONSTANTS.year,
-					"start": entity.birthday
-				});
+				loading = this.universe.calendar.breakdownGameTime(entity.birthday);
+				loading.name = "Birthday";
+				loading.time = entity.birthday;
+				loading.repeat_span = this.universe.calendar.CONSTANTS.year;
+				loading.repeats = "span";
+				specialEvents.push(loading);
 			}
 
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "rsCalendarDialog",
+				"calendar": this.universe.calendar,
 				"specialEvents": specialEvents,
+				"entity": entity,
 				"time": time
 			});
 		},

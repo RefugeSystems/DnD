@@ -323,36 +323,36 @@
         "id": "festival",
         "name": "Festival",
         "description": "A celebratory day",
-        "fields": ["parent", "name", "icon", "description", "month", "day", "types", "category", "period_days", "locations", "associations", "note"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "month", "day", "types", "category", "period_days", "locations", "associations", "note"]
     }, {
         "id": "month",
         "name": "Month",
         "description": "A sectional period of time in a calendar",
-        "fields": ["parent", "name", "icon", "description", "days", "types", "note"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "days", "types", "note"]
     }, {
         "id": "season",
         "name": "Season",
         "description": "A season of expected weather",
-        "fields": ["parent", "name", "icon", "description", "types", "note", "month", "day"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "types", "note", "month", "day"]
     }, {
         "id": "sun",
         "name": "Sun",
         "description": "Star that a world orbits and controls how/when night/day starts",
-        "fields": ["parent", "name", "icon", "description", "types", "note", "eq_sunrise", "eq_sunset"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "types", "note", "eq_sunrise", "eq_sunset"]
     }, {
         "id": "moon",
         "name": "Moon",
         "description": "A celestial object in orbit of a location that affects weather, lighting, or the view and is tracked as part of the calendar",
-        "fields": ["parent", "name", "icon", "description", "days", "types", "note"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "days", "types", "note"]
     }, {
         "id": "day",
         "name": "Day",
         "description": "A day of a week in a month. This is used to describe various characteristics and serves as the base for building out a calendar.",
-        "fields": ["parent", "name", "icon", "description", "seconds", "types", "note"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "seconds", "types", "note"]
     }, {
         "id": "calendar",
         "name": "Calendar",
         "description": "A location in the universe that is of importance. Possibly a point such as a city on a world map, a simple path with lines tracing it, or an area with a defined perimeter and area",
-        "fields": ["parent", "name", "icon", "description", "note", "moons", "suns", "months", "week", "seasons", "festivals", "associations"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "note", "moons", "suns", "months", "week", "seasons", "festivals", "associations"]
     }]
 }

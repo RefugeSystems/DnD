@@ -627,6 +627,36 @@
 			return null;
 		},
 		/**
+		 * Get the average of all numbers passed to the function and in arrays that are passed to the function.
+		 * @method average
+		 * @param  {...any} values 
+		 * @returns {Number} The average of all numbers received.
+		 */
+		"average": function(...values) {
+			var count = 0,
+				sum = 0,
+				i,
+				j;
+	
+			for(i=0; i<values.length; i++) {
+				if(values[i] instanceof Array) {
+					for(j=0; j<values[i].length; j++) {
+						if(typeof(values[i][j]) === "number") {
+							sum += values[i][j];
+							count++;
+						}
+					}
+				} else {
+					if(typeof(values[i]) === "number") {
+						sum += values[i];
+						count++;
+					}
+				}
+			}
+	
+			return sum/count;
+		},
+		/**
 		 * Compare the IDs and parental IDs of the objects (1 ancestry). If matched with is_unique set
 		 * on either object, they are considered similar enough to be considered not unique to one another.
 		 * @method isUniqueTo

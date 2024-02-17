@@ -115,6 +115,8 @@ var config = {
 				"RSChatCore",
 				"RSUniverse",
 				"RSObject",
+				"RSysDate",
+				"RSDate",
 
 				"RSConnection",
 				"RSConstruct",

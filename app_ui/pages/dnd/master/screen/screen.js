@@ -427,7 +427,7 @@ rsSystem.component("DNDMasterScreen", {
 				}
 			}
 		}];
-		data.dynamicHeadings = ["name", "category", "level", "range_normal", "cast_time", "created"];
+		data.dynamicHeadings = ["name", "category", "level", "range_normal", "cast_time", "created", "id"];
 		data.dynamicControls = [{
 			"title": "Delete Selection",
 			"icon": "fas fa-trash",

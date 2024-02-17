@@ -59,6 +59,18 @@ fields.push({
 	}
 });
 fields.push({
+	"id": "id",
+	"name": "ID",
+	"description": "The ID of the object",
+	"type": "string",
+	"inheritable": null,
+	"ordering": 0,
+	"attribute": {
+		"displayed": false,
+		"display_size": 110
+	}
+});
+fields.push({
 	"id": "updated",
 	"name": "Updated",
 	"description": "Timestamp of when this object was updated.",
