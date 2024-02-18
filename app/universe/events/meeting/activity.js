@@ -20,7 +20,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Array} [event.message.data.icon]
 	 */
 	universe.on("player:meeting:activity:info:add", function(event) {
-		if(event.player.gm) {
+		// if(event.player.gm) {
 			var entities = event.message.data.entities,
 				meeting = event.message.data.meeting,
 				name = event.message.data.name,
@@ -69,12 +69,12 @@ module.exports.initialize = function(universe) {
 			} else {
 				console.log("Invalid data for reference activity");
 			}
-		} else {
-			universe.handleError("universe:time", "Non-Gamemaster attempted to add a reference active event", null, {
-				"player": event.player.id,
-				"message": event.message
-			});
-		}
+		// } else {
+		// 	universe.handleError("universe:time", "Non-Gamemaster attempted to add a reference active event", null, {
+		// 		"player": event.player.id,
+		// 		"message": event.message
+		// 	});
+		// }
 	});
 	/**
 	 * 
@@ -95,7 +95,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Array} [event.message.data.icon]
 	 */
 	universe.on("player:meeting:activity:info:sub", function(event) {
-		if(event.player.gm) {
+		// if(event.player.gm) {
 			var entities = event.message.data.entities,
 				meeting = event.message.data.meeting,
 				name = event.message.data.name,
@@ -141,11 +141,11 @@ module.exports.initialize = function(universe) {
 			} else {
 				console.log("No meeting for timer");
 			}
-		} else {
-			universe.handleError("universe:time", "Non-Gamemaster attempted to add a reference active event", null, {
-				"player": event.player.id,
-				"message": event.message
-			});
-		}
+		// } else {
+		// 	universe.handleError("universe:time", "Non-Gamemaster attempted to add a reference active event", null, {
+		// 		"player": event.player.id,
+		// 		"message": event.message
+		// 	});
+		// }
 	});
 };

@@ -431,9 +431,10 @@ rsSystem.component("DNDWidgetCore", {
 		 * @param {Array | Object} [specialEvents]
 		 * @param {RSObject} [entity]
 		 */
-		"openCalendar": function(time, specialEvents, entity) {
+		"openCalendar": function(time, entity, specialEvents, specialFestivals) {
 			var loading;
 			specialEvents = specialEvents || [];
+			specialFestivals = specialFestivals || [];
 			entity = entity || this.entity;
 			if(entity && entity.birthday) {
 				loading = this.universe.calendar.breakdownGameTime(entity.birthday);
@@ -441,12 +442,14 @@ rsSystem.component("DNDWidgetCore", {
 				loading.time = entity.birthday;
 				loading.repeat_span = this.universe.calendar.CONSTANTS.year;
 				loading.repeats = "span";
+				specialFestivals.push(loading);
 				specialEvents.push(loading);
 			}
 
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "rsCalendarDialog",
 				"calendar": this.universe.calendar,
+				"specialFestivals": specialFestivals,
 				"specialEvents": specialEvents,
 				"entity": entity,
 				"time": time

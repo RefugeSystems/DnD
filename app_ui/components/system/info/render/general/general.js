@@ -658,6 +658,23 @@ rsSystem.component("sysInfoGeneral", {
 									}
 									break;
 								case "entity":
+									if(this.info.creator === this.entity.id && this.activeMeeting) {
+										if(this.activeMeeting.entities && this.activeMeeting.entities.indexOf(this.info.id) === -1) {
+											this.controls.push({
+												"title": "Create this creation (Add to active party)",
+												"icon": "game-icon game-icon-hammer-nails",
+												"type": "button",
+												"action": "partyentity"
+											});
+										} else {
+											this.controls.push({
+												"title": "Destroy creation (Remove from active party)",
+												"icon": "game-icon game-icon-spiky-explosion",
+												"type": "button",
+												"action": "unpartyentity"
+											});
+										}
+									}
 									if(this.info.owned && this.info.owned[this.player.id]) {
 										this.controls.push({
 											"title": "Open inventory of " + name,

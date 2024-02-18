@@ -117,9 +117,14 @@
 				<span class="fas fa-clock"></span>
 			</button>
 			-->
+			<!--
 			<button class="rounded general action" v-on:click="setStartTime()" disabled=true title="Set the start time for this meeting">
 				<span class="fas fa-clock"></span>
 				<span>Start</span>
+			</button>
+			-->
+			<button class="rounded general quick action" v-on:click="openCalendar()" title="Open a calendar">
+				<span class="fa-solid fa-calendar"></span>
 			</button>
 			<!--
 			<button class="rounded general action" v-on:click="setEndTime()" title="Set the end real time for this meeting. Recommend using 'Create Next' instead unless this is the final meeting or a next isn't known">

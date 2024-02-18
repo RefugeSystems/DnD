@@ -146,7 +146,9 @@ rsSystem.component("dndEntityBroad", {
 		}
 	},
 	"data": function() {
-		var data = {};
+		var data = {},
+			entity,
+			i;
 
 		data.shortRest = "action:rest:short";
 		if(this.entity.actions && this.entity.actions.indexOf("action:rest:trance") === -1) {
@@ -157,8 +159,28 @@ rsSystem.component("dndEntityBroad", {
 			data.longRest = "action:rest:trance";
 		}
 
-
 		data.proficiencyDetails = {};
+		data.contained = {};
+		data.creations = {};
+
+		for(i=0; i<this.universe.listing.entity.length; i++) {
+			entity = this.universe.listing.entity[i];
+			if(rsSystem.utility.isValid(entity)) {
+				if(entity.inside === this.entity.id) {
+					data.contained[entity.id] = entity;
+				}
+				if(entity.creator === this.entity.id) {
+					data.creations[entity.id] = entity;
+				}
+			}
+		}
+
+		for(i=0; i<this.universe.listing.item.length; i++) {
+			entity = this.universe.listing.item[i];
+			if(rsSystem.utility.isValid(entity) && entity.creator === this.entity.id) {
+				data.creations[entity.id] = entity;
+			}
+		}
 
 		data.proficiencyDetails.title = this.entity.name + " Proficiencies";
 		data.proficiencyDetails.sections = ["skills", "tools"];
@@ -191,6 +213,29 @@ rsSystem.component("dndEntityBroad", {
 		},
 		"scrollHome": function() {
 			this.$emit("scrollhome");
+		},
+		/**
+		 * 
+		 * @method isEmpty
+		 * @param {Object} object 
+		 * @returns {Boolean} True if an object exists and has no elements.
+		 */
+		"isEmpty": function(object) {
+			return rsSystem.utility.isEmpty(object);
+		},
+		"trackUpdates": function(updated) {
+			if(rsSystem.utility.isValid(updated)) {
+				if(this.contained[updated.id] && updated.inside !== this.entity.id) {
+					Vue.delete(this.contained, updated.id);
+				} else if(!this.contained[updated.id] && updated.inside === this.entity.id) {
+					Vue.set(this.contained, updated.id, updated);
+				}
+				if(this.creations[updated.id] && updated.creator !== this.entity.id) {
+					Vue.delete(this.creations, updated.id);
+				} else if(!this.creations[updated.id] && updated.creator === this.entity.id) {
+					Vue.set(this.creations, updated.id, updated);
+				}
+			}
 		},
 		"getModifier": function(field) {
 			if(0 <= this.entity[field]) {

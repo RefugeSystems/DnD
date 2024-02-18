@@ -172,6 +172,20 @@
 				<span>Date</span>
 			</span>
 		</div>
+		<h3 v-if="!isEmpty(contained)">Riders</h3>
+		<div v-if="!isEmpty(contained)" class="property-container inside flex h v-center wrap">
+			<button class="action general rounded" v-on:click="info(entity)" v-for="(entity, id) in contained">
+				<span :class="entity.icon"></span>
+				<!-- <span>{{entity.name}}</span> -->
+			</button>
+		</div>
+		<h3 v-if="!isEmpty(creations)">Creations</h3>
+		<div v-if="!isEmpty(creations)" class="property-container inside flex h v-center wrap">
+			<button class="action general rounded" v-on:click="info(entity)" v-for="(entity, id) in creations">
+				<span :class="entity.icon"></span>
+				<!-- <span>{{entity.name}}</span> -->
+			</button>
+		</div>
 		<div class="property-container rest flex h">
 			<button class="emphasis-stat" v-on:click="takeShortRest()" :title="totalHitDice + ' Hit Dice left'">
 				<div class="stat-label">Rest</div>

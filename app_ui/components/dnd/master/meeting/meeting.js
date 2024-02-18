@@ -467,6 +467,14 @@
 					});
 				}
 			},
+			"openCalendar": function() {
+				rsSystem.EventBus.$emit("dialog-open", {
+					"component": "rsCalendarDialog",
+					"calendar": this.universe.calendar,
+					"entity": this.$route.query.entity?this.universe.get(this.$route.query.entity):undefined,
+					"time": this.universe.time
+				});
+			},
 			/**
 			 * 
 			 * @method toggleTimeLock

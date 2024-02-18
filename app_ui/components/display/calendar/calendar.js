@@ -105,6 +105,22 @@ rsSystem.component("rsCalendarDialog", {
 				Vue.delete(this.eventReference[years[i]]);
 			}
 
+			if(this.details.specialEvents) {
+				for(i=0; i<this.details.specialEvents.length; i++) {
+					event = this.details.specialEvents[i];
+					time.setTime(event.time);
+					day = this.indexEvent(time, event);
+				}
+			}
+
+			if(this.details.specialFestivals) {
+				for(i=0; i<this.details.specialFestivals.length; i++) {
+					event = this.details.specialFestivals[i];
+					time.setTime(event.time);
+					day = this.indexFestival(time, event);
+				}
+			}
+
 			if(this.entity) {
 				for(i=0; i<this.universe.listing.skirmish.length; i++) {
 					skirmish = this.universe.listing.skirmish[i];
@@ -143,6 +159,22 @@ rsSystem.component("rsCalendarDialog", {
 			}
 			this.eventReference[year][mon][day].events.push(event);
 			return this.eventReference[year][mon][day];
+		},
+		"indexFestival": function(time, event) {
+			var mon = time.getMonth(),
+				day = time.getDate();
+			if(!this.festivalReference[mon]) {
+				this.festivalReference[mon] = {};
+			}
+			if(!this.festivalReference[mon][day]) {
+				this.festivalReference[mon][day] = {
+					"skirmish": false,
+					"travel": false,
+					"events": []
+				};
+			}
+			this.festivalReference[mon][day].events.push(event);
+			return this.festivalReference[mon][day];
 		},
 		"getRenderingTitle": function() {
 			var display = [],
