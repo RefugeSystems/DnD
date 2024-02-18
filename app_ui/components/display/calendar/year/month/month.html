@@ -1,0 +1,18 @@
+<div class="rs-component calendar-year-month">
+	<button class="container-name" v-on:click="openMonth()">
+		<span>{{name}}</span>
+	</button>
+	<div class="flex v centered">
+		<table class="container-month">
+			<tbody>
+				<tr v-for="week in weeks" class="container-week">
+					<td v-for="day in week" class="container-day" :class="day.classes">
+						<button class="button-day" v-if="day.number" v-on:click="openDay(day.number)">
+							<span class="date">{{day.number}}</span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

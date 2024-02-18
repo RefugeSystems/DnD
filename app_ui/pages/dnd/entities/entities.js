@@ -158,13 +158,14 @@ rsSystem.component("DNDEntities", {
 				"type": "flip",
 				"id": "scratch"
 			});
-			controls.push({
-				"icon": "fas fa-users-slash",
-				"title": "Hide the nearby creatures list",
-				"ctrl": "list",
-				"type": "flip",
-				"id": "hidenearby"
-			});
+			// TODO: Fix toggle bug
+			// controls.push({
+			// 	"icon": "fas fa-users-slash",
+			// 	"title": "Hide the nearby creatures list",
+			// 	"ctrl": "list",
+			// 	"type": "flip",
+			// 	"id": "hidenearby"
+			// });
 			controls.push({
 				"icon": "fas fa-users",
 				"title": "Include all nearby creatures in the list of creatures nearby",

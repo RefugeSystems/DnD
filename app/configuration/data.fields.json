@@ -3493,6 +3493,18 @@
 			"metadata": ""
 		}
 	}, {
+		"name": "Era",
+		"id": "era",
+		"description": "The era that this is a part of.",
+		"type": "string",
+		"ordering": 789,
+		"inheritance": null,
+		"inheritable": ["era"],
+		"attribute": {
+			"display_size": 100,
+			"metadata": ""
+		}
+	}, {
 		"id": "is_secure",
 		"name": "Is Secure",
 		"description": "Encryption flag",

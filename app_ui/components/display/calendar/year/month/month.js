@@ -1,6 +1,6 @@
 /**
  * View/Select days in the specified month
- * @class rsCalendarMonth
+ * @class rsCalendarYearMonth
  * @constructor
  * @module Components
  * @param {RSCalendar} calendar
@@ -9,7 +9,7 @@
  * @param {Object} [rendering.year] Optionally specify the year
  * @param {Object} entity
  */
-rsSystem.component("rsCalendarMonth", {
+rsSystem.component("rsCalendarYearMonth", {
 	"inherit": true,
 	"mixins": [],
 	"props": {
@@ -25,12 +25,16 @@ rsSystem.component("rsCalendarMonth", {
 			"requried": true,
 			"type": Object
 		},
-		"rendering": {
+		"eventReference": {
+			"type": Object
+		},
+		"sourceYear": {
 			"requried": true,
 			"type": Date
 		},
-		"eventReference": {
-			"type": Object
+		"rendMonth": {
+			"requried": true,
+			"type": Number
 		},
 		"today": {
 			"type": Date
@@ -53,14 +57,19 @@ rsSystem.component("rsCalendarMonth", {
 		data.week = 0;
 		data.end = 0;
 
+		data.todayYear = 0;
 		data.todayMonth = 0;
-		data.rendMonth = 0;
-		data.rendYear = 0;
 		data.todayDay = 0;
 
-		this.rendering.setMinute(0);
-		this.rendering.setSecond(0);
-		this.rendering.setHour(0);
+		data.rendYear = this.sourceYear.getFullYear();
+
+		data.rendering = new this.calendar.RSDate();
+		data.rendering.setMonth(this.rendMonth);
+		data.rendering.setYear(this.sourceYear.getFullYear());
+		data.rendering.setMinute(0);
+		data.rendering.setSecond(0);
+		data.rendering.setHour(0);
+		data.rendering.setDate(1);
 
 		return data;
 	},
@@ -79,15 +88,13 @@ rsSystem.component("rsCalendarMonth", {
 			this.days.push(rendered);
 
 			rendered.dayOfWeek = this.rendering.getDay();
-			rendered.start = this.rendering.getTime();
 			this.rendering.setDate(day + 1);
-			rendered.end = this.rendering.getTime();
 			rendered.month = this.rendMonth;
+			rendered.year = this.rendYear;
 			rendered.classes = [];
 			rendered.number = day;
-			rendered.events = [];
 
-			if(this.rendMonth === this.todayMonth && rendered.number === this.todayDay) {
+			if(this.rendYear === this.todayYear && this.rendMonth === this.todayMonth && rendered.number === this.todayDay) {
 				rendered.classes.push("today");
 			}
 			if(this.eventReference[this.rendYear] && this.eventReference[this.rendYear][this.rendMonth] && this.eventReference[this.rendYear][this.rendMonth][day]) {
@@ -103,14 +110,17 @@ rsSystem.component("rsCalendarMonth", {
 			return rendered;
 		},
 		"build": function() {
-			var month = this.rendering.getMonth();
-			this.rendYear = this.rendering.getFullYear();
-			this.rendMonth = month;
+			var year = this.sourceYear.getFullYear(),
+				month = this.rendMonth;
+			Vue.set(this, "rendYear", year);
+			this.rendering.setYear(year);
+
 			if(this.today) {
+				this.todayYear = this.today.getFullYear();
 				this.todayMonth = this.today.getMonth();
 				this.todayDay = this.today.getDate();
 			}
-
+			
 			Vue.set(this, "month", this.calendar.getMonth(month));
 			Vue.set(this, "name", this.month.name);
 			this.rendering.setDate(1);
@@ -124,7 +134,6 @@ rsSystem.component("rsCalendarMonth", {
 				safetyPin = 200,
 				week = [],
 				i = 0,
-				festival,
 				day;
 
 			this.weeks.splice(0);
@@ -142,25 +151,18 @@ rsSystem.component("rsCalendarMonth", {
 			}
 			this.weeks.push(week);
 			this.rendering.setDate(this.rendering.getDate() - 1);
-			
-			// Gather events (2/2)?
-			for(i=0; i<this.universe.listing.festival.length; i++) {
-				festival = this.universe.listing.festival[i];
-				if(rsSystem.utility.isValid(festival) && this.rendMonth === festival.month - 1 && this.renderedDays[festival.day]) {
-					this.renderedDays[festival.day].events.push(festival);
-				}
-			}
+		},
+		"openMonth": function() {
+			console.log("YearMonth Month: ", this.rendMonth);
+			this.$emit("month", this.rendMonth);
 		},
 		"openDay": function(day) {
-			this.rendering.setDate(day.number);
-			this.$emit("day", this.rendering.getFullYear(), this.rendMonth, day);
-		},
-		"info": function(festival) {
-			rsSystem.utility.info(festival);
+			console.log("YearMonth Day: ", this.rendMonth, day);
+			this.$emit("day", this.rendMonth, day);
 		}
 	},
 	"beforeDestroy": function () {
 		rsSystem.EventBus.$off("calendar:update", this.build);
 	},
-	"template": Vue.templified("components/display/calendar/month.html")
+	"template": Vue.templified("components/display/calendar/year/month.html")
 });

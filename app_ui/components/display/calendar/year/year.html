@@ -1,3 +1,5 @@
 <div class="rs-component calendar-year">
-	
+	<div class="month" v-for="month in months">
+		<rs-calendar-year-month :universe="universe" :calendar="calendar" :source-year="rendering" :event-reference="eventReference" :today="today" :rend-month="month" :rend-year="rendYear" v-on:month="openMonth" v-on:day="openDay"></rs-calendar-year-month>
+	</div>
 </div>

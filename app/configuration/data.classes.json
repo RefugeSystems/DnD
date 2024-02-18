@@ -353,6 +353,11 @@
         "id": "calendar",
         "name": "Calendar",
         "description": "A location in the universe that is of importance. Possibly a point such as a city on a world map, a simple path with lines tracing it, or an area with a defined perimeter and area",
-        "fields": ["parent", "name", "icon", "is_preview", "description", "note", "moons", "suns", "months", "week", "seasons", "festivals", "associations"]
+        "fields": ["parent", "name", "icon", "is_preview", "description", "note", "moons", "suns", "months", "era", "week", "seasons", "festivals", "associations"]
+	}, {
+		"id": "era",
+		"name": "Era",
+		"description": "A large span of time, usually with some kind of historical signifigance",
+		"fields": ["parent", "name", "icon", "is_preview", "description", "note", "associations", "start", "end"]
     }]
 }

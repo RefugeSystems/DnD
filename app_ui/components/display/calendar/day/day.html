@@ -1,0 +1,9 @@
+<div class="rs-component calendar-day">
+	<ul>
+		<li v-for="event in events">
+			<button class="event" :class="event.class" v-on:click="info(event)">
+				<span>{{event.name}}</span>
+			</button>
+		</li>
+	</ul>
+</div>

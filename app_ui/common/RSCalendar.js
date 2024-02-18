@@ -673,7 +673,6 @@ class RSCalendar extends EventEmitter {
 	 */
 	getTime(details) {
 		var time = 0,
-			months,
 			i;
 
 		if(0 < details.month) {
@@ -681,10 +680,8 @@ class RSCalendar extends EventEmitter {
 				time += this.monthsOfYear[i%this.monthsOfYear.length].days * this.CONSTANTS.day;
 			}
 		} else if(details.month < 0) {
-			months = Math.abs(details.month);
-			for(i=0; i<months; i++) {
-				console.log("Neg Calc[" + i + " % " + this.monthsOfYear.length + " = " + i%this.monthsOfYear.length + "]: ", this.monthsOfYear);
-				time -= this.monthsOfYear[ (this.monthsOfYear.length - (i%this.monthsOfYear.length)) - 1].days * this.CONSTANTS.day;
+			for(i=0; details.month<i; i--) {
+				time -= this.monthsOfYear[ (this.monthsOfYear.length + (i%this.monthsOfYear.length)) - 1].days * this.CONSTANTS.day;
 			}
 		}
 		if(details.year) {

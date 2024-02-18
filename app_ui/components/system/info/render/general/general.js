@@ -75,7 +75,7 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"methods": {
 		"repopulateControls": function(event) {
-			if(event && this.info && (event._class === "setting" || event.id === this.info.id || (this.player && event.id === this.player.id) || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id))) {
+			if(event && this.info && (event._class === "setting" || event.id === this.info.id || (this.player && event.id === this.player.id) || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id) || (this.activeMeeting && this.activeMeeting.id === event.id))) {
 				this.populateControls();
 			}
 		},
@@ -725,6 +725,12 @@ rsSystem.component("sysInfoGeneral", {
 												"action": "unequip"
 											});
 											if(object.melee || object.ranged || object.thrown) {
+												this.controls.push({
+													"title": "Attack with " + object.name,
+													"icon": object.icon || "fa-solid fa-cube",
+													"type": "button",
+													"action": "useweapon"
+												});
 												if(entity.main_weapon === object.id) {
 													this.controls.push({
 														"title": "Remove as Main Hand for " + entity.name,
@@ -1158,6 +1164,21 @@ rsSystem.component("sysInfoGeneral", {
 							"targeting": buffer,
 							"entity": entity.id
 						});
+						this.closeInfo();
+					} else {
+						console.warn("Player Character not found: " + this.player.attribute.playing_as);
+					}
+					break;
+				case "useweapon":
+					if(entity) {
+						rsSystem.EventBus.$emit("dialog-open", {
+							"title": entity.name + " Attack",
+							"component": "dndDialogDamage",
+							"action": this.universe.index.action["action:main:attack"],
+							"channel": this.info.id,
+							"entity": entity.id
+						});
+						this.closeInfo();
 					} else {
 						console.warn("Player Character not found: " + this.player.attribute.playing_as);
 					}

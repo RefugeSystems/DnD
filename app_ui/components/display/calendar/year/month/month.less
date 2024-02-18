@@ -1,0 +1,71 @@
+.rs-component.calendar-year-month {
+	.container-name {
+		text-align: center;
+		padding: 4px;
+		border-radius: 0px;
+		border-bottom: 1px solid @rsLightGray;
+		border-width: 0px 0px 1px 0px;
+		color: @rsLightBlue;
+		font-weight: 700;
+		font-size: 22px;
+		padding: 0px;
+		margin: 3px;
+		background-color: transparent;
+	}
+
+	.container-month {
+
+		.container-week {
+
+			.container-day {
+
+			}
+
+			.today {
+				.button-day {
+					border-color: @rsLightBlue;
+				}
+
+				.date {
+					color: @rsLightBlue;
+				}
+			}
+
+			.skirmish {
+				.button-day {
+					box-shadow: 0px 0px 15px @rsLightRed;
+				}
+			}
+
+			.events {
+				.button-day {
+					box-shadow: 0px 0px 15px @rsLightBlue;
+				}
+			}
+
+			.button-day {
+				position: relative;
+				display: flex;
+				height: 26px;
+				width: 26px;
+				line-height: 26px;
+				border-radius: 30px;
+				font-size: 16px;
+				font-weight: 400;
+				background-color: @rsBlack;
+				color: @rsWhite;
+				border: 1px solid @rsLightGray;
+				transition: background-color .3s;
+				align-items: center;
+				justify-content: center;
+
+				span {
+				}
+
+				&:hover {
+					background-color: @rsDarkGray;
+				}
+			}
+		}
+	}
+}
