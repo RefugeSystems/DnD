@@ -80,7 +80,7 @@
 				Vue.set(this.storage, "secure", location.protocol === "https:");
 			}
 			if(!this.storage.address) {
-				Vue.set(this.storage, "address", location.host);
+				Vue.set(this.storage, "address", this.storage.last_address || location.host);
 			}
 			
 			if(this.configuration.address && (!this.storage.address || this.configuration.force)) {
@@ -268,6 +268,7 @@
 						}
 					}).then((session) => {
 					    // Vue.set(this.storage, "session", res);
+						Vue.set(this.storage, "last_address", this.storage.address);
 						session.address = this.getSocketAddress();
 						this.$emit("login", session);
 						Vue.set(this, "loggingIn", false);
