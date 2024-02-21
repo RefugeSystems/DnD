@@ -198,6 +198,11 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "disable_mousescroll",
+					"label": "Disable the 'mouse scroll as touch' feature",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "skip_turn_prompt",
 					"label": "Skip End of Turn Prompt",
 					"base": this.profile,

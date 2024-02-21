@@ -214,6 +214,18 @@ rsSystem.component("dndEntityBroad", {
 		"scrollHome": function() {
 			this.$emit("scrollhome");
 		},
+		"scrollNext": function() {
+			this.$emit("scrollnext");
+		},
+		"scrollNextPage": function() {
+			this.$emit("scrollnextpage");
+		},
+		"scrollPrev": function() {
+			this.$emit("scrollprev");
+		},
+		"scrollPrevPage": function() {
+			this.$emit("scrollprevpage");
+		},
 		/**
 		 * 
 		 * @method isEmpty

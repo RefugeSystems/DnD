@@ -129,7 +129,9 @@ rsSystem.component("DNDCharacter", {
 				"spell_list_height": "600px"
 			}
 		};
-		data.widget.broad = {};
+		data.widget.broad = {
+			"show_next": "shown"
+		};
 		data.widget.feats = {
 			"no_divider": true
 		};
@@ -141,7 +143,11 @@ rsSystem.component("DNDCharacter", {
 			"height": "200px"
 		};
 		data.widget.notes = {};
-		data.widget.dice = {};
+		data.widget.dice = {
+			"attribute": {
+				"show_labels": "true"
+			}
+		};
 		data.widget.name = {};
 
 		data.storage = {};
@@ -160,6 +166,11 @@ rsSystem.component("DNDCharacter", {
 		data.storage.dice = {};
 		data.storage.name = {};
 
+		if(!rsSystem.universe.profile.disable_mousescroll) {
+			data.additionalClasses = "mouse-scrolling";
+		} else {
+			data.additionalClasses = "";
+		}
 
 		return data;
 	},
@@ -175,6 +186,21 @@ rsSystem.component("DNDCharacter", {
 		this.updateMinions();
 	},
 	"methods": {
+		"scrollHome": function() {
+			this.$refs.infocon.scrollLeft = 0;
+		},
+		"scrollNext": function() {
+			this.$refs.infocon.scrollLeft += 480;
+		},
+		"scrollPrev": function() {
+			this.$refs.infocon.scrollLeft -= 480;
+		},
+		"scrollNextPage": function() {
+			this.$refs.infocon.scrollLeft += this.$refs.infocon.clientWidth;
+		},
+		"scrollPrevPage": function() {
+			this.$refs.infocon.scrollLeft -= this.$refs.infocon.clientWidth;
+		},
 		"scrollTo": function(marker) {
 			if(this.$refs[marker]) {
 				this.$refs.infocon.scrollLeft = this.$refs[marker].offsetLeft - 420; // Appears to need the main column removed // TODO: Fix Adjustment to use actual offset instead of fudging and using grid alignment
@@ -182,14 +208,18 @@ rsSystem.component("DNDCharacter", {
 		},
 		"checkLeft": function(event) {
 			// console.log("Check Left Event: ", this.$refs.infocon.scrollLeft);
-			if(this.$refs.infocon.scrollLeft === 0 && this.widget.broad.show_home) {
-				Vue.set(this.widget.broad, "show_home", false);
-			} else if(!this.widget.broad.show_home) {
-				Vue.set(this.widget.broad, "show_home", true);
+			if(this.$refs.infocon.scrollLeft === 0 && this.widget.broad.show_home === "shown") {
+				Vue.set(this.widget.broad, "show_home", "");
+				Vue.set(this.widget.broad, "show_prev", "");
+			} else if(this.widget.broad.show_home !== "shown") {
+				Vue.set(this.widget.broad, "show_home", "shown");
+				Vue.set(this.widget.broad, "show_prev", "shown");
 			}
-		},
-		"scrollHome": function() {
-			this.$refs.infocon.scrollLeft = 0;
+			if(this.$refs.infocon.clientWidth + this.$refs.infocon.scrollLeft === this.$refs.infocon.scrollWidth && this.widget.broad.show_next === "shown") {
+				Vue.set(this.widget.broad, "show_next", "");
+			} else if(this.widget.broad.show_next !== "shown") {
+				Vue.set(this.widget.broad, "show_next", "shown");
+			}
 		},
 		"scrollWheel": function(event) {
 			if(event.path[0] == this.$refs.infocon) {

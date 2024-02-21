@@ -205,9 +205,6 @@
 		</div>
 		<h3>Panel Scrolling</h3>
 		<div class="property-container rest flex h">
-			<button class="action general rounded quick" v-if="widget.show_home" v-on:click="scrollHome()" title="Scroll all the way back to the left (Including any minions)">
-				<span class="action-icon fa-solid fa-arrow-left-long-to-line"></span>
-			</button>
 			<button class="action general rounded quick" v-on:click="emitScrollNotice('nearby')" title="Scroll to list of near-by entites">
 				<span class="action-icon fa-solid fa-street-view"></span>
 			</button>
@@ -239,6 +236,24 @@
 				<div class="stat-foot">Stats</div>
 			</button>
 			-->
+		</div>
+		<div class="property-container rest flex h">
+			<!--<button class="action general rounded quick" v-if="widget.show_home" v-on:click="scrollHome()" title="Scroll all the way back to the left (Including any minions)">-->
+			<button class="action general rounded quick obscured" :class="widget.show_home" v-on:click="scrollHome()" title="Scroll all the way back to the left (Including any minions)">
+				<span class="action-icon fa-solid fa-arrow-left-long-to-line"></span>
+			</button>
+			<button class="action general rounded quick obscured" :class="widget.show_home" v-on:click="scrollPrevPage()" title="Scroll left a page">
+				<span class="action-icon fa-solid fa-arrow-left-from-line"></span>
+			</button>
+			<button class="action general rounded quick obscured" :class="widget.show_home" v-on:click="scrollPrev()" title="Scroll to the previous panel to the left, if any">
+				<span class="action-icon fa-solid fa-arrow-left"></span>
+			</button>
+			<button class="action general rounded quick obscured" :class="widget.show_next" v-on:click="scrollNext()" title="Scroll to the next right panel, if any">
+				<span class="action-icon fa-solid fa-arrow-right"></span>
+			</button>
+			<button class="action general rounded quick obscured" :class="widget.show_next" v-on:click="scrollNextPage()" title="Scroll right a page">
+				<span class="action-icon fa-solid fa-arrow-right-from-line"></span>
+			</button>
 		</div>
 	</div>
 	<div class="character-stats broad-column flex v">
