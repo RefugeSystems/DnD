@@ -257,6 +257,21 @@
 		</div>
 	</div>
 	<div class="character-stats broad-column flex v">
+		<button class="emphasis-stat rsbd-light-red" v-on:click="declareAttack()" v-if="!profile.disable_easyaction">
+			<div class="stat-label" v-if="profile.details_easyaction === 'caster'">Casting</div>
+			<div class="stat-value" v-if="profile.details_easyaction === 'caster'">
+				+ {{entity.spell_attack}}
+				<span class="fad fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
+			</div>
+			<div class="stat-foot" v-if="profile.details_easyaction === 'caster'">{{entity.spell_dc}}</div>
+
+			<div class="stat-label" v-if="profile.details_easyaction !== 'caster'">Attacking</div>
+			<div class="stat-value" v-if="profile.details_easyaction !== 'caster'">
+				+ {{entity.skill_check["skill:mainhand"]}}
+				<span :class="getWeaponIcon()"></span>
+			</div>
+			<div class="stat-foot" v-if="profile.details_easyaction !== 'caster'">+ {{entity.skill_check["skill:offhand"]}}</div>
+		</button>
 		<button class="emphasis-stat" v-for="stat in characterStats" v-on:click="performSkillCheck(stat.skill)">
 			<div class="stat-label">{{stat.name}}</div>
 			<div class="stat-value">{{entity[stat.value_field]}}</div>

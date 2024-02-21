@@ -129,6 +129,7 @@ rsSystem.component("dndDialogDamage", {
 				for(i=0; i<search.length; i++) {
 					check = search[i];
 					if(rsSystem.utility.isNotEmpty(check.additive_skill) || check.skill_bonus_roll || check.additive_attack || check.additive_attack_melee || check.additive_attack_range || check.additive_attack_spell || (check.additive_attack_charged && check.charges > 0)) {
+					// if(this.isValidAdditive(check)) {
 						additives.push(check);
 					}
 				}
@@ -257,6 +258,28 @@ rsSystem.component("dndDialogDamage", {
 
 			return checks;
 		},
+		"targetCountClasses": function() {
+			if(this.target_limit < this.targetted) {
+				return "rs-light-red";
+			} else if(this.target_limit > this.targetted) {
+				return "rs-light-yellow";
+			} else {
+				return "rs-light-green";
+			}
+		},
+		"targetted": function() {
+			var targets = Object.keys(this.targetCount),
+				targetted = 0,
+				id,
+				i;
+
+			for(i=0; i<targets.length; i++) {
+				id = targets[i];
+				targetted += this.targetCount[id];
+			}
+			
+			return targetted;
+		},
 		"available_effects": function() {
 			var effects = [],
 				effect,
@@ -338,6 +361,8 @@ rsSystem.component("dndDialogDamage", {
 
 		data.dice = rsSystem.dnd.diceDefinitions;
 		data.focused_roll = null;
+		data.targetCount = {};
+		data.maxtargets = 0;
 
 		data.autoskipped = {};
 		data.available_levels = [0];
@@ -346,6 +371,8 @@ rsSystem.component("dndDialogDamage", {
 		} else {
 			data.cast_level = 0;
 		}
+
+		data.actionsToTake = [];
 
 		data.target_limit = 0;
 		data.channel = this.details.channel || null;
@@ -362,13 +389,12 @@ rsSystem.component("dndDialogDamage", {
 		data.damage_targets = [];
 		data.active_targets = [];
 		data.target_check = {};
-		data.skill_checks = [];
 		data.effects_self = [];
 		data.damages = [];
 		data.effects = [];
 		data.channel_changed = false;
 		data.targets_changed = false;
-		data.splitDamage = this.details.splitDamage === undefined?false:!!this.details.splitDamage;
+		data.splitDamage = this.details.splitDamage === undefined?true:!!this.details.splitDamage;
 		data.skill_add = {};
 		data.additives = [];
 		data.adding = {};
@@ -415,6 +441,38 @@ rsSystem.component("dndDialogDamage", {
 		}
 	},
 	"methods": {
+		"isValidAdditive": function(check) {
+			// Broken up for readability x_x
+			if(rsSystem.utility.isEmpty(check.additive_skill) && !check.skill_bonus_roll && !check.additive_attack && !check.additive_attack_melee && !check.additive_attack_range && !check.additive_attack_spell && (!check.additive_attack_charged || check.charges === 0)) {
+				return false;
+			}
+
+			if(check.bonus_channel_lock && this.channel.id !== check.bonus_channel_lock) {
+				return false;
+			}
+			
+			if(check.bonus_lock_to_class && this.channel._class !== check.bonus_lock_to_class) {
+				return false;
+			}
+
+			if(check.bonus_type_lock && (!this.channel.types || this.channel.types.indexOf(check.bonus_type_lock) === -1)) {
+				return false;
+			}
+
+			if(check.damage_bonus_type_lock && this.channel.damage_type !== check.damage_bonus_type_lock) {
+				return false;
+			}
+
+			if(check.additive_attack_melee && !this.channel.melee && this.channel.ranged) {
+				return false;
+			}
+
+			if(check.bonus_lock_to_ranged && this.channel.melee && !this.channel.ranged) {
+				return false;
+			}
+
+			return true;
+		},
 		"isEmpty": function(object) {
 			return rsSystem.utility.isEmpty(object);
 		},
@@ -507,13 +565,24 @@ rsSystem.component("dndDialogDamage", {
 			Vue.set(this, "show_feats", !this.show_feats);
 		},
 		"toggleTarget": function(target) {
-			if(this.targeting[target.id]) {
-				Vue.delete(this.targeting, target.id);
+			if(this.targetCount[target.id]) {
+				this.removeTarget(target);
 			} else {
-				Vue.set(this.targeting, target.id, target);
+				this.setTarget(target);
+			}
+		},
+		"removeTarget": function(target) {
+			Vue.set(this.targetCount, target.id, this.targetCount[target.id] - 1);
+			if(!this.targetCount[target.id]) {
+				Vue.delete(this.targeting, target.id);
 			}
 			Vue.set(this, "targets_changed", true);
-			if(this.activeSection.id === "targets" && !this.autoskipped[this.activeSection.id] && this.target_limit && Object.keys(this.targeting).length === this.target_limit) {
+		},
+		"setTarget": function(target) {
+			Vue.set(this.targetCount, target.id, (this.targetCount[target.id] || 0) + 1);
+			Vue.set(this.targeting, target.id, target);
+			Vue.set(this, "targets_changed", true);
+			if(this.activeSection.id === "targets" && !this.autoskipped[this.activeSection.id] && this.target_limit && this.targetted === this.target_limit) {
 				this.autoskipped[this.activeSection.id] = true;
 				this.finishSection(this.activeSection);
 			}
@@ -523,7 +592,7 @@ rsSystem.component("dndDialogDamage", {
 				if(this.adding[additive.id]) {
 					Vue.delete(this.adding, additive.id);
 					if(this.skill_add[additive.id]) {
-						Vue.delete(this.adding, additive.id);
+						Vue.delete(this.skill_add, additive.id);
 					}
 				} else {
 					Vue.set(this.adding, additive.id, additive);
@@ -533,167 +602,19 @@ rsSystem.component("dndDialogDamage", {
 				}
 			}
 		},
-		"completeRoll": function(section, id, formula) {
-			
-		},
-		"finishSection": function(section) {
-			// TODO: Validate Current
-			var channel = this.channel,
-				additives,
-				additive,
-				damages,
-				targets,
-				damage,
-				source,
-				target,
-				check,
-				type,
-				a,
-				i,
-				j;
-
-			switch(this.activeSection.id) {
-				case "additives":
-					additives = Object.keys(this.adding);
-					if(additives.length && !this.additives_locked) {
-						Vue.set(this, "additives_locked", true);
-						for(a=0; a<additives.length; a++) {
-							additive = this.adding[additives[a]];
-							// Checks that the additive applies are handled in the channel selection
-							if(!additive.damage_bonus_type_lock || (channel && (channel.damage_type === additive.damage_bonus_type_lock || channel.damage[additive.damage_bonus_type_lock]))) {
-								if(channel && channel.damage_type && additive.damage_bonus_weapon) {
-									type = this.universe.index.damage_type[this.channel.damage_type];
-									if(type) {
-										for(j=0; j<this.available_targets.length; j++) {
-											target = this.available_targets[j].id;
-											this.roll_damage[target][this.channel.damage_type].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][this.channel.damage_type].formula + " + " + additive.damage_bonus_weapon));
-											if(this.profile.auto_roll) {
-												this.roll_damage[target][this.channel.damage_type].roll();
-											}
-										}
-										this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_weapon));
-										if(this.available_damages.indexOf(type) === -1) {
-											this.available_damages.push(type);
-										}
-										if(this.profile.auto_roll) {
-											this.roll_damage[null][type.id].roll();
-										}
-									} else {
-										console.warn("Undefined Damage Type specified for " + this.channel.name + "(" + this.channel.id + ")", this.channel);
-									}
-								}
-								if(additive.damage_bonus_spell) {
-									damages = Object.keys(additive.damage_bonus_spell);
-									for(i=0; i<damages.length; i++) {
-										damage = damages[i];
-										type = this.universe.index.damage_type[damage];
-										if(type) {
-											for(j=0; j<this.available_targets.length; j++) {
-												target = this.available_targets[j].id;
-												this.roll_damage[target][damage].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[target][damage].formula + " + " + additive.damage_bonus_spell[damage]));
-												if(this.profile.auto_roll) {
-													this.roll_damage[target][damage].roll();
-												}
-											}
-											this.roll_damage[null][type.id].setFormula(rsSystem.dnd.reducedDiceRoll(this.roll_damage[null][type.id].formula + " + " + additive.damage_bonus_spell[type.id]));
-											if(this.available_damages.indexOf(type) === -1) {
-												this.available_damages.push(type);
-											}
-											if(this.profile.auto_roll) {
-												this.roll_damage[null][type.id].roll();
-											}
-										}
-									}
-								}
-							}
-						}
-						this.buildSkillChecks();
-					}
-					break;
-				case "checks":
-					for(i=0; i<this.skill_checks.length; i++) {
-						check = this.skill_checks[i];
-						if(check.target) {
-							this.target_check[check.target.id] = check;
-						}
-						if(check.roll && check.roll.is_critical) {
-							if(check.target) {
-								for(j=0; j<this.available_damages.length; j++) {
-									if(this.roll_damage[check.target.id][this.available_damages[j].id].dice_multiplier != 2) {
-										this.roll_damage[check.target.id][this.available_damages[j].id].setDiceMultiplier(2);
-									}
-								}
-							} else {
-								for(j=0; j<this.available_damages.length; j++) {
-									if(this.roll_damage[null][this.available_damages[j].id].dice_multiplier != 2) {
-										this.roll_damage[null][this.available_damages[j].id].setDiceMultiplier(2);
-									}
-								}
-							}
-						} else {
-							if(check.target) {
-								for(j=0; j<this.available_damages.length; j++) {
-									if(this.roll_damage[check.target.id][this.available_damages[j].id].dice_multiplier != 1) {
-										this.roll_damage[check.target.id][this.available_damages[j].id].setDiceMultiplier(1);
-									}
-								}
-							} else {
-								for(j=0; j<this.available_damages.length; j++) {
-									if(this.roll_damage[null][this.available_damages[j].id].dice_multiplier != 1) {
-										this.roll_damage[null][this.available_damages[j].id].setDiceMultiplier(1);
-									}
-								}
-							}
-						}
-					}
-					break;
-				case "targets":
-					targets = Object.keys(this.targeting);
-					if(this.targets_changed || this.channel_changed) {
-						Vue.set(this, "targets_changed", false);
-						Vue.set(this, "channel_changed", false);
-						this.active_targets.splice(0);
-						this.universe.transcribeInto(targets, this.active_targets);
-						this.buildSkillChecks();
-					}
-					this.damage_targets.splice(0);
-					if(this.splitDamage) {
-						this.damage_targets.push.apply(this.damage_targets, targets);
-					} else {
-						this.damage_targets.push(null);
-					}
-					this.buildAdditives();
-					break;
-				case "review":
-					this.send();
-					return false;
-			}
-
-			this.goToNextSection();
-			return true;
-		},
-		"buildSkillChecks": function() {
-			var targets = Object.keys(this.targeting),
+		"createActionCheck": function(target) {
+			console.warn("Create Action: ", target, this);
+			var action = {},
+				damage_type,
 				formula,
+				damage,
 				skill,
 				add,
 				i;
 
-			this.skill_checks.splice(0);
-			if(this.details.skill_checks) {
-				for(i=0; i<this.details.skill_checks.length; i++) {
-					skill = this.universe.index.skill[this.details.skill_checks[i]];
-					if(rsSystem.utility.isValid(skill)) {
-						this.skill_checks.push({
-							"roll": new Roll({
-								"entity": this.entity
-							}),
-							"skill": skill
-						});
-					}
-				}
-			}
-			
+			action.target = target;
+
+			// Get Skill Check
 			if(this.channel) {
 				if((this.isWeapon(this.channel) || this.channel.cast_attack)) {
 					if(this.entity.main_weapon === this.channel.id) {
@@ -713,39 +634,195 @@ rsSystem.component("dndDialogDamage", {
 						if(rsSystem.utility.isNotEmpty(this.skill_add)) {
 							for(i in this.skill_add) {
 								add = this.skill_add[i];
-								if(add.additive_skill && add.additive_skill[skill.id]) {
-									formula += " + " + add.additive_skill[skill.id];
-								} else if(add.skill_bonus_roll) {
-									formula += " + " + add.skill_bonus_roll;
+								if(this.additiveAppliesToTarget(add, target)) {
+									if(add.additive_skill && add.additive_skill[skill.id]) {
+										formula += " + " + add.additive_skill[skill.id];
+									} else if(add.skill_bonus_roll) {
+										formula += " + " + add.skill_bonus_roll;
+									}
 								}
 							}
 						}
-						for(i=0; i<targets.length; i++) {
-							this.skill_checks.push({
-								"roll": new Roll({
-									"formula": "1d20 + " + rsSystem.dnd.reducedDiceRoll((this.entity.skill_check[skill.id] || 0) + formula),
-									"entity": this.entity
-								}),
-								"target": this.universe.getObject(targets[i]) || targets[i],
-								"skill": skill
-							});
-						}
+						action.check = {
+							"roll": new Roll({
+								"formula": "1d20 + " + rsSystem.dnd.reducedDiceRoll((this.entity.skill_check[skill.id] || 0) + formula),
+								"entity": this.entity
+							}),
+							"target": target,
+							"skill": skill
+						};
+						action.skill = skill;
 					} else {
 						console.warn("Unable to find skill for channel: ", this.channel);
 					}
 				} else if(this.channel.dc_save && (skill = this.universe.index.skill[this.channel.dc_save])) {
-					for(i=0; i<targets.length; i++) {
-						this.skill_checks.push({
-							"roll": new Roll({
-								"formula": "1d20 + " + (this.entity.skill_check[skill.id] || 0),
-								"entity": this.entity
-							}),
-							"target": this.universe.getObject(targets[i]) || targets[i],
-							"skill": skill
-						});
+					action.check = {
+						"roll": new Roll({
+							"formula": "1d20 + " + (this.entity.skill_check[skill.id] || 0),
+							"entity": this.entity
+						}),
+						"target": target,
+						"skill": skill
+					};
+					action.skill = skill;
+					if(this.profile.auto_roll) {
+						action.check.roll.roll();
+					}
+				} else {
+					// No Skill
+				}
+				damage_type = this.channel.damage_type;
+			}
+
+			// Add Damage Rolls
+			if(this.available_damages.length) {
+				action.damageFormulas = {};
+				action.damageRollMap = {};
+				action.damages = [];
+				for(i=0; i<this.available_damages.length; i++) {
+					damage = this.available_damages[i];
+					action.damageFormulas[damage.id] = [this.channel.damage[damage.id] || 0];
+					action.damages.push(damage);
+				}
+				if(damage_type && !action.damageFormulas[damage_type]) {
+					action.damageFormulas[damage_type] = [];
+					action.damages.push(this.universe.get(damage_type));
+				}
+				if(rsSystem.utility.isNotEmpty(this.adding)) {
+					for(i in this.adding) {
+						add = this.adding[i];
+						if(this.additiveAppliesToTarget(add, target)) {
+							if(rsSystem.utility.isNotEmpty(add.damage_bonus_spell)) {
+								for(damage in add.damage_bonus_spell) {
+									if(!action.damageFormulas[damage]) {
+										action.damageFormulas[damage] = [];
+										action.damages.push(this.universe.get(damage));
+									}
+									action.damageFormulas[damage].push(add.damage_bonus_spell[damage]);
+								}
+							}
+							if(add.damage_bonus_weapon && damage_type) {
+								action.damageFormulas[damage_type].push(add.damage_bonus_weapon);
+							}
+						}
+					}
+				}
+				for(i=0; i<action.damages.length; i++) {
+					damage = action.damages[i];
+					action.damages[i] = {
+						"type": damage,
+						"roll": new Roll({
+							"formula": action.damageFormulas[damage.id].join(" + "),
+							"entity": this.entity
+						})
+					};
+					if(this.profile.auto_roll) {
+						action.damages[i].roll.roll();
 					}
 				}
 			}
+
+			return action;
+		},
+
+		"getDamageTotal": function(damages) {
+			var remainder = [],
+				sum = 0,
+				roll,
+				i;
+
+			if(damages) {
+				for(i=0; i<damages.length; i++) {
+					roll = damages[i].roll;
+					if(isNaN(roll.computed)) {
+						remainder.push(roll.computed);
+					} else {
+						sum += parseInt(roll.computed);
+					}
+				}
+
+				if(remainder.length) {
+					return sum + " + " + remainder.join(" + ");
+				}
+			}
+
+			return sum;
+		},
+		"completeRoll": function(section, id, formula) {
+			
+		},
+		"finishSection": function(section) {
+			// TODO: Validate Current
+			var channel = this.channel,
+				additives,
+				additive,
+				damages,
+				targets,
+				action,
+				damage,
+				source,
+				target,
+				check,
+				type,
+				a,
+				i,
+				j;
+
+			console.log("Finish Section: ", section.id, "\nActive:\n", this.activeSection.id);
+			switch(this.activeSection.id) {
+				case "channel":
+					console.log("Channel Set: ", this.channel);
+					break;
+				case "additives":
+					this.actionsToTake.splice(0);
+					targets = Object.keys(this.targetCount);
+					console.log(" > Check Targets: " + Object.keys(this.targeting).join(", ") + "\n", _p(this.targetCount));
+					for(i=0; i<targets.length; i++) {
+						console.log(" > Check Target: " + targets[i]);
+						target = this.targeting[targets[i]];
+						if(target) {
+							for(j=0; j<this.targetCount[target.id]; j++) {
+								action = this.createActionCheck(target);
+								this.actionsToTake.push(action);
+							}
+						} else {
+							delete(this.targetCount[targets[i]]);
+						}
+					}
+					break;
+				case "checks":
+					for(i=0; i<this.actionsToTake.length; i++) {
+						action = this.actionsToTake[i];
+						if(action.check && action.check.roll.is_critical && action.damages) {
+							for(j=0; j<action.damages.length; j++) {
+								action.damages[j].roll.setDiceMultiplier(2);
+							}
+						}
+					}
+					break;
+				case "targets":
+					targets = Object.keys(this.targeting);
+					if(this.targets_changed || this.channel_changed) {
+						Vue.set(this, "targets_changed", false);
+						Vue.set(this, "channel_changed", false);
+						this.active_targets.splice(0);
+						this.universe.transcribeInto(targets, this.active_targets);
+					}
+					this.damage_targets.splice(0);
+					if(this.splitDamage) {
+						this.damage_targets.push.apply(this.damage_targets, targets);
+					} else {
+						this.damage_targets.push(null);
+					}
+					this.buildAdditives();
+					break;
+				case "review":
+					this.send();
+					return false;
+			}
+
+			this.goToNextSection();
+			return true;
 		},
 		"goToSection": function(section) {
 			var auto_submit = this.profile.auto_submit || (this.entity.is_minion && this.profile.auto_submit_minion),
@@ -770,54 +847,55 @@ rsSystem.component("dndDialogDamage", {
 					}
 					break;
 				case "additives":
-					// if(this.additives.length === 0 && !this.autoskipped[this.activeSection.id]) {
 					if(this.additives.length === 0 && !this.autoskipped[section.id]) {
 						this.autoskipped[section.id] = true;
 						setTimeout(() => {
-							this.goToNextSection();
+							this.finishSection(section);
+							// this.goToNextSection();
 						});
-					// } else if(this.quick_adds && auto_submit && !this.autoskipped[this.activeSection.id]) {
 					} else if(this.quick_adds && auto_submit && !this.autoskipped[section.id]) {
 						this.autoskipped[section.id] = true;
 						setTimeout(() => {
-							this.goToNextSection();
+							this.finishSection(section);
+							// this.goToNextSection();
 						});
 					}
 					break;
 				case "checks":
-					console.log("Check[" + this.activeSection.id + "]: ", _p(this.skill_checks));
-					// if(this.skill_checks.length === 0 && !this.autoskipped[this.activeSection.id]) {
-					if(this.skill_checks.length === 0 && !this.autoskipped[section.id]) {
+					if(this.hasNoSkillChecks() && !this.autoskipped[section.id]) {
 						this.autoskipped[section.id] = true;
 						setTimeout(() => {
-							this.goToNextSection();
+							this.finishSection(section);
+							// this.goToNextSection();
 						});
 					} else if(auto) {
 						setTimeout(() => {
-							this.goToNextSection();
+							this.finishSection(section);
+							// this.goToNextSection();
 						});
 					}
 					break;
 				case "targets":
-					// if(this.available_targets.length === 0 && !this.autoskipped[this.activeSection.id]) {
 					if(this.available_targets.length === 0 && !this.autoskipped[section.id]) {
 						this.autoskipped[section.id] = true;
 						setTimeout(() => {
-							this.goToNextSection();
+							this.finishSection(section);
+							// this.goToNextSection();
 						});
 					}
 					break;
 				case "damage":
 					if(this.channel) {
-						// if(this.available_damages.length === 0 && !this.autoskipped[this.activeSection.id]) {
 						if(this.available_damages.length === 0 && !this.autoskipped[section.id]) {
 							this.autoskipped[section.id] = true;
 							setTimeout(() => {
-								this.goToNextSection();
+								this.finishSection(section);
+								// this.goToNextSection();
 							});
 						} else if(auto) {
 							setTimeout(() => {
-								this.goToNextSection();
+								this.finishSection(section);
+								// this.goToNextSection();
 							});
 						}
 					}
@@ -892,6 +970,14 @@ rsSystem.component("dndDialogDamage", {
 				this.goToSection(next);
 			}
 		},
+		"hasNoSkillChecks": function() {
+			for(var i=0; i<this.actionsToTake.length; i++) {
+				if(this.actionsToTake[i].skill) {
+					return false;
+				}
+			}
+			return true;
+		},
 		"getRangeClasses": function(target) {
 			if(!this.channel || !this.ranging[target.id]) {
 				return "";
@@ -940,6 +1026,18 @@ rsSystem.component("dndDialogDamage", {
 			}
 
 			return false;
+		},
+		"additiveAppliesToTarget": function(additive, target) {
+			if(additive.bonus_target_lock || additive.bonus_effect_lock) {
+				if(additive.bonus_target_lock && rsSystem.utility.hasParentalKey(target, additive.bonus_target_lock)) {
+					return true;
+				} else if(additive.bonus_effect_lock && target.effects && target.effects.length && rsSystem.utility.hasParentalKey(target.effects, additive.bonus_effect_lock)) {
+					return true;
+				}
+				return false;
+			} else {
+				return true;
+			}
 		},
 		"buildAdditives": function() {
 			console.log("Building Additives...", this.active_targets);
@@ -997,9 +1095,7 @@ rsSystem.component("dndDialogDamage", {
 				i,
 				j;
 			
-				
 			Vue.set(this, "additives_locked", false);
-			Vue.set(this, "channel_changed", true);
 			if(channel && channel._class === "spell" && (!channel || channel.level !== this.cast_level)) {
 				channel = Object.assign({}, channel);
 				if(channel.level && channel.level !== "0" /* Bug handling */ && this.cast_level > channel.level) {
@@ -1007,51 +1103,10 @@ rsSystem.component("dndDialogDamage", {
 				}
 			}
 
-			if(this.channel != channel) {
-				// Clear out damage data from previous channel
-				keys = Object.keys(this.roll_damage[null]);
-				for(i=0; i<keys.length; i++) {
-					this.roll_damage[null][keys[i]].clear();
-				}
+			if(!this.channel || this.channel.id !== channel.id) {
+				Vue.set(this, "channel_changed", true);
+				this.actionsToTake.splice(0);
 				Vue.set(this, "channel", channel);
-			}
-
-			// Build New Rolls objects for damage
-			if(channel && ((channel.skill_damage && rsSystem.utility.isNotEmpty(channel.skill_damage)) || (channel.damage && rsSystem.utility.isNotEmpty(channel.damage)))) {
-				// The channel _formula is used to allow slight adjustments UI side such as Upcasting calculations
-				map = channel._formula || {}; // 7/23/2022 - Formula updated in Universe delta sync - RSUniverse - @method receiveDelta - line ~549
-				// map = channel; // Formula does not update and any applicable replacements should have been completed by the server already
-				if(map.skill_damage && rsSystem.utility.isNotEmpty(map.skill_damage)) {
-					map = map.skill_damage;
-				} else if(map.damage && rsSystem.utility.isNotEmpty(map.damage)) {
-					map = map.damage;
-				} else if(channel.skill_damage && rsSystem.utility.isNotEmpty(channel.skill_damage)) {
-					map = channel.skill_damage;
-				} else if(channel.damage && rsSystem.utility.isNotEmpty(channel.damage)) {
-					map = channel.damage;
-				}
-				keys = Object.keys(map);
-				for(i=0; i<keys.length; i++) {
-					dmg = keys[i];
-					this.roll_damage[null][dmg].setFormula(rsSystem.dnd.reducedDiceRoll(map[dmg], channel));
-					this.roll_damage[null][dmg].setSource(channel);
-					for(j=0; j<this.available_targets.length; j++) {
-						target = this.available_targets[j].id;
-						this.roll_damage[target][dmg].setFormula(rsSystem.dnd.reducedDiceRoll(map[dmg], channel));
-						this.roll_damage[target][dmg].setSource(channel);
-					}
-				}
-			} else {
-				for(i=0; i<this.universe.listing.damage_type.length; i++) {
-					dmg = this.universe.listing.damage_type[i];
-					this.roll_damage[null][dmg.id].setFormula("");
-					this.roll_damage[null][dmg.id].setSource(null);
-					for(j=0; j<this.available_targets.length; j++) {
-						target = this.available_targets[j].id;
-						this.roll_damage[target][dmg.id].setFormula("");
-						this.roll_damage[target][dmg.id].setSource(null);
-					}
-				}
 			}
 
 			if(channel && !this.isEmpty(channel.action_cost)) {
@@ -1067,11 +1122,15 @@ rsSystem.component("dndDialogDamage", {
 				} else if(channel.is_damage_split !== undefined && channel.is_damage_split !== null) {
 					Vue.set(this, "splitDamage", !!channel.is_damage_split);
 				}
-				if(typeof(channel.target_limit) === "number") {
+
+				if(channel.melee || channel.ranged || channel.thrown) {
+					Vue.set(this, "target_limit", this.entity.attack_limit);
+				} else if(channel.target_limit) {
 					Vue.set(this, "target_limit", channel.target_limit);
 				} else {
-					Vue.set(this, "target_limit", 0);
+					Vue.set(this, "target_limit", 1);
 				}
+
 				source = [];
 				if(rsSystem.utility.isNotEmpty(channel.damage)) {
 					this.universe.transcribeInto(Object.keys(channel.damage), source);
@@ -1107,39 +1166,18 @@ rsSystem.component("dndDialogDamage", {
 		},
 		"send": function() {
 			var sending = {},
+				action,
+				damage,
 				check,
-				buffer,
-				load,
-				i;
+				event,
+				i,
+				j;
 			
 			// Send Skill Checks
 			sending.targeted_checks = {};
 			sending.target_checks = {};
 			sending.checks = [];
 			check = {};
-			for(i=0; i<this.skill_checks.length; i++) {
-				load = this.skill_checks[i];
-				if(load.target) {
-					buffer = sending.target_checks[load.target.id || load.target];
-					if(!buffer) {
-						buffer = sending.target_checks[load.target.id || load.target] = {};
-					}
-					buffer[load.skill.id] = parseInt(load.roll.computed) || 0;
-					sending.targeted_checks[load.target.id] = buffer[load.skill.id];
-					check.target = load.target.id;
-				}
-				sending.checks.push(check);
-				check.result = load.roll.computed;
-				check.channel = this.channel?this.channel.id:undefined;
-				check.entity = this.entity?this.entity.id:undefined;
-				check.name = load.skill.name;
-				check.skill = load.skill.id;
-				check.dice = load.roll.dice_rolls; // Legacy Support;
-				check.roll = load.roll; // Future Support
-				check.critical = load.roll.is_critical;
-				check.failure = load.roll.is_failure;
-				this.universe.send("action:check", check);
-			}
 
 			// Send Damage
 			sending.additives = Object.keys(this.adding);
@@ -1160,61 +1198,55 @@ rsSystem.component("dndDialogDamage", {
 			if(this.entity) {
 				sending.source = this.entity.id;
 			}
-
-			if(this.splitDamage) {
-				this.damage_targets.forEach((target) => {
-					var event = Object.assign({}, sending);
-				
-					event.targets = [target];
-					if(this.available_damages.length) {
-						event.damage = {};
-						event.result = {};
-						for(i=0; i<this.available_damages.length; i++) {
-							load = this.available_damages[i].id;
-							if(this.roll_damage[target][load] && this.roll_damage[target][load].computed) {
-								event.result[load] = event.damage[load] = this.roll_damage[target][load].computed;
-							}
-						}
+			
+			for(i=0; i<this.actionsToTake.length; i++) {
+				action = this.actionsToTake[i];
+				event = Object.assign({}, sending);
+				event.targets = [action.target.id];
+				if(action.check) {
+					event.checks = [];
+					event.checks.push(check = {});
+					check.result = action.check.roll.computed;
+					check.channel = this.channel?this.channel.id:undefined;
+					check.entity = this.entity?this.entity.id:undefined;
+					check.name = action.skill.name;
+					check.skill = action.skill.id;
+					check.dice = action.check.roll.dice_rolls; // Legacy Support;
+					check.roll = action.check.roll; // Future Support
+					check.critical = action.check.roll.is_critical;
+					check.failure = action.check.roll.is_failure;
+					if(this.channel.dc) {
+						check.difficulty = this.channel.dc;
 					}
+					this.universe.send("action:check", check);
 
-					if(this.details.action === "channel:use" || this.isEmpty(event.damage)) {
-						console.log("Use Event: ", _p(event));
-						this.universe.send("channel:use", event);
-					} else {
-						if(this.channel && this.channel._class === "spell") {
-							this.universe.send("action:cast:spell", event);
+					event.targeted_checks = {};
+					event.targeted_checks[action.target.id] = check.result;
+				}
+				if(action.damages) {
+					event.damage = {};
+					event.result = {};
+					for(j=0; j<action.damages.length; j++) {
+						damage = action.damages[j];
+						if(isNaN(damage.roll.computed)) {
+							event.damage[damage.type.id] = event.result[damage.type.id] = damage.roll.computed;
 						} else {
-							this.universe.send("action:damage:send", event);
-						}
-					}
-				});
-			} else {
-				if(!this.isEmpty(this.targeting)) {
-					sending.targets = Object.keys(this.targeting);
-				}
-
-				if(this.available_damages.length) {
-					sending.damage = {};
-					sending.result = {};
-					for(i=0; i<this.available_damages.length; i++) {
-						load = this.available_damages[i].id;
-						if(this.roll_damage[null][load] && this.roll_damage[null][load].computed) {
-							sending.result[load] = sending.damage[load] = this.roll_damage[null][load].computed;
+							event.damage[damage.type.id] = event.result[damage.type.id] = parseInt(damage.roll.computed);
 						}
 					}
 				}
-
-				if(this.details.action === "channel:use" || this.isEmpty(sending.damage)) {
-					console.log("Use Send: ", _p(sending));
-					this.universe.send("channel:use", sending);
+				if(this.details.action === "channel:use" || this.isEmpty(event.damage)) {
+					console.log("Use Event: ", _p(event));
+					this.universe.send("channel:use", event);
 				} else {
 					if(this.channel && this.channel._class === "spell") {
-						this.universe.send("action:cast:spell", sending);
+						this.universe.send("action:cast:spell", event);
 					} else {
-						this.universe.send("action:damage:send", sending);
+						this.universe.send("action:damage:send", event);
 					}
 				}
 			}
+
 			if(typeof(this.details.finished) === "function") {
 				this.details.finished(sending);
 			}

@@ -164,6 +164,10 @@ rsSystem.component("systemOptionsDialog", {
 			}
 		}
 
+		if(this.profile.details_easyaction === undefined) {
+			Vue.set(this.profile, "details_easyaction", "bruiser");
+		}
+
 		data.pages = {
 			/**
 			 * 
@@ -202,6 +206,23 @@ rsSystem.component("systemOptionsDialog", {
 					"label": "Disable the 'mouse scroll as touch' feature",
 					"base": this.profile,
 					"type": "toggle"
+				}, {
+					"id": "disable_easyaction",
+					"label": "Disable the 'Action' button in Character view",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "details_easyaction",
+					"label": "Control the data on the Easy Action button",
+					"base": this.profile,
+					"type": "select",
+					"options": [{
+						"name": "Caster",
+						"id": "caster"
+					}, {
+						"name": "Bruiser",
+						"id": "bruiser"
+					}]
 				}, {
 					"id": "skip_turn_prompt",
 					"label": "Skip End of Turn Prompt",

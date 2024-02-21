@@ -9,6 +9,7 @@
 			<span class="fas fa-info-circle"></span>
 			<span v-if="occurred.data.level">Level {{occurred.data.level}}</span>
 			<span>{{channel.name}}</span>
+			<span v-if="channel.dc" class="channel-dc">(DC<span class="rs-lightorange">{{channel.dc}}</span>)</span>
 		</button>
 		<span v-if="source">
 			<span>(From</span>

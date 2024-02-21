@@ -226,6 +226,18 @@ rsSystem.component("dndEntityBroad", {
 		"scrollPrevPage": function() {
 			this.$emit("scrollprevpage");
 		},
+		"getWeaponIcon": function() {
+			var weapon;
+			if(this.entity) {
+				if(this.entity.main_weapon) {
+					weapon = this.universe.get(this.entity.main_weapon);
+					if(weapon && weapon.icon) {
+						return weapon.icon;
+					}
+				}
+			}
+			return "fa-solid fa-exclamation-triangle rs-lightred";
+		},
 		/**
 		 * 
 		 * @method isEmpty

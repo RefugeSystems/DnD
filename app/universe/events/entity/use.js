@@ -38,14 +38,18 @@ module.exports.initialize = function(universe) {
 			target_checks = event.message.data.target_checks,
 			checks = event.message.data.checks,
 			damage = event.message.data.damage,
+			successful = true,
 			channel_skill,
 			damage_checks,
+			skill_check,
 			loading,
 			target,
 			broad,
 			check,
+			skill,
 			load,
 			keys,
+			roll,
 			i;
 
 		console.log("Target Checks: " + JSON.stringify(target_checks, null, 4));
@@ -62,9 +66,24 @@ module.exports.initialize = function(universe) {
 			channel_skill = event.message.data.channel_skill || channel.dc_save || channel.skill;
 			// Process Checks [TODO: This needs thought and may not be needed but probably exists as a step]
 			
+			if(channel_skill && channel.dc) {
+				successful = false;
+				if(checks) {
+					for(i=0; i<checks.length && !skill_check; i++) {
+						if(checks[i].skill === channel_skill) {
+							skill_check = checks[i].roll?checks[i].roll.computed:0;
+						}
+					}
+					successful = skill_check && ((channel.is_negative && skill_check <= channel.dc) || (!channel.is_negative && skill_check >= channel.dc));
+				} else {
+					successful = false;
+				}
+			}
+
+			console.log("Use Success?" + successful + ": " + channel_skill + " - " + skill_check);
 			
 			// Send Damage [TODO: This is currently handled by combat actions]
-			if(damage) {
+			if(successful && damage) {
 				damage_checks = {};
 				if(checks) {
 					for(i=0; i<checks.length; i++) {
@@ -82,7 +101,7 @@ module.exports.initialize = function(universe) {
 			}
 
 			// Instill Effects
-			if(channel.instilled) {
+			if(successful && channel.instilled) {
 				for(i=0; i<targets.length; i++) {
 					target = targets[i];
 					utility.instillEffects(universe, channel.instilled, source, target, channel, false, false);
