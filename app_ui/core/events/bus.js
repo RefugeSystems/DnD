@@ -24,7 +24,7 @@
 	 */
 	rsSystem.EventBus.$on("app-update", function() {
 		setTimeout(function() {
-			if(navigator.serviceWorker) {
+			if(navigator.serviceWorker && navigator.serviceWorker.controller) {
 				navigator.serviceWorker.controller.postMessage({
 					"action": "update"
 				});

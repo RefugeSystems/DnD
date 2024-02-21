@@ -53,8 +53,8 @@
 		"watch": {
 			"storage.address": function(value) {
 				if(this.worlds[value]) {
-					if(typeof(this.worlds[value].secure) === "boolean") {
-						Vue.set(this.storage, "secure", this.worlds[value].is_secure);
+					if(this.worlds[value].is_secure) {
+						Vue.set(this.storage, "secure", !!this.worlds[value].is_secure);
 					} else if(value.startsWith("https") || value.startsWith("wss")) {
 						Vue.set(this.storage, "secure", true);
 					} else {
