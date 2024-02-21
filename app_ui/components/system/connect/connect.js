@@ -52,9 +52,10 @@
 		},
 		"watch": {
 			"storage.address": function(value) {
+				console.log("World Set: " , value);
 				if(this.worlds[value]) {
 					if(this.worlds[value].is_secure) {
-						Vue.set(this.storage, "secure", !!this.worlds[value].is_secure);
+						Vue.set(this.storage, "secure", true);
 					} else if(value.startsWith("https") || value.startsWith("wss")) {
 						Vue.set(this.storage, "secure", true);
 					} else {
