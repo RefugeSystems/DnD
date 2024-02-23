@@ -122,11 +122,12 @@
 				<option v-for="i in (root[field.id].length)" :value="i-1">{{i-1}}</option>
 			</select>
 			<button class="info fas fa-info-circle" v-if="field.inheritable && !field.attribute.no_link" v-on:click="openReference(reference)"></button>
+			<button class="info fas fa-circle-t" v-if="canClone(reference)" v-on:click="cloneHere(reference)"></button>
 		</div>
 		<div class="referenced">
 			<select v-model="reference_value" v-if="availableReferences.length" v-on:change="addReference(reference_value)">
 				<option value="">Select To Add</option>
-				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.id">{{option.template?'(T) ' + option.name:option.name}}</option>
+				<option v-for="option in availableReferences" :id="option.id" :value="option.id" :title="option.id">{{getOptionName(option)}}</option>
 			</select>
 			<div v-if="!availableReferences.length">
 				<input v-model="reference_value" v-on:keydown.enter="addReference(reference_value)" />

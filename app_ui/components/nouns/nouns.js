@@ -36,6 +36,12 @@
 			}
 		},
 		"computed": {
+			"activeParent": function() {
+				if(this.details && this.details.parent) {
+					return this.universe.get(this.details.parent);
+				}
+				return null;
+			},
 			"classes": function() {
 				return this.universe.listing.classes.sort(rsSystem.utility.sortData);
 			},
@@ -410,11 +416,29 @@
 				}
 			},
 			"displayCopyFromParent": function(field) {
-				// TODO
-				return false;
+				if(field !== "parent" && field !== "id" && this.activeParent && this.activeParent[field] !== undefined && this.activeParent[field] !== null) {
+					switch(typeof(this.activeParent[field])) {
+						case "object":
+							if(this.activeParent[field] instanceof Array) {
+								return this.activeParent[field].length > 0;
+							} else {
+								return rsSystem.utility.isNotEmpty(this.activeParent[field]);
+							}
+						case "string":
+							return this.activeParent[field] !== "";
+						case "number":
+							return this.activeParent[field] !== 0;
+						default:
+							return true;
+					}
+				} else {
+					return false;
+				}
 			},
 			"copyParent": function(field) {
-				// TODO
+				if(this.activeParent && this.activeParent[field]) {
+					Vue.set(this.details, field, JSON.parse(JSON.stringify(this.activeParent[field])));
+				}
 			},
 			"hasInheritance": function(field) {
 				return field.inheritance && Object.keys(field.inheritance).length;

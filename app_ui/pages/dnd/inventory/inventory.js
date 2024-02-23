@@ -401,6 +401,19 @@ rsSystem.component("DNDInventory", {
 			if(this.entity && this.share) {
 				this.controls.push(this.share);
 			}
+			
+			this.controls.push({
+				"title": "Create Item",
+				// "icon": "fa-kit fa-regular-cube-circle-plus",
+				"icon": "game-icon game-icon-hammer-nails",
+				"process": () => {
+					rsSystem.EventBus.$emit("dialog-open", {
+						"title": "Create Shim Item",
+						"component": "dndDialogShim",
+						"entity": this.entity
+					});
+				}
+			});
 
 			for(i=0; i<this.universe.listing.item.length; i++) {
 				item = this.universe.listing.item[i];

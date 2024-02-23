@@ -80,7 +80,7 @@
 				Vue.set(this.storage, "secure", location.protocol === "https:");
 			}
 			if(!this.storage.address) {
-				Vue.set(this.storage, "address", this.storage.last_address || location.host);
+				Vue.set(this.storage, "address", this.storage.last_address || this.configuration.address || location.host);
 			}
 			
 			if(this.configuration.address && (!this.storage.address || this.configuration.force)) {
@@ -212,6 +212,9 @@
 					"heading": "System Failure",
 					"text": "Failed to connect to server to check authentication options"
 				});
+				if(this.storage.address) {
+					Vue.delete(this.storage, "address");
+				}
 				Vue.set(this, "loading", false);
 			});
 		},

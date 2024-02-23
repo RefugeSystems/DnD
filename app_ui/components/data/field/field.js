@@ -161,10 +161,13 @@
 			var data = {},
 				load,
 				i;
+
 			Vue.set(this.field, "type", (this.field.type || "text").toLowerCase());
 			if(this.field.unset === undefined) {
 				this.field.unset = "Select...";
 			}
+
+			data.isGM = !!this.universe.getPlayer().gm;
 			data.fid = Random.identifier("field");
 			data.reference_value = "";
 			data.reference_key = "";
@@ -679,6 +682,65 @@
 					};
 				} else {
 					return {};
+				}
+			},
+			"getOptionName": function(option) {
+				if(this.isGM) {
+					if(option.is_template) {
+						return option.name + " (T)";
+					} else if(option.is_copy) {
+						return option.name + " (C)";
+					} else if(option.is_unique) {
+						return option.name + " (U)";
+					} else if(option.is_singular) {
+						return option.name + " (S)";
+					}
+				}
+
+				return option.name;
+			},
+			"copyParent": function(field) {
+				var parent = this.universe.get(this.root.parent);
+				if(parent && parent[field]) {
+					Vue.set(this.root, this.field.id, JSON.parse(JSON.stringify(parent[field])));
+				}
+			},
+			"canClone": function(reference) {
+				if(reference) {
+					var object = this.universe.get(reference.id || reference);
+					if(object) {
+						return (object.template || object.is_template) && !object.is_copy;
+					}
+				}
+
+				return false;
+			},
+			"cloneHere": function(reference) {
+				if(reference) {
+					var index = this.root[this.field.id].indexOf(reference),
+						clone = {};
+					if(index !== -1) {
+						clone.id = reference + ":" + Date.now() + ":" + Random.identifier(16).toLowerCase();
+						clone.parent = reference;
+						clone.is_template = false;
+						clone.is_copy = true;
+						
+						switch(this.universe.getClassFromID(this.root.id)) {
+							case "entity":
+								clone.character = this.root.id;
+								clone.caster = this.root.id;
+								clone.user = this.root.id;
+								break;
+						}
+
+						this.universe.send("create:object", {
+							"classification": this.universe.getClassFromID(reference),
+							"details": clone
+						});
+						this.root[this.field.id].splice(index, 1, clone.id);
+					} else {
+						console.warn("Invalid Clone: ", reference);
+					}
 				}
 			},
 			"sortData": function(a, b) {
