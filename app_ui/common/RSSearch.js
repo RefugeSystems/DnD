@@ -179,7 +179,7 @@ class RSSearch {
 			field = fields[i];
 			if(field) {
 				if(this.field[field.id] && this.field[field.id].length) {
-					if(object[field.id]) {
+					if((object[field.id] !== null && object[field.id] !== undefined) || (field.type === "boolean")) {
 						if(field.inheritable && field.type !== "array" && field.type !== "object" && field.type !== "object:dice" && field.type !== "object:calculated") {
 							search = this.universe.get(object[field.id]);
 							if(rsSystem.utility.isValid(search)) {
@@ -196,8 +196,11 @@ class RSSearch {
 						} else {
 							for(j=0; j<this.field[field.id].length; j++) {
 								term = this.field[field.id][j];
-								if(term !== undefined && term !== null && term !== "") {
-									switch(typeof(object[field.id])) {
+								if((term !== undefined && term !== null && term !== "")) {
+									// switch(typeof(object[field.id])) {
+									switch(field.type) {
+										case "calculated":
+										case "integer":
 										case "number":
 											if(!lowered[field.id]) {
 												lowered[field.id] = (object[field.id]).toString();
@@ -235,6 +238,7 @@ class RSSearch {
 													break;
 											}
 											break;
+										case "markdown":
 										case "string":
 											if(!lowered[field.id]) {
 												lowered[field.id] = object[field.id].toLowerCase();
@@ -243,6 +247,21 @@ class RSSearch {
 											if(res === -1 && this.and) {
 												return false;
 											} else if(res !== -1 && !this.and) {
+												return true;
+											}
+											break;
+										case "boolean":
+											if(!lowered[field.id]) {
+												lowered[field.id] = !!object[field.id];
+											}
+											term = this.parseBoolean(term);
+											if(term === null) {
+												// Help the user catch typos
+												this.flag = "unsearchable";
+												return false;
+											} if(term !== lowered[field.id] && this.and) {
+												return false;
+											} else if(term === lowered[field.id] && !this.and) {
 												return true;
 											}
 											break;
@@ -391,6 +410,24 @@ class RSSearch {
 		}
 
 		return delta;
+	}
+
+	/**
+	 * Used to translate user entered term to a boolean for comparisons in the isFound method.
+	 * 
+	 * Not that the term would already be in lower case from this and thus case is not
+	 * addressed here.
+	 * @method parseBoolean
+	 * @param {String} term 
+	 * @returns {Boolean}
+	 */
+	parseBoolean(term) {
+		if(term === "true" || term === "yes" || term === "1" || term === "on" || term === "enabled" || term === "active" || term === "positive") {
+			return true;
+		} else if(term === "false" || term === "no" || term === "0" || term === "off" || term === "disabled" || term === "inactive" || term === "negative") {
+			return false;
+		}
+		return null;
 	}
 
 	/**
