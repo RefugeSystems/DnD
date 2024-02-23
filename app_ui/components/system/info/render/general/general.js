@@ -725,6 +725,14 @@ rsSystem.component("sysInfoGeneral", {
 										});
 									}
 									break;
+								case "spell":
+									this.controls.push({
+										"title": "Cast " + object.name,
+										"icon": object.icon || "fa-solid fa-cube",
+										"type": "button",
+										"action": "useweapon"
+									});
+									break;
 								case "item":
 									if(entity.inventory.indexOf(this.info.id) !== -1) {
 										if(entity.equipped.indexOf(object.id) === -1) {

@@ -222,7 +222,7 @@ rsSystem.component("DNDCharacter", {
 			}
 		},
 		"scrollWheel": function(event) {
-			if(event.path[0] == this.$refs.infocon) {
+			if(event.path && event.path[0] == this.$refs.infocon) {
 				/*
 				var offset = this.$refs.infocon.scrollLeft,
 					width = 60,

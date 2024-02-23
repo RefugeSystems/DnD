@@ -17,7 +17,8 @@
 		<!-- Do Nothing Here -->
 	</span>
 
-	<select :id="fid" v-if="availableReferences.length && field.type === 'string'" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
+	<!-- <select :id="fid" v-if="availableReferences.length && field.type === 'string'" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()"> -->
+	<select :id="fid" v-if="field.inheritable !== undefined && field.inheritable !== null && field.inheritable.length !== 0 && field.type === 'string'" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
 		<option v-if="root[field.id] === 'undefined' && !field.persistUnset" :value="root[field.id]">{{field.unset}}</option>
 		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
 
@@ -34,6 +35,12 @@
 		<span>Loading...</span>
 	</span>
 
+	<select :id="fid" v-if="field.options && field.options.length && field.type === 'select'" v-model="root[field.id]" v-on:change.stop="emitChanged()" v-on:blur="blurring()">
+		<option v-if="root[field.id] === 'undefined' && !field.persistUnset" :value="root[field.id]">{{field.unset}}</option>
+		<option v-if="field.persistUnset" value=undefined>{{field.unset || "Select..."}}</option>
+		<option v-for="option in field.options" :value="option.id || option" :title="option.id || option">{{option.name || option}}</option>
+	</select>
+
 	<button :id="fid" v-if="field.type === 'boolean'" v-on:click="set(!root[field.id])" class="flat">
 		<span class="far" :class="root[field.id]?'fa-check-square':(root[field.id] === undefined || root[field.id] === null?'fa-square':'fa-times-square')"></span>
 	</button>
@@ -44,7 +51,7 @@
 	<input :id="fid" :type="field.type" v-if="field.follow_type" v-model.lazy="root[field.id]" :min="field.attribute.min" :max="field.attribute.max" :placeholder="field.attribute.placeholder" v-on:input.stop="emitChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 
 	<input :id="fid" type="password" v-if="field.type === 'password' || field.attribute.encrypted || field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
-	<input :id="fid" type="text" v-if="availableReferences.length === 0 && !field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'icon' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data && !field.attribute.encrypted && !field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
+	<input :id="fid" type="text" v-if="(field.inheritable === undefined || field.inheritable === null || field.inheritable.length === 0) && !field.attribute.long_text && (!field.attribute.input || field.attribute.input === 'text') && (field.type === 'string' || field.type === 'icon' || field.type === 'dice' || field.type === 'calculated' || field.type === 'formula') && !field.attribute.file_data && !field.attribute.encrypted && !field.attribute.password" v-model="buffer" :placeholder="field.attribute.placeholder" v-on:input.stop="bufferChanged()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 
 	<input :id="fid" type="datetime-local" v-if="field.type === 'date'" v-model="buffer" v-on:change.stop="processDate()" v-on:focus="focusing()" v-on:blur="blurring()" autocomplete="chrome-off" />
 	<span class="indicator" v-if="field.type === 'file' || field.attribute.file_data">

@@ -82,6 +82,22 @@ rsSystem.component("dndDialogDamage", {
 
 			return items;
 		},
+		"available_other_items": function() {
+			var items = [],
+				item,
+				i;
+
+			if(this.entity.equipped) {
+				for(i=0; i<this.entity.equipped.length; i++) {
+					item = this.universe.getObject(this.entity.equipped[i]);
+					if(rsSystem.utility.isValid(item) && !this.isWeapon(item) && ((item.instilled && item.instilled.length) || item.dc || rsSystem.utility.isNotEmpty(item.damage) || (item.form && item.form.length))) {
+						items.push(item);
+					}
+				}
+			}
+
+			return items;
+		},
 		"ammos": function() {
 			var ammos = {},
 				ammo,
@@ -336,8 +352,12 @@ rsSystem.component("dndDialogDamage", {
 			"description": "Indicate any effects that you are imparting on the targets as a result of this damage. The effects will track whether damage needs dealt or any save needs passed.",
 			"id": "effects"
 		}, {
+			"name": "Data",
+			"description": "Custom data to be entered for the action, if any",
+			"id": "data"
+		}, {
 			"name": "Review",
-			"description": "page4",
+			"description": "Final review page",
 			"id": "review"
 		}];
 		for(i=0; i<data.sections.length; i++) {
@@ -363,6 +383,10 @@ rsSystem.component("dndDialogDamage", {
 		data.focused_roll = null;
 		data.targetCount = {};
 		data.maxtargets = 0;
+		
+		data.form_filters = {};
+		data.form_fields = [];
+		data.form = {};
 
 		data.autoskipped = {};
 		data.available_levels = [0];
@@ -374,6 +398,7 @@ rsSystem.component("dndDialogDamage", {
 
 		data.actionsToTake = [];
 
+		data.target_repetition = 0;
 		data.target_limit = 0;
 		data.channel = this.details.channel || null;
 		data.action = this.details.action || null;
@@ -837,9 +862,9 @@ rsSystem.component("dndDialogDamage", {
 			switch(section.id) {
 				case "channel":
 					this.available_levels.splice(1);
-					if(this.entity && this.entity.spell_slots) {
+					if(this.entity && this.entity.spell_slot_max && this.entity.spell_slots) {
 						// TODO: Build Out spell levels for selection of the cast
-						for(slot in this.entity.spell_slots) {
+						for(slot in this.entity.spell_slot_max) {
 							if(this.entity.spell_slots[slot] > 0) {
 								this.available_levels.push(slot);
 							}
@@ -947,6 +972,15 @@ rsSystem.component("dndDialogDamage", {
 					} else if(this.profile && auto) {
 						setTimeout(() => {
 							this.goToNextSection();
+						});
+					}
+					break;
+				case "data":
+					if(this.form_fields.length === 0 && !this.autoskipped[section.id]) {
+					// if(!this.form_fields.length) { // Always skip if no data prompt
+						this.autoskipped[section.id] = true;
+						setTimeout(() => {
+							this.finishSection(section);
 						});
 					}
 					break;
@@ -1089,12 +1123,15 @@ rsSystem.component("dndDialogDamage", {
 		"selectChannel": function(channel) {
 			var target,
 				source,
+				field,
 				keys,
 				map,
 				dmg,
 				i,
 				j;
 			
+			rsSystem.utility.clearObject(this.form_filters);
+			this.form_fields.splice(0);
 			Vue.set(this, "additives_locked", false);
 			if(channel && channel._class === "spell" && (!channel || channel.level !== this.cast_level)) {
 				channel = Object.assign({}, channel);
@@ -1124,10 +1161,13 @@ rsSystem.component("dndDialogDamage", {
 				}
 
 				if(channel.melee || channel.ranged || channel.thrown) {
+					Vue.set(this, "target_repetition", this.entity.attack_limit || 1);
 					Vue.set(this, "target_limit", this.entity.attack_limit);
 				} else if(channel.target_limit) {
+					Vue.set(this, "target_repetition", channel.target_repetition || channel.target_limit);
 					Vue.set(this, "target_limit", channel.target_limit);
 				} else {
+					Vue.set(this, "target_repetition", 1);
 					Vue.set(this, "target_limit", 1);
 				}
 
@@ -1138,6 +1178,24 @@ rsSystem.component("dndDialogDamage", {
 					this.universe.transcribeInto(Object.keys(channel.skill_damage), source);
 				} else {
 					// This channel does no damage, likely simply passing on effects or noting a spell slot consumption
+				}
+
+				if(channel.form) {
+					for(i=0; i<channel.form.length; i++) {
+						field = channel.form[i];
+						if(typeof(field) === "string") {
+							map = this.universe.index.fields[field];
+							if(map) {
+								this.form_fields.push(map);
+							} else {
+								console.warn("Invalid Channel Data Field: ", field);
+							}
+						} else if(typeof(field) === "object") {
+							this.form_fields.push(field);
+						} else {
+							console.warn("Invalid Channel Data Field: ", field, typeof(field));
+						}
+					}
 				}
 			} else {
 				source = this.universe.listing.damage_type;
@@ -1170,6 +1228,7 @@ rsSystem.component("dndDialogDamage", {
 				damage,
 				check,
 				event,
+				field,
 				i,
 				j;
 			
@@ -1177,6 +1236,7 @@ rsSystem.component("dndDialogDamage", {
 			sending.targeted_checks = {};
 			sending.target_checks = {};
 			sending.checks = [];
+			sending.form = {};
 			check = {};
 
 			// Send Damage
@@ -1197,6 +1257,10 @@ rsSystem.component("dndDialogDamage", {
 			}
 			if(this.entity) {
 				sending.source = this.entity.id;
+			}
+			for(i=0; i<this.form_fields.length; i++) {
+				field = this.form_fields[i].id;
+				sending.form[field] = this.form[field];
 			}
 			
 			for(i=0; i<this.actionsToTake.length; i++) {
@@ -1235,14 +1299,23 @@ rsSystem.component("dndDialogDamage", {
 						}
 					}
 				}
-				if(this.details.action === "channel:use" || this.isEmpty(event.damage)) {
+
+				if(this.details.action === "channel:use") {
 					console.log("Use Event: ", _p(event));
 					this.universe.send("channel:use", event);
 				} else {
-					if(this.channel && this.channel._class === "spell") {
-						this.universe.send("action:cast:spell", event);
-					} else {
-						this.universe.send("action:damage:send", event);
+					switch(this.channel._class) {
+						case "spell":
+							this.universe.send("action:cast:spell", event);
+							break;
+						case "item":
+							this.universe.send("action:damage:send", event);
+							break;
+						case "feat":
+							this.universe.send("channel:use", event);
+							break;
+						default:
+							this.universe.send("action:damage:send", event);
 					}
 				}
 			}

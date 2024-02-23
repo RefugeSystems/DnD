@@ -1,5 +1,5 @@
 <div class="rs-component component-form">
-	<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-if="isVisible(field)" :key="field.id">
+	<rs-field v-for="field in fields" :root="details" :field="field" :universe="universe" v-if="isVisible(field)" :entity="entity" :filter="searches[field.id]" :key="field.id">
 		<span slot="info">
 			<span v-if="field.id === 'icon' || field.type === 'icon'" :class="details[field.id]"></span>
 			<button class="clear-link ctrl-link flat fas fa-info-circle" v-if="field.id === 'parent' && details.parent" v-on:click="info(details.parent)" tabindex=2>

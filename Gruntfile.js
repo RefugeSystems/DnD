@@ -116,6 +116,8 @@ var config = {
 				"RSUniverse",
 				"RSObject",
 				"RSysDate",
+				"RSSearch",
+				"RSQuery",
 				"RSDate",
 
 				"RSConnection",

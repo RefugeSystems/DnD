@@ -103,6 +103,7 @@ rsSystem.component("dndChronicleReadout", {
 							"result": event.save,
 							"original_damage": event.original_damage,
 							"damage": event.damage,
+							"form": event.form,
 							"difficulty": event.difficulty,
 							"channel": event.channel,
 							"gametime": this.universe.calendar.toDisplay(event.gametime, true, false),
@@ -120,6 +121,7 @@ rsSystem.component("dndChronicleReadout", {
 							"critical": event.critical,
 							"failure": event.failure,
 							"succeeded": event.succeeded,
+							"form": event.form,
 							"resist": event.resist,
 							"resist_source": event.resist_source,
 							"damage": event.damage || null
@@ -157,6 +159,7 @@ rsSystem.component("dndChronicleReadout", {
 							"entity": event.target,
 							"source": event.source,
 							"attack": event.attack,
+							"form": event.form,
 							"skill": event.skill,
 							"gametime": this.universe.calendar.toDisplay(event.gametime, true, false),
 							"timeline": event.timeline,
@@ -170,6 +173,7 @@ rsSystem.component("dndChronicleReadout", {
 						update = {
 							"resist_source": event.resist_source,
 							"resist": event.resist,
+							"form": event.form,
 							"damage": event.damage || null
 						};
 						if(event.damage_source) {

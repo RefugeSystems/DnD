@@ -39,8 +39,8 @@ class UniverseUtility {
 	 * @param {String} [attack_skill] 
 	 * @param {String} [message] Optional to display with the prompt
 	 */
-	sendDamages(source, targets, channel, damage, attack, attacks, attack_skill, message) {
-		combat.sendDamages(source, targets, channel, damage, attack, attacks, attack_skill, message);
+	sendDamages(source, targets, channel, damage, attack, attacks, attack_skill, message, form) {
+		combat.sendDamages(source, targets, channel, damage, attack, attacks, attack_skill, message, form);
 	}
 
 	/**
@@ -55,8 +55,8 @@ class UniverseUtility {
 	 * @param {Object} [damage]
 	 * @param {String} [message] Optional to display with the prompt
 	 */
-	sendSaves(source, targets, level, channel, skill, difficulty, damage, message) {
-		combat.sendSaves(source, targets, level, channel, skill, difficulty, damage, message);
+	sendSaves(source, targets, level, channel, skill, difficulty, damage, message, form) {
+		combat.sendSaves(source, targets, level, channel, skill, difficulty, damage, message, form);
 	}
 
 	/**
@@ -216,6 +216,7 @@ class UniverseUtility {
 	 * @param {Number} [sync]
 	 */
 	playAudio(players, audio, volume, delay, sync) {
+		console.log("Utility Audio Play Control: ", audio);
 		if(typeof(volume) !== "number") {
 			volume = 100;
 		}

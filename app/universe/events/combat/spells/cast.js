@@ -12,6 +12,7 @@ module.exports.initialize = function(universe) {
 			difficulty,
 			attack,
 			source,
+			audio,
 			load,
 			i;
 
@@ -50,12 +51,20 @@ module.exports.initialize = function(universe) {
 				difficulty = spell.dc;
 			}
 
+			console.log("Cast! ", event.message.data.form);
+			if(event.message.data.form && event.message.data.form.audio) {
+				universe.emit("roomctrl:play", event.message.data.form.audio);
+			}
+			if(spell.audio) {
+				universe.emit("audio:play", spell.audio);
+			}
+
 			if(spell.cast_save) {
-				utility.sendSaves(source, targets, level, spell, spell.cast_save, difficulty, damage);
+				utility.sendSaves(source, targets, level, spell, spell.cast_save, difficulty, damage, undefined, event.message.data.form);
 			} else if(spell.cast_attack) {
-				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks);
+				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form);
 			} else {
-				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks);
+				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form);
 				console.log("Unclassed spell? " + spell.id);
 			}
 			

@@ -148,6 +148,7 @@ rsSystem.component("rsTable", {
 			// 	return this.source;
 			// }
 
+			/* Pre RSSearch Implementation
 			for(i=0; i<this.source.length; i++) {
 				if(!counts[this.source[i].id]) {
 					if(filter) {
@@ -166,6 +167,33 @@ rsSystem.component("rsTable", {
 								filtered.push(this.source[i]);
 								counts[this.source[i].id] = 1;
 							}
+						}
+					} else {
+						filtered.push(this.source[i]);
+						counts[this.source[i].id] = 1;
+					}
+				} else {
+					counts[this.source[i].id]++;
+				}
+			}
+			*/
+
+			this.search.clear();
+			if(filter && filter !== ":selected") {
+				this.search.addQuery(filter);
+			}
+
+			for(i=0; i<this.source.length; i++) {
+				if(!counts[this.source[i].id]) {
+					if(filter) {
+						if(filter === ":selected") {
+							if(this.storage.selected && this.storage.selected[this.source[i].id]) {
+								filtered.push(this.source[i]);
+								counts[this.source[i].id] = 1;
+							}
+						} else if(this.search.isFound(this.source[i])) {
+							filtered.push(this.source[i]);
+							counts[this.source[i].id] = 1;
 						}
 					} else {
 						filtered.push(this.source[i]);
@@ -245,6 +273,7 @@ rsSystem.component("rsTable", {
 	"data": function() {
 		var data = {};
 
+		data.search = new RSSearch();
 		data.idCount = {};
 
 		return data;

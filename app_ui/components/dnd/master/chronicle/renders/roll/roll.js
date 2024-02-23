@@ -91,6 +91,14 @@ rsSystem.component("dndChronicleReadoutRoll", {
 	"data": function() {
 		var data = {};
 
+		if(this.occurred.data.form) {
+			data.fields = Object.keys(this.occurred.data.form);
+			data.form = this.occurred.data.form;
+		} else {
+			data.fields = [];
+			data.form = {};
+		}
+
 		return data;
 	},
 	"mounted": function() {

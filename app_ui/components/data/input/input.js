@@ -33,6 +33,9 @@ rsSystem.component("rsInput", {
 		"storage": {
 			"type": Object
 		},
+		"search": {
+			"type": RSSearch
+		},
 		"name": {
 			"type": String
 		}
@@ -53,6 +56,7 @@ rsSystem.component("rsInput", {
 		data.timeout = null;
 		data.update = 0;
 		data.flagged = "fas fa-search";
+		data.errored = "fa-solid fa-exclamation-triangle rs-darkyellow";
 
 		return data;
 	},

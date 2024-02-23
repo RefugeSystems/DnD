@@ -75,6 +75,9 @@
 			</span>
 		</span>
 	</div>
+	<div class="rs-form" v-if="fields.length">
+		<rs-display-field v-for="field in fields" :field="field" :object="form" :key="field.id" :player="player" :universe="universe" :entity="entity" :profile="profile"></rs-display-field>
+	</div>
 	<div class="date">
 		<span v-if="damages.length && !occurred._updated" class="fa-solid fa-spinner fa-pulse"></span>
 		<span v-if="!damages.length || occurred._updated" class="fas fa-clock"></span>

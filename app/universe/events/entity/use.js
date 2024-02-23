@@ -82,31 +82,46 @@ module.exports.initialize = function(universe) {
 
 			console.log("Use Success?" + successful + ": " + channel_skill + " - " + skill_check);
 			
+			if(event.message.data.form && event.message.data.form.audio) {
+				universe.emit("roomctrl:play", event.message.data.form.audio);
+			}
+			if(event.message.data.form && event.message.data.form.playlist) {
+				universe.emit("roomctrl:play", event.message.data.form.playlist);
+			}
+			if(channel.audio) {
+				universe.emit("audio:play", channel.audio);
+			}
+			
 			// Send Damage [TODO: This is currently handled by combat actions]
-			if(successful && damage) {
-				damage_checks = {};
-				if(checks) {
-					for(i=0; i<checks.length; i++) {
-						check = checks[i];
-						if(check.skill === channel_skill) {
-							if(check.target) {
-								damage_checks[check.target] = check;
-							} else {
-								broad = check;
+			if(successful) {
+				console.log("Channel!");
+
+				if(damage) {
+					damage_checks = {};
+					if(checks) {
+						for(i=0; i<checks.length; i++) {
+							check = checks[i];
+							if(check.skill === channel_skill) {
+								if(check.target) {
+									damage_checks[check.target] = check;
+								} else {
+									broad = check;
+								}
 							}
 						}
 					}
+					combat.sendDamages(source, targets, channel, damage, broad, damage_checks, undefined, undefined, event.message.data.form);
 				}
-				combat.sendDamages(source, targets, channel, damage, broad, damage_checks);
+
+				// Instill Effects
+				if(channel.instilled) {
+					for(i=0; i<targets.length; i++) {
+						target = targets[i];
+						utility.instillEffects(universe, channel.instilled, source, target, channel, false, false);
+					}
+				}
 			}
 
-			// Instill Effects
-			if(successful && channel.instilled) {
-				for(i=0; i<targets.length; i++) {
-					target = targets[i];
-					utility.instillEffects(universe, channel.instilled, source, target, channel, false, false);
-				}
-			}
 			// Process Consume/Use
 			if(channel.consume || (channel.yields && channel.yields.length)) {
 				loading = utility.consumeObject(universe, source, channel, targets, target_checks);

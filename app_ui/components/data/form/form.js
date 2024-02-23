@@ -13,8 +13,14 @@
  * @param {Array} [fields]
  * @param {Object} [configuration]
  * @param {Object} [profile]
+ * @param {Object} [entity]
+ * @param {Object} [filters]
  */
 (function() {
+
+	var colon = /:/g,
+		me = /me/gi;
+
 	rsSystem.component("rsForm", {
 		"inherit": true,
 		"mixins": [
@@ -55,6 +61,12 @@
 				"default": function() {
 					return {};
 				}
+			},
+			"entity": {
+				"type": Object
+			},
+			"filters": {
+				"type": Object
 			}
 		},
 		"computed": {
@@ -66,6 +78,15 @@
 		"data": function() {
 			var data = {},
 				x;
+
+			data.searches = {};
+			if(this.filters) {
+				for(x in this.filters) {
+					if(typeof(this.filters[x]) === "string") {
+						data.searches[x] = new RSSearch(this.filters[x].replace(me, this.entity?this.entity.id.replace(colon,"\\:"):"me"), true, this.universe);
+					}
+				}
+			}
 
 			return data;
 		},

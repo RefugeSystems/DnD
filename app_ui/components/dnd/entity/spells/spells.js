@@ -1,4 +1,3 @@
-
 /**
  *
  *
@@ -26,7 +25,12 @@ rsSystem.component("dndEntitySpells", {
 	},
 	"computed": {
 		"spells": function() {
-			var spells = this.universe.transcribeInto(this.entity.spells, [], "spell", this.storage?this.storage.filter:null);
+			var spells;
+			this.search.clear();
+			if(this.storage) {
+				this.search.addQuery(this.storage.filter);
+			}
+			spells = this.universe.transcribeInto(this.entity.spells, [], "spell", this.search);
 			spells.sort(this.sortByLevel);
 			return spells;
 		},
@@ -66,6 +70,7 @@ rsSystem.component("dndEntitySpells", {
 		var data = {},
 			i;
 
+		data.search = new RSSearch();
 		data.action_field = this.universe.index.fields.action_cost;
 		data.sizes = [{
 			"id": "1",

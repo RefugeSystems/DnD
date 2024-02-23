@@ -40,6 +40,9 @@ rsSystem.component("rsTableControls", {
 		"selections": {
 			"type": Array
 		},
+		"search": {
+			"type": RSSearch
+		},
 		"storage": {
 			"type": Object
 		}

@@ -342,6 +342,7 @@ class RSUniverse extends EventEmitter {
 				// Let the display update then load the data
 				var classes = Object.keys(event.data),
 					objects,
+					forEach,
 					i,
 					j;
 					
@@ -353,6 +354,17 @@ class RSUniverse extends EventEmitter {
 							Vue.set(this.listing, classes[i], []); // event.data[classes[i]]);
 							Vue.set(this.index, classes[i], {});
 						}
+						forEach = function(handler) {
+							for(var i=0; i<this.length; i++) {
+								if(this.isValid(this[i])) {
+								   if(handler(this[i]) === false) {
+									   break;
+								   }
+								}
+							}
+						};
+						this.listing[classes[i]].forEach = forEach;
+						forEach.bind(this.listing[classes[i]]);
 						for(j=0; j<event.data[classes[i]].length; j++) {
 							this.receiveDelta(event.sent, classes[i], event.data[classes[i]][j].id, event.data[classes[i]][j]);
 						}
@@ -1256,25 +1268,35 @@ class RSUniverse extends EventEmitter {
 	 * @param {Array} source 
 	 * @param {Array} [destination]
 	 * @param {String} [classificaiton]
+	 * @param {String | RSSearch} [filter] Optional filter to apply to the transcription
 	 * @return {Array} The destination parameter or a newly instantiated array
 	 * 		if that parameter was omited.
 	 */
 	transcribeInto(source, destination = [], classificaiton, filter) {
-		filter = (filter || "").toLowerCase();
 		var buffer,
 			i;
 
-		if(classificaiton && this.index[classificaiton]) {
-			for(i=0; i<source.length; i++) {
-				buffer = this.index[classificaiton][source[i]];
-				if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
-					destination.push(buffer);
+		if(!filter || typeof(filter) === "string") {
+			filter = (filter || "").toLowerCase();
+			if(classificaiton && this.index[classificaiton]) {
+				for(i=0; i<source.length; i++) {
+					buffer = this.index[classificaiton][source[i]];
+					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+						destination.push(buffer);
+					}
+				}
+			} else {
+				for(i=0; i<source.length; i++) {
+					buffer = this.getObject(source[i]);
+					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+						destination.push(buffer);
+					}
 				}
 			}
-		} else {
+		} else if(filter instanceof RSSearch) {
 			for(i=0; i<source.length; i++) {
 				buffer = this.getObject(source[i]);
-				if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+				if(filter.isFound(buffer)) {
 					destination.push(buffer);
 				}
 			}
@@ -1350,6 +1372,11 @@ class RSUniverse extends EventEmitter {
 		}
 
 		return setting.value;
+	}
+
+
+	isValid(object) {
+		return rsSystem.utility.isValid(object);
 	}
 	
 	checkVersion() {

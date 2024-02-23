@@ -55,6 +55,12 @@ rsSystem.component("dndDialogList", {
 				i,
 				j;
 
+			console.log("List Filter: " + this.storage.filter);
+			this.search.clear();
+			if(this.storage) {
+				this.search.addQuery(this.storage.filter);
+			}
+
 			sync = [];
 			for(i=0; i<this.sections.length; i++) {
 				section = this.sections[i];
@@ -67,7 +73,8 @@ rsSystem.component("dndDialogList", {
 				extras = 0;
 				for(j=0; j<this.details.data[section].length; j++) {
 					entry = this.details.data[section][j];
-					if(entry && !entry.disabled && !entry.concealed && (!this.storage || !this.storage.filter || (entry._search && entry._search.indexOf(this.storage.filter) !== -1))) {
+					// if(entry && !entry.disabled && !entry.concealed && (!this.storage || !this.storage.filter || (entry._search && entry._search.indexOf(this.storage.filter) !== -1))) {
+					if(this.search.isFound(entry)) {
 						if(!counts[entry.id]) {
 							counts[entry.id] = 1;
 							sync.push(entry.id);
@@ -94,6 +101,7 @@ rsSystem.component("dndDialogList", {
 		var data = {};
 
 		data.cards = this.details.cards;
+		data.search = new RSSearch();
 		data.multiples = {};
 		data.extras = {};
 
@@ -106,6 +114,9 @@ rsSystem.component("dndDialogList", {
 		}
 	},
 	"methods": {
+		"toggleEmpty": function() {
+			Vue.set(this.storage, "showEmpty", !this.storage.showEmpty);
+		},
 		"entryClassing": function(section, entry) {
 			var classes = "";
 

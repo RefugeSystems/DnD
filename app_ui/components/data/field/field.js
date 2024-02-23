@@ -8,6 +8,8 @@
  * @param {Object} root
  * @param {Field} field
  * @param {Object} [storage] Maps the value to the field.id property when passed
+ * @param {Object} [entity] For advanced restrictions or interactions
+ * @param {RSSearch} [filter]
  */
 (function() {
 	var offset = (new Date()).getTimezoneOffset() * 60 * 1000,
@@ -69,6 +71,12 @@
 			"field": {
 				"required": true,
 				"type": Object
+			},
+			"entity": {
+				"type": Object
+			},
+			"filter": {
+				"type": Object
 			}
 		},
 		"computed": {
@@ -76,16 +84,19 @@
 				var available = [],
 					item,
 					x;
+				
 				if(this.field && this.field.inheritable) {
 					for(x=0; x<this.field.inheritable.length; x++) {
 						item = this.universe.listing[this.field.inheritable[x]];
 						if(item) {
-							available = available.concat(item);
+							available.push.apply(available, item.filter(this.filterReferences));
+							// available = available.concat(item);
 						} else {
 							console.error("Invalid Availability Reference: ", this.field);
 						}
 					}
 				}
+
 				available.sort(rsSystem.utility.sortData);
 				return available;
 			},
@@ -99,7 +110,8 @@
 							for(x=0; x<this.field.inheritable.length; x++) {
 								item = this.universe.listing[this.field.inheritable[x]];
 								if(item) {
-									available = available.concat(item);
+									available.push.apply(available, item.filter(this.filterReferences));
+									// available = available.concat(item);
 								} else {
 									console.error("Invalid Keyside Reference: ", this.field);
 								}
@@ -126,7 +138,8 @@
 							for(x=0; x<this.field.inheritable.length; x++) {
 								item = this.universe.listing[this.field.inheritable[x]];
 								if(item) {
-									available = available.concat(item);
+									available.push.apply(available, item.filter(this.filterReferences));
+									// available = available.concat(item);
 								} else {
 									console.error("Invalid Valueside Reference: ", this.field);
 								}
@@ -212,6 +225,9 @@
 			// rsSystem.EventBus.$on("noun-sync",this.reloadData);
 		},
 		"methods": {
+			"filterReferences": function(object) {
+				return rsSystem.utility.isValid(object) && (!this.filter || (this.filter.base[0] === "isknown" && this.entity && this.entity.knowledge_matrix[object.id]) ||  this.filter.isFound(object));
+			},
 			"reloadData": function() {
 				if(this.$refs.code) {
 					this.$refs.code.reloadData();

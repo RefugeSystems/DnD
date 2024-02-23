@@ -37,6 +37,8 @@ rsSystem.component("systemOptionsDialog", {
 		var data = {},
 			dashboards = [],
 			default_dash,
+			worldAddress,
+			worldName,
 			section,
 			loading,
 			option,
@@ -168,6 +170,18 @@ rsSystem.component("systemOptionsDialog", {
 			Vue.set(this.profile, "details_easyaction", "bruiser");
 		}
 
+		worldAddress = this.universe.connection.socket?this.universe.connection.session.address:"Not Connected";
+		if(worldAddress !== "Not Connected") {
+			worldAddress = worldAddress.replace("wss://", "").replace("ws://", "");
+			for(i=0; i<this.universe.listing.world.length; i++) {
+				if(rsSystem.utility.isValid(this.universe.listing.world[i]) && this.universe.listing.world[i].address === worldAddress) {
+					worldName = this.universe.listing.world[i].name;
+				}
+			}
+		} else {
+			worldName = worldAddress;
+		}
+		
 		data.pages = {
 			/**
 			 * 
@@ -366,9 +380,14 @@ rsSystem.component("systemOptionsDialog", {
 					"value": rsSystem.version,
 					"type": "data"
 				}, {
+					"id": "world",
+					"label": "World",
+					"value": worldName,
+					"type": "data"
+				}, {
 					"id": "address",
 					"label": "Server Address",
-					"value": this.universe.connection.socket?this.universe.connection.session.address:"Not Connected",
+					"value": worldAddress,
 					"type": "data"
 				}, {
 					"id": "latency",

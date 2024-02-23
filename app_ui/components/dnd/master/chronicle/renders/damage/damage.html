@@ -27,14 +27,14 @@
 			<span>)</span>
 		</span>
 	</div>
-	<div class="origin">
+	<div class="origin" v-if="skill || entity">
 		<button class="flat rs-white action channel" v-if="skill" v-on:click="info(skill)">
 			<span class="fas fa-info-circle"></span>
 			<span>{{skill.name}}</span>
 		</button>
-		<span>{{occurred.data.attack}} vs. {{entity.armor}}AC</span>
+		<span v-if="occurred.data.attack">{{occurred.data.attack}}<span v-if="entity"> vs. {{entity.armor}}AC</span></span>
 	</div>
-	<div class="details" :title="getKeyedObjectString(occurred.data.original_damage)">
+	<div class="details" v-if="damages.length" :title="getKeyedObjectString(occurred.data.original_damage)">
 		<div class="damages flex v">
 			<span>Damage:</span>
 			<ul>
@@ -61,9 +61,12 @@
 			</ul>
 		</div>
 	</div>
+	<div class="rs-form" v-if="fields.length">
+		<rs-display-field v-for="field in fields" :field="field" :object="form" :key="field.id" :universe="universe" :entity="entity"></rs-display-field>
+	</div>
 	<div class="date">
-		<span v-if="!occurred._updated" class="fa-solid fa-spinner fa-pulse"></span>
-		<span v-if="occurred._updated" class="fas fa-clock"></span>
+		<span v-if="!occurred._updated && damages.length" class="fa-solid fa-spinner fa-pulse"></span>
+		<span v-if="occurred._updated || !damages.length" class="fas fa-clock"></span>
 		<span>{{occurred.data.gametime}}</span>
 		<span v-if="!occurred._updated"> ( {{occurred.date}} )</span>
 		<span v-if="occurred._updated"> ( {{occurred.date}} <span class="fa-solid fa-arrow-right"></span> {{occurred._updated_date}} )</span>

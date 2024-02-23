@@ -5,11 +5,15 @@
 		<button class="general quick rounded action" v-if="details.link" v-on:click="toLink()">
 			<span class="fas fa-link"></span>
 		</button>
-		<rs-input class="grow-1" v-model="storage.filter" :delay="500"/>
+		<button class="general quick rounded action" v-on:click="toggleEmpty()" title="Toggle whether sections with all items filtered out still show">
+			<span class="fa-solid fa-eye-low-vision" v-if="storage.showEmpty"></span>
+			<span class="fa-solid fa-eye-slash" v-if="!storage.showEmpty"></span>
+		</button>
+		<rs-input class="grow-1" v-model="storage.filter" :search="search" :delay="500"/>
 	</h1>
 	<div class="extra-detail" v-if="details.extra" v-html="details.extra"></div>
 	<div class="listing">
-		<div class="list-container" v-for="section in sections">
+		<div class="list-container" v-for="section in sections" v-if="storage.showEmpty || listing[section].length !== 0">
 			<div class="card-container">
 				<div class="card" v-if="cards[section]">
 					<h2>{{cards[section].name || cards[section]}}</h2>

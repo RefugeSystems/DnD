@@ -621,8 +621,10 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} [attacks] Rolled attack value per target, if any
 	 * @param {String} [attack_skill] Skill ID for how the attack was performed (Main Hand, Off Hand, Spell Attack)
 	 * @param {String} [message]
+	 * @param {Object} [form]
 	 */
-	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill, message) {
+	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill, message, form) {
+		console.log("Send Damage Form: ", form);
 		var id = Random.identifier(activityPrefix, 10, 32),
 			time = universe.time,
 			date = Date.now(),
@@ -633,6 +635,11 @@ module.exports.initialize = function(universe) {
 
 		if(typeof(channel) === "string") {
 			channel = universe.get(channel);
+		}
+
+		console.log("Send Damages! ", form);
+		if(form && form.audio) {
+			universe.emit("roomctrl:play", form.audio);
 		}
 
 		if(!targets) {
@@ -658,6 +665,7 @@ module.exports.initialize = function(universe) {
 				"time": universe.time,
 				"date": Date.now(),
 				"source": source,
+				"form": form,
 				"target": target,
 				"channel": channel,
 				"attack": atk, // Deprecating
@@ -673,6 +681,7 @@ module.exports.initialize = function(universe) {
 				"target": target.id,
 				"channel": channel?channel.id:null,
 				"attack": atk,
+				"form": form,
 				"check_outcome": atk, // Standardizing around "check_outcome" & "check_difficulty"
 				"check_difficulty": target.armor,
 				"original_damage": damage,
@@ -696,6 +705,7 @@ module.exports.initialize = function(universe) {
 					"target": target.id,
 					"channel": channel?channel.id:null,
 					"damage": damage,
+					"form": form,
 					"time": time,
 					"date": date
 				});
@@ -716,6 +726,7 @@ module.exports.initialize = function(universe) {
 				"target": target.id,
 				"channel": channel?channel.id:null,
 				"damage": damage,
+				"form": form,
 				"time": time,
 				"date": date
 			});
@@ -738,8 +749,9 @@ module.exports.initialize = function(universe) {
 	 * @param {String} [channel] ID for the Spell, Item, or other method through which the damage is being delt, if any.
 	 * @param {Object} damage Being dealth, with damage_type ID keys mapped to values
 	 * @param {String} [message]
+	 * @param {Object} [form]
 	 */
-	sendDamage = function(activity, source, target, channel, damage, message) {
+	sendDamage = function(activity, source, target, channel, damage, message, form) {
 		if(!damage) {
 			// TODO: Revise for better handling and update source calls to ensure damage is guarenteed
 			damage = {};
@@ -771,6 +783,7 @@ module.exports.initialize = function(universe) {
 			"timeout": 7000,
 			"entity": target.id,
 			"time": universe.time,
+			"form": form,
 			"date": Date.now(),
 			"channel": channel,
 			"damage": damage,
@@ -883,6 +896,7 @@ module.exports.initialize = function(universe) {
 					"message": type + (source?" from " + (source.nickname || source.name):""),
 					"icon": icon,
 					"anchored": true,
+					"form": form,
 					"recipients": recipients,
 					"emission": emission
 				});
@@ -908,8 +922,9 @@ module.exports.initialize = function(universe) {
 	 * @param {Integer} difficulty 
 	 * @param {Object} damage 
 	 * @param {String} [message]
+	 * @param {Object} [form]
 	 */
-	sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill, difficulty, damage, message) {
+	sendSaves = module.exports.sendSaves = function(source, targets, level, channel, skill, difficulty, damage, message, form) {
 		if(!skill) {
 			// TODO: better error
 			universe.emit("error", new Error("Save called with no skill passed"));
@@ -950,6 +965,10 @@ module.exports.initialize = function(universe) {
 				universe.utility.playAudio({"player:master":true}, audio.id, audio.volume || 100);
 			}
 		}
+		console.log("Send Saves! ", form);
+		if(form && form.audio) {
+			universe.emit("roomctrl:play", form.audio);
+		}
 
 		for(i=0; i<targets.length; i++) {
 			target = targets[i];
@@ -964,6 +983,7 @@ module.exports.initialize = function(universe) {
 				"date": Date.now(),
 				"source": source,
 				"target": target,
+				"form": form,
 				"channel": channel,
 				"damage": damage,
 				"difficulty": difficulty,
@@ -977,13 +997,14 @@ module.exports.initialize = function(universe) {
 				"target": target.id,
 				"channel": channel?channel.id:null,
 				"difficulty": difficulty,
+				"form": form,
 				"damage": damage,
 				"skill": skill?skill.id:null,
 				"level": level
 			};
 
 			logged[activity].id = universe.chronicle.addOccurrence("entity:saving", logged[activity], universe.time, logged[activity].source, logged[activity].target);
-			sendSave(activity, source, target, channel, skill, damage, message);
+			sendSave(activity, source, target, channel, skill, damage, message, form);
 		}
 	};
 
@@ -999,8 +1020,9 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} [channel] ID for the Spell, Item, or other method through which the damage is being delt, if any.
 	 * @param {String | Object} skill To use for the save
 	 * @param {String} [message]
+	 * @param {Object} [form]
 	 */
-	sendSave = function(activity, source, target, channel, skill, damage, message) {
+	sendSave = function(activity, source, target, channel, skill, damage, message, form) {
 
 		// var events = target.active_events || {};
 
@@ -1020,6 +1042,7 @@ module.exports.initialize = function(universe) {
 			"source": source?source.id:null,
 			"entity": target.id,
 			"channel": channel.id,
+			"form": form,
 			"skill": skill?skill.id || skill:null,
 			"timeout": 7000,
 			"time": universe.time,
@@ -1103,6 +1126,7 @@ module.exports.initialize = function(universe) {
 					"type": "notice",
 					"mid": activityPrefix + activity,
 					"message": type + (source?" from " + (source.nickname || source.name):"") + (channel?" against " + channel.name:""),
+					"form": form,
 					"icon": icon,
 					"anchored": true,
 					"recipients": recipients,
@@ -1146,7 +1170,6 @@ module.exports.initialize = function(universe) {
 			source,
 			i;
 
-
 		if(event.message.data.source) {
 			source = universe.get(event.message.data.source);
 		}
@@ -1172,23 +1195,29 @@ module.exports.initialize = function(universe) {
 		if(event.message.data.checks && event.message.data.checks.length) {
 			attack = event.message.data.checks[0].result;
 		}
+		
+		if(event.message.data.form && event.message.data.form.audio) {
+			universe.emit("roomctrl:play", event.message.data.form.audio);
+		}
 
 		if(damage) {
 			if(targets.length) {
 				if(source && (source.owned[event.player.id] || event.player.gm)) {
-					sendDamages(source, targets, channel, damage, attack, event.message.data.targeted_checks);
+					sendDamages(source, targets, channel, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form);
 				} else if(!source && event.player.gm) {
-					sendDamages(null, targets, channel, damage, attack, event.message.data.targeted_checks);
+					sendDamages(null, targets, channel, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form);
 				} else {
 					console.log("Source Authorization Issue[" + event.player.id + "]: ", (source?source.owned:"No Source"), event.message.data);
 				}
 			} else {
 				// TODO: Log bad event
 				console.log("Target missing: ", event.message.data);
+				universe.chronicle.addOccurrence("entity:damaging", event.message.data, universe.time, source);
 			}
 		} else {
 			// TODO: Log bad event
 			console.log("Damage missing: ", event.message.data);
+			universe.chronicle.addOccurrence("entity:damaging", event.message.data, universe.time, source);
 		}
 	});
 

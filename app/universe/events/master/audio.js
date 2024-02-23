@@ -70,6 +70,54 @@ module.exports.initialize = function(universe) {
 		}
 	});
 
+
+	universe.on("audio:play", function(event) {
+		console.log("Audio Play Event: ", event);
+		var recipients,
+			audio,
+			delay,
+			sync;
+			
+		if(event) {
+			if(typeof(event) === "string") {
+				audio = event;
+				recipients = {"player:master":true};
+				sync = false;
+				delay = 0;
+			} else {
+				audio = event.audio;
+				recipients = event.recipients || {"player:master":true};
+				sync = event.sync || false;
+				delay = event.delay || 0;
+			}
+
+			if(typeof(audio) === "string") {
+				audio = universe.manager.audio.object[audio];
+			}
+
+			if(!audio.disabled && !audio.is_disabled && !audio.is_preview) {
+				universe.emit("master:control", {
+					"control": "audio:play",
+					"recipients": recipients,
+					"data": {
+						"audio": audio.id,
+						"delay": delay,
+						"sync": sync
+					}
+				});
+			} else {
+				universe.emit("send", {
+					"type": "notice",
+					"icon": "fas fa-exclamation-triangle rs-lightyellow",
+					"recipients": recipients,
+					"message": "Can not send play for disabled audio",
+					"data": event,
+					"timeout": 8000
+				});
+			}
+		}
+	});
+
 	/**
 	 * 
 	 * @event player:master:control:audio:stop

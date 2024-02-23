@@ -1,6 +1,7 @@
 <div class="rs-input rs-component">
 	<input v-model="buffer" :type="type" v-on:keydown="press($event)" :placeholder="placeholder"/>
 	<div class="flag">
-		<span :class="flagged"></span>
+		<span :class="flagged" v-if="!search || !search.flag"></span>
+		<span :class="errored" v-if="search && search.flag"></span>
 	</div>
 </div>

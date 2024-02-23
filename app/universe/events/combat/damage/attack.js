@@ -64,6 +64,14 @@ module.exports.initialize = function(universe) {
 			}
 		}
 
+		console.log("Attack! ", event.message.data.form);
+		if(event.message.data.form && event.message.data.form.audio) {
+			universe.emit("roomctrl:play", event.message.data.form.audio);
+		}
+		if(channel.audio) {
+			universe.emit("audio:play", channel.audio);
+		}
+
 		if(event.message.data.status === "Critical") {
 			keys = Object.keys(damage);
 			for(i=0; i<keys.length; i++) {
@@ -75,9 +83,9 @@ module.exports.initialize = function(universe) {
 
 		if(targets.length) {
 			if(source && (source.owned[event.player.id] || event.player.gm)) {
-				utility.sendDamages(source, targets, channel, damage);
+				utility.sendDamages(source, targets, channel, damage, undefined, undefined, undefined, undefined, event.message.data.form);
 			} else if(!source && event.player.gm) {
-				utility.sendDamages(null, targets, channel, damage);
+				utility.sendDamages(null, targets, channel, damage, undefined, undefined, undefined, undefined, event.message.data.form);
 			} else {
 				console.log("Data Missing? ", !!source, event.player.id, source.owned);
 			}

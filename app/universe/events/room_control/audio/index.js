@@ -140,6 +140,96 @@ module.exports.initialize = function(universe) {
 		}
 	});
 
+	universe.on("roomctrl:play", function(event) {
+		var controller,
+			roomctrl,
+			playlist,
+			volume,
+			follow,
+			audio;
+
+		if(typeof(event) === "string") {
+			roomctrl = universe.manager.roomctrl.object[universe.getSetting("setting:ctrl:audio:main")];
+			if(event.startsWith("audio:")) {
+				audio = event;
+			} else if(event.startsWith("playlist:")) {
+				playlist = event;
+			} else {
+				notifyMasters("Invalid audio control event - " + event);
+				universe.generalError("master:roomctrl:invalid", null, "Invalid audio control event", {
+					"player": event.player.id,
+					"data": event.message.data
+				});
+			}
+		} else {
+			roomctrl = universe.manager.roomctrl.object[event.control || universe.getSetting("setting:ctrl:audio:main")];
+			playlist = universe.manager.playlist.object[event.playlist];
+			audio = universe.manager.audio.object[event.audio];
+			volume = event.volume;
+		}
+
+		console.log(" - Room Controller[" + universe.getSetting("setting:ctrl:audio:main") + "] Play: ", roomctrl?roomctrl.name:"None", event);
+		if(roomctrl && (controller = getController(roomctrl))) {
+			if(playlist) {
+				if(typeof(playlist) === "string") {
+					playlist = universe.manager.playlist.object[playlist];
+				}
+				follow = controller.cease()
+				.then(function() {
+					return controller.start(playlist);
+				});
+			}
+			if(audio) {
+				if(typeof(audio) === "string") {
+					audio = universe.manager.audio.object[audio];
+				}
+				console.log("Audio: " + audio.id);
+				if(follow) {
+					follow = follow.then(function() {
+						return controller.play(audio);
+					});
+				} else {
+					follow = controller.play(audio);
+				}
+			}
+			if(typeof(volume) === "number") {
+				console.log("volume: " + volume);
+				if(follow) {
+					follow = follow.then(function() {
+						return controller.setVolume(volume);
+					});
+				} else {
+					follow = controller.setVolume(volume);
+				}
+			}
+			if(follow) {
+				follow.catch(function(err) {
+					notifyMasters("Failed to execute control - " + err.message);
+					universe.generalError("master:roomctrl:error", err, "Error managing Room Audio Controller: " + err.message, {
+						"player": event.player.id,
+						"data": event.message.data,
+						"error": {
+							"message": err.message,
+							"stack": err.stack
+						}
+					});
+				});
+			} else {
+				notifyMasters("No control to execute was found - " + event.message.data.control);
+				universe.generalError("master:roomctrl:execution", null, "No control to execute was found", {
+					"player": event.player.id,
+					"data": event.message.data
+				});
+			}
+		} else {
+			notifyMasters("Non-existent controller - " + event.message.data.control);
+			universe.generalError("master:roomctrl:access", null, "Non-existent controller", {
+				"player": event.player.id,
+				"data": event.message.data
+			});
+		}
+	});
+
 	/**
 	 * 
 	 * @event player:master:roomctrl:stop
