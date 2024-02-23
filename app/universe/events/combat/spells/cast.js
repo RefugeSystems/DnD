@@ -10,10 +10,13 @@ module.exports.initialize = function(universe) {
 			level = parseInt(event.message.data.spell_level),
 			targets = [],
 			difficulty,
+			applyForm,
 			attack,
 			source,
 			audio,
 			load,
+			set,
+			f,
 			i;
 
 		if(isNaN(level)) {
@@ -22,6 +25,29 @@ module.exports.initialize = function(universe) {
 		if(event.message.data.checks && event.message.data.checks.length) {
 			attack = event.message.data.checks[0].result;
 		}
+
+		applyFormIfApplicable = function(target) {
+			if(target.caster === source.id && event.message.data.form) {
+				set = {};
+				if(spell.form_sets && spell.form_sets.length) {
+					for(i=0; i<spell.form_sets.length; i++) {
+						f = spell.form_sets[i];
+						set[f] = event.message.data.form[f];
+					}
+				} else {
+					if(event.message.data.form.race) {
+						set.race = event.message.data.form.race;
+					}
+					if(event.message.data.form.gender) {
+						set.gender = event.message.data.form.gender;
+					}
+					if(event.message.data.form.hp) {
+						set.hp = event.message.data.form.hp;
+					}
+				}
+				target.setValues(set);
+			}
+		};
 
 		source = event.message.data.source || event.message.data.entity;
 		if(spell && source && (source = universe.get(source))) {
@@ -33,6 +59,7 @@ module.exports.initialize = function(universe) {
 				load = universe.get(event.message.data.target);
 				if(load && !load.disabled && !load.is_preview) {
 					targets.push(load);
+					applyFormIfApplicable(load);
 				}
 			}
 			
@@ -41,6 +68,7 @@ module.exports.initialize = function(universe) {
 					load = universe.get(event.message.data.targets[i]);
 					if(load && !load.disabled && !load.is_preview) {
 						targets.push(load);
+						applyFormIfApplicable(load);
 					}
 				}
 			}
