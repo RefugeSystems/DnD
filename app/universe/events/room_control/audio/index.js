@@ -157,8 +157,7 @@ module.exports.initialize = function(universe) {
 			} else {
 				notifyMasters("Invalid audio control event - " + event);
 				universe.generalError("master:roomctrl:invalid", null, "Invalid audio control event", {
-					"player": event.player.id,
-					"data": event.message.data
+					"data": event
 				});
 			}
 		} else {
@@ -206,8 +205,7 @@ module.exports.initialize = function(universe) {
 				follow.catch(function(err) {
 					notifyMasters("Failed to execute control - " + err.message);
 					universe.generalError("master:roomctrl:error", err, "Error managing Room Audio Controller: " + err.message, {
-						"player": event.player.id,
-						"data": event.message.data,
+						"data": event,
 						"error": {
 							"message": err.message,
 							"stack": err.stack
@@ -215,17 +213,15 @@ module.exports.initialize = function(universe) {
 					});
 				});
 			} else {
-				notifyMasters("No control to execute was found - " + event.message.data.control);
+				notifyMasters("No control to execute was found - " + event);
 				universe.generalError("master:roomctrl:execution", null, "No control to execute was found", {
-					"player": event.player.id,
-					"data": event.message.data
+					"data": event
 				});
 			}
 		} else {
-			notifyMasters("Non-existent controller - " + event.message.data.control);
+			notifyMasters("Non-existent controller - " + event.control);
 			universe.generalError("master:roomctrl:access", null, "Non-existent controller", {
-				"player": event.player.id,
-				"data": event.message.data
+				"data": event
 			});
 		}
 	});
