@@ -1,6 +1,5 @@
-# RefugeSystems Project Core
-
-
+# RefugeSystems DnD Project
+This project is still in development and _NOT_ user friendly. A setup process and finishing touches on processing are expected soon.
 
 # Getting Started
 Once cloned, run `npm install` to install the necessary modules and then run `grunt` to "start" development. This will start testing and linting in the background,
