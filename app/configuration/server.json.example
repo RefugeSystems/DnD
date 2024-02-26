@@ -1,7 +1,7 @@
 {
 	"server": {
 		"public": "https://[This Server's Domain Name: Include Port if Applicable]/",
-		"port": 3000,
+		"port": [Port Number],
 		"web_root": "./ui",
 		"-redirect": "https://site.which.to/redirect/any/web/requests",
 		"recover_mode": false,
@@ -17,7 +17,8 @@
 		"-key": "/path/to/key",
 		
 		"origins": {
-			"https://refugesystems.net": 1747380052613,
+			"https://sistersite.example": [TimeStamp to expire access],
+			"https://yoursite.example": 0,
 			"http://127.0.0.1:3082": 0,
 			"http://127.0.0.1:3000": 0,
 			"postman"

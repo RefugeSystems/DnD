@@ -167,7 +167,7 @@ module.exports.initialize = function(universe) {
 			volume = event.volume;
 		}
 
-		console.log(" - Room Controller[" + universe.getSetting("setting:ctrl:audio:main") + "] Play: ", roomctrl?roomctrl.name:"None", event);
+		// console.log(" - Room Controller[" + universe.getSetting("setting:ctrl:audio:main") + "] Play: ", roomctrl?roomctrl.name:"None", event);
 		if(roomctrl && (controller = getController(roomctrl))) {
 			if(playlist) {
 				if(typeof(playlist) === "string") {
@@ -182,7 +182,7 @@ module.exports.initialize = function(universe) {
 				if(typeof(audio) === "string") {
 					audio = universe.manager.audio.object[audio];
 				}
-				console.log("Audio: " + audio.id);
+				// console.log("Audio: " + audio.id);
 				if(follow) {
 					follow = follow.then(function() {
 						return controller.play(audio);
@@ -192,7 +192,7 @@ module.exports.initialize = function(universe) {
 				}
 			}
 			if(typeof(volume) === "number") {
-				console.log("volume: " + volume);
+				// console.log("volume: " + volume);
 				if(follow) {
 					follow = follow.then(function() {
 						return controller.setVolume(volume);

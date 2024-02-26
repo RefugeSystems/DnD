@@ -360,6 +360,11 @@ var config = {
 				"node_modules/jquery/dist/jquery.min.js",
 				"node_modules/vue-router/dist/vue-router.js",
 				"node_modules/d3/dist/d3.min.js",
+				"node_modules/highcharts/highcharts.src.js",
+				"node_modules/highcharts/modules/accessibility.src.js",
+				"node_modules/highcharts/modules/exporting.src.js",
+				"node_modules/highcharts/modules/export-data.src.js",
+				"node_modules/highcharts/modules/series-label.src.js",
 
 				"deploy_cache/templates.js",
 				"app_ui/library/*.js",
@@ -411,6 +416,11 @@ var config = {
 					"node_modules/jquery/dist/jquery.min.js",
 					"node_modules/vue-router/dist/vue-router.js",
 					"node_modules/d3/dist/d3.min.js",
+					"node_modules/highcharts/highcharts.js",
+					"node_modules/highcharts/modules/accessibility.js",
+					"node_modules/highcharts/modules/exporting.js",
+					"node_modules/highcharts/modules/export-data.js",
+					"node_modules/highcharts/modules/series-label.js",
 
 					"deploy_cache/templates.js",
 					"app_ui/library/*.js",
