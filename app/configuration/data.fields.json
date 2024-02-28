@@ -3556,8 +3556,173 @@
 		],
 		"attribute": {}
 	}, {
-		"name": "Date Completed",
+		"id": "stocks",
+		"name": "Stocks",
+		"description": "The types of things stocked to this object by the restock process.",
+		"type": "array",
+		"ordering": 780,
+		"inheritance": null,
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "stocks_randomly",
+		"name": "Randomgly Stocks",
+		"description": "Types stocked by this object at random.",
+		"type": "array",
+		"ordering": 781,
+		"inheritance": null,
+		"inheritable": [
+			"type"
+		],
+		"attribute": {}
+	}, {
+		"id": "stock_point",
+		"name": "Stock Point",
+		"description": "Maps a type to a numeric calculation to detemine how much of an object of that type to stock to this object during the restock process.",
+		"type": "object:dice",
+		"ordering": 782,
+		"attribute": {
+			"inherited_key": "type",
+			"display_size": 110
+		}
+	}, {
+		"id": "stock_periodically",
+		"name": "Stocks Periodically",
+		"description": "Defines the period over which this object should automatically restock, if any",
+		"type": "calculated",
+		"ordering": 783,
+		"attribute": {
+			"display_size": 110
+		}
+	}, {
+		"id": "stocked_last",
+		"name": "Last Stock",
+		"description": "When this object was last stocked by the restock process.",
+		"type": "gametime",
+		"ordering": 784,
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "stocks_persist",
+		"name": "Stocks Persist",
+		"description": "Controls what should remain when restocking. This is primarily for retaining any placed Uniques so that the DM can manage moving them with story.",
+		"type": "boolean",
+		"ordering": 785,
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "stocks_template",
+		"name": "Stocks Templates",
+		"description": "This object stocks template based items. This is primarily used in the restock process.",
+		"type": "boolean",
+		"ordering": 786,
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "stocks_unique",
+		"name": "Stocks Unique",
+		"description": "This object stocks unique items. This is primarily used in the restock process.",
+		"ordering": 787,
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "stocks_singular",
+		"name": "Stocks Singular",
+		"ordering": 788,
+		"description": "This object stocks singular items. This is primarily used in the restock process.",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "stocks_history",
+		"name": "Stock History",
+		"description": "A short history of events from the restock process.",
+		"type": "array",
+		"ordering": 789,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {}
+	}, {
+		"id": "access",
+		"name": "Access",
+		"description": "Maps class names to access levels, 0 for none, 1 for 'guest' level access and usually with the following access restrictions, though objects may define their own access:\n+ 10: Class Description\n+ 20: Class Documentation\n+30: Access to 'Your Stuff' based on player and assigned entities\n+ 50: Read\n+ 60: Update\n+ 70: Create\n+ 80: Delete\n+ 100: Usually 'Maximum' Access\n+ 120: Special access to 'universe' class to Create a field\n+ 140: Special access to create a new class\n+ 200: Special access to shutdown the server and all subscribed children (This essentialy should cause PM2 or similar to restart the world).",
+		"type": "object",
+		"ordering": 850,
+		"attribute": {
+			"inherited_key": "class",
+			"display": 110
+		}
+	}, {
+		"id": "apikey",
+		"name": "API Key",
+		"description": "Maps an apikey ID to an expiry date for this object to use the key, 0 or negative for no end.",
+		"type": "object",
+		"ordering": 855,
+		"attribute": {
+			"inherited_key": "apikey",
+			"display_size": 110
+		}
+	}, {
+		"id": "apikey_access",
+		"name": "Access Key",
+		"description": "The API key used by this server to access this world.",
+		"type": "string",
+		"ordering": 820,
+		"inheritance": null,
+		"inheritable": ["apikey"],
+		"attribute": {
+			"display_size": 100,
+			"metadata": ""
+		}
+	}, {
+		"id": "parent_world",
+		"name": "Parent World",
+		"description": "The world responsible for managing this world. This is primarily used for API syncing when a world changes and the managing server informs this server.",
+		"type": "string",
+		"ordering": 810,
+		"inheritable": ["world"],
+		"attribute": {
+			"display_size": 110,
+			"displayed": false
+		}
+	}, {
+		"id": "sync_template",
+		"name": "Sync Templates",
+		"description": "When set, templates are synced from this world down to this one",
+		"type": "boolean",
+		"ordering": 822,
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "sync_unique",
+		"name": "Sync Unique",
+		"description": "When set, unique objects are synced from this world down to this one",
+		"ordering": 824,
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
+		"id": "sync_singular",
+		"name": "Sync Singular",
+		"ordering": 826,
+		"description": "When set, singular objects are synced from this world down to this one",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
+	}, {
 		"id": "date_completed",
+		"name": "Date Completed",
 		"description": "Real time offset indicating when this was finished.",
 		"type": "date",
 		"ordering": null,
@@ -3571,8 +3736,8 @@
 		}
 	},
 	{
-		"name": "Date Needed",
 		"id": "date_needed",
+		"name": "Date Needed",
 		"description": "Real time offset by which time that this is needed.",
 		"type": "date",
 		"ordering": null,

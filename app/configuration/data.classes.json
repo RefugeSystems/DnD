@@ -68,7 +68,7 @@
 		"id": "world",
 		"name": "World",
 		"description": "A world to offer to users for alternative realms to join for games",
-		"fields": ["parent", "name", "icon", "description", "is_copy", "is_preview", "review", "attribute", "address", "is_secure", "players", "date_started", "date_completed"]
+		"fields": ["parent", "name", "icon", "description", "is_copy", "is_preview", "review", "apikey", "apikey_access", "attribute", "address", "is_secure", "players", "date_started", "date_completed"]
 	}, {
 		"id": "error",
 		"name": "Error",
@@ -78,7 +78,7 @@
 		"id": "playlist",
 		"name": "Playlist",
 		"description": "Collection of ",
-		"fields": ["parent", "name", "description", "disabled", "audios", "is_preview", "review", "attribute"]
+		"fields": ["parent", "name", "description", "disabled", "audios", "is_preview", "apikey", "review", "attribute"]
 	}, {
 		"id": "audio",
 		"name": "Audio",
@@ -104,6 +104,11 @@
 		"name": "Widget",
 		"description": "Describes a widget available in the UI. The attributes specify available values for configuration and offer a string on field usage or an array of options.",
 		"fields": ["parent", "name", "icon", "component", "category", "obscured", "description", "disabled", "is_preview", "cell_width", "review", "attribute", "is_copy"]
+	}, {
+		"id": "apikey",
+		"name": "APIKey",
+		"description": "A common path of strong wind that affects sailing and storms.",
+		"fields": ["parent", "name", "icon", "description", "is_preview", "review", "attribute", "is_deletable", "password", "is_active", "is_secure", "start", "end", "access"]
 	}, {
 		"id": "jetstream",
 		"name": "Jetstream",

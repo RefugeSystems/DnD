@@ -473,6 +473,16 @@ fields.push({
 	}
 });
 fields.push({
+	"id": "error_log",
+	"name": "Error Log",
+	"description": "Stores a short list of recent errors associated to this object. Used as a quick reference for display feedback and quick investigation",
+	"type": "array",
+	"ordering": 900,
+	"inheritance": null,
+	"inheritable": null,
+	"attribute": {}
+});
+fields.push({
 	"id": "preview_data",
 	"name": "Preview Data",
 	"description": "The properties to use when generating a preview.",
@@ -504,7 +514,7 @@ classes.push({
 	"id": "player",
 	"name": "Player",
 	"description": "Player information for connecting to the universe",
-	"fields": ["name", "disabled", "username", "password", "parent", "email", "description", "gm", "auth_token", "last", "connections", "is_preview", "attribute"]
+	"fields": ["name", "disabled", "username", "password", "parent", "email", "description", "gm", "auth_token", "last", "connections", "error_log", "is_preview", "attribute"]
 });
 classes.push({
 	"id": "session",
