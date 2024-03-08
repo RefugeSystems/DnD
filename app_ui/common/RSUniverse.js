@@ -759,6 +759,7 @@ class RSUniverse extends EventEmitter {
 		}
 
 		this.version = "Unknown";
+		this.connection.url = new URL(address);
 		this.connection.session = session;
 		this.connection.address = address;
 		console.log("Connecting: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");

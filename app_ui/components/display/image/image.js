@@ -35,10 +35,16 @@
 			 * @type String
 			 */
 			"url": function() {
+				/*
 				if(this.cacheSuffix) {
 					return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (this.image.id || this.image) + "?ctrl=" + this.cacheSuffix;
 				}
 				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (this.image.id || this.image);
+				*/
+				if(this.cacheSuffix) {
+					return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + (this.image.id || this.image) + "?ctrl=" + this.cacheSuffix;
+				}
+				return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + (this.image.id || this.image);
 			}
 		},
 		"data": function() {
