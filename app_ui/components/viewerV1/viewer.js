@@ -549,6 +549,10 @@
 			this.update();
 		},
 		"methods": {
+			"calculateTime": function(speed) {
+				speed /= 6; // Down to seconds
+				Vue.set(this, "totalTime", this.universe.calendar.displayDuration(this.totalLength/speed));
+			},
 			"getMarkerSize": function() {
 				return Math.min(this.baseFontSize + this.image.zoom, this.location.max_font_size || 50);
 			},

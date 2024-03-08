@@ -41,12 +41,14 @@ if(!Array.prototype.uniquely) {
  */
 if(!Array.prototype.purge) {
 	Array.prototype.purge = function(removing) {
-		var index = this.indexOf(removing);
-		if(index === -1) {
-			return false;
+		for(var i=0; i<this.length; i++) {
+			if(this[i] === removing || (this[i] && removing && this[i].id === removing.id)) {
+				this.splice(i, 1);
+				return true;
+			}
 		}
-		this.splice(index, 1);
-		return true;
+
+		return false;
 	};
 }
 

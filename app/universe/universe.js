@@ -7,6 +7,7 @@
  * @type {[type]}
  */
 
+const NameGenerator = require("../management/nameGenerator.js");
 const RSObject = require("../storage/rsobject");
 
 var appPackage = require("../../package.json"),
@@ -219,7 +220,7 @@ class Universe extends EventEmitter {
 					mark,
 					x;
 				
-				console.log("Linking Objects [Background Processing Layered with Loading]...");
+				console.log("Linking Objects...");
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
@@ -689,7 +690,17 @@ class Universe extends EventEmitter {
 	 */
 	copy(source, mask, callback) {
 		var details = {},
-			id;
+			waiting = [],
+			mask = {},
+			generator,
+			dataset,
+			loading,
+			tfields,
+			manager,
+			finish,
+			id,
+			i,
+			j;
 		
 		if(typeof(source) === "string") {
 			id = source;
@@ -704,13 +715,86 @@ class Universe extends EventEmitter {
 		}
 
 		if(source) {
+			manager = this.manager[source._class];
 			if(source.is_singular) {
-				callback(null, source);
+				if(callback) {
+					callback(null, source);
+				}
 			} else {
+				details.id = id + ":" + Random.string(32).toLowerCase();
+				mask.character = details.id;
+				mask.user = details.id;
 				if(source.is_template) {
 					Object.assign(details, mask);
 					if(source.template_process) {
 						// TODO: Handle Template Processing
+						tfields = Object.keys(source.template_process);
+						tfields.forEach((tf) => { // Localize for the Template copy promise
+						// for(j=0; j<tfields.length; j++) {
+							var tvalue = source.template_process[tf],
+								tfield = manager.fieldUsed[tf];
+							switch(tfield.type) {
+								case "calculated":
+								case "integer":
+								case "number":
+								case "dice":
+									details[tfield.id] = this.calculator.computedDiceRoll(tvalue, source);
+									break;
+								case "markdown":
+								case "string":
+									if(tvalue instanceof Array) {
+										if(tvalue[0].startsWith("dataset:")) {
+											loading = [];
+											for(i=0; i<tvalue.length; i++) {
+												dataset = this.get(tvalue[i]);
+												if(dataset)	{
+													generator = new NameGenerator(dataset.value);
+													loading.push(generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+												}
+											}
+											tvalue = loading.join(" ");
+										} else {
+											tvalue = tvalue[Random.integer(tvalue.length)];
+										}
+									}
+									if(typeof(tvalue) !== "string") {
+										tvalue = tvalue.toString();
+									}
+									details[tfield.id] = tvalue;
+									break;
+								case "boolean":
+									details[tfield.id] = (typeof(tvalue) === "string" && (tvalue === "true" || tvalue === "1")) || tvalue === true || tvalue === 1;
+									break;
+								case "array":
+									if(tvalue instanceof Array && tvalue[0] instanceof Array) {
+										tvalue = tvalue[Random.integer(tvalue.length)];
+									}
+									if(tfield.inheritance && tvalue instanceof Array && tvalue.length) {
+										details[tfield.id] = [];
+										for(i=0; i<tvalue.length; i++) {
+											loading = this.get(tvalue[i]);
+											if(loading) {
+												if(loading.is_template) {
+													waiting.push(this.copyPromise(loading, mask).then((copy) => {
+														details[tfield.id].push(copy.id);
+													}));
+												} else {
+													details[tfield.id].push(loading.id);
+												}
+											}
+										}
+									} else {
+										details[tfield.id] = tvalue;
+									}
+									break;
+								default:
+									if(tvalue instanceof Array) {
+										details[tfield.id] = tvalue[Random.integer(tvalue.length)];
+									} else {
+										details[tfield.id] = tvalue;
+									}
+							}
+						});
 					}
 				} else {
 					// Add check for hard-copy?
@@ -718,27 +802,41 @@ class Universe extends EventEmitter {
 					Object.assign(details, mask);
 				}
 				// details.id = Random.identifier(source._class, 10, 32).toLowerCase();
-				details.id = id + ":" + Random.string(32).toLowerCase();
-				details.acquired_in = this.manager.setting.object["setting:meeting"].value;
-				details.acquired = this.time;
-				details.is_template = false;
-				details.selectable = false;
-				details.playable = false;
-				details.is_copy = true;
-				details.parent = id;
-				if(source.hp) {
-					details.hp = source.hp;
+				finish = () => {
+					details.acquired_in = this.manager.setting.object["setting:meeting"].value;
+					details.acquired = this.time;
+					details.is_template = false;
+					details.selectable = false;
+					details.playable = false;
+					details.is_copy = true;
+					details.parent = id;
+					if(source.hp_max) {
+						details.hp = source.hp_max;
+					}
+					if(source.mp_max) {
+						details.mp = source.mp_max;
+					}
+					this.createObject(details, callback);
+				};
+
+				if(waiting.length) {
+					Promise.all(waiting)
+					.then(() => {
+						finish();
+					})
+					.catch((err) => {
+						if(callback) {
+							callback(new Anomaly("universe:object:copy", "Failed to copy object", 50, {id}, err, this));
+						}
+					});
+				} else {
+					finish();
 				}
-				if(source.mp) {
-					details.mp = source.mp;
-				}
-				if(source.spell_slots) {
-					details.spell_slots = JSON.parse(JSON.stringify(source.spell_slots));
-				}
-				this.createObject(details, callback);
 			}
 		} else {
-			callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
+			if(callback) {
+				callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
+			}
 		}
 	}
 
@@ -882,26 +980,38 @@ class Universe extends EventEmitter {
 		if(details) {
 			var classification = this.getClassFromID(details.id);
 			if(!this.manager[classification]) {
-				callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+				if(callback) {
+					callback(new Anomaly("universe:object:create", "Unable to identify classification for new object", 50, {details, classification}, null, this));
+				}
 			} else {
 				this.manager[classification].create(this, details, (err, created) => {
 					if(err) {
 						console.log("Error: ", err);
-						callback(err);
+						if(callback) {
+							callback(err);
+						}
 					} else {
 						created.linkFieldValues()
 						.then(() => {
 							created.calculateFieldValues();
 							created.updateFieldValues();
 							// this.emit("object-created", created);
-							callback(null, created);
+							if(callback) {
+								callback(null, created);
+							}
 						})
-						.catch(callback);
+						.catch(function(err) {
+							if(callback) {
+								callback(err);
+							}
+						});
 					}
 				});
 			}
 		} else {
-			callback(new Error("Attempted to create null object?"));
+			if(callback) {
+				callback(new Error("Attempted to create null object?"));
+			}
 		}
 	}
 	
@@ -964,16 +1074,13 @@ class Universe extends EventEmitter {
 	 */
 	deleteObject(object, callback) {
 		if(!object) {
-			callback(new Anomaly("universe:object:delete", "Unable to identify classification for new object", 50, {"id": object.id, "classification": object._class}, null, this));
+			var err = new Anomaly("universe:object:delete", "Unable to identify classification for new object", 50, {"id": object.id, "classification": object._class}, null, this);
+			this.emit("error", err);
+			if(callback) {
+				callback(err);
+			}
 		} else {
-			this.manager[object._class].delete(object, (err) => {
-				if(err) {
-					console.log("Error: ", err);
-					callback(err);
-				} else {
-					callback();
-				}
-			});
+			this.manager[object._class].delete(object, callback);
 		}
 	}
 	

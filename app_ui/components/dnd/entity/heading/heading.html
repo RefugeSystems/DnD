@@ -12,8 +12,8 @@
 				<span class="fas fa-unlock-alt"></span>
 			</button>
 			<button class="property" v-on:click="info(entity)">
-				<span :class="entity.icon"></span>
-				<span v-if="displayHat()" class="entity-hat game-icon game-icon-top-hat" :class="getHatColor()"></span>
+				<span class="iconography" :class="entity.icon"></span>
+				<span v-if="displayHat()" class="iconography entity-hat game-icon game-icon-top-hat" :class="getHatColor()"></span>
 				<span>{{entity.nickname || entity.name}}</span>
 			</button>
 		</div>

@@ -494,6 +494,7 @@ rsSystem.component("DNDInventory", {
 				this.controls.push({
 					"title": "Drop Items",
 					"icon": "fas fa-arrow-alt-to-bottom",
+					"clearSelection": true,
 					"process": function() {
 						rsSystem.utility.clearObject(reference.storage.selected);
 						reference.universe.send("inventory:drop", {
@@ -505,6 +506,7 @@ rsSystem.component("DNDInventory", {
 				this.controls.push({
 					"title": "Give Items",
 					"icon": "fas fa-people-carry",
+					"clearSelection": true,
 					"process": function() {
 						rsSystem.EventBus.$emit("dialog-open", {
 							"component": "dndDialogGive",

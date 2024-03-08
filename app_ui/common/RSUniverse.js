@@ -356,7 +356,7 @@ class RSUniverse extends EventEmitter {
 						}
 						forEach = function(handler) {
 							for(var i=0; i<this.length; i++) {
-								if(this.isValid(this[i])) {
+								if(rsSystem.utility.isValid(this[i])) {
 								   if(handler(this[i]) === false) {
 									   break;
 								   }
@@ -851,8 +851,12 @@ class RSUniverse extends EventEmitter {
 				}
 				if(this.state.initializing) {
 					this.state.initializing = false;
-					console.error("Connect Fault: ", event);
-					fail(event);
+					console.warn("Connect Initialization Fault, Retrying: ", event);
+					this.connect(this.connection.session, this.connection.address)
+					.catch((err) => {
+						console.warn("> Retry Failed, Failing connection", err);
+						fail(event);
+					});
 				} else {
 					setTimeout(() => {
 						this.reconnect();

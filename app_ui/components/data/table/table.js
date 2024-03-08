@@ -281,6 +281,9 @@ rsSystem.component("rsTable", {
 	"mounted": function() {
 		rsSystem.register(this);
 		Vue.set(this.storage, "defaultHeaders", this.headings);
+		if(this.profile && this.storage.selected && this.profile.reset_selections_on_load) {
+			rsSystem.utility.clearObject(this.storage.selected);
+		}
 		if(typeof(this.storage.page) !== "number") {
 			Vue.set(this.storage, "page", 0);
 		}

@@ -72,7 +72,7 @@
 		},
 		"unbind": function(el) {
 			var bound = bindings[el.getAttribute("data-mousescroll")];
-			console.log(" - Mousescroll Directive Unbinding: ", bound, "\nA: ", el);
+			// console.log(" - Mousescroll Directive Unbinding: ", bound, "\nA: ", el);
 			bound.element.removeEventListener("mouseleave", bound.leave);
 			bound.element.removeEventListener("mousedown", bound.down);
 			bound.element.removeEventListener("mouseup", bound.up);

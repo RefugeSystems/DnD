@@ -23,6 +23,7 @@ var stackRestricted = [
 	"updated",
 	"is_copy",
 	"is_template",
+	"template_process",
 	"attribute"
 ];
 
@@ -330,7 +331,7 @@ class RSObject {
 		if(this._data.parent && (parent = this._universe.objectHandler.retrieve(this._data.parent))) {
 			fields = this._manager.fieldIDs;
 			for(i = 0; i < fields.length; i++) {
-				if((this._data[fields[i]] === null || this._data[fields[i]] === undefined) && fields[i] !== "template" && fields[i] !== "is_template" /* TODO: Implement Field Attribute for no parental inheritance */ ) {
+				if((this._data[fields[i]] === null || this._data[fields[i]] === undefined) && fields[i] !== "template" && fields[i] !== "is_template" && fields[i] !== "template_process" /* TODO: Implement Field Attribute for no parental inheritance */ ) {
 					this._combined[fields[i]] = parent._combined[fields[i]];
 				} else {
 					this._combined[fields[i]] = this._data[fields[i]];
@@ -346,6 +347,8 @@ class RSObject {
 			// console.log("Inherit: ", id);
 			if(field.inheritanceFields && field.inheritanceFields.length) {
 				source = this._universe.objectHandler.retrieve(id);
+				// this._universe.objectHandler.trackInheritance(this, field.inheritanceFields);
+				// this._universe.objectHandler.trackReference(this, this._data[field.id]);
 				var ifield,
 					debugA,
 					debugB;
@@ -584,7 +587,7 @@ class RSObject {
 
 		// console.log("Calculated Self[" + this._data.id + "]");
 		// this._universe.objectHandler.pushCalculated(this.id);
-		this._universe.objectHandler.pushUpdated(this.id, origins);
+		// this._universe.objectHandler.pushUpdated(this.id, origins);
 	}
 
 	/**
@@ -670,6 +673,12 @@ class RSObject {
 							break;
 						case "array":
 							this[fields[x]] = [].concat(this._calculated[fields[x]]);
+							// if(field.inheritable && field.inheritable.length) {
+							// 	if(this._previous[fields[x]] && this._previous[fields[x]].length) {
+							// 		this._universe.objectHandler.untrackReference(this, this._previous[fields[x]]);
+							// 	}
+							// 	this._universe.objectHandler.trackReference(this, this[fields[x]]);
+							// }
 							if(field.attribute.searchable) {
 								// TODO: Follow inheritable fields to get the inheriting object name instead of the ID
 								if(field.inheritable && field.inheritable.length) {
@@ -1032,6 +1041,8 @@ class RSObject {
 		}
 
 		if(this.changed()) {
+			this._universe.objectHandler.pushUpdated(this.id, origins);
+			// this._universe.objectHandler.pushCalculated(this.id);
 			/*
 			if(this.handlers instanceof Array) {
 			for(i=0; i<this._universe.manager.occurrence.length; i++) {
@@ -1671,6 +1682,12 @@ class RSObject {
 					result[field.id][keys[i]] = field.attribute.max;
 				}
 			}
+		}
+		if(field.type === "boolean") {
+			result[field.id] = !!result[field.id];
+		}
+		if(field.type === "array" && typeof(field.attribute.max_length) === "number" && result[field.id] && result[field.id].length > field.attribute.max_length) {
+			result[field.id] = result[field.id].slice(result[field.id].length - field.attribute.max_length);
 		}
 		if(result[field.id] !== undefined && result[field.id] !== null) {
 			if(typeof(field.attribute.min) === "number" && typeof(result[field.id]) === "object") {

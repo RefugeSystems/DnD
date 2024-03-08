@@ -21,6 +21,7 @@ module.exports.initialize = function(universe) {
 			target = event.message.data.target,
 			items = event.message.data.items,
 			exchanging = [],
+			summary = [],
 			update,
 			item,
 			i;
@@ -38,6 +39,7 @@ module.exports.initialize = function(universe) {
 					if(item && entity.inventory.indexOf(item.id) !== -1) {
 						if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 							exchanging.push(item.id);
+							summary.push(item.name);
 							if(!item.is_singular || item.is_special) {
 								item.setValues({
 									"acquired_in": universe.manager.setting.object["setting:meeting"].value,
@@ -57,6 +59,7 @@ module.exports.initialize = function(universe) {
 				item = universe.manager.item.object[items[i]];
 				if(item) {
 					exchanging.push(item.id);
+					summary.push(item.name);
 					if(!item.is_singular || item.is_special) {
 						item.setValues({
 							"acquired_in": universe.manager.setting.object["setting:meeting"].value,
@@ -84,6 +87,10 @@ module.exports.initialize = function(universe) {
 				};
 				entity.addValues(update);
 			}
+			if(5 < summary.length) {
+				summary.push("Plus " + summary.splice(4).length + " more items");
+			}
+			summary = "<ul><li>" + summary.join("</li><li>") + "</li></ul>";
 			update = {
 				"inventory": exchanging,
 				"history": [{
@@ -102,13 +109,13 @@ module.exports.initialize = function(universe) {
 			universe.emit("send", {
 				"type": "notice",
 				"recipient": event.player.id,
-				"message": "Gave " + exchanging.length + " items to " + target.name,
+				"message": "<span>Gave " + exchanging.length + " items to " + target.name + ":<span>" + summary,
 				"timeout": 5000
 			});
 			universe.emit("send", {
 				"type": "notice",
 				"recipients": target.owned,
-				"message": target.name + " received " + exchanging.length + (entity?" items from " + entity.name:" items"),
+				"message": "<span>" + target.name + " received " + exchanging.length + (entity?" items from " + entity.name:" items") + ":<span>" + summary,
 				"timeout": 5000
 			});
 		}
@@ -135,6 +142,7 @@ module.exports.initialize = function(universe) {
 		var entity = event.message.data.entity,
 			items = event.message.data.items,
 			exchanging = [],
+			summary = [],
 			meeting,
 			update,
 			item,
@@ -149,6 +157,7 @@ module.exports.initialize = function(universe) {
 				if(item && entity.inventory.indexOf(item.id) !== -1) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
+						summary.push(item.name);
 						item.setValues({
 							"character": null,
 							"user": null
@@ -160,6 +169,10 @@ module.exports.initialize = function(universe) {
 			}
 		}
 		if(exchanging.length) {
+			if(5 < summary.length) {
+				summary.push("Plus " + summary.splice(4).length + " more items");
+			}
+			summary = "<ul><li>" + summary.join("</li><li>") + "</li></ul>";
 			update = {
 				"inventory": exchanging
 			};
@@ -179,7 +192,7 @@ module.exports.initialize = function(universe) {
 			universe.emit("send", {
 				"type": "notice",
 				"recipient": event.player.id,
-				"message": "Dropped " + exchanging.length + " items",
+				"message": "<span>Dropped " + exchanging.length + " items:</span>" + summary,
 				"timeout": 5000
 			});
 			meeting = universe.manager.meeting.object[universe.manager.setting.object["setting:meeting"].value];

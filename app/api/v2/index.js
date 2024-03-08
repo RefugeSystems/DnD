@@ -9,8 +9,8 @@ var express = require("express"),
 
 module.exports = new (function() {
 	this.router = express.Router();
-	this.id = "api:v1:router";
-	
+	this.id = "api:v2:router";
+
 	/**
 	 * 
 	 * @method initialize
@@ -19,8 +19,8 @@ module.exports = new (function() {
 	 */
 	this.initialize = (api) => {
 		return new Promise((done, fail) => {
-			if(api.universe.configuration.server.api.v1 === true || api.universe.configuration.server.api.v1 === undefined) {
-				fs.readdir("app/api/v1", (err, paths) => {
+			if(api.universe.configuration.server.api.v2 === true) {
+				fs.readdir("app/api/v2", (err, paths) => {
 					if(err) {
 						fail(err);
 					} else {
@@ -37,7 +37,7 @@ module.exports = new (function() {
 									load.path = load.path || "/" + paths[x].replace(".js", "");
 									loading.push(load);
 								} else {
-									api.universe.emit("error", new api.universe.Anomaly("api:v1:load", "Failed to load an API branch: no Initialize", 40, {"branch": paths[x]}, null, this));
+									api.universe.emit("error", new api.universe.Anomaly("api:v2:load", "Failed to load an API branch: no Initialize", 40, {"branch": paths[x]}, null, this));
 								}
 							}
 						}
@@ -56,7 +56,7 @@ module.exports = new (function() {
 			} else {
 				this.router.use((req, res) => {
 					res.status(503).json({
-						"message": "V1 API Disabled"
+						"message": "V2 API Disabled"
 					});
 				});
 				done();

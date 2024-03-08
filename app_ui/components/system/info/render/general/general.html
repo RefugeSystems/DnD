@@ -20,13 +20,14 @@
 			<button v-if="control.type === 'button'" class="quick rounded general action" v-on:click="process(control)" v-on:click.right.stop.prevent="option(control)" :title="control.title">
 				<span :class="control.icon"></span>
 			</button>
-			<select v-if="control.type === 'select'" class="rounded" v-model="control._value" v-on:change="process(control)">
+			<select v-if="control.type === 'select'" class="rounded" v-model="control._value" v-on:change="process(control)" :title="control.title">
 				<option v-if="control._missing" :value="control._missing">{{control._missing}}</option>
 				<option v-for="option in control.options" :value="option">{{option}}</option>
 			</select>
-			<select v-if="control.type === 'selectobj'" class="rounded" v-model="control._value" v-on:change="process(control)">
+			<select v-if="control.type === 'selectobj'" class="rounded" v-model="control._value" v-on:change="process(control)" :title="control.title">
 				<option v-for="option in control.options" :value="option.id" :title="option.id" :disabled="!option.id">{{option.id?option.name:option}}</option>
 			</select>
+			<span v-if="control.type === 'selectobj' || control.type === 'select'" class="select-ctrl-icon" :class="control.icon"></span>
 		</div>
 		<dnd-object-charges class="flat" v-if="info.charges_max" :object="info" :universe="universe"></dnd-object-charges>
 	</div>

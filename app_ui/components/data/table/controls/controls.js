@@ -25,6 +25,9 @@ rsSystem.component("rsTableControls", {
 		"additionalHeaders": {
 			"type": Array
 		},
+		"profile": {
+			"type": Object
+		},
 		"source": {
 			"type": Array
 		},
@@ -94,6 +97,16 @@ rsSystem.component("rsTableControls", {
 		}
 	},
 	"methods": {
+		"process": function(control) {
+			try {
+				control.process();
+			} catch(fault) {
+				console.error(fault);
+			}
+			if(control.clearSelection || (this.profile && this.profile.reset_selections_on_action)) {
+				this.clearSelection();
+			}
+		},
 		"configureTable": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "rsTableConfigure",

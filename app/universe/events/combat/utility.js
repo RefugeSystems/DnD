@@ -529,12 +529,19 @@ module.exports.initialize = function(universe) {
 		}
 
 		if(add.hp > 0 && (entity.death_fail || entity.death_save)) {
+			entity.fireHandlers("entity:consciousness:gained", {});
 			entity.setValues({
 				"death_fail": 0,
 				"death_save": 0
 			}); // TODO: Link with general error tracking for callback in universe, but if this fails, the latter ops will fail, so tracking there for now
-			entity.fireHandlers("entity:consciousness:gained", {
-			});
+			if(entity.is_npc) {
+				entity.subValues({
+					"types": "type:dead"
+				});
+				entity.setValues({
+					"is_chest": false
+				});
+			}
 		}
 
 		// console.log("Damage Set");
@@ -550,9 +557,17 @@ module.exports.initialize = function(universe) {
 						universe.notifyMasters(entity.name + " has lost consciousness");
 					}
 					entity.fireHandlers("entity:consciousness:lost", {});
-					meeting.addValues({
-						"killed": [entity.id]
-					});
+					if(entity.is_npc) {
+						entity.addValues({
+							"types": "type:dead"
+						});
+						entity.setValues({
+							"is_chest": true
+						});
+						meeting.addValues({
+							"killed": [entity.id]
+						});
+					}
 				} else if(!conscious && entity.hp !== 0) {
 					universe.notifyMasters(entity.name + " has gained consciousness");
 					entity.fireHandlers("entity:consciousness:gain", {});

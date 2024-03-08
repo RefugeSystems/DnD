@@ -156,12 +156,17 @@
 				<option value="">No Modify</option>
 				<option v-for="locale in locales" :value="locale.id">{{locale.name}}</option>
 			</select>
+			<!--
 			<select class="control master" v-model="storage.view_party" v-if="player.gm">
 				<option value="">No Party Stats</option>
 				<option v-for="party in parties" :value="party.id">{{party.name}}</option>
 			</select>
+			-->
 			<div class="measuring-total length" v-if="totalLength">
 				{{totalLength}}
+			</div>
+			<div class="measuring-total length" v-if="totalLength">
+				<input type="number" v-model.number="storage.speed" v-on:keyup="calculateTime(totalLength, storage.speed)" placeholder="Move speed per round"/>
 			</div>
 			<div class="measuring-total length" v-if="totalTime">
 				{{totalTime}}

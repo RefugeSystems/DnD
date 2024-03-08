@@ -34,6 +34,23 @@ rsSystem.component("sysInfoGeneral", {
 		"activeMeeting": function() {
 			return this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value] || null;
 		},
+		"activeSkirmishes": function() {
+			var skirmishes = {};
+
+			skirmishes.available = [];
+			skirmishes.involved = [];
+			this.universe.listing.skirmish.forEach((skirmish) => {
+				if(skirmish.is_active) {
+					if(skirmish.entities.indexOf(this.info.id) === -1) {
+						skirmishes.available.push(skirmish);
+					} else {
+						skirmishes.involved.push(skirmish);
+					}
+				}
+			});
+
+			return skirmishes;
+		},
 		"note": function() {
 			if(this.player.gm) {
 				return this.rsshowdown(this.info.note || "", this.info, this.profile?this.profile.inline_javascript:false);
@@ -75,7 +92,7 @@ rsSystem.component("sysInfoGeneral", {
 	},
 	"methods": {
 		"repopulateControls": function(event) {
-			if(event && this.info && (event._class === "setting" || event.id === this.info.id || (this.player && event.id === this.player.id) || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id) || (this.activeMeeting && this.activeMeeting.id === event.id))) {
+			if(event && this.info && (event._class === "skirmish" || event._class === "setting" || event.id === this.info.id || (this.player && event.id === this.player.id) || event.id === this.info.character || event.id === this.info.user || event.id === this.info.caster || event.id === this.info.attuned || (this.entity && event.id === this.entity.id) || (this.activeMeeting && this.activeMeeting.id === event.id))) {
 				this.populateControls();
 			}
 		},
@@ -295,6 +312,22 @@ rsSystem.component("sysInfoGeneral", {
 									"action": "private"
 								});
 							}
+							if(this.info.is_template) {
+								this.controls.push({
+									"title": "Generate copy of this template here (location, meeting)",
+									"icon": "fa-solid fa-clone",
+									"type": "button",
+									"action": "clonetemplate"
+								});
+							}
+							if((this.info.stocks && this.info.stocks.length) || (this.stocks_randomly && this.stocks_randomly.length)) {
+								this.controls.push({
+									"title": "Restock this entity",
+									"icon": "fa-solid fa-warehouse-full",
+									"type": "button",
+									"action": "restock"
+								});
+							}
 							// if(this.info.must_know && this.info.is_position_hidden !== undefined && this.info.is_position_hidden !== null) {
 							if(this.info.is_position_hidden) {
 								this.controls.push({
@@ -465,6 +498,27 @@ rsSystem.component("sysInfoGeneral", {
 											"type": "button",
 											"action": "unpartyentity"
 										});
+
+										if(this.info.is_combatable) {
+											if(this.activeSkirmishes.available.length) {
+												this.controls.push({
+													"title": "Add to Skirmish",
+													"icon": "fa-solid fa-swords",
+													"type": "selectobj",
+													"action": "skirmishentity",
+													"options": this.activeSkirmishes.available
+												});
+											}
+											if(this.activeSkirmishes.involved.length) {
+												this.controls.push({
+													"title": "Remove from to Skirmish",
+													"icon": "fa-light fa-swords",
+													"type": "selectobj",
+													"action": "unskirmishentity",
+													"options": this.activeSkirmishes.involved
+												});
+											}
+										}
 									}
 								}
 								if(this.info.is_deletable) {
@@ -1247,6 +1301,42 @@ rsSystem.component("sysInfoGeneral", {
 							"entities": [object.id]
 						});
 					}
+					break;
+				case "skirmishentity":
+					if(control._value) {
+						this.universe.send("skirmish:add:entities", {
+							"skirmish": control._value,
+							"entities": [object.id]
+						});
+						Vue.delete(control, "_value");
+					}
+					break;
+				case "unskirmishentity":
+					if(control._value) {
+						this.universe.send("skirmish:remove:entities", {
+							"skirmish": control._value,
+							"entities": [object.id]
+						});
+						Vue.delete(control, "_value");
+					}
+					break;
+				case "clonetemplate":
+					buffer = {};
+					buffer.id = this.info.id;
+					buffer.seed = {}; 
+					if(this.activeMeeting) {
+						buffer.seed.location = this.activeMeeting.location;
+						buffer.seed.meeting = this.activeMeeting.id;
+					}
+					if(this.$route.query.entity) {
+						buffer.seed._target = this.$route.query.entity;
+					}
+					this.universe.send("template:spawn", buffer);
+					break;
+				case "restock":
+					buffer = {};
+					buffer.id = this.info.id;
+					this.universe.send("stock:shop", buffer);
 					break;
 				case "partyentities":
 					if(this.activeMeeting) {

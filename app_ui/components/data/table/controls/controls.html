@@ -35,7 +35,7 @@
 			<span class="far fa-cog"></span>
 		</button>
 		<div class="sub-controls" v-if="controls">
-			<button class="ctrl selections info" v-for="control in controls" v-on:click="control.process()" :title="control.title">
+			<button class="ctrl selections info" v-for="control in controls" v-on:click="process(control)" :title="control.title">
 				<span :class="control.icon"></span>
 				<span>{{control.name}}</span>
 			</button>

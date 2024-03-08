@@ -9,7 +9,8 @@
 			"log_all_requests": true,
 			"log_post_body": false,
 			"allow_modifications": false,
-			"database_control": false
+			"database_control": false,
+			"require_key": true
 		},
 
 		"-certificate": "/path/to/cert",

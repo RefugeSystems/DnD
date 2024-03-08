@@ -215,7 +215,6 @@ module.exports.initialize = function(universe) {
 			current,
 			entity,
 			next,
-			up,
 			i;
 
 		for(i=0; i<skirmish.entities.length; i++) {
@@ -223,7 +222,7 @@ module.exports.initialize = function(universe) {
 			if(typeof(entity) === "string") {
 				entity = universe.manager.entity.object[entity];
 			}
-			if(entity) {
+			if(entity && ((!entity.is_minion && !entity.is_npc) || (entity.hp !== 0 && entity.hp_max !== 0))) {
 				if(typeof(entity.initiative) === "number") {
 					entities.push(entity);
 				} else if(!entity.is_npc && entity.owned && entity.id !== skirmish.combat_turn) {
@@ -243,7 +242,7 @@ module.exports.initialize = function(universe) {
 						"hideFormula": true,
 						"hideHistory": true,
 						"closeAfterCheck": true
-					}, 15000);
+					}, 5000);
 				}
 			}
 		}
@@ -251,7 +250,7 @@ module.exports.initialize = function(universe) {
 		if(up && entities.indexOf(up) === -1) {
 			// BLOCKED: Need event for "Request Roll"
 			// TODO: Request Initiative Roll for Current Entity
-			if(up.is_npc) {
+			if(up.is_npc || up.is_minion) {
 				up.setValues({
 					"initiative": universe.calculator.compute("1d20 + " + (up.skill_check["skill:initiaitive"] || 0), up)
 				});

@@ -15,6 +15,7 @@ var EventEmitter = require("events").EventEmitter,
 	HTTP = require("http"),
 	APIws = require("./connection"),
 	APIv1 = require("./v1"),
+	APIv2 = require("./v2"),
 	APIui = require("./ui"),
 	express = require("express"),
 	Router = express.Router,
@@ -74,6 +75,7 @@ class APIController extends EventEmitter {
 			});
 			this.router.use((req, res, next) => {
 				req.id = Random.identifier("request", 12, 40);
+				req.key_required = this.universe.configuration.server.api && this.universe.configuration.server.api.require_key;
 				
 				if(this.specification.api.log_all_requests || (req.method === "POST" && this.specification.api.log_post_body)) {
 					var details = {};
@@ -122,19 +124,47 @@ class APIController extends EventEmitter {
 			});
 			
 			this.router.use((req, res, next) => {
-				// console.log(" > Body: ", req.body);
+				var userObject,
+					apiObject,
+					user,
+					code,
+					key;
+
 				this.emit("request", req);
 				
 				req.conversation = req.query.conversation;
-				if(req.query.token) {
-					// Fill with Token based Session
-					// TODO: Log if no match
-				} else if(req.query.username && req.query.password) {
-					// TODO: Fill with User based Session
-					// TODO: Log if no match
+				if(key = req.headers["rs-apikey"]) {
+					try {
+						key = JSON.parse(atob(key));
+						if(key.length !== 3) {
+							throw new Error("Invalid API Key");
+						}
+						user = key[0]; // req.headers["rs-username"] || req.headers["rs-world"];
+						code = key[2]; // req.headers["rs-passcode"];
+						key = key[1];
+						if(user && code) {
+							userObject = this.universe.get(user);
+							apiObject = this.universe.get(key);
+	
+							// console.log("Session Request: " + user + "\n > Code: " + code + "\n > User: " + (userObject?userObject.id:"No User") + "\n > API: " + (apiObject?apiObject.id:"No API"));
+							code = code.sha256().sha256(); // Doulbe Hash to match hashing pattern for all password fields
+							// console.log(" > End Code: " + code + " == " + apiObject.password);
+	
+							if(userObject && apiObject && apiObject.password === code) {
+								req.session = {};
+								req.session.user = userObject;
+								req.session.apikey = apiObject;
+								req.session.access = apiObject.access;
+							}
+						}
+						next();
+					} catch(err) {
+						console.log("APIKey Error: ", err);
+						next(new Error("Invalid API Key"));
+					}
+				} else {
+					next();
 				}
-				
-				next();
 			});
 			
 			this.router.options(".*", (req, res) => {
@@ -144,8 +174,14 @@ class APIController extends EventEmitter {
 			// Bind Routes
 			APIv1.initialize(this)
 			.then(() => {
+				APIv1.router.use(this.authorize);
 				this.router.use("/api/sys", APIv1.router);
 				this.router.use("/api/v1", APIv1.router);
+
+				return APIv2.initialize(this);
+			}).then(() => {
+				APIv2.router.use(this.authorize);
+				this.router.use("/api/v2", APIv2.router);
 				
 				return APIui.initialize(this);
 			}).then(() => {
@@ -235,19 +271,16 @@ class APIController extends EventEmitter {
 			.catch(fail);
 		});
 	}
-	
-	/**
-	 * 
-	 * @method authorizeRequest
-	 * @deprecated
-	 * @param {Request} req [description]
-	 * @return {Promise}
-	 */
-	authorizeRequest(req) {
-		return new Promise((done, fail) => {
-			// TODO: handle
-			done();
-		});
+
+	authorize(req, res, next) {
+		// console.log("Authorize: ", req.session?req.session.access:"No Session");
+		if(!req.key_required || (req.session && req.session.apikey) || req.originalUrl === "/api/v1/worlds/list" || req.originalUrl.startsWith("/api/v1/meet/next/")) {
+			next();
+		} else {
+			res.status(401).json({
+				"message": "Unauthorized"
+			});
+		}
 	}
 	
 	/**

@@ -1,3 +1,5 @@
+const Anomaly = require("../../management/anomaly");
+
 /**
  * 
  *
@@ -251,6 +253,8 @@ class PlayerConnection extends EventEmitter {
 	 */
 	send(type, data, source, socket) {
 		var message = {},
+			clean = [],
+			anomaly,
 			x;
 			
 		message.type = type;
@@ -264,8 +268,18 @@ class PlayerConnection extends EventEmitter {
 			this.connection[socket].send(message);
 		} else {
 			for(x=0; x<this.socketIDs.length; x++) {
-				this.connection[this.socketIDs[x]].send(message);
+				try {
+					this.connection[this.socketIDs[x]].send(message);
+				} catch(e) {
+					anomaly = new Anomaly("player:connection:send", "Failed to send message to " + this.id + " on Socket " + this.socketIDs[x], 40, null, e, this);
+					this.universe.emit("warning", anomaly);
+					console.log(anomaly);
+					clean.unshift(x);
+				}
 			}
+		}
+		while(clean.length) {
+			this.socketIDs.splice(clean.shift(), 1);
 		}
 	}
 	

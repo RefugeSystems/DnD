@@ -353,3 +353,16 @@ String.prototype.sha256 = (function() {
 		return hex_sha256(this);
 	};
 })();
+
+/**
+ *
+ * @method capitalize
+ * @return {String}
+ * @for String
+ */
+String.prototype.capitalize = function() {
+	if(this.length) {
+		return this[0].toUpperCase() + this.substring(1);
+	}
+	return this;
+};

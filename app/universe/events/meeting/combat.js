@@ -101,4 +101,111 @@ module.exports.initialize = function(universe) {
 			});
 		}
 	});
+	/**
+	 * 
+	 * @event player:skirmish:add:entities
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.skirmish
+	 * @param {String} event.message.data.entities
+	 */
+	universe.on("player:skirmish:add:entities", function(event) {
+		var entities = event.message.data.entities,
+			skirmish = event.message.data.skirmish,
+			changing = [],
+			entity,
+			i;
+
+		if(typeof(skirmish) === "string") {
+			skirmish = universe.manager.skirmish.object[skirmish];
+		}
+		if(event.player.gm) {
+			if(skirmish && entities && entities.length) {
+				for(i=0; i<entities.length; i++) {
+					entity = entities[i];
+					if(typeof(entity) === "string") {
+						entity = universe.manager.entity.object[entity];
+					}
+					if(entity && !entity.disabled && !entity.is_preview && skirmish.entities.indexOf(entity.id) === -1) {
+						changing.push(entity.id);
+					}
+				}
+				if(changing.length) {
+					skirmish.addValues({
+						"entities": changing
+					});
+				}
+			} else {
+				universe.warnMasters("Missing information[" + event.message.data.skirmish + "]: " + (!!skirmish) + " | " + (entities?entities.length:"false"));
+			}
+		} else {
+			universe.handleError("universe:skirmish", "Non-Gamemaster attempted to modify skirmish entities", null, {
+				"player": event.player.id,
+				"message": event.message
+			});
+		}
+	});
+
+	/**
+	 * 
+	 * @event player:skirmish:remove:entities
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.meeting
+	 * @param {String} event.message.data.entities
+	 */
+	universe.on("player:skirmish:remove:entities", function(event) {
+		var entities = event.message.data.entities,
+			skirmish = event.message.data.skirmish,
+			changing = [],
+			entity,
+			i;
+
+		if(typeof(skirmish) === "string") {
+			skirmish = universe.manager.skirmish.object[skirmish];
+		}
+		if(event.player.gm) {
+			if(skirmish && entities && entities.length) {
+				for(i=0; i<entities.length; i++) {
+					entity = entities[i];
+					if(typeof(entity) === "string") {
+						entity = universe.manager.entity.object[entity];
+					}
+					if(entity) {
+						changing.push(entity.id);
+					} else {
+						changing.push(entities[i]);
+					}
+				}
+				if(changing.length) {
+					skirmish.subValues({
+						"entities": changing
+					});
+				}
+			} else {
+				universe.warnMasters("Missing information: " + (!!skirmish) + " | " + (entities?entities.length:"false"));
+			}
+		} else {
+			universe.handleError("universe:skirmish", "Non-Gamemaster attempted to modify skirmish entities", null, {
+				"player": event.player.id,
+				"message": event.message
+			});
+		}
+	});
 };

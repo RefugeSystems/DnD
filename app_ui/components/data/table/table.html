@@ -1,5 +1,5 @@
 <div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editNoun($event)" v-if="storage.selected" :class="search.flag">
-	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" :search="search" v-on:download="exportCorpus()" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
+	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :profile="profile" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" :search="search" v-on:download="exportCorpus()" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
 	<div class="table-scroll-container">
 		<div class="table-container" v-if="storage">
 			<table class="table-element" :class="storage.classes">

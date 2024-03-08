@@ -174,6 +174,32 @@
 		"type": "gametime",
 		"attribute": {}
 	}, {
+		"id": "the_scene",
+		"name": "The Scene",
+		"description": "Used to describe the opening scene of the object, typically a meeting",
+		"type": "markdown",
+		"order": 50,
+		"attribute": {
+			"display_size": 100
+		}
+	}, {
+		"id": "important",
+		"name": "Important",
+		"description": "Lists elements that are important as reminders. This serves to note elements for the Players and GMs to remember about meetings, persons, places, or things and is meant to be set by the GM explicitly.",
+		"type": "array",
+		"order": 150,
+		"inheritable": [
+			"entity",
+			"knowledge",
+			"item",
+			"location",
+			"dmtask",
+			"quest"
+		],
+		"attribute": {
+			"display_size": 50
+		}
+	}, {
 		"id": "loyal_to",
 		"name": "Loyal To",
 		"description": "Indicates who this entity is loyal to, used for summons and minions and the like",
@@ -3649,7 +3675,18 @@
 		"ordering": 789,
 		"inheritance": null,
 		"inheritable": null,
-		"attribute": {}
+		"attribute": {
+			"max_length": 25
+		}
+	}, {
+		"id": "is_stock_excluded",
+		"name": "Is Restock Excluded",
+		"ordering": 785,
+		"description": "This object is excluded when entities are calculating their restock.",
+		"type": "boolean",
+		"attribute": {
+			"displayed": false
+		}
 	}, {
 		"id": "access",
 		"name": "Access",

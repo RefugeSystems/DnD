@@ -89,7 +89,7 @@ module.exports.initialize = function(universe) {
 					}
 					if(entity && !entity.disabled && !entity.is_preview && meeting.entities.indexOf(entity.id) === -1) {
 						changing.push(entity.id);
-						if(entity.is_minion && entity.parent) {
+						if(entity.is_copy && entity.parent) {
 							add = entity.parent;
 						} else {
 							add = entity.id;

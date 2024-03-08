@@ -28,7 +28,7 @@
 		"id": "meeting",
 		"name": "Meeting",
 		"description": "Stores data for a game meeting",
-		"fields": ["parent", "name", "description", "page", "skirmishes", "time", "time_end", "date", "associations", "players", "absent", "entities", "is_active", "is_preview", "review", "attribute"]
+		"fields": ["parent", "name", "description", "page", "skirmishes", "the_scene", "important", "time", "time_end", "date", "associations", "players", "absent", "entities", "is_active", "is_preview", "review", "attribute"]
 	}, {
 		"id": "category",
 		"name": "Category",
@@ -108,7 +108,7 @@
 		"id": "apikey",
 		"name": "APIKey",
 		"description": "A common path of strong wind that affects sailing and storms.",
-		"fields": ["parent", "name", "icon", "description", "is_preview", "review", "attribute", "is_deletable", "password", "is_active", "is_secure", "start", "end", "access"]
+		"fields": ["parent", "name", "icon", "description", "is_preview", "review", "attribute", "is_deletable", "password", "is_active", "is_secure", "date", "access"]
 	}, {
 		"id": "jetstream",
 		"name": "Jetstream",
@@ -263,7 +263,7 @@
 		"id": "item",
 		"name": "Item",
 		"description": "An item used by entities",
-		"fields": ["parent", "name", "description", "instilled", "cause", "backstory", "character", "concealment", "concealed_ui", "is_deprecated", "is_concealed", "view", "note", "versatile", "versatility", "skill_check", "is_singular", "is_template", "x", "y", "recharges_amount_short", "recharges_amount_long", "recharges_short", "recharges_long", "template_process", "attuned_on", "acquired", "attunement_blocked", "icon", "price", "mobility", "handlers", "response", "god", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "inventory", "gold", "armor", "picture", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "charges_max", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "equip_slots", "skill_advantage", "skill_disadvantage", "duration", "conditionals", "is_preview", "review", "attribute", "is_copy"]
+		"fields": ["parent", "name", "description", "instilled", "cause", "important", "backstory", "character", "concealment", "concealed_ui", "is_deprecated", "is_concealed", "view", "note", "versatile", "versatility", "skill_check", "is_singular", "is_template", "x", "y", "recharges_amount_short", "recharges_amount_long", "recharges_short", "recharges_long", "template_process", "attuned_on", "acquired", "attunement_blocked", "icon", "price", "mobility", "handlers", "response", "god", "obscured", "stat_strength", "stat_dexterity", "stat_constitution", "stat_intelligence", "stat_wisdom", "stat_charisma", "inventory", "gold", "armor", "picture", "spells", "skill_proficiency", "proficiencies", "skills", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "actions", "spell_slot_max", "score", "threat", "cost", "attune_max", "types", "types_accepted", "types_rejected", "dice_type", "charges_none", "needs", "damage", "resistance", "damage_type", "range_minimum", "range_normal", "range_maximum", "ranged", "melee", "thrown", "durability", "size", "weight", "encumberance", "history", "alignment", "proficiency", "spells_maximum", "recharges_on", "cantrips_maximum", "spell_dc", "spell_attack", "stat", "skill", "consume", "consume_hint", "consume_icon", "movement_ground", "movement_swim", "movement_fly", "dc", "user", "attunes", "attuned", "unattunable", "charges", "charges_max", "recharging", "recharges_at_short", "recharges_at_long", "recharges_after", "knowledges", "knowledge_matrix", "enchantments", "equip_slots", "skill_advantage", "skill_disadvantage", "duration", "conditionals", "is_preview", "review", "attribute", "is_copy"]
 	}, {
 		"id": "profession",
 		"name": "Profession",
@@ -323,7 +323,7 @@
 		"id": "location",
 		"name": "Location",
 		"description": "A location in the universe that is of importance. Possibly a point such as a city on a world map, a simple path with lines tracing it, or an area with a defined perimeter and area",
-		"fields": ["parent", "name", "icon", "symbol", "backstory", "concealed", "concealment", "concealed_ui", "is_concealed", "skill_check", "view", "is_default", "base_font_size", "max_font_size", "weather_tabulation", "weather", "coordinates", "mapbg", "rendering_path", "rendering_path_closed", "rendering_has_path", "rendering_has_fill", "rendering_path_thickness", "rendering_fill_color", "rendering_path_color", "map_distance", "handlers", "response", "description", "location", "obscured", "nation", "population", "populace", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "picture", "background", "map", "links_to", "is_preview", "review", "attribute", "conditionals"]
+		"fields": ["parent", "name", "icon", "symbol", "backstory", "important", "concealed", "concealment", "concealed_ui", "is_concealed", "skill_check", "view", "is_default", "base_font_size", "max_font_size", "weather_tabulation", "weather", "coordinates", "mapbg", "rendering_path", "rendering_path_closed", "rendering_has_path", "rendering_has_fill", "rendering_path_thickness", "rendering_fill_color", "rendering_path_color", "map_distance", "handlers", "response", "description", "location", "obscured", "nation", "population", "populace", "x", "y", "effects", "movement_ground", "movement_swim", "movement_fly", "size", "skills", "actions", "skill_advantage", "skill_disadvantage", "ordering", "picture", "background", "map", "links_to", "is_preview", "review", "attribute", "conditionals"]
 	}, {
         "id": "festival",
         "name": "Festival",

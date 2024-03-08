@@ -62,6 +62,12 @@ rsSystem.component("dndEntityName", {
 			} else if(this.leveling) {
 				this.levelUp();
 			}
+		},
+		"displayHat": function() {
+			return this.entity.color_flag && !this.entity.color_flag.startsWith("bordered-");
+		},
+		"getHatColor": function() {
+			return "rs-" + this.entity.color_flag;
 		}
 	},
 	"beforeDestroy": function() {

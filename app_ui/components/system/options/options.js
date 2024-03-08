@@ -206,8 +206,13 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
-					"id": "lock_character",
-					"label": "Lock Character Column",
+					"id": "reset_selections_on_load",
+					"label": "Reset Table Selections on Navigation",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "reset_selections_on_action",
+					"label": "Reset Table Selections on Action",
 					"base": this.profile,
 					"type": "toggle"
 				}, {
@@ -240,6 +245,11 @@ rsSystem.component("systemOptionsDialog", {
 				}, {
 					"id": "skip_turn_prompt",
 					"label": "Skip End of Turn Prompt",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "lock_character",
+					"label": "Lock Character Column",
 					"base": this.profile,
 					"type": "toggle"
 				}, {

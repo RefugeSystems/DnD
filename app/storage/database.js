@@ -1184,14 +1184,16 @@ class ClassManager extends EventEmitter {
 				if(Construction) {
 					for(i=0; i<this.fieldIDs.length; i++) {
 						field = this.fieldUsed[this.fieldIDs[i]];
-						if(field.attribute && field.attribute.hashed && details[field.id]) {
+						if(field && field.attribute && field.attribute.hashed && details[field.id]) {
 							details[field.id] = details[field.id].sha256();
 						}
 					}
 					this.writeObjectData(details, (err) => {
 						if(err) {
 							console.log("Data Write Failed[" + this.id + "]: " + details.id);
-							callback(err, null);
+							if(callback) {
+								callback(err, null);
+							}
 						} else {
 							// console.log("Data Written[" + this.id + "]: " + details.id);
 							object = new Construction(universe, this, details);
@@ -1199,15 +1201,21 @@ class ClassManager extends EventEmitter {
 							object.updated = details.updated;
 							this.object[object.id] = object;
 							this.objectIDs.push(object.id);
-							callback(null, object);
+							if(callback) {
+								callback(null, object);
+							}
 						}
 					});
 				} else {
-					callback(new Error("Failed to locate constructor for Class " + this.id));
+					if(callback) {
+						callback(new Error("Failed to locate constructor for Class " + this.id));
+					}
 				}
 			}
 		} catch(constructionException) {
-			callback(constructionException);
+			if(callback) {
+				callback(constructionException);
+			}
 		}
 	}
 	
@@ -1233,14 +1241,16 @@ class ClassManager extends EventEmitter {
 				if(Construction) {
 					for(i=0; i<this.fieldIDs.length; i++) {
 						field = this.fieldUsed[this.fieldIDs[i]];
-						if(field.attribute && field.attribute.hashed && details[field.id]) {
+						if(field && field.attribute && field.attribute.hashed && details[field.id]) {
 							details[field.id] = details[field.id].sha256();
 						}
 					}
 					this.writeObjectData(details, (err) => {
 						if(err) {
 							console.log("Data Write Failed[" + this.id + "]: " + details.id);
-							callback(err, null);
+							if(callback) {
+								callback(err, null);
+							}
 						} else {
 							// console.log("Data Written[" + this.id + "]: " + details.id);
 							object = new Construction(universe, this, details);
@@ -1248,15 +1258,19 @@ class ClassManager extends EventEmitter {
 							object.updated = details.updated;
 							this.object[object.id] = object;
 							this.objectIDs.push(object.id);
-							callback(null, object);
+							if(callback) {
+								callback(null, object);
+							}
 						}
 					});
-				} else {
+				} else if(callback) {
 					callback(new Error("Failed to locate constructor for Class " + this.id));
 				}
 			}
 		} catch(constructionException) {
-			callback(constructionException);
+			if(callback) {
+				callback(constructionException);
+			}
 		}
 	}
 
@@ -1276,15 +1290,21 @@ class ClassManager extends EventEmitter {
 			}
 			this.database.connection.run("delete from " + this.id + " where id = $id;", {"$id":object.id}, (err) => {
 				if(err) {
-					callback(err);
+					if(callback) {
+						callback(err);
+					}
 				} else {
 					delete this.object[object.id];
 					this.emit("deleted", object.id);
-					callback();
+					if(callback) {
+						callback();
+					}
 				}
 			});
 		} else {
-			callback();			
+			if(callback) {
+				callback();
+			}
 		}
 	}
 	
@@ -1392,7 +1412,9 @@ class ClassManager extends EventEmitter {
 	 */
 	writeObjectData(object, callback) {
 		if(!object || !object.id) {
-			callback(new Error("Unable to write object with no ID: " + JSON.stringify(object)));
+			if(callback) {
+				callback(new Error("Unable to write object with no ID: " + JSON.stringify(object)));
+			}
 		} else {
 			var fields = Object.keys(object),
 				sid = fields.join(),

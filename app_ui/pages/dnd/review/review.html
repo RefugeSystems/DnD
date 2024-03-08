@@ -1,0 +1,91 @@
+<div class="rs-page dnd-page dnd-review flex h">
+	<div class="panels-main flex v">
+		<h1 class="review-heading">{{meeting.name}}</h1>
+		<section class="panel" id="scene">
+			<h1>The Scene...</h1>
+			<div class="contents" v-html="rsshowdown(meeting.the_scene)"></div>
+		</section>
+		<section class="panel" id="last">
+			<h1>Last Time...</h1>
+			<div class="contents" v-if="last" v-html="rsshowdown(last.description)"></div>
+			<div class="contents" v-else>
+				<p>There was no previous meeting.</p>
+			</div>
+		</section>
+		<section class="panel" id="updates">
+			<h1>System Updates</h1>
+			<div class="contents" v-if="updates.length === 0">
+				<p>There are no system updates to note for this meeting.</p>
+			</div>
+			<div class="contents" v-else>
+				<div class="code-update flex v" v-for="task in updates">
+					<div class="code-update-title flex h v-center">
+						<button class="general quick rounded action" v-on:click="info(task)">
+							<span class="iconography" :class="task.icon || 'fa-solid fa-code'"></span>
+						</button>
+						<h2>{{task.name}}</h2>
+					</div>
+					<div class="code-update-description" v-html="rsshowdown(task.description)"></div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="panels-sub flex v">
+		<section class="panel" id="status">
+			<div class="property-container date flex h v-center">
+				<button class="action general rounded" v-on:click="openCalendar(meeting.time)">
+					<span class="iconography fa-solid fa-calendar"></span>
+					<span>{{displayDate(universe.time, {})}}</span>
+				</button>
+			</div>
+			<div class="property-container date flex h v-center">
+				<button class="action general rounded" v-if="weather" v-on:click="info(weather)">
+					<span class="iconography" :class="weather.icon"></span>
+					<span>{{weather.name}}</span>
+				</button>
+				<button class="action general rounded" v-else>
+					<span class="iconography fa-solid fa-cloud-xmark"></span>
+					<span>No Weather</span>
+				</button>
+			</div>
+			<div class="property-container date flex h v-center">
+				<button class="action general rounded" v-if="location && !location.obscured && !location.is_obscured" v-on:click="info(location)">
+					<span class="iconography" :class="location.icon || 'fa-solid fa-location-dot'"></span>
+					<span>{{location.name}}</span>
+				</button>
+				<button class="action general rounded" v-else>
+					<span class="iconography fa-solid fa-location-dot-slash"></span>
+					<span>Unknown Location</span>
+				</button>
+			</div>
+		</section>
+		<section class="panel" id="quests">
+			<h1>Current Quests</h1>
+			<div class="contents" v-if="quests.length === 0">
+				<p>There are no active quests to note for this meeting.</p>
+			</div>
+			<div class="contents" v-else>
+				<div class="entry flex h v-center" v-for="quest in quests">
+					<button class="general quick rounded action" v-on:click="info(quest)">
+						<span class="iconography" :class="quest.icon || 'fa-regular fa-rectangle-history-circle-user'"></span>
+					</button>
+					<span>{{quest.name}}</span>
+				</div>
+			</div>
+		</section>
+		<section class="panel" id="reminders">
+			<h1>Important to Remember</h1>
+			<div class="contents" v-if="reminders.length === 0">
+				<p>There are no reminders for this meeting.</p>
+			</div>
+			<div class="contents" v-else>
+				<div class="entry flex h v-center" v-for="reminder in reminders">
+					<button class="general quick rounded action" v-on:click="info(reminder)">
+						<span class="iconography" :class="reminder.icon"></span>
+					</button>
+					<span>{{reminder.name}}</span>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

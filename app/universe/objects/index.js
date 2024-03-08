@@ -343,60 +343,74 @@ module.exports = function(universe) {
 			x;
 			
 		// console.log("Tracking: " + consumer.id);
-		for(x=0; x<sources.length; x++) {
-			classification = universe.getClassFromID(sources[x]);
-			// console.log(" > Inherit: ", classification);
-			if(classification && manager[classification]) {
-				// console.log(" > Inherit[Manager]");
-				if(sources[x] !== consumer.id) {
-					loading = trace[sources[x]];
-					
-					if(!loading) {
-						loading = trace[sources[x]] = {"_list":[]};
-					}
-					if(loading[consumer.id]) {
-						loading[consumer.id]++;
-					} else {
-						loading._list.push(consumer.id);
-						loading[consumer.id] = 1;
-					}
+		if(sources instanceof Array) {
+			for(x=0; x<sources.length; x++) {
+				classification = universe.getClassFromID(sources[x]);
+				// console.log(" > Inherit: ", classification);
+				if(classification && manager[classification]) {
+					// console.log(" > Inherit[Manager]");
+					if(sources[x] !== consumer.id) {
+						loading = trace[sources[x]];
 						
-					// console.log(" > Inherit[Object]? ", sources[x], "\n   > Loading: ", loading, "\n   > Trace: ", trace);
-					// Ensure the consumed objects are loaded
-					if(manager[classification].object[sources[x]] === false) {
-						// Exists but not loaded
-						if(loading) {
-							loading.push(manager[classification].load(universe, sources[x]));
+						if(!loading) {
+							loading = trace[sources[x]] = {"_list":[]};
+						}
+						if(loading[consumer.id]) {
+							loading[consumer.id]++;
 						} else {
+							loading._list.push(consumer.id);
+							loading[consumer.id] = 1;
+						}
+							
+						// console.log(" > Inherit[Object]? ", sources[x], "\n   > Loading: ", loading, "\n   > Trace: ", trace);
+						// Ensure the consumed objects are loaded
+						if(manager[classification].object[sources[x]] === false) {
+							// Exists but not loaded
+							if(loading) {
+								loading.push(manager[classification].load(universe, sources[x]));
+							} else {
+								details = {};
+								details.classification = classification;
+								details.consumer = consumer;
+								details.sources = sources;
+								details.id = sources[x];
+								universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 20, details, null, "universe:objects"));
+							}
+						} else if(manager[classification].object[sources[x]] === undefined) {
+							// Doesn't exist
 							details = {};
 							details.classification = classification;
 							details.consumer = consumer;
 							details.sources = sources;
-							details.id = sources[x];
-							universe.emit("error", new universe.Anomaly("universe:trace:depend", "Object not loaded", 20, details, null, "universe:objects"));
+							details.value = sources[x];
+							universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 20, details, null, "universe:objects"));
+						}  else {
+							// Already loaded
 						}
-					} else if(manager[classification].object[sources[x]] === undefined) {
-						// Doesn't exist
-						details = {};
-						details.classification = classification;
-						details.consumer = consumer;
-						details.sources = sources;
-						details.value = sources[x];
-						universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such object", 20, details, null, "universe:objects"));
-					}  else {
-						// Already loaded
+					} else {
+						// console.log("Self Dependence Skipped");
 					}
 				} else {
-					// console.log("Self Dependence Skipped");
+					details = {};
+					details.classification = classification;
+					details.consumer = consumer;
+					details.sources = sources;
+					details.value = sources[x];
+					universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 20, details, null, "universe:objects"));
+					// console.trace("what2?");
 				}
+			}
+		} else if(sources) {
+			loading = trace[sources];
+			
+			if(!loading) {
+				loading = trace[sources] = {"_list":[]};
+			}
+			if(loading[consumer.id]) {
+				loading[consumer.id]++;
 			} else {
-				details = {};
-				details.classification = classification;
-				details.consumer = consumer;
-				details.sources = sources;
-				details.value = sources[x];
-				universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 20, details, null, "universe:objects"));
-				// console.trace("what2?");
+				loading._list.push(consumer.id);
+				loading[consumer.id] = 1;
 			}
 		}
 		
@@ -601,7 +615,7 @@ module.exports = function(universe) {
 	 */
 	var trackCalculations = function(changing) {
 		setTimeout(function() {
-			if(true || changing.debug) {
+			if(changing.debug) {
 				console.log(" - Recalculate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index++]);
 			}
 			var cascade = handler.retrieve(changing.queue[changing.index++]);
@@ -665,41 +679,52 @@ module.exports = function(universe) {
 	 * @param {Object} changing Used for trackign what objects have
 	 * 		been changed as a crude loop prevention
 	 */
-	var trackUpdates = function(changing) {
-		setTimeout(function() {
-			var cascade = handler.retrieve(changing.queue[changing.index++]),
-				timing;
+	var trackUpdates = function(changeProcessing) {
+		var cascade = handler.retrieve(changeProcessing.queue[changeProcessing.index++]);
 
-			if(true || changing.debug) {
-				if(universe.configuration.server.startup_time) {
-					timing = " - " + (Date.now() - universe.configuration.server.ready_mark) + "ms";
-				} else {
-					timing = " - [" + (Date.now() - universe.configuration.server.initialize_mark) + "ms]";
-				}
-				if(universe.configuration.universe.debug || universe.configuration.universe.debug_traces) {
-					console.log(" - Reupdate Trace[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: " + changing.queue[changing.index] + timing);
-				}
+		if(cascade && !changeProcessing.origins[cascade.id]) {
+			cascade.linkFieldValues(false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+			cascade.calculateFieldValues(changeProcessing.origins, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+			cascade.updateFieldValues(changeProcessing.origins, false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+			changeProcessing.origins[cascade.id] = Date.now();
+		}
+		
+		if(changeProcessing.index < changeProcessing.queue.length) {
+			trackUpdates(changeProcessing);
+		} else {
+			changeProcessing.duration = Date.now() - changeProcessing.start;
+			if(changeProcessing.debug) {
+				console.log(" √ Reupdate Complete[" + changeProcessing.origin + "@" + changeProcessing.index + "/" + changeProcessing.queue.length + "]: ", changeProcessing);
 			}
+			universe.emit("cascaded", changeProcessing);
+		}
+	};
 
-			if(cascade && !changing.origins[cascade.id]) {
-				// cascade.updateFieldValues();
-				// cascade.recalculateFieldValues();
-				cascade.linkFieldValues(false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
-				cascade.calculateFieldValues(changing.origins, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
-				cascade.updateFieldValues(changing.origins, false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
-				if(changing.index < changing.queue.length) {
-					trackUpdates(changing);
-				} else {
-					changing.duration = Date.now() - changing.start;
-					if(changing.debug) {
-						console.log(" √ Reupdate Complete[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: ", changing);
-					}
-					universe.emit("cascaded", changing);
-				}
-			} else if(changing.debug) {
-				console.log(" ! Reupdate Error[" + changing.origin + "@" + changing.index + "/" + changing.queue.length + "]: Cascade Target not found");
+	var _trackUpdates = function(changing) {
+		changeProcessing = changing;
+		setTimeout(processChange, 0);
+	};
+
+	var changeProcessing = null; // Declared for awareneess
+	var processChange = function() {
+		var cascade = handler.retrieve(changeProcessing.queue[changeProcessing.index++]);
+
+		if(cascade && !changeProcessing.origins[cascade.id]) {
+			cascade.linkFieldValues(false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+			cascade.calculateFieldValues(changeProcessing.origins, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+			cascade.updateFieldValues(changeProcessing.origins, false, universe.configuration.universe.debug || universe.configuration.universe.debug_cascades);
+			changeProcessing.origins[cascade.id] = Date.now();
+		}
+		
+		if(changeProcessing.index < changeProcessing.queue.length) {
+			trackUpdates(changeProcessing);
+		} else {
+			changeProcessing.duration = Date.now() - changeProcessing.start;
+			if(changeProcessing.debug) {
+				console.log(" √ Reupdate Complete[" + changeProcessing.origin + "@" + changeProcessing.index + "/" + changeProcessing.queue.length + "]: ", changeProcessing);
 			}
-		}, 0);
+			universe.emit("cascaded", changeProcessing);
+		}
 	};
 	
 	return this;
