@@ -116,6 +116,17 @@ rsSystem.component("DNDReview", {
 	"mounted": function() {
 		rsSystem.register(this);
 		this.universe.$on("updated", this.checkUpdate);
+		this.$el.onclick = (event) => {
+			var follow = event.srcElement.attributes.getNamedItem("data-id");
+			if(follow && (follow = this.universe.getObject(follow.value))) {
+				rsSystem.EventBus.$emit("display-info", {
+					"info": follow.id,
+					"view": this.view
+				});
+				event.stopPropagation();
+				event.preventDefault();
+			}
+		};
 	},
 	"methods": {
 		/**
