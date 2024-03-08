@@ -278,9 +278,11 @@ class PlayerConnection extends EventEmitter {
 				}
 			}
 		}
+		/* Skipping clean as this seems to be causing issues, likely with a dual drop
 		while(clean.length) {
 			this.socketIDs.splice(clean.shift(), 1);
 		}
+		*/
 	}
 	
 	/**
