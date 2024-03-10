@@ -3622,11 +3622,31 @@
 			"display_size": 110
 		}
 	}, {
+		"id": "stock_rarity_min",
+		"name": "Stock Minimum Rarity",
+		"description": "Maps a type to a numeric calculation to detemine the minimum rarity to stock. If this maps to a value of 5, that is the minimum. If this is 0, there is no minimum.",
+		"type": "object:dice",
+		"ordering": 783,
+		"attribute": {
+			"inherited_key": "type",
+			"display_size": 110
+		}
+	}, {
+		"id": "stock_rarity_max",
+		"name": "Stock Maximum Rarity",
+		"description": "Maps a type to a numeric calculation to detemine the inclusive maximum rarity to stock. If this maps to a value of 5, that is the maximum. If this is 0, there is no maximum. If min and max are omitted, the rarity is not considered.",
+		"type": "object:dice",
+		"ordering": 784,
+		"attribute": {
+			"inherited_key": "type",
+			"display_size": 110
+		}
+	}, {
 		"id": "stock_periodically",
 		"name": "Stocks Periodically",
 		"description": "Defines the period over which this object should automatically restock, if any",
 		"type": "calculated",
-		"ordering": 783,
+		"ordering": 786,
 		"attribute": {
 			"display_size": 110
 		}
@@ -3635,7 +3655,7 @@
 		"name": "Last Stock",
 		"description": "When this object was last stocked by the restock process.",
 		"type": "gametime",
-		"ordering": 784,
+		"ordering": 787,
 		"attribute": {
 			"displayed": false
 		}
@@ -3644,7 +3664,7 @@
 		"name": "Stocks Persist",
 		"description": "Controls what should remain when restocking. This is primarily for retaining any placed Uniques so that the DM can manage moving them with story.",
 		"type": "boolean",
-		"ordering": 785,
+		"ordering": 788,
 		"attribute": {
 			"displayed": false
 		}
@@ -3653,7 +3673,7 @@
 		"name": "Stocks Templates",
 		"description": "This object stocks template based items. This is primarily used in the restock process.",
 		"type": "boolean",
-		"ordering": 786,
+		"ordering": 788,
 		"attribute": {
 			"displayed": false
 		}
@@ -3661,7 +3681,7 @@
 		"id": "stocks_unique",
 		"name": "Stocks Unique",
 		"description": "This object stocks unique items. This is primarily used in the restock process.",
-		"ordering": 787,
+		"ordering": 788,
 		"type": "boolean",
 		"attribute": {
 			"displayed": false

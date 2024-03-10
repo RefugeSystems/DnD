@@ -15,6 +15,7 @@ module.exports.initialize = function(universe) {
 			source,
 			audio,
 			load,
+			sets,
 			set,
 			f,
 			i;
@@ -28,10 +29,11 @@ module.exports.initialize = function(universe) {
 
 		applyFormIfApplicable = function(target) {
 			if(target.caster === source.id && event.message.data.form) {
+				sets = spell?spell.form_sets || spell.form_set:null;
 				set = {};
-				if(spell.form_set && spell.form_set.length) {
-					for(i=0; i<spell.form_set.length; i++) {
-						f = spell.form_set[i];
+				if(sets && sets.length) {
+					for(i=0; i<sets.length; i++) {
+						f = sets[i];
 						set[f] = event.message.data.form[f];
 					}
 				} else {

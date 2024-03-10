@@ -166,7 +166,7 @@
 				{{totalLength}}
 			</div>
 			<div class="measuring-total length" v-if="totalLength">
-				<input type="number" v-model.number="storage.speed" v-on:keyup="calculateTime(totalLength, storage.speed)" placeholder="Move speed per round"/>
+				<input type="number" v-model.number="storage.speed" v-on:keyup="calculateTime(total_length, storage.speed)" placeholder="Move speed per round"/>
 			</div>
 			<div class="measuring-total length" v-if="totalTime">
 				{{totalTime}}

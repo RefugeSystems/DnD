@@ -68,6 +68,7 @@ rsSystem.component("rsCalendarDialog", {
 		 * @type Object
 		 */
 		data.eventReference = {};
+		data.festivalReference = {};
 
 		data.view = 2;
 		data.reference = {

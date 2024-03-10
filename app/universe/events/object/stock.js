@@ -5,6 +5,79 @@ module.exports.initialize = function(universe) {
 	var maxScan = 100;
 
 	/**
+	 * Delete all copies of an item from a shop's inventory
+	 * @event player:stock:clear
+	 * @for Universe
+	 * @param {Object} event With data from the system
+	 * @param {String} event.type The event name being fired, should match this event's name
+	 * @param {Integer} event.received Timestamp of when the server received the event
+	 * @param {Integer} event.sent Timestamp of when the UI sent the event (By the User's time)
+	 * @param {RSObject} event.player That triggered the event
+	 * @param {Object} event.message The payload from the UI
+	 * @param {Object} event.message.type Original event type indicated by the UI; Should be "error:report"
+	 * @param {Object} event.message.sent The timestamp at which the event was sent by the UI (By the User's time)
+	 * @param {Object} event.message.data Typical location of data from the UI
+	 * @param {String} event.message.data.id Of the shop to stock
+	 * @param {Object} [event.message.data.seed] Any optional leading data to apply to the matched type or rarity for
+	 * 		restocking the shop
+	 * @param {String} [event.message.data.seed.type:potion] Example of seeding the Potion type to be stocked with a
+	 * 		specific count or formula (ie. '8', '4 + location.level', or '2d4')
+	 */
+	universe.on("player:stock:clear", function(event) {
+		// console.log("Restocking Shop: ", event.message.data.id);
+		var shop = universe.get(event.message.data.id),
+			manager = universe.manager.item,
+			limits = {},
+			item,
+			i;
+		
+		if(shop) {
+			if(event.player.gm) {
+				// Not Persisting: Loop over current inventory and delete copies then clear inventory
+				for(i=0; i<shop.inventory.length; i++) {
+					item = manager.object[shop.inventory[i]];
+					if(item && item.is_copy) {
+						manager.delete(item);
+					}
+				}
+
+				shop.setValues({
+					"inventory": [],
+					"stocked_last": universe.time,
+				});
+				
+				universe.chronicle.addOccurrence("shop:clear", {"source": shop.id, "limits": limits}, universe.time, shop.id);
+				universe.emit("send", {
+					"type": "notice",
+					"mid": "universe:success",
+					"recipients": universe.getMasters(),
+					"message": "Shop Stock Cleared: " + shop.name,
+					"icon": "fas fa-check rs-lightgreen",
+					"anchored": true
+				});
+			} else {
+				universe.emit("send", {
+					"type": "notice",
+					"mid": "universe:error",
+					"recipients": universe.getMasters(),
+					"message": "Access error: Non Game-Master Player attempted to clear a shop",
+					"icon": "fas fa-exclamation-triangle rs-lightred",
+					"anchored": true
+				});
+			}
+		} else {
+			universe.emit("send", {
+				"type": "notice",
+				"mid": "universe:error",
+				"recipients": universe.getMasters(),
+				"message": "Unable to find shop to clear: " + event.message.data.id,
+				"icon": "fas fa-exclamation-triangle rs-lightred",
+				"anchored": true
+			});
+		}
+	});
+
+	/**
 	 * 
 	 * @event player:stock:shop
 	 * @for Universe

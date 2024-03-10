@@ -549,9 +549,14 @@
 			this.update();
 		},
 		"methods": {
-			"calculateTime": function(speed) {
-				speed /= 6; // Down to seconds
-				Vue.set(this, "totalTime", this.universe.calendar.displayDuration(this.totalLength/speed));
+			"calculateTime": function(length, speed) {
+				console.log("Claculate Time: " + length + " studs | " +  speed + " studs/round");
+				if(speed) {
+					speed /= 6; // Down to seconds
+					Vue.set(this, "totalTime", this.universe.calendar.displayDuration(length/speed));
+				} else {
+					Vue.set(this, "totalTime", 0);
+				}
 			},
 			"getMarkerSize": function() {
 				return Math.min(this.baseFontSize + this.image.zoom, this.location.max_font_size || 50);

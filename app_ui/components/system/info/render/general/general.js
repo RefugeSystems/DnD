@@ -328,6 +328,14 @@ rsSystem.component("sysInfoGeneral", {
 									"action": "restock"
 								});
 							}
+							if(this.info.inventory && this.info.inventory.length && this.info.is_shop) {
+								this.controls.push({
+									"title": "Clear this shop's stock",
+									"icon": "fa-solid fa-warehouse",
+									"type": "button",
+									"action": "clearstock"
+								});
+							}
 							// if(this.info.must_know && this.info.is_position_hidden !== undefined && this.info.is_position_hidden !== null) {
 							if(this.info.is_position_hidden) {
 								this.controls.push({
@@ -1337,6 +1345,11 @@ rsSystem.component("sysInfoGeneral", {
 					buffer = {};
 					buffer.id = this.info.id;
 					this.universe.send("stock:shop", buffer);
+					break;
+				case "clearstock":
+					buffer = {};
+					buffer.id = this.info.id;
+					this.universe.send("stock:clear", buffer);
 					break;
 				case "partyentities":
 					if(this.activeMeeting) {
