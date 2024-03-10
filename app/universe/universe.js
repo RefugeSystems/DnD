@@ -506,14 +506,16 @@ class Universe extends EventEmitter {
 		var responder,
 			i;
 		
-		for(i=0; i<this.manager.responder.objectIDs.length; i++) {
-			responder = this.manager.responder.object[this.manager.responder.objectIDs[i]];
-			if(responder && !responder.is_preview && responder.is_active) {
-				try {
-					responder.processor(null, event, this, this.utility);
-					// responder.processor(data);
-				} catch(error) {
-					console.log("Error handling responder[" + responder.id + "]: ", error);
+		if(this.manager.responder) {
+			for(i=0; i<this.manager.responder.objectIDs.length; i++) {
+				responder = this.manager.responder.object[this.manager.responder.objectIDs[i]];
+				if(responder && !responder.is_preview && responder.is_active) {
+					try {
+						responder.processor(null, event, this, this.utility);
+						// responder.processor(data);
+					} catch(error) {
+						console.log("Error handling responder[" + responder.id + "]: ", error);
+					}
 				}
 			}
 		}
