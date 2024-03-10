@@ -3314,6 +3314,14 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "processed",
+		"name": "processed",
+		"description": "Maps an Occurrence to a boolean to indicate if it has been processed.",
+		"type": "object",
+		"attribute": {
+			"inherited_key": "occurrence"
+		}
+	}, {
 		"id": "activities",
 		"name": "Activities",
 		"description": "Activities associated with this object.",

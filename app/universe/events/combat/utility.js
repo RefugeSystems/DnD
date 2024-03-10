@@ -227,6 +227,7 @@ module.exports.initialize = function(universe) {
 							adding = [];
 							for(i=0; i<effects.length; i++) {
 								effect = effects[i];
+								console.log("Check Effect: " + effect.name + "\n > Parent: " + effect.id + "\n > Caster: " + effect.caster + "\n > Target: " + effect.character + "\n > Expiration: " + effect.expiration);
 								if(effect.expiration) {
 									universe.trackExpiration(effect, tracked.target.id, "effects");
 								}
@@ -237,6 +238,7 @@ module.exports.initialize = function(universe) {
 							});
 						})
 						.catch(function(err) {
+							console.log("Damage Err: ", err);
 							universe.generalError("damage:taken", null, "Error while instilling channel effects", {
 								"activity": activity,
 								"log": log
@@ -386,6 +388,7 @@ module.exports.initialize = function(universe) {
 					mask = Object.assign({}, castMask);
 					mask.character = tracked.target.id;
 					mask.expiration = universe.time + buffer.duration;
+					console.log("Check Effect: " + (mask.name || mask.id) + "\n > Parent: " + buffer.id + "\n > Caster: " + mask.caster + "\n > Target: " + mask.character + "\n > Expiration: " + mask.expiration);
 					if(buffer && ((buffer.damage_required && was_damaged && buffer.hit_required && succeeded === false)
 							|| (buffer.damage_required && was_damaged && !buffer.hit_required)
 							|| (!buffer.damage_required && buffer.hit_required && succeeded === false)
@@ -456,8 +459,10 @@ module.exports.initialize = function(universe) {
 			universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received");
 			return false;
 		}
-		var keys = Object.keys(damage),
-			conscious = 0 <= entity.hp,
+		var skirmish = universe.getActiveSkirmish(),
+			meeting = universe.getCurrentMeeting(),
+			keys = Object.keys(damage),
+			conscious = 0 < entity.hp,
 			start_hp = entity.hp,
 			was_damaged = false,
 			event = {},
@@ -465,7 +470,6 @@ module.exports.initialize = function(universe) {
 			received,
 			add = {},
 			temp_cap,
-			meeting,
 			i;
 
 		add.hp_temp = 0;
@@ -530,26 +534,22 @@ module.exports.initialize = function(universe) {
 
 		if(add.hp > 0 && (entity.death_fail || entity.death_save)) {
 			entity.fireHandlers("entity:consciousness:gained", {});
+			universe.emit("entity:consciousness:gained", {
+				"source": entity
+			});
 			entity.setValues({
 				"death_fail": 0,
 				"death_save": 0
 			}); // TODO: Link with general error tracking for callback in universe, but if this fails, the latter ops will fail, so tracking there for now
-			if(entity.is_npc) {
-				entity.subValues({
-					"types": "type:dead"
-				});
-				entity.setValues({
-					"is_chest": false
-				});
-			}
 		}
 
 		// console.log("Damage Set");
 		entity.addValues(add, function(err) {
 			if(err) {
+				console.log("Resolving Err: ", err);
 				universe.generalError("damage:taken", err, "Issue setting HP: " + err.message);
 			} else {
-				// console.log("Damage Handler Fire");
+				console.log("Damage Handler Fire");
 				if(conscious && entity.hp === 0) {
 					if(entity.transform_character) {
 						universe.notifyMasters(entity.name + " has lost lost their transformation");
@@ -559,19 +559,34 @@ module.exports.initialize = function(universe) {
 					entity.fireHandlers("entity:consciousness:lost", {});
 					if(entity.is_npc) {
 						entity.addValues({
-							"types": "type:dead"
+							"types": ["type:dead"]
 						});
 						entity.setValues({
 							"is_chest": true
 						});
-						meeting.addValues({
-							"killed": [entity.id]
-						});
+						if(meeting) {
+							meeting.addValues({
+								"killed": [entity.id]
+							});
+						}
 					}
-				} else if(!conscious && entity.hp !== 0) {
+				} else if(!conscious && entity.hp > 0) {
 					universe.notifyMasters(entity.name + " has gained consciousness");
 					entity.fireHandlers("entity:consciousness:gain", {});
+					universe.emit("entity:consciousness:gained", {
+						"source": entity
+					});
+					if(entity.is_npc) {
+						entity.subValues({
+							"effects": ["effect:condition:prone"],
+							"types": ["type:dead"]
+						});
+						entity.setValues({
+							"is_chest": false
+						});
+					}
 				}
+				universe.emit("entity:damaged", event);
 				entity.fireHandlers("entity:damaged", event);
 
 				if(entity.hp <= 0 && entity.transform_character && (transform = universe.get(entity.transform_character))) {
@@ -584,11 +599,17 @@ module.exports.initialize = function(universe) {
 							} else {
 								if(conscious && transform.hp === 0) {
 									transform.fireHandlers("entity:consciousness:lost", {});
+									universe.emit("entity:consciousness:lost", {
+										"source": transform
+									});
 								} else if(!conscious && entity.hp !== 0) {
 									transform.fireHandlers("entity:consciousness:gain", {});
+									universe.emit("entity:consciousness:gained", {
+										"source": transform
+									});
 								}
 								// TODO: Transformation resolution needs centralized
-								if(meeting = universe.getActiveMeeting()) {
+								if(meeting) {
 									if(meeting.entities.indexOf(entity.transform_character) === -1) {
 										meeting.addValues({
 											"entities": [entity.transform_character]
@@ -598,18 +619,18 @@ module.exports.initialize = function(universe) {
 										"entities": [transform.id]
 									});
 								}
-								if(meeting = universe.getActiveSkirmish()) {
-									if(meeting.combat_turn === entity.id) {
-										meeting.setValues({
+								if(skirmish) {
+									if(skirmish.combat_turn === entity.id) {
+										skirmish.setValues({
 											"combat_turn": entity.transform_character
 										});
 									}
-									if(meeting.entities.indexOf(entity.transform_character) === -1) {
-										meeting.addValues({
+									if(skirmish.entities.indexOf(entity.transform_character) === -1) {
+										skirmish.addValues({
 											"entities": [entity.transform_character]
 										});
 									}
-									meeting.subValues({
+									skirmish.subValues({
 										"entities": [entity.id]
 									});
 								}

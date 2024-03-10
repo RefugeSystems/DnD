@@ -202,6 +202,8 @@ class RSSearch {
 										case "calculated":
 										case "integer":
 										case "number":
+										case "date":
+										case "time":
 											if(!lowered[field.id]) {
 												lowered[field.id] = (object[field.id]).toString();
 											}
@@ -240,6 +242,7 @@ class RSSearch {
 											break;
 										case "markdown":
 										case "string":
+										case "icon":
 											if(!lowered[field.id]) {
 												lowered[field.id] = object[field.id].toLowerCase();
 											}
@@ -265,6 +268,8 @@ class RSSearch {
 												return true;
 											}
 											break;
+										case "object:calculated":
+										case "object:dice":
 										case "object":
 											res = JSON.stringify(object[field.id]).toLowerCase().indexOf(term);
 											if(res === -1 && this.and) {
@@ -292,6 +297,30 @@ class RSSearch {
 												this.flag = "unsearchable";
 											}
 											*/
+											break;
+										case "array":
+											if(object[field.id] instanceof Array) {
+												res = object[field.id].indexOf(term);
+												if(res === -1) {
+													for(k=0; k<object[field.id].length && res === -1; k++) {
+														if(typeof(object[field.id][k]) === "string") {
+															res = object[field.id][k].toLowerCase().indexOf(term);
+														}
+													}
+												}
+												if(res === -1 && this.and) {
+													return false;
+												} else if(res !== -1 && !this.and) {
+													return true;
+												}
+											} else {
+												res = JSON.stringify(object[field.id]).toLowerCase().indexOf(term);
+												if(res === -1 && this.and) {
+													return false;
+												} else if(res !== -1 && !this.and) {
+													return true;
+												}
+											}
 											break;
 										default:
 											if(this.and && object[field.id] != term) {

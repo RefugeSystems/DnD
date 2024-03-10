@@ -17,8 +17,13 @@
 	}, {
 		"id": "handler",
 		"name": "Handler",
-		"description": "Definition to handle an occurrence of an event or other action within the universe",
+		"description": "Definition to handle an occurrence of an event or other action within the universe on an object to object basis with client side options",
 		"fields": ["parent", "name", "icon", "category", "description", "event_universe", "occurrences", "processor", "is_preview", "review", "attribute"]
+	}, {
+		"id": "responder",
+		"name": "Responder",
+		"description": "Definition to handle an occurrence of an event or other action directly from the universe and only server side",
+		"fields": ["parent", "name", "icon", "category", "description", "processed", "processor", "is_preview", "review", "attribute"]
 	}, {
 		"id": "occurrence",
 		"name": "Occurrence",

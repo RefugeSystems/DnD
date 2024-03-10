@@ -6,7 +6,14 @@
 			</button>
 			<button class="property" v-else-if="entity.is_shop && !entity.is_locked" v-on:click="shop()">
 				<span v-if="entity.discount.all !== 1" class="fas fa-shopping-cart"></span>
-				<span v-if="entity.discount.all === 1" :class="entity.icon || 'fas fa-treasure-chest'"></span>
+				<span v-if="entity.discount.all === 1" class="fas fa-treasure-chest"></span>
+			</button>
+			<button class="property" v-else-if="entity.is_shop && !entity.is_locked && !entity.is_chest" v-on:click="shop()">
+				<span v-if="entity.discount.all !== 1" class="fas fa-shopping-cart"></span>
+				<span v-if="entity.discount.all === 1" class="fas fa-treasure-chest"></span>
+			</button>
+			<button class="property" v-else-if="!entity.is_shop && !entity.is_locked && entity.is_chest" v-on:click="shop()">
+				<span class="fa-regular fa-treasure-chest"></span>
 			</button>
 			<button class="property" v-else-if="entity.is_locked === false" v-on:click="info('knowledge:locked')">
 				<span class="fas fa-unlock-alt"></span>

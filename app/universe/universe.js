@@ -159,6 +159,8 @@ class Universe extends EventEmitter {
 				}
 			}, 1000);
 		});
+
+		this._emit = this.emit;
 	}
 
 	/**
@@ -499,6 +501,26 @@ class Universe extends EventEmitter {
 		});
 	}
 
+	// Overrides the EventEmitter emit to handle the 
+	emit(event, data) {
+		var responder,
+			i;
+		
+		for(i=0; i<this.manager.responder.objectIDs.length; i++) {
+			responder = this.manager.responder.object[this.manager.responder.objectIDs[i]];
+			if(responder && !responder.is_preview && responder.is_active) {
+				try {
+					responder.processor(null, event, this, this.utility);
+					// responder.processor(data);
+				} catch(error) {
+					console.log("Error handling responder[" + responder.id + "]: ", error);
+				}
+			}
+		}
+
+		super.emit(event, data);
+	}
+
 	/**
 	 * 
 	 * @param {Object} attributes 
@@ -635,7 +657,10 @@ class Universe extends EventEmitter {
 	 * @returns {String} Meeting ID for the current meeting.
 	 */
 	getCurrentMeeting() {
-		return this.manager.setting.object["setting:meeting"].value;
+		if(!this.manager.setting.object["setting:meeting"]) {
+			return undefined;
+		}
+		return this.manager.meeting.object[this.manager.setting.object["setting:meeting"].value];
 	}
 
 	/**
@@ -691,7 +716,6 @@ class Universe extends EventEmitter {
 	copy(source, mask, callback) {
 		var details = {},
 			waiting = [],
-			mask = {},
 			generator,
 			dataset,
 			loading,
@@ -714,6 +738,11 @@ class Universe extends EventEmitter {
 			mask = {};
 		}
 
+		details.id = id + ":" + Random.string(32).toLowerCase();
+		console.log("Mask: ", mask);
+		Object.assign(details, mask);
+		console.log("Res: ", details);
+
 		if(source) {
 			manager = this.manager[source._class];
 			if(source.is_singular) {
@@ -721,11 +750,9 @@ class Universe extends EventEmitter {
 					callback(null, source);
 				}
 			} else {
-				details.id = id + ":" + Random.string(32).toLowerCase();
-				mask.character = details.id;
-				mask.user = details.id;
+				// mask.character = details.id; // What was being smoked here???
+				// mask.user = details.id;
 				if(source.is_template) {
-					Object.assign(details, mask);
 					if(source.template_process) {
 						// TODO: Handle Template Processing
 						tfields = Object.keys(source.template_process);
@@ -816,6 +843,7 @@ class Universe extends EventEmitter {
 					if(source.mp_max) {
 						details.mp = source.mp_max;
 					}
+					console.log("Copying details: ", details);
 					this.createObject(details, callback);
 				};
 

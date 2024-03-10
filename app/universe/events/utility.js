@@ -130,23 +130,40 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 		mask.cause_level = channel.level;
 		mask.cause = channel.id;
 	}
+	console.log("Instilling: " + JSON.stringify(mask, null, 4));
 
+	/*
 	for(i=0; i<effects.length; i++) {
 		effect = effects[i];
 		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.is_hit_required || hit) && (!effect.damage_required || damaged) && (!effect.is_damage_required || damaged) && (!effect.is_fail_required || !saved)) {
 			duration = channel.duration || effect.duration;
 			if(duration) {
 				mask.expiration = universe.time + duration;
+			} else {
+				delete(mask.expiration);
 			}
 			waiting.push(universe.copyPromise(effect, mask));
 		}
 	}
+	/* */
+	effects.forEach((effect) => {
+		var masking = Object.assign({}, mask);
+		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.is_hit_required || hit) && (!effect.damage_required || damaged) && (!effect.is_damage_required || damaged) && (!effect.is_fail_required || !saved)) {
+			duration = channel.duration || effect.duration;
+			if(duration) {
+				masking.expiration = universe.time + duration;
+			}
+			waiting.push(universe.copyPromise(effect, masking));
+		}
+	});
+	/* */
 
 	if(waiting.length) {
 		Promise.all(waiting)
 		.then(function(instilling) {
 			var instill = [],
 				i;
+			console.log("Instilling: " + instilling.map(e => e.id + "[" + e.caster + "@" + e.character + "]").join(", "));
 			for(i=0; i<instilling.length; i++) {
 				universe.trackExpiration(instilling[i], target.id, "effects");
 				instill.push(instilling[i].id);

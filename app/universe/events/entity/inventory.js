@@ -113,7 +113,8 @@ module.exports.initialize = function(universe) {
 	 */
 	 universe.on("player:inventory:pickup", function(event) {
 		var entity = universe.get(event.message.data.entity),
-			item = universe.get(event.message.data.item);
+			item = universe.get(event.message.data.item),
+			meeting = universe.getCurrentMeeting();
 	
 		if(entity && item && item.location === entity.location) {
 			entity.addValues({
@@ -121,7 +122,7 @@ module.exports.initialize = function(universe) {
 			});
 			if(!item.is_singular || item.is_unique) {
 				item.setValues({
-					"acquired_on": universe.getCurrentMeeting(),
+					"acquired_on": meeting?meeting.id:undefined,
 					"acquire": universe.getTime(),
 					"location": null
 				});

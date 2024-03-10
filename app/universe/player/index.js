@@ -191,11 +191,12 @@ class PlayerConnection extends EventEmitter {
 			event.message = event.message;
 			event.received = Date.now();
 			event.signal = "close";
-			event.player = this.player;
 			event.event = event;
+			console.log("Player socket closed: ", event);
+			event.player = this.player;
 
+			this.emit("disconnected", event);
 			if(this.socketIDs.length === 0) {
-				this.emit("disconnected", event);
 				this.universe.emit("send", {
 					"type": "player-disconnected",
 					"player": this.player.id,

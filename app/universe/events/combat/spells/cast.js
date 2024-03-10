@@ -29,6 +29,11 @@ module.exports.initialize = function(universe) {
 		applyFormIfApplicable = function(target) {
 			if(target.caster === source.id && event.message.data.form) {
 				set = {};
+				if(spell) {
+					console.log("Spell Form Set: ", spell.form_sets, event.message.data.form);
+				} else {
+					console.log("Spell Form Set No Spell: ", event.message.data.form);
+				}
 				if(spell.form_sets && spell.form_sets.length) {
 					for(i=0; i<spell.form_sets.length; i++) {
 						f = spell.form_sets[i];
@@ -46,6 +51,9 @@ module.exports.initialize = function(universe) {
 					}
 				}
 				target.setValues(set);
+			} else if(event.message.data.form) {
+				// To remove after debugging
+				console.log("No Form Set Applicable as no Spell: ", event.message.data.form);
 			}
 		};
 

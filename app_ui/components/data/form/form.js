@@ -19,7 +19,7 @@
 (function() {
 
 	var colon = /:/g,
-		me = /me/gi;
+		me = /{{me}}/gi;
 
 	rsSystem.component("rsForm", {
 		"inherit": true,
