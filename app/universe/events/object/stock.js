@@ -1,3 +1,5 @@
+const {max, min} = require("lodash");
+
 var cleanID = new RegExp("[^a-z0-9_:]", "g"),
 	Random = require("rs-random");
 
@@ -101,11 +103,16 @@ module.exports.initialize = function(universe) {
 		var shop = universe.get(event.message.data.id),
 			manager = universe.manager.item,
 			inventory = [],
+			indexing = {},
+			min_rare = {},
+			max_rare = {},
 			uniques = {},
 			limits = {},
 			types = {},
 			wait = [],
 			stockType,
+			scanned,
+			rarity,
 			count,
 			limit,
 			item,
@@ -140,15 +147,33 @@ module.exports.initialize = function(universe) {
 					inventory.push.apply(inventory, shop.inventory);
 				}
 
+				for(i=0; i<shop.stocks.length; i++) {
+					indexing[shop.stocks[i]] = true;
+				}
+				for(i=0; i<shop.stocks_randomly.length; i++) {
+					indexing[shop.stocks_randomly[i]] = true;
+				}
+
 				manager.forEach(function(item) {
 					if(item && item.types) {
 						for(j=0; j<item.types.length; j++) {
 							type = item.types[j];
-							if(!types[type]) {
-								types[type] = [];
-							}
-							if( !item.is_stock_excluded && ((item.is_unique && shop.stocks_unique && !isHeld(item.id)) || (item.is_singular && shop.stocks_singular) || (item.is_template && shop.stocks_template) )) {
-								types[type].push(item);
+							if(indexing[type]) {
+								if(!types[type]) {
+									types[type] = [];
+									min_rare[type] = shop.stock_rarity_min[type]?universe.calculator.computedDiceRoll(shop.stock_rarity_min[type], shop) || 0:0;
+									max_rare[type] = shop.stock_rarity_max[type]?universe.calculator.computedDiceRoll(shop.stock_rarity_max[type], shop) || 0:0;
+									if(isNaN(min_rare[type])) {
+										min_rare[type] = 0;
+									}
+									if(isNaN(max_rare[type])) {
+										max_rare[type] = 0;
+									}
+								}
+								rarity = item.rarity;
+								if( !item.is_stock_excluded && ((item.is_unique && shop.stocks_unique && !isHeld(item.id)) || (item.is_singular && shop.stocks_singular) || (item.is_template && shop.stocks_template)) && ((min_rare[type] === 0 && max_rare[type] === 0) || (!isNaN(rarity) && (min_rare[type] === 0 || min_rare[type] <= rarity) && (max_rare[type] === 0 || rarity <= max_rare[type])))) {
+									types[type].push(item);
+								}
 							}
 						}
 					}
@@ -164,8 +189,9 @@ module.exports.initialize = function(universe) {
 						limit = Random.integer(4);
 					}
 					limits[type] += limit;
+					scanned = 0;
 					count = 0;
-					while(count < limits[type] && 0 < types[type].length && count < maxScan) {
+					while(count < limits[type] && 0 < types[type].length && scanned < maxScan) {
 						item = types[type][Random.integer(types[type].length)];
 						// console.log(" > Stock Considering: " + item.name + " [" + item.is_unique + ", " + item.is_singular + ", " + item.is_template + "]");
 						if(item.is_unique) {
@@ -173,8 +199,9 @@ module.exports.initialize = function(universe) {
 							if(!uniques[item.id]) {
 								uniques[item] = true;
 								inventory.push(item.id);
-								limits[type]--;
+								// limits[type]--;
 								types[type].purge(item);
+								count++;
 							}
 						} else if(item.is_template) {
 							// console.log("  -> Stocking Template: " + item.name + " [" + item.id + "]");
@@ -183,13 +210,18 @@ module.exports.initialize = function(universe) {
 									inventory.push(copy.id);
 								}
 							}));
-							limits[type]--;
+							// limits[type]--;
+							count++;
 						} else if(item.is_singular) {
 							// console.log("  -> Stocking Singular: " + item.name + " [" + item.id + "]");
 							inventory.push(item.id);
-							limits[type]--;
+							// limits[type]--;
+							count++;
 						}
-						count++;
+						scanned++;
+					}
+					if(scanned === maxScan) {
+						console.log("Stocking Error: " + type + " - Exceeded Max Scan:\n", types[type]);
 					}
 				};
 
