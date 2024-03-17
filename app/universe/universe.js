@@ -779,9 +779,7 @@ class Universe extends EventEmitter {
 		}
 
 		details.id = id + ":" + Random.string(32).toLowerCase();
-		console.log("Mask: ", mask);
 		Object.assign(details, mask);
-		console.log("Res: ", details);
 
 		if(source) {
 			manager = this.manager[source._class];
@@ -897,12 +895,10 @@ class Universe extends EventEmitter {
 					if(source.mp_max) {
 						details.mp = source.mp_max;
 					}
-					console.log("Copying details: ", details);
 					this.createObject(details, callback);
 				};
 
 				if(waiting.length) {
-					console.log(" > Waiting for more details: ", details);
 					Promise.all(waiting)
 					.then(() => {
 						if(source.is_template && source.template_process) {
@@ -919,9 +915,9 @@ class Universe extends EventEmitter {
 									}
 								}
 							}
-							if(source.template_process.main_hand && !locked[details.main_hand]) {
-								details.inventory.push(details.main_hand);
-								details.equipped.push(details.main_hand);
+							if(source.template_process.main_weapon && !locked[details.main_weapon]) {
+								details.inventory.push(details.main_weapon);
+								details.equipped.push(details.main_weapon);
 							}
 						}
 						finish();
