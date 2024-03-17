@@ -14,6 +14,7 @@
 						<button class="button-day" v-if="day.number" v-on:click="openDay(day)">
 							<span class="date">{{day.number}}</span>
 							<button class="button-event" v-for="event in day.events" v-on:click.stop="info(event)">
+								<span :class="event.icon" v-if="event.icon"></span>
 								<span class="event">{{event.name}}</span>
 							</button>
 						</button>

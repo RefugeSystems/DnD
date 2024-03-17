@@ -2,6 +2,7 @@
 	<ul>
 		<li v-for="event in events">
 			<button class="event" :class="event.class" v-on:click="info(event)">
+				<span :class="event.icon" v-if="event.icon"></span>
 				<span>{{event.name}}</span>
 			</button>
 		</li>
