@@ -751,14 +751,17 @@ class Universe extends EventEmitter {
 	 * @param {Function} callback 
 	 */
 	copy(source, mask, callback) {
-		var details = {},
+		var subTemplateMask = {},
+			details = {},
 			waiting = [],
+			locked = {},
 			generator,
 			dataset,
 			loading,
 			tfields,
 			manager,
 			finish,
+			buffer,
 			id,
 			i,
 			j;
@@ -787,8 +790,8 @@ class Universe extends EventEmitter {
 					callback(null, source);
 				}
 			} else {
-				// mask.character = details.id; // What was being smoked here???
-				// mask.user = details.id;
+				subTemplateMask.character = details.id;
+				subTemplateMask.user = details.id;
 				if(source.is_template) {
 					if(source.template_process) {
 						// TODO: Handle Template Processing
@@ -824,7 +827,17 @@ class Universe extends EventEmitter {
 									if(typeof(tvalue) !== "string") {
 										tvalue = tvalue.toString();
 									}
-									details[tfield.id] = tvalue;
+									if((buffer = this.get(tvalue)) && buffer.is_template) {
+										waiting.push(this.copyPromise(buffer, subTemplateMask).then((copy) => {
+											details[tfield.id] = copy.id;
+											if(copy.is_locked) {
+												locked[copy.id] = true;
+											}
+											return copy;
+										}));
+									} else {
+										details[tfield.id] = tvalue;
+									}
 									break;
 								case "boolean":
 									details[tfield.id] = (typeof(tvalue) === "string" && (tvalue === "true" || tvalue === "1")) || tvalue === true || tvalue === 1;
@@ -839,8 +852,12 @@ class Universe extends EventEmitter {
 											loading = this.get(tvalue[i]);
 											if(loading) {
 												if(loading.is_template) {
-													waiting.push(this.copyPromise(loading, mask).then((copy) => {
+													waiting.push(this.copyPromise(loading, subTemplateMask).then((copy) => {
 														details[tfield.id].push(copy.id);
+														if(copy.is_locked) {
+															locked[copy.id] = true;
+														}
+														return copy;
 													}));
 												} else {
 													details[tfield.id].push(loading.id);
@@ -887,6 +904,28 @@ class Universe extends EventEmitter {
 				if(waiting.length) {
 					Promise.all(waiting)
 					.then(() => {
+						if(source.is_template && source.template_process) {
+							if(!details.inventory) {
+								details.inventory = [];
+							}
+							if(!details.equipped) {
+								details.equipped = [];
+							}
+							if(source.template_process.equipped) {
+								if(!details.inventory) {
+									details.inventory = [];
+								}
+								for(var i=0; i<details.equipped.length; i++) {
+									if(!locked[details.equipped[i]]) {
+										details.inventory.push(details.equipped[i]);
+									}
+								}
+							}
+							if(source.template_process.main_hand && !locked[details.main_hand]) {
+								details.inventory.push(details.main_hand);
+								details.equipped.push(details.main_hand);
+							}
+						}
 						finish();
 					})
 					.catch((err) => {
