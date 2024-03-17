@@ -116,14 +116,18 @@ module.exports.initialize = function(universe) {
 					generate.name = "Session";
 				}
 
+				generate.associations = copy(meeting.associations);
+				generate.important = copy(meeting.important);
 				generate.entities = copy(meeting.entities);
 				generate.players = copy(meeting.players);
+				generate.is_sky_visible = meeting.is_sky_visible;
 				generate.date = meeting.date + 2 * week;
 				generate.meeting_previous = meeting.id;
 				generate.location = meeting.location;
 				generate.weather = meeting.weather;
+				generate.world = meeting.world;
+				generate.type = meeting.type;
 				generate.time = universe.time;
-				generate.is_sky_visible = meeting.is_sky_visible;
 				universe.createObject(generate, function(error, meet) {
 					if(error) {
 						universe.emit("send", {
