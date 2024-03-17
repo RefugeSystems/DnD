@@ -846,7 +846,7 @@ class Universe extends EventEmitter {
 									if(tvalue instanceof Array && tvalue[0] instanceof Array) {
 										tvalue = tvalue[Random.integer(tvalue.length)];
 									}
-									if(tfield.inheritance && tvalue instanceof Array && tvalue.length) {
+									if(tfield.inheritable && tvalue instanceof Array && tvalue.length) {
 										details[tfield.id] = [];
 										for(i=0; i<tvalue.length; i++) {
 											loading = this.get(tvalue[i]);
@@ -902,6 +902,7 @@ class Universe extends EventEmitter {
 				};
 
 				if(waiting.length) {
+					console.log(" > Waiting for more details: ", details);
 					Promise.all(waiting)
 					.then(() => {
 						if(source.is_template && source.template_process) {
@@ -912,9 +913,6 @@ class Universe extends EventEmitter {
 								details.equipped = [];
 							}
 							if(source.template_process.equipped) {
-								if(!details.inventory) {
-									details.inventory = [];
-								}
 								for(var i=0; i<details.equipped.length; i++) {
 									if(!locked[details.equipped[i]]) {
 										details.inventory.push(details.equipped[i]);
@@ -934,6 +932,7 @@ class Universe extends EventEmitter {
 						}
 					});
 				} else {
+					console.log(" > No additional details: ", details);
 					finish();
 				}
 			}
