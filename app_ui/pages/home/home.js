@@ -32,6 +32,7 @@ rsSystem.component("RSHome", {
 	"data": function() {
 		var data = {};
 		
+		data.issueLoading = null;
 		data.messageTimestamp = "";
 		data.messageHeading = "";
 		data.messageClass = "";
@@ -59,6 +60,25 @@ rsSystem.component("RSHome", {
 		data.configuration = null;
 		data.universe = new RSUniverse();
 		data.chatCore = new RSChatCore(data.universe);
+		data.universe.$on("disconnected", () => {
+			Vue.set(this, "messageClass", "");
+			Vue.set(this, "messageIcon", "fas fa-info-circle rs-light-blue");
+			Vue.set(this, "messageHeading", "Disconnected");
+			Vue.set(this, "message", "Disconnected from the server");
+			if(this.state >= 0) {
+				Vue.set(this, "state", 0);
+			}
+		});
+		data.universe.$on("error:disconnected", () => {
+			Vue.set(this, "messageClass", "");
+			Vue.set(this, "messageIcon", "fas fa-info-circle rs-light-blue");
+			Vue.set(this, "messageHeading", "Disconnected");
+			Vue.set(this, "message", "Disconnected from the server");
+			if(this.state >= 0) {
+				Vue.set(this, "state", 0);
+			}
+		});
+
 		data.universe.$on("disconnected", () => {
 			Vue.set(this, "messageClass", "");
 			Vue.set(this, "messageIcon", "fas fa-info-circle rs-light-blue");

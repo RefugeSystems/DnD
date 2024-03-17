@@ -86,13 +86,18 @@
 				max-width: 92px;
 				overflow-x: hidden;
 				margin: 0px;
-				padding: 0px;
+				padding: 1px 4px;
 				border-bottom: 1px solid @rsDarkYellow;
-				border-bottom: 1px solid #776f08;
 				border-width: 0px 0px 1px 0px;
 				background: transparent;
-				color: white;
+				color: @rsWhite;
 				white-space: nowrap;
+				left: -4px;
+
+				&:hover {
+					color: @rsBlack;
+					background: @rsWhite;
+				}
 			}
 		}
 	}

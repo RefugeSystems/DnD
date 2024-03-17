@@ -144,6 +144,28 @@ module.exports.initialize = function(universe) {
 				"consumed": channel.consume,
 				"yields": channel.yields
 			});
+
+			/**
+			 * 
+			 * @event world:item:use
+			 * @for Chronicle
+			 * @param {Object} source
+			 * @param {Object} channel
+			 * @param {Array} targets
+			 * @param {Object} data
+			 * @param {Object} damage
+			 * @param {Array | RSRoll} checks
+			 * @param {Boolean} successful
+			 */
+			universe.emit("world:item:use", {
+				"source": source,
+				"channel": channel,
+				"targets": targets,
+				"data": event.message.data,
+				"damage": damage,
+				"checks": checks,
+				"successful": successful
+			});
 		} else {
 			// Authorization issue
 		}

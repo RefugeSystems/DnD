@@ -21,6 +21,9 @@
 		<div class="status">
 			<span class="far fa-spinner fa-pulse"></span>
 		</div>
+		<div class="time-delay-abort" v-if="issueLoading">
+
+		</div>
 	</div>
 	<div class="system-display active" v-if="state === 10 && player && configuration && !active" :class="mainViewClass">
 	<!--<div class="system-display active" v-if="state === 10 && player && configuration && !active" :class="getNavClasses()">-->

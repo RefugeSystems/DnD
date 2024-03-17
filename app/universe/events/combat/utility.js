@@ -261,6 +261,22 @@ module.exports.initialize = function(universe) {
 				universe.generalError("damage:taken", new Error("No Damage") /* For Trace */, "No damage was received for entity:damaged event");
 			}
 		}
+		
+		/**
+		 * 
+		 * @event world:entity:damaged
+		 * @for Chronicle
+		 * @param {String} source
+		 * @param {String} channel
+		 * @param {String} target
+		 * @param {Object} damage
+		 */
+		universe.emit("world:weapon:attack", {
+			"source": log.source,
+			"channel": log.channel,
+			"target": entity.id,
+			"damage": damage
+		});
 		universe.chronicle.updateOccurrence(log.id, log, "entity:damaged", universe.time, log.source, entity.id);
 	};
 
@@ -1235,6 +1251,26 @@ module.exports.initialize = function(universe) {
 		if(event.message.data.form && event.message.data.form.audio) {
 			universe.emit("roomctrl:play", event.message.data.form.audio);
 		}
+		
+		/**
+		 * 
+		 * @event world:weapon:attack
+		 * @for Chronicle
+		 * @param {Object} source
+		 * @param {Object} channel
+		 * @param {Array} targets
+		 * @param {Object} data
+		 * @param {Integer} level
+		 * @param {Object} damage
+		 */
+		universe.emit("world:weapon:attack", {
+			"source": source,
+			"channel": item,
+			"targets": targets,
+			"data": event.message.data,
+			"attack": attack,
+			"damage": damage
+		});
 
 		if(damage) {
 			if(targets.length) {

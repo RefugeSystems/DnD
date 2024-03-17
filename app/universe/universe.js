@@ -170,13 +170,15 @@ class Universe extends EventEmitter {
 	 * @return {Promise}
 	 */
 	initialize(startup) {
+		var mark = Date.now();
+
 		this.objectHandler = new ObjectHandler(this);
 		
 		if(this.specification.recovery_mode) {
 			return this.objectHandler.initialize(startup);
 		}
 		
-		console.log("Starting Load");
+		console.log("Starting Server...");
 		return new Promise((done, fail) => {
 			startup.universe = this;
 			// Initialize Database
@@ -190,7 +192,7 @@ class Universe extends EventEmitter {
 					i,
 					x;
 
-				console.log("Loading Managers");
+				console.log("...Loading Managers...");
 				for(x=0; x<types.length; x++) {
 					if(manager[types[x]]) {
 						this.manager[types[x]] = manager[types[x]];	
@@ -204,7 +206,7 @@ class Universe extends EventEmitter {
 				return Promise.all(loading);
 			})
 			.then((loading) => {
-				console.log("Managers Loaded");
+				console.log("...Managers Loaded...");
 				var anomaly = new Anomaly("universe:initialization", "Managers Loaded", 30, Object.keys(this.manager), null, this);
 				this.emit("error", anomaly);
 				// Calculate Loaded Objects
@@ -219,16 +221,16 @@ class Universe extends EventEmitter {
 			.then((loading) => {
 				// Update Loaded Objects
 				var start = Date.now(),
-					mark,
 					x;
 				
-				console.log("Linking Objects...");
+				console.log("...Linking Objects...");
 				for(x=0; x<loading.length; x++) {
 					if(loading[x]) {
 						loading[x].updateFieldValues();
 					}
 				}
-				console.log(" + Initialize: " + (Date.now() - start) + "ms");
+				console.log("...Linked: " + (Date.now() - start) + "ms...");
+				console.log("...Initializing...");
 				mark = Date.now();
 				// for(x=0; x<loading.length; x++) {
 				// 	if(loading[x]) {
@@ -249,6 +251,7 @@ class Universe extends EventEmitter {
 			})
 			.then(() => {
 				// Load Time Settings
+				console.log("...Chronicle Initialized...");
 				var loading = [];
 				loading.push(new Promise((done, fail) => {
 					if(this.manager.setting.object["setting:time"]) {
@@ -330,6 +333,8 @@ class Universe extends EventEmitter {
 				}));
 				return Promise.all(loading);
 			}).then(() => {
+				console.log("...Settings Loaded...");
+				console.log("...Loading Discovery Paths...");
 				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/discovery", "i"),
 						start = Date.now(),
@@ -384,6 +389,7 @@ class Universe extends EventEmitter {
 					loadDirectory("app/universe/discovery");
 				});
 			}).then(() => {
+				console.log("...Loading Event Paths...");
 				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/events", "i"),
 						start = Date.now(),
@@ -437,6 +443,7 @@ class Universe extends EventEmitter {
 					loadDirectory("app/universe/events");
 				});
 			}).then(() => {
+				console.log("...Loading Simulation Paths...");
 				return new Promise((done, fail) => {
 					var clean = new RegExp("^/?app/universe/simulation", "i"),
 						start = Date.now(),
@@ -491,10 +498,25 @@ class Universe extends EventEmitter {
 					loadDirectory("app/universe/simulation");
 				});
 			}).then(() => {
+				console.log("...Univeral Object Refresh...");
+				var managers = Object.keys(this.manager),
+					refreshing = [],
+					manager,
+					i,
+					j;
+
+				for(i=0; i<managers.length; i++) {
+					manager = this.manager[managers[i]];
+					for(j=0; j<manager.objectIDs.length; j++) {
+						refreshing.push(manager.object[manager.objectIDs[j]].refresh());
+					}
+				}
+
+				return Promise.all(refreshing);
+			}).then(() => {
 				this.initialized = true;
-				console.log("Universe Loaded: ", Object.keys(this.manager));
+				console.log("...Universe Loaded: ", Object.keys(this.manager));
 				this.emit("initialized", this);
-				this.utility.info("Test");
 				done();
 			})
 			.catch(fail);
@@ -503,18 +525,31 @@ class Universe extends EventEmitter {
 
 	// Overrides the EventEmitter emit to handle the 
 	emit(event, data) {
-		var responder,
+		var reaction,
 			i;
 		
-		if(this.manager.responder) {
-			for(i=0; i<this.manager.responder.objectIDs.length; i++) {
-				responder = this.manager.responder.object[this.manager.responder.objectIDs[i]];
-				if(responder && !responder.is_preview && responder.is_active) {
+		if(this.manager.reaction) {
+			/*
+			for(i=0; i<this.manager.reaction.objectIDs.length; i++) {
+				reaction = this.manager.reaction.object[this.manager.reaction.objectIDs[i]];
+				if(reaction && !reaction.is_preview && reaction.is_active) {
 					try {
-						responder.processor(null, event, this, this.utility);
+						reaction.processor(null, event, this, this.utility);
 						// responder.processor(data);
 					} catch(error) {
-						console.log("Error handling responder[" + responder.id + "]: ", error);
+						console.log("Error handling reaction[" + reaction.id + "]: ", error);
+					}
+				}
+			}
+			*/
+			for(i=0; i<this.manager.reaction.objectIDs.length; i++) {
+				reaction = this.manager.reaction.object[this.manager.reaction.objectIDs[i]];
+				if(reaction && !reaction.is_preview && reaction.is_active && (reaction.acknowledge === event || reaction._eventMap[event])) {
+					try {
+						reaction.processor(null, event, this, this.utility);
+						// responder.processor(data);
+					} catch(error) {
+						console.log("Error handling reaction[" + reaction.id + "]: ", error);
 					}
 				}
 			}

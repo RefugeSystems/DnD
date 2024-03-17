@@ -336,7 +336,7 @@ class RSUniverse extends EventEmitter {
 		};
 		this.processEvent.sync = (event) => {
 			this.$emit("loading", this);
-			console.log("Syncing: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+			// console.log("Syncing: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
 			rsSystem.diagnostics.at.sync = Date.now();
 			setTimeout(() => {
 				// Let the display update then load the data
@@ -379,7 +379,7 @@ class RSUniverse extends EventEmitter {
 					"timeline": event.data._timeline,
 					"time": event.data._time
 				});
-				console.log("Caching: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+				// console.log("Caching: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
 				rsSystem.diagnostics.at.cache = Date.now();
 				this.cacheData();
 				// localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
@@ -388,7 +388,7 @@ class RSUniverse extends EventEmitter {
 				Vue.set(this, "version", event.version);
 				this.checkVersion();
 				
-				console.log("Unbuffering: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+				// console.log("Unbuffering: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
 				rsSystem.diagnostics.at.buffer = Date.now();
 				if(this.buffer_delta.length) {
 					for(i=0; i<this.buffer_delta.length; i++) {
@@ -406,9 +406,9 @@ class RSUniverse extends EventEmitter {
 						// TODO: Improve logging and initialization registration for feedback
 					}
 				}
-				console.log("Ready: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
+				// console.log("Ready: " + (Date.now() - rsSystem.diagnostics.at.connect) + "ms");
 				rsSystem.diagnostics.at.finish = Date.now();
-				console.log("Load Time: " + (rsSystem.diagnostics.at.finish - rsSystem.diagnostics.at.start) + "ms");
+				console.log(this.getConsoleLogo() + "\nSystem Loaded[V" + rsSystem.version + "]: " + (rsSystem.diagnostics.at.finish - rsSystem.diagnostics.at.start) + "ms");
 			}, 0);
 		};
 		
@@ -425,7 +425,7 @@ class RSUniverse extends EventEmitter {
 					i,
 					j;
 					
-				console.log("Loading Cache: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
+				// console.log("Loading Cache: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
 				rsSystem.diagnostics.at.load = Date.now();
 				if(loadIndex && loadMetrics) {
 					try {
@@ -458,6 +458,47 @@ class RSUniverse extends EventEmitter {
 		}
 	}
 
+	getConsoleLogo() {
+		return	"________  ______  ______\n" + 
+				"\\____   \\/   ___\\/  ___ \\_________________\n" + 
+				" |     _/\\___  \\/  /   \\/   _ \\_  ___/ __ \\\n" + 
+				" |  |\\  \\/      \\  \\____\\  (_) |  | \\  ___/\n" + 
+				" |__| \\  \\______/\\______/\\____/|__|  \\____>\n" + 
+				"       \\_/";
+	}
+
+	/**
+	 * Clear the stored data and reset the connection state. This is to process logout and when the user changes
+	 * worlds.
+	 * @method reset
+	 */
+	reset() {
+		this.metrics.dialation = 0;
+		this.metrics.latency = 0;
+		this.metrics.sync = 0;
+		this.metrics.last = 0;
+		this.metrics.delta_average = 0;
+		this.metrics.deltas = 0;
+		this.metrics.dps = 0;
+		this.metrics.dps_count = 0;
+		this.metrics.dps_last = 0;
+		this.metrics.dps_cap = 0;
+		this.state.loaded = false;
+		this.state.initialized = false;
+		this.state.synchronizing = false;
+		this.state.initializing = true;
+		this.state.version_warning = false;
+		this.version = "Unknown";
+
+		this.history.splice(0);
+		this.buffer.splice(0);
+
+		this.index = {};
+		this.index.all = {};
+		this.named = {};
+		this.listing = {};
+	}
+
 	/**
 	 * 
 	 * @method setProfile
@@ -468,7 +509,7 @@ class RSUniverse extends EventEmitter {
 	 * @param {Boolean} [profile.enable_cache] When true, the current cache is deleted
 	 */
 	setProfile(profile) {
-		console.log("Set Profile: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
+		// console.log("Set Profile: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
 		rsSystem.diagnostics.at.profile = Date.now();
 		if(profile) {
 			this.profile = profile;
@@ -514,7 +555,7 @@ class RSUniverse extends EventEmitter {
 	 * @method cacheData
 	 */
 	cacheData() {
-		console.log("Cache Data");
+		// console.log("Cache Data");
 		if(this.profile && this.profile.enable_cache) {
 			localStorage.setItem(this.KEY.METRICS, JSON.stringify(this.metrics));
 			localStorage.setItem(this.KEY.CLASSPREFIX, LZString.compressToUTF16(JSON.stringify(this.listing)));
@@ -762,7 +803,8 @@ class RSUniverse extends EventEmitter {
 		this.connection.url = new URL(address);
 		this.connection.session = session;
 		this.connection.address = address;
-		console.log("Connecting: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
+		this.state.initializing = true;
+		// console.log("Connecting: " + (Date.now() - rsSystem.diagnostics.at.start) + "ms");
 		rsSystem.diagnostics.at.connect = Date.now();
 
 		return new Promise((done, fail) => {
@@ -854,6 +896,9 @@ class RSUniverse extends EventEmitter {
 					this.state.initializing = false;
 					console.warn("Connect Initialization Fault, Retrying: ", event);
 					this.connect(this.connection.session, this.connection.address)
+					.then(() => {
+						done(this);
+					})
 					.catch((err) => {
 						console.warn("> Retry Failed, Failing connection", err);
 						fail(event);
@@ -866,7 +911,7 @@ class RSUniverse extends EventEmitter {
 			};
 
 			socket.onclose = (event) => {
-				console.log("Close: ", event, this);
+				// console.log("Close: ", event, this);
 				this.addLogEvent("Connection Closed", 40, event);
 				if(!this.state.closing) {
 					if(event.code === 4000) {
@@ -1046,6 +1091,7 @@ class RSUniverse extends EventEmitter {
 	logout() {
 		this.state.loggedOut = true;
 		this.disconnect();
+		this.reset();
 	}
 
 	/**

@@ -20,11 +20,6 @@
 		"description": "Definition to handle an occurrence of an event or other action within the universe on an object to object basis with client side options",
 		"fields": ["parent", "name", "icon", "category", "description", "event_universe", "occurrences", "processor", "is_preview", "review", "attribute"]
 	}, {
-		"id": "responder",
-		"name": "Responder",
-		"description": "Definition to handle an occurrence of an event or other action directly from the universe and only server side",
-		"fields": ["parent", "name", "icon", "category", "description", "processed", "processor", "is_preview", "review", "attribute"]
-	}, {
 		"id": "occurrence",
 		"name": "Occurrence",
 		"description": "Mapping for Universe simulation event emissions",
@@ -298,7 +293,7 @@
 		"id": "reaction",
 		"name": "Reaction",
 		"description": "Handles reacting to a specified event in the universe server side",
-		"fields": ["parent", "name", "icon", "description", "attribute", "acknowledge", "is_preview", "processor"]
+		"fields": ["parent", "name", "icon", "description", "attribute", "acknowledge", "processed", "is_active", "is_preview", "processor"]
 	}, {
 		"id": "library",
 		"name": "Library",

@@ -331,11 +331,11 @@ rsSystem.component("dndEntitySpells", {
 
 			Vue.set(this.storage, "slot", typeof(this.entity.cast_level) === "number"?this.entity.cast_level.toString():this.entity.cast_level);
 			Vue.set(this, "entity_state", state);
-			console.log("Updated[" + this.entity.id + "]: " + this.entity.cast_level, this.storage);
+			// console.log("Updated[" + this.entity.id + "]: " + this.entity.cast_level, this.storage);
 		},
 		"update": function(event) {
 			if(event && event.id === this.entity.id) {
-				console.log("Update[" + this.entity.id + "]: " + this.entity.cast_level);
+				// console.log("Update[" + this.entity.id + "]: " + this.entity.cast_level);
 				this.updateEntityState();
 			}
 		}

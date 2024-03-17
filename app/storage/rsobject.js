@@ -1653,7 +1653,7 @@ class RSObject {
 	}
 
 	refresh() {
-		this.linkFieldValues()
+		return this.linkFieldValues()
 		.then(() => {
 			this.calculateFieldValues();
 			this.updateFieldValues();

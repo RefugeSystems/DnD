@@ -29,6 +29,9 @@ rsSystem.component("rsCalendarMonth", {
 			"requried": true,
 			"type": Date
 		},
+		"player": {
+			"type": Object
+		},
 		"eventReference": {
 			"type": Object
 		},
@@ -39,7 +42,17 @@ rsSystem.component("rsCalendarMonth", {
 	"computed": {
 
 	},
+	"watch": {
+		"eventReference": {
+			"deep": true,
+			"handler": function() {
+				// console.log(" ! Month Watch Fire");
+				this.update();
+			}
+		}
+	},
 	"data": function () {
+		// console.log("Data: Month");
 		var data = {};
 
 		data.renderedDays = {};
@@ -65,6 +78,7 @@ rsSystem.component("rsCalendarMonth", {
 		return data;
 	},
 	"mounted": function () {
+		// console.log("Mounted: Month");
 		rsSystem.register(this);
 		this.build();
 		rsSystem.EventBus.$on("calendar:update", this.build);
@@ -103,6 +117,7 @@ rsSystem.component("rsCalendarMonth", {
 			return rendered;
 		},
 		"build": function() {
+			// console.log("Build Month");
 			var month = this.rendering.getMonth();
 			this.rendYear = this.rendering.getFullYear();
 			this.rendMonth = month;
@@ -119,12 +134,15 @@ rsSystem.component("rsCalendarMonth", {
 			this.update();
 		},
 		"update": function() {
+			// console.log("Update Month");
 			this.rendering.setDate(1);
 			var month = this.rendering.getMonth(),
 				safetyPin = 200,
 				week = [],
 				i = 0,
 				festival,
+				event,
+				date,
 				day;
 
 			this.weeks.splice(0);
@@ -142,12 +160,29 @@ rsSystem.component("rsCalendarMonth", {
 			}
 			this.weeks.push(week);
 			this.rendering.setDate(this.rendering.getDate() - 1);
+			// console.log(" > Render Complete - Reference: ", _p(this.eventReference));
 			
 			// Gather events (2/2)?
 			for(i=0; i<this.universe.listing.festival.length; i++) {
 				festival = this.universe.listing.festival[i];
 				if(rsSystem.utility.isValid(festival) && this.rendMonth === festival.month - 1 && this.renderedDays[festival.day]) {
 					this.renderedDays[festival.day].events.push(festival);
+				}
+			}
+			for(i=0; i<this.universe.listing.event.length; i++) {
+				event = this.universe.listing.event[i];
+				if(rsSystem.utility.isValid(event) && ((this.entity && event.associations && event.associations.indexOf(this.entity.id) !== -1) || (this.player && this.player.gm))) {
+					date = new this.universe.calendar.RSDate(event.time);
+					day = date.getDate();
+					if(this.rendYear === date.getFullYear() && this.rendMonth === date.getMonth() && this.renderedDays[day]) {
+						if(this.renderedDays[day].events.length < 4) {
+							this.renderedDays[day].events.push(event);
+						} else {
+							this.renderedDays[day].events.push({
+								"name": "..."
+							});
+						}
+					}
 				}
 			}
 		},

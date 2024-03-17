@@ -40,6 +40,7 @@
 				<span>{{die}} Hit Die</span>
 			</span>
 		</div>
+		<dnd-entity-actions :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.actions" :storage-container="storage.actions" :events-only="true"></dnd-entity-actions>
 		<!--
 		<div class="property-container defense flex h v-center" v-for="(amount, die) in entity.hit_dice">
 			<button class="action general rounded" v-on:click="useDie(die)">
@@ -257,7 +258,7 @@
 		</div>
 	</div>
 	<div class="character-stats broad-column flex v">
-		<button class="emphasis-stat rsbd-light-red" v-on:click="declareAttack()" v-if="!profile.disable_easyaction">
+		<button class="emphasis-stat emphasis-attack rsbd-light-orange" v-on:click="declareAttack()" v-if="!profile.disable_easyaction">
 			<div class="stat-label" v-if="profile.details_easyaction === 'caster'">Casting</div>
 			<div class="stat-value" v-if="profile.details_easyaction === 'caster'">
 				+ {{entity.spell_attack}}

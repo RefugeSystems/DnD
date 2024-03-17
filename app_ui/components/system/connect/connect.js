@@ -62,6 +62,9 @@
 						Vue.set(this.storage, "secure", false);
 					}
 				}
+				if(rsSystem.universe) {
+					rsSystem.universe.reset();
+				}
 			}
 		},
 		"computed": {

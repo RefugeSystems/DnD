@@ -1,5 +1,5 @@
 <div class="rs-component dnd-component entity-actions" v-if="isVisible">
-	<div class="action-counts flex h center wrap">
+	<div class="action-counts flex h center wrap" v-if="!eventsOnly">
 		<button class="user-bar rounded general action" v-on:click="declareAttack()" title="Open the generic attack declartion wizard">
 			<span class="action-icon" :class="attackIcon"></span>
 		</button>
@@ -14,7 +14,7 @@
 			<span class="count">{{entity.action_count[act] || 0}}/{{entity.action_max[act]}}</span>
 		</button>
 	</div>
-	<div class="activities flex h wrap">
+	<div class="activities flex h wrap" v-if="!buttonsOnly">
 		<rs-shiny-button class="general rounded action" v-if="myTurn" v-on:click="endTurn()" :active="true" color="yellow" title="End Turn">
 			<span class="action-icon fa-solid fa-rotate-right"></span>
 			<span class="">End Turn</span>

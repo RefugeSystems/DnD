@@ -31,6 +31,7 @@ rsSystem.component("rsCalendarDialog", {
 
 	},
 	"data": function () {
+		// console.log("Data: Calendar");
 		var data = {};
 
 		data.calendar = this.details.calendar;
@@ -77,10 +78,13 @@ rsSystem.component("rsCalendarDialog", {
 			"3": ["getYear", "setYear"]
 		};
 
+		this.build(this.details, this.universe, this.player, data.entity, data.eventReference, data.festivalReference);
+		// console.log("Calendar Data: ", _p(data.eventReference), _p(data.festivalReference));
 
 		return data;
 	},
 	"mounted": function () {
+		// console.log("Mounted: Calendar");
 		rsSystem.register(this);
 		rsSystem.EventBus.$on("calendar:update", this.update);
 		this.$el.onclick = (event) => {
@@ -91,91 +95,117 @@ rsSystem.component("rsCalendarDialog", {
 				event.preventDefault();
 			}
 		};
-		this.build();
+		// this.build();
 	},
 	"methods": {
-		"build": function() {
-			var years = Object.keys(this.eventReference),
-				time = new this.universe.calendar.RSDate(),
+		"build": function(details, universe, player, entity, eventReference, festivalReference) {
+			if(!details) {
+				details = this.details;
+			}
+			if(!universe) {
+				universe = this.universe;
+			}
+			if(!entity) {
+				entity = this.entity;
+			}
+			if(!player) {
+				player = this.player;
+			}
+			if(!eventReference) {
+				eventReference = this.eventReference;
+			}
+			if(!festivalReference) {
+				festivalReference = this.festivalReference;
+			}
+			// console.log("Build Calendar: ", details, universe, player, entity, _p(eventReference), _p(festivalReference));
+			var years = Object.keys(eventReference),
+				time = new universe.calendar.RSDate(),
 				skirmish,
 				event,
 				day,
 				i;
 
 			for(i=0; i<years.length; i++) {
-				Vue.delete(this.eventReference[years[i]]);
+				Vue.delete(eventReference[years[i]]);
 			}
 
-			if(this.details.specialEvents) {
-				for(i=0; i<this.details.specialEvents.length; i++) {
-					event = this.details.specialEvents[i];
+			if(details.specialEvents) {
+				for(i=0; i<details.specialEvents.length; i++) {
+					event = details.specialEvents[i];
 					time.setTime(event.time);
-					day = this.indexEvent(time, event);
+					day = this.indexEvent(time, event, eventReference);
 				}
 			}
 
-			if(this.details.specialFestivals) {
-				for(i=0; i<this.details.specialFestivals.length; i++) {
-					event = this.details.specialFestivals[i];
+			if(details.specialFestivals) {
+				for(i=0; i<details.specialFestivals.length; i++) {
+					event = details.specialFestivals[i];
 					time.setTime(event.time);
-					day = this.indexFestival(time, event);
+					day = this.indexFestival(time, event, festivalReference);
 				}
 			}
 
-			if(this.entity) {
-				for(i=0; i<this.universe.listing.skirmish.length; i++) {
-					skirmish = this.universe.listing.skirmish[i];
-					if(rsSystem.utility.isValid(skirmish) && skirmish.entities.indexOf(this.entity.id) !== -1) {
+			if(entity) {
+				for(i=0; i<universe.listing.skirmish.length; i++) {
+					skirmish = universe.listing.skirmish[i];
+					if(rsSystem.utility.isValid(skirmish) && (skirmish.entities.indexOf(entity.id) !== -1 || player.gm)) {
 						time.setTime(skirmish.time);
-						day = this.indexEvent(time, skirmish);
+						day = this.indexEvent(time, skirmish, eventReference);
 						day.skirmish = true;
 					}
 				}
 
-				for(i=0; i<this.universe.listing.event.length; i++) {
-					event = this.universe.listing.event[i];
-					if(rsSystem.utility.isValid(event) && event.associations.indexOf(this.entity.id) !== -1) {
+				for(i=0; i<universe.listing.event.length; i++) {
+					event = universe.listing.event[i];
+					if(rsSystem.utility.isValid(event) && (event.associations.indexOf(entity.id) !== -1 || player.gm)) {
 						time.setTime(event.time);
-						day = this.indexEvent(time, event);
+						day = this.indexEvent(time, event, eventReference);
 					}
 				}
 			}
+			// console.log("Calendar Built: ", _p(eventReference), _p(festivalReference));
 		},
-		"indexEvent": function(time, event) {
+		"indexEvent": function(time, event, eventReference) {
+			if(!eventReference) {
+				eventReference = this.eventReference;
+			}
 			var year = time.getFullYear(),
 				mon = time.getMonth(),
 				day = time.getDate();
-			if(!this.eventReference[year]) {
-				this.eventReference[year] = {};
+			if(!eventReference[year]) {
+				eventReference[year] = {};
 			}
-			if(!this.eventReference[year][mon]) {
-				this.eventReference[year][mon] = {};
+			if(!eventReference[year][mon]) {
+				eventReference[year][mon] = {};
 			}
-			if(!this.eventReference[year][mon][day]) {
-				this.eventReference[year][mon][day] = {
+			if(!eventReference[year][mon][day]) {
+				eventReference[year][mon][day] = {
 					"skirmish": false,
 					"travel": false,
 					"events": []
 				};
 			}
-			this.eventReference[year][mon][day].events.push(event);
-			return this.eventReference[year][mon][day];
+			eventReference[year][mon][day].events.push(event);
+			return eventReference[year][mon][day];
 		},
-		"indexFestival": function(time, event) {
+		"indexFestival": function(time, event, festivalReference) {
+			if(!festivalReference) {
+				festivalReference = this.festivalReference;
+			}
 			var mon = time.getMonth(),
 				day = time.getDate();
-			if(!this.festivalReference[mon]) {
-				this.festivalReference[mon] = {};
+			if(!festivalReference[mon]) {
+				festivalReference[mon] = {};
 			}
-			if(!this.festivalReference[mon][day]) {
-				this.festivalReference[mon][day] = {
+			if(!festivalReference[mon][day]) {
+				festivalReference[mon][day] = {
 					"skirmish": false,
 					"travel": false,
 					"events": []
 				};
 			}
-			this.festivalReference[mon][day].events.push(event);
-			return this.festivalReference[mon][day];
+			festivalReference[mon][day].events.push(event);
+			return festivalReference[mon][day];
 		},
 		"getRenderingTitle": function() {
 			var display = [],
@@ -227,14 +257,14 @@ rsSystem.component("rsCalendarDialog", {
 		},
 
 		"openYear": function(year) {
-			console.log("Open Year: ", year);
+			// console.log("Open Year: ", year);
 		},
 		"openMonth": function(year, month) {
-			console.log("Open Month: ", year, month);
+			// console.log("Open Month: ", year, month);
 			Vue.set(this, "view", 2);
 		},
 		"openDay": function(year, month, day) {
-			console.log("Open Day: ", year, month, day);
+			// console.log("Open Day: ", year, month, day);
 			Vue.set(this, "view", 1);
 		},
 
@@ -268,6 +298,7 @@ rsSystem.component("rsCalendarDialog", {
 			return this.view === 4;
 		},
 		"update": function() {
+			// console.log("Update Calendar");
 			setTimeout(() => {
 				this.$forceUpdate();
 			});

@@ -46,7 +46,7 @@
 				
 				for(i=0; i<this.universe.listing.meeting.length; i++) {
 					meet = this.universe.listing.meeting[i];
-					if(meet && !meet.is_preview && !meet.disabled && mark < meet.date) {
+					if(meet && !meet.is_preview && !meet.disabled && (mark < meet.date || meet.id === this.id)) {
 						meetings.push(meet);
 					}
 				}
@@ -105,6 +105,9 @@
 							Vue.set(this, "name", "");
 						} else {
 							Vue.set(this, "editName", true);
+						}
+						if(this.id === "") {
+							Vue.set(this, "id", meet.id);
 						}
 						return meet;
 					}

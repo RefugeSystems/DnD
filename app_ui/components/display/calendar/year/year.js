@@ -36,6 +36,15 @@ rsSystem.component("rsCalendarYear", {
 			"type": Date
 		}
 	},
+	"watch": {
+		"eventReference": {
+			"deep": true,
+			"handler": function() {
+				// console.log(" ! Month Watch Fire");
+				this.update();
+			}
+		}
+	},
 	"computed": {
 
 	},

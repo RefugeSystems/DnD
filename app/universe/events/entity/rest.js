@@ -14,6 +14,7 @@ module.exports.initialize = function(universe) {
 		var time = universe.time,
 			date = Date.now(),
 			entity,
+			event,
 			item,
 			feat,
 			add,
@@ -95,14 +96,22 @@ module.exports.initialize = function(universe) {
 				}
 			}
 
+			event = {
+				"source": entity,
+				"time": time,
+				"date": date
+			};
+			universe.emit("entity:rest:long", event);
+
 			/**
 			 * 
 			 * @event entity:rest:long
 			 * @for Chronicle
 			 * @param {Number} time
 			 * @param {Number} date
+			 * @param {Object} source
 			 */
-			entity.fireHandlers("entity:rest:long", {}, ["equipped", "feats", "effects", "inventory"]);
+			entity.fireHandlers("entity:rest:long", event, ["equipped", "feats", "effects", "inventory"]);
 			/**
 			 * 
 			 * @event entity:consciousness:lost
@@ -110,7 +119,9 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:consciousness:lost", {}, ["equipped", "feats", "effects", "inventory"]);
+			entity.fireHandlers("entity:consciousness:lost", event, ["equipped", "feats", "effects", "inventory"]);
+
+			// TODO: Queue this for time + [Entity rest time] and require flag to get long rest
 			/**
 			 * 
 			 * @event entity:consciousness:gain
@@ -118,7 +129,7 @@ module.exports.initialize = function(universe) {
 			 * @param {Number} time
 			 * @param {Number} date
 			 */
-			entity.fireHandlers("entity:consciousness:gain", {}, ["equipped", "feats", "effects", "inventory"]);
+			entity.fireHandlers("entity:consciousness:gain", event, ["equipped", "feats", "effects", "inventory"]);
 		}
 	});
 

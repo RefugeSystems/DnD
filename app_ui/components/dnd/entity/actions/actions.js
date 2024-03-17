@@ -46,6 +46,14 @@
 				"default": function() {
 					return {};
 				}
+			},
+			"eventsOnly": {
+				"type": Boolean,
+				"default": false
+			},
+			"buttonsOnly": {
+				"type": Boolean,
+				"default": false
 			}
 		},
 		"computed": {

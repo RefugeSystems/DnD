@@ -3,7 +3,7 @@
 		<div class="character-container main-character-container column flex v" v-mousescroll>
 			<dnd-entity-name :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.name" :storage-container="storage.name"></dnd-entity-name>
 			<dnd-entity-broad :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.broad" :storage-container="storage.broad" v-on:scrollcon="scrollTo($event)" v-on:scrollhome="scrollHome()" v-on:scrollnext="scrollNext()" v-on:scrollprev="scrollPrev()" v-on:scrollnextpage="scrollNextPage()" v-on:scrollprevpage="scrollPrevPage()"></dnd-entity-broad>
-			<dnd-entity-actions :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.actions" :storage-container="storage.actions"></dnd-entity-actions>
+			<dnd-entity-actions :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.actions" :storage-container="storage.actions" :buttons-only="true"></dnd-entity-actions>
 			<dnd-entity-dice :entity="entity" :universe="universe" :profile="profile" :player="player" :widget="widget.dice" :storage-container="storage.dice"></dnd-entity-dice>
 		</div>
 		<div class="initiative-container" :class="skirmish?'combat':'closed'">

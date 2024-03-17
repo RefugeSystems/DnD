@@ -98,6 +98,28 @@ module.exports.initialize = function(universe) {
 				console.log("Unclassed spell? " + spell.id);
 			}
 			
+			/**
+			 * 
+			 * @event world:spell:cast
+			 * @for Chronicle
+			 * @param {Object} source
+			 * @param {Object} channel
+			 * @param {Array} targets
+			 * @param {Object} data
+			 * @param {Integer} level
+			 * @param {Object} damage
+			 */
+			universe.emit("world:spell:cast", {
+				"source": source,
+				"channel": spell,
+				"targets": targets,
+				"data": event.message.data,
+				"dc": difficulty,
+				"level": level,
+				"damage": damage,
+				"attack": attack
+			});
+			
 			load = {};
 			load.spell_slots = {};
 			load.spell_slots[level] = 1;

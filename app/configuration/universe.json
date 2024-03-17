@@ -2,6 +2,8 @@
 	"universe": {
 		"debug_cascades": false,
 		"debug_traces": false,
+		"flat_percentiles": false,
+		"partial_percentiles": true,
 		"classes": [
 			"session",
 			"player",
@@ -10,7 +12,7 @@
 			"meeting",
 			"event",
 			"handler",
-			"responder",
+			"reaction",
 			"occurrence",
 			"userbar",
 			"activity",
@@ -20,7 +22,6 @@
 			"backlog",
 			"hint",
 			"repetition",
-			"reaction",
 			"library",
 			"apikey",
 			

@@ -5,9 +5,7 @@
  * @constructor
  * @static
  */
-module.exports = function(universe) {
-	
-	var debug = false;
+module.exports = function(universe, debug) {
 
 	var rollMap = [
 		["str", "strength"],
@@ -28,6 +26,17 @@ module.exports = function(universe) {
 		"class_level": "archetype_level",
 		"proficiency": "proficiency_rating",
 		"pro": "proficiency_rating"
+	};
+
+	/**
+	 * Returns values to sort such that the highest values are first.
+	 * @method sortNumically
+	 * @param {Integer} a 
+	 * @param {Integer} b 
+	 * @returns {Integer}
+	 */
+	var sortNumically = function(a, b) {
+		return b - a;
 	};
 	
 	
@@ -171,7 +180,7 @@ module.exports = function(universe) {
 	 * loaded and computes values based on their _calculated properties.
 	 * @method compute
 	 * @param {String} expression [description]
-	 * @param {RSObject} source     [description]
+	 * @param {RSObject} source	 [description]
 	 * @param {Array} [referenced] Stores the sources for variables that were
 	 * 		calculated for update response purposes.
 	 * @return {Number}
@@ -531,15 +540,40 @@ module.exports = function(universe) {
 				reduced = value;
 			}
 		}
-		value = this.compute(dice["%"], source);
-		if(debug) {
-			console.log(" > Dice[percent]: " + reduced, value);
-		}
-		if(value) {
-			if(reduced) {
-				reduced += " + " + value + "%";
+		if(dice["%"]) {
+			if(universe.configuration.universe.partial_percentiles) {
+				dice["%"] = dice["%"].split("+");
+				var remaining = 100,
+					reduction = 0,
+					carry;
+				for(x=0; x<dice["%"].length; x++) {
+					carry = remaining * (parseInt(dice["%"][x])/100);
+					remaining -= carry;
+					reduction += carry;
+				}
+				value = reduction;
+			} else if(universe.configuration.universe.flat_percentiles) {
+				dice["%"] = dice["%"].split("+");
+				for(x=0; x<dice["%"].length; x++) {
+					dice["%"][x] = parseInt(dice["%"][x]);
+					if(isNaN(dice["%"][x])) {
+						dice["%"][x] = 0;
+					}
+				}
+				dice["%"].sort(sortNumically);
+				value = dice["%"][0];
 			} else {
-				reduced = value + "%";
+				value = this.compute(dice["%"], source);
+				if(debug) {
+					console.log(" > Dice[percent]: " + dice["%"] + " -> " + reduced, value);
+				}
+			}
+			if(value) {
+				if(reduced) {
+					reduced += " + " + value + "%";
+				} else {
+					reduced = value + "%";
+				}
 			}
 		}
 		if(debug) {

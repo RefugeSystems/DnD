@@ -52,6 +52,7 @@ module.exports.initialize = function(universe) {
 		// TODO: Improve at-response-time handling to allow actions to be created on the fly
 		// console.log("Actionable - " + id);
 		universe.on(id, function(event) {
+			console.log("Universe Action Response: " + id);
 			var entity = event.source || event.entity;
 			if(typeof(entity) === "string") {
 				entity = universe.get(entity);
@@ -172,7 +173,7 @@ module.exports.initialize = function(universe) {
 			"player": event.player.id
 		};
 
-		console.log("Perform: ", perform);
+		// console.log("Perform: ", perform);
 
 		if(perform.action) {
 			action = manager.object[perform.action];
@@ -182,14 +183,14 @@ module.exports.initialize = function(universe) {
 				if(source && (source.played_by === event.player.id || (source.owned && source.owned[event.player.id]) || event.player.gm)) {
 					perform.entity = source;
 					universe.emit(perform.action.id, perform);
-					console.log("Performed: ", perform.action.id);
+					// console.log("Performed: ", perform.action.id);
 
 					if(action.also) {
 						for(i=0; i<action.also.length; i++) {
 							console.log("Also: " + action.also[i]);
 							also = manager.object[action.also[i]];
 							if(also && !also.disabled && !also.is_preview) {
-								console.log(" > Emit: " + also.id);
+								// console.log(" > Emit: " + also.id);
 								universe.emit(also.id, {
 									"entity": source,
 									"action": also

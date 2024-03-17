@@ -20,18 +20,18 @@
 	</div>
 
 	<div class="view day" v-if="viewingDay()">
-		<rs-calendar-day :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :entity="entity" v-on:month="openMonth" v-on:year="openYear"></rs-calendar-day>
+		<rs-calendar-day :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :player="player" :entity="entity" :profile="profile" v-on:month="openMonth" v-on:year="openYear"></rs-calendar-day>
 	</div>
 
 	<div class="view month" v-if="viewingMonth()">
-		<rs-calendar-month :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :entity="entity" v-on:day="openDay" v-on:year="openYear"></rs-calendar-month>
+		<rs-calendar-month :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :player="player" :entity="entity" :profile="profile" v-on:day="openDay" v-on:year="openYear"></rs-calendar-month>
 	</div>
 
 	<div class="view year" v-else-if="viewingYear()">
-		<rs-calendar-year :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :entity="entity" v-on:day="openDay" v-on:month="openMonth"></rs-calendar-year>
+		<rs-calendar-year :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :player="player" :entity="entity" :profile="profile" v-on:day="openDay" v-on:month="openMonth"></rs-calendar-year>
 	</div>
 
 	<div class="view era" v-else>
-		<rs-calendar-era :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :entity="entity"></rs-calendar-era>
+		<rs-calendar-era :rendering="rendering" :today="today" :universe="universe" :calendar="calendar" :event-reference="eventReference" :player="player" :entity="entity" :profile="profile"></rs-calendar-era>
 	</div>
 </div>
