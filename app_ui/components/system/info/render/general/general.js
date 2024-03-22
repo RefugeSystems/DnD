@@ -1555,9 +1555,9 @@ rsSystem.component("sysInfoGeneral", {
 			if(record.data) {
 				return record.data;
 			} else if(this.cacheSuffix) {
-				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + record.id + "?ctrl=" + this.cacheSuffix;
+				return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + record.id + "?ctrl=" + this.cacheSuffix;
 			} else {
-				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + record.id + "?ctrl=" + Date.now();
+				return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + record.id + "?ctrl=" + Date.now();
 			}
 		},
 		/**

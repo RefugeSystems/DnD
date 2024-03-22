@@ -571,7 +571,7 @@ class RSUniverse extends EventEmitter {
 	 * @param {Object || String} id 
 	 */
 	getImagePath(image) {
-		return  location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + (image.id || image);
+		return  location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + (image.id || image);
 	}
 
 	/**
@@ -587,7 +587,7 @@ class RSUniverse extends EventEmitter {
 		} else {
 			classification = classification || "entity";
 		}
-		return  location.protocol + "//" + rsSystem.configuration.address + "/api/v1/" + classification + "/" + object;
+		return  location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/" + classification + "/" + object;
 	}
 
 	/**

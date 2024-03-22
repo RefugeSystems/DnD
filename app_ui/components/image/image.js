@@ -38,9 +38,9 @@
 			 */
 			"url": function() {
 				if(this.cacheSuffix) {
-					return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id + "?ctrl=" + this.cacheSuffix;
+					return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + this.location.id + "?ctrl=" + this.cacheSuffix;
 				}
-				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id;
+				return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + this.location.id;
 			}
 		},
 		"data": function() {

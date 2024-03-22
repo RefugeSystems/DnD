@@ -128,7 +128,7 @@ rsSystem.component("dndEntityOverview", {
 		},
 		"getImageURL": function() {
 			if(this.location) {
-				return location.protocol + "//" + rsSystem.configuration.address + "/api/v1/image/" + this.location.id;
+				return location.protocol + "//" + rsSystem.universe.connection.url.host + "/api/v1/image/" + this.location.id;
 			}
 			return null;
 		}

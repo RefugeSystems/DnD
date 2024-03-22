@@ -902,6 +902,7 @@ class Universe extends EventEmitter {
 					Promise.all(waiting)
 					.then(() => {
 						if(source.is_template && source.template_process) {
+							console.log(" > Additional Details: ", locked, details);
 							if(!details.inventory) {
 								details.inventory = [];
 							}
@@ -1096,6 +1097,12 @@ class Universe extends EventEmitter {
 							created.updateFieldValues();
 							// this.emit("object-created", created);
 							if(callback) {
+								this.emit("universe:object:created", {
+									"created": created,
+									"source": created,
+									"date": Date.now(),
+									"time": this.time
+								});
 								callback(null, created);
 							}
 						})
