@@ -41,7 +41,7 @@ rsSystem.component("DNDCharacter", {
 			if(this.meeting && this.meeting.entities) {
 				for(x=0; x<this.meeting.entities.length; x++) {
 					entity = this.universe.index.entity[this.meeting.entities[x]];
-					if(rsSystem.utility.isValid(entity)) {
+					if(rsSystem.utility.isValid(entity) && !entity.obscured) {
 						entities.uniquely(entity);
 					}
 				}
