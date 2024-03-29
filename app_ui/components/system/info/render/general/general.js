@@ -51,6 +51,46 @@ rsSystem.component("sysInfoGeneral", {
 
 			return skirmishes;
 		},
+		"alsoHas": function() {
+			var entities = [],
+				alsoHas = [],
+				buffer,
+				other,
+				field,
+				i;
+			
+			switch(this.info._class) {
+				case "proficiency":
+					field = "proficiencies";
+					break;
+				case "knowledge":
+					field = "knowledges";
+					break;
+				case "item":
+					field = "inventory";
+					other = this.info.parent;
+					break;
+				case "feat":
+					field = "feats";
+					break;
+			}
+
+			if(field) {
+				this.universe.transcribeInto(this.activeMeeting.entities, entities);
+				for(i=0; i<entities.length; i++) {
+					buffer = entities[i];
+					if(buffer[field] instanceof Array) {
+						if(buffer[field].indexOf(this.info.id) !== -1) {
+							alsoHas.push(buffer);
+						} else if(other && buffer[field].indexOf(other) !== -1) {
+							alsoHas.push(buffer);
+						}
+					}
+				}
+			}
+
+			return alsoHas;
+		},
 		"note": function() {
 			if(this.player.gm) {
 				return this.rsshowdown(this.info.note || "", this.info, this.profile?this.profile.inline_javascript:false);

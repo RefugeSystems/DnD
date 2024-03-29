@@ -798,80 +798,84 @@ class Universe extends EventEmitter {
 						// for(j=0; j<tfields.length; j++) {
 							var tvalue = source.template_process[tf],
 								tfield = manager.fieldUsed[tf];
-							switch(tfield.type) {
-								case "calculated":
-								case "integer":
-								case "number":
-								case "dice":
-									details[tfield.id] = this.calculator.computedDiceRoll(tvalue, source);
-									break;
-								case "markdown":
-								case "string":
-									if(tvalue instanceof Array) {
-										if(tvalue[0].startsWith("dataset:")) {
-											loading = [];
-											for(i=0; i<tvalue.length; i++) {
-												dataset = this.get(tvalue[i]);
-												if(dataset)	{
-													generator = new NameGenerator(dataset.value);
-													loading.push(generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+							if(tfield) {
+								switch(tfield.type) {
+									case "calculated":
+									case "integer":
+									case "number":
+									case "dice":
+										details[tfield.id] = this.calculator.computedDiceRoll(tvalue, source);
+										break;
+									case "markdown":
+									case "string":
+										if(tvalue instanceof Array) {
+											if(tvalue[0].startsWith("dataset:")) {
+												loading = [];
+												for(i=0; i<tvalue.length; i++) {
+													dataset = this.get(tvalue[i]);
+													if(dataset)	{
+														generator = new NameGenerator(dataset.value);
+														loading.push(generator.corpus[Random.integer(generator.corpus.length)].capitalize());
+													}
 												}
+												tvalue = loading.join(" ");
+											} else {
+												tvalue = tvalue[Random.integer(tvalue.length)];
 											}
-											tvalue = loading.join(" ");
+										}
+										if(typeof(tvalue) !== "string") {
+											tvalue = tvalue.toString();
+										}
+										if((buffer = this.get(tvalue)) && buffer.is_template) {
+											waiting.push(this.copyPromise(buffer, subTemplateMask).then((copy) => {
+												details[tfield.id] = copy.id;
+												if(copy.is_locked) {
+													locked[copy.id] = true;
+												}
+												return copy;
+											}));
 										} else {
+											details[tfield.id] = tvalue;
+										}
+										break;
+									case "boolean":
+										details[tfield.id] = (typeof(tvalue) === "string" && (tvalue === "true" || tvalue === "1")) || tvalue === true || tvalue === 1;
+										break;
+									case "array":
+										if(tvalue instanceof Array && tvalue[0] instanceof Array) {
 											tvalue = tvalue[Random.integer(tvalue.length)];
 										}
-									}
-									if(typeof(tvalue) !== "string") {
-										tvalue = tvalue.toString();
-									}
-									if((buffer = this.get(tvalue)) && buffer.is_template) {
-										waiting.push(this.copyPromise(buffer, subTemplateMask).then((copy) => {
-											details[tfield.id] = copy.id;
-											if(copy.is_locked) {
-												locked[copy.id] = true;
-											}
-											return copy;
-										}));
-									} else {
-										details[tfield.id] = tvalue;
-									}
-									break;
-								case "boolean":
-									details[tfield.id] = (typeof(tvalue) === "string" && (tvalue === "true" || tvalue === "1")) || tvalue === true || tvalue === 1;
-									break;
-								case "array":
-									if(tvalue instanceof Array && tvalue[0] instanceof Array) {
-										tvalue = tvalue[Random.integer(tvalue.length)];
-									}
-									if(tfield.inheritable && tvalue instanceof Array && tvalue.length) {
-										details[tfield.id] = [];
-										for(i=0; i<tvalue.length; i++) {
-											loading = this.get(tvalue[i]);
-											if(loading) {
-												if(loading.is_template) {
-													waiting.push(this.copyPromise(loading, subTemplateMask).then((copy) => {
-														details[tfield.id].push(copy.id);
-														if(copy.is_locked) {
-															locked[copy.id] = true;
-														}
-														return copy;
-													}));
-												} else {
-													details[tfield.id].push(loading.id);
+										if(tfield.inheritable && tvalue instanceof Array && tvalue.length) {
+											details[tfield.id] = [];
+											for(i=0; i<tvalue.length; i++) {
+												loading = this.get(tvalue[i]);
+												if(loading) {
+													if(loading.is_template) {
+														waiting.push(this.copyPromise(loading, subTemplateMask).then((copy) => {
+															details[tfield.id].push(copy.id);
+															if(copy.is_locked) {
+																locked[copy.id] = true;
+															}
+															return copy;
+														}));
+													} else {
+														details[tfield.id].push(loading.id);
+													}
 												}
 											}
+										} else {
+											details[tfield.id] = tvalue;
 										}
-									} else {
-										details[tfield.id] = tvalue;
-									}
-									break;
-								default:
-									if(tvalue instanceof Array) {
-										details[tfield.id] = tvalue[Random.integer(tvalue.length)];
-									} else {
-										details[tfield.id] = tvalue;
-									}
+										break;
+									default:
+										if(tvalue instanceof Array) {
+											details[tfield.id] = tvalue[Random.integer(tvalue.length)];
+										} else {
+											details[tfield.id] = tvalue;
+										}
+								}
+							} else {
+								console.warn("Undefined field referenced in template process \"" + source.name + "\" (" + source.id + "): " + tf);
 							}
 						});
 					}

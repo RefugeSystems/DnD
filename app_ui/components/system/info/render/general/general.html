@@ -32,4 +32,13 @@
 		<dnd-object-charges class="flat" v-if="info.charges_max" :object="info" :universe="universe"></dnd-object-charges>
 	</div>
 	<rs-stat-block :universe="universe" :object="info" :player="player" :profile="profile" :size="size" :empties="false" :filterable="true" marking="fad fa-dot-circle rs-secondary-transparent"/>
+	<div class="info-also" v-if="alsoHas.length">
+		<div class="heading">Entites Have:</div>
+		<ul>
+			<li v-for="also in alsoHas" :data-id="also.id">
+				<span :class="also.icon"></span>
+				<span>{{also.name}}</span>
+			</li>
+		</ul>
+	</div>
 </div>
