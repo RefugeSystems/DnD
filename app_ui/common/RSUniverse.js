@@ -421,6 +421,7 @@ class RSUniverse extends EventEmitter {
 					loadMetrics = localStorage.getItem(this.KEY.METRICS),
 					loadIndex = {},
 					loadNamed = {},
+					templated = {},
 					keys,
 					i,
 					j;
@@ -435,7 +436,12 @@ class RSUniverse extends EventEmitter {
 							loadIndex[keys[i]] = {};
 							for(j=0; j<loadListing[keys[i]].length; j++) {
 								loadIndex[keys[i]][loadListing[keys[i]][j].id] = loadListing[keys[i]][j];
-								loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
+								if(loadListing[keys[i]][j].is_template) {
+									loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
+									templated[loadListing[keys[i]][j].id] = true;
+								} else if(!templated[loadListing[keys[i]][j].id]) {
+									loadNamed[loadListing[keys[i]][j].name] = loadListing[keys[i]][j];
+								}
 							}
 						}
 						// console.log("Cached Action Max: ", _p(loadIndex.fields.action_max));
