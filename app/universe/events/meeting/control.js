@@ -94,8 +94,13 @@ module.exports.initialize = function(universe) {
 	 */
 	universe.on("player:meeting:generate", function(event) {
 		var meeting = event.message.data.meeting,
+			frequency = parseInt(universe.getSetting("setting:meetings:frequency")),
 			generate,
 			parts;
+
+		if(isNaN(frequency) || frequency === 0) {
+			frequency = 2;
+		}
 
 		if(event.player.gm) {
 			if(typeof(meeting) === "string") {
@@ -121,7 +126,7 @@ module.exports.initialize = function(universe) {
 				generate.entities = copy(meeting.entities);
 				generate.players = copy(meeting.players);
 				generate.is_sky_visible = meeting.is_sky_visible;
-				generate.date = meeting.date + 2 * week;
+				generate.date = meeting.date + frequency * week;
 				generate.meeting_previous = meeting.id;
 				generate.location = meeting.location;
 				generate.weather = meeting.weather;

@@ -1,5 +1,7 @@
 var combat = require("./events/combat/utility.js"),
-	Random = require("rs-random");
+	NameGenerator = require("../management/nameGenerator.js"),
+	Random = require("rs-random"),
+	split = /[\s,;]+/;
 
 /**
  * 
@@ -11,6 +13,8 @@ class UniverseUtility {
 	constructor(universe) {
 		this.universe = universe;
 		this.console = console;
+		this.NameGenerator = NameGenerator;
+		this.split = /[\s,;]+/;
 	}
 
 	get(id) {
@@ -432,6 +436,37 @@ class UniverseUtility {
 		}
 
 		return found;
+	}
+
+	getRandomName(dataset) {
+		if(typeof(dataset) === "string") {
+			dataset = this.universe.get(dataset);
+		}
+		if(!dataset) {
+			return null;
+		}
+		var values = dataset.value.split(this.split),
+			index = Random.integer(values.length),
+			generator = Math.random() < .5,
+			name = [],
+			next,
+			i;
+
+		if(generator) {
+			generator = new NameGenerator(dataset.value);
+			name.push(generator.create().capitalize());
+		} else {
+			name.push(values[index].capitalize());
+		}
+
+		for(i=0; i<dataset.next.length; i++) {
+			next = this.universe.get(dataset.next[i]);
+			if(next) {
+				name.push(this.getRandomName(next));
+			}
+		}
+
+		return name.join(dataset.spacing || " ");
 	}
 
 	/**

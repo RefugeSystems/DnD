@@ -756,6 +756,7 @@ class Universe extends EventEmitter {
 			waiting = [],
 			locked = {},
 			generator,
+			complete,
 			dataset,
 			loading,
 			tfields,
@@ -778,15 +779,26 @@ class Universe extends EventEmitter {
 			mask = {};
 		}
 
+		complete = (err, object) => {
+			if(source.is_template) {
+				this.emit("object:template:generated", object);
+			}
+			if(callback) {
+				if(err) {
+					callback(err);
+				} else {
+					callback(null, object);
+				}
+			}
+		};
+
 		details.id = id + ":" + Random.string(32).toLowerCase();
 		Object.assign(details, mask);
 
 		if(source) {
 			manager = this.manager[source._class];
 			if(source.is_singular) {
-				if(callback) {
-					callback(null, source);
-				}
+				complete(null, source);
 			} else {
 				subTemplateMask.character = details.id;
 				subTemplateMask.user = details.id;
@@ -899,7 +911,7 @@ class Universe extends EventEmitter {
 					if(source.mp_max) {
 						details.mp = source.mp_max;
 					}
-					this.createObject(details, callback);
+					this.createObject(details, complete);
 				};
 
 				if(waiting.length) {
@@ -928,9 +940,7 @@ class Universe extends EventEmitter {
 						finish();
 					})
 					.catch((err) => {
-						if(callback) {
-							callback(new Anomaly("universe:object:copy", "Failed to copy object", 50, {id}, err, this));
-						}
+						complete(new Anomaly("universe:object:copy", "Failed to copy object", 50, {id}, err, this));
 					});
 				} else {
 					console.log(" > No additional details: ", details);
@@ -938,9 +948,7 @@ class Universe extends EventEmitter {
 				}
 			}
 		} else {
-			if(callback) {
-				callback(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
-			}
+			complete(new Anomaly("universe:object:copy", "Unable to find source object", 50, {id}, null, this));
 		}
 	}
 
