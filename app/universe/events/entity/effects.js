@@ -64,6 +64,13 @@ module.exports.initialize = function(universe) {
 				character.subValues({
 					"effects": subtractions[character.id]
 				});
+				universe.emit("entity:effects:loss", {
+					"target": character,
+					"effects": subtractions[character.id],
+					"damage": false,
+					"saved": false,
+					"hit": false
+				});
 			}
 		}
 		if(from) {
@@ -72,6 +79,19 @@ module.exports.initialize = function(universe) {
 				if(event.player.gm || (character && character.owned[event.player.id])) {
 					character.subValues({
 						"effects": effects
+					});
+					/**
+					 * 
+					 * @event entity:effects:loss
+					 * @param {RSObject} target Entity losing the effect
+					 * @param {Array} effects The effects being lost
+					 */
+					universe.emit("entity:effects:loss", {
+						"target": character,
+						"effects": effects,
+						"damage": false,
+						"saved": false,
+						"hit": false
 					});
 				}
 			}

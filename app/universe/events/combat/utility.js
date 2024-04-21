@@ -1,4 +1,5 @@
-var Random = require("rs-random");
+var Random = require("rs-random"),
+	EventUtility = require("../utility");
 
 var TRACKING_Limit = 18;
 
@@ -135,6 +136,7 @@ module.exports.initialize = function(universe) {
 			effect,
 			notify,
 			events,
+			level,
 			copy,
 			i;
 
@@ -146,6 +148,7 @@ module.exports.initialize = function(universe) {
 			} else {
 				notify = universe.getMasters();
 			}
+			level = tracked.level;
 			universe.emit("send", {
 				"type": "dismiss-message",
 				"mid": activityPrefix + activity,
@@ -173,6 +176,11 @@ module.exports.initialize = function(universe) {
 		} else {
 			log.succeeded = true; // Master or Environment
 		}
+
+		if(universe.debugDamage) {
+			console.log("Tracked Damage[" + level + "]: " + (tracked.channel?tracked.channel.id:tracked.channel));
+		}
+
 		if(damage) {
 			if(log.succeeded) {
 				log.damage = damage; // Update for what the player submitted as final damage
@@ -227,15 +235,16 @@ module.exports.initialize = function(universe) {
 							adding = [];
 							for(i=0; i<effects.length; i++) {
 								effect = effects[i];
-								console.log("Check Effect: " + effect.name + "\n > Parent: " + effect.id + "\n > Caster: " + effect.caster + "\n > Target: " + effect.character + "\n > Expiration: " + effect.expiration);
-								if(effect.expiration) {
-									universe.trackExpiration(effect, tracked.target.id, "effects");
-								}
+								// console.log("Check Effect: " + effect.name + "\n > Parent: " + effect.id + "\n > Caster: " + effect.caster + "\n > Target: " + effect.character + "\n > Expiration: " + effect.expiration);
+								// if(effect.expiration) {
+								// 	universe.trackExpiration(effect, tracked.target.id, "effects");
+								// }
 								adding.push(effect.id);
 							}
-							tracked.target.addValues({
-								"effects": adding
-							});
+							// tracked.target.addValues({
+							// 	"effects": adding
+							// });
+							EventUtility.instillEffects(universe, adding, tracked.source, tracked.target, tracked.channel, true, true, false, level);
 						})
 						.catch(function(err) {
 							console.log("Damage Err: ", err);
@@ -399,28 +408,29 @@ module.exports.initialize = function(universe) {
 			// was_damaged = resolveDamage(entity, tracked.damage, tracked.resist);
 			// TODO: Conditional Instill
 			if(tracked.channel && tracked.channel.instilled && tracked.channel.instilled.length) {
-				for(i=0; i<tracked.channel.instilled.length; i++) {
-					buffer = universe.get(tracked.channel.instilled[i]);
-					mask = Object.assign({}, castMask);
-					mask.character = tracked.target.id;
-					mask.expiration = universe.time + buffer.duration;
-					console.log("Check Effect: " + (mask.name || mask.id) + "\n > Parent: " + buffer.id + "\n > Caster: " + mask.caster + "\n > Target: " + mask.character + "\n > Expiration: " + mask.expiration);
-					if(buffer && ((buffer.damage_required && was_damaged && buffer.hit_required && succeeded === false)
-							|| (buffer.damage_required && was_damaged && !buffer.hit_required)
-							|| (!buffer.damage_required && buffer.hit_required && succeeded === false)
-							|| (!buffer.damage_required && !buffer.hit_required))) {
-						universe.copy(buffer.id, mask, function(err, effect) {
-							if(!err) {
-								universe.trackExpiration(effect, tracked.target.id, "effects");
-								tracked.target.addValues({
-									"effects": [effect.id]
-								});
-							} else {
-								console.log("Error tracking effect expiration from spell save: ", err);
-							}
-						});
-					}
-				}
+				// for(i=0; i<tracked.channel.instilled.length; i++) {
+				// 	buffer = universe.get(tracked.channel.instilled[i]);
+				// 	mask = Object.assign({}, castMask);
+				// 	mask.character = tracked.target.id;
+				// 	mask.expiration = universe.time + buffer.duration;
+				// 	console.log("Check Effect: " + (mask.name || mask.id) + "\n > Parent: " + buffer.id + "\n > Caster: " + mask.caster + "\n > Target: " + mask.character + "\n > Expiration: " + mask.expiration);
+				// 	if(buffer && ((buffer.damage_required && was_damaged && buffer.hit_required && succeeded === false)
+				// 			|| (buffer.damage_required && was_damaged && !buffer.hit_required)
+				// 			|| (!buffer.damage_required && buffer.hit_required && succeeded === false)
+				// 			|| (!buffer.damage_required && !buffer.hit_required))) {
+				// 		universe.copy(buffer.id, mask, function(err, effect) {
+				// 			if(!err) {
+				// 				universe.trackExpiration(effect, tracked.target.id, "effects");
+				// 				tracked.target.addValues({
+				// 					"effects": [effect.id]
+				// 				});
+				// 			} else {
+				// 				console.log("Error tracking effect expiration from spell save: ", err);
+				// 			}
+				// 		});
+				// 	}
+				// }
+				EventUtility.instillEffects(universe, tracked.channel.instilled, tracked.source, tracked.target, tracked.channel, false, was_damaged, succeeded, tracked.level);
 			}
 		} else {
 			// No auto, just log to chronicle
@@ -674,8 +684,9 @@ module.exports.initialize = function(universe) {
 	 * @param {String} [attack_skill] Skill ID for how the attack was performed (Main Hand, Off Hand, Spell Attack)
 	 * @param {String} [message]
 	 * @param {Object} [form]
+	 * @param {Integer} [level]
 	 */
-	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill, message, form) {
+	 sendDamages = module.exports.sendDamages = function(source, targets, channel, damage, attack, attacks, attack_skill, message, form, level) {
 		console.log("Send Damage Form: ", form);
 		var id = Random.identifier(activityPrefix, 10, 32),
 			time = universe.time,
@@ -724,7 +735,8 @@ module.exports.initialize = function(universe) {
 				"check_outcome": atk, // Standardizing around "check_outcome" & "check_difficulty"
 				"check_difficulty": target.armor,
 				"damage": damage,
-				"skill": attack_skill?attack_skill.id || attack_skill:undefined
+				"skill": attack_skill?attack_skill.id || attack_skill:undefined,
+				"level": level
 			};
 			logged[activity] = {
 				"activity": activity,
@@ -738,7 +750,8 @@ module.exports.initialize = function(universe) {
 				"check_difficulty": target.armor,
 				"original_damage": damage,
 				"damage": damage,
-				"skill": attack_skill?attack_skill.id || attack_skill:undefined
+				"skill": attack_skill?attack_skill.id || attack_skill:undefined,
+				"level": level
 			};
 			/**
 			 * Fired for the creature attacking
@@ -785,7 +798,7 @@ module.exports.initialize = function(universe) {
 
 
 			logged[activity].id = universe.chronicle.addOccurrence("entity:damaging", logged[activity], universe.time, logged[activity].source, logged[activity].target);
-			sendDamage(activity, source, target, logged[activity].channel, damage, message);
+			sendDamage(activity, source, target, logged[activity].channel, damage, message, level);
 		}
 	};
 
@@ -803,7 +816,7 @@ module.exports.initialize = function(universe) {
 	 * @param {String} [message]
 	 * @param {Object} [form]
 	 */
-	sendDamage = function(activity, source, target, channel, damage, message, form) {
+	sendDamage = function(activity, source, target, channel, damage, message, form, level) {
 		if(!damage) {
 			// TODO: Revise for better handling and update source calls to ensure damage is guarenteed
 			damage = {};
@@ -1265,7 +1278,7 @@ module.exports.initialize = function(universe) {
 		 */
 		universe.emit("world:weapon:attack", {
 			"source": source,
-			"channel": item,
+			"channel": channel,
 			"targets": targets,
 			"data": event.message.data,
 			"attack": attack,

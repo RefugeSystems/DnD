@@ -318,8 +318,8 @@ rsSystem.component("dndDialogDamage", {
 	},
 	"data": function () {
 		var data = {},
+			targets,
 			items,
-			slot,
 			dmg,
 			i;
 
@@ -381,8 +381,14 @@ rsSystem.component("dndDialogDamage", {
 
 		data.dice = rsSystem.dnd.diceDefinitions;
 		data.focused_roll = null;
+		data.targeting = this.details.targeting || {};
 		data.targetCount = {};
 		data.maxtargets = 0;
+		targets = Object.keys(data.targeting);
+		for(i=0; i<targets.length; i++) {
+			data.targetCount[targets[i]] = 1;
+		}
+
 		
 		data.form_filters = {};
 		data.form_fields = [];
@@ -403,7 +409,6 @@ rsSystem.component("dndDialogDamage", {
 		data.channel = this.details.channel || null;
 		data.action = this.details.action || null;
 		data.action_cost = null;
-		data.targeting = this.details.targeting || {};
 		data.ranging = {};
 		data.roll_damage = this.details.roll_damage || {};
 		data.send_damage = this.details.send_damage || {};

@@ -9,6 +9,7 @@ module.exports.initialize = function(universe) {
 			damage = event.message.data.result || {},
 			level = parseInt(event.message.data.spell_level),
 			targets = [],
+			applyFormIfApplicable,
 			difficulty,
 			applyForm,
 			attack,
@@ -90,11 +91,11 @@ module.exports.initialize = function(universe) {
 			}
 
 			if(spell.cast_save) {
-				utility.sendSaves(source, targets, level, spell, spell.cast_save, difficulty, damage, undefined, event.message.data.form);
+				utility.sendSaves(source, targets, level, spell, spell.cast_save, difficulty, damage, undefined, event.message.data.form, level);
 			} else if(spell.cast_attack) {
-				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form);
+				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form, level);
 			} else {
-				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form);
+				utility.sendDamages(source, targets, spell, damage, attack, event.message.data.targeted_checks, undefined, undefined, event.message.data.form, level);
 				console.log("Unclassed spell? " + spell.id);
 			}
 			

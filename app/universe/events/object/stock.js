@@ -45,7 +45,7 @@ module.exports.initialize = function(universe) {
 
 				shop.setValues({
 					"inventory": [],
-					"stocked_last": universe.time,
+					"stocked_last": universe.time
 				});
 				
 				universe.chronicle.addOccurrence("shop:clear", {"source": shop.id, "limits": limits}, universe.time, shop.id);
@@ -240,7 +240,7 @@ module.exports.initialize = function(universe) {
 				.then(function() {
 					shop.setValues({
 						"inventory": inventory,
-						"stocked_last": universe.time,
+						"stocked_last": universe.time
 					});
 					universe.chronicle.addOccurrence("shop:restock", {"source": shop.id, "limits": limits}, universe.time, shop.id);
 					universe.emit("send", {

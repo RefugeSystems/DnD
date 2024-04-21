@@ -61,6 +61,13 @@ module.exports.process = function(universe, occurrence, completed) {
 		} else if(target && field) {
 			values[field] = [object.id];
 			target.subValues(values);
+			universe.emit("entity:effects:loss", {
+				"target": target,
+				"effects": [object.id],
+				"damage": false,
+				"saved": false,
+				"hit": false
+			});
 		}
 	}
 

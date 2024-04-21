@@ -258,6 +258,10 @@ class PlayerConnection extends EventEmitter {
 			anomaly,
 			x;
 			
+		if(this.universe.allSends) {
+			console.log("Sending[" + this.id + "]: ", type, data, source, socket);
+		}
+
 		message.type = type;
 		message.data = data;
 		message.sent = Date.now();
@@ -274,10 +278,16 @@ class PlayerConnection extends EventEmitter {
 				} catch(e) {
 					anomaly = new Anomaly("player:connection:send", "Failed to send message to " + this.id + " on Socket " + this.socketIDs[x], 40, null, e, this);
 					this.universe.emit("warning", anomaly);
-					console.log(anomaly);
 					clean.unshift(x);
+					if(this.universe.allSends) {
+						console.log(anomaly);
+					}
 				}
 			}
+		}
+
+		if(this.universe.allSends && clean.length) {
+			console.log("Cleaning Found: ", clean);
 		}
 		/* Skipping clean as this seems to be causing issues, likely with a dual drop
 		while(clean.length) {

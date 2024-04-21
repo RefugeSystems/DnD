@@ -52,6 +52,7 @@ module.exports.initialize = function(universe) {
 			roll,
 			i;
 
+		console.log("Chanel Checks: " + JSON.stringify(event.message.data, null, 4));
 		console.log("Target Checks: " + JSON.stringify(target_checks, null, 4));
 		if(targets && targets instanceof Array) {
 			universe.transcribeArray(targets);

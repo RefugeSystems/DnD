@@ -246,7 +246,7 @@ var config = {
 				"tests/_mocks/**/*.js",
 				"tests/_data/**/*.js"
 			],
-			"tasks": ["eslint:server", "jasmine:server"]
+			"tasks": ["eslint:server", "jasmine:server", "yuidoc:server"]
 		},
 		"ui": {
 			"files": [
@@ -512,6 +512,15 @@ var config = {
 		"server": {
 			"tasks": [
 				["open:docs_server", "exec:server"],
+				["server_develop"]
+			],
+			"options": {
+				"logConcurrentOutput": true
+			}
+		},
+		"server:info": {
+			"tasks": [
+				["open:docs_server", "watch:server"],
 				["server_develop"]
 			],
 			"options": {

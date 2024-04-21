@@ -32,7 +32,7 @@ var configuration = require("a-configuration"),
 	start = Date.now();
 
 // Setup basic defaults
-EventEmitter.defaultMaxListeners = 50;
+EventEmitter.defaultMaxListeners = 100;
 
 configuration.server.initialize_mark = start;
 startup.configuration = configuration;

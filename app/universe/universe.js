@@ -546,7 +546,7 @@ class Universe extends EventEmitter {
 				reaction = this.manager.reaction.object[this.manager.reaction.objectIDs[i]];
 				if(reaction && !reaction.is_preview && reaction.is_active && (reaction.acknowledge === event || reaction._eventMap[event])) {
 					try {
-						reaction.processor(null, event, this, this.utility);
+						reaction.processor(null, data, this, this.utility);
 						// responder.processor(data);
 					} catch(error) {
 						console.log("Error handling reaction[" + reaction.id + "]: ", error);
@@ -1404,17 +1404,17 @@ class Universe extends EventEmitter {
 					if(occurrences && occurrences.length) {
 						var processing = occurrences.length,
 							chronicler,
-							occurrence,
 							process;
 						
 						process = () => {
-							occurrence = occurrences.shift();
+							var occurrence = occurrences.shift();
 							if(occurrence) {
 								chronicler = this.chronicler[occurrence.type];
 								occurrence.reverse = reverse;
 								if(chronicler) {
 									chronicler.process(this, occurrence, process);
-								} else if(occurrence.emit) {
+								}
+								if(occurrence.emit) {
 									this.emit(occurrence.emit, occurrence);
 								}
 							}
@@ -1901,7 +1901,7 @@ class Universe extends EventEmitter {
 			"recipients": players,
 			"message": message,
 			"icon": icon,
-			"anchored": true,
+			"anchored": timeout?false:true,
 			"emission": emission,
 			"timeout": timeout
 		});

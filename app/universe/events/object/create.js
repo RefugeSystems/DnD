@@ -98,12 +98,12 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 */
 	universe.on("player:shim:object", function(event) {
-			var classification = event.message.data.classification,
-				details = event.message.data.details,
-				entity = event.message.data.entity,
-				recipients = {},
-				cleaned = {},
-				release;
+		var classification = event.message.data.classification,
+			details = event.message.data.details,
+			entity = event.message.data.entity,
+			recipients = {},
+			cleaned = {},
+			release;
 
 		recipients[event.player.id] = true;
 		recipients["player:master"] = true;

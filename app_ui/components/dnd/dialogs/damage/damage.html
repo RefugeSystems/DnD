@@ -1,4 +1,4 @@
-<div class="rs-component dnd-component dialog-dnd-damage">
+<div class="rs-component dnd-component dialog-dnd-damage" v-mousescroll>
 	<!-- All selections depend on the passed entity -->
 	<div class="progress flex h v-center">
 		<button class="section-tab flat action rs-white" v-for="section in prepared" v-on:click="goToSection(section)" v-if="section.id !== 'review'">
@@ -13,7 +13,7 @@
 			<span class="action-icon fa-solid" :class="sections[activeSection.index + 1]?'fa-chevrons-right':'fa-upload'"></span>
 		</button>
 		-->
-		<rs-shiny-button class="general rounded action" v-on:click="finishSection(activeSection)" :active="true" color="yellow">
+		<rs-shiny-button class="general rounded action" v-on:click="finishSection(activeSection)" :active="true" color="yellow" v-if="channel">
 			<span class="">{{sections[activeSection.index + 1]?'Next':'Finish'}}</span>
 			<span class="action-icon fa-solid" :class="sections[activeSection.index + 1]?'fa-chevrons-right':'fa-upload'"></span>
 		</rs-shiny-button>

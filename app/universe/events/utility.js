@@ -114,9 +114,10 @@ module.exports.addUniquely = function(universe, adding, to) {
  * @param {Boolean} [hit] Was the target successfully hit by the source. Used for effect instill consideration.
  * @param {Boolean} [damaged] Was the target successfully damaged by the source. Used for effect instill consideration.
  * @param {Boolean} [saved] Did the target successful save on any checks involved.
+ * @param {Integer} [level] The level of the channel. Used for effect instill consideration.
  * @return {Array} Of encountered problems. Gaurenteed to exist. If empty, success.
  */
-module.exports.instillEffects = function(universe, effects, source, target, channel, hit, damaged, saved) {
+module.exports.instillEffects = function(universe, effects, source, target, channel, hit, damaged, saved, level) {
 	var waiting = [],
 		mask = {},
 		duration,
@@ -129,6 +130,9 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 	if(channel) {
 		mask.cause_level = channel.level;
 		mask.cause = channel.id;
+	}
+	if(level) {
+		mask.cause_level = level;
 	}
 	console.log("Instilling: " + JSON.stringify(mask, null, 4));
 
@@ -170,6 +174,27 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 			}
 			target.addValues({
 				"effects": instill
+			});
+			/**
+			 * 
+			 * @event entity:effects:gained
+			 * @param {RSObject} target Entity gaining the effects
+			 * @param {Array} effects The effects being gained
+			 * @param {Boolean} damage Was the target successfully damaged by the source
+			 * @param {Boolean} saved Did the target successful save on any checks involved
+			 * @param {Boolean} hit Was the target successfully hit by the source
+			 * @param {RSObject} source The item, spell, or otherwise acting as the source of the effects
+			 * @param {Integer} level The level of the source
+			 */
+			universe.emit("entity:effects:gained", {
+				"source": source,
+				"target": target,
+				"effects": instill,
+				"damage": damaged,
+				"saved": saved,
+				"hit": hit,
+				"channel": channel,
+				"level": level
 			});
 		})
 		.catch(function(err) {
