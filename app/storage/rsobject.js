@@ -426,9 +426,9 @@ class RSObject {
 							}
 						} catch (e) {
 							if(debug) {
-								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield ? ifield.id : "") + "]", debugA, debugB, e);
+								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield ? ifield.id : field.inheritanceFields[i]) + "]", debugA, debugB, e);
 							} else {
-								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield ? ifield.id : "") + "]", e);
+								console.log("Ref Fail: " + this.id + " -> " + source.id + " @ " + field.id + "[" + (ifield ? ifield.id : field.inheritanceFields[i]) + "]", e);
 							}
 						}
 					}

@@ -165,7 +165,8 @@ module.exports.initialize = function(universe) {
 				"data": event.message.data,
 				"damage": damage,
 				"checks": checks,
-				"successful": successful
+				"successful": successful,
+				"yields": channel.yields
 			});
 		} else {
 			// Authorization issue

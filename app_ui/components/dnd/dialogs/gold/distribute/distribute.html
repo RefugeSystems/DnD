@@ -1,12 +1,24 @@
 <div class="rs-component dnd-component distribute-gold">
 	<h1>
 		<span class="fas fa-coins"></span>
-		<span>{{entity.name}}</span>
+		<span> to {{entities.length}} Creatures</span>
 	</h1>
 	<div class="distribute flex h">
 		<input class="amount" id="amount" v-model.number="amount" v-on:keydown.enter="distributeGold()" />
-		<button class="rounded general quick action" v-on:click="distributeGold()">
+		<button class="rounded general main action" v-on:click="toggleSplit()" title="Split amount selected?">
+			<span class="fa-solid" :class="split?'fa-check rs-light-green':'fa-xmark rs-light-red'"></span>
+		</button>
+		<button class="rounded general main action" v-on:click="distributeGold()" :disabled="cannotDistribute">
 			<span class="fas fa-hand-holding-usd"></span>
 		</button>
+	</div>
+	<div class="targets flex v">
+		<div class="target flex h v-center" v-for="target in entities">
+			<div class="icon" :class="getTargetStyleClass(target)">
+				<span :class="target.icon || 'fas fa-user'"></span>
+			</div>
+			<div class="target-name">{{target.name}}</div>
+			<div class="target-amount">( {{numberWithCommas(target.gold)}} <span class="fas fa-coins"></span> +{{numberWithCommas(distributing)}} )</div>
+		</div>
 	</div>
 </div>

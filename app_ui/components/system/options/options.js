@@ -35,10 +35,13 @@ rsSystem.component("systemOptionsDialog", {
 	},
 	"data": function() {
 		var data = {},
+			assist = {},
 			dashboards = [],
+			sectionNaming,
 			default_dash,
 			worldAddress,
 			worldName,
+			sections,
 			section,
 			loading,
 			option,
@@ -100,71 +103,52 @@ rsSystem.component("systemOptionsDialog", {
 			Vue.set(this.profile, "default_dashboard", default_dash.id);
 		}
 
-		data.availableKeyEvents = [{
+		data.availableKeyEvents = [data.keymapDefaultOption, {
 			"label": "Filter",
 			"id": null,
 			"type": "filter"
-		}, {
-			"label": "Character Actions",
-			"id": null,
-			"meta": "character:::action",
-			"type": "section"
-		}, {
-			"name": "Character Info",
-			"id": "character:info",
-			"type": "keybind"
-		}, {
-			"name": "Character Attack",
-			"id": "character:attack",
-			"type": "keybind"
-		}, {
-			"label": "System Actions",
-			"id": null,
-			"meta": "system:::action",
-			"type": "section"
-		}, {
-			"name": "Menu",
-			"id": "system:menu",
-			"type": "keybind"
-		}, {
-			"name": "Help",
-			"id": "system:help",
-			"type": "keybind"
 		}];
-		data.availableKeyMapEvents = {};
-		for(i=0; i<data.availableKeyEvents.length; i++) {
-			loading = data.availableKeyEvents[i];
-			if(loading.id) {
-				data.availableKeyMapEvents[loading.id] = loading.name;
-				if(typeof(loading.meta) !== "string") {
-					loading.meta = "";
-				}
-				loading.meta += ":::" + loading.name.toLowerCase();
-				if(!loading.section && section) {
-					loading.section = section;
-					loading.meta += ":::" + section.meta;
-				}
-			} else {
-				section = loading;
+
+		sectionNaming = {
+			"system": "System Key Mappings",
+			"character": "Character Action Mappings",
+			"knowledge": "Knowledge Action Mappings",
+			"inventory": "Inventory Action Mappings",
+			"actionbar": "Action-Bar Action Mappings",
+			"combat": "Combat Action Mappings",
+			"master": "Master Action Mappings"
+		};
+
+		assist.section = (section) => {
+			if((section !== "master" && section.id !== "master") || this.player.gm) {
+				var name = section.name || sectionNaming[section.id] || sectionNaming[section] || section;
+				data.availableKeyEvents.push({
+					"label": name,
+					"id": null,
+					"meta": section + ":::action",
+					"type": "section"
+				});
+				rsSystem.commands.getAvailable(section).forEach(assist.command);
 			}
-		}
+		};
+
+		assist.command = (command) => {
+			data.availableKeyEvents.push({
+				"name": command.name || command.id,
+				"id": command.id,
+				"meta": command.section + ":::" + command.id + ":::" + (command.name?command.name.toLowerCase():""),
+				"type": "keybind",
+				"command": command
+			});
+		};
+
+		sections = rsSystem.commands.getSections();
+		sections.forEach(assist.section);
 
 		data.currentKeyMap = {};
-		keys = Object.keys(rsSystem.keyboard.keymap);
-		for(i=0; i<keys.length; i++) {
-			key = rsSystem.keyboard.keymap[keys[i]];
-			if(key) {
-				if(key.alt) {
-					data.currentKeyMap[key.alt] = "alt + " + keys[i];
-				}
-				if(key.ctrl) {
-					data.currentKeyMap[key.ctrl] = "ctrl + " + keys[i];
-				}
-				if(key[""]) {
-					data.currentKeyMap[key[""]] = keys[i];
-				}
-			}
-		}
+		rsSystem.keyboard.forEach(function(binding) {
+			data.currentKeyMap[binding.emit] = binding;
+		});
 
 		if(this.profile.details_easyaction === undefined) {
 			Vue.set(this.profile, "details_easyaction", "bruiser");
@@ -328,7 +312,7 @@ rsSystem.component("systemOptionsDialog", {
 			},
 			"keybinds": {
 				"name": "Keybindings",
-				"options": data.availableKeyEvents.concat([data.keymapDefaultOption])
+				"options": data.availableKeyEvents//.concat([data.keymapDefaultOption])
 			},
 			"account": {
 				"name": "Account",
@@ -650,49 +634,30 @@ rsSystem.component("systemOptionsDialog", {
 			return (!this.filter || (option.meta && option.meta.indexOf(this.filter) !== -1)) && option.type === type;
 		},
 		"setMapping": function(event, option) {
+			Vue.set(option, "value", this.renderKeyObject(this.currentKeyMap[option.id]));
 			Vue.set(option, "remapping", true);
 		},
 		"updateMapping": function(event, option) {
 			if(option) {
 				Vue.set(option, "remapping", false);
+				Vue.delete(option, "value");
 				rsSystem.keyboard.$emit("system:keymap:set", {
 					"key": event.key === "Backspace"?null:event.key,
 					"old": this.currentKeyMap[option.id],
+					"location": event.location,
 					"alt": event.altKey,
 					"ctrl": event.ctrlKey,
 					"emit": option.id
 				});
 			}
 
+			event.stopPropagation();
 			event.preventDefault();
-			if(typeof(event.stopPropogation) === "function") {
-				event.stopPropogation();
-			}
 		},
 		"refreshMapping": function() {
-			var keys = Object.keys(this.currentKeyMap),
-				key,
-				i;
-			
-			for(i=0; i<keys.length; i++) {
-				Vue.delete(this.currentKeyMap, keys[i]);
-			}
-
-			keys = Object.keys(rsSystem.keyboard.keymap);
-			for(i=0; i<keys.length; i++) {
-				key = rsSystem.keyboard.keymap[keys[i]];
-				if(key) {
-					if(key.alt) {
-						Vue.set(this.currentKeyMap, key.alt, "alt + " + keys[i]);
-					}
-					if(key.ctrl) {
-						Vue.set(this.currentKeyMap, key.ctrl, "ctrl + " + keys[i]);
-					}
-					if(key[""]) {
-						Vue.set(this.currentKeyMap, key[""], keys[i]);
-					}
-				}
-			}
+			rsSystem.keyboard.forEach((binding) => {
+				this.currentKeyMap[binding.emit] = binding;
+			});
 		},
 		"keymapDefaulted": function() {
 			Vue.set(this.keymapDefaultOption, "action", "noop");
@@ -707,7 +672,42 @@ rsSystem.component("systemOptionsDialog", {
 			if(option.match && option.base[option.match] && option.base[option.id] !== option.base[option.match]) {
 				classes += " malformed";
 			}
+			if(option.classes) {
+				classes += " " + option.classes;
+			}
 			return classes;
+		},
+		"renderKeyObject": function(map) {
+			var display = [];
+			if(!map) {
+				return "";
+			}
+
+			if(map.modifier) {
+				display.push(map.modifier.toUpperCase());
+			}
+			if(map.alt) {
+				display.push("ALT");
+			}
+			if(map.ctrl) {
+				display.push("CTRL");
+			}
+			if(map.shift) {
+				display.push("SHIFT");
+			}
+			switch(map.location) {
+				case rsSystem.keyboard.DEVREF.Keyboard:
+				case rsSystem.keyboard.DEVREF.Right: // TODO: Seperate Left/Right control sequences?
+				case rsSystem.keyboard.DEVREF.Left:
+					display.push(map.key);
+					break;
+				case rsSystem.keyboard.DEVREF.Numpad:
+					display.push("NUMPAD " + map.key);
+					break;
+				default:
+					display.push("Dev:" + map.location + " " + map.key);
+			}
+			return display.join(" + ");
 		},
 		"clearOption": function(option) {
 			switch(option.type) {

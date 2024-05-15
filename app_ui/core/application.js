@@ -257,6 +257,11 @@ rsSystem.getBrowserName = function() {
 };
 
 rsSystem.initializations = rsSystem.initializations || [];
+/**
+ * Add a function to be called once the system is ready to finish initializing.
+ * @method addInitialization
+ * @param {Function} initialization 
+ */
 rsSystem.addInitialization = function(initialization) {
 	if(typeof(initialization) === "function") {
 		rsSystem.initializations.push(initialization);

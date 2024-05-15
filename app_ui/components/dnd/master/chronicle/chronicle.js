@@ -60,6 +60,9 @@ rsSystem.component("dndChronicleReadout", {
 		};
 
 		data.searchKeys = Object.keys(data.searchables);
+		// TODO: Determine pathing and load from storage
+		//   ? [Index] > [Entity] > [Skill] > [Collection]
+		data.collections = {};
 
 		return data;
 	},
@@ -67,6 +70,7 @@ rsSystem.component("dndChronicleReadout", {
 		rsSystem.register(this);
 		this.universe.$on("chronicled", this.receiveEvent);
 		this.universe.$on("entity:roll", this.receiveRoll);
+		
 		if(!this.storage.witnessed) {
 			Vue.set(this.storage, "witnessed", []);
 		}
@@ -88,6 +92,29 @@ rsSystem.component("dndChronicleReadout", {
 				}
 			}
 			this.storage.witnessed.splice(0);
+		},
+		/**
+		 * Receives an event from the EventBus that rolls for a specific skill from the identified entities
+		 * should be put into a special container with more details.
+		 * @method receiveCollection
+		 * @param {Object} event 
+		 * @param {String} event.skill Skill ID
+		 * @param {Array} event.entities Entity IDs
+		 */
+		"receiveCollection": function(event) {
+			var skill = this.universe.get(event.skill),
+				entities = [],
+				i;
+			
+			if(skill) {
+				for(i=0; i<event.entities.length; i++) {
+					entities.push(this.universe.get(event.entities[i]));
+				}
+
+				// TODO: Build collection occurrence
+				// TODO: Store and index collection occurrence
+
+			}
 		},
 		"receiveEvent": function(event) {
 			console.log("Received Chronice: ", event);
@@ -244,6 +271,7 @@ rsSystem.component("dndChronicleReadout", {
 			}
 		},
 		"witnessEvent": function(type, component, data) {
+			// TODO: If this is a roll, check for a collection against the entity
 			data = {
 				"activity": data.activity,
 				"type": type,

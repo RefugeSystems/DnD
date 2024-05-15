@@ -1,7 +1,5 @@
-
 /**
- *
- *
+ * 
  * @class RSHome
  * @constructor
  * @module Pages
@@ -55,6 +53,7 @@ rsSystem.component("RSHome", {
 		data.menuSpacing = null;
 		data.meetingNotice = false;
 		data.hidden = {};
+		data.splash = {};
 		
 		data.active = null;
 		data.configuration = null;
@@ -259,6 +258,9 @@ rsSystem.component("RSHome", {
 		rsSystem.EventBus.$on("home.show", this.respondShowEvent);
 	},
 	"methods": {
+		"changeWorld": function(world) {
+			console.log("World Connect: ", world);
+		},
 		"respondShowEvent": function(event) {
 			switch(event.element) {
 				case "message":
@@ -329,6 +331,13 @@ rsSystem.component("RSHome", {
 
 			if(this.universe && this.universe.connection && this.universe.connection.metrics && this.universe.connection.metrics.connected_server) {
 				return "";
+			}
+
+			if(this.splash.address) {
+				if(this.splash.world) {
+					return "background-image: url(\"" + (this.splash.world.is_secure ? "https://" : "http://") + this.splash.world.address + "/api/pub/image/" + (this.splash.world.map || this.splash.world.attribute.map) + "\");";
+				}
+				return "background-image: url(\"" + (this.splash.is_secure ? "https://" : "http://") + this.splash.address + "/api/pub/image/image:background\");";
 			}
 
 			if(this.configuration && this.configuration.background) {
@@ -408,12 +417,18 @@ rsSystem.component("RSHome", {
 		},
 		"receiveMessage": function(message) {
 			if(message) {
-				var date = new Date();
-				Vue.set(this, "messageClass", message.classes || "");
-				Vue.set(this, "messageIcon", message.icon);
-				Vue.set(this, "messageHeading", message.heading);
-				Vue.set(this, "messageTimestamp", date.toLocaleDateString("en-us") + " " + date.toLocaleTimeString("en-us"));
-				Vue.set(this, "message", message.text || message);
+				switch(message.type) {
+					case "clear":
+						this.dismissMessage();
+						break;
+					default:
+						var date = new Date();
+						Vue.set(this, "messageClass", message.classes || "");
+						Vue.set(this, "messageIcon", message.icon);
+						Vue.set(this, "messageHeading", message.heading);
+						Vue.set(this, "messageTimestamp", date.toLocaleDateString("en-us") + " " + date.toLocaleTimeString("en-us"));
+						Vue.set(this, "message", message.text || message);
+				}
 			} else {
 				Vue.set(this, "message", null);
 			}
@@ -435,14 +450,17 @@ rsSystem.component("RSHome", {
 			})
 			.catch((error) => {
 				console.error("Failed to connect: ", error);
-				Vue.set(this.storage, "session", null);
-				Vue.set(this, "state", 0);
 				this.$emit("message", {
 					"class": "rsbd-orange",
 					"icon": "fas fa-exclamation-triangle",
 					"heading": "Connection Failure",
 					"text": "Failed to connect to " + this.storage.address + "."
 				});
+				console.log("Connection Errored: ", error);
+				setTimeout(() => {
+					Vue.set(this.storage, "session", null);
+					Vue.set(this, "state", 0);
+				}, 500);
 			});
 		}
 	},

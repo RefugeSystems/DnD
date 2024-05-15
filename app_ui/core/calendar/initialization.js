@@ -12,7 +12,7 @@ rsSystem.initializations.push(function(universe) {
 		});
 	} else {
 		console.warn("Failed to locate default calendar, fallback to manual");
-		this.calendar.nameMonths([
+		universe.calendar.nameMonths([
 			"Alucevum",
 			"Vaknaevum",
 			"Borgevum",
@@ -22,7 +22,7 @@ rsSystem.initializations.push(function(universe) {
 			"Unkulevum",
 			"Dormevum"
 		]);
-		this.calendar.nameDays([
+		universe.calendar.nameDays([
 			"Horallum",
 			"Horaneskja",
 			"Horantono",
@@ -30,6 +30,6 @@ rsSystem.initializations.push(function(universe) {
 			"Horanquil",
 			"Horakkir"
 		]);
-		this.calendar.setDays([25]);
+		universe.calendar.setDays([25]);
 	}
 });

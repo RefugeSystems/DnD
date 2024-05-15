@@ -121,6 +121,29 @@ rsSystem.component("DNDWidgetCore", {
 		}
 	},
 	"methods": {
+		"getTargetStyleClass": function(target) {
+			var classes = [];
+			if(target) {
+				if(target.is_npc) {
+					classes.push("style-npc");
+				}
+				if(target.is_hostile) {
+					classes.push("style-hostile");
+				}
+				if(target.is_shop) {
+					classes.push("style-shop");
+				}
+				if(target.race === "race:building") {
+					classes.push("style-building");
+				}
+				if(rsSystem.utility.isEmpty(target.played_by)) {
+					classes.push("style-npc");
+				} else {
+					classes.push("style-player");
+				}
+			}
+			return classes.join(" ");
+		},
 		"declareAttack": function() {
 			var details = {},
 				i,

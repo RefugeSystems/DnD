@@ -703,6 +703,7 @@
 		"type": "integer",
 		"ordering": 200,
 		"attribute": {
+			"default": 0
 		}
 	}, {
 		"id": "fighter",
@@ -730,6 +731,7 @@
 		"type": "integer",
 		"ordering": 200,
 		"attribute": {
+			"default": 0
 		}
 	}, {
 		"id": "ranger",
@@ -739,6 +741,7 @@
 		"type": "integer",
 		"ordering": 200,
 		"attribute": {
+			"default": 0
 		}
 	}, {
 		"id": "rogue",
@@ -757,6 +760,7 @@
 		"type": "integer",
 		"ordering": 200,
 		"attribute": {
+			"default": 0
 		}
 	}, {
 		"id": "warlock",
@@ -775,6 +779,7 @@
 		"type": "integer",
 		"ordering": 200,
 		"attribute": {
+			"default": 0
 		}
 	}, {
 		"id": "initiative",
@@ -3828,6 +3833,42 @@
 			"metadata": "",
 			"version_since": "0.9.85",
 			"version_update": "0.9.85"
+		}
+	}, {
+		"name": "Spell Casting Level",
+		"id": "spell_casting_level",
+		"description": "The culmination of your experience and ability for casting magic. This is the primary determination in what spell slots you possess and indicates your ability to manage magic.",
+		"type": "calculated",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 90,
+			"metadata": ""
+		}
+	}, {
+		"name": "Arcane Trickster",
+		"id": "arcane_trickster",
+		"description": "The number of levels of Arcane Trickster you have.",
+		"type": "integer",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"default": 0,
+			"display_size": 90
+		}
+	}, {
+		"name": "Eldritch Knight",
+		"id": "eldritch_knight",
+		"description": "The number of levels of Eldritch Knight you have.",
+		"type": "integer",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"default": 0,
+			"display_size": 90
 		}
 	}]
 }

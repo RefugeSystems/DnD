@@ -10,7 +10,7 @@ var express = require("express"),
 module.exports = new (function() {
 	this.router = express.Router();
 	this.id = "api:v1:router";
-	
+
 	/**
 	 * 
 	 * @method initialize

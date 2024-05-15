@@ -4,6 +4,7 @@
 		"debug_traces": false,
 		"flat_percentiles": false,
 		"partial_percentiles": true,
+		"recovery_mode": false,
 		"classes": [
 			"session",
 			"player",

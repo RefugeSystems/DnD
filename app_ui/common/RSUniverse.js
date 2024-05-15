@@ -1319,25 +1319,58 @@ class RSUniverse extends EventEmitter {
 		return !object.is_owned || object.owned[player.id || player];
 	}
 
-	/**
-	 * 
-	 * @method transcribeInto
-	 * @param {Array} source 
-	 * @param {Array} [destination]
-	 * @param {String} [classificaiton]
-	 * @param {String | RSSearch} [filter] Optional filter to apply to the transcription
-	 * @return {Array} The destination parameter or a newly instantiated array
-	 * 		if that parameter was omited.
-	 */
-	transcribeInto(source, destination = [], classificaiton, filter) {
+	transcribe(source, classification, filter) {
 		var buffer,
 			i;
 
 		if(!filter || typeof(filter) === "string") {
 			filter = (filter || "").toLowerCase();
-			if(classificaiton && this.index[classificaiton]) {
+			if(classification && this.index[classification]) {
 				for(i=0; i<source.length; i++) {
-					buffer = this.index[classificaiton][source[i]];
+					buffer = this.index[classification][source[i]];
+					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+						source[i] = buffer;
+					}
+				}
+			} else {
+				for(i=0; i<source.length; i++) {
+					buffer = this.getObject(source[i]);
+					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
+						source[i] = buffer;
+					}
+				}
+			}
+		} else if(filter instanceof RSSearch) {
+			for(i=0; i<source.length; i++) {
+				buffer = this.getObject(source[i]);
+				if(filter.isFound(buffer)) {
+					source[i] = buffer;
+				}
+			}
+		}
+
+		return source;
+	}
+
+	/**
+	 * 
+	 * @method transcribeInto
+	 * @param {Array} source 
+	 * @param {Array} [destination]
+	 * @param {String} [classification]
+	 * @param {String | RSSearch} [filter] Optional filter to apply to the transcription
+	 * @return {Array} The destination parameter or a newly instantiated array
+	 * 		if that parameter was omited.
+	 */
+	transcribeInto(source, destination = [], classification, filter) {
+		var buffer,
+			i;
+
+		if(!filter || typeof(filter) === "string") {
+			filter = (filter || "").toLowerCase();
+			if(classification && this.index[classification]) {
+				for(i=0; i<source.length; i++) {
+					buffer = this.index[classification][source[i]];
 					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
 						destination.push(buffer);
 					}
@@ -1367,20 +1400,20 @@ class RSUniverse extends EventEmitter {
 	 * @method transcribeUniquely
 	 * @param {Array} source 
 	 * @param {Array} [destination]
-	 * @param {String} [classificaiton]
+	 * @param {String} [classification]
 	 * @return {Array} The destination parameter or a newly instantiated array
 	 * 		if that parameter was omited.
 	 */
-	transcribeUniquely(source, destination = [], classificaiton, filter) {
+	transcribeUniquely(source, destination = [], classification, filter) {
 		filter = (filter || "").toLowerCase();
 		var unique = {},
 			buffer,
 			i;
 
-		if(classificaiton && this.index[classificaiton]) {
+		if(classification && this.index[classification]) {
 			for(i=0; i<source.length; i++) {
 				if(!unique[source[i]]) { // Save a cycle if possible
-					buffer = this.index[classificaiton][source[i]];
+					buffer = this.index[classification][source[i]];
 					if(buffer && !buffer.disabled && !buffer.is_preview && (!filter || (buffer._search && buffer._search.indexOf(filter) !== -1))) {
 						unique[buffer.id] = true;
 						destination.push(buffer);

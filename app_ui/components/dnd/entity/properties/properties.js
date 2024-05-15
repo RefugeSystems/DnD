@@ -21,11 +21,15 @@ rsSystem.component("dndEntityProperties", {
 
 		data.properties = [];
 		data.properties.push(this.universe.index.fields.played_by);
-		data.properties.push(this.universe.index.fields.initiative);
-		data.properties.push(this.universe.index.fields.passive_perception);
-		data.properties.push(this.universe.index.fields.stealth);
-		data.properties.push(this.universe.index.fields.investigation);
-		data.properties.push(this.universe.index.fields.perception);
+		if(!this.entity.is_combatable) {
+			data.properties.push(this.universe.index.fields.initiative);
+		}
+		if(!this.entity.is_shop && !this.entity.is_chest && this.entity.race !== "race:building") {
+			data.properties.push(this.universe.index.fields.passive_perception);
+			data.properties.push(this.universe.index.fields.stealth);
+			data.properties.push(this.universe.index.fields.investigation);
+			data.properties.push(this.universe.index.fields.perception);
+		}
 		data.properties.push(this.universe.index.fields.armor);
 		data.properties.push(this.universe.index.fields.gold);
 
@@ -72,6 +76,21 @@ rsSystem.component("dndEntityProperties", {
 			// console.log("Field: ", field);
 			this.$emit("property", field);
 			this.$emit(field.id, this.entity[field.id]);
+		},
+		"classProperty": function(field) {
+			var classes = [];
+			if(field.id === "played_by") {
+				if(this.entity.is_hostile) {
+					classes.push("style-hostile");
+				} else if(this.entity.is_shop) {
+					classes.push("style-shop");
+				} else if(this.entity.is_chest) {
+					classes.push("style-chest");
+				} else if(this.entity.is_npc) {
+					classes.push("style-npc");
+				}
+			}
+			return classes;
 		},
 		"getName": function(field, value) {
 			if(field.inheritable && field.inheritable.length) {

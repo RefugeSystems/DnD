@@ -1,4 +1,4 @@
-<div class="rs-component dnd-component dialog-dnd-damage" v-mousescroll>
+<div class="rs-component dnd-component dialog-dnd-damage">
 	<!-- All selections depend on the passed entity -->
 	<div class="progress flex h v-center">
 		<button class="section-tab flat action rs-white" v-for="section in prepared" v-on:click="goToSection(section)" v-if="section.id !== 'review'">
@@ -20,7 +20,7 @@
 	</div>
 	<div class="declaring">
 		<div class="declaration-slider flex h" :class="activeSection.classing">
-			<section class="page channels">
+			<section class="page channels" v-mousescroll>
 				<div class="page-contents">
 					<!-- This may be passed in as an object "channel" or "method" (preferably channel but method makes more sense as plain english, avoiding for javascript method confusion) -->
 					<!--
@@ -140,7 +140,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="page targets">
+			<section class="page targets" v-mousescroll>
 				<div class="page-contents">
 					<!-- This may be passed in as an array of IDs "targets" -->
 					<div class="message" v-if="available_targets.length === 0">
@@ -176,7 +176,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="page additives">
+			<section class="page additives" v-mousescroll>
 				<div class="page-contents">
 					<!-- This may be passed in as an array of IDs "targets" -->
 					<div class="message additives" v-if="additives.length === 0">
@@ -207,7 +207,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="page checks">
+			<section class="page checks" v-mousescroll>
 				<div class="page-contents">
 					<!-- Perform any necessary attack rolls (Indicate advantage here) and can force additional checks with an object "check" (Maps skill IDs). Default behavior derived from "channel" when possible. -->
 					<div class="message channel-feat" v-if="hasNoSkillChecks()">
@@ -234,7 +234,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="page damages">
+			<section class="page damages" v-mousescroll>
 				<div class="page-contents">
 					<div class="damage-list flex h wrap " v-for="action in actionsToTake" v-if="action.damages">
 						<div class="target name-damage" v-if="action.target">
@@ -259,7 +259,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="page effects">
+			<section class="page effects" v-mousescroll>
 				<div class="page-contents">
 					<!-- Effects to pass to the target. Defaults to a list based on method. Button to edit. Selection limited to "playable" effects. Defaults gained from "channel" -->
 					<div class="message" v-if="effects.length === 0">
@@ -297,7 +297,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="page data">
+			<section class="page data" v-mousescroll>
 				<div class="page-contents">
 					<h3>Additional Data</h3>
 					<div class="message channel-feat" v-if="!form_fields.length">
@@ -307,7 +307,7 @@
 					<rs-form :fields="form_fields" :details="form" :universe="universe" :player="player" :profile="profile" :show_undefined="false" :entity="entity" :filters="channel.form_filter" v-else></rs-form>
 				</div>
 			</section>
-			<section class="page review">
+			<section class="page review" v-mousescroll>
 				<div class="page-contents">
 					<div class="channel flex v" v-if="channel">
 						<h3>Using</h3>

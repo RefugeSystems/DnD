@@ -241,8 +241,9 @@ module.exports.initialize = function(universe) {
 						"skill": "skill:initiative",
 						"hideFormula": true,
 						"hideHistory": true,
-						"closeAfterCheck": true
-					}, 5000);
+						"closeAfterCheck": true,
+						"id": "roll:skill:initiative:" + entity.id
+					});
 				}
 			}
 		}

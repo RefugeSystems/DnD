@@ -120,14 +120,14 @@ rsSystem.component("DNDMasterScreen", {
 				j,
 				k;
 
-			entities.list = [];
-			entities.mains = mains;
 			entities.minions = minions;
+			entities.mains = mains;
 			entities.foes = foes;
 			entities.npcs = npcs;
+			entities.nocombat = [];
 			entities.meeting = [];
 			entities.combat = [];
-			entities.nocombat = [];
+			entities.list = [];
 
 			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
@@ -136,8 +136,8 @@ rsSystem.component("DNDMasterScreen", {
 					entity = this.universe.index.entity[player.attribute.playing_as];
 					if(entity && !loaded[entity.id]) {
 						loaded[entity.id] = true;
-						mains.push(entity);
 						main[entity.id] = true;
+						mains.push(entity);
 					}
 				}
 			}
@@ -687,6 +687,10 @@ rsSystem.component("DNDMasterScreen", {
 				classes += "current_turn ";
 			}
 
+			if(this.isEntitySelected(entity)) {
+				classes += "selected ";
+			}
+
 			return classes;
 		},
 		"removeEntity": function(entity) {
@@ -698,6 +702,13 @@ rsSystem.component("DNDMasterScreen", {
 					"entities": [entity.id]
 				});
 			}
+		},
+		"selectEntity": function(entity) {
+			rsSystem.commands.toggleTarget(entity.id);
+			this.$forceUpdate();
+		},
+		"isEntitySelected": function(entity) {
+			return rsSystem.commands.isTargeted(entity.id);
 		},
 		"witnessLimit": function(mod) {
 			Vue.set(this.storage, "witnessed_limit", this.storage.witnessed_limit + mod);

@@ -9,9 +9,8 @@
 		<div class="options-form dialog-content-bound">
 			<div class="options">
 				<div class="option" v-for="option in options">
-					<div class="option-ctrl tightened" :class="getOptionClass(option)" v-if="option.type === 'filter'">
-						<span>{{option.label}}</span>
-						<input type="text" v-model="filter" />
+					<div class="option-ctrl tightened flex h" :class="getOptionClass(option)" v-if="option.type === 'filter'">
+						<input type="text" v-model="filter" :placeholder="option.label" class="fill" />
 					</div>
 					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'data'">
 						<span>{{option.label}}</span>
@@ -24,17 +23,17 @@
 						<a :href="option.link" target="_blank">{{option.link}}</a>
 					</div>
 
-					<div class="option-ctrl tightened option-section" :class="getOptionClass(option)" v-if="isShown(option, 'section')">
+					<div class="option-ctrl option-section" :class="getOptionClass(option)" v-if="isShown(option, 'section')">
 						<span>{{option.label}}</span>
 						<span>:</span><br/>
 					</div>
 					<div class="option-ctrl tightened option-key" :class="getOptionClass(option)" v-if="isShown(option, 'keybind')">
 						<button class="option-keybind" v-on:click="setMapping($event, option)" v-if="!option.remapping">
-							{{currentKeyMap[option.id]}}
+							{{renderKeyObject(currentKeyMap[option.id])}}
 						</button>
-						<input v-if="option.remapping" class="option-setkey" type="text" v-focus v-on:keyup="updateMapping($event, option)" v-on:keydown="updateMapping($event)" v-on:keypress="updateMapping($event)" :value="currentKeyMap[option.id]">
+						<input v-if="option.remapping" class="option-setkey" type="text" v-focus v-on:keyup="updateMapping($event, option)" v-on:keydown="updateMapping($event)" v-on:keypress="updateMapping($event)" :value="option.value">
 						<span>:</span>
-						<span>{{availableKeyMapEvents[option.id]}}</span>
+						<span>{{option.name}}</span>
 					</div>
 
 					<button class="option-ctrl general" :class="getOptionClass(option)" v-on:click="toggleOption(option.base, option.id)" v-if="option.type === 'toggle'" v-on:keyup.esc.stop.prevent="clearOption(option)" v-on:keyup.enter="submitOption(option)">

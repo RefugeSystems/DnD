@@ -14,6 +14,8 @@ var EventEmitter = require("events").EventEmitter,
 	HTTPS = require("https"),
 	HTTP = require("http"),
 	APIws = require("./connection"),
+	APIPub = require("./pub"),
+	APISys = require("./sys"),
 	APIv1 = require("./v1"),
 	APIv2 = require("./v2"),
 	APIui = require("./ui"),
@@ -35,6 +37,7 @@ class APIController extends EventEmitter {
 		this.authentication = authentication;
 		this.router = express();
 		this.router.disable("x-powered-by");
+		this.version = this.universe.package.version;
 		
 		universe.on("shutdown", () => {
 			this.close();
@@ -107,7 +110,6 @@ class APIController extends EventEmitter {
 				var origin = req.get("origin"),
 					anomaly;
 					
-				// console.log("Request[@" + origin + "]: ", req.path);
 				if(!origin || this.specification.origins[origin] === 0 || Date.now() < this.specification.origins[origin])  {
 					res.header("Access-Control-Allow-Origin", origin);
 					res.header("Access-Control-Allow-Headers", "*");
@@ -175,7 +177,6 @@ class APIController extends EventEmitter {
 			APIv1.initialize(this)
 			.then(() => {
 				APIv1.router.use(this.authorize);
-				this.router.use("/api/sys", APIv1.router);
 				this.router.use("/api/v1", APIv1.router);
 
 				return APIv2.initialize(this);
@@ -183,10 +184,19 @@ class APIController extends EventEmitter {
 				APIv2.router.use(this.authorize);
 				this.router.use("/api/v2", APIv2.router);
 				
+				return APISys.initialize(this);
+			}).then(() => {
+				APISys.router.use(this.authorize);
+				this.router.use("/api/sys", APISys.router);
+
+				return APIPub.initialize(this);
+			}).then(() => {
+				this.router.use("/api/pub", APIPub.router);
+				
 				return APIui.initialize(this);
 			}).then(() => {
 				this.router.use("/ui", APIui.router);
-			// 
+			
 			// 	return APIauth.initialize(this);
 			// }).then(() => {
 				this.router.use("/login", this.authentication.router);

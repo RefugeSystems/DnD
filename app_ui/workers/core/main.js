@@ -68,7 +68,7 @@ updateCaches = function() {
 		return cache.addAll(pages);
 	})
 	.then(function() {
-		console.log("Cache Updated");
+		// console.log("Cache Updated");
 		// TODO: Investigate how to trigger the refresh or prompt for it
 		// location.reload();
 	})
@@ -124,7 +124,7 @@ self.addEventListener("notificationclick", function(event) {
 });
 
 self.addEventListener("message", function(message) {
-	console.log("Message: ", message.data);
+	// console.log("Message: ", message.data);
 	if(message.data) {
 		processAction(message.data.action, message.data);
 	}

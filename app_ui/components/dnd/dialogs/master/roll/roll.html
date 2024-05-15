@@ -1,0 +1,9 @@
+<div class="rs-component dnd-component master-roll">
+	<panel-select class="selection panels" v-on:selected="choose($event)" :flush="6" :corpus="availableSkills" :current="skill" :universe="universe" :player="player" :configuration="configuration" :descriptionless="true" fmarking="fad fa-dot-circle rs-secondary-transparent">
+		<div slot="controls" slot-scope="{record}" class="align-right">
+			<button class="rounded quick main action rs-border two" :class="getSkillInfoClass(record)" v-on:click.prevent.stop="info(record)">
+				<span class="fas fa-info rs-lightblue"></span>
+			</button>
+		</div>
+	</panel-select>
+</div>

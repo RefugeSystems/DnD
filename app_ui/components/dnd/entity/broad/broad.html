@@ -125,7 +125,7 @@
 		</div>
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="transferGold()">
-				<span>{{entity.gold}}</span>
+				<span>{{entity.gold || 0}}</span>
 				<span v-if="entity.gold_max">
 					<span class="seperator">/</span>
 					<span>{{entity.gold_max}}</span>

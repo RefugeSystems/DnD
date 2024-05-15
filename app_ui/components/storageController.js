@@ -54,7 +54,11 @@ rsSystem.component("StorageController", {
 			if(this.storageKey && !this.storageContainer) {
 				var data = localStorage.getItem(this.storageKey);
 				if(data) {
-					return JSON.parse(data);
+					try {
+						return JSON.parse(data);
+					} catch(e) {
+						return defaults || this.defaultStorage || {};
+					}
 				} else {
 					return defaults || this.defaultStorage || {};
 				}
@@ -116,6 +120,13 @@ rsSystem.component("StorageController", {
 		},
 		"closeDialog": function() {
 			rsSystem.EventBus.$emit("dialog-dismiss");
+		},
+		"numberWithCommas": function(number) {
+			if(!number) {
+				return "0";
+			}
+			return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			// return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 		},
 		"info": function(record) {
 			rsSystem.EventBus.$emit("display-info", {

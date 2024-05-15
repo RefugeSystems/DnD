@@ -85,6 +85,12 @@
 		box-shadow: 0px 0px 10px inset @rsOrange !important;
 	}
 
+	.selected > .widgets.container {
+		// box-shadow: 0px 0px 10px @rsBlue !important;
+		// border: px solid @rsBlue;
+		background-color: rgba(0, 0, 255, 0.1);
+	}
+
 	button.bucket.action.active {
 		box-shadow: 0px 0px 10px @rsBlue;
 		border-color: @rsBlue;
@@ -94,6 +100,26 @@
 		.action {
 			margin: 5px;
 			min-height: 34px;
+		}
+	}
+
+	.screen-column.entities {
+		.master-entity {
+			.imagery-container {
+				width: 100%;
+
+				.imagery {
+					top: 0px;
+					right: 0px;
+					width: 200px;
+					height: 200px;
+				}
+
+				img {
+					height: 100%;
+					width: auto;
+				}
+			}
 		}
 	}
 }

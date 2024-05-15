@@ -207,7 +207,7 @@
 			console.log(" > Expanded: " + expression);
 		}
 
-		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+		if(expression && expression.length < 600 && calculateSecurityRegEx.test(expression)) {
 			// console.log("Valid Expression");
 			try {
 				if(debug) {

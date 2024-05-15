@@ -406,6 +406,8 @@ class RSCalendar extends EventEmitter {
 		if(!calendar) {
 			console.warn("Attempted to set null calendar");
 			return null;
+		} else {
+			// console.log("Reading calendar: ", calendar);
 		}
 
 		this.id = calendar.id;
@@ -784,6 +786,10 @@ class RSCalendar extends EventEmitter {
 			time = this.time;
 		}
 		parsed = this.breakdownGameTime(time);
+
+		if(parsed.month === undefined || this.monthsOfYear.length <= parsed.month) {
+			return "Unknown Date";
+		}
 
 		if(longForm) {
 			display = this.monthsOfYear[parsed.month].name + " " + (parsed.day + 1) + ", " + (parsed.year + 1);

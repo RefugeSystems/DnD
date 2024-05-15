@@ -293,11 +293,11 @@ module.exports = function(universe) {
 				}
 			} else {
 				details = {};
-				details.classification = classification;
+				details.classification = classification || "[No Classification?" + value + "]";
+				details.value = value || "[No Value]";
 				details.consumer = consumer;
 				details.fields = source_fields;
 				details.available = Object.keys(manager);
-				details.value = value;
 				universe.emit("error", new universe.Anomaly("universe:trace:track", "No such class", 20, details, null, "universe:objects"));
 
 				// console.trace("what1?");
@@ -392,10 +392,10 @@ module.exports = function(universe) {
 					}
 				} else {
 					details = {};
-					details.classification = classification;
+					details.classification = classification || "[No Classification?" + sources[x] + "]";
+					details.value = sources[x] || "[No Value]";
 					details.consumer = consumer;
 					details.sources = sources;
-					details.value = sources[x];
 					universe.emit("error", new universe.Anomaly("universe:trace:depend", "No such class", 20, details, null, "universe:objects"));
 					// console.trace("what2?");
 				}
@@ -546,10 +546,10 @@ module.exports = function(universe) {
 				}
 			} else {
 				details = {};
-				details.classification = classification;
+				details.classification = classification || "[No Classification?" + sources[x] + "]";
+				details.value = sources[x] || "[No Value]";
 				details.consumer = consumer;
 				details.sources = sources;
-				details.value = sources[x];
 				universe.emit("error", new universe.Anomaly("universe:trace:undepend", "No such class", 20, details, null, "universe:objects"));
 			}
 		}

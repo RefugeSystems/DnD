@@ -13,6 +13,7 @@ rsSystem.component("dndDistributeGold", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
+		rsSystem.components.DNDWidgetCore,
 		rsSystem.components.RSCore
 	],
 	"props": {
@@ -22,12 +23,47 @@ rsSystem.component("dndDistributeGold", {
 		}
 	},
 	"computed": {
+		"distributing": function () {
+			if(!this.amount) {
+				return 0;
+			}
+			if(this.entities.length === 0) {
+				return 0;
+			}
+			if(this.split) {
+				return parseFloat((this.amount/this.entities.length).toFixed(2));
+			}
+			return parseFloat(this.amount.toFixed(2));
+		},
+		"cannotDistribute": function() {
+			return isNaN(this.amount);
+		}
 	},
 	"data": function () {
-		var data = {};
+		var data = {},
+			i;
 
-		data.entity = this.universe.getObject(this.details.entity);
-		data.amount = null;
+		data.amount = this.details.amount || null;
+		data.split = !!this.details.split;
+
+		data.entities = [];
+		if(this.details.entity) {
+			if(typeof(this.details.entity) === "string") {
+				data.entities.push(this.universe.getObject(this.details.entity));
+			} else {
+				data.entities.push(this.details.entity);
+			}
+		}
+
+		if(this.details.entities) {
+			for(i=0; i<this.details.entities.length; i++) {
+				if(typeof(this.details.entities[i]) === "string") {
+					data.entities.push(this.universe.getObject(this.details.entities[i]));
+				} else {
+					data.entities.push(this.details.entities[i]);
+				}
+			}
+		}
 
 		return data;
 	},
@@ -37,12 +73,22 @@ rsSystem.component("dndDistributeGold", {
 	},
 	"methods": {
 		"distributeGold": function () {
-			this.universe.send("send:gold", {
-				"target": this.entity.id,
-				"amount": this.amount
-			});
+			var target,
+				i;
+			
+			for(i=0; i<this.entities.length; i++) {
+				target = this.entities[i];
+				this.universe.send("send:gold", {
+					"target": target.id,
+					"amount": this.distributing
+				});
+			}
+
 			Vue.set(this, "amount", 0);
 			this.closeDialog();
+		},
+		"toggleSplit": function () {
+			Vue.set(this, "split", !this.split);
 		}
 	},
 	"beforeDestroy": function () {

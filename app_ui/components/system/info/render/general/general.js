@@ -75,7 +75,7 @@ rsSystem.component("sysInfoGeneral", {
 					break;
 			}
 
-			if(field) {
+			if(field && this.activeMeeting) {
 				this.universe.transcribeInto(this.activeMeeting.entities, entities);
 				for(i=0; i<entities.length; i++) {
 					buffer = entities[i];

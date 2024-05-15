@@ -22,7 +22,7 @@
 module.exports.initialize = function(universe) {
 	universe.on("player:action:check", function(event) {
 		console.log("Check: ", event.message.data);
-		var entity,
+		var entity = universe.get(event.message.data.entity),
 			skill,
 			roll = {
 				"type": "entity:roll",
@@ -53,13 +53,15 @@ module.exports.initialize = function(universe) {
 		} else if(roll.skill === "skill:stealth") {
 			skill = {"stealth":roll.result};
 		}
-		if(skill) {
-			// console.log("Has");
-			entity = universe.get(roll.entity);
-			if(entity) {
-				// console.log("Set");
-				entity.setValues(skill);
-			}
+		if(skill && entity) {
+			entity.setValues(skill);
+		}
+
+		if(roll.skill && entity) {
+			universe.emit("send", {
+				"type": "dismiss-message",
+				"id": "roll:" + roll.skill + ":" + entity.id
+			});
 		}
 
 		if(roll.target && (roll.action === "action:main:attack" || roll.action === "action:bonus:attack:light" || roll.action === "action:main:attack:extra" || roll.skill === "skill:offhand" || roll.skill === "skill:mainhand")) {

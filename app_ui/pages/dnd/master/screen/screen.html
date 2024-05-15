@@ -8,7 +8,7 @@
 				<dnd-master-players :player="player" :universe="universe" :configuration="configuration" :profile="profile" :tracking="tracking"></dnd-master-players>
 			</div>
 			<div class="screen-column large entities">
-				<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" v-on:removeentity="removeEntity(entity)" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
+				<dnd-master-entity v-for="entity in activeEntities[storage.activeBucket]" :universe="universe" v-on:removeentity="removeEntity(entity)" v-on:select="selectEntity(entity)" :configuration="configuration" :player="player" :profile="profile" :entity="entity" :rolled="rolled" :class="getEntityClass(entity)" :key="entity.id"></dnd-master-entity>
 			</div>
 			<div class="screen-action-column">
 				<button class="bucket general quick rounded action" v-on:click="witnessLimit(5)"  v-on:click.right.stop.prevent="witnessLimit(-5)">

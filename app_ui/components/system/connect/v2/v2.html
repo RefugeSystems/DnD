@@ -1,0 +1,120 @@
+<div class="rs-component connect-component-v2">
+	<div class="connect-title">
+		{{title}}
+	</div>
+	<div class="connect-delayed" v-if="!modules.local && !alternatives.length && loading">
+		<span class="fas fa-spinner fa-pulse"></span>
+	</div>
+	<div class="connect-container" v-if="modules.local">
+		<div class="heading">
+			<span class="heading-icon"></span>
+		</div>
+		<div class="fields" action="javascript:void(0);">
+			<table>
+				<tr>
+					<td class="label">
+						<label class="full align-right" for="login-username">
+							<span class="field-text">Username</span>
+						</label>
+					</td>
+					<td>
+						<input id="login-username" type="text" v-enter="login" v-model="storage.username" v-esc="clearUsername" placeholder="Enter a Username..." />
+					</td>
+					<td>
+						<button class="quick-action" v-on:click="clearUsername()">
+							<span class="fas fa-ban"></span>
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						<label class="full align-right" for="login-password">
+							<span class="field-text">Password</span>
+						</label>
+					</td>
+					<td>
+						<input id="login-password" type="password" v-enter="login" v-model="password" v-esc="clearPassword" :placeholder="passwordPlaceholder"/>
+					</td>
+					<td>
+						<button class="quick-action" v-on:click="clearPassword()">
+							<span class="fas fa-ban"></span>
+						</button>
+					</td>
+				</tr>
+				<tr v-if="otherWorlds">
+					<td class="label">
+						<label class="full align-right" for="login-world">
+							<span class="field-text">World</span>
+						</label>
+					</td>
+					<td>
+						<select v-model="storage.address" v-esc="clearAddress" v-on:change="updateWorld">
+							<option value="">Select a world...</option>
+							<option v-for="w in otherWorlds" :value="w.address">{{w.name}}</option>
+						</select>
+					</td>
+					<td>
+						<button class="quick-action" v-on:click="toggleServerDetails()">
+							<span v-if="external" class="fas fa-minus"></span>
+							<span v-if="!external" class="fas fa-plus"></span>
+						</button>
+					</td>
+				</tr>
+				<tr v-if="external">
+					<td class="label">
+						<label class="full align-right" for="login-address">
+							<span class="field-text">Add World</span>
+						</label>
+					</td>
+					<td>
+						<input id="login-address" type="text" v-enter="login" v-model="add.name" placeholder="Enter Server Name..." />
+					</td>
+					<td>
+						<button v-if="external" class="quick-action" v-on:click="addWorld(add)">
+							<span class="fa-solid fa-globe"></span>
+						</button>
+					</td>
+				</tr>
+				<tr v-if="external">
+					<td class="label">
+						<label class="full align-right" for="login-address">
+							<span class="field-text">Address</span>
+						</label>
+					</td>
+					<td>
+						<input id="login-address" type="text" v-enter="login" v-model="add.address" placeholder="Enter a Server Address..." />
+					</td>
+					<td>
+						<button v-if="external" class="quick-action" v-on:click="add.is_secure = !add.is_secure">
+							<span class="fa-solid" :class="add.is_secure?'fa-lock':'fa-unlock'"></span>
+						</button>
+					</td>
+				</tr>
+				<tr class="secondary-login">
+					<td></td>
+					<td>
+						<button v-on:click="login()">
+							<span>Login</span>
+							<span class="fad fa-portal-enter"></span>
+						</button>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			<div class="actions">
+				<button class="primary-action primary-login" v-on:click="login()">
+					<span v-if="loggingIn" class="action-icon fas fa-spinner fa-pulse"></span>
+					<span v-if="!loggingIn" class="action-icon fad fa-portal-enter"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="connect-alternatives" v-if="alternatives.length">
+		<div class="divider" :class="configuration?configuration.divider:'white'" v-if="modules.local"></div>
+		<div class="alternatives">
+			<button v-for="module in alternatives" class="module-authentication" :class="module.id" v-on:click="loginModule(module)">
+				<span class="auth-icon" :class="module.icon"></span>
+			</button>
+		</div>
+	</div>
+</div>

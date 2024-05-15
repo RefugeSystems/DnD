@@ -25,13 +25,17 @@
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">100</span>
 			</button>
+			<button class="rounded general quick action" v-on:click="forwardTime(1800)" title="30 Minutes">
+				<span class="action-icon fal fa-calendar-week"></span>
+				<span class="action-count">300</span>
+			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(3600)" title="1 Hour">
 				<span class="action-icon fal fa-hourglass-start"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(18000)" title="5 Hours">
+			<button class="rounded general quick action" v-on:click="forwardTime(14400)" title="4 Hours">
 				<span class="action-icon fal fa-hourglass-start"></span>
-				<span class="action-count">5</span>
+				<span class="action-count">4</span>
 			</button>
 			<button class="rounded general quick action" v-on:click="forwardTime(86400)" title="1 Day">
 				<span class="action-icon fal fa-calendar-day"></span>
@@ -41,21 +45,23 @@
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">1</span>
 			</button>
+			<!--
 			<button class="rounded general quick action" v-on:click="forwardTime(2160000)" title="5 Weeks">
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">5</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(4320000)" title="10 Weeks">
-				<span class="action-icon fal fa-calendar-week"></span>
-				<span class="action-count">10</span>
-			</button>
-			<!--
 			<button class="rounded general quick action" v-on:click="toggleTimeLock()" title="Toggle Time Locking">
 				<span class="action-icon fas" :class="storage.timeLocked?'fa-lock':'fa-unlock'"></span>
 			</button>
-			-->
 			<button class="rounded general quick action" v-on:click="broadcastThinking()" title="Trigger 'Thinking' response - ie. Display hints for players.">
 				<span class="action-icon fa-solid fa-face-thinking"></span>
+			</button>
+			-->
+			<button class="rounded general quick action" v-on:click="distributeGold()" title="Distribute gold to selected entities.">
+				<span class="action-icon fa-solid fa-coins"></span>
+			</button>
+			<button class="rounded general quick action" v-on:click="requestSkillCheck()" title="Request a skill check from selected entities.">
+				<span class="action-icon fa-solid fa-universal-access"></span>
 			</button>
 			<button class="rounded general quick action" v-if="!skirmish" v-on:click="startSkirmish()" title="Start Skirmish">
 				<span class="action-icon fas fa-swords"></span>

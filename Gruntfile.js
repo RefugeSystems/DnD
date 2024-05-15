@@ -21,6 +21,7 @@ var config = {
 						"SwitchCase": 1
 					}
 				],
+				"no-invalid-regexp": 1,
 				"comma-dangle": 2,
 				"quotes": [2, "double"],
 				"no-unused-vars": [1, {

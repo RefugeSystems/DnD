@@ -80,6 +80,7 @@ class Universe extends EventEmitter {
 		this.classes = configuration.universe.classes?defaultClasses.concat(configuration.universe.classes):defaultClasses;
 		this.initialized = false;
 		this.Libraries = new Libraries(this);
+		this.package = appPackage;
 
 		this.chronicle.on("error", function(error) {
 			this.handleError("chronicle:general", error);
@@ -1912,6 +1913,30 @@ class Universe extends EventEmitter {
 			"anchored": timeout?false:true,
 			"emission": emission,
 			"timeout": timeout
+		});
+	}
+
+	/**
+	 * 
+	 * @method distributeMessage
+	 * @param {Object} recipients Player IDs
+	 * @param {String} id To identify the message on the recipient's end
+	 * @param {Object} message Containing the data to include
+	 * @param {Object} [options] Optional settings for controlling the message
+	 * @param {String} options.icon CSS Classing
+	 * @param {Number} options.timeout Time in milliseconds before the message is removed, if any
+	 * @param {Object} emission Event for UI
+	 */
+	distributeMessage(recipients, id, message, options, emission) {
+		this.emit("send", {
+			"type": "notice",
+			"recipients": recipients,
+			"message": message,
+			"icon": options?options.icon:undefined,
+			"id": id || undefined,
+			"anchored": options?!!options.timeout:true,
+			"emission": options?options.emission || emission:emission,
+			"timeout": options?options.timeout:undefined
 		});
 	}
 

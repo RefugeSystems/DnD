@@ -37,7 +37,7 @@ module.exports = function(universe) {
 			expression = expression.substring(1);
 		}
 
-		if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
+		if(expression && expression.length < 600 && calculateSecurityRegEx.test(expression)) {
 			try {
 				return parseInt(Math.floor(eval(expression)));
 			} catch(ignored) {

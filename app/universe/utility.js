@@ -156,6 +156,33 @@ class UniverseUtility {
 
 	/**
 	 * 
+	 * @method requestSkillCheck
+	 * @param {RSObject} entity 
+	 * @param {RSObject} skill 
+	 */
+	requestSkillCheck(entity, skill) {
+		if(entity && skill) {
+			this.universe.distributeMessage(entity.owned, "roll:" + skill.id + ":" + entity.id, "Roll " + skill.name + " for " + entity.name, {
+				"icon": "fa-solid fa-dice-d20",
+				"emission": {
+					// ToMay: Add flags to sync back?
+					"type": "dialog-open",
+					"component": "dndDialogCheck",
+					"storageKey": "store:roll:" + entity.id,
+					"entity": entity.id,
+					"skill": skill.id,
+					"hideFormula": true,
+					"hideHistory": true,
+					"closeAfterCheck": true
+				}
+			});
+		} else {
+			this.console.log("Invalid Request for Roll: " + (entity?entity.name + "[" + entity.id + "]":"[No Entity]") + " | " + (skill?skill.name + "[" + skill.id + "]":"[No Skill]"));
+		}
+	}
+
+	/**
+	 * 
 	 * @method applyWeather
 	 * @param {String | Object} weather 
 	 * @param {String | Object} meeting 

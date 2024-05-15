@@ -226,9 +226,7 @@ rsSystem.component("dndMasterEntity", {
 		data.rolls = [];
 		data.gender = this.universe.get(this.entity.gender) || {"name": this.entity.gender || "No Gender"};
 		data.race = this.universe.get(this.entity.race) || {"name": this.entity.race || "No Race"};
-		/*
 		data.location = this.entity.location;
-		*/
 
 		return data;
 	},
@@ -304,6 +302,9 @@ rsSystem.component("dndMasterEntity", {
 			*/
 
 			return "";
+		},
+		"selectEntity": function(event) {
+			this.$emit("select", this.entity.id);
 		},
 		"entityRolled": function(event) {
 			if(event && event.entity === this.entity.id) {

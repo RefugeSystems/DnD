@@ -1,13 +1,14 @@
 <div class="rs-page page-home" :style="styleSplash()">
 	<div class="login prompt" v-if="state <= 0 && configuration && !active">
 		<div class="boxed">
-			<rs-connect v-if="state === 0" v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" storage-key="session"></rs-connect>
+			<!-- <rs-connect v-if="state === 0" v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" :splash="splash" storage-key="session"></rs-connect> -->
+			<rs-connect-v2 v-if="state === 0" v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" v-on:world="changeWorld" :universe="universe" :configuration="configuration" storage-key="session"></rs-connect-v2>
 			<div class="message-content system-component" v-if="message" :class="messageClass" v-on:click="dismissMessage()">
 				<div class="message-heading" v-if="messageHeading">
 					<span :class="messageIcon" v-if="messageIcon"></span>
 					<span>{{messageHeading}}</span>
 				</div>
-				<div class="message-text">{{message}}</div>
+				<div class="message-text" v-html="message"></div>
 				<div class="message-time">{{messageTimestamp}}</div>
 			</div>
 		</div>

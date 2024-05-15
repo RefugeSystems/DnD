@@ -13,31 +13,54 @@ rsSystem.keyboard = (function() {
 	var emitter = new EventEmitter(),
 		DEFAULT = {},
 		keymap = {},
+		NAMING = {},
 		KEY = {},
 		endKey;
 
+	// emitter.debug = 10;
 	KEY.keymap = "sysem:keymap";
 
+	/**
+	 * Maps the DOM key location to a string for use within switch statements.
+	 * @property DEVREF
+	 * @type Object
+	 */
+	emitter.DEVREF = {
+		"Keyboard": KeyboardEvent.DOM_KEY_LOCATION_STANDARD.toString(),
+		"Right": KeyboardEvent.DOM_KEY_LOCATION_RIGHT.toString(),
+		"Left": KeyboardEvent.DOM_KEY_LOCATION_LEFT.toString(),
+		"Numpad": KeyboardEvent.DOM_KEY_LOCATION_NUMPAD.toString()
+	}
+
+	NAMING.location = {
+		"0": "",
+		"1": "Numpad:"
+	};
+
 	DEFAULT.keymap = {
-		"F1": {
-			"": "system:help",
-			"ctrl": "character:attack",
-			"alt": "character:info"
-		},
-		"F2": {
-			"": "character:attack",
-			"ctrl": "character:info",
-			"alt": "characterinfo:attack"
-		},
-		"F10": {
-			"": "system:menu"
-		},
-		"1": {
-			"": null,
-			"ctrl": "character:attack",
-			"alt": "characterinfo:attack"
+		"0": {									// Location
+			"F1": {								// Key
+				"_": "system:help",
+				"ctrl": "character:attack",
+				"alt": "character:info"
+			},
+			"F2": {
+				"_": "character:attack",
+				"ctrl": "character:info",
+				"alt": "characterinfo:attack"
+			},
+			"F10": {
+				"_": "system:menu"
+			},
+			"1": {
+				"_": null,
+				"ctrl": "character:attack",
+				"alt": "characterinfo:attack"
+			}
 		}
 	};
+
+
 
 	endKey = function(event) {
 		event.preventDefault();
@@ -47,39 +70,42 @@ rsSystem.keyboard = (function() {
 	};
 
 	document.onkeyup = function(e) {
-		if(rsSystem.debug >= 5) {
-			console.log("Key Up: " + e.key, keymap[e.key]);
-		} else if(rsSystem.debug >= 10) {
-			console.log("Key Up: ", e, keymap[e.key]);
-		}
-
-		if(keymap[e.key]) {
-			if(e.altKey && keymap[e.key].alt) {
+		if(keymap[e.location] && keymap[e.location][e.key]) {
+			if(e.altKey && keymap[e.location][e.key].alt) {
 				endKey(e);
-			} else if(e.ctrlKey && keymap[e.key].ctrl) {
+			} else if(e.ctrlKey && keymap[e.location][e.key].ctrl) {
 				endKey(e);
-			} else if(keymap[e.key][""]) {
+			} else if(e.shiftKey && keymap[e.location][e.key].shift) {
+				endKey(e);
+			} else if(keymap[e.location][e.key]._ && !e.ctrlKey && !e.altKey && !e.shiftKey) {
 				endKey(e);
 			}
 		}
 	};
 
 	document.onkeydown = function(e) {
-		if(rsSystem.debug >= 5) {
-			console.log("Key Dn[" + e.code + "]: " + e.key);
-		} else if(rsSystem.debug >= 10) {
-			console.log("Key Dn: ", e);
+		var debug = rsSystem.debug || rsSystem.keyboard.debug;
+		if(debug >= 10) {
+			console.log("Key Dn[" + e.location + "]: ", e, keymap[e.location]?keymap[e.location][e.key]:"No Location: " + e.location);
+		} else if(debug >= 5) {
+			console.log("Key Dn[" + e.location + "]: " + e.key, keymap[e.location]?keymap[e.location][e.key]:"No Location: " + e.location);
 		}
 
-		if(keymap[e.key]) {
-			if(e.altKey && keymap[e.key].alt) {
-				emitter.$emit(keymap[e.key].alt);
+		if(keymap[e.location] && keymap[e.location][e.key]) {
+			if(e.altKey && e.ctrlKey && e.shiftKey && keymap[e.location][e.key].acs) {
+				emitter.$emit(keymap[e.location][e.key].acs);
 				endKey(e);
-			} else if(e.ctrlKey && keymap[e.key].ctrl) {
-				emitter.$emit(keymap[e.key].ctrl);
+			} else if(e.altKey && keymap[e.location][e.key].alt) {
+				emitter.$emit(keymap[e.location][e.key].alt);
 				endKey(e);
-			} else if(keymap[e.key][""]) {
-				emitter.$emit(keymap[e.key][""]);
+			} else if(e.ctrlKey && keymap[e.location][e.key].ctrl) {
+				emitter.$emit(keymap[e.location][e.key].ctrl);
+				endKey(e);
+			} else if(e.shiftKey && keymap[e.location][e.key].shift) {
+				emitter.$emit(keymap[e.location][e.key].shift);
+				endKey(e);
+			} else if(keymap[e.location][e.key]._ && !e.ctrlKey && !e.altKey && !e.shiftKey) {
+				emitter.$emit(keymap[e.location][e.key]._);
 				endKey(e);
 			}
 		}
@@ -136,7 +162,7 @@ rsSystem.keyboard = (function() {
 	 * 		firing anything.
 	 */
 	emitter.$on("system:keymap:set", function(event) {
-		emitter.setKeybind(event.key, event.emit, event.alt, event.ctrl, event.old);
+		emitter.setKeybind(event.location, event.key, event.emit, event.alt, event.ctrl, event.shift, event.old);
 	});
 
 	emitter.$on("system:keymap:default", function(event) {
@@ -161,42 +187,66 @@ rsSystem.keyboard = (function() {
 		emitter.$emit("system:keymap:updated");
 	};
 
-	emitter.setKeybind = function(key, emit, alt, ctrl, old) {
-		if(!keymap[key]) {
-			keymap[key] = {};
+	/**
+	 * 
+	 * @method setKeybind
+	 * @param {String} location 
+	 * @param {String} key 
+	 * @param {String} emit 
+	 * @param {Boolean} alt 
+	 * @param {Boolean} ctrl 
+	 * @param {Boolean} shift 
+	 * @param {Keybind} {old} The keybind to clean up, if any.
+	 * @returns {Keybind} The keybind that was set
+	 */
+	emitter.setKeybind = function(location, key, emit, alt, ctrl, shift, old) {
+		var set = {
+			"location": location,
+			"emit": emit,
+			"key": key
+		};
+
+		if(!keymap[location]) {
+			keymap[location] = {};
+		}
+		if(!keymap[location][key]) {
+			keymap[location][key] = {};
+		}
+
+		if(old) {
+			if(old.location && keymap[old.location] && keymap[old.location][old.key]) {
+				delete(keymap[old.location][old.key][old.modifier || "_"]);
+			}
 		}
 
 		if(key) {
 			if(alt) {
+				set.modifier = "alt";
 				if(emit === null) {
-					delete(keymap[key].alt);
+					delete(keymap[location][key].alt);
 				} else {
-					keymap[key].alt = emit;
+					keymap[location][key].alt = emit;
 				}
 			} else if(ctrl) {
+				set.modifier = "ctrl";
 				if(emit === null) {
-					delete(keymap[key].ctrl);
+					delete(keymap[location][key].ctrl);
 				} else {
-					keymap[key].ctrl = emit;
+					keymap[location][key].ctrl = emit;
+				}
+			} else if(shift) {
+				set.modifier = "shift";
+				if(emit === null) {
+					delete(keymap[location][key].shift);
+				} else {
+					keymap[location][key].shift = emit;
 				}
 			} else {
 				if(emit === null) {
-					delete(keymap[key][""]);
+					delete(keymap[location][key]._);
 				} else {
-					keymap[key][""] = emit;
+					keymap[location][key]._ = emit;
 				}
-			}
-		}
-
-		if(typeof(old) === "string") {
-			if(old.startsWith("ctrl")) {
-				old = old.replace("ctrl +", "").trim();
-				delete(keymap[old].ctrl);
-			} else if(old.startsWith("alt")) {
-				old = old.replace("alt +", "").trim();
-				delete(keymap[old].alt);
-			} else {
-				delete(keymap[old][""]);
 			}
 		}
 
@@ -204,7 +254,45 @@ rsSystem.keyboard = (function() {
 			localStorage.setItem(KEY.keymap, JSON.stringify(keymap));
 			emitter.$emit("system:keymap:updated");
 		}
-	}
+
+		return set;
+	};
+
+	/**
+	 * Loop over all the bindings in the keymap.
+	 * 
+	 * Each binding has 4 properties:
+	 * + location : The location of the key such as "0" for the keyboard or "1" for the numpad
+	 * + key : The key that triggers the binding, such as "F2" (See KeyboardEvent.key)
+	 * + modifier : The modifier key used to trigger the binding (Only 1 modifier per key at this time)
+	 * + emit : The event that the binding emits
+	 * 
+	 * @method forEach
+	 * @param {Function} process The function to call for each keybind. Returning null will stop the loop.
+	 */
+	emitter.forEach = function(process) {
+		var location,
+			modifier,
+			result,
+			key;
+
+		for(location in keymap) {
+			for(key in keymap[location]) {
+				for(modifier in keymap[location][key]) {
+					result = process({
+						"location": location,
+						"key": key,
+						"modifier": modifier === "_"?undefined:modifier,
+						"emit": keymap[location][key][modifier]
+					});
+
+					if(result === false) {
+						return null;
+					}
+				}
+			}
+		}
+	};
 
 	return emitter;
 })();
@@ -240,3 +328,36 @@ rsSystem.keyboard.$on("character:attack", function() {
 		bus.$emit("dialog-open", details);
 	}
 });
+
+/**
+ * 
+ * @class Keybind
+ * @constructor
+ */
+
+/**
+ * The device origin ID for the keybind such as "0" for the keyboard or "1" for the numpad.
+ * @property location
+ * @type String
+ */
+
+/**
+ * The key that triggers the binding, such as "F2" (See KeyboardEvent.key)
+ * @property key
+ * @type String
+ */
+
+/**
+ * The modifier key used to trigger the binding (Only 1 modifier per key at this time).
+ * 
+ * If this is not set, then the keybind is for the key itself. The keybind mapping uses "_" for
+ * the property on the map when descending the lookup object.
+ * @property modifier
+ * @type String
+ */
+
+/**
+ * The event that the binding emits
+ * @property emit
+ * @type String
+ */

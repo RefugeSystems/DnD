@@ -492,6 +492,14 @@
 			"broadcastThinking": function() {
 				this.universe.send("master:thinking", {});
 			},
+
+			"distributeGold": function() {
+				rsSystem.keyboard.$emit("command:gold:distribute");
+			},
+
+			"requestSkillCheck": function() {
+				rsSystem.keyboard.$emit("command:skill:request");
+			},
 			/**
 			 * 
 			 * @method forwardTime
