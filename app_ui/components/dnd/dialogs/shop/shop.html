@@ -14,9 +14,13 @@
 			<span class="fas fa-shopping-cart"></span>
 			<span>Checkout</span>
 		</button>
+		<div class="discount flex h" v-if="discount">
+			<span class="fa-solid fa-tag"></span>
+			<span class="shopping-note price" :class="discountClass">{{displayDiscount}}</span>
+		</div>
 		<div class="cost flex h" title="Cost to checkout">
 			<span class="fa-solid fa-cash-register"></span>
-			<span class="shopping-note price" :class="canAfford?'rs-light-green':'rs-light-red'">{{displayedCost}}</span>
+			<span class="shopping-note price" :class="canAfford?'rs-light-green':'rs-light-yellow'">{{displayedCost}}</span>
 		</div>
 	</div>
 </div>

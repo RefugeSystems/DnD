@@ -125,7 +125,7 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} damage 
 	 * @param {Object} [resist] 
 	 */
-	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}) {
+	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}, roll) {
 		var tracked = tracking[activity],
 			log = logged[activity],
 			resisted = {},

@@ -332,6 +332,14 @@ module.exports.initialize = function(universe) {
 				"skirmish": skirmish.id,
 				"turn": entity.id
 			});
+			universe.emit("send", {
+				"type": "combat:turn",
+				"recipients": entity.owned || universe.getMasters(),
+				"recipient": entity.played_by,
+				"skirmish": skirmish.id,
+				"entity": entity.id
+			});
+
 			if(!entity.is_minion && !entity.is_npc && entity.played_by) {
 				/**
 				 * 
@@ -377,12 +385,12 @@ module.exports.initialize = function(universe) {
 			});
 
 			if(entity.owned && Object.keys(entity.owned).length) {
-				universe.messagePlayers(entity.owned, "It is \"" + entity.name + "\"'s turn in combat", null, null, 5000);
+				universe.messagePlayers(entity.owned, "It is " + entity.name + "'s turn in combat", null, null, 5000);
 			}
 			
 			entity = entities[(next + 1)%entities.length];
 			if(entity.owned && Object.keys(entity.owned).length) {
-				universe.messagePlayers(entity.owned, "\"" + entity.name + "\" is on deck for combat", null, null, 5000);
+				universe.messagePlayers(entity.owned, entity.name + " is on deck for combat", null, null, 5000);
 			}
 		} else {
 			// TODO: Improve handling/feedback

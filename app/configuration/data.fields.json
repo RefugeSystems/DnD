@@ -3637,6 +3637,18 @@
 			"display_size": 110
 		}
 	}, {
+		"id": "stock_skew",
+		"name": "Restock Skew",
+		"description": "Controls the skew for the restocking normal distribution. Numbers over 1 move the skew to the low/min side of the range and fractions less than 1 move it to the high/max side of the range. The higher the number, the further towards the min. The smaller the fraction, the farther towards the max. 0 or less will result in 0 for the entire restock and shouold only be used as an inheritance way of nuetralizing the restocking, such as a location being destroyed.",
+        "order": 783,
+		"type": "object:dice",
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+            "inherited_key": "type",
+            "display_size": 110
+        }
+	}, {
 		"id": "stock_rarity_max",
 		"name": "Stock Maximum Rarity",
 		"description": "Maps a type to a numeric calculation to detemine the inclusive maximum rarity to stock. If this maps to a value of 5, that is the maximum. If this is 0, there is no maximum. If min and max are omitted, the rarity is not considered.",

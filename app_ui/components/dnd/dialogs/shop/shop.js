@@ -51,6 +51,18 @@ rsSystem.component("dndDialogShop", {
 			}
 			return false;
 		},
+		"discount": function() {
+			if(this.shop.discount) {
+				return this.shop.discount[this.entity.id] || this.shop.discount.all || this.shop.discount.everyone || 0;
+			}
+			return 0;
+		},
+		"displayDiscount": function() {
+			return Math.ceil(Math.abs(this.discount) * 100).toFixed(0) + "% " + (this.discount<0?"Markup":"Discount");
+		},
+		"discountClass": function() {
+			return this.discount>0?"rs-light-green":"rs-light-red";
+		},
 		"price": function() {
 			if(!this.table || !this.table.selected) {
 				return 0;
@@ -77,10 +89,7 @@ rsSystem.component("dndDialogShop", {
 				}
 			}
 
-			if(this.shop.discount) {
-				discount = this.shop.discount[this.entity.id] || this.shop.discount.all || this.shop.discount.everyone || 0;
-				cost = (1 - discount) * cost;
-			}
+			cost = (1 - this.discount) * cost;
 
 			return cost;
 		},
@@ -130,6 +139,13 @@ rsSystem.component("dndDialogShop", {
 		};
 		data.formatter.info = (value, record) => {
 			return "<span class=\"fas fa-info-circle\"></span>";
+		};
+		data.formatter.cost = (value, record) => {
+			value = (1 - this.discount) * value;
+			if(value%1) {
+				return value.toFixed(2);
+			}
+			return value;
 		};
 		data.formatter.category = (value) => {
 			var category;

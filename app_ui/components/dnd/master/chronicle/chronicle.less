@@ -51,6 +51,7 @@
 		}
 	}
 
+	.render-collection,
 	.render-roll {
 		margin: 5px;
 		padding: 5px;
@@ -78,7 +79,57 @@
 		}
 	}
 
+	.render-collection {
+		border-color: @rsLightOrange;
+
+		.container {
+			justify-content: space-between;
+		}
+
+		.stats {
+			margin: 0px 0px 0px 7px;
+			border-left: 2px solid @rsLightGray;
+			padding: 0px 0px 0px 7px;
+		}
+
+		.readout {
+
+			.roll {
+				text-align: center;
+				width: 20px;
+			}
+
+			.die {
+				margin: 0px 4px;
+			}
+
+			.entity {
+				margin: 2px 0px;
+			}
+		}
+
+		.titling {
+			margin: 0px 0px 5px 0px;
+			padding: 0px 0px 5px 0px;
+			border-bottom: 1px solid @rsLightGray;
+
+			.name {
+				font-size: 20px;
+			}
+		}
+
+		.details {
+			margin: 5px 0px 0px 0px;
+			padding: 5px 0px 0px 0px;
+			border-top: 1px solid @rsLightGray;
+		}
+	}
+
 	.channel-dc {
 		margin: 0px 5px;
+	}
+
+	.dice-type {
+		margin: 0px 2px;
 	}
 }

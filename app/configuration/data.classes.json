@@ -138,7 +138,7 @@
 		"id": "slot",
 		"name": "Slot",
 		"description": "An entry where an item can be placed in association with another object.",
-		"fields": ["parent", "name", "icon", "description", "score", "is_singular", "is_positive", "is_negative", "spells", "threat", "ordering", "types", "action_max", "types_accepted", "types_rejected", "weight", "size", "is_preview", "review", "attribute", "is_copy"]
+		"fields": ["parent", "name", "icon", "description", "score", "is_singular", "is_positive", "is_negative", "spells", "threat", "ordering", "types", "action_max", "types_accepted", "types_rejected", "weight", "size", "is_preview", "review", "attribute", "is_copy", "stocks", "stocks_randomly", "stock_point", "stock_rarity_min", "stock_skew", "stock_rarity_max", "stock_periodically", "stocked_last", "stocks_persist", "stocks_template", "stocks_unique", "stocks_singular", "stocks_history", "is_stock_excluded"]
 	}, {
 		"id": "gender",
 		"name": "Gender",

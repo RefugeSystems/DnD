@@ -81,7 +81,8 @@ module.exports.initialize = function(universe) {
 							"skill": "skill:initiative",
 							"hideFormula": true,
 							"hideHistory": true,
-							"closeAfterCheck": true
+							"closeAfterCheck": true,
+							"id": "roll:skill:initiative:" + entity.id
 						});
 					}
 					meeting.addValues({

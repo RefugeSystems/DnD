@@ -61,10 +61,16 @@ rsSystem.component("dndMasterRollRequest", {
 	},
 	"methods": {
 		"choose": function(skill) {
-			console.warn("Skill chosen", skill);
+			var entities = this.entities.map((entity) => entity.id);
 			this.closeDialog();
+			
+			rsSystem.EventBus.$emit("master:collect", {
+				"entities": entities,
+				"skill": skill.id
+			});
+
 			this.universe.send("master:request:roll", {
-				"entities": this.entities.map((entity) => entity.id),
+				"entities": entities,
 				"skill": skill.id
 			});
 		},

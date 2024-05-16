@@ -1,3 +1,27 @@
-<div class="render-collection" :class="classing">
-	
+<div class="render-collection">
+	<div class="flex v">
+		<div class="titling flex v">
+			<div class="skill">Skill: <span class="name">{{skill?skill.name:occurred.skill}}</span></div>
+		</div>
+		<div class="container flex h">
+			<div class="readout flex v">
+				<div class="entity flex h" v-for="entity in entities">
+					<div class="roll" v-if="occurred.index[entity.id]">{{occurred.index[entity.id]}}</div>
+					<div class="roll " v-if="!occurred.index[entity.id]">
+						<span class="fa-solid fa-pulse fa-spinner"></span>
+					</div>
+					<span class="die fa-solid fa-dice-d20"></span>
+					<div class="name">{{entity.name}} ( {{getBonus(entity)}} )</div>
+				</div>
+			</div>
+			<div class="stats flex v">
+				<div class="stat avg">Avg: <span :class="classResult()">{{occurred.average}}</span></div>
+				<div class="stat avg-range">[{{occurred.range.min}}, {{occurred.range.avg}}, {{occurred.range.max}}]</div>
+				<div class="stat total"> = <span :class="classResult()">{{occurred.total}}</span></div>
+			</div>
+		</div>
+		<div class="details flex v">
+			<div class="updated">Updated <span class="fas fa-clock"></span> {{occurred._updated_date}}</div>
+		</div>
+	</div>
 </div>

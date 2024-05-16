@@ -231,12 +231,14 @@
 					<span>{{getFinishName()}}</span>
 				</span>
 			</rs-shiny-button>
-			<rs-shiny-button class="send-action" color="green" slot="content" :active="ready" v-if="canMiss" v-on:click="sendZeroResults()" title="Declare this a miss">
-				<span>
-					<span :class="getSendResultIcon()"></span>
-					<span>Declare Miss</span>
-				</span>
-			</rs-shiny-button>
+			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendCoverResult(-2)">
+				<span class="fa-solid fa-shield-halved"></span>
+				<span>Half (+2)</span>
+			</button>
+			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendCoverResult(-5)">
+				<span class="fa-duotone fa-shield-halved rs-secondary-green rs-secondary-solid"></span>
+				<span>3/4 (+5)</span>
+			</button>
 			<!--
 			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendResults()" :title="actionTitling">
 				<span :class="getSendResultIcon()"></span>
@@ -259,6 +261,20 @@
 				<span class="far fa-ban"></span>
 				<span>Clear</span>
 			</button>
+		</div>
+		<div class="roll-complete flex h" v-if="canMiss">
+			<rs-shiny-button class="send-action" color="red" slot="content" :active="ready" v-if="canMiss" v-on:click="sendHitResults()" title="Declare this a hit">
+				<span>
+					<span :class="getSendResultIcon()"></span>
+					<span class="rs-light-red">Declare Hit</span>
+				</span>
+			</rs-shiny-button>
+			<rs-shiny-button class="send-action" color="green" slot="content" :active="ready" v-if="canMiss" v-on:click="sendZeroResults()" title="Declare this a miss">
+				<span>
+					<span :class="getSendResultIcon()"></span>
+					<span class="rs-light-green">Declare Miss</span>
+				</span>
+			</rs-shiny-button>
 		</div>
 		<div class="input">
 			<div class="flex h center">

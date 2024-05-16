@@ -4,7 +4,7 @@
 		<span> to {{entities.length}} Creatures</span>
 	</h1>
 	<div class="distribute flex h">
-		<input class="amount" id="amount" v-model.number="amount" v-on:keydown.enter="distributeGold()" />
+		<input class="amount" id="amount" autocomplete="off" v-model.number="amount" v-on:keydown.enter="distributeGold()" />
 		<button class="rounded general main action" v-on:click="toggleSplit()" title="Split amount selected?">
 			<span class="fa-solid" :class="split?'fa-check rs-light-green':'fa-xmark rs-light-red'"></span>
 		</button>

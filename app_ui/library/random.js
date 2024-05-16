@@ -23,6 +23,14 @@ const Random = (function() {
 	var alphanumeric = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 
 	/**
+	 * Quick reference array for generating random strings with lowercase only.
+	 * @private
+	 * @property alphanumericLower
+	 * @type String[]
+	 */
+	var alphanumericLower = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+	/**
 	 * 
 	 * @type Number[]
 	 * @property primes
@@ -1078,6 +1086,41 @@ const Random = (function() {
 		} else {
 			return null;
 		}
+	};
+
+	/**
+	 * Get a random alphanumeric string (ie. matches pattern ^[a-zA-Z0-9]*$).
+	 * @method string
+	 * @param {Number} len The desired length for the returned String.
+	 * @return {String} A random alphanumeric string
+	 */
+	random.lowercase = function(len) {
+		if(len) {
+			var x, string = [];
+			for(x=0; x<len; x++)
+				string[x] = alphanumericLower[random.integer(alphanumericLower.length)];
+			return string.join("");
+		} else {
+			return null;
+		}
+	};
+	
+	/**
+	 * Get a normal distribution of random numbers between 2 values.
+	 * @see https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve
+	 * @method guassian
+	 * @param {Number} [mean] Optional, defaults to 0.
+	 * @param {Number} [stdev] Optional, detaults to 1.
+	 * @param {Number} [skew] Optional skew of the curve, defaults to 1. Higher numbers front load the curve, fractions back load the curve.
+	 * 		Negative numbers are not valid here.
+	 */
+	random.guassian = function(min = 0, max = 1, skew = 1) {
+		if(skew <= 0) {
+			return 0;
+		}
+	
+		var num = Math.sqrt(-2 * Math.log(1 - Math.random())) * Math.cos(2 * Math.PI * Math.random());
+		return Math.pow(num/10 + .5, skew) * (max - min) + min;
 	};
 
 	/**

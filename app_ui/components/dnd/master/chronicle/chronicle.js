@@ -60,19 +60,22 @@ rsSystem.component("dndChronicleReadout", {
 		};
 
 		data.searchKeys = Object.keys(data.searchables);
-		// TODO: Determine pathing and load from storage
-		//   ? [Index] > [Entity] > [Skill] > [Collection]
-		data.collections = {};
 
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		rsSystem.EventBus.$on("master:collect", this.receiveCollection);
 		this.universe.$on("chronicled", this.receiveEvent);
 		this.universe.$on("entity:roll", this.receiveRoll);
 		
 		if(!this.storage.witnessed) {
 			Vue.set(this.storage, "witnessed", []);
+		}
+		// TODO: Determine pathing and load from storage
+		//   ? [Index] > [Entity] > [Skill] > [Collection]
+		if(typeof(this.storage.collecting) !== "object") {
+			Vue.set(this.storage, "collecting", {});
 		}
 		if(!this.storage.chronicle_filter) {
 			Vue.set(this.storage, "chronicle_filter", "");
@@ -101,25 +104,109 @@ rsSystem.component("dndChronicleReadout", {
 		 * @param {String} event.skill Skill ID
 		 * @param {Array} event.entities Entity IDs
 		 */
+		/**
+		 * Event notification that the game master is collecting a skill roll from a group of entities
+		 * @event master:collect
+		 * @param {Object} event 
+		 * @param {String} event.skill Skill ID
+		 * @param {Array} event.entities Entity IDs
+		 */
 		"receiveCollection": function(event) {
+			// console.log("Received Collection: ", _p(this.storage), event);
 			var skill = this.universe.get(event.skill),
-				entities = [],
+				collection = {},
+				entity,
 				i;
 			
 			if(skill) {
+				collection.id = Random.lowercase(32);
+				collection.component = "dndChronicleReadoutCollection";
+				collection.type = "collection";
+				collection.entities = [];
+				collection.checks = {};
+				collection.index = {};
 				for(i=0; i<event.entities.length; i++) {
-					entities.push(this.universe.get(event.entities[i]));
+					entity = event.entities[i];
+					collection.entities.push(entity);
+					collection.index[entity] = null;
+					// console.log(" - Test - ");
+					// console.log("Indexing Collection: ", _p(this.storage), "\n - Collecting: ");//, _p(this.storage.collecting));
+					if(!this.storage.collecting[entity]) {
+						Vue.set(this.storage.collecting, entity, {});
+					}
+					Vue.set(this.storage.collecting[entity], skill.id, collection.id);
 				}
 
 				// TODO: Build collection occurrence
-				// TODO: Store and index collection occurrence
+				collection.skill = skill.id;
+				collection.average = 0;
+				collection.total = 0;
+				collection.count = 0;
+				collection.range = {
+					"min": 0,
+					"avg": Math.floor(collection.entities.length * 10.5),
+					"max": Math.floor(collection.entities.length * 20)
+				};
+				for(i=0; i<collection.entities.length; i++) {
+					entity = this.universe.get(collection.entities[i]);
+					collection.range.min += entity.skill_check[skill.id] || 0;
+				}
+				collection.range.avg += collection.range.min;
+				collection.range.max += collection.range.min;
+				collection.range.max += collection.entities.length; // Lowest roll is a 1
+				collection.range.low = Math.floor(collection.range.max * .33);
+				collection.range.med = Math.floor(collection.range.max * .66);
 
+				// TODO: Store and index collection occurrence
+				this.storage.witnessed.unshift(collection);
 			}
+		},
+		/**
+		 * Update the collection, if any, with the results of the roll for the entity and skill.
+		 * @method updateCollection
+		 * @param {Object} occurred 
+		 * @return {Boolean} True if the collection was updated, false if not
+		 */
+		"updateCollection": function(event) {
+			var entity = event.entity,
+				skill = event.skill,
+				roll = event.result,
+				collection,
+				scan,
+				id,
+				i;
+
+			if(this.storage.collecting[entity] && (id = this.storage.collecting[entity][skill])) {
+				for(i=0; !collection && i<this.storage.witnessed.length; i++) {
+					scan = this.storage.witnessed[i];
+					if(scan.type === "collection" && scan.id === id) {
+						collection = scan;
+					}
+				}
+
+				// Clean up regardless as the collection may have been dismissed
+				Vue.delete(this.storage.collecting[entity], skill);
+
+				if(collection) {
+					Vue.set(collection, "total", collection.total + roll);
+					Vue.set(collection, "count", collection.count + 1);
+					Vue.set(collection, "average", Math.floor(collection.total / collection.count));
+					Vue.set(collection, "_updated_date", (new Date()).toLocaleTimeString());
+					Vue.set(collection, "_updated", Date.now());
+					Vue.set(collection.index, entity, roll);
+					return true;
+				}
+			}
+
+			return false;
 		},
 		"receiveEvent": function(event) {
 			console.log("Received Chronice: ", event);
-			var update;
+			var collected,
+				update;
+			// if(event && !this.updateCollection(event)) {
 			if(event) {
+				collected = this.updateCollection(event);
 				switch(event.type) {
 					case "entity:saving":
 						this.witnessEvent("roll", "dndChronicleReadoutRoll", {
@@ -130,6 +217,7 @@ rsSystem.component("dndChronicleReadout", {
 							"result": event.save,
 							"original_damage": event.original_damage,
 							"damage": event.damage,
+							"collected": collected,
 							"form": event.form,
 							"difficulty": event.difficulty,
 							"channel": event.channel,
@@ -148,6 +236,7 @@ rsSystem.component("dndChronicleReadout", {
 							"critical": event.critical,
 							"failure": event.failure,
 							"succeeded": event.succeeded,
+							"collected": collected,
 							"form": event.form,
 							"resist": event.resist,
 							"resist_source": event.resist_source,
@@ -188,6 +277,7 @@ rsSystem.component("dndChronicleReadout", {
 							"attack": event.attack,
 							"form": event.form,
 							"skill": event.skill,
+							"collected": collected,
 							"gametime": this.universe.calendar.toDisplay(event.gametime, true, false),
 							"timeline": event.timeline,
 							"level": event.level,
@@ -201,6 +291,7 @@ rsSystem.component("dndChronicleReadout", {
 							"resist_source": event.resist_source,
 							"resist": event.resist,
 							"form": event.form,
+							"collected": collected,
 							"damage": event.damage || null
 						};
 						if(event.damage_source) {
@@ -297,6 +388,7 @@ rsSystem.component("dndChronicleReadout", {
 		}
 	},
 	"beforeDestroy": function() {
+		rsSystem.EventBus.$off("master:collect", this.receiveCollection);
 		this.universe.$off("chronicled", this.receiveEvent);
 		this.universe.$off("entity:roll", this.receiveRoll);
 		/*

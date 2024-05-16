@@ -64,7 +64,8 @@
 		<span class="result">{{occurred.data.result || occurred.data.save}}</span>
 		<span class="result" v-if="occurred.data.difficulty">(vs DC{{occurred.data.difficulty}})</span>
 		<span class="dice">
-			<span class="type" v-for="(rolled, type) in occurred.data.dice" v-if="rolled.length">
+			<span>=</span>
+			<span class="dice-type type" v-for="(rolled, type) in occurred.data.dice" v-if="rolled.length">
 				<span v-if="type !== 'vantage'">
 					<span :class="'fas fa-dice-' + type"></span>
 					<span class="rolls">{{joinRolls(rolled)}}</span>
@@ -79,6 +80,7 @@
 		<rs-display-field v-for="field in fields" :field="field" :object="form" :key="field.id" :player="player" :universe="universe" :entity="entity" :profile="profile"></rs-display-field>
 	</div>
 	<div class="date">
+		<span v-if="occurred.collected" class="fa-solid fa-dice"></span>
 		<span v-if="damages.length && !occurred._updated" class="fa-solid fa-spinner fa-pulse"></span>
 		<span v-if="!damages.length || occurred._updated" class="fas fa-clock"></span>
 		<span>{{occurred.data.gametime}}</span>

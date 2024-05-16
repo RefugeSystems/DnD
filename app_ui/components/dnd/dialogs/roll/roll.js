@@ -1022,6 +1022,14 @@ rsSystem.component("dndDialogRoll", {
 			}
 			this.sendResults();
 		},
+		"sendHitResults": function() {
+			Vue.set(this.details, "attack", isNaN(this.entity.armor)?20:this.entity.armor + 1);
+			this.sendResults();
+		},
+		"sendCoverResult": function(diff) {
+			Vue.set(this.details, "attack", this.details.attack + diff);
+			this.sendResults();
+		},
 		"sendResults": function() {
 			var state = this.getResultState(),
 				perform,
@@ -1118,6 +1126,7 @@ rsSystem.component("dndDialogRoll", {
 				}
 				perform.critical = !!this.isCritical;
 				perform.failure = !!this.isFailure;
+				perform.roll = this.details.attack; // Loop attack roll back to allow for adjustment
 
 				console.log("Performing: ", perform);
 				if(perform.action && perform.action !== "action:free:damage") {

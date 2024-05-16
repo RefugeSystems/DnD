@@ -47,9 +47,9 @@ rsSystem.component("dndEntityName", {
 			if(this.leveling) {
 				classes += "available ";
 			}
-			if(this.combat) {
-				classes += "combat ";
-			}
+			// if(this.combat) {
+			// 	classes += "combat ";
+			// }
 
 			return classes;
 		},

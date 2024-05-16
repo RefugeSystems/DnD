@@ -1,3 +1,5 @@
+const {type} = require("jquery");
+
 var combat = require("./events/combat/utility.js"),
 	NameGenerator = require("../management/nameGenerator.js"),
 	Random = require("rs-random"),
@@ -162,23 +164,38 @@ class UniverseUtility {
 	 */
 	requestSkillCheck(entity, skill) {
 		if(entity && skill) {
-			this.universe.distributeMessage(entity.owned, "roll:" + skill.id + ":" + entity.id, "Roll " + skill.name + " for " + entity.name, {
-				"icon": "fa-solid fa-dice-d20",
-				"emission": {
-					// ToMay: Add flags to sync back?
-					"type": "dialog-open",
-					"component": "dndDialogCheck",
-					"storageKey": "store:roll:" + entity.id,
-					"entity": entity.id,
-					"skill": skill.id,
-					"hideFormula": true,
-					"hideHistory": true,
-					"closeAfterCheck": true
-				}
-			});
+			if(entity.is_npc && entity.is_minion && (entity.auto_roll || this.universe.getSetting("setting:minion:auto"))) {
+				// TODO: Implement automatic skill check
+			} else {
+				this.universe.distributeMessage(entity.owned, "roll:" + skill.id + ":" + entity.id, "Roll " + skill.name + " for " + entity.name, {
+					"icon": "fa-solid fa-dice-d20",
+					"emission": {
+						// ToMay: Add flags to sync back?
+						"type": "dialog-open",
+						"component": "dndDialogCheck",
+						"storageKey": "store:roll:" + entity.id,
+						"entity": entity.id,
+						"skill": skill.id,
+						"hideFormula": true,
+						"hideHistory": true,
+						"closeAfterCheck": true
+					}
+				});
+			}
 		} else {
 			this.console.log("Invalid Request for Roll: " + (entity?entity.name + "[" + entity.id + "]":"[No Entity]") + " | " + (skill?skill.name + "[" + skill.id + "]":"[No Skill]"));
 		}
+	}
+
+	// TODO: Implement and use in requestSkillCheck
+	/**
+	 * Calculate and emit a skill check for the passed entity.
+	 * @method entitySkillCheck
+	 * @param {RSObject} entity 
+	 * @param {RSObject} skill 
+	 */
+	entitySkillCheck(entity, skill) {
+
 	}
 
 	/**
@@ -494,6 +511,34 @@ class UniverseUtility {
 		}
 
 		return name.join(dataset.spacing || " ");
+	}
+
+	/**
+	 * Used to reduce arrays to a more readable format when calling JSON. Use this as the
+	 * replacer (second) argument in JSON.stringify.
+	 * 
+	 * Non-Object Arrays are returned as is. Object arrays where the objects do not have a name
+	 * property are returned as is. Object arrays where the objects have a name property are
+	 * returned as an array of the names with IDs.
+	 * @method reduceArrays
+	 * @param {String} key 
+	 * @param {*} value 
+	 * @returns {*}
+	 */
+	reduceArrays(key, value) {
+		if(value instanceof Array && value[0]) {
+			if(typeof(value[0]) === "object") {
+				return value.map(function(item) {
+					return item.name?item.name + " (" + item.id + ")":item;
+				});
+			}
+		}
+
+		if(typeof(value) === "object" && key && value.name) {
+			return value.name + "(" + value.id + ")";
+		}
+
+		return value;
 	}
 
 	/**
