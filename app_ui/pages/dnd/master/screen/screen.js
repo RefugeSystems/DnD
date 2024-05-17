@@ -107,6 +107,7 @@ rsSystem.component("DNDMasterScreen", {
 				minions = [],
 				loaded = {},
 				mains = [],
+				shops = [],
 				main = {},
 				foes = [],
 				npcs = [],
@@ -124,10 +125,19 @@ rsSystem.component("DNDMasterScreen", {
 			entities.mains = mains;
 			entities.foes = foes;
 			entities.npcs = npcs;
+			entities.shops = shops;
 			entities.nocombat = [];
 			entities.meeting = [];
 			entities.combat = [];
 			entities.list = [];
+
+			// Meeting
+			for(i=0; i<this.universe.listing.meeting.length; i++) {
+				meeting = this.universe.listing.meeting[i];
+				if(meeting && !meeting.is_preview && !meeting.disabled && meeting.is_active) {
+					break;
+				}
+			}
 
 			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
@@ -143,19 +153,32 @@ rsSystem.component("DNDMasterScreen", {
 			}
 
 			// Pull from players listed in active meeting
-			for(i=0; i<this.universe.listing.meeting.length; i++) {
-				load = this.universe.listing.meeting[i];
-				if(load && !load.disabled && load.is_active && load.players && load.players.length) {
-					for(j=0; j<load.players.length; j++) {
-						player = this.universe.index.player[load.players[j]];
-						if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
-							entity = this.universe.index.entity[player.attribute.playing_as];
-							if(entity && !loaded[entity.id]) {
-								loaded[entity.id] = true;
-								mains.push(entity);
-								main[entity.id] = true;
-							}
+			if(meeting) {
+				for(j=0; j<meeting.players.length; j++) {
+					player = this.universe.index.player[meeting.players[j]];
+					if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
+						entity = this.universe.index.entity[player.attribute.playing_as];
+						if(entity && !loaded[entity.id]) {
+							loaded[entity.id] = true;
+							mains.push(entity);
+							main[entity.id] = true;
 						}
+					}
+				}
+
+				for(i=0; i<meeting.entities.length; i++) {
+					entity = this.universe.index.entity[meeting.entities[i]];
+					if(entity.is_npc) {
+						npcs.push(entity);
+					}
+					if(entity.is_minion) {
+						minions.push(entity);
+					}
+					if(entity.is_hostile) {
+						foes.push(entity);
+					}
+					if(entity.is_shop) {
+						shops.push(entity);
 					}
 				}
 			}
@@ -216,14 +239,6 @@ rsSystem.component("DNDMasterScreen", {
 				}
 			}
 
-			// Meeting
-			for(i=0; i<this.universe.listing.meeting.length; i++) {
-				meeting = this.universe.listing.meeting[i];
-				if(meeting && !meeting.is_preview && !meeting.disabled && meeting.is_active) {
-					break;
-				}
-			}
-
 			if(meeting && meeting.is_active && !meeting.is_preview && !meeting.disabled && meeting.entities) {
 				this.universe.transcribeInto(meeting.entities, entities.meeting, "entity");
 			}
@@ -246,7 +261,18 @@ rsSystem.component("DNDMasterScreen", {
 			entities.combat.sort(rsSystem.utility.sortByInitiative);
 			entities.list = mains.concat(minions, npcs, foes);
 			entities.list.sort(rsSystem.utility.sortByInitiative);
-			entities._keys = Object.keys(entities);
+			// entities._keys = Object.keys(entities);
+			entities._keys = [
+				"meeting",
+				"mains",
+				"npcs",
+				"minions",
+				"foes",
+				"shops",
+				"combat",
+				"nocombat",
+				"list"
+			];
 			return entities;
 		}
 	},
@@ -283,6 +309,7 @@ rsSystem.component("DNDMasterScreen", {
 			"npcs": "game-icon game-icon-character",
 			"meeting": "fas fa-calendar",
 			"combat": "fas fa-swords",
+			"shops": "fa-solid fa-shop",
 			"nocombat": "fa-regular fa-peace",
 			"minions": "fas fa-dog"
 		};
@@ -734,8 +761,20 @@ rsSystem.component("DNDMasterScreen", {
 			}
 			return classes;
 		},
+		"toggleListed": function() {
+			for(var i=0; this.activeEntities[this.storage.activeBucket].length; i++) {
+				this.selectEntity(this.activeEntities[this.storage.activeBucket][i]);
+			}
+		},
+		"unselectListed": function() {
+			// TODO: Implement
+		},
 		"switchEntityBucket": function(bucket) {
-			Vue.set(this.storage, "activeBucket", bucket);
+			if(this.storage.activeBucket === bucket) {
+				this.toggleListed();
+			} else {
+				Vue.set(this.storage, "activeBucket", bucket);
+			}
 			this.$forceUpdate();
 		},
 		"playerDisconnected": function(event) {

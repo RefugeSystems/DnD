@@ -2007,7 +2007,7 @@ class Universe extends EventEmitter {
 			setting = this.get("setting:" + key);
 		}
 		
-		if(!setting) {
+		if(!setting || setting.disabled) {
 			return null;
 		}
 		

@@ -166,6 +166,7 @@ class UniverseUtility {
 		if(entity && skill) {
 			if(entity.is_npc && entity.is_minion && (entity.auto_roll || this.universe.getSetting("setting:minion:auto"))) {
 				// TODO: Implement automatic skill check
+				this.entitySkillCheck(entity, skill);
 			} else {
 				this.universe.distributeMessage(entity.owned, "roll:" + skill.id + ":" + entity.id, "Roll " + skill.name + " for " + entity.name, {
 					"icon": "fa-solid fa-dice-d20",
@@ -193,9 +194,50 @@ class UniverseUtility {
 	 * @method entitySkillCheck
 	 * @param {RSObject} entity 
 	 * @param {RSObject} skill 
+	 * @param {RSObject} [channel] Optional channel through which the save was performed.
+	 * @param {RSObject} [target] Optional target of the skill check.
+	 * @param {Number} [amount] Optional amount to which this check is responding. This is
+	 * 		used for percentage calculations in the roll.
+	 * @param {Socket} [socket] Optional socket to attach to the emitted check for response
+	 * 		filtering if desired.
+	 * @return {Object} An object describing the outcome of the check.
 	 */
-	entitySkillCheck(entity, skill) {
+	entitySkillCheck(entity, skill, channel, target, amount, socket) {
+		if(entity && skill) {
+			var check = {};
 
+			check.name = skill.name;
+			check.timestamp = Date.now();
+			check.dice = {};
+			check.formula = "1d20 + " + (entity.skill_check[skill.id] || 0);
+			check.result = this.universe.calculator.computedDiceRoll(check.formula, entity, null, amount, check.dice, entity.skill_advantage[skill.id]);
+			check.skill = skill.id;
+			check.entity = entity.id;
+			check.channel = channel?channel.id:null;
+			check.target = target?target.id:null;
+			if(check.dice.d20 && check.dice.d20.length) {
+				if(check.dice.d20[0] === 1) {
+					check.failure = true;
+				} else if(check.dice.d20[0] === 20) {
+					check.critical = true;
+				}
+			}
+			
+			this.universe.emit("player:action:check", {
+				"type": "player:action:check",
+				"received": check.timestamp,
+				"player": this.universe.get("player:master"), // This should be an NPC so we'll use master here
+				"sent": check.timestamp,
+				"message": {
+					"type": "player:action:check",
+					"data": check
+				},
+				"socket": socket
+			});
+
+			return check;
+		}
+		return null;
 	}
 
 	/**
