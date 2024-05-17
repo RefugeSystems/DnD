@@ -168,17 +168,23 @@ rsSystem.component("DNDMasterScreen", {
 
 				for(i=0; i<meeting.entities.length; i++) {
 					entity = this.universe.index.entity[meeting.entities[i]];
-					if(entity.is_npc) {
-						npcs.push(entity);
-					}
-					if(entity.is_minion) {
-						minions.push(entity);
-					}
-					if(entity.is_hostile) {
-						foes.push(entity);
-					}
-					if(entity.is_shop) {
-						shops.push(entity);
+					if(entity && !loaded[entity.id]) {
+						if(entity.is_npc) {
+							loaded[entity.id] = true;
+							npcs.push(entity);
+						}
+						if(entity.is_minion) {
+							loaded[entity.id] = true;
+							minions.push(entity);
+						}
+						if(entity.is_hostile) {
+							loaded[entity.id] = true;
+							foes.push(entity);
+						}
+						if(entity.is_shop) {
+							loaded[entity.id] = true;
+							shops.push(entity);
+						}
 					}
 				}
 			}
