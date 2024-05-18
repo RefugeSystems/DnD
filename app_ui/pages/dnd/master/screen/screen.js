@@ -265,11 +265,19 @@ rsSystem.component("DNDMasterScreen", {
 			}
 
 			entities.combat.sort(rsSystem.utility.sortByInitiative);
+			// TODO: Determine if "list" is even useful and if so fix this
 			entities.list = [];
-			entities.list.uniquely.apply(list, mains);
-			entities.list.uniquely.apply(list, minions);
-			entities.list.uniquely.apply(list, npcs);
-			entities.list.uniquely.apply(list, foes);
+			loaded = {};
+			load = function(entity) {
+				if(entity && !loaded[entity.id]) {
+					loaded[entity.id] = true;
+					entities.list.push(entity);
+				}
+			};
+			mains.forEach(load);
+			minions.forEach(load);
+			npcs.forEach(load);
+			foes.forEach(load);
 			entities.list.sort(rsSystem.utility.sortByInitiative);
 			// entities._keys = Object.keys(entities);
 			entities._keys = [
