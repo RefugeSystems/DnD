@@ -265,7 +265,11 @@ rsSystem.component("DNDMasterScreen", {
 			}
 
 			entities.combat.sort(rsSystem.utility.sortByInitiative);
-			entities.list = mains.concat(minions, npcs, foes);
+			entities.list = [];
+			entities.list.uniquely.apply(list, mains);
+			entities.list.uniquely.apply(list, minions);
+			entities.list.uniquely.apply(list, npcs);
+			entities.list.uniquely.apply(list, foes);
 			entities.list.sort(rsSystem.utility.sortByInitiative);
 			// entities._keys = Object.keys(entities);
 			entities._keys = [
@@ -737,11 +741,15 @@ rsSystem.component("DNDMasterScreen", {
 			}
 		},
 		"selectEntity": function(entity) {
-			rsSystem.commands.toggleTarget(entity.id);
-			this.$forceUpdate();
+			if(entity) {
+				rsSystem.commands.toggleTarget(entity.id);
+				this.$forceUpdate();
+			}
 		},
 		"isEntitySelected": function(entity) {
-			return rsSystem.commands.isTargeted(entity.id);
+			if(entity) {
+				return rsSystem.commands.isTargeted(entity.id);
+			}
 		},
 		"witnessLimit": function(mod) {
 			Vue.set(this.storage, "witnessed_limit", this.storage.witnessed_limit + mod);
