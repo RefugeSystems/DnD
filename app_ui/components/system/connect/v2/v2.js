@@ -282,7 +282,7 @@
 						throw new Error("Unknown Error");
 					}
 				}).then((list) => {
-					console.log("World List: ", list);
+					console.log("World List[" + this.storage.address + "]: ", list);
 					var world = null,
 						x;
 
@@ -291,7 +291,7 @@
 							if(!this.worlds[list[x].address]) {
 								this.worlds[list[x].address] = list[x];
 								this.otherWorlds.push(list[x]);
-								if(list[x].address === this.storage.address) {
+								if(list[x].address == this.storage.address) {
 									world = list[x];
 								}
 							}
@@ -299,9 +299,11 @@
 					}
 
 					if(world && (!this.storage.address || this.storage.address !== world.address || !this.world || this.world.address !== world.address)) {
+						console.log("World Selected[" + world.address + "]: ", world);
 						this.changeWorld(world, true);
+					} else {
+						console.log("World Select Skipped[" + (world?world.address:"No World") + "]: ", world);
 					}
-					console.log("World Selected[" + world.address + "]: ", world);
 				}).catch((error) => {
 					// console.error("Error processing Available Authentication Modules: ", error);
 					// console.log(" - Reset Address:\n", this.configuration, "\n - Storage: ", this.storage);
