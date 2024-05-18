@@ -62,7 +62,7 @@ module.exports.initialize = function(universe) {
 	};
 
 
-	var takeDamage = function(entity, damage, resist = {}) {
+	var takeDamage = function(entity, damage, resist = {}, roll) {
 		var keys = Object.keys(damage),
 			was_damaged = false,	
 			received,
@@ -316,15 +316,15 @@ module.exports.initialize = function(universe) {
 	 * @param {Object} event.message.data Typical location of data from the UI
 	 * @param {String} event.message.data.id Of the attack from the "attack:start" 
 	 * @param {String} event.message.data.damage 
-	 * @param {String} event.message.data.resist
+	 * @param {String} event.message.data.resist 
+	 * @param {String} event.message.data.[roll] Used to rewrite the roll
 	 */	
 	universe.on("player:attack:complete", function(event) {
 		var attack = tracking[event.message.data.id];
-
 		if(attack && attack.target.owned[event.player.id]) {
 			delete(tracking[event.message.data.id]);
 			universe.chronicle.addOccurrence("entity:attack:complete", event.message.data, universe.time, attack.source.id, attack.target.id);
-			takeDamage(attack.target, event.message.data.damage, event.message.data.resist);
+			takeDamage(attack.target, event.message.data.damage, event.message.data.resist, event.message.data.roll);
 		}
 	});
 

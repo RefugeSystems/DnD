@@ -115,6 +115,7 @@ module.exports.initialize = function(universe) {
 	 * @param {RSObject} entity 
 	 * @param {Object} damage 
 	 * @param {Object} [resist] 
+	 * @param {Integer} [roll] Used to rewrite the attack roll
 	 */
 	/**
 	 * 
@@ -124,6 +125,7 @@ module.exports.initialize = function(universe) {
 	 * @param {RSObject} entity 
 	 * @param {Object} damage 
 	 * @param {Object} [resist] 
+	 * @param {Integer} [roll] Used to rewrite the attack roll
 	 */
 	takeDamage = module.exports.takeDamage = finishDamage = module.exports.finishDamage = function(activity, entity, damage, resist = {}, roll) {
 		var tracked = tracking[activity],
@@ -160,12 +162,17 @@ module.exports.initialize = function(universe) {
 			log.target = entity.id;
 			log.source = null;
 			log.channel = null;
-			log.check_difficulty = 0;
+			// log.check_difficulty = 0;
 			log.check_outcome = 0;
 			log.original_damage = damage;
 			log.damage = damage;
 			tracked = {};
 		}
+		if(typeof(roll) === "number") {
+			tracked.check_outcome = roll;
+			log.check_outcome = roll;
+		}
+		console.log("Finish Damage[" + roll + "]: ", log);
 
 		entity.subValues({
 			"active_events": [activity]
@@ -1328,8 +1335,9 @@ module.exports.initialize = function(universe) {
 	universe.on("player:action:damage:recv", function(event) {
 		 var entity = universe.get(event.message.data.entity);
 		 if(entity) {
+			console.log("Damage Recv: ", event.message.data);
 			 if(entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) {
-				takeDamage(event.message.data.activity, entity, event.message.data.damage || {}, event.message.data.resist);
+				finishDamage(event.message.data.activity, entity, event.message.data.damage || {}, event.message.data.resist, event.message.data.roll);
 			 }
 		} else {
 			// TODO: Log bad event

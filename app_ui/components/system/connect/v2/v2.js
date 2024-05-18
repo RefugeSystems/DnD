@@ -255,6 +255,7 @@
 					// console.log("Available Modules: ", result);
 					for(var x=0; x<result.modules.length; x++) {
 						Vue.set(this.modules, result.modules[x].id, result.modules[x]);
+						this.alternatives.splice(0);
 						if(result.modules[x].id !== "local") {
 							this.alternatives.push(result.modules[x]);
 						}
@@ -313,11 +314,13 @@
 							Vue.set(this.storage, "secure", this.configuration.secure || location.protocol === "https:");
 						}
 
+						console.log("Connection Error: ", error);
 						this.$emit("message", {
 							"class": "rsbd-lightred",
 							"icon": "fas fa-exclamation-triangle rs-lightorange",
 							"heading": "System Failure",
-							"text": "Failed to connect to server to check authentication options. World settings have been reset."
+							"text": "Failed to connect to server to check authentication options. World settings have been reset.",
+							"error": error
 						});
 					} else {
 						this.$emit("message", {

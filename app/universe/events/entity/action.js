@@ -173,7 +173,7 @@ module.exports.initialize = function(universe) {
 			"player": event.player.id
 		};
 
-		// console.log("Perform: ", perform);
+		console.log("Perform: ", perform);
 
 		if(perform.action) {
 			action = manager.object[perform.action];
@@ -183,7 +183,7 @@ module.exports.initialize = function(universe) {
 				if(source && (source.played_by === event.player.id || (source.owned && source.owned[event.player.id]) || event.player.gm)) {
 					perform.entity = source;
 					universe.emit(perform.action.id, perform);
-					// console.log("Performed: ", perform.action.id);
+					console.log("Performed: ", perform.action.id);
 
 					if(action.also) {
 						for(i=0; i<action.also.length; i++) {

@@ -90,6 +90,8 @@ rsSystem.component("dndDialogRoll", {
 
 			return entities;
 		},
+		"action": function() {
+		},
 		/**
 		 * 
 		 * Event of "dialog-open" with "dndDialogRoll" passed as the component.
@@ -267,7 +269,7 @@ rsSystem.component("dndDialogRoll", {
 		data.hideFormula = this.details.hideFormula;
 		data.hideHistory = this.details.hideHistory;
 		data.ready = !this.profile.auto_roll;
-		data.canMiss = !!this.details.damage;
+		data.canMiss = !!this.details.damage && this.details.action && this.details.action.id !== "action:free:damage";
 
 		data.skills = [];
 		if(this.details.skill) {
@@ -1027,10 +1029,11 @@ rsSystem.component("dndDialogRoll", {
 			this.sendResults();
 		},
 		"sendCoverResult": function(diff) {
-			Vue.set(this.details, "attack", this.details.attack + diff);
+			Vue.set(this.details, "attack", parseInt(this.details.attack) + diff);
 			this.sendResults();
 		},
 		"sendResults": function() {
+			// console.log("Details: " + this.details.attack);
 			var state = this.getResultState(),
 				perform,
 				keys,
@@ -1126,7 +1129,7 @@ rsSystem.component("dndDialogRoll", {
 				}
 				perform.critical = !!this.isCritical;
 				perform.failure = !!this.isFailure;
-				perform.roll = this.details.attack; // Loop attack roll back to allow for adjustment
+				perform.roll = parseInt(this.details.attack); // Loop attack roll back to allow for adjustment
 
 				console.log("Performing: ", perform);
 				if(perform.action && perform.action !== "action:free:damage") {

@@ -231,11 +231,11 @@
 					<span>{{getFinishName()}}</span>
 				</span>
 			</rs-shiny-button>
-			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendCoverResult(-2)">
+			<button class="general rounded action roll-action" v-if="details.action && canMiss" v-on:click="sendCoverResult(-2)">
 				<span class="fa-solid fa-shield-halved"></span>
 				<span>Half (+2)</span>
 			</button>
-			<button class="general rounded action roll-action" v-if="details.action" v-on:click="sendCoverResult(-5)">
+			<button class="general rounded action roll-action" v-if="details.action && canMiss" v-on:click="sendCoverResult(-5)">
 				<span class="fa-duotone fa-shield-halved rs-secondary-green rs-secondary-solid"></span>
 				<span>3/4 (+5)</span>
 			</button>
