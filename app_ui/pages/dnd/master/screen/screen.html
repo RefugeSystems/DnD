@@ -51,7 +51,7 @@
 		</div>
 		<div class="screen-panel" v-if="storage && storage.itemTable && storage.dynamicTable">
 			<div class="screen-data-column">
-				<rs-table class="fitted" :universe="universe" :source="dynamicCorpus" :headings="dynamicHeadings" :formatter="formatter" :controls="dynamicControls" :selections="dynamicSelections" :storage-container="storage.dynamicTable" :profile="profile"/>
+				<rs-table id="objecttable" class="fitted" :universe="universe" :source="dynamicCorpus" :editor="recordEditor" :headings="dynamicHeadings" :formatter="formatter" :controls="dynamicControls" :selections="dynamicSelections" :storage-container="storage.dynamicTable" :profile="profile"/>
 			</div>
 		</div>
 	</div>

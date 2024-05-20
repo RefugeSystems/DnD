@@ -132,20 +132,28 @@ rsSystem.component("rsTableControls", {
 		},
 		"clearSelection": function() {
 			var keys = Object.keys(this.storage.selected),
+				change = [],
 				i;
 
 			for(i=0; i<keys.length; i++) {
 				Vue.delete(this.storage.selected, keys[i]);
+				change.push(keys[i]);
 			}
+			this.$emit("uncollect", change);
 			this.$emit("deselected");
 		},
 		"clearFilter": function() {
 			Vue.set(this.storage, "filter", "");
 		},
 		"allSelection": function() {
+			var change = [],
+				i;
+
 			for(var i=0; i<this.corpus.length; i++) {
 				Vue.set(this.storage.selected, this.corpus[i].id, true);
+				change.push(this.corpus[i].id);
 			}
+			this.$emit("collect", change);
 			this.$emit("selected");
 		},
 		"infoSelection": function() {

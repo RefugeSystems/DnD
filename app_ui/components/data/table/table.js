@@ -17,6 +17,8 @@
  * @param {Object} [sorts] Maps field IDs to functions that handle sorting data for that field.
  * @param {Object} [hidden] Maps field IDs to booleans to hide the heading for that field
  * @param {Object} [size] Short hand for header selection based on field display sizing.
+ * @param {Function} [editor] Function to handle editing of records on right click if something other than the master
+ * 		default preference is needed
  */
 rsSystem.component("rsTable", {
 	"inherit": true,
@@ -85,6 +87,9 @@ rsSystem.component("rsTable", {
 		},
 		"profile": {
 			"type": Object
+		},
+		"editor": {
+			"type": Function
 		},
 		"hidden": {
 			"type": Object,
@@ -305,6 +310,18 @@ rsSystem.component("rsTable", {
 		}
 	},
 	"methods": {
+		"editRecord": function(event) {
+			if(this.editor) {
+				console.log("Event: ", event);
+				var record = this.universe.getObject(event.id);
+				this.editor(record);
+			} else {
+				this.editNoun(event);
+			}
+			if((this.profile && this.profile.reset_selections_on_action) || (this.storage.always_clear)) {
+				this.clearSelection();
+			}
+		},
 		"sortRows": function(a, b) {
 			var va = a[this.storage.key || "id"],
 				vb = b[this.storage.key || "id"],
@@ -503,16 +520,54 @@ rsSystem.component("rsTable", {
 		 * @event deselected
 		 * @param {Object} record
 		 */
-		"select": function(record, header) {
+		/**
+		 * 
+		 * @event collect
+		 * @param {Array | Object} record
+		 */
+		/**
+		 * 
+		 * @event uncollect
+		 * @param {Array | Object} record
+		 */
+		"select": function(record, header, $event) {
+			console.log("Table Select Event: ", $event);
+			var change = [],
+				index,
+				last,
+				i;
+
 			if(typeof(this.actions[header.id]) === "function") {
 				this.actions[header.id](record, header);
 			} else if(!this.storage.selection) {
 				if(this.storage.selected[record.id]) {
 					Vue.delete(this.storage.selected, record.id);
+					Vue.delete(this.storage, "lastSelection");
 					this.$emit("deselected", record, header);
+					change.push(record);
+					this.$emit("uncollect", change);
+				} else if($event.shiftKey && this.storage.lastSelection && (last = this.filtered.indexOf(this.filtered.find((el) => {return el.id === this.storage.lastSelection;}))) !== -1) {
+					index = this.filtered.indexOf(record);
+					if(index < last) {
+						i = index;
+						index = last;
+						last = i;
+					} else {
+						index += 1;
+						last += 1;
+					}
+					for(i = last; i<index; i++) {
+						Vue.set(this.storage.selected, this.filtered[i].id, 1);
+						this.$emit("selected", this.filtered[i], header);
+						change.push(record);
+					}
+					this.$emit("collect", change);
 				} else {
 					Vue.set(this.storage.selected, record.id, 1);
+					Vue.set(this.storage, "lastSelection", record.id);
 					this.$emit("selected", record, header);
+					change.push(record);
+					this.$emit("collect", change);
 				}
 			}
 		},
@@ -524,11 +579,29 @@ rsSystem.component("rsTable", {
 			}
 			this.$emit("selected", record);
 		},
+		"clearSelection": function() {
+			var keys = Object.keys(this.storage.selected),
+				change = [],
+				i;
+
+			for(i=0; i<keys.length; i++) {
+				Vue.delete(this.storage.selected, keys[i]);
+				change.push(keys[i]);
+			}
+			this.$emit("uncollect", change);
+			this.$emit("deselected");
+		},
 		"repeatSelect": function(event) {
 			this.$emit("selected", event);
 		},
 		"repeatDeselect": function(event) {
 			this.$emit("deselected", event);
+		},
+		"repeatCollect": function(event) {
+			this.$emit("collect", event);
+		},
+		"repeatUncollect": function(event) {
+			this.$emit("uncollect", event);
 		}
 	},
 	"beforeDestroy": function() {

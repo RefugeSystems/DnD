@@ -1,5 +1,5 @@
-<div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editNoun($event)" v-if="storage.selected" :class="search.flag">
-	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :profile="profile" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" :search="search" v-on:download="exportCorpus()" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)"/>
+<div class="rs-table system-component table-index" v-on:click.right.stop.prevent="editRecord($event)" v-on:keyup.esc="clearSelection()" v-if="storage.selected" :class="search.flag">
+	<component :is="control" :storage="storage" :source="source" :filtered="filtered" :profile="profile" :controls="controls" :selections="selections" :additional-headers="additionalHeaders" :corpus="corpus" :label="label" :search="search" v-on:download="exportCorpus()" v-on:info="info($event)" v-on:select="repeatSelect($event)" v-on:deselect="repeatDeselect($event)" v-on:collection="repeatCollect($event)" v-on:uncollect="repeatUncollect($event)"/>
 	<div class="table-scroll-container">
 		<div class="table-container" v-if="storage">
 			<table class="table-element" :class="storage.classes">
@@ -28,7 +28,7 @@
 						</td>
 					</tr>
 					<tr v-for="record in corpus" :key="record.id" :class="(!record.child_parent && storage.selected[record.id]) || (record.child_parent && storage.selected[record.child_parent] >= record.select)?'record-selected':''" v-on:click.right.prevent="" :data-id="record.id" v-linkable="record.id">
-						<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.child_parent" v-on:click="select(record, header)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
+						<td v-for="(header, i) in headers" class="table-record" :class="header.id" v-if="!record.child_parent" v-on:click="select(record, header, $event)" :title="title[header.id]?record[title[header.id]] || title[header.id]:''">
 							<!-- TODO: Field attribute Checks -->
 							<div v-if="!header.noCross" class="crosshair"></div>
 							<div v-if="!header.noHighlight && storage.selected[record.id] && i === 0" class="highlight starting"></div>

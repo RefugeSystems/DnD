@@ -170,6 +170,9 @@
 					Vue.set(this, "details", null);
 				}, 600));
 				rsSystem.EventBus.$emit("dialog:closed");
+				if(typeof(this.details.completion) === "function") {
+					this.details.completion();
+				}
 			}
 		},
 		"template": Vue.templified("components/system/dialog.html")
