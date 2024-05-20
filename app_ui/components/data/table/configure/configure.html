@@ -49,5 +49,10 @@
 			</button>
 			<span> Show Download</span>
 		</div>
+		<div class="option flex h" v-on:click="toggleClear()">
+			<button class="flat rounded action far" :class="storage.always_clear?'fa-check-square rs-light-green':'fa-square rs-white'">
+			</button>
+			<span> Always Clear Selection</span>
+		</div>
 	</div>
 </div>

@@ -103,7 +103,7 @@ rsSystem.component("rsTableControls", {
 			} catch(fault) {
 				console.error(fault);
 			}
-			if(control.clearSelection || (this.profile && this.profile.reset_selections_on_action)) {
+			if(control.clearSelection || (this.profile && this.profile.reset_selections_on_action) || (this.storage.always_clear)) {
 				this.clearSelection();
 			}
 		},
