@@ -67,7 +67,7 @@ rsSystem.component("dndEntitySkills", {
 				section = sections[i];
 				skills = section.skills;
 				section.skills.sort(this.sortData);
-				section.skills = [skills, skills.splice(skills.length/2)];
+				section.skills = [skills, skills.splice(Math.floor(skills.length/2 + .6))];
 			}
 
 			return sections;
@@ -82,6 +82,9 @@ rsSystem.component("dndEntitySkills", {
 	},
 	"mounted": function() {
 		rsSystem.register(this);
+		if(!this.storage) {
+			this.storage = {};
+		}
 		if(!this.storage.rolled) {
 			Vue.set(this.storage, "rolled", {});
 		}

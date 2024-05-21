@@ -1,7 +1,7 @@
 /**
  *
  *
- * @class dndCard
+ * @class dndDefenses
  * @constructor
  * @module Components
  * @param {Object} universe
@@ -30,6 +30,9 @@ rsSystem.component("dndDefenses", {
 	"computed": {
 		"max_carry": function() {
 			return this.entity.encumberance_max?this.entity.encumberance_max.toFixed(2):0;
+		},
+		"current_weight": function() {
+			return (this.entity.weight - (this.bag_weight || 0)).toFixed(2);
 		}
 	},
 	"data": function () {

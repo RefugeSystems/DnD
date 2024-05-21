@@ -966,6 +966,13 @@ rsSystem.component("DNDWidgetCore", {
 				"entity": this.entity.id
 			});
 		},
+		"openSkillCheck": function() {
+			rsSystem.EventBus.$emit("dialog-open", {
+				"component": "dndSkillsDialog",
+				"storageKey": "store:check:" + this.entity.id,
+				"entity": this.entity.id
+			});
+		},
 		"takeShortRest": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogShortRest",

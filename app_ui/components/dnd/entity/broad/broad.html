@@ -62,23 +62,31 @@
 		</div>
 		-->
 		<h3>Skills</h3>
-		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(featDetails)" v-if="entity.feats && entity.feats.length">
-			<button class="action general rounded">
-				<span>{{entity.feats.length}}</span>
-				<span class="fa-regular fa-universal-access"></span>
+		<div class="flex h v-center">
+			<button class="action general rounded checks" v-on:click="openSkillCheck()">
+				<span class="fa-solid fa-dice"></span>
+				<span>View Skill Checks</span>
 			</button>
-			<span class="property-label">
-				<span>Feats</span>
-			</span>
-		</div>
-		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(spellDetails, null, listCastSpell)" v-if="entity.spells && entity.spells.length">
-			<button class="action general rounded">
-				<span>{{entity.spells.length}}</span>
-				<span class="fa-duotone fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
-			</button>
-			<span class="property-label">
-				<span>Spells</span>
-			</span>
+			<div class="property-container addendum flex v shrink-0">
+				<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(featDetails)" v-if="entity.feats && entity.feats.length">
+					<button class="action general rounded">
+						<span>{{entity.feats.length}}</span>
+						<span class="fa-regular fa-universal-access"></span>
+					</button>
+					<span class="property-label">
+						<span>Feats</span>
+					</span>
+				</div>
+				<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(spellDetails, null, listCastSpell)" v-if="entity.spells && entity.spells.length">
+					<button class="action general rounded">
+						<span>{{entity.spells.length}}</span>
+						<span class="fa-duotone fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
+					</button>
+					<span class="property-label">
+						<span>Spells</span>
+					</span>
+				</div>
+			</div>
 		</div>
 		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(proficiencyDetails)">
 			<button class="action general rounded">
