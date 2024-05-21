@@ -1,6 +1,9 @@
 <div class="rs-component dnd-component entity-broad flex h">
 	<div class="character-data broad-column flex v">
-		<h3>Vitals</h3>
+		<h3 class="flex h v-center">
+			<span class="section-icon fa-solid rs-light-orange fa-heart-pulse"></span>
+			<span>Vitals</span>
+		</h3>
 		<div class="property-container health flex h v-center">
 			<button class="action general rounded" v-on:click="takeDamage()">
 				<span>{{entity.hp}}</span>
@@ -30,7 +33,10 @@
 				<span>Active Effects</span>
 			</span>
 		</div>
-		<h3>Defenses</h3>
+		<h3 class="flex h v-center">
+			<span class="section-icon fa-solid rs-light-orange fa-shield-heart"></span>
+			<span>Defenses</span>
+		</h3>
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="viewDefenses()">
 				<span>{{entity.armor}}</span>
@@ -61,7 +67,10 @@
 			</span>
 		</div>
 		-->
-		<h3>Skills</h3>
+		<h3 class="flex h v-center">
+			<span class="section-icon fa-solid rs-light-orange fa-person-rays"></span>
+			<span>Skills</span>
+		</h3>
 		<div class="flex h v-center">
 			<button class="action general rounded checks" v-on:click="openSkillCheck()">
 				<span class="fa-solid fa-dice"></span>
@@ -136,7 +145,10 @@
 				<span>({{entity.movement_swim/4}} Squares)</span>
 			</span>
 		</div>
-		<h3>Goods</h3>
+		<h3 class="flex h v-center">
+			<span class="section-icon fa-solid rs-light-orange fa-backpack"></span>
+			<span>Goods</span>
+		</h3>
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="transferGold()">
 				<span>{{entity.gold || 0}}</span>
@@ -171,7 +183,10 @@
 				<span>Bag Weight</span>
 			</span>
 		</div>
-		<h3>World</h3>
+		<h3 class="flex h v-center">
+			<span class="section-icon fa-solid rs-light-orange fa-globe"></span>
+			<span>World</span>
+		</h3>
 		<div class="property-container location flex h v-center">
 			<button class="action general rounded" v-on:click="info(entity.location)">
 				<span>{{location?location.name:"No Location"}}</span>
@@ -208,14 +223,20 @@
 				<span>Date</span>
 			</span>
 		</div>
-		<h3 v-if="!isEmpty(contained)">Riders</h3>
+		<h3 class="flex h v-center" v-if="!isEmpty(contained)">
+			<span class="section-icon fa-duo-tone rs-light-orange fa-horse-saddle rs-secondary-light-gray rs-secondary-solid"></span>
+			<span>Riders</span>
+		</h3>
 		<div v-if="!isEmpty(contained)" class="property-container inside flex h v-center wrap">
 			<button class="action general rounded" v-on:click="info(entity)" v-for="(entity, id) in contained">
 				<span :class="entity.icon"></span>
 				<!-- <span>{{entity.name}}</span> -->
 			</button>
 		</div>
-		<h3 v-if="!isEmpty(creations)">Creations</h3>
+		<h3 class="flex h v-center" v-if="!isEmpty(creations)">
+			<span class="section-icon game-icon rs-light-orange game-icon-anvil"></span>
+			<span>Creations</span>
+		</h3>
 		<div v-if="!isEmpty(creations)" class="property-container inside flex h v-center wrap">
 			<button class="action general rounded" v-on:click="info(entity)" v-for="(entity, id) in creations">
 				<span :class="entity.icon"></span>
@@ -239,7 +260,9 @@
 				<div class="stat-foot">Long</div>
 			</button>
 		</div>
-		<h3>Panel Scrolling</h3>
+		<h3 class="flex h v-center">
+			<span>Panel Scrolling</span>
+		</h3>
 		<div class="property-container rest flex h">
 			<button class="action general rounded quick" v-on:click="emitScrollNotice('nearby')" title="Scroll to list of near-by entites">
 				<span class="action-icon fa-solid fa-street-view"></span>

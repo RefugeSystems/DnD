@@ -12,7 +12,7 @@
 		<rs-input class="grow-1" v-model="storage.filter" :search="search" :delay="500"/>
 	</h1>
 	<div class="extra-detail" v-if="details.extra" v-html="details.extra"></div>
-	<div class="listing">
+	<div class="listing" v-mousescroll>
 		<div class="list-container" v-for="section in sections" v-if="storage.showEmpty || listing[section].length !== 0">
 			<div class="card-container">
 				<div class="card" v-if="cards[section]">
