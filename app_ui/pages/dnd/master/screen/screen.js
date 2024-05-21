@@ -774,10 +774,13 @@ rsSystem.component("DNDMasterScreen", {
 				});
 			}
 		},
-		"selectEntity": function(entity) {
+		"selectEntity": function(entity, skip) {
 			if(entity) {
+				// console.log(" - Select: " + entity.id);
 				rsSystem.commands.toggleTarget(entity.id);
-				this.$forceUpdate();
+				if(!skip) {
+					this.$forceUpdate();
+				}
 			}
 		},
 		"isEntitySelected": function(entity) {
@@ -810,8 +813,12 @@ rsSystem.component("DNDMasterScreen", {
 			return classes;
 		},
 		"toggleListed": function() {
-			for(var i=0; this.activeEntities[this.storage.activeBucket].length; i++) {
-				this.selectEntity(this.activeEntities[this.storage.activeBucket][i]);
+			// console.log("Toggle List: ", this.activeEntities[this.storage.activeBucket]);
+			if(this.activeEntities && this.activeEntities[this.storage.activeBucket]) {
+				for(var i=0; i<this.activeEntities[this.storage.activeBucket].length; i++) {
+					this.selectEntity(this.activeEntities[this.storage.activeBucket][i], true);
+				}
+				this.$forceUpdate();
 			}
 		},
 		"unselectListed": function() {

@@ -64,6 +64,8 @@ class RSUniverse extends EventEmitter {
 		this.state.version_warning = false;
 		
 		this.version = "Unknown";
+		this.fulfillment = {};
+		this.fulfillmentTimeout = 60000;
 		
 		try {
 			// Shared Workers aren't fully supported yet, especially on Mobile browsers
@@ -957,8 +959,7 @@ class RSUniverse extends EventEmitter {
 			 */
 
 			socket.onmessage = (event) => {
-				var message,
-					fulfill;
+				var message;
 
 				Vue.set(this.metrics, "last", Date.now());
 
@@ -982,11 +983,25 @@ class RSUniverse extends EventEmitter {
 					}
 					
 					this.addLogEvent(message.type + " Message received", message.type === "error"?50:30, message);
-					if(this.processEvent[message.type]) {
-						this.processEvent[message.type](message);
+					if(message.fulfillment) {
+						if(this.fulfillment[message.fulfillment]) {
+							if(message.error) {
+								this.fulfillment[message.fulfillment].fail(message.data || message.error);
+							} else {
+								this.fulfillment[message.fulfillment].done(message.data);
+							}
+							clearTimeout(this.fulfillment[message.fulfillment].timeout);
+							delete this.fulfillment[message.fulfillment];
+						} else {
+							console.warn("Received message fulfillment without a promise: ", message);
+						}
 					} else {
-						this.$emit(message.type, message.event || message.data);
-						// this.$emit(message.type, message.event);
+						if(this.processEvent[message.type]) {
+							this.processEvent[message.type](message);
+						} else {
+							this.$emit(message.type, message.event || message.data);
+							// this.$emit(message.type, message.event);
+						}
 					}
 				} catch(exception) {
 					console.error("Communication Exception: ", exception);
@@ -1101,22 +1116,56 @@ class RSUniverse extends EventEmitter {
 	}
 
 	/**
+	 * 
+	 * @method fulfill
+	 * @param {String} type 
+	 * @param {Object} data 
+	 * @return {Promise} Completed with the server response to this specific request.
+	 */
+	fulfill(type, data) {
+		var id = Random.string(64);
+
+		this.fulfillment[id] = {};
+		if(!isNaN(this.fulfillmentTimeout)) {
+			this.fulfillment[id].timeout = setTimeout(() => {
+				this.fulfillment[id].fail({
+					"message": "Fulfillment Timeout",
+					"data": data,
+					"type": type,
+					"sent": this.fulfillment[id].sent,
+					"now": Date.now()
+				});
+			}, this.fulfillmentTimeout);
+		}
+		return new Promise((done, fail) => {
+			this.fulfillment[id].done = done;
+			this.fulfillment[id].fail = fail;
+			this.send(type, data, id);
+		});
+	}
+
+	/**
 	 *
 	 * @method send
 	 * @param {String} type
 	 * @param {Object} data
-	 * @param {String} [player] ID
+	 * @param {String} [fulfillment] ID for the fulfillment of the request. When present, a {@link Promise} is created
+	 * 		and returned to the caller.
 	 */
-	send(type, data, player) {
+	send(type, data, fulfillment) {
 		data = data || {};
 		var sending;
 
 		if(this.connection.socket) {
 			sending = {
 				"sent": Date.now(),
+				"fulfillment": fulfillment,
 				"type": type,
 				"data": data
 			};
+			if(fulfillment) {
+				this.fulfillment[fulfillment].sent = sending.sent;
+			}
 			if(this.debugConnection || this.debug) {
 				console.log("Sending[" + this.state.initialized + "]: ", sending);
 			}

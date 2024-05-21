@@ -1897,6 +1897,24 @@ class Universe extends EventEmitter {
 
 	/**
 	 * 
+	 * @method fulfill
+	 * @param {Object} event The received event with a fulfillment ID
+	 * @param {Object} data The data to fulfill the event
+	 */
+	fulfill(event, data) {
+		var player;
+		if(event && event.player && (player = this.connection[event.player.id])) {
+			if(!event.fulfillment) {
+				console.log("Received event without fulfillment ID: ", event);
+			}
+			player.fulfill(event, data);
+		} else {
+			console.log("Failed to fulfill event: ", event);
+		}
+	}
+
+	/**
+	 * 
 	 * @method messagePlayers
 	 * @param {Object} players IDs
 	 * @param {String} message Text

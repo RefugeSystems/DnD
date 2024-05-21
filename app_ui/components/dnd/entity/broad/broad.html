@@ -21,6 +21,15 @@
 				<span>Temporary Health Points</span>
 			</span>
 		</div>
+		<div class="property-container defense flex h v-center" v-if="entity.effects && entity.effects.length">
+			<button class="action general rounded" v-on:click="viewListData(effectDetails)">
+				<span>{{entity.effects.length}}</span>
+				<span class="game-icon game-icon-aura"></span>
+			</button>
+			<span class="property-label">
+				<span>Active Effects</span>
+			</span>
+		</div>
 		<h3>Defenses</h3>
 		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="viewDefenses()">
@@ -53,13 +62,22 @@
 		</div>
 		-->
 		<h3>Skills</h3>
-		<div class="property-container defense flex h v-center" v-on:click="viewLanguages()">
+		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(featDetails)" v-if="entity.feats && entity.feats.length">
 			<button class="action general rounded">
-				<span>{{languages.length}}</span>
-				<span class="fas fa-comment"></span>
+				<span>{{entity.feats.length}}</span>
+				<span class="fa-regular fa-universal-access"></span>
 			</button>
 			<span class="property-label">
-				<span>Languages Spoken</span>
+				<span>Feats</span>
+			</span>
+		</div>
+		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(spellDetails, null, listCastSpell)" v-if="entity.spells && entity.spells.length">
+			<button class="action general rounded">
+				<span>{{entity.spells.length}}</span>
+				<span class="fa-duotone fa-hand-holding-magic rs-lightpurple rs-secondary-solid rs-secondary-white"></span>
+			</button>
+			<span class="property-label">
+				<span>Spells</span>
 			</span>
 		</div>
 		<div class="property-container proficiencies flex h v-center" v-on:click="viewListData(proficiencyDetails)">
@@ -69,6 +87,15 @@
 			</button>
 			<span class="property-label">
 				<span>Proficiencies</span>
+			</span>
+		</div>
+		<div class="property-container defense flex h v-center" v-on:click="viewLanguages()">
+			<button class="action general rounded">
+				<span>{{languages.length}}</span>
+				<span class="fas fa-comment"></span>
+			</button>
+			<span class="property-label">
+				<span>Languages Spoken</span>
 			</span>
 		</div>
 		<div class="property-container defense flex h v-center">
@@ -103,6 +130,19 @@
 		</div>
 		<h3>Goods</h3>
 		<div class="property-container defense flex h v-center">
+			<button class="action general rounded" v-on:click="transferGold()">
+				<span>{{entity.gold || 0}}</span>
+				<span v-if="entity.gold_max">
+					<span class="seperator">/</span>
+					<span>{{entity.gold_max}}</span>
+				</span>
+				<span class="fas fa-coins"></span>
+			</button>
+			<span class="property-label">
+				<span>Gold</span>
+			</span>
+		</div>
+		<div class="property-container defense flex h v-center">
 			<button class="action general rounded" v-on:click="emitScrollNotice('inventory')">
 				<span>{{formatNumber(entity.weight)}}</span>
 				<span class="fa-solid fa-weight-scale"></span>
@@ -121,19 +161,6 @@
 			<span class="property-label">
 				<!-- <span class="icon" :class="getWeightScales()"></span> -->
 				<span>Bag Weight</span>
-			</span>
-		</div>
-		<div class="property-container defense flex h v-center">
-			<button class="action general rounded" v-on:click="transferGold()">
-				<span>{{entity.gold || 0}}</span>
-				<span v-if="entity.gold_max">
-					<span class="seperator">/</span>
-					<span>{{entity.gold_max}}</span>
-				</span>
-				<span class="fas fa-coins"></span>
-			</button>
-			<span class="property-label">
-				<span>Gold</span>
 			</span>
 		</div>
 		<h3>World</h3>

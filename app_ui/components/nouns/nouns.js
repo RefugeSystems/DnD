@@ -54,11 +54,11 @@
 					source = this.universe.listing[this.storage.classification];
 					for(i=0; i<source.length; i++) {
 						buffer = source[i];
-						if(buffer && (buffer.is_template || buffer.is_copy || buffer.is_preview || buffer.is_template || buffer.parent || this.storage.includes._base)
+						if(buffer && (buffer.is_template || buffer.is_copy || buffer.is_preview || buffer.parent || this.storage.includes._base)
 								&& (!buffer.parent || this.storage.includes._parented)
-								&& (!buffer.is_template || this.storage.includes.is_template)
-								&& (!buffer.is_copy || this.storage.includes.is_copy)
-								&& (!buffer.is_preview || this.storage.includes.is_preview)) {
+								&& (!!buffer.is_template == !!this.storage.includes.is_template)
+								&& (!!buffer.is_copy == !!this.storage.includes.is_copy)
+								&& (!!buffer.is_preview == !!this.storage.includes.is_preview)) {
 							sources.push(buffer);
 						}
 					}

@@ -1007,7 +1007,7 @@ rsSystem.component("DNDWidgetCore", {
 				"entity": this.entity
 			});
 		},
-		"viewListData": function(details, list) {
+		"viewListData": function(details, list, action) {
 			details.component = "dndDialogList";
 			details.activate = (section, action) => {
 				this.info(action);
@@ -1016,6 +1016,9 @@ rsSystem.component("DNDWidgetCore", {
 				details.data = {
 					"data": list
 				};
+			}
+			if(action) {
+				details.activate = action;
 			}
 			rsSystem.EventBus.$emit("dialog-open", details);
 		},

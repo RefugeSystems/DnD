@@ -148,6 +148,7 @@ rsSystem.component("dndEntityBroad", {
 	"data": function() {
 		var data = {},
 			entity,
+			load,
 			i;
 
 		data.shortRest = "action:rest:short";
@@ -160,6 +161,9 @@ rsSystem.component("dndEntityBroad", {
 		}
 
 		data.proficiencyDetails = {};
+		data.effectDetails = {};
+		data.spellDetails = {};
+		data.featDetails = {};
 		data.contained = {};
 		data.creations = {};
 
@@ -202,6 +206,77 @@ rsSystem.component("dndEntityBroad", {
 			"tools": this.proficientTools
 		};
 
+		data.featDetails.title = this.entity.name + " Feats";
+		data.featDetails.sections = ["feats"];
+		data.featDetails.related = {};
+		data.featDetails.cards = {
+			"feats": {
+				"name": "Feats",
+				"icon": "fa-regular fa-universal-access",
+				"description": "Activities at which you are proicient."
+			}
+		};
+		data.featDetails.data = {
+			"feats": this.universe.transcribeInto(this.entity.feats, [])
+		};
+
+		data.effectDetails.title = this.entity.name + " Effects";
+		data.effectDetails.sections = ["positive", "negative"];
+		data.effectDetails.related = {};
+		data.effectDetails.cards = {
+			"positive": {
+				"name": "Postive",
+				"icon": "game-icon game-icon-aura rs-light-green",
+				"description": "Effects that should be giving an overall benefit."
+			},
+			"negative": {
+				"name": "Negative",
+				"icon": "game-icon game-icon-aura rs-light-red",
+				"description": "Effects that should be giving an overall detriment."
+			}
+		};
+		data.effectDetails.data = {
+			"positive": [],
+			"negative": []
+		};
+		if(this.entity.effects && this.entity.effects.length) {
+			for(i=0; i<this.entity.effects.length; i++) {
+				load = this.universe.get(this.entity.effects[i]);
+				if(rsSystem.utility.isValid(load)) {
+					if(load.debuff || load.is_debuff) {
+						data.effectDetails.data.negative.push(load);
+					} else {
+						data.effectDetails.data.positive.push(load);
+					}
+				}
+			}
+		}
+
+
+		data.spellDetails.title = this.entity.name + " Spells";
+		data.spellDetails.sections = [];
+		data.spellDetails.related = {};
+		data.spellDetails.cards = {};
+		data.spellDetails.data = {};
+		if(this.entity.spells && this.entity.spells.length) {
+			for(i=0; i<this.entity.spells.length; i++) {
+				load = this.universe.get(this.entity.spells[i]);
+				if(rsSystem.utility.isValid(load)) {
+					if(!data.spellDetails.cards[load.level]) {
+						data.spellDetails.sections.push(load.level);
+						data.spellDetails.data[load.level] = [];
+						data.spellDetails.cards[load.level] = {
+							"name": "Level " + load.level,
+							"icon": "fa-solid fa-lightning-bolt",
+							"description": "Spells of level " + load.level
+						};
+					}
+					data.spellDetails.data[load.level].push(load);
+				}
+			}
+			data.spellDetails.sections.sort();
+		}
+
 		return data;
 	},
 	"mounted": function() {
@@ -237,6 +312,13 @@ rsSystem.component("dndEntityBroad", {
 				}
 			}
 			return "fa-solid fa-exclamation-triangle rs-lightred";
+		},
+		"listCastSpell": function(section, spell) {
+			var level = this.entity.spell_casting_level;
+			if(isNaN(level) || level < spell.level) {
+				level = spell.level;
+			}
+			this.castSpell(level, spell);
 		},
 		/**
 		 * 

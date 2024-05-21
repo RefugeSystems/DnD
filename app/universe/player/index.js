@@ -156,6 +156,7 @@ class PlayerConnection extends EventEmitter {
 						"received": Date.now(),
 						"player": this.player,
 						"sent": message.sent,
+						"fulfillment": message.fulfillment,
 						"message": message,
 						"socket": id
 					};
@@ -294,6 +295,26 @@ class PlayerConnection extends EventEmitter {
 			this.socketIDs.splice(this.socketIDs.indexOf(clean.shift()), 1);
 		}
 		*/
+	}
+
+	/**
+	 * 
+	 * @method fulfill
+	 * @param {Object} event Source event data from the player object describing the event
+	 * @param {Object} data To fulfill the reuqest
+	 */
+	fulfill(event, data) {
+		var socket = this.connection[event.socket],
+			message;
+		message = JSON.stringify({
+			"fulfillment": event.fulfillment,
+			"data": data
+		});
+		if(socket) {
+			socket.send(message);
+		} else {
+			this.send(message);
+		}
 	}
 	
 	/**

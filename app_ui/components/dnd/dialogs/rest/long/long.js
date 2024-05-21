@@ -39,13 +39,34 @@ rsSystem.component("dndDialogLongRest", {
 		}
 	},
 	"data": function () {
-		var data = {};
+		var data = {},
+			indexed,
+			item,
+			i;
 
 		data.attune = null;
 		if(typeof(this.details.entity) === "string") {
 			data.entity = this.universe.getObject(this.details.entity);
 		} else {
 			data.entity = this.details.entity;
+		}
+
+		data.eattable = [];
+		data.counts = {};
+		data.food = null;
+		indexed = {};
+		for(i=0; i<data.entity.inventory.length; i++) {
+			item = this.universe.index.item[data.entity.inventory[i]];
+			if(rsSystem.utility.isValid(item) && item.types.includes("type:food")) {
+				if(!indexed[item.id]) {
+					indexed[item.id] = true;
+					data.eattable.push(item);
+				}
+				if(!data.counts[item.id]) {
+					data.counts[item.id] = 0;
+				}
+				data.counts[item.id]++;
+			}
 		}
 
 		return data;
@@ -58,7 +79,8 @@ rsSystem.component("dndDialogLongRest", {
 			this.universe.send("action:perform", {
 				"action": "action:rest:long",
 				"entity": this.entity.id,
-				"item": this.attune
+				"item": this.attune,
+				"food": this.food
 			});
 			this.closeDialog();
 		}

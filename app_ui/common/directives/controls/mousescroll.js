@@ -28,7 +28,7 @@
 			bound.scrollLeft;
 			bound.scrollTop;
 
-			console.log("Mousescroll Directive[" + id + "]:\n", binding);
+			// console.log("Mousescroll Directive[" + id + "]:\n", binding);
 			check = function(event) {
 				if(binding.modifiers.stop) {
 					event.stopPropagation();
@@ -84,12 +84,12 @@
 			};
 
 			bound.horizontal = function(e) {
-				console.log("Horizontal Scroll: ", e.deltaX);
+				// console.log("Horizontal Scroll: ", e.deltaX);
 				bound.element.scrollLeft = bound.scrollLeft - e.deltaX;
 			};
 
 			bound.vertical = function(e) {
-				console.log("Vertical Scroll: ", e.deltaY);
+				// console.log("Vertical Scroll: ", e.deltaY);
 				bound.element.scrollTop = bound.scrollTop - e.deltaY;
 			};
 

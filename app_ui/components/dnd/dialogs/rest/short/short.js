@@ -40,6 +40,8 @@ rsSystem.component("dndDialogShortRest", {
 	},
 	"data": function () {
 		var data = {},
+			indexed,
+			item,
 			i;
 
 		if(typeof(this.details.entity) === "string") {
@@ -60,6 +62,24 @@ rsSystem.component("dndDialogShortRest", {
 		} else {
 			data.hitdie = [];
 			data.used = {};
+		}
+
+		data.eattable = [];
+		data.counts = {};
+		data.food = null;
+		indexed = {};
+		for(i=0; i<data.entity.inventory.length; i++) {
+			item = this.universe.index.item[data.entity.inventory[i]];
+			if(rsSystem.utility.isValid(item) && item.types.includes("type:food")) {
+				if(!indexed[item.id]) {
+					indexed[item.id] = true;
+					data.eattable.push(item);
+				}
+				if(!data.counts[item.id]) {
+					data.counts[item.id] = 0;
+				}
+				data.counts[item.id]++;
+			}
 		}
 
 		return data;
@@ -86,6 +106,7 @@ rsSystem.component("dndDialogShortRest", {
 				"entity": this.entity.id,
 				"result": this.used,
 				"item": this.attune,
+				"food": this.food,
 				"roll": this.roll
 			});
 			for(var i=0; i<this.hitdie.length; i++) {

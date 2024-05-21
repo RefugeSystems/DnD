@@ -211,6 +211,8 @@
 					if(!skip) {
 						this.fetchLoginMethods();
 					}
+					
+					this.$emit("changing");
 				}
 			},
 			"toggleSecure": function() {

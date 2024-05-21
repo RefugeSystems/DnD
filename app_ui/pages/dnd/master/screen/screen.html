@@ -16,10 +16,10 @@
 					<span class="action-count">{{storage.witnessed_limit}}</span>
 				</button>
 
-				<!-- <button class="bucket general quick rounded action" v-on:click="toggleListed()" v-on:click.right.stop.prevent="unselectListed()">
+				<button class="bucket general quick rounded action" v-on:click="toggleListed()" v-on:click.right.stop.prevent="unselectListed()" v-if="">
 					<span class="fa-regular fa-square-check"></span>
 					<span class="action-count">{{activeEntities[storage.activeBucket]?activeEntities[storage.activeBucket].length:-1}}</span>
-				</button> -->
+				</button>
 
 				<button class="bucket general quick rounded action" v-for="bucket in activeEntities._keys" v-on:click="switchEntityBucket(bucket)" :class="bucketClass(bucket)" :title="bucket">
 					<span :class="bucketIcon[bucket] || 'fas fa-users'"></span>
