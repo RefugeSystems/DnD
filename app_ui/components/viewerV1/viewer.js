@@ -1783,10 +1783,11 @@
 				if(this.storage.boundry_keys) {
 					for(i=0; i<this.storage.boundry_keys.length; i++) {
 						object = this.universe.getObject(this.storage.boundry_keys[i]);
-						field = this.storage.boundries[object.id].field;
-						// console.log("Boundry Render[" + field + "]: " + (object?object[field]:null), object);
-						if(object && object.location === this.location.id && typeof(object[field]) === "number") {
-							this.renderRadial(object, object[field], null, null, "");
+						if(object && (field = this.storage.boundries[object.id].field)) {
+							// console.log("Boundry Render[" + field + "]: " + (object?object[field]:null), object);
+							if(object && object.location === this.location.id && typeof(object[field]) === "number") {
+								this.renderRadial(object, object[field], null, null, "");
+							}
 						}
 					}
 				}
