@@ -94,7 +94,7 @@ rsSystem.component("rsSelectionBlock", {
 								}
 							}
 						}
-						if(add && typeof(spell.level) === "number" && spell.level >= 0 && !spell.obscured && !spell.is_preview && !spell.disabled && !spell.is_disabled && !spell.is_template && !spell.is_copy && !spell.is_inherited && typeof(entity.spell_slot_max[spell.level]) === "number" && entity.spell_slot_max[spell.level] !== 0 && rsSystem.utility.isUniqueTo(spell, this.base, this.block.unique) && rsSystem.utility.testNeeds(entity, spell)) {
+						if(add && typeof(spell.level) === "number" && spell.level >= 0 && !spell.obscured && !spell.is_preview && !spell.disabled && !spell.is_disabled && !spell.is_template && !spell.is_copy && !spell.is_inherited && typeof(entity.spell_slot_max[spell.level]) === "number" && entity.spell_slot_max[spell.level] !== 0 && rsSystem.utility.isUniqueTo(spell, /*this.base[this.block.field]*/ entity.spells_known, this.block.unique) && rsSystem.utility.testNeeds(entity, spell)) {
 							choices.push(spell);
 						}
 					}
@@ -141,7 +141,7 @@ rsSystem.component("rsSelectionBlock", {
 						for(x=0; x<this.block.choices.length; x++) {
 							record = this.universe.getObject(this.block.choices[x]);
 							if(record) {
-								if(rsSystem.utility.isUniqueTo(record, choices, this.block.unique) && rsSystem.utility.isUniqueTo(record, this.base, this.block.unique) && rsSystem.utility.testNeeds(entity, record)) {
+								if(rsSystem.utility.isUniqueTo(record, choices, this.block.unique) && rsSystem.utility.isUniqueTo(record, this.base[this.block.field], this.block.unique) && rsSystem.utility.testNeeds(entity, record)) {
 									choices.push(record);
 								}
 							} else {
