@@ -74,9 +74,246 @@
 		}
 	};
 
+	var formatString = function(sourceText, universe, entity) {
+		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
+		sourceText = sourceText?sourceText.replace(compatibility.start, marking.start).replace(compatibility.end, marking.end):"";
+		universe = universe || rsSystem.universe;
+		
+		// Deprecated and Removing
+		var targetObject = null,
+			base = null;
+			
+		var properties,
+			tracking,
+			element,
+			target,
+			buffer,
+			title,
+			value,
+			index,
+			mark,
+			end,
+			key,
+			x,
+			i;
+
+		index = sourceText.indexOf(marking.start);
+		while(index !== -1 && (end = sourceText.indexOf(marking.end, index)) !== -1 && index + 3 < end) {
+			try {
+				tracking = sourceText.substring(index, end + 2);
+				target = sourceText.substring(index + 2, end);
+				properties = {};
+
+				mark = target.indexOf(",");
+				if(mark === -1) {
+					value = target;
+				} else {
+					value = target.split(",");
+					switch(value.length) {
+						default:
+						case 4:
+							base = universe.getObject(value[3]);
+						case 3:
+							properties.classes = value[2];
+						case 2:
+							properties.id = value[1].trim();
+						case 1:
+							value = value[0];
+							if(!value && properties.id) {
+								buffer = universe.getObject(properties.id);
+								if(buffer) {
+									value = buffer.name;
+								}
+							}
+					}
+				}
+
+				if(value) {
+					// console.warn("Calculating Expression: " + value, universe, entity, base, targetObject);
+					if(value[0] === "=") {
+						// Followed value
+						// value = universe.calculateExpression(value.substring(1), entity, base, targetObject);
+						properties.classes = properties.classes || "";
+						value = value.substring(1);
+						title = value;
+						if(isNaN(value)) {
+							// value = naiveObjectValue(universe, entity, value);
+							properties.classes += " calculated-result ";
+							try {
+								value = rsSystem.dnd.compute(value, entity);
+							} catch(e) {
+								console.warn("Value Calculation Failed: {{=" + value + "}}");
+							}
+						} else {
+							properties.classes += " flat-result ";
+							value = parseFloat(value);
+
+						}
+
+						element = value;
+					} else if(value[0] === "~") {
+						// Walked Reference
+						value = value.substring(1).split(".");
+						if(value.length < 2) {
+							value = entity[value[0]];
+						} else {
+							buffer = universe.get(entity[value[0]]);
+							for(x=1; buffer && x<value.length; x++) {
+								buffer = universe.get(buffer[value[x]]) || buffer[value[x]];
+							}
+							value = buffer;
+							// if(buffer) {
+							// 	value = buffer.name || buffer.id;
+							// } else {
+							// 	console.error("Failed to get referenced field: ", value, entity);
+							// }
+
+							// tracking = universe.getObject(entity[value[0]]);
+							// for(x=1; x<value.length; x++) {
+							// 	tracking = universe.getObject(tracking[value[x]]);
+							// }
+							// value = tracking.name || tracking.id;
+						}
+						if(value && value.name) {
+							value = value.name;
+						}
+						// if(value.length === 2) {
+						// 	switch(value[0]) {
+						// 		case "base":
+						// 			value = base[value[1]] || "";
+						// 			break;
+						// 		case "target":
+						// 			value = targetObject[value[1]] || "";
+						// 			break;
+						// 		default:
+						// 			value = entity[value[1]] || "";
+						// 			break;
+						// 	}
+						// } else {
+						// 	value = entity[value[0]] || "";
+						// }
+						if(typeof(value) === "object") {
+							element = "";
+							if(value instanceof Array) {
+								for(i=0; i<value.length; i++) {
+									buffer = universe.get(value[i]);
+									if(buffer) {
+										buffer = buffer.name;
+									} else {
+										buffer = value[i];
+									}
+									if(element.length) {
+										element += ", " + buffer;
+									} else {
+										element += buffer;
+									}
+								}
+							} else {
+								for(i in value) {
+									buffer = universe.get(value[i]);
+									key = universe.get(i);
+									if(element.length) {
+										element += ", ";
+									}
+									if(key) {
+										element += key.name + ": ";
+									} else {
+										element += i + ": ";
+									}
+									if(buffer) {
+										element += buffer.name;
+									} else {
+										element += value[i];
+									}
+								}
+							}
+						} else {
+							element = value;
+						}
+					} else if(value[0] === "?") {
+						// Formulas
+						value = value.substring(1).trim();
+						if(properties.id) {
+							buffer = universe.getObject(properties.id) || entity;
+						} else {
+							buffer = entity;
+						}
+						if(buffer && buffer._formulas && buffer._formulas[value]) {
+							element = buffer._formulas[value];
+						} else {
+							element = "Unknown";
+						}
+					} else if(value[0] === "@") {
+						// Time Reference
+						value = value.substring(1).trim();
+						// buffer = universe.calendar.toDisplay(value, false, false);
+						element = $("<span class=\"rendered-value value-formula\"><span class=\"far fa-calendar\"></span> " + value + "</span>");
+					} else if(value[0] === "#") {
+						// ID Reference
+						value = value.substring(1).trim();
+						buffer = universe.getObject(value);
+						if(!buffer) {
+							buffer = universe.getObject(entity[value]);
+						}
+						// TODO: Respond to object type better here. This is mainly to drive a more "native" support for images, but things
+						//		like items should auto include some key details like icon, damage, or type. Possibly as hover text but likely
+						//		also in parenthesis.
+						if(buffer) {
+							element = buffer.name;
+						} else {
+							element =  value;
+						}
+					} else if(value[0] === "!") {
+						// Icon
+						// Not valid for string formatting
+					} else if(value[0] === "\"") {
+						// value = value.substring(1).trim();
+						value = value.substring(1).trim().split(".");
+						if(value.length < 2) {
+							value = entity[value[0]];
+						} else {
+							buffer = universe.getObject(entity[value[0]]);
+							for(x=1; buffer && x<value.length-1; x++) {
+								buffer = universe.getObject(buffer[value[x]]);
+							}
+							if(buffer) {
+								value = buffer[value[value.length-1]];
+							} else {
+								console.error("Failed to get referenced field: ", value, entity);
+							}
+						}
+						element = value;
+					} else {
+						// Linked
+						if(properties.id) {
+							mark = universe.getObject(properties.id);
+						} else {
+							mark = universe.getNamed(value);
+						}
+						if(mark) {
+							element = mark.name;;
+						} else {
+							element = value;
+						}
+					}
+
+					sourceText = sourceText.replace(tracking, element);
+				}
+
+				index = sourceText.indexOf(marking.start, index + 1);
+			} catch(err) {
+				console.error("Error formatting Markdown: ", err, "\n\nEntity: ", entity, "\nSource: ", sourceText);
+				throw err;
+			}
+		}
+
+		return sourceText;
+	};
+
 	var formatMarkdown = function(sourceText, universe, entity, allow_js) {
 		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
 		sourceText = sourceText?sourceText.replace(compatibility.start, marking.start).replace(compatibility.end, marking.end):"";
+		universe = universe || rsSystem.universe;
 		
 		// Deprecated and Removing
 		var targetObject = null,
@@ -346,6 +583,15 @@
 			}
 		}
 	});
+
+	rsSystem.utility.formatMarkdown = function(text) {
+		return formatMarkdown(text, rsSystem.universe);
+	};
+
+	rsSystem.utility.formatString = function(text) {
+		return formatString(text, rsSystem.universe);
+		
+	};
 
 	document.body.addEventListener("click", function(event) {
 		if(event.target && typeof(event.target.getAttribute) === "function") {
