@@ -29,6 +29,7 @@ rsSystem.component("dndEntityProperties", {
 			data.properties.push(this.universe.index.fields.stealth);
 			data.properties.push(this.universe.index.fields.investigation);
 			data.properties.push(this.universe.index.fields.perception);
+			data.properties.push(this.universe.index.fields.initiative);
 		}
 		data.properties.push(this.universe.index.fields.armor);
 		data.properties.push(this.universe.index.fields.gold);
