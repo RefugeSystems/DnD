@@ -8,6 +8,7 @@
 				{{getRenderingTitle()}}
 			</h2>
 			<span>( {{getRenderingSubtitle()}} )</span>
+			<span v-if="player.gm" v-on:click.stop.preventDefault="copyTimeStamp()" id="timestamp">(Time: {{getTimeStamp()}} <span class="fa-solid fa-checkmark rs-lightgreen" v-if="copied && !copy_error"></span><span class="fa-solid fa-times rs-lightred" v-if="copy_error"></span>) </span>
 		</div>
 		<button class="ctrl next" v-on:click="next()">
 			<span class="fa-solid fa-chevron-right"></span>

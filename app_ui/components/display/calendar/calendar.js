@@ -71,6 +71,8 @@ rsSystem.component("rsCalendarDialog", {
 		data.eventReference = {};
 		data.festivalReference = {};
 
+		data.copied = null;
+		data.copy_error = null;
 		data.view = 2;
 		data.reference = {
 			"1": ["getDate", "setDate"],
@@ -248,8 +250,21 @@ rsSystem.component("rsCalendarDialog", {
 
 			return display.join(" / ");
 		},
-
-
+		"getTimeStamp": function() {
+			return this.rendering.getTime();
+		},
+		"copyTimeStamp": function() {
+			try {
+				if(!this.copied) {
+					Vue.set(this, "copied", setTimeout(() => {
+						Vue.set(this, "copied", null);
+					}, 2000));
+					navigator.clipboard.writeText(this.rendering.getTime());
+				}
+			} catch(err) {
+				Vue.set(this, "copy_error", err.message);
+			}
+		},
 		"viewYear": function() {
 			if(this.view < 3) {
 				Vue.set(this, "view", this.view + 1);

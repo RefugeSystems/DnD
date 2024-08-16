@@ -198,7 +198,7 @@ rsSystem.component("dndDialogCheck", {
 		"send": function() {
 			var check = {};
 			if(this.roll.computed !== null && this.roll.computed !== undefined && this.roll.computed !== "") {
-				check.result = this.roll.computed || 0;
+				check.result = parseInt(this.roll.computed) || 0;
 				check.channel = this.details.channel;
 				check.entity = this.entity?this.entity.id:undefined;
 				check.name = this.skill?this.skill.name:this.details.name;

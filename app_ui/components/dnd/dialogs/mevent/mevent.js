@@ -32,22 +32,29 @@ rsSystem.component("dndMeetingEvent", {
 			this.universe.index.fields.time_start,
 			this.universe.index.fields.time_end,
 			this.universe.index.fields.location,
+			this.universe.index.fields.meeting,
+			this.universe.index.fields.acquired_in,
+			this.universe.index.fields.category,
 			this.universe.index.fields.associations
 		];
 		data.root = {
 			"id": "event:" + Date.now() + ":" + this.universe.time,
-			"icon": "fa-solid fa-newspaper",
-			"description": data.meeting.description,
+			"name": this.details.values.name || "",
+			"icon": this.details.values.icon || "fa-solid fa-newspaper",
+			"description": this.details.values.description || data.meeting.description,
 			"time": this.universe.time,
 			"time_start": this.universe.time,
-			"location": data.meeting.location,
-			"associations": data.meeting.associations?data.meeting.associations.concat([]):[]
+			"location": this.details.values.location || data.meeting.location,
+			"category": this.details.values.category || this.universe.index.category["category:ideas:travels"]?"category:ideas:travels":undefined,
+			"associations": this.details.values.associations || data.meeting.associations?data.meeting.associations.concat([]):[],
+			"acquired_in": data.meeting.id,
+			"meeting": data.meeting.id
 		};
 		
-		if(data.meeting.location) {
+		if(!this.details.values.associations && data.meeting.location) {
 			data.root.associations.push(data.meeting.location);
 		}
-		if(data.meeting.entities && data.meeting.entities.length) {
+		if(!this.details.values.associations && data.meeting.entities && data.meeting.entities.length) {
 			data.root.associations = data.root.associations.concat(data.meeting.entities);
 		}
 

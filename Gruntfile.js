@@ -594,6 +594,7 @@ module.exports = function (grunt) {
 		var done = this.async();
 		var Jasmine = require("jasmine");
 		var jasmine = new Jasmine();
+		jasmine.exitOnCompletion = false;
 		var Reporter = require("jasmine-console-reporter");
 		var reporter = new Reporter({
 			"verbosity": {
@@ -608,7 +609,6 @@ module.exports = function (grunt) {
 		});
 
 		jasmine.configureDefaultReporter(false);
-		jasmine.onComplete(done);
 		jasmine.loadConfig({
 			"spec_dir": options.directory,
 			"spec_files": options.specifications,
@@ -618,7 +618,8 @@ module.exports = function (grunt) {
 
 		jasmine.addReporter(reporter);
 
-		jasmine.execute();
+		jasmine.execute()
+		.then(done);
 	});
 
 	grunt.registerTask("documentation", ["yuidoc:server", "yuidoc:ui"]);

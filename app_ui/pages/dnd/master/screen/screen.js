@@ -142,7 +142,7 @@ rsSystem.component("DNDMasterScreen", {
 			// Pull from connected players
 			for(i=0; i<this.universe.listing.player.length; i++) {
 				player = this.universe.listing.player[i];
-				if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
+				if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled && !player.gm) {
 					entity = this.universe.index.entity[player.attribute.playing_as];
 					if(entity && !loaded[entity.id]) {
 						loaded[entity.id] = true;
@@ -156,7 +156,7 @@ rsSystem.component("DNDMasterScreen", {
 			if(meeting) {
 				for(j=0; j<meeting.players.length; j++) {
 					player = this.universe.index.player[meeting.players[j]];
-					if(player && player.attribute && player.attribute.playing_as && player.connections && !player.disabled) {
+					if(player && player.attribute && player.attribute.playing_as && !player.disabled && !player.gm) {
 						entity = this.universe.index.entity[player.attribute.playing_as];
 						if(entity && !loaded[entity.id]) {
 							loaded[entity.id] = true;
@@ -628,6 +628,7 @@ rsSystem.component("DNDMasterScreen", {
 
 		// this.universe.$on("player-disconnected", this.playerDisconnected);
 		// this.universe.$on("player-connected", this.playerConnected);
+		rsSystem.EventBus.$on("targets:changed", this.forceUpdate);
 		this.universe.$on("entity:roll", this.entityRolled);
 
 		if(this.storage && !this.storage.activeBucket) {
@@ -774,7 +775,25 @@ rsSystem.component("DNDMasterScreen", {
 				});
 			}
 		},
+		"unselectEntity": function(entity, skip) {
+			if(entity) {
+				// console.log(" - Select: " + entity.id);
+				rsSystem.commands.unselectTarget(entity.id);
+				if(!skip) {
+					this.$forceUpdate();
+				}
+			}
+		},
 		"selectEntity": function(entity, skip) {
+			if(entity) {
+				// console.log(" - Select: " + entity.id);
+				rsSystem.commands.selectTarget(entity.id);
+				if(!skip) {
+					this.$forceUpdate();
+				}
+			}
+		},
+		"toggleEntity": function(entity, skip) {
 			if(entity) {
 				// console.log(" - Select: " + entity.id);
 				rsSystem.commands.toggleTarget(entity.id);
@@ -812,7 +831,19 @@ rsSystem.component("DNDMasterScreen", {
 			}
 			return classes;
 		},
-		"toggleListed": function() {
+		"unselectAll": function() {
+			rsSystem.commands.clearTargets();
+			this.$forceUpdate();
+		},
+		"unselectListed": function() {
+			if(this.activeEntities && this.activeEntities[this.storage.activeBucket]) {
+				for(var i=0; i<this.activeEntities[this.storage.activeBucket].length; i++) {
+					this.unselectEntity(this.activeEntities[this.storage.activeBucket][i], true);
+				}
+				this.$forceUpdate();
+			}
+		},
+		"selectListed": function() {
 			// console.log("Toggle List: ", this.activeEntities[this.storage.activeBucket]);
 			if(this.activeEntities && this.activeEntities[this.storage.activeBucket]) {
 				for(var i=0; i<this.activeEntities[this.storage.activeBucket].length; i++) {
@@ -821,8 +852,28 @@ rsSystem.component("DNDMasterScreen", {
 				this.$forceUpdate();
 			}
 		},
-		"unselectListed": function() {
-			// TODO: Implement
+		"toggleListed": function() {
+			// console.log("Toggle List: ", this.activeEntities[this.storage.activeBucket]);
+			var selecting = 0,
+				i;
+
+			if(this.activeEntities && this.activeEntities[this.storage.activeBucket]) {
+				for(i=0; i<this.activeEntities[this.storage.activeBucket].length; i++) {
+					if(this.isEntitySelected(this.activeEntities[this.storage.activeBucket][i])) {
+						selecting += 1;
+					}
+				}
+				if(selecting === this.activeEntities[this.storage.activeBucket].length) {
+					for(i=0; i<this.activeEntities[this.storage.activeBucket].length; i++) {
+						this.unselectEntity(this.activeEntities[this.storage.activeBucket][i], true);
+					}
+				} else {
+					for(i=0; i<this.activeEntities[this.storage.activeBucket].length; i++) {
+						this.selectEntity(this.activeEntities[this.storage.activeBucket][i], true);
+					}
+				}
+				this.$forceUpdate();
+			}
 		},
 		"switchEntityBucket": function(bucket) {
 			if(this.storage.activeBucket === bucket) {
@@ -837,9 +888,13 @@ rsSystem.component("DNDMasterScreen", {
 		},
 		"playerConnected": function(event) {
 			console.log("Connect: ", event);
+		},
+		"forceUpdate": function() {
+			this.$forceUpdate();
 		}
 	},
 	"beforeDestroy": function() {
+		rsSystem.EventBus.$off("targets:changed", this.forceUpdate);
 		this.universe.$off("entity:roll", this.entityRolled);
 	},
 	"template": Vue.templified("pages/dnd/master/screen.html")

@@ -227,8 +227,12 @@
 		<div class="roll-complete flex h">
 			<rs-shiny-button class="send-action" color="blue" slot="content" :active="ready" v-if="details.action" v-on:click="sendResults()" :title="actionTitling">
 				<span>
+					<span class="fa-duotone fa-solid fa-brain-circuit rs-secondary-transparent"></span>
+					<span>Complete Automatically</span>
+					<!--
 					<span :class="getSendResultIcon()"></span>
 					<span>{{getFinishName()}}</span>
+					-->
 				</span>
 			</rs-shiny-button>
 			<button class="general rounded action roll-action" v-if="details.action && canMiss" v-on:click="sendCoverResult(-2)">

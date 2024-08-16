@@ -2,7 +2,7 @@
 	<div class="divider" v-if="widget && !widget.no_divider"></div>
 	<div class="section-name flex h justified">
 		<div class="name flex h">
-			<button class="property" v-on:click="toggle()">
+			<button class="property" v-on:click.stop="toggle()">
 				<span class="fal" :class="storage && storage.is_open?'fa-minus':'fa-plus'"></span>
 			</button>
 			<div class="property rsbg-lightBlue">

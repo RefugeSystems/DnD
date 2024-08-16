@@ -303,7 +303,7 @@ rsSystem.component("DNDCharacter", {
 			if(this.meeting && this.meeting.entities && this.meeting.entities.length) {
 				for(i=0; i<this.meeting.entities.length; i++) {
 					entity = this.universe.index.entity[this.meeting.entities[i]];
-					if(rsSystem.utility.isValid(entity) && entity.is_minion && (entity.character === this.entity.id || (entity.loyal_to && entity.loyal_to[this.entity.id]))) {
+					if(rsSystem.utility.isValid(entity) && entity.is_minion && (entity.character === this.entity.id || (entity.loyal_to && entity.loyal_to[this.entity.id]) || entity.creator === this.entity.id || entity.caster === this.entity.id)) {
 						this.minions.push(entity);
 					}
 				}

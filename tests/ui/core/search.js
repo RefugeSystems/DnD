@@ -1,5 +1,5 @@
 try {
-	var RSSearch = require("../../app_ui/common/RSSearch.js");
+	var RSSearch = require("../../../app_ui/common/RSSearch.js");
 
 	describe("RSCore UI RSSearch Modeling", function() {
 		var universeShim = {
@@ -15,6 +15,9 @@ try {
 
 					}
 				}
+			},
+			"isValid": function(obj) {
+				return true;
 			}
 		};
 

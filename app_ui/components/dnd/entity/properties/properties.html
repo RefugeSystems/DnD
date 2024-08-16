@@ -1,6 +1,6 @@
 <div class="dnd-component entity-properties">
 	<div class="flex h wrap">
-		<button class="rounded general action entity-property" v-on:click="damaging()">
+		<button class="rounded general action entity-property" v-on:click.stop.preventDefault="damaging()">
 			<span class="icon fas fa-heartbeat"></span>
 			<span>
 				<span>{{entity.hp}}</span>

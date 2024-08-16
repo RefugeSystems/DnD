@@ -814,6 +814,75 @@
 			}
 		},
 		/**
+		 * Get the active "meeting" object from the universe.
+		 * @method getActiveMeeting
+		 */
+		"getActiveMeeting": function() {
+			var setting = rsSystem.universe.get("setting:meeting"),
+				meeting;
+			if(setting && (meeting = rsSystem.universe.get(setting.value))) {
+				return meeting;
+			}
+			for(meeting=0; meeting<rsSystem.universe.listing.meeting.length; meeting++) {
+				if(rsSystem.universe.listing.meeting[meeting].is_active) {
+					return rsSystem.universe.listing.meeting[meeting];
+				}
+			}
+			return null;
+		},
+		/**
+		 * Clear the current system selection targets and select entities in the current meeting
+		 * that are played by players or minions of those characters.
+		 * 
+		 * This leverages the utility.getParty function to get the party list to select.
+		 * @method selectParty
+		 */
+		"selectParty": function() {
+			var party = utility.getParty(),
+				entity,
+				i;
+
+			rsSystem.commands.clearTargets();
+			for(i=0; i<party.length; i++) {
+				entity = party[i];
+				rsSystem.commands.selectTarget(entity.id);
+			}
+		},
+		/**
+		 * Get the player party from the active meeting entities.
+		 * 
+		 * This is entities who are played by a non-gamemaster, not an npc, and are in the
+		 * meeting entity list.
+		 * @method getParty
+		 */
+		"getParty": function() {
+			var meeting = utility.getActiveMeeting(),
+				played = {},
+				party = [],
+				indexing,
+				entity,
+				i;
+			rsSystem.commands.clearTargets();
+			indexing = rsSystem.universe.listing.player;
+			for(i=0; i<indexing.length; i++) {
+				if(!indexing[i].gm && indexing[i].attribute && indexing[i].attribute.playing_as) {
+					played[indexing[i].attribute.playing_as] = indexing[i].id;
+				}
+			}
+			indexing = meeting.entities;
+			for(i=0; i<indexing.length; i++) {
+				entity = rsSystem.universe.get(indexing[i]);
+				if(utility.isValid(entity)) {
+					if(!entity.is_npc && played[entity.id]) {
+						party.push(entity);
+					} else if(entity.is_minion && ((entity.character && played[entity.character]) || (entity.creator && played[entity.creator]) || (entity.caster && played[entity.caster]))) {
+						party.push(entity);
+					}
+				}
+			}
+			return party;
+		},
+		/**
 		 *
 		 * @method sortByID
 		 * @param a

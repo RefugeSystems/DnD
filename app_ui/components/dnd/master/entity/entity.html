@@ -18,18 +18,19 @@
 			</select>
 		</div>
 		-->
-		<!--
 		<div class="master-actions widget flex h">
-			<button class="general rounded quick action" v-on:click="giveGold()">
+			<button class="general rounded quick action" v-on:click.stop="giveGold()">
 				<span class="fas fa-coins"></span>
 			</button>
-			<button class="general rounded quick action" v-on:click="givePoints()">
+			<!--
+			<button class="general rounded quick action" v-on:click.stop="givePoints()">
 				<span class="game-icon game-icon-skills"></span>
 			</button>
-			<button class="general rounded quick action" v-on:click="giveEffects()">
+			-->
+			<button class="general rounded quick action" v-on:click.stop="giveEffects()">
 				<span class="game-icon game-icon-beams-aura"></span>
 			</button>
-			<button class="general rounded quick action" v-on:click="removeFromMeeting()">
+			<button class="general rounded quick action" v-on:click.stop="removeFromMeeting()">
 				<span class="fas fa-user-times"></span>
 			</button>
 			<button class="general rounded quick action">
@@ -40,7 +41,6 @@
 				<span class="roll-result">{{roll.result}}</span>
 			</button>
 		</div>
-		-->
 		<!-- <dnd-entity-equipment class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/> -->
 		<dnd-entity-effects class="widget" :entity="entity" :player="player" :configuration="configuration" :universe="universe" :profile="profile" storage-key="master-entity"/>
 	</div>

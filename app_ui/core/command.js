@@ -73,6 +73,37 @@ rsSystem.commands = (function() {
 			target = typeof(target) === "string"?target:target.id;
 			// Vue.set(targeted, target, !targeted[target]);
 			targeted[target] = !targeted[target];
+			rsSystem.EventBus.$emit("execution:targets:toggled", target);
+			rsSystem.EventBus.$emit("targets:changed");
+			if(targeted[target]) {
+				rsSystem.EventBus.$emit("execution:targets:selected", target);
+			} else {
+				rsSystem.EventBus.$emit("execution:targets:unselected", target);
+			}
+		}
+	};
+
+	commandStructure.unselectTarget = function(target) {
+		if(target) {
+			target = typeof(target) === "string"?target:target.id;
+			// Vue.set(targeted, target, !targeted[target]);
+			if(targeted[target]) {
+				targeted[target] = false;
+				rsSystem.EventBus.$emit("execution:targets:unselected", target);
+				rsSystem.EventBus.$emit("targets:changed");
+			}
+		}
+	};
+
+	commandStructure.selectTarget = function(target) {
+		if(target) {
+			target = typeof(target) === "string"?target:target.id;
+			// Vue.set(targeted, target, !targeted[target]);
+			if(!targeted[target]) {
+				targeted[target] = true;
+				rsSystem.EventBus.$emit("execution:targets:selected", target);
+				rsSystem.EventBus.$emit("targets:changed");
+			}
 		}
 	};
 
@@ -82,6 +113,16 @@ rsSystem.commands = (function() {
 
 	commandStructure.getTargets = function() {
 		return Object.keys(targeted).filter(assist.isTargeted);
+	};
+
+	commandStructure.clearTargets = function() {
+		var keys = Object.keys(targeted),
+			i;
+		for(i=0; i<keys.length; i++) {
+			targeted[keys[i]] = false;
+		}
+		rsSystem.EventBus.$emit("execution:targets:cleared");
+		rsSystem.EventBus.$emit("targets:changed");
 	};
 
 	commandStructure.getSections = function() {

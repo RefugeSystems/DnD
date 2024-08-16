@@ -168,9 +168,9 @@ rsSystem.component("dndChronicleReadout", {
 		 * @return {Boolean} True if the collection was updated, false if not
 		 */
 		"updateCollection": function(event) {
-			var entity = event.entity,
+			var roll = parseInt(event.result) || 0,
+				entity = event.entity,
 				skill = event.skill,
-				roll = event.result,
 				collection,
 				scan,
 				id,

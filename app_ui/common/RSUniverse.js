@@ -39,6 +39,7 @@ class RSUniverse extends EventEmitter {
 		this.KEY.METRICS = "_universe:" + (rsSystem.configuration.name || rsSystem.configuration.title || "name") + ":datacache:metrics";
 		
 		this.history = [];
+		this.versionDismissed = false;
 		
 		this.buffer = [];
 		this.buffer_delta = [];
@@ -1519,61 +1520,91 @@ class RSUniverse extends EventEmitter {
 	}
 	
 	checkVersion() {
-		if(!this.serviceWorkerIssues && !rsSystem.options.suppress_update_warning && this.version != rsSystem.version) {
-			var ui = rsSystem.version.split("."),
-				app = this.version.split(".");
-			
-			if(ui[0] !== app[0]) {
+		var ui = rsSystem.version.split("."),
+			app = this.version.split("."),
+			clear = true,
+			i;
+
+		for(i=0; clear && i<3; i++) {
+			app[i] = parseInt(app[i]) || 0;
+			ui[i] = parseInt(ui[i]) || 0;
+			if(ui[i] < app[i]) {
+				clear = false;
+			} else if(ui[i] > app[i]) {
+				break;
+			}
+		}
+
+		if(!this.versionDismissed) {
+			if(!this.serviceWorkerIssues && !rsSystem.options.suppress_update_warning && !clear) {
+				if(ui[0] < app[0]) {
+					this.$emit("error", {
+						"id": "app:update",
+						"message": "New Version Required",
+						"icon": "fas fa-exclamation-triangle rs-lightred",
+						"anchored": true,
+						"emission": {
+							"type": "dialog-open",
+							"title": "Refresh page for new version?",
+							"buttons": [{
+								"classes": "fas fa-check rs-lightgreen",
+								"text": "Yes",
+								"emission": "app-update"
+							}, {
+								"classes": "fas fa-times rs-lightred",
+								"text": "No",
+								"emission": () => {
+									rsSystem.EventBus.$emit("dialog-close");
+									this.versionDismissed = true;
+								}
+							}]
+						}
+					});
+				} else if(navigator.serviceWorker && navigator.serviceWorker.controller) {
+					this.state.version_warning = true;
+					navigator.serviceWorker.controller.postMessage({
+						"action": "update"
+					});
+					this.$emit("warning", {
+						"id": "app:update",
+						"message": "New Version Available",
+						"icon": "fas fa-exclamation-triangle rs-lightyellow",
+						"anchored": true,
+						"emission": {
+							"type": "dialog-open",
+							"title": "Refresh page for new version?",
+							"buttons": [{
+								"classes": "fas fa-check rs-lightgreen",
+								"text": "Yes",
+								"emission": "app-update"
+							}, {
+								"classes": "fas fa-times rs-lightred",
+								"text": "No",
+								"emission": () => {
+									rsSystem.EventBus.$emit("dialog-close");
+									this.versionDismissed = true;
+								}
+							}]
+						}
+					});
+				} else {
+					this.serviceWorkerIssues = true;
+					// Not currently invoke this as this tends to happen when the page is ignored for awhile currently, the ignoring/timeout is expected
+					// and the control warning is aimed at when the user is actively trying to update. However if the page has been active for more than
+					// a day AND this issue comes up, the warning isprobably relevent.
+					//rsSystem.controls.serviceWorkerFault();
+					console.warn("Issues with Service Worker - Service Worker: ", !!navigator.serviceWorker, " Controller: ", navigator.serviceWorker?!!navigator.serviceWorker.controller:false);
+				}
+			} else if(ui[0] > app[0] || ui[1] > app[1]) {
 				this.$emit("error", {
-					"id": "app:update",
-					"message": "New Version Required",
+					"id": "app:alignment",
+					"message": "Server Running Older Version",
 					"icon": "fas fa-exclamation-triangle rs-lightred",
-					"anchored": true,
-					"emission": {
-						"type": "dialog-open",
-						"title": "Refresh page for new version?",
-						"buttons": [{
-							"classes": "fas fa-check rs-lightgreen",
-							"text": "Yes",
-							"emission": "app-update"
-						}, {
-							"classes": "fas fa-times rs-lightred",
-							"text": "No",
-							"emission": "dialog-dismiss"
-						}]
-					}
+					"anchored": true
 				});
-			} else if(navigator.serviceWorker && navigator.serviceWorker.controller) {
-				this.state.version_warning = true;
-				navigator.serviceWorker.controller.postMessage({
-					"action": "update"
-				});
-				this.$emit("warning", {
-					"id": "app:update",
-					"message": "New Version Available",
-					"icon": "fas fa-exclamation-triangle rs-lightyellow",
-					"anchored": true,
-					"emission": {
-						"type": "dialog-open",
-						"title": "Refresh page for new version?",
-						"buttons": [{
-							"classes": "fas fa-check rs-lightgreen",
-							"text": "Yes",
-							"emission": "app-update"
-						}, {
-							"classes": "fas fa-times rs-lightred",
-							"text": "No",
-							"emission": "dialog-dismiss"
-						}]
-					}
-				});
-			} else {
-				this.serviceWorkerIssues = true;
-				// Not currently invoke this as this tends to happen when the page is ignored for awhile currently, the ignoring/timeout is expected
-				// and the control warning is aimed at when the user is actively trying to update. However if the page has been active for more than
-				// a day AND this issue comes up, the warning isprobably relevent.
-				//rsSystem.controls.serviceWorkerFault();
-				console.warn("Issues with Service Worker - Service Worker: ", !!navigator.serviceWorker, " Controller: ", navigator.serviceWorker?!!navigator.serviceWorker.controller:false);
+			} else if(ui[2] > app[2]) {
+				console.warn("UI Running a newer subversion of the app. This is likely okay, but may cause issues.");
+				this.versionDismissed = true;
 			}
 		}
 	}

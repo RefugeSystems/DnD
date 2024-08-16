@@ -429,13 +429,17 @@
 				};
 				rsSystem.EventBus.$emit("dialog-open", details);
 			},
-			"createEvent": function() {
+			"createEvent": function(values) {
 				console.log("Create Event");
+				if(typeof(values) !== "object") {
+					values = {};
+				}
 				var details = {
 					"component": "dndMeetingEvent",
 					"storageKey": "master",
 					"id": "dndMeetingOption",
 					"meeting": this.active,
+					"values": values,
 					"max_size": true
 				};
 				rsSystem.EventBus.$emit("dialog-open", details);
@@ -581,6 +585,15 @@
 								"type": "level",
 								"amount": amount
 							});
+							setTimeout(() => {
+								this.createEvent({
+									"name": "Leveled Up",
+									"associations": entities.concat([this.active.location]),
+									"icon": "fa-solid fa-user-plus",
+									"description": "Players leveled upained a level.",
+									"category": this.universe.index.category["category:travel:levelup"]?"category:travel:levelup":undefined
+								});
+							}, 100);
 							this.closeDialog();
 						}
 					}, {
