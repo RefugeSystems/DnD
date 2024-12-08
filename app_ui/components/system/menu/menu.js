@@ -40,6 +40,9 @@ rsSystem.component("systemMenu", {
 			i,
 			j;
 
+		// Temporary Patch for silent disconnects
+		data.emergancyReconnectCount = 0;
+
 		data.items = {};
 		data.items.app = [];
 		data.items.controls = [];
@@ -202,6 +205,11 @@ rsSystem.component("systemMenu", {
 		"checkSocket": function() {
 			if(!this.universe.connection.socket && !this.universe.connection.reconnecting) {
 				Vue.set(this.optionsItem, "icon", "fas fa-exclamation-triangle rs-lightred");
+				if((this.emergancyReconnectCount++) > 5) {
+					rsSystem.EventBus.$emit("universe-reconnect");
+				}
+			} else {
+				this.emergancyReconnectCount = 0;
 			}
 			setTimeout(this.checkSocket, 1000);
 		},
