@@ -322,7 +322,7 @@ class PlayerConnection extends EventEmitter {
 		}
 		if(!this.errored[id]) {
 			this.errored[id] = anomaly;
-			this.universe.create({
+			this.universe.createObject({
 				"id": "error:" + RSRandom.identifier("error", 10, 64),
 				"name": "Player Connection Error: " + this.player.name,
 				"description": JSON.stringify(anomaly),
