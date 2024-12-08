@@ -476,7 +476,7 @@ rsSystem.component("sysInfoGeneral", {
 									"property": "color_flag",
 									"type": "select",
 									"_value": this.info.color_flag,
-									"options": ["", "transparent", "red", "yellow", "green", "purple", "blue", "cyan", "black", "white", "gray", "bordered-red", "bordered-yellow", "bordered-green", "bordered-purple", "bordered-blue", "bordered-cyan", "bordered-white", "bordered-gray", "bordered-black"]
+									"options": ["", "transparent", "red", "orange", "yellow", "green", "pink", "purple", "blue", "cyan", "black", "brown", "white", "gray", "bordered-red", "bordered-orange", "bordered-yellow", "bordered-green", "bordered-purple", "bordered-pink", "bordered-blue", "bordered-cyan", "bordered-white", "bordered-brown", "bordered-gray", "bordered-black"]
 								};
 								if(loading.options.indexOf[loading._value] === -1) {
 									loading._missing = loading._value;

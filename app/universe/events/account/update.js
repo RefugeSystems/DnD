@@ -16,6 +16,7 @@
 module.exports.initialize = function(universe) {
 	universe.on("player:account:update", function(event) {
 		// console.log("Player Event: ", event);
+		console.log("Account Pre-Update Password: " + event.message.data.password);
 		
 		var auth_sources = ["discord", "bnet", "google", "facebook"],
 			errors = [],

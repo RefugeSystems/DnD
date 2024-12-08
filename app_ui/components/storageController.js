@@ -72,23 +72,30 @@ rsSystem.component("StorageController", {
 		"copyText": function(text) {
 			navigator.clipboard.writeText(text);
 		},
+		"getPathRecord": function(event) {
+			var path = event.composedPath(),
+				record,
+				i;
+
+			for(var i=0; i<path.length; i++) {
+				if(path[i] && path[i] && path[i].attributes && (record = path[i].getAttribute("data-id"))) {
+					record = this.universe.getObject(record);
+					if(record) {
+						event.stopPropagation();
+						event.preventDefault();
+						return record;
+					}
+				}
+			}
+
+			return null;
+		},
 		"editNoun": function(event, record) {
-			var player = this.player,
-				path;
+			var player = this.player;
 
 			if(event instanceof MouseEvent) {
-				path = event.composedPath();
 				if(!record) {
-					for(var i=0; i<path.length; i++) {
-						if(path[i] && path[i] && path[i].attributes && (record = path[i].getAttribute("data-id"))) {
-							record = this.universe.getObject(record);
-							if(record) {
-								event.stopPropagation();
-								event.preventDefault();
-								break;
-							}
-						}
-					}
+					record = this.getPathRecord(event);
 				}
 				if(record) {
 					if(!player) {

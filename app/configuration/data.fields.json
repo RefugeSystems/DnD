@@ -1450,6 +1450,15 @@
 		],
 		"attribute": {}
 	}, {
+		"id": "action",
+		"name": "Action",
+		"description": "The action that was taken for this object",
+		"type": "string",
+		"inheritable": [
+			"action"
+		],
+		"attribute": {}
+	}, {
 		"id": "action_count",
 		"name": "Actions",
 		"description": "The current action count for this object by type; main, bonus, reaction",
@@ -3269,6 +3278,20 @@
 		"type": "object",
 		"attribute": {
 			"inherited_key": "player"
+		}
+	}, {
+		"name": "Player",
+		"id": "player",
+		"description": "Reference to a Player object.",
+		"type": "string",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": [
+			"player"
+		],
+		"attribute": {
+			"display_size": 90,
+			"metadata": ""
 		}
 	}, {
 		"id": "discount",

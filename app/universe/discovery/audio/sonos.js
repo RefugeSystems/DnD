@@ -11,7 +11,8 @@ module.exports.type = "sonos";
 
 module.exports.initialize = function(universe) {
 	var config = configuration.discovery || {},
-		idReplacements = /_/ig,
+		idReplacements = /[_:;]+/ig,
+		idCleaning = /[ \t\+]+/ig,
 		start_up = Date.now(),
 		devices = {},
 		runDiscovery,
@@ -27,7 +28,7 @@ module.exports.initialize = function(universe) {
 	}
 
 	getIDString = function(id) {
-		return id.toLowerCase().replace(idReplacements, ":");
+		return id.toLowerCase().replace(idCleaning,"").replace(idReplacements, ":");
 	};
 
 	runDiscovery = function() {
@@ -58,8 +59,8 @@ module.exports.initialize = function(universe) {
 		}).then((groups) => {
 			seen = Date.now();
 			groups.forEach(function(group) {
-				console.log("Discovery Group: " + group.ID);
-				id = "device:" + getIDString(group.ID);
+				console.log("Discovery Group: " + group.ID + " | " + group.Name);
+				id = "device:" + getIDString(group.Name);
 				device = universe.get(id);
 				if(device) {
 					if(!device.is_discovered) {

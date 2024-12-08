@@ -370,12 +370,15 @@ rsSystem.component("dndMasterEntity", {
 			};
 
 			details.activate = (section, object) => {
-				console.log("Give[" + section + "]: ", object);
-				this.universe.send("give:copy", {
+				this.universe.send("effect:grant", {
 					"target": this.entity.id,
-					"object": object.id,
-					"field": section
+					"effects": [object.id]
 				});
+				// this.universe.send("give:copy", {
+				// 	"target": this.entity.id,
+				// 	"object": object.id,
+				// 	"field": section
+				// });
 			};
 
 			details.cards.effects = {

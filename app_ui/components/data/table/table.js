@@ -311,10 +311,13 @@ rsSystem.component("rsTable", {
 	},
 	"methods": {
 		"editRecord": function(event) {
+			console.log("Event: ", event);
 			if(this.editor) {
-				console.log("Event: ", event);
 				var record = this.universe.getObject(event.id);
-				this.editor(record);
+				if(!record) {
+					record = this.getPathRecord(event);
+				}
+				this.editor(record, event);
 			} else {
 				this.editNoun(event);
 			}

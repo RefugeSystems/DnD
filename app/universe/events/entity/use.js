@@ -52,8 +52,8 @@ module.exports.initialize = function(universe) {
 			roll,
 			i;
 
-		console.log("Chanel Checks: " + JSON.stringify(event.message.data, null, 4));
-		console.log("Target Checks: " + JSON.stringify(target_checks, null, 4));
+		// console.log("Chanel Checks: " + JSON.stringify(event.message.data, null, 4));
+		// console.log("Target Checks: " + JSON.stringify(target_checks, null, 4));
 		if(targets && targets instanceof Array) {
 			universe.transcribeArray(targets);
 		} else {
@@ -83,20 +83,21 @@ module.exports.initialize = function(universe) {
 
 			console.log("Use Success?" + successful + ": " + channel_skill + " - " + skill_check);
 			
-			if(event.message.data.form && event.message.data.form.audio) {
-				universe.emit("roomctrl:play", event.message.data.form.audio);
-			}
-			if(event.message.data.form && event.message.data.form.playlist) {
-				universe.emit("roomctrl:play", event.message.data.form.playlist);
+			if(event.message.data.form) {
+				if(event.message.data.form.audio) {
+					universe.emit("roomctrl:play", event.message.data.form.audio);
+				} else if(event.message.data.form.playlist) {
+					universe.emit("roomctrl:play", event.message.data.form.playlist);
+				}
 			}
 			if(channel.audio) {
 				universe.emit("audio:play", channel.audio);
+			} else if(channel.audios && channel.audios.length) {
+				universe.emit("audio:play", channel.audios[Math.floor(Math.random()*channel.audios.length)]);
 			}
 			
 			// Send Damage [TODO: This is currently handled by combat actions]
 			if(successful) {
-				console.log("Channel!");
-
 				if(damage) {
 					damage_checks = {};
 					if(checks) {

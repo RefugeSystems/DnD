@@ -52,10 +52,10 @@ try {
 			expect(search.field.name).toEqual(["me"]);
 		});
 
-		it("parses a basic advanced and finds a matching object", function() {
+		it("parses a basic advanced search and finds a matching object", function() {
 			var search = new RSSearch("test name:me", true, universeShim),
 				findme = {};
-			findme._search = "data";
+			findme._search = "test";
 			findme.name = "me";
 			expect(search.isFound(findme)).toEqual(true);
 		});

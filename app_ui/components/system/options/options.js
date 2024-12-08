@@ -389,6 +389,11 @@ rsSystem.component("systemOptionsDialog", {
 					"value": this.universe.metrics.latency + "ms",
 					"type": "data"
 				}, {
+					"id": "socket_id",
+					"label": "Connection ID",
+					"value": this.universe.socketID,
+					"type": "data"
+				}, {
 					"id": "app-resync",
 					"action": "resync",
 					"icon": "fas fa-sync",

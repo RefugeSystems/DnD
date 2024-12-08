@@ -157,7 +157,7 @@ rsSystem.component("rsTableControls", {
 			this.$emit("selected");
 		},
 		"infoSelection": function() {
-			this.$emit("info", Object.keys(this.storage.selected)[0]);
+			this.$emit("info", this.storage.lastSelection);
 		}
 	},
 	"beforeDestroy": function() {

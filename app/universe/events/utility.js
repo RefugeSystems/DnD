@@ -123,18 +123,18 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 		duration,
 		effect,
 		i;
+		
+	if(!universe || !effects) {
+		return null;
+	}
 	
 	universe.transcribeArray(effects);
 	mask.character = target.id;
-	mask.caster = source.id;
+	mask.caster = source?source.id:null;
 	if(channel) {
 		mask.cause_level = channel.level;
 		mask.cause = channel.id;
 	}
-	if(level) {
-		mask.cause_level = level;
-	}
-	console.log("Instilling: " + JSON.stringify(mask, null, 4));
 
 	/*
 	for(i=0; i<effects.length; i++) {
@@ -153,7 +153,11 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 	effects.forEach((effect) => {
 		var masking = Object.assign({}, mask);
 		if(universe.isValid(effect) && (!effect.hit_required || hit) && (!effect.is_hit_required || hit) && (!effect.damage_required || damaged) && (!effect.is_damage_required || damaged) && (!effect.is_fail_required || !saved)) {
-			duration = channel.duration || effect.duration;
+			if(channel && channel.duration) {
+				duration = channel.duration;
+			} else {
+				duration = effect.duration;
+			}
 			if(duration) {
 				masking.expiration = universe.time + duration;
 			}
@@ -167,7 +171,7 @@ module.exports.instillEffects = function(universe, effects, source, target, chan
 		.then(function(instilling) {
 			var instill = [],
 				i;
-			console.log("Instilling: " + instilling.map(e => e.id + "[" + e.caster + "@" + e.character + "]").join(", "));
+			// console.log("Instilling: " + instilling.map(e => e.id + "[" + e.caster + "@" + e.character + "]").join(", "));
 			for(i=0; i<instilling.length; i++) {
 				universe.trackExpiration(instilling[i], target.id, "effects");
 				instill.push(instilling[i].id);
@@ -446,4 +450,9 @@ module.exports.isEmpty = function(object) {
 		return false;
 	}
 	return true;
+};
+
+
+module.exports.authorizationError = function(universe, event) {
+	universe.generalError("master:message:access", null, "Invalid attempt to send a master level message", {"player": event.player.id, "data": event.message.data});
 };

@@ -321,8 +321,11 @@ class RSUniverse extends EventEmitter {
 		 * @param {RSUniverse} universe
 		 */
 		this.processEvent.connected = (event) => {
+			console.warn("Connected | Reconnecting: " + (!!this.state.reconnecting) + ": ", event);
+			this.addLogEvent("Connection Opened | Reconnecting: " + (!!this.state.reconnecting), 30, event);
 			this.metrics.connected = Date.now();
 			this.metrics.connected_server = event.sent;
+			this.socketID = event.id;
 			this.$emit("connected", this);
 			if(this.state.reconnecting) {
 				this.state.reconnecting = false;
@@ -835,7 +838,7 @@ class RSUniverse extends EventEmitter {
 				this.state.closing = false;
 				this.state.opened = Date.now();
 				this.state.reconnectAttempts = 0;
-				this.addLogEvent("Connection Established", 30, event);
+				this.addLogEvent("Connection Established | Reconnecting: " + (!!this.state.reconnecting), 30, event);
 				if(this.state.reconnecting) {
 					// this.state.reconnecting = false; // Handled by the function that processes the "connection" event to skip sync if reconnecting
 					this.$emit("reconnected", this);
@@ -853,6 +856,7 @@ class RSUniverse extends EventEmitter {
 					
 					var ping = () => {
 						this.send("ping", {
+							"version": rsSystem.version,
 							"ping": Date.now()
 						});
 						setTimeout(ping, 360000);

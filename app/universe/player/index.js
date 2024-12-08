@@ -26,6 +26,8 @@ class PlayerConnection extends EventEmitter {
 		this.socketIDs = [];
 		
 		this.session = {};
+
+		this.errored = {};
 		
 		this.ready = {};
 		
@@ -104,6 +106,7 @@ class PlayerConnection extends EventEmitter {
 		// console.log("Connecting " + id);
 		this.connection[id] = socket;
 		this.session[id] = session;
+		socket.__sID = id;
 		this.player.addValues({
 			"connections": 1
 		}, noOp);
@@ -117,6 +120,7 @@ class PlayerConnection extends EventEmitter {
 				
 			switch(message.type) {
 				case "ping":
+					socket.__sVersion = message.data.version;
 					socket.send(JSON.stringify({
 						"type": "ping",
 						"pong": now,
@@ -234,13 +238,15 @@ class PlayerConnection extends EventEmitter {
 		// console.log("Connected");
 		socket.send(JSON.stringify({
 			"type": "connected",
-			"sent": Date.now()
+			"sent": Date.now(),
+			"id": id
 		}));
 		if(this.socketIDs.length === 1) {
 			this.universe.emit("send", {
 				"type": "player-connected",
 				"player": this.player.id,
-				"username": this.player.username
+				"username": this.player.username,
+				"socket": id
 			});
 		}
 	}
@@ -256,7 +262,6 @@ class PlayerConnection extends EventEmitter {
 	send(type, data, source, socket) {
 		var message = {},
 			clean = [],
-			anomaly,
 			x;
 			
 		if(this.universe.allSends) {
@@ -271,30 +276,66 @@ class PlayerConnection extends EventEmitter {
 		message = JSON.stringify(message);
 		
 		if(socket && this.connection[socket]) {
-			this.connection[socket].send(message);
+			try {
+				if(this.connection[socket]) {
+					this.connection[socket].send(message);
+				} else if(!this.errored[socket]) {
+					this.handleSocketError(socket, this.connection[socket], new Error("Socket not found"));
+				}
+			} catch(err) {
+				console.log("Socket Error: ", this.connection[socket], err);
+				this.handleSocketError(socket, this.connection[socket], err);
+				clean.unshift(socket);
+			}
 		} else {
 			for(x=0; x<this.socketIDs.length; x++) {
 				try {
-					this.connection[this.socketIDs[x]].send(message);
-				} catch(e) {
-					anomaly = new Anomaly("player:connection:send", "Failed to send message to " + this.id + " on Socket " + this.socketIDs[x], 40, null, e, this);
-					this.universe.emit("warning", anomaly);
-					clean.unshift(x);
-					if(this.universe.allSends) {
-						console.log(anomaly);
+					if(this.connection[this.socketIDs[x]]) {
+						this.connection[this.socketIDs[x]].send(message);
+					} else if(!this.errored[this.socketIDs[x]]) {
+						this.handleSocketError(this.socketIDs[x], this.connection[this.socketIDs[x]], new Error("Socket not found"));
 					}
+				} catch(err) {
+					this.handleSocketError(this.socketIDs[x], this.connection[this.socketIDs[x]], err);
+					clean.unshift(this.socketIDs[x]);
 				}
 			}
 		}
 
-		if(this.universe.allSends && clean.length) {
-			console.log("Cleaning Found: ", clean);
+		if(clean.length) {
+			console.log("Cleaning Found for " + this.player.name + ": ", clean);
 		}
+		clean.splice(0);
 		/* Skipping clean as this seems to be causing issues, likely with a dual drop
 		while(clean.length) {
 			this.socketIDs.splice(this.socketIDs.indexOf(clean.shift()), 1);
 		}
 		*/
+	}
+
+	handleSocketError(id, socket, error) {
+		console.log("Socket Error[" + id + "]: ", socket, error);
+		var anomaly = new Anomaly("player:connection:send", "Failed to send message to " + this.player.name + " (" + this.id + ") on Socket " + id, 40, {"player":this.player.id, "socket": socket, "defined": !!this.connection[id]}, error, this);
+		this.universe.emit("warning", anomaly);
+		if(this.universe.allSends) {
+			console.log(anomaly);
+		}
+		if(!this.errored[id]) {
+			this.errored[id] = anomaly;
+			this.universe.create({
+				"id": "error:" + RSRandom.identifier("error", 10, 64),
+				"name": "Player Connection Error: " + this.player.name,
+				"description": JSON.stringify(anomaly),
+				"player": this.player.id,
+				"review": true,
+				"attribute": {
+					"defined": !!this.connection[id],
+					"code": anomaly.code,
+					"stack": error.stack,
+					"socket": id
+				}
+			});
+		}
 	}
 
 	/**
@@ -398,6 +439,31 @@ class PlayerConnection extends EventEmitter {
 			// TODO: Implement additional general filtering
 			this.send(message.type, message, null, message.socket);
 		}
+	}
+
+
+	getConnectionState() {
+		var socket,
+			state,
+			i;
+
+		state = {
+			"player": {
+				"name": this.player.name,
+				"id": this.player.id
+			},
+			"connections": {}
+		};
+
+		for(i=0; i<this.socketIDs.length; i++) {
+			socket = this.connection[this.socketIDs[i]];
+			state.connections[this.socketIDs[i]] = {
+				"last": this.session[this.socketIDs[i]].last,
+				"version": socket.__sVersion
+			};
+		}
+
+		return state;
 	}
 	
 	close() {

@@ -906,12 +906,14 @@ class Universe extends EventEmitter {
 					details.playable = false;
 					details.is_copy = true;
 					details.parent = id;
+					/*
 					if(source.hp_max) {
 						details.hp = source.hp_max;
 					}
 					if(source.mp_max) {
 						details.mp = source.mp_max;
 					}
+					*/
 					this.createObject(details, complete);
 				};
 
@@ -1841,6 +1843,8 @@ class Universe extends EventEmitter {
 				}
 			}
 		}
+
+		return array; // Save me from my dumbing :'(
 	}
 
 	/**

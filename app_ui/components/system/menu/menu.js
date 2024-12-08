@@ -189,8 +189,22 @@ rsSystem.component("systemMenu", {
 		} else {
 			document.title = this.configuration.title || "RSDnD";
 		}
+
+		this.checkSocket();
 	},
 	"methods": {
+		/**
+		 * This is a patch method for issues with the client maintaining a socket connection
+		 * seemingly related to reconnection problems and the socket value not setting and
+		 * needing a manual reconnect.
+		 * @method checkSocket
+		 */
+		"checkSocket": function() {
+			if(!this.universe.connection.socket && !this.universe.connection.reconnecting) {
+				Vue.set(this.optionsItem, "icon", "fas fa-exclamation-triangle rs-lightred");
+			}
+			setTimeout(this.checkSocket, 1000);
+		},
 		"checkViewed": function() {
 			var groups = Object.keys(this.chatCore.chat._recent),
 				i;

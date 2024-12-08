@@ -12,10 +12,10 @@
 					<div class="option-ctrl tightened flex h" :class="getOptionClass(option)" v-if="option.type === 'filter'">
 						<input type="text" v-model="filter" :placeholder="option.label" class="fill" />
 					</div>
-					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'data'">
-						<span>{{option.label}}</span>
-						<span>:</span>
-						<span>{{option.value}}</span>
+					<div class="option-ctrl flex h" :class="getOptionClass(option)" v-if="option.type === 'data'">
+						<span class="data-label">{{option.label}}</span>
+						<span class="seperator">:</span>
+						<span class="data-point">{{option.value}}</span>
 					</div>
 					<div class="option-ctrl" :class="getOptionClass(option)" v-if="option.type === 'link'">
 						<span>{{option.label}}</span>

@@ -672,31 +672,36 @@ rsSystem.component("DNDMasterScreen", {
 		}
 	},
 	"methods": {
-		"recordEditor": function() {
-			var selected = this.universe.transcribeInto(Object.keys(this.storage.dynamicTable.selected)),
-				fields = [],
-				field,
-				i;
+		"recordEditor": function(record, event) {
+			console.warn("Screen Editor: ", record, event);
+			if(!event || !record || !event.altKey) {
+				var selected = this.universe.transcribeInto(Object.keys(this.storage.dynamicTable.selected)),
+					fields = [],
+					field,
+					i;
 
-			for(i=0; i<this.storage.dynamicTable.headings.length; i++) {
-				field = this.universe.index.fields[this.storage.dynamicTable.headings[i]];
-				if(field && !field.deprecated && !field.is_deprecated) {
-					fields.push(field);
-				}
-			}
-			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndUpdateObjects",
-				"show_undefined": true,
-				"objects": selected,
-				"fields": fields,
-				"completion": () => {
-					try {
-						document.getElementById("objecttable").getElementsByTagName("button")[0].focus();
-					} catch(ignored) {
-						// Likely no button to focus on, this is merely an attempt to help and not required
+				for(i=0; i<this.storage.dynamicTable.headings.length; i++) {
+					field = this.universe.index.fields[this.storage.dynamicTable.headings[i]];
+					if(field && !field.deprecated && !field.is_deprecated) {
+						fields.push(field);
 					}
 				}
-			});
+				rsSystem.EventBus.$emit("dialog-open", {
+					"component": "dndUpdateObjects",
+					"show_undefined": true,
+					"objects": selected,
+					"fields": fields,
+					"completion": () => {
+						try {
+							document.getElementById("objecttable").getElementsByTagName("button")[0].focus();
+						} catch(ignored) {
+							// Likely no button to focus on, this is merely an attempt to help and not required
+						}
+					}
+				});
+			} else {
+				this.info(record);
+			}
 		},
 		"scrollWheel": function(event) {
 			/*

@@ -73,7 +73,7 @@
 		"id": "error",
 		"name": "Error",
 		"description": "Error representation",
-		"fields": ["parent", "name", "description", "is_preview", "review", "attribute"]
+		"fields": ["parent", "name", "description", "player", "character", "is_preview", "review", "attribute"]
 	}, {
 		"id": "playlist",
 		"name": "Playlist",
