@@ -506,6 +506,10 @@ class Universe extends EventEmitter {
 					i,
 					j;
 
+				if(typeof(this.calculator.initialize) === "function") {
+					this.calculator.initialize();
+				}
+				
 				for(i=0; i<managers.length; i++) {
 					manager = this.manager[managers[i]];
 					for(j=0; j<manager.objectIDs.length; j++) {
@@ -713,8 +717,12 @@ class Universe extends EventEmitter {
 		if(!classification) {
 			classification = this.getClassFromID(id);
 		}
-		if(this.manager[classification]) {
-			return this.manager[classification].object[id];
+		if(this.manager) {
+			if(this.manager[classification]) {
+				return this.manager[classification].object[id];
+			}
+		} else {
+			console.error("Universe configuration error; No Manager: ", this);
 		}
 		this.emit("error", new Anomaly("universe:object:request", "Unable to find object class", 50, {"id": id, "classification": classification}, null, this));
 		return null;

@@ -932,7 +932,7 @@ rsSystem.component("sysInfoGeneral", {
 							"type": "button",
 							"action": "knowing"
 						});
-						if(this.player.gm || (character === entity.id && !this.info.is_singular)) {
+						if(this.player.gm || (entity && character === entity.id && !this.info.is_singular)) {
 							this.controls.push({
 								"title": "Edit description for " + name,
 								"icon": "fas fa-edit",

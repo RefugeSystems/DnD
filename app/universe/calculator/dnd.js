@@ -49,8 +49,25 @@ module.exports = function(universe, debug) {
 		zeros = new RegExp("(null|undefined)", "g"),
 		maths = new RegExp("([^a-zA-Z_.])?(abs|log|min|max|pow|exp|ceil|floor|random|round|sqrt|sin|cos|tan)\\(", "g"),
 		doubled = new RegExp("Math.Math.", "g"), // TODO: Ajust maths regex to accoutn for this AS WELL AS starting a line, which seems to be the issue with the leading "." check
+		maxCalculationLength = 400,
 		allowedCharacters = {},
 		buildChars;
+
+	this.initialize = function() {
+		maxCalculationLength = parseInt(universe.getSetting("setting:rolls:computation:max_length")) || 400,
+		universe.on("universe:setting:updated", function(setting) {
+			var value = setting.value;
+			if(setting) {
+				switch(setting.id) {
+					case "setting:rolls:computation:max_length":
+						if(value = parseInt(value)) {
+							maxCalculationLength = value;
+						}
+						break;
+				}
+			}
+		});
+	};
 
 	allowedCharacters["<"] = true;
 	allowedCharacters[">"] = true;
@@ -116,7 +133,7 @@ module.exports = function(universe, debug) {
 		}
 
 		// if(expression && expression.length < 150 && calculateSecurityRegEx.test(expression)) {
-		if(expression && expression.length < 150 && isEvaluatable(expression)) {
+		if(expression && expression.length < 400 && isEvaluatable(expression)) {
 			// console.log("Valid Expression");
 			try {
 				if(debug) {
