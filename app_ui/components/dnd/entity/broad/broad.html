@@ -244,7 +244,7 @@
 			</button>
 		</div>
 		<div class="property-container rest flex h">
-			<button class="emphasis-stat" v-on:click="takeShortRest()" :title="totalHitDice + ' Hit Dice left'">
+			<button class="emphasis-stat" v-on:click="takeShortRest()" :title="totalHitDice + ' Hit Dice left'" :class="shortRestClasses">
 				<div class="stat-label">Rest</div>
 				<div class="stat-value">
 					<span class="fas fa-dice"></span>
@@ -252,7 +252,7 @@
 				</div>
 				<div class="stat-foot">Short</div>
 			</button>
-			<button class="emphasis-stat" v-on:click="takeLongRest()" :title="longRestNote">
+			<button class="emphasis-stat" v-on:click="takeLongRest()" :title="longRestNote" :class="longRestClasses">
 				<div class="stat-label">Rest</div>
 				<div class="stat-value">
 					<span class="correct-2" :class="longRestIcon"></span>

@@ -56,6 +56,26 @@ rsSystem.component("dndEntityBroad", {
 	
 			return bag_weight.toFixed(2);
 		},
+		"shortRestClasses": function() {
+			var classes = [],
+				location;
+			if(this.entity && this.entity.location && (location = this.universe.index.location[this.entity.location])) {
+				if(location.is_restful) {
+					classes.push("rs-border green two");
+				}
+			}
+			return classes.join(" ");
+		},
+		"longRestClasses": function() {
+			var classes = [],
+				location;
+			if(this.entity && this.entity.location && (location = this.universe.index.location[this.entity.location])) {
+				if(location.is_restful) {
+					classes.push("rs-border green two");
+				}
+			}
+			return classes.join(" ");
+		},
 		"meeting": function() {
 			if(this.universe.index.setting["setting:meeting"]) {
 				return this.universe.index.meeting[this.universe.index.setting["setting:meeting"].value];
