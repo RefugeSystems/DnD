@@ -52,8 +52,8 @@ rsSystem.component("dndDialogLongRest", {
 		}
 
 		data.eattable = [];
+		data.eating = null;
 		data.counts = {};
-		data.food = null;
 		indexed = {};
 		for(i=0; i<data.entity.inventory.length; i++) {
 			item = this.universe.index.item[data.entity.inventory[i]];
@@ -80,7 +80,7 @@ rsSystem.component("dndDialogLongRest", {
 				"action": "action:rest:long",
 				"entity": this.entity.id,
 				"item": this.attune,
-				"food": this.food
+				"food": this.eating
 			});
 			this.closeDialog();
 		}

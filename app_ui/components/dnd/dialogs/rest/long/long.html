@@ -16,10 +16,10 @@
 			</tr>
 			<tr v-if="eattable.length">
 				<td>
-					<span>Eatting</span>
+					<span>Eating</span>
 				</td>
 				<td>
-					<select v-model="eatting" v-on:keyup.enter="rest()">
+					<select v-model="eating" v-on:keyup.enter="rest()">
 						<option v-for="food in eattable" :value="food.id">{{food.name}} ({{counts[food.id]}})</option>
 					</select>
 				</td>
