@@ -72,6 +72,36 @@ rsSystem.component("StorageController", {
 		"copyText": function(text) {
 			navigator.clipboard.writeText(text);
 		},
+		"getActiveSkirmish": function() {
+			var skirmish,
+				i;
+
+			for(i=0; i<this.universe.listing.skirmish.length; i++) {
+				skirmish = this.universe.listing.skirmish[i];
+				if(skirmish.is_active && !skirmish.disabled && !skirmish.is_preview) {
+					return skirmish;
+				}
+			}
+
+			return null;
+		},
+		"getActiveMeeting": function() {
+			var meeting = this.universe.get(this.universe.get("setting:meeting").value),
+				i;
+
+			if(meeting) {
+				return meeting;
+			}
+
+			for(i=0; i<this.universe.listing.meeting.length; i++) {
+				meeting = this.universe.listing.meeting[i];
+				if(meeting && meeting.active) {
+					return meeting;
+				}
+			}
+
+			return null;
+		},
 		"getPathRecord": function(event) {
 			var path = event.composedPath(),
 				record,

@@ -13,35 +13,35 @@
 			</div>
 		</div>
 		<div class="flex h wrap master-actions">
-			<button class="rounded general quick action" v-on:click="forwardTime(6)" title="1 Round (6 Seconds)">
+			<button class="rounded general quick action" v-on:click="forwardTime(6)" title="1 Round (6 Seconds)" v-if="!skirmish">
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(60)" title="1 Minute">
+			<button class="rounded general quick action" v-on:click="forwardTime(60)" title="1 Minute" v-if="!skirmish">
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">10</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(600)" title="10 Minutes">
+			<button class="rounded general quick action" v-on:click="forwardTime(600)" title="10 Minutes" v-if="!skirmish">
 				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">100</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(1800)" title="30 Minutes">
-				<span class="action-icon fal fa-calendar-week"></span>
+			<button class="rounded general quick action" v-on:click="forwardTime(1800)" title="30 Minutes" v-if="!skirmish">
+				<span class="action-icon fas fa-history rot180 inverted"></span>
 				<span class="action-count">300</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(3600)" title="1 Hour">
+			<button class="rounded general quick action" v-on:click="forwardTime(3600)" title="1 Hour" v-if="!skirmish">
 				<span class="action-icon fal fa-hourglass-start"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(14400)" title="4 Hours">
+			<button class="rounded general quick action" v-on:click="forwardTime(14400)" title="4 Hours" v-if="!skirmish">
 				<span class="action-icon fal fa-hourglass-start"></span>
 				<span class="action-count">4</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(86400)" title="1 Day">
+			<button class="rounded general quick action" v-on:click="forwardTime(86400)" title="1 Day" v-if="!skirmish">
 				<span class="action-icon fal fa-calendar-day"></span>
 				<span class="action-count">1</span>
 			</button>
-			<button class="rounded general quick action" v-on:click="forwardTime(432000)" title="1 Week">
+			<button class="rounded general quick action" v-on:click="forwardTime(432000)" title="1 Week" v-if="!skirmish">
 				<span class="action-icon fal fa-calendar-week"></span>
 				<span class="action-count">1</span>
 			</button>

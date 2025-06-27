@@ -41,11 +41,11 @@ rsSystem.component("DNDPresentation", {
 
 		data.presenting = {};
 		data.presenting.meeting = this.universe.get(this.universe.get("setting:meeting").value);
+		data.presenting.skirmish = this.getActiveSkirmish();
 		data.presenting.location = null;
 		data.presenting.map_parameters = {};
 		data.presenting.map_center = null;
 		data.presenting.image = null;
-		data.presenting.skirmish = null;
 		data.presenting.dialog = null;
 		data.presenting.puzzle = null;
 		data.presenting.tabletop = null;
@@ -64,9 +64,12 @@ rsSystem.component("DNDPresentation", {
 		if(!this.storage.location_parameters) {
 			Vue.set(this.storage, "location_parameters", {});
 		}
-		if(this.storage.skirmish) {
+
+		if(!this.presenting.skirmish && this.storage.skirmish) {
 			Vue.set(this.presenting, "skirmish", this.universe.get(this.storage.skirmish));
 		}
+
+
 
 		if(!this.presenting.location && this.presenting.meeting) {
 			Vue.set(this.presenting, "location", this.universe.get(this.presenting.meeting.location || this.presenting.meeting.world));

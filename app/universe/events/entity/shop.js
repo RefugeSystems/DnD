@@ -336,7 +336,7 @@ module.exports.initialize = function(universe) {
 							// item = types[type][rarity][Random.integer(types[type][rarity].length)];
 							// console.log(" > Stock Considering: " + item.name + " [" + item.is_unique + ", " + item.is_singular + ", " + item.is_template + "]");
 							// console.log("Stock Rarity Check:" + rarity);
-							if(types[type][rarity] && (item = types[type][rarity][Random.integer(types[type][rarity].length)])) {
+							if(types[type] && types[type][rarity] && (item = types[type][rarity][Random.integer(types[type][rarity].length)])) {
 								if(item.is_unique) {
 									// console.log("  -> Stocking Unique: " + item.name + " [" + item.id + "]");
 									if(!uniques[item.id]) {
