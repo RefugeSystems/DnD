@@ -15,6 +15,19 @@
 				<span>Health Points</span>
 			</span>
 		</div>
+		<div class="property-container health flex h v-center" v-if="entity.hp === 0">
+			<button class="action general rounded flex h" v-on:click="deathSavePass()" v-on:click.right.prevent.stop="unPass()">
+				<span class="fa-solid fa-angel rs-green save-indicator" v-for="n in entity.death_save"></span>
+				<span class="fa-regular fa-angel rs-green save-indicator" v-for="n in (3 - entity.death_save)"></span>
+			</button>
+			<button class="action general rounded flex h" v-on:click="deathSaveFail()" v-on:click.right.prevent.stop="unFail()">
+				<span class="fa-solid fa-skull rs-red save-indicator" v-for="n in entity.death_fail"></span>
+				<span class="fa-regular fa-skull rs-red save-indicator" v-for="n in (3 - entity.death_fail)"></span>
+			</button>
+			<!-- <span class="property-label">
+				<span>Death Saves</span>
+			</span> -->
+		</div>
 		<div class="property-container health flex h v-center" v-if="entity.hp_temp">
 			<button class="action general rounded" v-on:click="takeDamage()">
 				<span>{{entity.hp_temp}}</span>

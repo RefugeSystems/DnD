@@ -38,6 +38,7 @@ rsSystem.component("dndEntityBroad", {
 
 			return total;
 		},
+
 		"longRestNote": function() {
 			if(this.entity.last_rest) {
 				return "Last long rest was " + this.displayTime(this.entity.last_rest) + " (" + this.universe.calendar.displayDuration(this.universe.time - this.entity.last_rest, true, false) + " ago)";
@@ -321,6 +322,28 @@ rsSystem.component("dndEntityBroad", {
 		"scrollPrevPage": function() {
 			this.$emit("scrollprevpage");
 		},
+
+		"deathSaveFail": function() {
+			this.universe.send("death:fail", {
+				"entity": this.entity.id
+			});
+		},
+		"deathSavePass": function() {
+			this.universe.send("death:save", {
+				"entity": this.entity.id
+			});
+		},
+		"unPass": function() {
+			this.universe.send("death:unsave", {
+				"entity": this.entity.id
+			});
+		},
+		"unFail": function() {
+			this.universe.send("death:unfail", {
+				"entity": this.entity.id
+			});
+		},
+		
 		"getWeaponIcon": function() {
 			var weapon;
 			if(this.entity) {
