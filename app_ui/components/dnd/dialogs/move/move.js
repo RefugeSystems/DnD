@@ -10,7 +10,7 @@
  * @param {Object} details
  * @param {UIProfile} profile
  */
-rsSystem.component("dndDialogPoints", {
+rsSystem.component("dndDialogMove", {
 	"inherit": true,
 	"mixins": [
 		rsSystem.components.StorageController,
@@ -31,28 +31,30 @@ rsSystem.component("dndDialogPoints", {
 	"computed": {
 	},
 	"data": function() {
-		var data = {};
+		var data = {},
+			i;
 		
-		
+		data.delta = {};
+		data.delta.x = 0;
+		data.delta.y = 0;
+		data.delta.z = 0;
+		data.movement = [];
+		for(i=-60; i<=60; i+=1) {
+			data.movement.push(i);
+		}
 
 		return data;
 	},
 	"mounted": function() {
 		rsSystem.register(this);
-		
 	},
 	"methods": {
-		"givePoints": function(type, amount) {
-			this.universe.send("point:give", {
-				"entity": this.details.entity.id || this.details.entity,
-				"type": type,
-				"amount": amount
-			});
+		"move": function() {
+
 		}
 	},
 	"beforeDestroy": function () {
-		this.universe.$off("action:status", this.receiveStatus);
-		this.universe.$off("roll", this.receiveRoll);
+
 	},
-	"template": Vue.templified("components/dnd/dialogs/roll.html")
+	"template": Vue.templified("components/dnd/dialogs/move.html")
 });

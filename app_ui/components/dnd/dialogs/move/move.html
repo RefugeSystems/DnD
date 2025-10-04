@@ -1,3 +1,27 @@
 <div class="rs-component dnd-component dialog-move">
-	
+	<h3>Move</h3>
+	<div class="positional move-x">
+		<label class="rs-component-label">
+			<span>Delta X: </span>
+			<select class="rs-select" v-model="delta.x">
+				<option v-for="i in movement" :value="i">{{i}}</option>
+			</select>
+		</label>
+	</div>
+	<div class="positional move-y">
+		<label class="rs-component-label">
+			<span>Delta Y: </span>
+			<select class="rs-select" v-model="delta.y">
+				<option v-for="i in movement" :value="i">{{i}}</option>
+			</select>
+		</label>
+	</div>
+	<div class="positional move-z">
+		<label class="rs-component-label">
+			<span>Delta Z: </span>
+			<select class="rs-select" v-model="delta.z">
+				<option v-for="i in movement" :value="i">{{i}}</option>
+			</select>
+		</label>
+	</div>
 </div>
