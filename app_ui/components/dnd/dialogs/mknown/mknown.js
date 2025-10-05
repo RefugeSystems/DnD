@@ -23,7 +23,9 @@ rsSystem.component("dndMeetingKnowledge", {
 	"data": function () {
 		var associations = [],
 			associated = {},
-			data = {};
+			trace = {},
+			data = {},
+			desc;
 
 		data.meeting = this.details.meeting;
 		data.fields = [
@@ -35,9 +37,11 @@ rsSystem.component("dndMeetingKnowledge", {
 			this.universe.index.fields.acquired
 		];
 
+		desc = rsSystem.utility.formatString(data.meeting.description, null, trace);
 		associations = this.pruneAuto(data.meeting.entities, associated)
 		.concat(this.pruneAuto(data.meeting.skirmishes, associated))
-		.concat(this.pruneAuto(data.meeting.associations, associated));
+		.concat(this.pruneAuto(data.meeting.associations, associated))
+		.concat(this.pruneAuto(Object.keys(trace), associated));
 		if(this.details.values) {
 			associations.push.apply(associations, this.pruneAuto(this.details.values.associations, associated));
 		}
@@ -50,6 +54,8 @@ rsSystem.component("dndMeetingKnowledge", {
 			associations.push(data.meeting.location);
 			associated[data.meeting.location] = true;
 		}
+
+
 
 		data.root = {
 			"id": "knowledge:" + Date.now() + ":" + this.universe.time,

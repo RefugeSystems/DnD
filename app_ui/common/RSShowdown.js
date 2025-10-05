@@ -74,7 +74,7 @@
 		}
 	};
 
-	var formatString = function(sourceText, universe, entity) {
+	var formatString = function(sourceText, universe, entity, trace) {
 		// console.warn("Formatting Markdown: " + sourceText, universe, entity, base, targetObject);
 		sourceText = sourceText?sourceText.replace(compatibility.start, marking.start).replace(compatibility.end, marking.end):"";
 		universe = universe || rsSystem.universe;
@@ -259,6 +259,9 @@
 						//		like items should auto include some key details like icon, damage, or type. Possibly as hover text but likely
 						//		also in parenthesis.
 						if(buffer) {
+							if(trace) {
+								trace[buffer.id] = index;
+							}
 							element = buffer.name;
 						} else {
 							element =  value;
@@ -291,7 +294,10 @@
 							mark = universe.getNamed(value);
 						}
 						if(mark) {
-							element = mark.name;;
+							if(trace && !trace[mark.id]) {
+								trace[mark.id] = index;
+							}
+							element = mark.name;
 						} else {
 							element = value;
 						}
@@ -588,9 +594,8 @@
 		return formatMarkdown(text, rsSystem.universe);
 	};
 
-	rsSystem.utility.formatString = function(text) {
-		return formatString(text, rsSystem.universe);
-		
+	rsSystem.utility.formatString = function(text, entity, trace) {
+		return formatString(text, rsSystem.universe, entity, trace);
 	};
 
 	document.body.addEventListener("click", function(event) {
