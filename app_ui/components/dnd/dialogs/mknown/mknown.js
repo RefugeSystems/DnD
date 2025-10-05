@@ -21,7 +21,9 @@ rsSystem.component("dndMeetingKnowledge", {
 	"computed": {
 	},
 	"data": function () {
-		var data = {};
+		var associations = [],
+			associated = {},
+			data = {};
 
 		data.meeting = this.details.meeting;
 		data.fields = [
@@ -32,32 +34,33 @@ rsSystem.component("dndMeetingKnowledge", {
 			this.universe.index.fields.associations,
 			this.universe.index.fields.acquired
 		];
+
+		associations = this.pruneAuto(data.meeting.entities, associated)
+		.concat(this.pruneAuto(data.meeting.skirmishes, associated))
+		.concat(this.pruneAuto(data.meeting.associations, associated));
+		if(this.details.values) {
+			associations.push.apply(associations, this.pruneAuto(this.details.values.associations, associated));
+		}
+
+		// associations = this.pruneAuto(data.meeting.associations, associated)
+		// .concat(this.pruneAuto(data.meeting.skirmishes, associated))
+		// .concat(this.pruneAuto(data.meeting.entities, associated));
+
+		if(data.meeting.location && !associated[data.meeting.location]) {
+			associations.push(data.meeting.location);
+			associated[data.meeting.location] = true;
+		}
+
 		data.root = {
 			"id": "knowledge:" + Date.now() + ":" + this.universe.time,
-			"icon": "fa-solid fa-graduation-cap",
+			"icon": "fa-solid fa-book-open-cover",
 			"name": data.meeting.name,
 			"description": data.meeting.description,
-			"associations": data.meeting.associations?data.meeting.associations.concat([]):[],
+			"associations": associations,
 			"category": "category:ideas:travel",
 			"acquired": this.universe.time,
 			"acquired_in": data.meeting.id
 		};
-
-		if(data.meeting.location) {
-			data.root.associations.push(data.meeting.location);
-		}
-		if(data.meeting.entities && data.meeting.entities.length) {
-			data.root.associations = data.root.associations.concat(data.meeting.entities);
-		}
-		if(data.meeting.skirmishes && data.meeting.skirmishes.length) {
-			data.root.associations = data.root.associations.concat(data.meeting.skirmishes);
-		}
-		if(data.meeting.session_events && data.meeting.session_events.length) {
-			data.root.associations = data.root.associations.concat(data.meeting.session_events);
-		}
-		if(data.meeting.items && data.meeting.items.length) {
-			data.root.associations = data.root.associations.concat(data.meeting.items);
-		}
 
 		return data;
 	},

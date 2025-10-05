@@ -21,7 +21,9 @@ rsSystem.component("dndMeetingEvent", {
 	"computed": {
 	},
 	"data": function () {
-		var data = {};
+		var associations = [],
+			associated = {},
+			data = {};
 
 		data.meeting = this.details.meeting;
 		data.fields = [
@@ -37,6 +39,27 @@ rsSystem.component("dndMeetingEvent", {
 			this.universe.index.fields.category,
 			this.universe.index.fields.associations
 		];
+
+		// associations = this.pruneAuto(data.meeting.entities, associated)
+		// .concat(this.pruneAuto(data.meeting.skirmishes, associated))
+		// .concat(this.pruneAuto(data.meeting.associations, associated))
+		// .concat(this.pruneAuto(this.details.values.associations, associated));
+
+		associations = data.meeting.entities.filter((entity) => {
+			entity = this.universe.index.entity[entity];
+			if(entity && entity.played_by && !associated[entity.id] && entity.played_by !== "player:master" && entity.played_by !== "player:system" && !entity.is_npc && !entity.is_minion) {
+				associated[entity.id] = true;
+				return true;
+			}
+			return false;
+		});
+		if(!this.details.values.associations && data.meeting.location) {
+			associations.push(data.meeting.location);
+		}
+		// if(!this.details.values.associations && data.meeting.entities && data.meeting.entities.length) {
+		// 	associations = associations.concat(data.meeting.entities);
+		// }
+
 		data.root = {
 			"id": "event:" + Date.now() + ":" + this.universe.time,
 			"name": this.details.values.name || "",
@@ -46,17 +69,11 @@ rsSystem.component("dndMeetingEvent", {
 			"time_start": this.universe.time,
 			"location": this.details.values.location || data.meeting.location,
 			"category": this.details.values.category || this.universe.index.category["category:ideas:travels"]?"category:ideas:travels":undefined,
-			"associations": this.details.values.associations || data.meeting.associations?data.meeting.associations.concat([]):[],
+			"associations": associations, //this.details.values.associations || data.meeting.associations?data.meeting.associations.concat([]):[],
 			"acquired_in": data.meeting.id,
 			"meeting": data.meeting.id
 		};
 		
-		if(!this.details.values.associations && data.meeting.location) {
-			data.root.associations.push(data.meeting.location);
-		}
-		if(!this.details.values.associations && data.meeting.entities && data.meeting.entities.length) {
-			data.root.associations = data.root.associations.concat(data.meeting.entities);
-		}
 
 		return data;
 	},

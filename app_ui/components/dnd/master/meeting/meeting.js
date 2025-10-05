@@ -419,7 +419,6 @@
 				});
 			},
 			"createKnowledge": function() {
-				console.log("Create Knowledge");
 				var details = {
 					"component": "dndMeetingKnowledge",
 					"storageKey": "master",
@@ -430,7 +429,6 @@
 				rsSystem.EventBus.$emit("dialog-open", details);
 			},
 			"createEvent": function(values) {
-				console.log("Create Event");
 				if(typeof(values) !== "object") {
 					values = {};
 				}

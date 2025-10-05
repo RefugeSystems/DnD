@@ -125,6 +125,31 @@ rsSystem.component("RSCore", {
 				console.warn("Edit Noun Failed: Requires MouseEvent as first parameter");
 			}
 		},
+		"pruneAuto": function(list, filtered) {
+			console.warn("RSCore.pruneAuto: ", this);
+			filtered = filtered || {};
+			var result = [],
+				link,
+				id,
+				i;
+
+			if(list) {
+				for(i=0; i < list.length; i++) {
+					link = this.universe.get(id = list[i]);
+					if(link && !link.is_auto_excluded) {
+						if(link.is_copy) {
+							id = link.parent;
+						}
+						if(!filtered[id]) {
+							filtered[id] = true;
+							result.push(id);
+						}
+					}
+				}
+			}
+
+			return result;
+		},
 		"getPlayer": function() {
 			return this.universe.nouns.player[this.user.id];
 		}
