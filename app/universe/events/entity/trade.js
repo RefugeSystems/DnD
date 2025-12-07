@@ -154,7 +154,7 @@ module.exports.initialize = function(universe) {
 		if(entity && (entity.owned[event.player.id] || entity.played_by === event.player.id || event.player.gm) && entity.inventory && items && items.length) {
 			for(i=0; i<items.length; i++) {
 				item = universe.manager.item.object[items[i]];
-				if(item && entity.inventory.indexOf(item.id) !== -1) {
+				if(item && ((item.is_singular && !item.is_equipment) || item.is_ammo || entity.inventory.indexOf(item.id) !== -1)) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
 						summary.push(item.name);
@@ -163,7 +163,7 @@ module.exports.initialize = function(universe) {
 							"user": null
 						});
 					} else {
-						universe.messagePlayer(event.player, "Can not give item \"" + item.name + "\" because it is currently equipped");
+						universe.messagePlayer(event.player, "Can not drop item \"" + item.name + "\" because it is currently equipped");
 					}
 				}
 			}
