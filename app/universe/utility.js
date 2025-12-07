@@ -382,7 +382,7 @@ class UniverseUtility {
 		if(entity && entity.inventory && items && items.length) {
 			for(i=0; i<items.length; i++) {
 				item = this.universe.manager.item.object[items[i]];
-				if(item && entity.inventory.indexOf(item.id) !== -1) {
+				if(item && ((item.is_singular && !item.is_equipment) || item.is_ammo || entity.inventory.indexOf(item.id) !== -1)) {
 					if(entity.equipped && entity.equipped.indexOf(item.id) === -1) {
 						exchanging.push(item.id);
 						item.setValues({
