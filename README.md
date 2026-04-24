@@ -5,6 +5,20 @@ This project is still in development and _NOT_ user friendly. A setup process an
 Once cloned, run `npm install` to install the necessary modules and then run `grunt` to "start" development. This will start testing and linting in the background,
 start a local web server with the pages assembled, open a web browser to the hosted site, and watch for changes to refresh the page.
 
+Once installed,
+
++ node app
+
+For aliases, use the below commands
+1. cd app/
+2. ln -s index.js [alias].js
+3. cd ..
+4. node app/[alias].js --config [path_to_config_folder]
+
+Remember to change the owner if you copied a previous configuration folder.
+
+node app/ohmquel.js --config worlds/ohmquel/configuration
+
 ## Notable Libraries
 Below is a non-comprehensive list of software and other packages notably in use by this application. In the future this will be generated and more comprehensive.
 

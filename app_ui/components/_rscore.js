@@ -126,7 +126,6 @@ rsSystem.component("RSCore", {
 			}
 		},
 		"pruneAuto": function(list, filtered) {
-			console.warn("RSCore.pruneAuto: ", this);
 			filtered = filtered || {};
 			var result = [],
 				link,
