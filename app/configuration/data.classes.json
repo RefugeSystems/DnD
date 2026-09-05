@@ -364,5 +364,15 @@
 		"name": "Era",
 		"description": "A large span of time, usually with some kind of historical signifigance",
 		"fields": ["parent", "name", "icon", "is_preview", "description", "note", "associations", "start", "end"]
+	}, {
+		"id": "powertree",
+		"name": "Power Tree",
+		"description": "A hierarchical structure of powers that can be learned or improved",
+		"fields": ["parent", "name", "icon", "is_preview", "description", "powers", "selection", "selected", "note"]
+	}, {
+		"id": "power",
+		"name": "Power",
+		"description": "Represents an individual power that can be learned or improved",
+		"fields": ["parent", "name", "icon", "is_preview", "description", "feats", "enchantments", "note"]
     }]
 }

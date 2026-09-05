@@ -1,3 +1,4 @@
+const {type} = require("os");
 const Anomaly = require("../../management/anomaly");
 
 /**
@@ -107,9 +108,6 @@ class PlayerConnection extends EventEmitter {
 		this.connection[id] = socket;
 		this.session[id] = session;
 		socket.__sID = id;
-		this.player.addValues({
-			"connections": 1
-		}, noOp);
 		
 		// console.log("...continuing...");
 		
@@ -183,6 +181,7 @@ class PlayerConnection extends EventEmitter {
 		};
 
 		socket.onclose = (event) => {
+			console.log(" > Player Socket Closed[" + this.socketIDs.indexOf(id) + "]: " + id + " ->\n    + " + this.socketIDs.join("\n    + "));
 			delete(this.connection[id]);
 			delete(this.session[id]);
 			this.socketIDs.purge(id);
@@ -197,7 +196,6 @@ class PlayerConnection extends EventEmitter {
 			event.received = Date.now();
 			event.signal = "close";
 			event.event = event;
-			console.log("Player socket closed: ", event);
 			event.player = this.player;
 
 			this.emit("disconnected", event);
@@ -212,9 +210,14 @@ class PlayerConnection extends EventEmitter {
 		};
 
 		socket.onerror = (error) => {
-			delete(this.connection[id]);
-			delete(this.session[id]);
-			this.socketIDs.purge(id);
+			if(this.connection[id] || !this.session[id]) {
+				delete(this.connection[id]);
+				delete(this.session[id]);
+				this.socketIDs.purge(id);
+				console.log(" > Player Socket Error[" + this.socketIDs.indexOf(id) + "]: " + id + " ->\n    + " + this.socketIDs.join("\n    + "));
+			} else {
+				console.log(" > Player Socket Already Closed[" + this.socketIDs.indexOf(id) + "]: " + id);
+			}
 			this.player.connects--;
 			this.player.leaves++;
 			this.player.subValues({
@@ -228,7 +231,7 @@ class PlayerConnection extends EventEmitter {
 			event.received = Date.now();
 			event.signal = "error";
 			event.player = this.player;
-			this.emit("error", event);
+			// this.emit("error", event);
 		};
 		
 		this.emit("connected");
@@ -236,6 +239,9 @@ class PlayerConnection extends EventEmitter {
 		this.last = Date.now();
 		this.socketIDs.push(id);
 		// console.log("Connected");
+		this.player.setValues({
+			"connections": this.socketIDs.length + 1
+		}, noOp);
 		socket.send(JSON.stringify({
 			"type": "connected",
 			"sent": Date.now(),
@@ -267,12 +273,12 @@ class PlayerConnection extends EventEmitter {
 		if(this.universe.allSends) {
 			console.log("Sending[" + this.id + "]: ", type, data, source, socket);
 		}
-
+		
+		message.id = RSRandom.identifier("message", 10, 32);
+		message.sent = Date.now();
+		message.source = source;
 		message.type = type;
 		message.data = data;
-		message.sent = Date.now();
-		message.id = RSRandom.identifier("message", 10, 32);
-		message.source = source;
 		message = JSON.stringify(message);
 		
 		if(socket && this.connection[socket]) {
@@ -441,37 +447,97 @@ class PlayerConnection extends EventEmitter {
 		}
 	}
 
+	killSocket(socket, skipUpdate) {
+		if(socket && socket.__sID) {
+			socket = socket.__sID;
+		}
+		
+		console.log(" > Killing Socket[" + this.socketIDs.indexOf(socket) + "]: " + socket + " ->\n    + " + this.socketIDs.join("\n    + "));
+
+		if(socket) {
+			if(this.connection[socket]) {
+				try {
+					this.connection[socket].close();
+				} catch(err) {
+					return err;
+				}
+			}
+			this.socketIDs.purge(socket);
+			delete(this.connection[socket]);
+			delete(this.session[socket]);
+			if(!skipUpdate) {
+				this.player.setValues({
+					"connections": this.socketIDs.length
+				});
+			}
+		}
+
+		console.log(" > Killed Socket[" + this.socketIDs.indexOf(socket) + "]: " + socket + " ->\n    + " + this.socketIDs.join("\n    + "));
+		
+		return null;
+	}
+
+	killOtherSockets(socket) {
+		var ids = Object.keys(this.connection),
+			result = {},
+			i;
+
+		for(i=0; i<ids.length; i++) {
+			if(ids[i] !== socket) {
+				result[ids[i]] = this.killSocket(ids[i]);
+			}
+		}
+
+		return result;
+	}
 
 	getConnectionState() {
-		var socket,
+		var session,
+			socket,
 			state,
 			i;
 
 		state = {
+			"time": Date.now(),
 			"player": {
 				"name": this.player.name,
+				"connects": this.connects,
 				"id": this.player.id
 			},
+			"socketIDs": [].concat(this.socketIDs),
+			"sockets": Object.keys(this.connection),
+			"sessions": Object.keys(this.session),
+			"errored": this.errored,
 			"connections": {}
 		};
 
 		for(i=0; i<this.socketIDs.length; i++) {
 			socket = this.connection[this.socketIDs[i]];
-			state.connections[this.socketIDs[i]] = {
-				"last": this.session[this.socketIDs[i]].last,
-				"version": socket.__sVersion
-			};
+			session = this.session[this.socketIDs[i]];
+			if(socket && session) {
+				state.connections[this.socketIDs[i]] = {
+					"last": new Date(session.last),
+					"version": socket.__sVersion
+				};
+			} else {
+				this.killSocket(this.socketIDs[i], true);
+				state.connections[this.socketIDs[i]] = {
+					"last": null,
+					"version": null,
+				};
+			}
 		}
+
+		this.player.setValues({
+			"connections": this.socketIDs.length
+		});
 
 		return state;
 	}
 	
 	close() {
-		for(var x=0; x<this.socketIDs.length; x++) {
-			if(this.connection[this.socketIDs[x]]) {
-				this.connection[this.socketIDs[x]].close();
-			}
-		}
+		var result = this.killOtherSockets(null);
+		return result;
 	}
 }
 

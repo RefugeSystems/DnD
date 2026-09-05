@@ -77,6 +77,7 @@ rsSystem.component("dndEntityInfo", {
 		rsSystem.register(this);
 	},
 	"methods": {
+		/*
 		"takeShortRest": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogShortRest",
@@ -91,6 +92,7 @@ rsSystem.component("dndEntityInfo", {
 				"closeAfterAction": true
 			});
 		},
+		*/
 		"focusAction": function(action) {
 			if(this.action === action) {
 				Vue.set(this, "action", null);

@@ -25,6 +25,8 @@
 			"repetition",
 			"library",
 			"apikey",
+			"power",
+			"powertree",
 			
 			"dataset",
 			"image",
@@ -53,6 +55,7 @@
 			"festival",
 			"moon",
 			"sun",
+			"era",
 			
 			"party",
 			"entity",

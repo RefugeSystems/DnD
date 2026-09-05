@@ -33,6 +33,86 @@ module.exports.initialize = function(universe) {
 		}
 	});
 
+
+	universe.on("player:refill:one", function(event) {
+		var packPrice = parseFloat(universe.get("setting:price:pack") || .1),
+			entity = universe.get(event.message.data.entity),
+			object = universe.get(event.message.data.object),
+			notification = {};
+
+		notification.recipients = {};	
+		notification.recipients[event.player.id] = true;
+		notification.type = "notice";
+		notification.timeout = 15000;
+		notification.anchored = true;
+
+		if(entity && object && entity.inventory.contains(object.id) && (entity.owned[event.player.id] || event.player.gm)) {
+			if(object.charges_max && object.charges < object.charges_max) {
+				if(packPrice <= entity.gold) {
+					entity.subValues({
+						"gold": packPrice
+					});
+					object.addValues({
+						"charges": 1
+					});
+					notification.message = entity.name + " refilled 1 charge to " + object.name + " for " + packPrice + " gold";
+					notification.icon = "fa-kit fa-regular-backpack-circle-check rs-green";
+				} else {
+					notification.message = entity.name + " can't pay the " + packPrice + " gold to refill " + object.name;
+					notification.icon = "game-icon game-icon-two-coins rs-light-red";
+				}
+			} else {
+				notification.message = object.name + " has no need for charges";
+				notification.icon = "fa-kit fa-regular-backpack-circle-plus rs-yellow";
+			}
+		} else {
+			notification.message = entity.name + " can't refill " + object.name + " as they do not have it";
+			notification.icon = "fa-kit fa-regular-backpack-circle-plus rs-light-red";
+		}
+
+		universe.emit("send", notification);
+	});
+
+	universe.on("player:refill:all", function(event) {
+		var packPrice = parseFloat(universe.get("setting:price:pack") || .1),
+			entity = universe.get(event.message.data.entity),
+			object = universe.get(event.message.data.object),
+			notification = {};
+
+		notification.recipients = {};	
+		notification.recipients[event.player.id] = true;
+		notification.type = "notice";
+		notification.timeout = 15000;
+		notification.anchored = true;
+
+		if(entity && object && entity.inventory.contains(object.id) && (entity.owned[event.player.id] || event.player.gm)) {
+			if(object.charges_max && object.charges < object.charges_max) {
+				packPrice = packPrice * (object.charges_max - object.charges);
+				if(packPrice < entity.gold) {
+					entity.subValues({
+						"gold": packPrice
+					});
+					object.setValues({
+						"charges": object.charges_max
+					});
+					notification.message = entity.name + " refilled " + object.name + " for " + packPrice + " gold";
+					notification.icon = "fa-kit fa-regular-backpack-circle-check rs-green";
+				} else {
+					notification.message = entity.name + " can't pay the " + packPrice + " gold to refill " + object.name;
+					notification.icon = "game-icon game-icon-two-coins rs-light-red";
+				}
+			} else {
+				notification.message = object.name + " has no need for charges";
+				notification.icon = "fa-kit fa-regular-backpack-circle-plus rs-yellow";
+			}
+		} else {
+			notification.message = entity.name + " can't refill " + object.name + " as they do not have it";
+			notification.icon = "fa-kit fa-regular-backpack-circle-plus rs-light-red";
+		}
+
+		universe.emit("send", notification);
+	});
+
 	/**
 	 * 
 	 * @event player:inventory:reveal

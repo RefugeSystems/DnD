@@ -1,11 +1,11 @@
 <div class="rs-component dnd-component dialog-rest-short">
 	<div class="dialog-header align-center">
-		<span>Short Rest</span>
+		<span>{{details.restType || "Short"}} Rest</span>
 	</div>
-	<div class="dialog-contents">
+	<div class="dialog-contents rs-inputs">
 		<table>
 			<tr>
-				<td>
+				<td class="align-right">
 					<span>Hit Dice:</span>
 				</td>
 				<td>
@@ -13,61 +13,76 @@
 						<span :class="'fas fa-dice-' + die"></span>
 						<span class="action-count">{{used[die]}}/{{entity.hit_dice[die]}}</span>
 					</button>
-					<div>
+					<div v-if="!profile.auto_roll">
 						Con: {{entity.constitution<0?entity.constitution:"+" + entity.constitution}}
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<span>Healing:</span>
+				<td class="align-right">
+					<span>Healing</span>
+				</td>
+				<td class="field-container">
+					<input class="grow-1 field" type="number" min="0" v-model.number="roll" v-on:keyup.enter="rest()" :disabled="profile.auto_roll"/>
 				</td>
 				<td>
-					<input class="grow-1" type="number" min="0" v-model.number="roll" v-on:keyup.enter="rest()"/>
+					<button class="quick rounded calculate action fas fa-info-circle fa-dice" v-if="!profile.auto_roll" v-on:click="rollHitDice()"></button>
 				</td>
-			</tr>
-			<tr>
-				<td>
-					<span>HP:</span>
-				</td>
-				<td>
-					<span>{{entity.hp}} / {{entity.hp_max}}</span><span v-if="roll"> + {{roll}} ({{getOverUnder()}})</span>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><span v-if="message" class="rs-light-yellow">{{message}}</span></td>
 			</tr>
 			<tr v-if="attunables.length">
-				<td>
+				<td class="align-right">
 					<span>Attune</span>
 				</td>
-				<td>
-					<select v-model="attune" v-on:keyup.enter="rest()">
+				<td class="field-container">
+					<select v-model="attune" v-on:keyup.enter="rest()" class="grow-1 field">
 						<option v-for="attunable in attunables" :value="attunable.id">{{attunable.name}}</option>
 					</select>
 				</td>
-			</tr>
-			<tr v-if="eattable.length">
 				<td>
-					<span>Eatting</span>
+					<button class="quick rounded details action fas fa-info-circle" v-if="attune" v-on:click="info(attune)"></button>
 				</td>
-				<td>
-					<select v-model="eatting" v-on:keyup.enter="rest()">
-						<option v-for="food in eattable" :value="food.id">{{food.name}} ({{counts[food.id]}})</option>
+			</tr>
+			<tr v-if="eatable.length">
+				<td class="align-right">
+					<span>Eating</span>
+				</td>
+				<td class="field-container">
+					<select v-model="eating" v-on:keyup.enter="rest()" class="grow-1 field">
+						<option v-for="food in eatable" :value="food.id">{{food.name}} ({{counts[food.id]}})</option>
 					</select>
 				</td>
+				<td>
+					<button class="quick rounded details action fas fa-info-circle" v-if="eating" v-on:click="info(eating)"></button>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-right">
+					<span>HP After</span>
+				</td>
+				<td class="field-container">
+					<div class="field">
+						<span>{{entity.hp}} <span v-if="roll" class="rs-lightgreen additional rs-border light-green"> + {{roll}}</span>/ {{entity.hp_max}}</span> <span v-if="roll">({{getOverUnder()}})</span>
+					</div>
+				</td>
+				<td>
+					<button class="quick rounded details action fas fa-info-circle" v-on:click="info('knowledge:rest:short')"></button>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-right"></td>
+				<td><span v-if="message" class="rs-light-yellow">{{message}}</span></td>
+				<td></td>
 			</tr>
 		</table>
 	</div>
-	<div class="dialog-confirmation flex h justified">
-		<button class="rounded accept action" v-on:click="rest()">
+	<div class="dialog-confirmation flex h">
+		<button class="rounded accept action joined-left" v-on:click="rest()">
 			<span class="fas fa-campfire"></span>
 			<span>Rest</span>
 		</button>
-		<button class="rounded cancel action" v-on:click="closeDialog()">
-			<span class="fas fa-times"></span>
+		<button class="rounded cancel action joined-right" v-on:click="closeDialog()">
 			<span>Cancel</span>
+			<span class="fas fa-times"></span>
 		</button>
 	</div>
 </div>

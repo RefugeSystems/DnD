@@ -168,6 +168,7 @@ module.exports.initialize = function(universe) {
 			"channel": event.message.data.using,
 			"spell": event.message.data.spell,
 			"item": event.message.data.item,
+			"food": event.message.data.food,
 			"name": event.message.data.name,
 			"roll": event.message.data.roll,
 			"player": event.player.id

@@ -59,11 +59,14 @@ String.prototype.pluralize = function(capitalize) {
  */
 if(!Array.prototype.uniquely) {
 	Array.prototype.uniquely = function(adding) {
-		if(this.indexOf(adding) === -1) {
-			this.push(adding);
-			return true;
+		for(var i=0; i<this.length; i++) {
+			if(this[i] === adding || (this[i] && this[i].id && adding && adding.id && this[i].id === adding.id) || (this[i] && adding && (this[i].id === adding || adding.id === this[i]))) {
+				return false;
+			}
 		}
-		return false;
+
+		this.push(adding);
+		return true;
 	};
 }
 
@@ -76,14 +79,18 @@ if(!Array.prototype.uniquely) {
  */
 if(!Array.prototype.purge) {
 	Array.prototype.purge = function(removing) {
-		var index = this.indexOf(removing);
-		if(index === -1) {
-			return false;
+		var i;
+		for(i=0; i<this.length; i++) {
+			if(this[i] === removing || (this[i] && this[i].id && removing && removing.id && this[i].id === removing.id) || (this[i] && removing && (this[i].id === removing || removing.id === this[i]))) {
+				this.splice(i, 1);
+				return true;
+			}
 		}
-		this.splice(index, 1);
-		return true;
+
+		return false;
 	};
 }
+
 
 /**
  * Handles determining if the indicated entry is within this array leveraging the "id"
@@ -274,6 +281,132 @@ if(!Array.prototype.hasCommon) {
 		}
 
 		return false;
+	};
+}
+
+
+/**
+ * Uses an optional compare function to determine the sorting for the incoming value into
+ * the array and then inserts it into the array at the appropriate location. If no compare
+ * function is provided; If the value is a number or string, it will be sorted in ascending
+ * order. If the value is an object, it will be sorted by the "time" property if it exists,
+ * otherwise by "id".
+ * 
+ * The compare function needs to only compare 2 values, the insertion sort handles determining
+ * what key values to pull from objects and otherwise handling mixed value types.
+ * 
+ * Additionally, this method only sorts at insertion, the rest of the array is considered to
+ * already be sorted by the needed key as desired.
+ * @method insert
+ * @mutable
+ * @chainable
+ * @for Array
+ * @param {Boolean | Number | String | Object} insert
+ * @param {Function} [compare] A function that takes 2 arguments and returns -1, 0, or 1.
+ * @return {Array} This array with the value inserted at the appropriate location
+ */
+if(!Array.prototype.insert) {
+	Array.prototype.insert = function(insert, compare, getKey) {
+		var stepLimit = 100,
+			minV,
+			midV,
+			maxV,
+			minI,
+			midI,
+			maxI,
+			a,
+			b,
+			c,
+			v;
+
+		if(!compare) {
+			compare = Array.prototype._insertCompare;
+		}
+		if(!getKey) {
+			getKey = Array.prototype._insertGetKey;
+		}
+
+		v = getKey(insert);
+
+		if(this.length) {
+			maxI = this.length-1;
+			midI = Math.floor(this.length/2);
+			minI = 0;
+			maxV = getKey(this[maxI]);
+			midV = getKey(this[midI]);
+			minV = getKey(this[minI]);
+			while(1 < maxI - minI && 0 < stepLimit--) {
+				a = compare(v, minV);
+				b = compare(v, midV);
+				c = compare(v, maxV);
+				if(a === 0 || a === -1) {
+					// Less than or equal to the min, insert at the beginning
+					this.splice(minI, 0, insert);
+					return this;
+				} else if(b === 0) {
+					// Magically equal to the middle so insert next to it
+					this.splice(midI, 0, insert);
+					return this;
+				} else if(c === 0 || c === 1) {
+					// We're more than the max, so insert after it
+					this.splice(maxI + 1, 0, insert);
+					return this;
+				} else if(a === 1 && b === -1) {
+					// We're in the first half, update and prepare to retest
+					maxI = midI;
+					midI = Math.floor((minI + maxI)/2);
+					maxV = getKey(this[maxI]);
+					midV = getKey(this[midI]);
+				} else if(b === 1 && c === -1) {
+					// We're in the second half, update and prepare to retest
+					minI = midI;
+					midI = Math.floor((minI + maxI)/2);
+					minV = getKey(this[minI]);
+					midV = getKey(this[midI]);
+				} else {
+					// This should never happen, but if it does, just push to the end
+					console.warn("Array.insert: Unable to determine insertion point for value, pushing to end of array", insert);
+					this.push(insert);
+					return this;
+				}
+			}
+			if(minI - maxI <= 1) {
+				console.log("Insertion Point[" + stepLimit + "]: ", minI, midI, maxI, minV, midV, maxV);
+				this.splice(minI === maxI ? minI : maxI, 0, insert);
+			}
+		} else {
+			this.push(insert);
+		}
+
+		if(stepLimit <= 0) {
+			console.error("Array.insert: Step limit exceeded, unable to determine insertion point for value", insert);
+		}
+
+		return this;
+	};
+
+	Array.prototype._insertCompare = function(a, b) {
+		if(a === b) {
+			return 0;
+		} else if(a < b) {
+			return -1;
+		} else {
+			return 1;
+		}
+	};
+
+	Array.prototype._insertGetKey = function(obj) {
+		if(typeof(obj) === "string") {
+			return obj.toLowerCase();
+		} else if(typeof(obj) === "number") {
+			return obj;
+		} else if(typeof(obj) === "object") {
+			if(obj.time) {
+				return obj.time;
+			} else {
+				return obj.id;
+			}
+		}
 	};
 }
 

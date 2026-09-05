@@ -215,9 +215,15 @@ rsSystem.component("sysInfoGeneral", {
 			setTimeout(() => {
 				var entity = this.playerCharacter || this.getPlayerCharacter(),
 					character = this.info.character || this.info.caster || this.info.user, 
+					meeting = this.universe.get(this.universe.getCurrentMeeting()),
 					object = this.info,
+					location,
 					loading,
 					name;
+
+				if(meeting && meeting.location) {
+					location = this.universe.get(meeting.location);
+				}
 
 				this.controls.splice(0);
 				if(!this.info.is_preview && this.info._class) {
@@ -749,6 +755,16 @@ rsSystem.component("sysInfoGeneral", {
 										"action": "craft"
 									});
 									break;
+								case "player":
+									if(this.player.gm) {
+										this.controls.push({
+											"title": "Report connection state",
+											"icon": "fa-solid fa-signal-stream",
+											"type": "button",
+											"action": "player:state"
+										});
+									}
+									break;
 								case "effect":
 									if(this.player.gm || (entity.effects.indexOf(this.info.id) !== -1 && !this.info.is_locked)) {
 										this.controls.push({
@@ -836,7 +852,7 @@ rsSystem.component("sysInfoGeneral", {
 									});
 									break;
 								case "item":
-									if(entity.inventory.indexOf(this.info.id) !== -1) {
+									if(entity.inventory.contains(this.info.id)) {
 										if(entity.equipped.indexOf(object.id) === -1) {
 											this.controls.push({
 												"title": "Equip Item to " + entity.name,
@@ -874,6 +890,20 @@ rsSystem.component("sysInfoGeneral", {
 													});
 												}
 											}
+										}
+										if(this.info.types && this.info.types.contains("type:backpack") && location.is_pack_restockable && this.info.charges_max && this.info.charges < this.info.charges_max) {
+											this.controls.push({
+												"title": "+1 " + this.info.name,
+												"icon": "fa-kit fa-regular-backpack-circle-check",
+												"type": "button",
+												"action": "refill:one"
+											});
+											this.controls.push({
+												"title": "Refill " + this.info.name,
+												"icon": "fa-kit fa-regular-backpack-circle-plus",
+												"type": "button",
+												"action": "refill:all"
+											});
 										}
 										if(this.info.consume) {
 											this.controls.push({
@@ -1036,6 +1066,13 @@ rsSystem.component("sysInfoGeneral", {
 						"value": this.universe.time
 					});
 					break;
+				case "refill:one":
+				case "refill:all":
+					this.universe.send(control.action || control, {
+						"entity": entity.id,
+						"object": object.id
+					});
+					break;
 				case "addcurrentlocation":
 					if(this.activeMeeting && this.activeMeeting.location) {
 						buffer = object.locations || [];
@@ -1101,6 +1138,11 @@ rsSystem.component("sysInfoGeneral", {
 						"object": object.id,
 						"field": "is_position_hidden",
 						"value": false
+					});
+					break;
+				case "player:state":
+					this.universe.send("master:player:state", {
+						"player": object.id
 					});
 					break;
 				case "rotate":

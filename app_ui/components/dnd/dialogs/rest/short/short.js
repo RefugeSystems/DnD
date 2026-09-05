@@ -35,6 +35,8 @@ rsSystem.component("dndDialogShortRest", {
 				}
 			}
 
+			attunables.sort(rsSystem.utility.sortByName);
+
 			return attunables;
 		}
 	},
@@ -64,23 +66,37 @@ rsSystem.component("dndDialogShortRest", {
 			data.used = {};
 		}
 
-		data.eattable = [];
+		data.foodSource = [];
+		data.eatable = [];
 		data.counts = {};
-		data.food = null;
+		data.eating = null;
 		indexed = {};
 		for(i=0; i<data.entity.inventory.length; i++) {
 			item = this.universe.index.item[data.entity.inventory[i]];
-			if(rsSystem.utility.isValid(item) && item.types.includes("type:food")) {
-				if(!indexed[item.id]) {
-					indexed[item.id] = true;
-					data.eattable.push(item);
+			if(rsSystem.utility.isValid(item)) {
+				if(item.types.includes("type:source:food")) {
+					if(!indexed[item.id]) {
+						data.counts[item.id] = "Food Source";
+						indexed[item.id] = true;
+						data.foodSource.push(item);
+					}
+				} else if(item.types.includes("type:food")) {
+					if(!indexed[item.id]) {
+						indexed[item.id] = true;
+						data.eatable.push(item);
+					}
+					if(!data.counts[item.id]) {
+						data.counts[item.id] = 0;
+					}
+					data.counts[item.id]++;
 				}
-				if(!data.counts[item.id]) {
-					data.counts[item.id] = 0;
-				}
-				data.counts[item.id]++;
 			}
 		}
+
+		data.foodSource.sort(rsSystem.utility.sortByName);
+		data.eatable.sort(rsSystem.utility.sortByName);
+
+		data.eatable = data.foodSource.concat(data.eatable);
 
 		return data;
 	},
@@ -100,13 +116,28 @@ rsSystem.component("dndDialogShortRest", {
 				}
 			}
 		},
+		"rollHitDice": function() {
+			var dice = Object.keys(this.used),
+				formula = [],
+				rolled = 0,
+				die,
+				i;
+
+			for(i=0; i<dice.length; i++) {
+				die = dice[i];
+				formula.push(this.used[die] + die);
+				rolled += this.used[die];
+			}
+			formula = formula.join(" + ");
+			Vue.set(this, "roll", rsSystem.dnd.Calculator.getRollResult(formula).result + rolled * this.entity.constitution);
+		},
 		"rest": function() {
 			this.universe.send("action:perform", {
-				"action": "action:rest:short",
+				"action": this.details.action || "action:rest:short",
 				"entity": this.entity.id,
 				"result": this.used,
 				"item": this.attune,
-				"food": this.food,
+				"food": this.eating,
 				"roll": this.roll
 			});
 			for(var i=0; i<this.hitdie.length; i++) {
@@ -119,7 +150,7 @@ rsSystem.component("dndDialogShortRest", {
 				Vue.set(this.used, die, this.used[die] + 1);
 				if(this.profile.auto_roll) {
 					Vue.set(this, "roll", this.roll + rsSystem.dnd.Calculator.diceRoll(die) + this.entity.constitution);
-					Vue.set(this, "message", "(Constitution Modifier Added Automatically)");
+					Vue.set(this, "message", "Con Added Automatically");
 				}
 			}
 		},

@@ -977,14 +977,18 @@ rsSystem.component("DNDWidgetCore", {
 			rsSystem.EventBus.$emit("dialog-open", {
 				"component": "dndDialogShortRest",
 				"entity": this.entity.id,
-				"closeAfterAction": true
+				"closeAfterAction": true,
+				"action": "action:rest:short",
+				"restType": "Short"
 			});
 		},
 		"takeLongRest": function() {
 			rsSystem.EventBus.$emit("dialog-open", {
-				"component": "dndDialogLongRest",
+				"component": "dndDialogShortRest",
 				"entity": this.entity.id,
-				"closeAfterAction": true
+				"closeAfterAction": true,
+				"action": "action:rest:long",
+				"restType": "Long"
 			});
 		},
 		"focusAction": function(action) {
@@ -1049,6 +1053,52 @@ rsSystem.component("DNDWidgetCore", {
 			details.activate = (section, action) => {
 				this.info(action);
 			};
+
+			rsSystem.EventBus.$emit("dialog-open", details);
+		},
+		"viewEffects": function() {
+			var details = {},
+				load,
+				i;
+
+			details.title = this.entity.name + " Effects";
+			details.component = "dndDialogList";
+			details.sections = ["positive", "negative"];
+			details.related = {};
+			details.cards = {
+				"positive": {
+					"name": "Positive Effect",
+					"icon": "fas fa-plus-circle",
+					"description": "Beneficial effects currently affecting the entity."
+				},
+				"negative": {
+					"name": "Negative Effect",
+					"icon": "fas fa-minus-circle",
+					"description": "Detrimental effects currently affecting the entity."
+				}
+			};
+
+			details.data = {
+				"positive": [],
+				"negative": []
+			};
+
+			details.activate = (section, action) => {
+				this.info(action);
+			};
+
+			if(this.entity.effects && this.entity.effects.length) {
+				for(i=0; i<this.entity.effects.length; i++) {
+					load = this.universe.get(this.entity.effects[i]);
+					if(rsSystem.utility.isValid(load)) {
+						if(load.debuff || load.is_debuff) {
+							details.data.negative.push(load);
+						} else {
+							details.data.positive.push(load);
+						}
+					}
+				}
+			}
 
 			rsSystem.EventBus.$emit("dialog-open", details);
 		},

@@ -1,18 +1,18 @@
 <div class="rs-page dnd-page dnd-review flex h">
 	<div class="panels-main flex v">
 		<h1 class="review-heading">{{meeting.name}}</h1>
-		<section class="panel" id="scene">
+		<section class="panel text-panel" id="scene">
 			<h1>The Scene...</h1>
 			<div class="contents" v-html="rsshowdown(meeting.the_scene)"></div>
 		</section>
-		<section class="panel" id="last">
+		<section class="panel text-panel" id="last">
 			<h1>Last Time...</h1>
 			<div class="contents" v-if="last" v-html="rsshowdown(last.description)"></div>
 			<div class="contents" v-else>
 				<p>There was no previous meeting.</p>
 			</div>
 		</section>
-		<section class="panel" id="updates">
+		<section class="panel text-panel" id="updates">
 			<h1>System Updates</h1>
 			<div class="contents" v-if="updates.length === 0">
 				<p>There are no system updates to note for this meeting.</p>

@@ -1,4 +1,264 @@
 <div class="rs-page page-home" :style="styleSplash()">
+	<div class="weather-effects" v-if="meeting && weather && !storage.profile.no_weather_effects" :style="daylightRGBa()">
+		<div class="storm-container" ref="storm" v-if="!weather.is_sky_blocked && weather.is_storming">
+		</div>
+		<div class="snow-container" ref="snow" v-if="!weather.is_sky_blocked && weather.is_snowing">
+			
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="snow">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<div class="rain-container" ref="rain" v-if="!weather.is_sky_blocked && weather.is_raining">
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		
+			<div class="rain">
+				<div class="drop"></div>
+				<div class="waves">
+					<div></div>
+					<div></div>
+				</div>
+				<div class="particles">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="login prompt" v-if="state <= 0 && configuration && !active">
 		<div class="boxed">
 			<!-- <rs-connect v-if="state === 0" v-on:configure="receiveConfiguration($event)" v-on:login="connect($event)" v-on:message="receiveMessage($event)" :universe="universe" :configuration="configuration" :splash="splash" storage-key="session"></rs-connect> -->

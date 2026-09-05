@@ -215,6 +215,16 @@ rsSystem.component("systemOptionsDialog", {
 					"base": this.profile,
 					"type": "toggle"
 				}, {
+					"id": "no_weather_effects",
+					"label": "Disable weather effects in the background",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
+					"id": "hide_daylight",
+					"label": "Disable Day/Night cycle border lighting",
+					"base": this.profile,
+					"type": "toggle"
+				}, {
 					"id": "details_easyaction",
 					"label": "Control the data on the Easy Action button",
 					"base": this.profile,
@@ -398,6 +408,11 @@ rsSystem.component("systemOptionsDialog", {
 					"action": "resync",
 					"icon": "fas fa-sync",
 					"label": "Resync"
+				}, {
+					"id": "app-trim",
+					"action": "trim",
+					"icon": "fas fa-signal-stream rs-yellow",
+					"label": "Kill Other Connections"
 				}, {
 					"id": "app-cache-delete",
 					"action": "uncache",
@@ -602,6 +617,9 @@ rsSystem.component("systemOptionsDialog", {
 						Vue.set(this.universe, "debug", true);
 						Vue.set(this.controlDebugging, "label", "Disable Debugging");
 					}
+					break;
+				case "trim":
+					this.universe.send("socket:trim", {});
 					break;
 				case "report-submit":
 					this.universe.send("error:report", this.report_mirror);

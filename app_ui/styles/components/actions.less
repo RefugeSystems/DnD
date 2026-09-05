@@ -32,6 +32,20 @@
 	
 	button.rounded {
 		border-radius: 5px;
+
+		&.joined-left {
+			border-top-right-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+
+		&.joined-right {
+			border-top-left-radius: 0px;
+			border-bottom-left-radius: 0px;
+		}
+
+		&.joined-middle {
+			border-radius: 0px;
+		}
 	}
 	
 	button.circular {
@@ -44,7 +58,7 @@
 		background-color: @rsDarkRed;
 		color: @rsWhite;
 		border: 1px solid @rsLightRed;
-		// transition: background-color .5s, color .5s;
+		transition: background-color .5s, color .5s;
 		
 		&:hover {
 			background-color: @rsWhite;
@@ -62,7 +76,7 @@
 		background-color: @rsDarkGreen;
 		color: @rsWhite;
 		border: 1px solid @rsLightGreen;
-		// transition: background-color .5s, color .5s;
+		transition: background-color .5s, color .5s;
 		
 		&:hover {
 			background-color: @rsWhite;
@@ -71,6 +85,44 @@
 		
 		&:active {
 			border-color: @rsWhite;
+		}
+	}
+	
+	button.calculate,
+	button.process,
+	button.compute {
+		background-color: @rsBlack;
+		color: @rsWhite;
+		border: 1px solid @rsLightOrange;
+		transition: background-color .5s, color .5s;
+		
+		&:hover {
+			background-color: @rsLightOrange;
+			color: @rsDarkOrange;
+		}
+		
+		&:active {
+			border-color: @rsWhite;
+		}
+	}
+	
+	button.action {
+		&.informational,
+		&.details,
+		&.stats {
+			background-color: @rsBlack;
+			color: @rsWhite;
+			border: 1px solid @rsLightBlue;
+			transition: background-color .5s, color .5s;
+			
+			&:hover {
+				background-color: @rsLightBlue;
+				color: @rsDarkBlue;
+			}
+			
+			&:active {
+				border-color: @rsWhite;
+			}
 		}
 	}
 	

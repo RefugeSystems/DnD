@@ -162,6 +162,47 @@ rsSystem.component("dndEntityBroad", {
 			}
 			return languages;
 		},
+		"effectDetails": function() {
+			var details = {},
+				load,
+				i;
+
+			details.title = this.entity.name + " Effects";
+			details.sections = ["positive", "negative"];
+			details.related = {};
+			details.cards = {
+				"positive": {
+					"name": "Postive",
+					"icon": "game-icon game-icon-aura rs-light-green",
+					"description": "Effects that should be giving an overall benefit."
+				},
+				"negative": {
+					"name": "Negative",
+					"icon": "game-icon game-icon-aura rs-light-red",
+					"description": "Effects that should be giving an overall detriment."
+				}
+			};
+
+			details.data = {
+				"positive": [],
+				"negative": []
+			};
+
+			if(this.entity.effects && this.entity.effects.length) {
+				for(i=0; i<this.entity.effects.length; i++) {
+					load = this.universe.get(this.entity.effects[i]);
+					if(rsSystem.utility.isValid(load)) {
+						if(load.debuff || load.is_debuff) {
+							details.data.negative.push(load);
+						} else {
+							details.data.positive.push(load);
+						}
+					}
+				}
+			}
+
+			return details;
+		},
 		"max_carry": function() {
 			return this.entity.encumberance_max?this.entity.encumberance_max.toFixed(2):0;
 		}
@@ -182,7 +223,6 @@ rsSystem.component("dndEntityBroad", {
 		}
 
 		data.proficiencyDetails = {};
-		data.effectDetails = {};
 		data.spellDetails = {};
 		data.featDetails = {};
 		data.contained = {};
@@ -240,39 +280,6 @@ rsSystem.component("dndEntityBroad", {
 		data.featDetails.data = {
 			"feats": this.universe.transcribeInto(this.entity.feats, [])
 		};
-
-		data.effectDetails.title = this.entity.name + " Effects";
-		data.effectDetails.sections = ["positive", "negative"];
-		data.effectDetails.related = {};
-		data.effectDetails.cards = {
-			"positive": {
-				"name": "Postive",
-				"icon": "game-icon game-icon-aura rs-light-green",
-				"description": "Effects that should be giving an overall benefit."
-			},
-			"negative": {
-				"name": "Negative",
-				"icon": "game-icon game-icon-aura rs-light-red",
-				"description": "Effects that should be giving an overall detriment."
-			}
-		};
-		data.effectDetails.data = {
-			"positive": [],
-			"negative": []
-		};
-		if(this.entity.effects && this.entity.effects.length) {
-			for(i=0; i<this.entity.effects.length; i++) {
-				load = this.universe.get(this.entity.effects[i]);
-				if(rsSystem.utility.isValid(load)) {
-					if(load.debuff || load.is_debuff) {
-						data.effectDetails.data.negative.push(load);
-					} else {
-						data.effectDetails.data.positive.push(load);
-					}
-				}
-			}
-		}
-
 
 		data.spellDetails.title = this.entity.name + " Spells";
 		data.spellDetails.sections = [];

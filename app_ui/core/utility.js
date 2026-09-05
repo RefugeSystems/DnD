@@ -882,6 +882,43 @@
 			}
 			return party;
 		},
+
+		"interpolate": function(start, end, percent) {
+			var result,
+				keys,
+				key,
+				i;
+
+			if(typeof(start) === "object" && typeof(end) === "object") {
+				keys = Object.keys(start);
+				result = {};
+
+				for(i=0; i<keys.length; i++) {
+					key = keys[i];
+					result[key] = start[key] + (end[key] - start[key]) * percent;
+				}
+			} else if(typeof(start) === "number" && typeof(end) === "object") {
+				keys = Object.keys(end);
+				result = {};
+				
+				for(i=0; i<keys.length; i++) {
+					key = keys[i];
+					result[key] = start + (end[key] - start) * percent;
+				}
+			} else if(typeof(start) === "object" && typeof(end) === "number") {
+				keys = Object.keys(start);
+				result = {};
+
+				for(i=0; i<keys.length; i++) {
+					key = keys[i];
+					result[key] = start[key] + (end - start[key]) * percent;
+				}
+			} else if(typeof(start) === "number" && typeof(end) === "number") {
+				result = start + (end - start) * percent;
+			}
+
+			return result;
+		},
 		/**
 		 *
 		 * @method sortByID

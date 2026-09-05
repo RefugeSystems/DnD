@@ -1898,12 +1898,14 @@ class Universe extends EventEmitter {
 	 * @param {String | RSObject} player ID
 	 * @param {String} message Text
 	 */
-	messagePlayer(player, message) {
+	messagePlayer(player, message, socket) {
 		this.emit("send", {
 			"type": "notice",
 			"recipient": player.id || player,
-			"message": message,
-			"anchored": true
+			"icon": message.icon || undefined,
+			"message": message.message || message,
+			"anchored": true,
+			"socket": message.socket || (socket?socket.id || socket:undefined)
 		});
 	}
 

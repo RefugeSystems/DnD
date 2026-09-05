@@ -25,6 +25,47 @@ rsSystem.component("RSHome", {
 				return this.universe.index.entity[this.player.attribute.playing_as];
 			}
 			return null;
+		},
+
+		"meeting": function() {
+			if(this.universe) {
+				try {
+					var meeting = this.universe.getCurrentMeeting();
+
+					if(meeting && (meeting = this.universe.get(meeting))) {
+						return meeting;
+					}
+
+				} catch(err) {
+					// console.warn("Weather Error: ", err);
+				}
+			}
+
+			return null;
+		},
+
+		"weather": function() {
+			var weather = null;
+			if(this.meeting && this.meeting.weather && (weather = this.universe.get(this.meeting.weather))) {
+				console.log("Weather: ", weather);
+				if(weather.is_raining) {
+					setTimeout(() => {
+						console.log("Scatter Rain: ", this.$refs.rain);
+						this.scatterEffects(this.$refs.rain);
+					}, 100);
+				}
+
+				if(weather.is_snowing) {
+					setTimeout(() => {
+						console.log("Scatter Snow: ", this.$refs.snow);
+						this.scatterEffects(this.$refs.snow);
+					}, 100);
+				}
+
+				return weather;
+			}
+
+			return null;
 		}
 	},
 	"data": function() {
@@ -37,6 +78,14 @@ rsSystem.component("RSHome", {
 		data.messageIcon = "";
 		data.message = "";
 		data.state = 0;
+
+		data.day_red = 199;
+		data.day_green = 205;
+		data.day_blue = 52;
+		data.daylight = "box-shadow: inset 0px 0px 10px rgba(199, 205, 52, 0.5)";
+		data.is_storming = false;
+		data.is_raining = false;
+		data.is_snowing = false;
 
 		// Track Connection Information
 		data.configuration = null;
@@ -54,6 +103,29 @@ rsSystem.component("RSHome", {
 		data.meetingNotice = false;
 		data.hidden = {};
 		data.splash = {};
+
+		data.lighting = {
+			"midnight": {
+				"red": 30,
+				"green": 50,
+				"blue": 200
+			},
+			"dawn": {
+				"red": 161,
+				"green": 121,
+				"blue": 45
+			},
+			"noon": {
+				"red": 255,
+				"green": 245,
+				"blue": 100
+			},
+			"dusk": {
+				"red": 190,
+				"green": 130,
+				"blue": 30
+			}
+		};
 		
 		data.active = null;
 		data.configuration = null;
@@ -258,8 +330,48 @@ rsSystem.component("RSHome", {
 		rsSystem.EventBus.$on("home.show", this.respondShowEvent);
 	},
 	"methods": {
+		"getTimeLightColor": function(hour) {
+			var colors = {};
+
+			if(hour === undefined) {
+				hour = this.universe.calendar.hour;
+			}
+
+			if(hour < 6) {
+				// Midnight -> Dawn
+				return rsSystem.utility.interpolate(this.lighting.midnight, this.lighting.dawn, hour / 6);
+			}
+		
+			if(hour < 12) {
+				// Dawn -> Noon
+				return rsSystem.utility.interpolate(this.lighting.dawn, this.lighting.noon, (hour - 6) / 6);
+			}
+		
+			if(hour < 18) {
+				// Noon -> Dusk
+				return rsSystem.utility.interpolate(this.lighting.noon, this.lighting.dusk, (hour - 12) / 6);
+			}
+		
+			// Dusk -> Midnight
+			return rsSystem.utility.interpolate(this.lighting.dusk, this.lighting.midnight, (hour - 18) / 6);
+		},
+		"daylightRGBa": function() {
+			if(this.storage.profile.hide_daylight || !this.weather || this.weather.is_sky_blocked) {
+				return "";
+			}
+
+			var lighting = this.getTimeLightColor();
+			return "box-shadow: inset 0px 0px 20px rgba(" + parseInt(lighting.red) + ", " + parseInt(lighting.green) + ", " + parseInt(lighting.blue) + ", 0.6)";
+		},
 		"changeWorld": function(world) {
 			console.log("World Connect: ", world);
+		},
+		"scatterEffects": function(element) {
+			element.childNodes.forEach(function(child) {
+				if(child.nodeType === 1) {
+					child.style.transform = "translate(" + Random.integer(75) + "vw, " + Random.integer(20, 70) + "vh) scale(" + Random.number(.7, .5) + ")";
+				}
+			});
 		},
 		"respondShowEvent": function(event) {
 			switch(event.element) {

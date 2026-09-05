@@ -3905,5 +3905,36 @@
 			"default": 0,
 			"display_size": 90
 		}
+	}, {
+		"name": "Powers",
+		"id": "powers",
+		"description": "Active powers for the object.",
+		"type": "array",
+		"ordering": null,
+		"inheritance": {
+			"enchantments": "+",
+			"actions": "+",
+			"effects": "+",
+			"skills": "+",
+			"spells": "+",
+			"feats": "+"
+		},
+		"inheritable": [
+			"power"
+		],
+		"attribute": {
+			"display_size": 40
+		}
+	}, {
+		"name": "Selected",
+		"id": "selected",
+		"description": "Maps an ID to a gametime value for when it was selected to track existing selections.",
+		"type": "object",
+		"ordering": null,
+		"inheritance": null,
+		"inheritable": null,
+		"attribute": {
+			"display_size": 100
+		}
 	}]
 }
